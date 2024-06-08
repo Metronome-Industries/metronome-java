@@ -1,0 +1,1292 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.metronome.api.models
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.metronome.api.core.Enum
+import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
+import com.metronome.api.core.JsonValue
+import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.errors.MetronomeInvalidDataException
+import java.time.OffsetDateTime
+import java.util.Objects
+import java.util.Optional
+
+@JsonDeserialize(builder = Override.Builder::class)
+@NoAutoDetect
+class Override
+private constructor(
+    private val id: JsonField<String>,
+    private val product: JsonField<Product>,
+    private val applicableProductTags: JsonField<List<String>>,
+    private val overrideSpecifiers: JsonField<List<OverrideSpecifier>>,
+    private val startingAt: JsonField<OffsetDateTime>,
+    private val endingBefore: JsonField<OffsetDateTime>,
+    private val entitled: JsonField<Boolean>,
+    private val type: JsonField<Type>,
+    private val multiplier: JsonField<Double>,
+    private val overwriteRate: JsonField<OverwriteRate>,
+    private val additionalProperties: Map<String, JsonValue>,
+) {
+
+    private var validated: Boolean = false
+
+    private var hashCode: Int = 0
+
+    fun id(): String = id.getRequired("id")
+
+    fun product(): Optional<Product> = Optional.ofNullable(product.getNullable("product"))
+
+    fun applicableProductTags(): Optional<List<String>> =
+        Optional.ofNullable(applicableProductTags.getNullable("applicable_product_tags"))
+
+    fun overrideSpecifiers(): Optional<List<OverrideSpecifier>> =
+        Optional.ofNullable(overrideSpecifiers.getNullable("override_specifiers"))
+
+    fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+    fun endingBefore(): Optional<OffsetDateTime> =
+        Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+    fun entitled(): Optional<Boolean> = Optional.ofNullable(entitled.getNullable("entitled"))
+
+    fun type(): Optional<Type> = Optional.ofNullable(type.getNullable("type"))
+
+    fun multiplier(): Optional<Double> = Optional.ofNullable(multiplier.getNullable("multiplier"))
+
+    fun overwriteRate(): Optional<OverwriteRate> =
+        Optional.ofNullable(overwriteRate.getNullable("overwrite_rate"))
+
+    @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+    @JsonProperty("product") @ExcludeMissing fun _product() = product
+
+    @JsonProperty("applicable_product_tags")
+    @ExcludeMissing
+    fun _applicableProductTags() = applicableProductTags
+
+    @JsonProperty("override_specifiers")
+    @ExcludeMissing
+    fun _overrideSpecifiers() = overrideSpecifiers
+
+    @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+
+    @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
+
+    @JsonProperty("entitled") @ExcludeMissing fun _entitled() = entitled
+
+    @JsonProperty("type") @ExcludeMissing fun _type() = type
+
+    @JsonProperty("multiplier") @ExcludeMissing fun _multiplier() = multiplier
+
+    @JsonProperty("overwrite_rate") @ExcludeMissing fun _overwriteRate() = overwriteRate
+
+    @JsonAnyGetter
+    @ExcludeMissing
+    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    fun validate(): Override = apply {
+        if (!validated) {
+            id()
+            product().map { it.validate() }
+            applicableProductTags()
+            overrideSpecifiers().map { it.forEach { it.validate() } }
+            startingAt()
+            endingBefore()
+            entitled()
+            type()
+            multiplier()
+            overwriteRate().map { it.validate() }
+            validated = true
+        }
+    }
+
+    fun toBuilder() = Builder().from(this)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is Override &&
+            this.id == other.id &&
+            this.product == other.product &&
+            this.applicableProductTags == other.applicableProductTags &&
+            this.overrideSpecifiers == other.overrideSpecifiers &&
+            this.startingAt == other.startingAt &&
+            this.endingBefore == other.endingBefore &&
+            this.entitled == other.entitled &&
+            this.type == other.type &&
+            this.multiplier == other.multiplier &&
+            this.overwriteRate == other.overwriteRate &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    id,
+                    product,
+                    applicableProductTags,
+                    overrideSpecifiers,
+                    startingAt,
+                    endingBefore,
+                    entitled,
+                    type,
+                    multiplier,
+                    overwriteRate,
+                    additionalProperties,
+                )
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "Override{id=$id, product=$product, applicableProductTags=$applicableProductTags, overrideSpecifiers=$overrideSpecifiers, startingAt=$startingAt, endingBefore=$endingBefore, entitled=$entitled, type=$type, multiplier=$multiplier, overwriteRate=$overwriteRate, additionalProperties=$additionalProperties}"
+
+    companion object {
+
+        @JvmStatic fun builder() = Builder()
+    }
+
+    class Builder {
+
+        private var id: JsonField<String> = JsonMissing.of()
+        private var product: JsonField<Product> = JsonMissing.of()
+        private var applicableProductTags: JsonField<List<String>> = JsonMissing.of()
+        private var overrideSpecifiers: JsonField<List<OverrideSpecifier>> = JsonMissing.of()
+        private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var entitled: JsonField<Boolean> = JsonMissing.of()
+        private var type: JsonField<Type> = JsonMissing.of()
+        private var multiplier: JsonField<Double> = JsonMissing.of()
+        private var overwriteRate: JsonField<OverwriteRate> = JsonMissing.of()
+        private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+        @JvmSynthetic
+        internal fun from(override: Override) = apply {
+            this.id = override.id
+            this.product = override.product
+            this.applicableProductTags = override.applicableProductTags
+            this.overrideSpecifiers = override.overrideSpecifiers
+            this.startingAt = override.startingAt
+            this.endingBefore = override.endingBefore
+            this.entitled = override.entitled
+            this.type = override.type
+            this.multiplier = override.multiplier
+            this.overwriteRate = override.overwriteRate
+            additionalProperties(override.additionalProperties)
+        }
+
+        fun id(id: String) = id(JsonField.of(id))
+
+        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+
+        fun product(product: Product) = product(JsonField.of(product))
+
+        @JsonProperty("product")
+        @ExcludeMissing
+        fun product(product: JsonField<Product>) = apply { this.product = product }
+
+        fun applicableProductTags(applicableProductTags: List<String>) =
+            applicableProductTags(JsonField.of(applicableProductTags))
+
+        @JsonProperty("applicable_product_tags")
+        @ExcludeMissing
+        fun applicableProductTags(applicableProductTags: JsonField<List<String>>) = apply {
+            this.applicableProductTags = applicableProductTags
+        }
+
+        fun overrideSpecifiers(overrideSpecifiers: List<OverrideSpecifier>) =
+            overrideSpecifiers(JsonField.of(overrideSpecifiers))
+
+        @JsonProperty("override_specifiers")
+        @ExcludeMissing
+        fun overrideSpecifiers(overrideSpecifiers: JsonField<List<OverrideSpecifier>>) = apply {
+            this.overrideSpecifiers = overrideSpecifiers
+        }
+
+        fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
+
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+            this.startingAt = startingAt
+        }
+
+        fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
+
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+            this.endingBefore = endingBefore
+        }
+
+        fun entitled(entitled: Boolean) = entitled(JsonField.of(entitled))
+
+        @JsonProperty("entitled")
+        @ExcludeMissing
+        fun entitled(entitled: JsonField<Boolean>) = apply { this.entitled = entitled }
+
+        fun type(type: Type) = type(JsonField.of(type))
+
+        @JsonProperty("type")
+        @ExcludeMissing
+        fun type(type: JsonField<Type>) = apply { this.type = type }
+
+        fun multiplier(multiplier: Double) = multiplier(JsonField.of(multiplier))
+
+        @JsonProperty("multiplier")
+        @ExcludeMissing
+        fun multiplier(multiplier: JsonField<Double>) = apply { this.multiplier = multiplier }
+
+        fun overwriteRate(overwriteRate: OverwriteRate) = overwriteRate(JsonField.of(overwriteRate))
+
+        @JsonProperty("overwrite_rate")
+        @ExcludeMissing
+        fun overwriteRate(overwriteRate: JsonField<OverwriteRate>) = apply {
+            this.overwriteRate = overwriteRate
+        }
+
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            this.additionalProperties.putAll(additionalProperties)
+        }
+
+        @JsonAnySetter
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            this.additionalProperties.put(key, value)
+        }
+
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun build(): Override =
+            Override(
+                id,
+                product,
+                applicableProductTags.map { it.toUnmodifiable() },
+                overrideSpecifiers.map { it.toUnmodifiable() },
+                startingAt,
+                endingBefore,
+                entitled,
+                type,
+                multiplier,
+                overwriteRate,
+                additionalProperties.toUnmodifiable(),
+            )
+    }
+
+    @JsonDeserialize(builder = OverrideSpecifier.Builder::class)
+    @NoAutoDetect
+    class OverrideSpecifier
+    private constructor(
+        private val productId: JsonField<String>,
+        private val productTags: JsonField<List<String>>,
+        private val pricingGroupValues: JsonField<PricingGroupValues>,
+        private val presentationGroupValues: JsonField<PresentationGroupValues>,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        private var validated: Boolean = false
+
+        private var hashCode: Int = 0
+
+        fun productId(): Optional<String> = Optional.ofNullable(productId.getNullable("product_id"))
+
+        fun productTags(): Optional<List<String>> =
+            Optional.ofNullable(productTags.getNullable("product_tags"))
+
+        fun pricingGroupValues(): Optional<PricingGroupValues> =
+            Optional.ofNullable(pricingGroupValues.getNullable("pricing_group_values"))
+
+        fun presentationGroupValues(): Optional<PresentationGroupValues> =
+            Optional.ofNullable(presentationGroupValues.getNullable("presentation_group_values"))
+
+        @JsonProperty("product_id") @ExcludeMissing fun _productId() = productId
+
+        @JsonProperty("product_tags") @ExcludeMissing fun _productTags() = productTags
+
+        @JsonProperty("pricing_group_values")
+        @ExcludeMissing
+        fun _pricingGroupValues() = pricingGroupValues
+
+        @JsonProperty("presentation_group_values")
+        @ExcludeMissing
+        fun _presentationGroupValues() = presentationGroupValues
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun validate(): OverrideSpecifier = apply {
+            if (!validated) {
+                productId()
+                productTags()
+                pricingGroupValues().map { it.validate() }
+                presentationGroupValues().map { it.validate() }
+                validated = true
+            }
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is OverrideSpecifier &&
+                this.productId == other.productId &&
+                this.productTags == other.productTags &&
+                this.pricingGroupValues == other.pricingGroupValues &&
+                this.presentationGroupValues == other.presentationGroupValues &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        productId,
+                        productTags,
+                        pricingGroupValues,
+                        presentationGroupValues,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "OverrideSpecifier{productId=$productId, productTags=$productTags, pricingGroupValues=$pricingGroupValues, presentationGroupValues=$presentationGroupValues, additionalProperties=$additionalProperties}"
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var productId: JsonField<String> = JsonMissing.of()
+            private var productTags: JsonField<List<String>> = JsonMissing.of()
+            private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
+            private var presentationGroupValues: JsonField<PresentationGroupValues> =
+                JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(overrideSpecifier: OverrideSpecifier) = apply {
+                this.productId = overrideSpecifier.productId
+                this.productTags = overrideSpecifier.productTags
+                this.pricingGroupValues = overrideSpecifier.pricingGroupValues
+                this.presentationGroupValues = overrideSpecifier.presentationGroupValues
+                additionalProperties(overrideSpecifier.additionalProperties)
+            }
+
+            fun productId(productId: String) = productId(JsonField.of(productId))
+
+            @JsonProperty("product_id")
+            @ExcludeMissing
+            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
+
+            fun productTags(productTags: List<String>) = productTags(JsonField.of(productTags))
+
+            @JsonProperty("product_tags")
+            @ExcludeMissing
+            fun productTags(productTags: JsonField<List<String>>) = apply {
+                this.productTags = productTags
+            }
+
+            fun pricingGroupValues(pricingGroupValues: PricingGroupValues) =
+                pricingGroupValues(JsonField.of(pricingGroupValues))
+
+            @JsonProperty("pricing_group_values")
+            @ExcludeMissing
+            fun pricingGroupValues(pricingGroupValues: JsonField<PricingGroupValues>) = apply {
+                this.pricingGroupValues = pricingGroupValues
+            }
+
+            fun presentationGroupValues(presentationGroupValues: PresentationGroupValues) =
+                presentationGroupValues(JsonField.of(presentationGroupValues))
+
+            @JsonProperty("presentation_group_values")
+            @ExcludeMissing
+            fun presentationGroupValues(
+                presentationGroupValues: JsonField<PresentationGroupValues>
+            ) = apply { this.presentationGroupValues = presentationGroupValues }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): OverrideSpecifier =
+                OverrideSpecifier(
+                    productId,
+                    productTags.map { it.toUnmodifiable() },
+                    pricingGroupValues,
+                    presentationGroupValues,
+                    additionalProperties.toUnmodifiable(),
+                )
+        }
+
+        @JsonDeserialize(builder = PresentationGroupValues.Builder::class)
+        @NoAutoDetect
+        class PresentationGroupValues
+        private constructor(
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): PresentationGroupValues = apply {
+                if (!validated) {
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is PresentationGroupValues &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = Objects.hash(additionalProperties)
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PresentationGroupValues{additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(presentationGroupValues: PresentationGroupValues) = apply {
+                    additionalProperties(presentationGroupValues.additionalProperties)
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): PresentationGroupValues =
+                    PresentationGroupValues(additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = PricingGroupValues.Builder::class)
+        @NoAutoDetect
+        class PricingGroupValues
+        private constructor(
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): PricingGroupValues = apply {
+                if (!validated) {
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is PricingGroupValues &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = Objects.hash(additionalProperties)
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PricingGroupValues{additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(pricingGroupValues: PricingGroupValues) = apply {
+                    additionalProperties(pricingGroupValues.additionalProperties)
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): PricingGroupValues =
+                    PricingGroupValues(additionalProperties.toUnmodifiable())
+            }
+        }
+    }
+
+    @JsonDeserialize(builder = OverwriteRate.Builder::class)
+    @NoAutoDetect
+    class OverwriteRate
+    private constructor(
+        private val rateType: JsonField<RateType>,
+        private val price: JsonField<Double>,
+        private val quantity: JsonField<Double>,
+        private val isProrated: JsonField<Boolean>,
+        private val tiers: JsonField<List<Tier>>,
+        private val customRate: JsonField<CustomRate>,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        private var validated: Boolean = false
+
+        private var hashCode: Int = 0
+
+        fun rateType(): RateType = rateType.getRequired("rate_type")
+
+        /**
+         * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this is a
+         * decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+         */
+        fun price(): Optional<Double> = Optional.ofNullable(price.getNullable("price"))
+
+        /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+        fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
+
+        /** Default proration configuration. Only valid for SUBSCRIPTION rate_type. */
+        fun isProrated(): Optional<Boolean> =
+            Optional.ofNullable(isProrated.getNullable("is_prorated"))
+
+        /** Only set for TIERED rate_type. */
+        fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers.getNullable("tiers"))
+
+        /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
+        fun customRate(): Optional<CustomRate> =
+            Optional.ofNullable(customRate.getNullable("custom_rate"))
+
+        @JsonProperty("rate_type") @ExcludeMissing fun _rateType() = rateType
+
+        /**
+         * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this is a
+         * decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+         */
+        @JsonProperty("price") @ExcludeMissing fun _price() = price
+
+        /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+
+        /** Default proration configuration. Only valid for SUBSCRIPTION rate_type. */
+        @JsonProperty("is_prorated") @ExcludeMissing fun _isProrated() = isProrated
+
+        /** Only set for TIERED rate_type. */
+        @JsonProperty("tiers") @ExcludeMissing fun _tiers() = tiers
+
+        /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
+        @JsonProperty("custom_rate") @ExcludeMissing fun _customRate() = customRate
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun validate(): OverwriteRate = apply {
+            if (!validated) {
+                rateType()
+                price()
+                quantity()
+                isProrated()
+                tiers().map { it.forEach { it.validate() } }
+                customRate().map { it.validate() }
+                validated = true
+            }
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is OverwriteRate &&
+                this.rateType == other.rateType &&
+                this.price == other.price &&
+                this.quantity == other.quantity &&
+                this.isProrated == other.isProrated &&
+                this.tiers == other.tiers &&
+                this.customRate == other.customRate &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        rateType,
+                        price,
+                        quantity,
+                        isProrated,
+                        tiers,
+                        customRate,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "OverwriteRate{rateType=$rateType, price=$price, quantity=$quantity, isProrated=$isProrated, tiers=$tiers, customRate=$customRate, additionalProperties=$additionalProperties}"
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var rateType: JsonField<RateType> = JsonMissing.of()
+            private var price: JsonField<Double> = JsonMissing.of()
+            private var quantity: JsonField<Double> = JsonMissing.of()
+            private var isProrated: JsonField<Boolean> = JsonMissing.of()
+            private var tiers: JsonField<List<Tier>> = JsonMissing.of()
+            private var customRate: JsonField<CustomRate> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(overwriteRate: OverwriteRate) = apply {
+                this.rateType = overwriteRate.rateType
+                this.price = overwriteRate.price
+                this.quantity = overwriteRate.quantity
+                this.isProrated = overwriteRate.isProrated
+                this.tiers = overwriteRate.tiers
+                this.customRate = overwriteRate.customRate
+                additionalProperties(overwriteRate.additionalProperties)
+            }
+
+            fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
+
+            @JsonProperty("rate_type")
+            @ExcludeMissing
+            fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
+
+            /**
+             * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this
+             * is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+             */
+            fun price(price: Double) = price(JsonField.of(price))
+
+            /**
+             * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this
+             * is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+             */
+            @JsonProperty("price")
+            @ExcludeMissing
+            fun price(price: JsonField<Double>) = apply { this.price = price }
+
+            /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+            fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+
+            /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+            @JsonProperty("quantity")
+            @ExcludeMissing
+            fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
+
+            /** Default proration configuration. Only valid for SUBSCRIPTION rate_type. */
+            fun isProrated(isProrated: Boolean) = isProrated(JsonField.of(isProrated))
+
+            /** Default proration configuration. Only valid for SUBSCRIPTION rate_type. */
+            @JsonProperty("is_prorated")
+            @ExcludeMissing
+            fun isProrated(isProrated: JsonField<Boolean>) = apply { this.isProrated = isProrated }
+
+            /** Only set for TIERED rate_type. */
+            fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
+
+            /** Only set for TIERED rate_type. */
+            @JsonProperty("tiers")
+            @ExcludeMissing
+            fun tiers(tiers: JsonField<List<Tier>>) = apply { this.tiers = tiers }
+
+            /**
+             * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
+             */
+            fun customRate(customRate: CustomRate) = customRate(JsonField.of(customRate))
+
+            /**
+             * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
+             */
+            @JsonProperty("custom_rate")
+            @ExcludeMissing
+            fun customRate(customRate: JsonField<CustomRate>) = apply {
+                this.customRate = customRate
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): OverwriteRate =
+                OverwriteRate(
+                    rateType,
+                    price,
+                    quantity,
+                    isProrated,
+                    tiers.map { it.toUnmodifiable() },
+                    customRate,
+                    additionalProperties.toUnmodifiable(),
+                )
+        }
+
+        class RateType
+        @JsonCreator
+        private constructor(
+            private val value: JsonField<String>,
+        ) : Enum {
+
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is RateType && this.value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+
+            companion object {
+
+                @JvmField val FLAT = RateType(JsonField.of("FLAT"))
+
+                @JvmField val FLAT = RateType(JsonField.of("flat"))
+
+                @JvmField val PERCENTAGE = RateType(JsonField.of("PERCENTAGE"))
+
+                @JvmField val PERCENTAGE = RateType(JsonField.of("percentage"))
+
+                @JvmField val SUBSCRIPTION = RateType(JsonField.of("SUBSCRIPTION"))
+
+                @JvmField val SUBSCRIPTION = RateType(JsonField.of("subscription"))
+
+                @JvmField val TIERED = RateType(JsonField.of("TIERED"))
+
+                @JvmField val TIERED = RateType(JsonField.of("tiered"))
+
+                @JvmField val CUSTOM = RateType(JsonField.of("CUSTOM"))
+
+                @JvmField val CUSTOM = RateType(JsonField.of("custom"))
+
+                @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
+            }
+
+            enum class Known {
+                FLAT,
+                FLAT,
+                PERCENTAGE,
+                PERCENTAGE,
+                SUBSCRIPTION,
+                SUBSCRIPTION,
+                TIERED,
+                TIERED,
+                CUSTOM,
+                CUSTOM,
+            }
+
+            enum class Value {
+                FLAT,
+                FLAT,
+                PERCENTAGE,
+                PERCENTAGE,
+                SUBSCRIPTION,
+                SUBSCRIPTION,
+                TIERED,
+                TIERED,
+                CUSTOM,
+                CUSTOM,
+                _UNKNOWN,
+            }
+
+            fun value(): Value =
+                when (this) {
+                    FLAT -> Value.FLAT
+                    FLAT -> Value.FLAT
+                    PERCENTAGE -> Value.PERCENTAGE
+                    PERCENTAGE -> Value.PERCENTAGE
+                    SUBSCRIPTION -> Value.SUBSCRIPTION
+                    SUBSCRIPTION -> Value.SUBSCRIPTION
+                    TIERED -> Value.TIERED
+                    TIERED -> Value.TIERED
+                    CUSTOM -> Value.CUSTOM
+                    CUSTOM -> Value.CUSTOM
+                    else -> Value._UNKNOWN
+                }
+
+            fun known(): Known =
+                when (this) {
+                    FLAT -> Known.FLAT
+                    FLAT -> Known.FLAT
+                    PERCENTAGE -> Known.PERCENTAGE
+                    PERCENTAGE -> Known.PERCENTAGE
+                    SUBSCRIPTION -> Known.SUBSCRIPTION
+                    SUBSCRIPTION -> Known.SUBSCRIPTION
+                    TIERED -> Known.TIERED
+                    TIERED -> Known.TIERED
+                    CUSTOM -> Known.CUSTOM
+                    CUSTOM -> Known.CUSTOM
+                    else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
+                }
+
+            fun asString(): String = _value().asStringOrThrow()
+        }
+
+        /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
+        @JsonDeserialize(builder = CustomRate.Builder::class)
+        @NoAutoDetect
+        class CustomRate
+        private constructor(
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): CustomRate = apply {
+                if (!validated) {
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is CustomRate &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = Objects.hash(additionalProperties)
+                }
+                return hashCode
+            }
+
+            override fun toString() = "CustomRate{additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(customRate: CustomRate) = apply {
+                    additionalProperties(customRate.additionalProperties)
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): CustomRate = CustomRate(additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = Tier.Builder::class)
+        @NoAutoDetect
+        class Tier
+        private constructor(
+            private val size: JsonField<Double>,
+            private val price: JsonField<Double>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun size(): Optional<Double> = Optional.ofNullable(size.getNullable("size"))
+
+            fun price(): Double = price.getRequired("price")
+
+            @JsonProperty("size") @ExcludeMissing fun _size() = size
+
+            @JsonProperty("price") @ExcludeMissing fun _price() = price
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): Tier = apply {
+                if (!validated) {
+                    size()
+                    price()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Tier &&
+                    this.size == other.size &&
+                    this.price == other.price &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            size,
+                            price,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "Tier{size=$size, price=$price, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var size: JsonField<Double> = JsonMissing.of()
+                private var price: JsonField<Double> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(tier: Tier) = apply {
+                    this.size = tier.size
+                    this.price = tier.price
+                    additionalProperties(tier.additionalProperties)
+                }
+
+                fun size(size: Double) = size(JsonField.of(size))
+
+                @JsonProperty("size")
+                @ExcludeMissing
+                fun size(size: JsonField<Double>) = apply { this.size = size }
+
+                fun price(price: Double) = price(JsonField.of(price))
+
+                @JsonProperty("price")
+                @ExcludeMissing
+                fun price(price: JsonField<Double>) = apply { this.price = price }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): Tier =
+                    Tier(
+                        size,
+                        price,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+        }
+    }
+
+    @JsonDeserialize(builder = Product.Builder::class)
+    @NoAutoDetect
+    class Product
+    private constructor(
+        private val id: JsonField<String>,
+        private val name: JsonField<String>,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        private var validated: Boolean = false
+
+        private var hashCode: Int = 0
+
+        fun id(): String = id.getRequired("id")
+
+        fun name(): String = name.getRequired("name")
+
+        @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+        @JsonProperty("name") @ExcludeMissing fun _name() = name
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun validate(): Product = apply {
+            if (!validated) {
+                id()
+                name()
+                validated = true
+            }
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Product &&
+                this.id == other.id &&
+                this.name == other.name &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        id,
+                        name,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Product{id=$id, name=$name, additionalProperties=$additionalProperties}"
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var id: JsonField<String> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(product: Product) = apply {
+                this.id = product.id
+                this.name = product.name
+                additionalProperties(product.additionalProperties)
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            @JsonProperty("id")
+            @ExcludeMissing
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun name(name: String) = name(JsonField.of(name))
+
+            @JsonProperty("name")
+            @ExcludeMissing
+            fun name(name: JsonField<String>) = apply { this.name = name }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): Product =
+                Product(
+                    id,
+                    name,
+                    additionalProperties.toUnmodifiable(),
+                )
+        }
+    }
+
+    class Type
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
+
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Type && this.value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+
+        companion object {
+
+            @JvmField val OVERWRITE = Type(JsonField.of("OVERWRITE"))
+
+            @JvmField val MULTIPLIER = Type(JsonField.of("MULTIPLIER"))
+
+            @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+        }
+
+        enum class Known {
+            OVERWRITE,
+            MULTIPLIER,
+        }
+
+        enum class Value {
+            OVERWRITE,
+            MULTIPLIER,
+            _UNKNOWN,
+        }
+
+        fun value(): Value =
+            when (this) {
+                OVERWRITE -> Value.OVERWRITE
+                MULTIPLIER -> Value.MULTIPLIER
+                else -> Value._UNKNOWN
+            }
+
+        fun known(): Known =
+            when (this) {
+                OVERWRITE -> Known.OVERWRITE
+                MULTIPLIER -> Known.MULTIPLIER
+                else -> throw MetronomeInvalidDataException("Unknown Type: $value")
+            }
+
+        fun asString(): String = _value().asStringOrThrow()
+    }
+}

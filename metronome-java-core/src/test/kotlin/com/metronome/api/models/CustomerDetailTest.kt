@@ -1,0 +1,49 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.metronome.api.models
+
+import java.time.OffsetDateTime
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+class CustomerDetailTest {
+
+    @Test
+    fun createCustomerDetail() {
+        val customerDetail =
+            CustomerDetail.builder()
+                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .currentBillableStatus(
+                    CustomerDetail.CurrentBillableStatus.builder()
+                        .value(CustomerDetail.CurrentBillableStatus.Value.BILLABLE)
+                        .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .build()
+                )
+                .customFields(CustomerDetail.CustomFields.builder().build())
+                .customerConfig(
+                    CustomerDetail.CustomerConfig.builder().salesforceAccountId("string").build()
+                )
+                .externalId("string")
+                .ingestAliases(listOf("string"))
+                .name("string")
+                .build()
+        assertThat(customerDetail).isNotNull
+        assertThat(customerDetail.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(customerDetail.currentBillableStatus())
+            .isEqualTo(
+                CustomerDetail.CurrentBillableStatus.builder()
+                    .value(CustomerDetail.CurrentBillableStatus.Value.BILLABLE)
+                    .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .build()
+            )
+        assertThat(customerDetail.customFields())
+            .isEqualTo(CustomerDetail.CustomFields.builder().build())
+        assertThat(customerDetail.customerConfig())
+            .isEqualTo(
+                CustomerDetail.CustomerConfig.builder().salesforceAccountId("string").build()
+            )
+        assertThat(customerDetail.externalId()).isEqualTo("string")
+        assertThat(customerDetail.ingestAliases()).containsExactly("string")
+        assertThat(customerDetail.name()).isEqualTo("string")
+    }
+}

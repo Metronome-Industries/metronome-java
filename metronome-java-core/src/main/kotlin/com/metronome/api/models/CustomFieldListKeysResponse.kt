@@ -1,0 +1,410 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.metronome.api.models
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.metronome.api.core.Enum
+import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
+import com.metronome.api.core.JsonValue
+import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.errors.MetronomeInvalidDataException
+import java.util.Objects
+import java.util.Optional
+
+@JsonDeserialize(builder = CustomFieldListKeysResponse.Builder::class)
+@NoAutoDetect
+class CustomFieldListKeysResponse
+private constructor(
+    private val data: JsonField<List<Data>>,
+    private val nextPage: JsonField<String>,
+    private val additionalProperties: Map<String, JsonValue>,
+) {
+
+    private var validated: Boolean = false
+
+    private var hashCode: Int = 0
+
+    fun data(): List<Data> = data.getRequired("data")
+
+    fun nextPage(): Optional<String> = Optional.ofNullable(nextPage.getNullable("next_page"))
+
+    @JsonProperty("data") @ExcludeMissing fun _data() = data
+
+    @JsonProperty("next_page") @ExcludeMissing fun _nextPage() = nextPage
+
+    @JsonAnyGetter
+    @ExcludeMissing
+    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    fun validate(): CustomFieldListKeysResponse = apply {
+        if (!validated) {
+            data().forEach { it.validate() }
+            nextPage()
+            validated = true
+        }
+    }
+
+    fun toBuilder() = Builder().from(this)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is CustomFieldListKeysResponse &&
+            this.data == other.data &&
+            this.nextPage == other.nextPage &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    data,
+                    nextPage,
+                    additionalProperties,
+                )
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "CustomFieldListKeysResponse{data=$data, nextPage=$nextPage, additionalProperties=$additionalProperties}"
+
+    companion object {
+
+        @JvmStatic fun builder() = Builder()
+    }
+
+    class Builder {
+
+        private var data: JsonField<List<Data>> = JsonMissing.of()
+        private var nextPage: JsonField<String> = JsonMissing.of()
+        private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+        @JvmSynthetic
+        internal fun from(customFieldListKeysResponse: CustomFieldListKeysResponse) = apply {
+            this.data = customFieldListKeysResponse.data
+            this.nextPage = customFieldListKeysResponse.nextPage
+            additionalProperties(customFieldListKeysResponse.additionalProperties)
+        }
+
+        fun data(data: List<Data>) = data(JsonField.of(data))
+
+        @JsonProperty("data")
+        @ExcludeMissing
+        fun data(data: JsonField<List<Data>>) = apply { this.data = data }
+
+        fun nextPage(nextPage: String) = nextPage(JsonField.of(nextPage))
+
+        @JsonProperty("next_page")
+        @ExcludeMissing
+        fun nextPage(nextPage: JsonField<String>) = apply { this.nextPage = nextPage }
+
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            this.additionalProperties.putAll(additionalProperties)
+        }
+
+        @JsonAnySetter
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            this.additionalProperties.put(key, value)
+        }
+
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun build(): CustomFieldListKeysResponse =
+            CustomFieldListKeysResponse(
+                data.map { it.toUnmodifiable() },
+                nextPage,
+                additionalProperties.toUnmodifiable(),
+            )
+    }
+
+    @JsonDeserialize(builder = Data.Builder::class)
+    @NoAutoDetect
+    class Data
+    private constructor(
+        private val entity: JsonField<Entity>,
+        private val key: JsonField<String>,
+        private val enforceUniqueness: JsonField<Boolean>,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        private var validated: Boolean = false
+
+        private var hashCode: Int = 0
+
+        fun entity(): Entity = entity.getRequired("entity")
+
+        fun key(): String = key.getRequired("key")
+
+        fun enforceUniqueness(): Boolean = enforceUniqueness.getRequired("enforce_uniqueness")
+
+        @JsonProperty("entity") @ExcludeMissing fun _entity() = entity
+
+        @JsonProperty("key") @ExcludeMissing fun _key() = key
+
+        @JsonProperty("enforce_uniqueness")
+        @ExcludeMissing
+        fun _enforceUniqueness() = enforceUniqueness
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun validate(): Data = apply {
+            if (!validated) {
+                entity()
+                key()
+                enforceUniqueness()
+                validated = true
+            }
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Data &&
+                this.entity == other.entity &&
+                this.key == other.key &&
+                this.enforceUniqueness == other.enforceUniqueness &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        entity,
+                        key,
+                        enforceUniqueness,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Data{entity=$entity, key=$key, enforceUniqueness=$enforceUniqueness, additionalProperties=$additionalProperties}"
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var entity: JsonField<Entity> = JsonMissing.of()
+            private var key: JsonField<String> = JsonMissing.of()
+            private var enforceUniqueness: JsonField<Boolean> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(data: Data) = apply {
+                this.entity = data.entity
+                this.key = data.key
+                this.enforceUniqueness = data.enforceUniqueness
+                additionalProperties(data.additionalProperties)
+            }
+
+            fun entity(entity: Entity) = entity(JsonField.of(entity))
+
+            @JsonProperty("entity")
+            @ExcludeMissing
+            fun entity(entity: JsonField<Entity>) = apply { this.entity = entity }
+
+            fun key(key: String) = key(JsonField.of(key))
+
+            @JsonProperty("key")
+            @ExcludeMissing
+            fun key(key: JsonField<String>) = apply { this.key = key }
+
+            fun enforceUniqueness(enforceUniqueness: Boolean) =
+                enforceUniqueness(JsonField.of(enforceUniqueness))
+
+            @JsonProperty("enforce_uniqueness")
+            @ExcludeMissing
+            fun enforceUniqueness(enforceUniqueness: JsonField<Boolean>) = apply {
+                this.enforceUniqueness = enforceUniqueness
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): Data =
+                Data(
+                    entity,
+                    key,
+                    enforceUniqueness,
+                    additionalProperties.toUnmodifiable(),
+                )
+        }
+
+        class Entity
+        @JsonCreator
+        private constructor(
+            private val value: JsonField<String>,
+        ) : Enum {
+
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Entity && this.value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+
+            companion object {
+
+                @JvmField val ALERT = Entity(JsonField.of("alert"))
+
+                @JvmField val BILLABLE_METRIC = Entity(JsonField.of("billable_metric"))
+
+                @JvmField val CHARGE = Entity(JsonField.of("charge"))
+
+                @JvmField val COMMIT = Entity(JsonField.of("commit"))
+
+                @JvmField val CONTRACT_CREDIT = Entity(JsonField.of("contract_credit"))
+
+                @JvmField val CONTRACT_PRODUCT = Entity(JsonField.of("contract_product"))
+
+                @JvmField val CONTRACT = Entity(JsonField.of("contract"))
+
+                @JvmField val CREDIT_GRANT = Entity(JsonField.of("credit_grant"))
+
+                @JvmField val CUSTOMER_PLAN = Entity(JsonField.of("customer_plan"))
+
+                @JvmField val CUSTOMER = Entity(JsonField.of("customer"))
+
+                @JvmField val INVOICE = Entity(JsonField.of("invoice"))
+
+                @JvmField val PLAN = Entity(JsonField.of("plan"))
+
+                @JvmField val PROFESSIONAL_SERVICE = Entity(JsonField.of("professional_service"))
+
+                @JvmField val PRODUCT = Entity(JsonField.of("product"))
+
+                @JvmField val RATE_CARD = Entity(JsonField.of("rate_card"))
+
+                @JvmField val SCHEDULED_CHARGE = Entity(JsonField.of("scheduled_charge"))
+
+                @JvmStatic fun of(value: String) = Entity(JsonField.of(value))
+            }
+
+            enum class Known {
+                ALERT,
+                BILLABLE_METRIC,
+                CHARGE,
+                COMMIT,
+                CONTRACT_CREDIT,
+                CONTRACT_PRODUCT,
+                CONTRACT,
+                CREDIT_GRANT,
+                CUSTOMER_PLAN,
+                CUSTOMER,
+                INVOICE,
+                PLAN,
+                PROFESSIONAL_SERVICE,
+                PRODUCT,
+                RATE_CARD,
+                SCHEDULED_CHARGE,
+            }
+
+            enum class Value {
+                ALERT,
+                BILLABLE_METRIC,
+                CHARGE,
+                COMMIT,
+                CONTRACT_CREDIT,
+                CONTRACT_PRODUCT,
+                CONTRACT,
+                CREDIT_GRANT,
+                CUSTOMER_PLAN,
+                CUSTOMER,
+                INVOICE,
+                PLAN,
+                PROFESSIONAL_SERVICE,
+                PRODUCT,
+                RATE_CARD,
+                SCHEDULED_CHARGE,
+                _UNKNOWN,
+            }
+
+            fun value(): Value =
+                when (this) {
+                    ALERT -> Value.ALERT
+                    BILLABLE_METRIC -> Value.BILLABLE_METRIC
+                    CHARGE -> Value.CHARGE
+                    COMMIT -> Value.COMMIT
+                    CONTRACT_CREDIT -> Value.CONTRACT_CREDIT
+                    CONTRACT_PRODUCT -> Value.CONTRACT_PRODUCT
+                    CONTRACT -> Value.CONTRACT
+                    CREDIT_GRANT -> Value.CREDIT_GRANT
+                    CUSTOMER_PLAN -> Value.CUSTOMER_PLAN
+                    CUSTOMER -> Value.CUSTOMER
+                    INVOICE -> Value.INVOICE
+                    PLAN -> Value.PLAN
+                    PROFESSIONAL_SERVICE -> Value.PROFESSIONAL_SERVICE
+                    PRODUCT -> Value.PRODUCT
+                    RATE_CARD -> Value.RATE_CARD
+                    SCHEDULED_CHARGE -> Value.SCHEDULED_CHARGE
+                    else -> Value._UNKNOWN
+                }
+
+            fun known(): Known =
+                when (this) {
+                    ALERT -> Known.ALERT
+                    BILLABLE_METRIC -> Known.BILLABLE_METRIC
+                    CHARGE -> Known.CHARGE
+                    COMMIT -> Known.COMMIT
+                    CONTRACT_CREDIT -> Known.CONTRACT_CREDIT
+                    CONTRACT_PRODUCT -> Known.CONTRACT_PRODUCT
+                    CONTRACT -> Known.CONTRACT
+                    CREDIT_GRANT -> Known.CREDIT_GRANT
+                    CUSTOMER_PLAN -> Known.CUSTOMER_PLAN
+                    CUSTOMER -> Known.CUSTOMER
+                    INVOICE -> Known.INVOICE
+                    PLAN -> Known.PLAN
+                    PROFESSIONAL_SERVICE -> Known.PROFESSIONAL_SERVICE
+                    PRODUCT -> Known.PRODUCT
+                    RATE_CARD -> Known.RATE_CARD
+                    SCHEDULED_CHARGE -> Known.SCHEDULED_CHARGE
+                    else -> throw MetronomeInvalidDataException("Unknown Entity: $value")
+                }
+
+            fun asString(): String = _value().asStringOrThrow()
+        }
+    }
+}
