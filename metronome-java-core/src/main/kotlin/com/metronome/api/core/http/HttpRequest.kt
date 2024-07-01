@@ -5,6 +5,7 @@ import com.google.common.collect.ListMultimap
 import com.google.common.collect.Multimap
 import com.google.common.collect.MultimapBuilder
 import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.RequestOptions
 
 class HttpRequest
 private constructor(
