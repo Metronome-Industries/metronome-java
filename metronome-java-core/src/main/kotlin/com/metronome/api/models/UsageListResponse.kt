@@ -27,8 +27,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     fun data(): List<Data> = data.getRequired("data")
 
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage.getNullable("next_page"))
@@ -50,32 +48,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is UsageListResponse &&
-            this.data == other.data &&
-            this.nextPage == other.nextPage &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    data,
-                    nextPage,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "UsageListResponse{data=$data, nextPage=$nextPage, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -145,8 +117,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         fun customerId(): String = customerId.getRequired("customer_id")
 
         fun billableMetricId(): String = billableMetricId.getRequired("billable_metric_id")
@@ -205,42 +175,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Data &&
-                this.customerId == other.customerId &&
-                this.billableMetricId == other.billableMetricId &&
-                this.billableMetricName == other.billableMetricName &&
-                this.startTimestamp == other.startTimestamp &&
-                this.endTimestamp == other.endTimestamp &&
-                this.value == other.value &&
-                this.groups == other.groups &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        customerId,
-                        billableMetricId,
-                        billableMetricName,
-                        startTimestamp,
-                        endTimestamp,
-                        value,
-                        groups,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Data{customerId=$customerId, billableMetricId=$billableMetricId, billableMetricName=$billableMetricName, startTimestamp=$startTimestamp, endTimestamp=$endTimestamp, value=$value, groups=$groups, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -372,8 +306,6 @@ private constructor(
 
             private var validated: Boolean = false
 
-            private var hashCode: Int = 0
-
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -385,23 +317,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Groups && this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                }
-                return hashCode
-            }
-
-            override fun toString() = "Groups{additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -434,6 +349,65 @@ private constructor(
 
                 fun build(): Groups = Groups(additionalProperties.toUnmodifiable())
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Groups && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() = "Groups{additionalProperties=$additionalProperties}"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Data && this.customerId == other.customerId && this.billableMetricId == other.billableMetricId && this.billableMetricName == other.billableMetricName && this.startTimestamp == other.startTimestamp && this.endTimestamp == other.endTimestamp && this.value == other.value && this.groups == other.groups && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(customerId, billableMetricId, billableMetricName, startTimestamp, endTimestamp, value, groups, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Data{customerId=$customerId, billableMetricId=$billableMetricId, billableMetricName=$billableMetricName, startTimestamp=$startTimestamp, endTimestamp=$endTimestamp, value=$value, groups=$groups, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is UsageListResponse && this.data == other.data && this.nextPage == other.nextPage && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(data, nextPage, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "UsageListResponse{data=$data, nextPage=$nextPage, additionalProperties=$additionalProperties}"
 }

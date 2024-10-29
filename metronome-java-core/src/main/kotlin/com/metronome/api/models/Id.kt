@@ -24,8 +24,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     fun id(): String = id.getRequired("id")
 
     @JsonProperty("id") @ExcludeMissing fun _id() = id
@@ -42,25 +40,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is Id &&
-            this.id == other.id &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = Objects.hash(id, additionalProperties)
-        }
-        return hashCode
-    }
-
-    override fun toString() = "Id{id=$id, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -98,4 +77,23 @@ private constructor(
 
         fun build(): Id = Id(id, additionalProperties.toUnmodifiable())
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is Id && this.id == other.id && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(id, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() = "Id{id=$id, additionalProperties=$additionalProperties}"
 }

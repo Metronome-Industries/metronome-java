@@ -4,15 +4,15 @@ package com.metronome.api.services.blocking
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.handlers.errorHandler
+import com.metronome.api.core.handlers.jsonHandler
+import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
 import com.metronome.api.core.http.HttpResponse.Handler
 import com.metronome.api.errors.MetronomeError
+import com.metronome.api.models.AuditLogListPage
 import com.metronome.api.models.AuditLogListParams
-import com.metronome.api.models.AuditLogListResponse
-import com.metronome.api.services.errorHandler
-import com.metronome.api.services.jsonHandler
-import com.metronome.api.services.withErrorHandler
 
 class AuditLogServiceImpl
 constructor(
@@ -21,8 +21,9 @@ constructor(
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
-    private val listHandler: Handler<AuditLogListResponse> =
-        jsonHandler<AuditLogListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+    private val listHandler: Handler<AuditLogListPage.Response> =
+        jsonHandler<AuditLogListPage.Response>(clientOptions.jsonMapper)
+            .withErrorHandler(errorHandler)
 
     /**
      * Retrieves a range of audit logs. If no further audit logs are currently available, the data
@@ -33,11 +34,12 @@ constructor(
     override fun list(
         params: AuditLogListParams,
         requestOptions: RequestOptions
-    ): AuditLogListResponse {
+    ): AuditLogListPage {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("auditLogs")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -50,6 +52,7 @@ constructor(
                         validate()
                     }
                 }
+                .let { AuditLogListPage.of(this, params, it) }
         }
     }
 }

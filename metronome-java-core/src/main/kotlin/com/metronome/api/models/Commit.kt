@@ -35,10 +35,11 @@ private constructor(
     private val id: JsonField<String>,
     private val contract: JsonField<Contract>,
     private val type: JsonField<Type>,
+    private val rateType: JsonField<RateType>,
     private val name: JsonField<String>,
     private val priority: JsonField<Double>,
     private val product: JsonField<Product>,
-    private val accessSchedule: JsonField<AccessSchedule>,
+    private val accessSchedule: JsonField<ScheduleDuration>,
     private val invoiceSchedule: JsonField<SchedulePointInTime>,
     private val invoiceContract: JsonField<InvoiceContract>,
     private val rolledOverFrom: JsonField<RolledOverFrom>,
@@ -57,13 +58,13 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     fun id(): String = id.getRequired("id")
 
     fun contract(): Optional<Contract> = Optional.ofNullable(contract.getNullable("contract"))
 
     fun type(): Type = type.getRequired("type")
+
+    fun rateType(): Optional<RateType> = Optional.ofNullable(rateType.getNullable("rate_type"))
 
     fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
 
@@ -76,7 +77,7 @@ private constructor(
     fun product(): Product = product.getRequired("product")
 
     /** The schedule that the customer will gain access to the credits purposed with this commit. */
-    fun accessSchedule(): Optional<AccessSchedule> =
+    fun accessSchedule(): Optional<ScheduleDuration> =
         Optional.ofNullable(accessSchedule.getNullable("access_schedule"))
 
     /** The schedule that the customer will be invoiced for this commit. */
@@ -130,6 +131,8 @@ private constructor(
     @JsonProperty("contract") @ExcludeMissing fun _contract() = contract
 
     @JsonProperty("type") @ExcludeMissing fun _type() = type
+
+    @JsonProperty("rate_type") @ExcludeMissing fun _rateType() = rateType
 
     @JsonProperty("name") @ExcludeMissing fun _name() = name
 
@@ -198,6 +201,7 @@ private constructor(
             id()
             contract().map { it.validate() }
             type()
+            rateType()
             name()
             priority()
             product().validate()
@@ -221,68 +225,6 @@ private constructor(
 
     fun toBuilder() = Builder().from(this)
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is Commit &&
-            this.id == other.id &&
-            this.contract == other.contract &&
-            this.type == other.type &&
-            this.name == other.name &&
-            this.priority == other.priority &&
-            this.product == other.product &&
-            this.accessSchedule == other.accessSchedule &&
-            this.invoiceSchedule == other.invoiceSchedule &&
-            this.invoiceContract == other.invoiceContract &&
-            this.rolledOverFrom == other.rolledOverFrom &&
-            this.description == other.description &&
-            this.rolloverFraction == other.rolloverFraction &&
-            this.applicableProductIds == other.applicableProductIds &&
-            this.applicableProductTags == other.applicableProductTags &&
-            this.applicableContractIds == other.applicableContractIds &&
-            this.netsuiteSalesOrderId == other.netsuiteSalesOrderId &&
-            this.amount == other.amount &&
-            this.salesforceOpportunityId == other.salesforceOpportunityId &&
-            this.ledger == other.ledger &&
-            this.customFields == other.customFields &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    contract,
-                    type,
-                    name,
-                    priority,
-                    product,
-                    accessSchedule,
-                    invoiceSchedule,
-                    invoiceContract,
-                    rolledOverFrom,
-                    description,
-                    rolloverFraction,
-                    applicableProductIds,
-                    applicableProductTags,
-                    applicableContractIds,
-                    netsuiteSalesOrderId,
-                    amount,
-                    salesforceOpportunityId,
-                    ledger,
-                    customFields,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "Commit{id=$id, contract=$contract, type=$type, name=$name, priority=$priority, product=$product, accessSchedule=$accessSchedule, invoiceSchedule=$invoiceSchedule, invoiceContract=$invoiceContract, rolledOverFrom=$rolledOverFrom, description=$description, rolloverFraction=$rolloverFraction, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, applicableContractIds=$applicableContractIds, netsuiteSalesOrderId=$netsuiteSalesOrderId, amount=$amount, salesforceOpportunityId=$salesforceOpportunityId, ledger=$ledger, customFields=$customFields, additionalProperties=$additionalProperties}"
-
     companion object {
 
         @JvmStatic fun builder() = Builder()
@@ -293,10 +235,11 @@ private constructor(
         private var id: JsonField<String> = JsonMissing.of()
         private var contract: JsonField<Contract> = JsonMissing.of()
         private var type: JsonField<Type> = JsonMissing.of()
+        private var rateType: JsonField<RateType> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
         private var priority: JsonField<Double> = JsonMissing.of()
         private var product: JsonField<Product> = JsonMissing.of()
-        private var accessSchedule: JsonField<AccessSchedule> = JsonMissing.of()
+        private var accessSchedule: JsonField<ScheduleDuration> = JsonMissing.of()
         private var invoiceSchedule: JsonField<SchedulePointInTime> = JsonMissing.of()
         private var invoiceContract: JsonField<InvoiceContract> = JsonMissing.of()
         private var rolledOverFrom: JsonField<RolledOverFrom> = JsonMissing.of()
@@ -317,6 +260,7 @@ private constructor(
             this.id = commit.id
             this.contract = commit.contract
             this.type = commit.type
+            this.rateType = commit.rateType
             this.name = commit.name
             this.priority = commit.priority
             this.product = commit.product
@@ -353,6 +297,12 @@ private constructor(
         @ExcludeMissing
         fun type(type: JsonField<Type>) = apply { this.type = type }
 
+        fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
+
+        @JsonProperty("rate_type")
+        @ExcludeMissing
+        fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
+
         fun name(name: String) = name(JsonField.of(name))
 
         @JsonProperty("name")
@@ -382,7 +332,7 @@ private constructor(
         /**
          * The schedule that the customer will gain access to the credits purposed with this commit.
          */
-        fun accessSchedule(accessSchedule: AccessSchedule) =
+        fun accessSchedule(accessSchedule: ScheduleDuration) =
             accessSchedule(JsonField.of(accessSchedule))
 
         /**
@@ -390,7 +340,7 @@ private constructor(
          */
         @JsonProperty("access_schedule")
         @ExcludeMissing
-        fun accessSchedule(accessSchedule: JsonField<AccessSchedule>) = apply {
+        fun accessSchedule(accessSchedule: JsonField<ScheduleDuration>) = apply {
             this.accessSchedule = accessSchedule
         }
 
@@ -538,6 +488,7 @@ private constructor(
                 id,
                 contract,
                 type,
+                rateType,
                 name,
                 priority,
                 product,
@@ -570,8 +521,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         fun id(): String = id.getRequired("id")
 
         fun name(): String = name.getRequired("name")
@@ -593,32 +542,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Product &&
-                this.id == other.id &&
-                this.name == other.name &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        id,
-                        name,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Product{id=$id, name=$name, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -671,6 +594,26 @@ private constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Product && this.id == other.id && this.name == other.name && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(id, name, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Product{id=$id, name=$name, additionalProperties=$additionalProperties}"
     }
 
     class Type
@@ -686,7 +629,7 @@ private constructor(
                 return true
             }
 
-            return other is Type && this.value == other.value
+            return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -730,396 +673,6 @@ private constructor(
         fun asString(): String = _value().asStringOrThrow()
     }
 
-    /** The schedule that the customer will gain access to the credits purposed with this commit. */
-    @JsonDeserialize(builder = AccessSchedule.Builder::class)
-    @NoAutoDetect
-    class AccessSchedule
-    private constructor(
-        private val creditType: JsonField<CreditType>,
-        private val scheduleItems: JsonField<List<ScheduleItem>>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        private var validated: Boolean = false
-
-        private var hashCode: Int = 0
-
-        fun creditType(): Optional<CreditType> =
-            Optional.ofNullable(creditType.getNullable("credit_type"))
-
-        fun scheduleItems(): List<ScheduleItem> = scheduleItems.getRequired("schedule_items")
-
-        @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
-
-        @JsonProperty("schedule_items") @ExcludeMissing fun _scheduleItems() = scheduleItems
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): AccessSchedule = apply {
-            if (!validated) {
-                creditType().map { it.validate() }
-                scheduleItems().forEach { it.validate() }
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is AccessSchedule &&
-                this.creditType == other.creditType &&
-                this.scheduleItems == other.scheduleItems &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        creditType,
-                        scheduleItems,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "AccessSchedule{creditType=$creditType, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var creditType: JsonField<CreditType> = JsonMissing.of()
-            private var scheduleItems: JsonField<List<ScheduleItem>> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(accessSchedule: AccessSchedule) = apply {
-                this.creditType = accessSchedule.creditType
-                this.scheduleItems = accessSchedule.scheduleItems
-                additionalProperties(accessSchedule.additionalProperties)
-            }
-
-            fun creditType(creditType: CreditType) = creditType(JsonField.of(creditType))
-
-            @JsonProperty("credit_type")
-            @ExcludeMissing
-            fun creditType(creditType: JsonField<CreditType>) = apply {
-                this.creditType = creditType
-            }
-
-            fun scheduleItems(scheduleItems: List<ScheduleItem>) =
-                scheduleItems(JsonField.of(scheduleItems))
-
-            @JsonProperty("schedule_items")
-            @ExcludeMissing
-            fun scheduleItems(scheduleItems: JsonField<List<ScheduleItem>>) = apply {
-                this.scheduleItems = scheduleItems
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun build(): AccessSchedule =
-                AccessSchedule(
-                    creditType,
-                    scheduleItems.map { it.toUnmodifiable() },
-                    additionalProperties.toUnmodifiable(),
-                )
-        }
-
-        @JsonDeserialize(builder = ScheduleItem.Builder::class)
-        @NoAutoDetect
-        class ScheduleItem
-        private constructor(
-            private val id: JsonField<String>,
-            private val amount: JsonField<Double>,
-            private val startingAt: JsonField<OffsetDateTime>,
-            private val endingBefore: JsonField<OffsetDateTime>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
-
-            private var validated: Boolean = false
-
-            private var hashCode: Int = 0
-
-            fun id(): String = id.getRequired("id")
-
-            fun amount(): Double = amount.getRequired("amount")
-
-            fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
-
-            fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
-
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
-
-            @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
-
-            @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
-
-            @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): ScheduleItem = apply {
-                if (!validated) {
-                    id()
-                    amount()
-                    startingAt()
-                    endingBefore()
-                    validated = true
-                }
-            }
-
-            fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is ScheduleItem &&
-                    this.id == other.id &&
-                    this.amount == other.amount &&
-                    this.startingAt == other.startingAt &&
-                    this.endingBefore == other.endingBefore &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            amount,
-                            startingAt,
-                            endingBefore,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "ScheduleItem{id=$id, amount=$amount, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
-
-            companion object {
-
-                @JvmStatic fun builder() = Builder()
-            }
-
-            class Builder {
-
-                private var id: JsonField<String> = JsonMissing.of()
-                private var amount: JsonField<Double> = JsonMissing.of()
-                private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
-                private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(scheduleItem: ScheduleItem) = apply {
-                    this.id = scheduleItem.id
-                    this.amount = scheduleItem.amount
-                    this.startingAt = scheduleItem.startingAt
-                    this.endingBefore = scheduleItem.endingBefore
-                    additionalProperties(scheduleItem.additionalProperties)
-                }
-
-                fun id(id: String) = id(JsonField.of(id))
-
-                @JsonProperty("id")
-                @ExcludeMissing
-                fun id(id: JsonField<String>) = apply { this.id = id }
-
-                fun amount(amount: Double) = amount(JsonField.of(amount))
-
-                @JsonProperty("amount")
-                @ExcludeMissing
-                fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
-
-                fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
-
-                @JsonProperty("starting_at")
-                @ExcludeMissing
-                fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
-                    this.startingAt = startingAt
-                }
-
-                fun endingBefore(endingBefore: OffsetDateTime) =
-                    endingBefore(JsonField.of(endingBefore))
-
-                @JsonProperty("ending_before")
-                @ExcludeMissing
-                fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
-                    this.endingBefore = endingBefore
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
-                }
-
-                @JsonAnySetter
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun build(): ScheduleItem =
-                    ScheduleItem(
-                        id,
-                        amount,
-                        startingAt,
-                        endingBefore,
-                        additionalProperties.toUnmodifiable(),
-                    )
-            }
-        }
-
-        @JsonDeserialize(builder = CreditType.Builder::class)
-        @NoAutoDetect
-        class CreditType
-        private constructor(
-            private val name: JsonField<String>,
-            private val id: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
-
-            private var validated: Boolean = false
-
-            private var hashCode: Int = 0
-
-            fun name(): String = name.getRequired("name")
-
-            fun id(): String = id.getRequired("id")
-
-            @JsonProperty("name") @ExcludeMissing fun _name() = name
-
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): CreditType = apply {
-                if (!validated) {
-                    name()
-                    id()
-                    validated = true
-                }
-            }
-
-            fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is CreditType &&
-                    this.name == other.name &&
-                    this.id == other.id &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            name,
-                            id,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "CreditType{name=$name, id=$id, additionalProperties=$additionalProperties}"
-
-            companion object {
-
-                @JvmStatic fun builder() = Builder()
-            }
-
-            class Builder {
-
-                private var name: JsonField<String> = JsonMissing.of()
-                private var id: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(creditType: CreditType) = apply {
-                    this.name = creditType.name
-                    this.id = creditType.id
-                    additionalProperties(creditType.additionalProperties)
-                }
-
-                fun name(name: String) = name(JsonField.of(name))
-
-                @JsonProperty("name")
-                @ExcludeMissing
-                fun name(name: JsonField<String>) = apply { this.name = name }
-
-                fun id(id: String) = id(JsonField.of(id))
-
-                @JsonProperty("id")
-                @ExcludeMissing
-                fun id(id: JsonField<String>) = apply { this.id = id }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
-                }
-
-                @JsonAnySetter
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun build(): CreditType =
-                    CreditType(
-                        name,
-                        id,
-                        additionalProperties.toUnmodifiable(),
-                    )
-            }
-        }
-    }
-
     @JsonDeserialize(builder = Contract.Builder::class)
     @NoAutoDetect
     class Contract
@@ -1129,8 +682,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         fun id(): String = id.getRequired("id")
 
@@ -1148,25 +699,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Contract &&
-                this.id == other.id &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(id, additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "Contract{id=$id, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1206,6 +738,25 @@ private constructor(
 
             fun build(): Contract = Contract(id, additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Contract && this.id == other.id && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(id, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "Contract{id=$id, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = CustomFields.Builder::class)
@@ -1216,8 +767,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1230,23 +779,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomFields && this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1278,6 +810,25 @@ private constructor(
 
             fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
     /** The contract that this commit will be billed on. */
@@ -1290,8 +841,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         fun id(): String = id.getRequired("id")
 
@@ -1309,26 +858,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is InvoiceContract &&
-                this.id == other.id &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(id, additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "InvoiceContract{id=$id, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1369,6 +898,26 @@ private constructor(
             fun build(): InvoiceContract =
                 InvoiceContract(id, additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is InvoiceContract && this.id == other.id && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(id, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "InvoiceContract{id=$id, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(using = Ledger.Deserializer::class)
@@ -1391,8 +940,6 @@ private constructor(
             PostpaidCommitAutomatedInvoiceDeductionLedgerEntry? =
             null,
         private val postpaidCommitRolloverLedgerEntry: PostpaidCommitRolloverLedgerEntry? = null,
-        private val postpaidCommitCanceledLedgerEntry: PostpaidCommitCanceledLedgerEntry? = null,
-        private val postpaidCommitCreditedLedgerEntry: PostpaidCommitCreditedLedgerEntry? = null,
         private val postpaidCommitTrueupLedgerEntry: PostpaidCommitTrueupLedgerEntry? = null,
         private val prepaidCommitManualLedgerEntry: PrepaidCommitManualLedgerEntry? = null,
         private val postpaidCommitManualLedgerEntry: PostpaidCommitManualLedgerEntry? = null,
@@ -1433,12 +980,6 @@ private constructor(
         fun postpaidCommitRolloverLedgerEntry(): Optional<PostpaidCommitRolloverLedgerEntry> =
             Optional.ofNullable(postpaidCommitRolloverLedgerEntry)
 
-        fun postpaidCommitCanceledLedgerEntry(): Optional<PostpaidCommitCanceledLedgerEntry> =
-            Optional.ofNullable(postpaidCommitCanceledLedgerEntry)
-
-        fun postpaidCommitCreditedLedgerEntry(): Optional<PostpaidCommitCreditedLedgerEntry> =
-            Optional.ofNullable(postpaidCommitCreditedLedgerEntry)
-
         fun postpaidCommitTrueupLedgerEntry(): Optional<PostpaidCommitTrueupLedgerEntry> =
             Optional.ofNullable(postpaidCommitTrueupLedgerEntry)
 
@@ -1474,12 +1015,6 @@ private constructor(
 
         fun isPostpaidCommitRolloverLedgerEntry(): Boolean =
             postpaidCommitRolloverLedgerEntry != null
-
-        fun isPostpaidCommitCanceledLedgerEntry(): Boolean =
-            postpaidCommitCanceledLedgerEntry != null
-
-        fun isPostpaidCommitCreditedLedgerEntry(): Boolean =
-            postpaidCommitCreditedLedgerEntry != null
 
         fun isPostpaidCommitTrueupLedgerEntry(): Boolean = postpaidCommitTrueupLedgerEntry != null
 
@@ -1524,12 +1059,6 @@ private constructor(
 
         fun asPostpaidCommitRolloverLedgerEntry(): PostpaidCommitRolloverLedgerEntry =
             postpaidCommitRolloverLedgerEntry.getOrThrow("postpaidCommitRolloverLedgerEntry")
-
-        fun asPostpaidCommitCanceledLedgerEntry(): PostpaidCommitCanceledLedgerEntry =
-            postpaidCommitCanceledLedgerEntry.getOrThrow("postpaidCommitCanceledLedgerEntry")
-
-        fun asPostpaidCommitCreditedLedgerEntry(): PostpaidCommitCreditedLedgerEntry =
-            postpaidCommitCreditedLedgerEntry.getOrThrow("postpaidCommitCreditedLedgerEntry")
 
         fun asPostpaidCommitTrueupLedgerEntry(): PostpaidCommitTrueupLedgerEntry =
             postpaidCommitTrueupLedgerEntry.getOrThrow("postpaidCommitTrueupLedgerEntry")
@@ -1577,14 +1106,6 @@ private constructor(
                     visitor.visitPostpaidCommitRolloverLedgerEntry(
                         postpaidCommitRolloverLedgerEntry
                     )
-                postpaidCommitCanceledLedgerEntry != null ->
-                    visitor.visitPostpaidCommitCanceledLedgerEntry(
-                        postpaidCommitCanceledLedgerEntry
-                    )
-                postpaidCommitCreditedLedgerEntry != null ->
-                    visitor.visitPostpaidCommitCreditedLedgerEntry(
-                        postpaidCommitCreditedLedgerEntry
-                    )
                 postpaidCommitTrueupLedgerEntry != null ->
                     visitor.visitPostpaidCommitTrueupLedgerEntry(postpaidCommitTrueupLedgerEntry)
                 prepaidCommitManualLedgerEntry != null ->
@@ -1611,8 +1132,6 @@ private constructor(
                         postpaidCommitInitialBalanceLedgerEntry == null &&
                         postpaidCommitAutomatedInvoiceDeductionLedgerEntry == null &&
                         postpaidCommitRolloverLedgerEntry == null &&
-                        postpaidCommitCanceledLedgerEntry == null &&
-                        postpaidCommitCreditedLedgerEntry == null &&
                         postpaidCommitTrueupLedgerEntry == null &&
                         prepaidCommitManualLedgerEntry == null &&
                         postpaidCommitManualLedgerEntry == null &&
@@ -1629,8 +1148,6 @@ private constructor(
                 postpaidCommitInitialBalanceLedgerEntry?.validate()
                 postpaidCommitAutomatedInvoiceDeductionLedgerEntry?.validate()
                 postpaidCommitRolloverLedgerEntry?.validate()
-                postpaidCommitCanceledLedgerEntry?.validate()
-                postpaidCommitCreditedLedgerEntry?.validate()
                 postpaidCommitTrueupLedgerEntry?.validate()
                 prepaidCommitManualLedgerEntry?.validate()
                 postpaidCommitManualLedgerEntry?.validate()
@@ -1644,48 +1161,11 @@ private constructor(
                 return true
             }
 
-            return other is Ledger &&
-                this.prepaidCommitSegmentStartLedgerEntry ==
-                    other.prepaidCommitSegmentStartLedgerEntry &&
-                this.prepaidCommitAutomatedInvoiceDeductionLedgerEntry ==
-                    other.prepaidCommitAutomatedInvoiceDeductionLedgerEntry &&
-                this.prepaidCommitRolloverLedgerEntry == other.prepaidCommitRolloverLedgerEntry &&
-                this.prepaidCommitExpirationLedgerEntry ==
-                    other.prepaidCommitExpirationLedgerEntry &&
-                this.prepaidCommitCanceledLedgerEntry == other.prepaidCommitCanceledLedgerEntry &&
-                this.prepaidCommitCreditedLedgerEntry == other.prepaidCommitCreditedLedgerEntry &&
-                this.postpaidCommitInitialBalanceLedgerEntry ==
-                    other.postpaidCommitInitialBalanceLedgerEntry &&
-                this.postpaidCommitAutomatedInvoiceDeductionLedgerEntry ==
-                    other.postpaidCommitAutomatedInvoiceDeductionLedgerEntry &&
-                this.postpaidCommitRolloverLedgerEntry == other.postpaidCommitRolloverLedgerEntry &&
-                this.postpaidCommitCanceledLedgerEntry == other.postpaidCommitCanceledLedgerEntry &&
-                this.postpaidCommitCreditedLedgerEntry == other.postpaidCommitCreditedLedgerEntry &&
-                this.postpaidCommitTrueupLedgerEntry == other.postpaidCommitTrueupLedgerEntry &&
-                this.prepaidCommitManualLedgerEntry == other.prepaidCommitManualLedgerEntry &&
-                this.postpaidCommitManualLedgerEntry == other.postpaidCommitManualLedgerEntry &&
-                this.postpaidCommitExpirationLedgerEntry ==
-                    other.postpaidCommitExpirationLedgerEntry
+            return /* spotless:off */ other is Ledger && this.prepaidCommitSegmentStartLedgerEntry == other.prepaidCommitSegmentStartLedgerEntry && this.prepaidCommitAutomatedInvoiceDeductionLedgerEntry == other.prepaidCommitAutomatedInvoiceDeductionLedgerEntry && this.prepaidCommitRolloverLedgerEntry == other.prepaidCommitRolloverLedgerEntry && this.prepaidCommitExpirationLedgerEntry == other.prepaidCommitExpirationLedgerEntry && this.prepaidCommitCanceledLedgerEntry == other.prepaidCommitCanceledLedgerEntry && this.prepaidCommitCreditedLedgerEntry == other.prepaidCommitCreditedLedgerEntry && this.postpaidCommitInitialBalanceLedgerEntry == other.postpaidCommitInitialBalanceLedgerEntry && this.postpaidCommitAutomatedInvoiceDeductionLedgerEntry == other.postpaidCommitAutomatedInvoiceDeductionLedgerEntry && this.postpaidCommitRolloverLedgerEntry == other.postpaidCommitRolloverLedgerEntry && this.postpaidCommitTrueupLedgerEntry == other.postpaidCommitTrueupLedgerEntry && this.prepaidCommitManualLedgerEntry == other.prepaidCommitManualLedgerEntry && this.postpaidCommitManualLedgerEntry == other.postpaidCommitManualLedgerEntry && this.postpaidCommitExpirationLedgerEntry == other.postpaidCommitExpirationLedgerEntry /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(
-                prepaidCommitSegmentStartLedgerEntry,
-                prepaidCommitAutomatedInvoiceDeductionLedgerEntry,
-                prepaidCommitRolloverLedgerEntry,
-                prepaidCommitExpirationLedgerEntry,
-                prepaidCommitCanceledLedgerEntry,
-                prepaidCommitCreditedLedgerEntry,
-                postpaidCommitInitialBalanceLedgerEntry,
-                postpaidCommitAutomatedInvoiceDeductionLedgerEntry,
-                postpaidCommitRolloverLedgerEntry,
-                postpaidCommitCanceledLedgerEntry,
-                postpaidCommitCreditedLedgerEntry,
-                postpaidCommitTrueupLedgerEntry,
-                prepaidCommitManualLedgerEntry,
-                postpaidCommitManualLedgerEntry,
-                postpaidCommitExpirationLedgerEntry,
-            )
+            return /* spotless:off */ Objects.hash(prepaidCommitSegmentStartLedgerEntry, prepaidCommitAutomatedInvoiceDeductionLedgerEntry, prepaidCommitRolloverLedgerEntry, prepaidCommitExpirationLedgerEntry, prepaidCommitCanceledLedgerEntry, prepaidCommitCreditedLedgerEntry, postpaidCommitInitialBalanceLedgerEntry, postpaidCommitAutomatedInvoiceDeductionLedgerEntry, postpaidCommitRolloverLedgerEntry, postpaidCommitTrueupLedgerEntry, prepaidCommitManualLedgerEntry, postpaidCommitManualLedgerEntry, postpaidCommitExpirationLedgerEntry) /* spotless:on */
         }
 
         override fun toString(): String {
@@ -1708,10 +1188,6 @@ private constructor(
                     "Ledger{postpaidCommitAutomatedInvoiceDeductionLedgerEntry=$postpaidCommitAutomatedInvoiceDeductionLedgerEntry}"
                 postpaidCommitRolloverLedgerEntry != null ->
                     "Ledger{postpaidCommitRolloverLedgerEntry=$postpaidCommitRolloverLedgerEntry}"
-                postpaidCommitCanceledLedgerEntry != null ->
-                    "Ledger{postpaidCommitCanceledLedgerEntry=$postpaidCommitCanceledLedgerEntry}"
-                postpaidCommitCreditedLedgerEntry != null ->
-                    "Ledger{postpaidCommitCreditedLedgerEntry=$postpaidCommitCreditedLedgerEntry}"
                 postpaidCommitTrueupLedgerEntry != null ->
                     "Ledger{postpaidCommitTrueupLedgerEntry=$postpaidCommitTrueupLedgerEntry}"
                 prepaidCommitManualLedgerEntry != null ->
@@ -1787,16 +1263,6 @@ private constructor(
             ) = Ledger(postpaidCommitRolloverLedgerEntry = postpaidCommitRolloverLedgerEntry)
 
             @JvmStatic
-            fun ofPostpaidCommitCanceledLedgerEntry(
-                postpaidCommitCanceledLedgerEntry: PostpaidCommitCanceledLedgerEntry
-            ) = Ledger(postpaidCommitCanceledLedgerEntry = postpaidCommitCanceledLedgerEntry)
-
-            @JvmStatic
-            fun ofPostpaidCommitCreditedLedgerEntry(
-                postpaidCommitCreditedLedgerEntry: PostpaidCommitCreditedLedgerEntry
-            ) = Ledger(postpaidCommitCreditedLedgerEntry = postpaidCommitCreditedLedgerEntry)
-
-            @JvmStatic
             fun ofPostpaidCommitTrueupLedgerEntry(
                 postpaidCommitTrueupLedgerEntry: PostpaidCommitTrueupLedgerEntry
             ) = Ledger(postpaidCommitTrueupLedgerEntry = postpaidCommitTrueupLedgerEntry)
@@ -1857,14 +1323,6 @@ private constructor(
                 postpaidCommitRolloverLedgerEntry: PostpaidCommitRolloverLedgerEntry
             ): T
 
-            fun visitPostpaidCommitCanceledLedgerEntry(
-                postpaidCommitCanceledLedgerEntry: PostpaidCommitCanceledLedgerEntry
-            ): T
-
-            fun visitPostpaidCommitCreditedLedgerEntry(
-                postpaidCommitCreditedLedgerEntry: PostpaidCommitCreditedLedgerEntry
-            ): T
-
             fun visitPostpaidCommitTrueupLedgerEntry(
                 postpaidCommitTrueupLedgerEntry: PostpaidCommitTrueupLedgerEntry
             ): T
@@ -1890,6 +1348,7 @@ private constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): Ledger {
                 val json = JsonValue.fromJsonNode(node)
+
                 tryDeserialize(node, jacksonTypeRef<PrepaidCommitSegmentStartLedgerEntry>()) {
                         it.validate()
                     }
@@ -1956,18 +1415,6 @@ private constructor(
                     ?.let {
                         return Ledger(postpaidCommitRolloverLedgerEntry = it, _json = json)
                     }
-                tryDeserialize(node, jacksonTypeRef<PostpaidCommitCanceledLedgerEntry>()) {
-                        it.validate()
-                    }
-                    ?.let {
-                        return Ledger(postpaidCommitCanceledLedgerEntry = it, _json = json)
-                    }
-                tryDeserialize(node, jacksonTypeRef<PostpaidCommitCreditedLedgerEntry>()) {
-                        it.validate()
-                    }
-                    ?.let {
-                        return Ledger(postpaidCommitCreditedLedgerEntry = it, _json = json)
-                    }
                 tryDeserialize(node, jacksonTypeRef<PostpaidCommitTrueupLedgerEntry>()) {
                         it.validate()
                     }
@@ -2027,10 +1474,6 @@ private constructor(
                         )
                     value.postpaidCommitRolloverLedgerEntry != null ->
                         generator.writeObject(value.postpaidCommitRolloverLedgerEntry)
-                    value.postpaidCommitCanceledLedgerEntry != null ->
-                        generator.writeObject(value.postpaidCommitCanceledLedgerEntry)
-                    value.postpaidCommitCreditedLedgerEntry != null ->
-                        generator.writeObject(value.postpaidCommitCreditedLedgerEntry)
                     value.postpaidCommitTrueupLedgerEntry != null ->
                         generator.writeObject(value.postpaidCommitTrueupLedgerEntry)
                     value.prepaidCommitManualLedgerEntry != null ->
@@ -2057,8 +1500,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun type(): Type = type.getRequired("type")
 
@@ -2091,36 +1532,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PrepaidCommitSegmentStartLedgerEntry &&
-                    this.type == other.type &&
-                    this.timestamp == other.timestamp &&
-                    this.amount == other.amount &&
-                    this.segmentId == other.segmentId &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            type,
-                            timestamp,
-                            amount,
-                            segmentId,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PrepaidCommitSegmentStartLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2210,7 +1621,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2249,6 +1660,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PrepaidCommitSegmentStartLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PrepaidCommitSegmentStartLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = PrepaidCommitAutomatedInvoiceDeductionLedgerEntry.Builder::class)
@@ -2264,8 +1695,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun type(): Type = type.getRequired("type")
 
@@ -2303,38 +1732,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PrepaidCommitAutomatedInvoiceDeductionLedgerEntry &&
-                    this.type == other.type &&
-                    this.timestamp == other.timestamp &&
-                    this.amount == other.amount &&
-                    this.segmentId == other.segmentId &&
-                    this.invoiceId == other.invoiceId &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            type,
-                            timestamp,
-                            amount,
-                            segmentId,
-                            invoiceId,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PrepaidCommitAutomatedInvoiceDeductionLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2436,7 +1833,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2477,6 +1874,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PrepaidCommitAutomatedInvoiceDeductionLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.invoiceId == other.invoiceId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, invoiceId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PrepaidCommitAutomatedInvoiceDeductionLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = PrepaidCommitRolloverLedgerEntry.Builder::class)
@@ -2492,8 +1909,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun type(): Type = type.getRequired("type")
 
@@ -2531,38 +1946,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PrepaidCommitRolloverLedgerEntry &&
-                    this.type == other.type &&
-                    this.timestamp == other.timestamp &&
-                    this.amount == other.amount &&
-                    this.segmentId == other.segmentId &&
-                    this.newContractId == other.newContractId &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            type,
-                            timestamp,
-                            amount,
-                            segmentId,
-                            newContractId,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PrepaidCommitRolloverLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, newContractId=$newContractId, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2664,7 +2047,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2702,6 +2085,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PrepaidCommitRolloverLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.newContractId == other.newContractId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, newContractId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PrepaidCommitRolloverLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, newContractId=$newContractId, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = PrepaidCommitExpirationLedgerEntry.Builder::class)
@@ -2716,8 +2119,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun type(): Type = type.getRequired("type")
 
@@ -2750,36 +2151,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PrepaidCommitExpirationLedgerEntry &&
-                    this.type == other.type &&
-                    this.timestamp == other.timestamp &&
-                    this.amount == other.amount &&
-                    this.segmentId == other.segmentId &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            type,
-                            timestamp,
-                            amount,
-                            segmentId,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PrepaidCommitExpirationLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2869,7 +2240,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2907,6 +2278,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PrepaidCommitExpirationLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PrepaidCommitExpirationLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = PrepaidCommitCanceledLedgerEntry.Builder::class)
@@ -2922,8 +2313,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun type(): Type = type.getRequired("type")
 
@@ -2961,38 +2350,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PrepaidCommitCanceledLedgerEntry &&
-                    this.type == other.type &&
-                    this.timestamp == other.timestamp &&
-                    this.amount == other.amount &&
-                    this.segmentId == other.segmentId &&
-                    this.invoiceId == other.invoiceId &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            type,
-                            timestamp,
-                            amount,
-                            segmentId,
-                            invoiceId,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PrepaidCommitCanceledLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -3091,7 +2448,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3129,6 +2486,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PrepaidCommitCanceledLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.invoiceId == other.invoiceId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, invoiceId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PrepaidCommitCanceledLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = PrepaidCommitCreditedLedgerEntry.Builder::class)
@@ -3144,8 +2521,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun type(): Type = type.getRequired("type")
 
@@ -3183,38 +2558,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PrepaidCommitCreditedLedgerEntry &&
-                    this.type == other.type &&
-                    this.timestamp == other.timestamp &&
-                    this.amount == other.amount &&
-                    this.segmentId == other.segmentId &&
-                    this.invoiceId == other.invoiceId &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            type,
-                            timestamp,
-                            amount,
-                            segmentId,
-                            invoiceId,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PrepaidCommitCreditedLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -3313,7 +2656,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3351,6 +2694,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PrepaidCommitCreditedLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.invoiceId == other.invoiceId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, invoiceId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PrepaidCommitCreditedLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = PostpaidCommitInitialBalanceLedgerEntry.Builder::class)
@@ -3364,8 +2727,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun type(): Type = type.getRequired("type")
 
@@ -3393,34 +2754,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PostpaidCommitInitialBalanceLedgerEntry &&
-                    this.type == other.type &&
-                    this.timestamp == other.timestamp &&
-                    this.amount == other.amount &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            type,
-                            timestamp,
-                            amount,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PostpaidCommitInitialBalanceLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -3503,7 +2836,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3542,6 +2875,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PostpaidCommitInitialBalanceLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PostpaidCommitInitialBalanceLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(
@@ -3559,8 +2912,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun type(): Type = type.getRequired("type")
 
@@ -3598,38 +2949,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PostpaidCommitAutomatedInvoiceDeductionLedgerEntry &&
-                    this.type == other.type &&
-                    this.timestamp == other.timestamp &&
-                    this.amount == other.amount &&
-                    this.segmentId == other.segmentId &&
-                    this.invoiceId == other.invoiceId &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            type,
-                            timestamp,
-                            amount,
-                            segmentId,
-                            invoiceId,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PostpaidCommitAutomatedInvoiceDeductionLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -3731,7 +3050,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3772,6 +3091,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PostpaidCommitAutomatedInvoiceDeductionLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.invoiceId == other.invoiceId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, invoiceId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PostpaidCommitAutomatedInvoiceDeductionLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = PostpaidCommitRolloverLedgerEntry.Builder::class)
@@ -3787,8 +3126,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun type(): Type = type.getRequired("type")
 
@@ -3826,38 +3163,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PostpaidCommitRolloverLedgerEntry &&
-                    this.type == other.type &&
-                    this.timestamp == other.timestamp &&
-                    this.amount == other.amount &&
-                    this.segmentId == other.segmentId &&
-                    this.newContractId == other.newContractId &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            type,
-                            timestamp,
-                            amount,
-                            segmentId,
-                            newContractId,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PostpaidCommitRolloverLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, newContractId=$newContractId, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -3959,7 +3264,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3997,450 +3302,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
-        }
-
-        @JsonDeserialize(builder = PostpaidCommitCanceledLedgerEntry.Builder::class)
-        @NoAutoDetect
-        class PostpaidCommitCanceledLedgerEntry
-        private constructor(
-            private val type: JsonField<Type>,
-            private val timestamp: JsonField<OffsetDateTime>,
-            private val amount: JsonField<Double>,
-            private val segmentId: JsonField<String>,
-            private val invoiceId: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
-
-            private var validated: Boolean = false
-
-            private var hashCode: Int = 0
-
-            fun type(): Type = type.getRequired("type")
-
-            fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
-
-            fun amount(): Double = amount.getRequired("amount")
-
-            fun segmentId(): String = segmentId.getRequired("segment_id")
-
-            fun invoiceId(): String = invoiceId.getRequired("invoice_id")
-
-            @JsonProperty("type") @ExcludeMissing fun _type() = type
-
-            @JsonProperty("timestamp") @ExcludeMissing fun _timestamp() = timestamp
-
-            @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
-
-            @JsonProperty("segment_id") @ExcludeMissing fun _segmentId() = segmentId
-
-            @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): PostpaidCommitCanceledLedgerEntry = apply {
-                if (!validated) {
-                    type()
-                    timestamp()
-                    amount()
-                    segmentId()
-                    invoiceId()
-                    validated = true
-                }
-            }
-
-            fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return other is PostpaidCommitCanceledLedgerEntry &&
-                    this.type == other.type &&
-                    this.timestamp == other.timestamp &&
-                    this.amount == other.amount &&
-                    this.segmentId == other.segmentId &&
-                    this.invoiceId == other.invoiceId &&
-                    this.additionalProperties == other.additionalProperties
+                return /* spotless:off */ other is PostpaidCommitRolloverLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.newContractId == other.newContractId && this.additionalProperties == other.additionalProperties /* spotless:on */
             }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            type,
-                            timestamp,
-                            amount,
-                            segmentId,
-                            invoiceId,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PostpaidCommitCanceledLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
-
-            companion object {
-
-                @JvmStatic fun builder() = Builder()
-            }
-
-            class Builder {
-
-                private var type: JsonField<Type> = JsonMissing.of()
-                private var timestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-                private var amount: JsonField<Double> = JsonMissing.of()
-                private var segmentId: JsonField<String> = JsonMissing.of()
-                private var invoiceId: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(
-                    postpaidCommitCanceledLedgerEntry: PostpaidCommitCanceledLedgerEntry
-                ) = apply {
-                    this.type = postpaidCommitCanceledLedgerEntry.type
-                    this.timestamp = postpaidCommitCanceledLedgerEntry.timestamp
-                    this.amount = postpaidCommitCanceledLedgerEntry.amount
-                    this.segmentId = postpaidCommitCanceledLedgerEntry.segmentId
-                    this.invoiceId = postpaidCommitCanceledLedgerEntry.invoiceId
-                    additionalProperties(postpaidCommitCanceledLedgerEntry.additionalProperties)
-                }
-
-                fun type(type: Type) = type(JsonField.of(type))
-
-                @JsonProperty("type")
-                @ExcludeMissing
-                fun type(type: JsonField<Type>) = apply { this.type = type }
-
-                fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
-
-                @JsonProperty("timestamp")
-                @ExcludeMissing
-                fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
-                    this.timestamp = timestamp
-                }
-
-                fun amount(amount: Double) = amount(JsonField.of(amount))
-
-                @JsonProperty("amount")
-                @ExcludeMissing
-                fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
-
-                fun segmentId(segmentId: String) = segmentId(JsonField.of(segmentId))
-
-                @JsonProperty("segment_id")
-                @ExcludeMissing
-                fun segmentId(segmentId: JsonField<String>) = apply { this.segmentId = segmentId }
-
-                fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
-
-                @JsonProperty("invoice_id")
-                @ExcludeMissing
-                fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
-                }
-
-                @JsonAnySetter
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun build(): PostpaidCommitCanceledLedgerEntry =
-                    PostpaidCommitCanceledLedgerEntry(
-                        type,
-                        timestamp,
-                        amount,
-                        segmentId,
-                        invoiceId,
-                        additionalProperties.toUnmodifiable(),
-                    )
-            }
-
-            class Type
-            @JsonCreator
-            private constructor(
-                private val value: JsonField<String>,
-            ) : Enum {
-
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Type && this.value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-
-                companion object {
-
-                    @JvmField
-                    val POSTPAID_COMMIT_CANCELED = Type(JsonField.of("POSTPAID_COMMIT_CANCELED"))
-
-                    @JvmStatic fun of(value: String) = Type(JsonField.of(value))
-                }
-
-                enum class Known {
-                    POSTPAID_COMMIT_CANCELED,
-                }
-
-                enum class Value {
-                    POSTPAID_COMMIT_CANCELED,
-                    _UNKNOWN,
-                }
-
-                fun value(): Value =
-                    when (this) {
-                        POSTPAID_COMMIT_CANCELED -> Value.POSTPAID_COMMIT_CANCELED
-                        else -> Value._UNKNOWN
-                    }
-
-                fun known(): Known =
-                    when (this) {
-                        POSTPAID_COMMIT_CANCELED -> Known.POSTPAID_COMMIT_CANCELED
-                        else -> throw MetronomeInvalidDataException("Unknown Type: $value")
-                    }
-
-                fun asString(): String = _value().asStringOrThrow()
-            }
-        }
-
-        @JsonDeserialize(builder = PostpaidCommitCreditedLedgerEntry.Builder::class)
-        @NoAutoDetect
-        class PostpaidCommitCreditedLedgerEntry
-        private constructor(
-            private val type: JsonField<Type>,
-            private val timestamp: JsonField<OffsetDateTime>,
-            private val amount: JsonField<Double>,
-            private val segmentId: JsonField<String>,
-            private val invoiceId: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
-
-            private var validated: Boolean = false
 
             private var hashCode: Int = 0
 
-            fun type(): Type = type.getRequired("type")
-
-            fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
-
-            fun amount(): Double = amount.getRequired("amount")
-
-            fun segmentId(): String = segmentId.getRequired("segment_id")
-
-            fun invoiceId(): String = invoiceId.getRequired("invoice_id")
-
-            @JsonProperty("type") @ExcludeMissing fun _type() = type
-
-            @JsonProperty("timestamp") @ExcludeMissing fun _timestamp() = timestamp
-
-            @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
-
-            @JsonProperty("segment_id") @ExcludeMissing fun _segmentId() = segmentId
-
-            @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): PostpaidCommitCreditedLedgerEntry = apply {
-                if (!validated) {
-                    type()
-                    timestamp()
-                    amount()
-                    segmentId()
-                    invoiceId()
-                    validated = true
-                }
-            }
-
-            fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PostpaidCommitCreditedLedgerEntry &&
-                    this.type == other.type &&
-                    this.timestamp == other.timestamp &&
-                    this.amount == other.amount &&
-                    this.segmentId == other.segmentId &&
-                    this.invoiceId == other.invoiceId &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
             override fun hashCode(): Int {
                 if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            type,
-                            timestamp,
-                            amount,
-                            segmentId,
-                            invoiceId,
-                            additionalProperties,
-                        )
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, newContractId, additionalProperties) /* spotless:on */
                 }
                 return hashCode
             }
 
             override fun toString() =
-                "PostpaidCommitCreditedLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
-
-            companion object {
-
-                @JvmStatic fun builder() = Builder()
-            }
-
-            class Builder {
-
-                private var type: JsonField<Type> = JsonMissing.of()
-                private var timestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-                private var amount: JsonField<Double> = JsonMissing.of()
-                private var segmentId: JsonField<String> = JsonMissing.of()
-                private var invoiceId: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(
-                    postpaidCommitCreditedLedgerEntry: PostpaidCommitCreditedLedgerEntry
-                ) = apply {
-                    this.type = postpaidCommitCreditedLedgerEntry.type
-                    this.timestamp = postpaidCommitCreditedLedgerEntry.timestamp
-                    this.amount = postpaidCommitCreditedLedgerEntry.amount
-                    this.segmentId = postpaidCommitCreditedLedgerEntry.segmentId
-                    this.invoiceId = postpaidCommitCreditedLedgerEntry.invoiceId
-                    additionalProperties(postpaidCommitCreditedLedgerEntry.additionalProperties)
-                }
-
-                fun type(type: Type) = type(JsonField.of(type))
-
-                @JsonProperty("type")
-                @ExcludeMissing
-                fun type(type: JsonField<Type>) = apply { this.type = type }
-
-                fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
-
-                @JsonProperty("timestamp")
-                @ExcludeMissing
-                fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
-                    this.timestamp = timestamp
-                }
-
-                fun amount(amount: Double) = amount(JsonField.of(amount))
-
-                @JsonProperty("amount")
-                @ExcludeMissing
-                fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
-
-                fun segmentId(segmentId: String) = segmentId(JsonField.of(segmentId))
-
-                @JsonProperty("segment_id")
-                @ExcludeMissing
-                fun segmentId(segmentId: JsonField<String>) = apply { this.segmentId = segmentId }
-
-                fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
-
-                @JsonProperty("invoice_id")
-                @ExcludeMissing
-                fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
-                }
-
-                @JsonAnySetter
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun build(): PostpaidCommitCreditedLedgerEntry =
-                    PostpaidCommitCreditedLedgerEntry(
-                        type,
-                        timestamp,
-                        amount,
-                        segmentId,
-                        invoiceId,
-                        additionalProperties.toUnmodifiable(),
-                    )
-            }
-
-            class Type
-            @JsonCreator
-            private constructor(
-                private val value: JsonField<String>,
-            ) : Enum {
-
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Type && this.value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-
-                companion object {
-
-                    @JvmField
-                    val POSTPAID_COMMIT_CREDITED = Type(JsonField.of("POSTPAID_COMMIT_CREDITED"))
-
-                    @JvmStatic fun of(value: String) = Type(JsonField.of(value))
-                }
-
-                enum class Known {
-                    POSTPAID_COMMIT_CREDITED,
-                }
-
-                enum class Value {
-                    POSTPAID_COMMIT_CREDITED,
-                    _UNKNOWN,
-                }
-
-                fun value(): Value =
-                    when (this) {
-                        POSTPAID_COMMIT_CREDITED -> Value.POSTPAID_COMMIT_CREDITED
-                        else -> Value._UNKNOWN
-                    }
-
-                fun known(): Known =
-                    when (this) {
-                        POSTPAID_COMMIT_CREDITED -> Known.POSTPAID_COMMIT_CREDITED
-                        else -> throw MetronomeInvalidDataException("Unknown Type: $value")
-                    }
-
-                fun asString(): String = _value().asStringOrThrow()
-            }
+                "PostpaidCommitRolloverLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, newContractId=$newContractId, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = PostpaidCommitTrueupLedgerEntry.Builder::class)
@@ -4455,8 +3336,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun type(): Type = type.getRequired("type")
 
@@ -4489,36 +3368,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PostpaidCommitTrueupLedgerEntry &&
-                    this.type == other.type &&
-                    this.timestamp == other.timestamp &&
-                    this.amount == other.amount &&
-                    this.invoiceId == other.invoiceId &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            type,
-                            timestamp,
-                            amount,
-                            invoiceId,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PostpaidCommitTrueupLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -4608,7 +3457,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -4646,6 +3495,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PostpaidCommitTrueupLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.invoiceId == other.invoiceId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, invoiceId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PostpaidCommitTrueupLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = PrepaidCommitManualLedgerEntry.Builder::class)
@@ -4660,8 +3529,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun type(): Type = type.getRequired("type")
 
@@ -4694,36 +3561,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PrepaidCommitManualLedgerEntry &&
-                    this.type == other.type &&
-                    this.timestamp == other.timestamp &&
-                    this.amount == other.amount &&
-                    this.reason == other.reason &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            type,
-                            timestamp,
-                            amount,
-                            reason,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PrepaidCommitManualLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, reason=$reason, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -4812,7 +3649,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -4850,6 +3687,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PrepaidCommitManualLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.reason == other.reason && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, reason, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PrepaidCommitManualLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, reason=$reason, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = PostpaidCommitManualLedgerEntry.Builder::class)
@@ -4864,8 +3721,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun type(): Type = type.getRequired("type")
 
@@ -4898,36 +3753,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PostpaidCommitManualLedgerEntry &&
-                    this.type == other.type &&
-                    this.timestamp == other.timestamp &&
-                    this.amount == other.amount &&
-                    this.reason == other.reason &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            type,
-                            timestamp,
-                            amount,
-                            reason,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PostpaidCommitManualLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, reason=$reason, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -5017,7 +3842,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -5055,6 +3880,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PostpaidCommitManualLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.reason == other.reason && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, reason, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PostpaidCommitManualLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, reason=$reason, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = PostpaidCommitExpirationLedgerEntry.Builder::class)
@@ -5068,8 +3913,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun type(): Type = type.getRequired("type")
 
@@ -5097,34 +3940,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PostpaidCommitExpirationLedgerEntry &&
-                    this.type == other.type &&
-                    this.timestamp == other.timestamp &&
-                    this.amount == other.amount &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            type,
-                            timestamp,
-                            amount,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PostpaidCommitExpirationLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -5205,7 +4020,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -5244,7 +4059,84 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PostpaidCommitExpirationLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PostpaidCommitExpirationLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, additionalProperties=$additionalProperties}"
         }
+    }
+
+    class RateType
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
+
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is RateType && this.value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+
+        companion object {
+
+            @JvmField val COMMIT_RATE = RateType(JsonField.of("COMMIT_RATE"))
+
+            @JvmField val LIST_RATE = RateType(JsonField.of("LIST_RATE"))
+
+            @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
+        }
+
+        enum class Known {
+            COMMIT_RATE,
+            LIST_RATE,
+        }
+
+        enum class Value {
+            COMMIT_RATE,
+            LIST_RATE,
+            _UNKNOWN,
+        }
+
+        fun value(): Value =
+            when (this) {
+                COMMIT_RATE -> Value.COMMIT_RATE
+                LIST_RATE -> Value.LIST_RATE
+                else -> Value._UNKNOWN
+            }
+
+        fun known(): Known =
+            when (this) {
+                COMMIT_RATE -> Known.COMMIT_RATE
+                LIST_RATE -> Known.LIST_RATE
+                else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
+            }
+
+        fun asString(): String = _value().asStringOrThrow()
     }
 
     @JsonDeserialize(builder = RolledOverFrom.Builder::class)
@@ -5257,8 +4149,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         fun commitId(): String = commitId.getRequired("commit_id")
 
@@ -5281,32 +4171,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is RolledOverFrom &&
-                this.commitId == other.commitId &&
-                this.contractId == other.contractId &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        commitId,
-                        contractId,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "RolledOverFrom{commitId=$commitId, contractId=$contractId, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -5359,5 +4223,45 @@ private constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is RolledOverFrom && this.commitId == other.commitId && this.contractId == other.contractId && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(commitId, contractId, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "RolledOverFrom{commitId=$commitId, contractId=$contractId, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is Commit && this.id == other.id && this.contract == other.contract && this.type == other.type && this.rateType == other.rateType && this.name == other.name && this.priority == other.priority && this.product == other.product && this.accessSchedule == other.accessSchedule && this.invoiceSchedule == other.invoiceSchedule && this.invoiceContract == other.invoiceContract && this.rolledOverFrom == other.rolledOverFrom && this.description == other.description && this.rolloverFraction == other.rolloverFraction && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.applicableContractIds == other.applicableContractIds && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.amount == other.amount && this.salesforceOpportunityId == other.salesforceOpportunityId && this.ledger == other.ledger && this.customFields == other.customFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(id, contract, type, rateType, name, priority, product, accessSchedule, invoiceSchedule, invoiceContract, rolledOverFrom, description, rolloverFraction, applicableProductIds, applicableProductTags, applicableContractIds, netsuiteSalesOrderId, amount, salesforceOpportunityId, ledger, customFields, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "Commit{id=$id, contract=$contract, type=$type, rateType=$rateType, name=$name, priority=$priority, product=$product, accessSchedule=$accessSchedule, invoiceSchedule=$invoiceSchedule, invoiceContract=$invoiceContract, rolledOverFrom=$rolledOverFrom, description=$description, rolloverFraction=$rolloverFraction, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, applicableContractIds=$applicableContractIds, netsuiteSalesOrderId=$netsuiteSalesOrderId, amount=$amount, salesforceOpportunityId=$salesforceOpportunityId, ledger=$ledger, customFields=$customFields, additionalProperties=$additionalProperties}"
 }

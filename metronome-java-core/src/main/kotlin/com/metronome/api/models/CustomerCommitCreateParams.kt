@@ -1,0 +1,1525 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.metronome.api.models
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.metronome.api.core.Enum
+import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonValue
+import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.errors.MetronomeInvalidDataException
+import com.metronome.api.models.*
+import java.time.OffsetDateTime
+import java.util.Objects
+import java.util.Optional
+
+class CustomerCommitCreateParams
+constructor(
+    private val accessSchedule: AccessSchedule,
+    private val customerId: String,
+    private val priority: Double,
+    private val productId: String,
+    private val type: Type,
+    private val applicableContractIds: List<String>?,
+    private val applicableProductIds: List<String>?,
+    private val applicableProductTags: List<String>?,
+    private val customFields: CustomFields?,
+    private val description: String?,
+    private val invoiceContractId: String?,
+    private val invoiceSchedule: InvoiceSchedule?,
+    private val name: String?,
+    private val netsuiteSalesOrderId: String?,
+    private val salesforceOpportunityId: String?,
+    private val additionalQueryParams: Map<String, List<String>>,
+    private val additionalHeaders: Map<String, List<String>>,
+    private val additionalBodyProperties: Map<String, JsonValue>,
+) {
+
+    fun accessSchedule(): AccessSchedule = accessSchedule
+
+    fun customerId(): String = customerId
+
+    fun priority(): Double = priority
+
+    fun productId(): String = productId
+
+    fun type(): Type = type
+
+    fun applicableContractIds(): Optional<List<String>> = Optional.ofNullable(applicableContractIds)
+
+    fun applicableProductIds(): Optional<List<String>> = Optional.ofNullable(applicableProductIds)
+
+    fun applicableProductTags(): Optional<List<String>> = Optional.ofNullable(applicableProductTags)
+
+    fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+
+    fun description(): Optional<String> = Optional.ofNullable(description)
+
+    fun invoiceContractId(): Optional<String> = Optional.ofNullable(invoiceContractId)
+
+    fun invoiceSchedule(): Optional<InvoiceSchedule> = Optional.ofNullable(invoiceSchedule)
+
+    fun name(): Optional<String> = Optional.ofNullable(name)
+
+    fun netsuiteSalesOrderId(): Optional<String> = Optional.ofNullable(netsuiteSalesOrderId)
+
+    fun salesforceOpportunityId(): Optional<String> = Optional.ofNullable(salesforceOpportunityId)
+
+    @JvmSynthetic
+    internal fun getBody(): CustomerCommitCreateBody {
+        return CustomerCommitCreateBody(
+            accessSchedule,
+            customerId,
+            priority,
+            productId,
+            type,
+            applicableContractIds,
+            applicableProductIds,
+            applicableProductTags,
+            customFields,
+            description,
+            invoiceContractId,
+            invoiceSchedule,
+            name,
+            netsuiteSalesOrderId,
+            salesforceOpportunityId,
+            additionalBodyProperties,
+        )
+    }
+
+    @JvmSynthetic internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
+
+    @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
+
+    @JsonDeserialize(builder = CustomerCommitCreateBody.Builder::class)
+    @NoAutoDetect
+    class CustomerCommitCreateBody
+    internal constructor(
+        private val accessSchedule: AccessSchedule?,
+        private val customerId: String?,
+        private val priority: Double?,
+        private val productId: String?,
+        private val type: Type?,
+        private val applicableContractIds: List<String>?,
+        private val applicableProductIds: List<String>?,
+        private val applicableProductTags: List<String>?,
+        private val customFields: CustomFields?,
+        private val description: String?,
+        private val invoiceContractId: String?,
+        private val invoiceSchedule: InvoiceSchedule?,
+        private val name: String?,
+        private val netsuiteSalesOrderId: String?,
+        private val salesforceOpportunityId: String?,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        /**
+         * Schedule for distributing the commit to the customer. For "POSTPAID" commits only one
+         * schedule item is allowed and amount must match invoice_schedule total.
+         */
+        @JsonProperty("access_schedule") fun accessSchedule(): AccessSchedule? = accessSchedule
+
+        @JsonProperty("customer_id") fun customerId(): String? = customerId
+
+        /**
+         * If multiple credits or commits are applicable, the one with the lower priority will apply
+         * first.
+         */
+        @JsonProperty("priority") fun priority(): Double? = priority
+
+        @JsonProperty("product_id") fun productId(): String? = productId
+
+        @JsonProperty("type") fun type(): Type? = type
+
+        /**
+         * Which contract the commit applies to. If not provided, the commit applies to all
+         * contracts.
+         */
+        @JsonProperty("applicable_contract_ids")
+        fun applicableContractIds(): List<String>? = applicableContractIds
+
+        /**
+         * Which products the commit applies to. If both applicable_product_ids and
+         * applicable_product_tags are not provided, the commit applies to all products.
+         */
+        @JsonProperty("applicable_product_ids")
+        fun applicableProductIds(): List<String>? = applicableProductIds
+
+        /**
+         * Which tags the commit applies to. If both applicable_product_ids and
+         * applicable_product_tags are not provided, the commit applies to all products.
+         */
+        @JsonProperty("applicable_product_tags")
+        fun applicableProductTags(): List<String>? = applicableProductTags
+
+        @JsonProperty("custom_fields") fun customFields(): CustomFields? = customFields
+
+        /** Used only in UI/API. It is not exposed to end customers. */
+        @JsonProperty("description") fun description(): String? = description
+
+        /**
+         * The contract that this commit will be billed on. This is required for "POSTPAID" commits
+         * and for "PREPAID" commits unless there is no invoice schedule above (i.e., the commit is
+         * 'free').
+         */
+        @JsonProperty("invoice_contract_id") fun invoiceContractId(): String? = invoiceContractId
+
+        /**
+         * Required for "POSTPAID" commits: the true up invoice will be generated at this time and
+         * only one schedule item is allowed; the total must match accesss_schedule amount. Optional
+         * for "PREPAID" commits: if not provided, this will be a "complimentary" commit with no
+         * invoice.
+         */
+        @JsonProperty("invoice_schedule") fun invoiceSchedule(): InvoiceSchedule? = invoiceSchedule
+
+        /** displayed on invoices */
+        @JsonProperty("name") fun name(): String? = name
+
+        /** This field's availability is dependent on your client's configuration. */
+        @JsonProperty("netsuite_sales_order_id")
+        fun netsuiteSalesOrderId(): String? = netsuiteSalesOrderId
+
+        /** This field's availability is dependent on your client's configuration. */
+        @JsonProperty("salesforce_opportunity_id")
+        fun salesforceOpportunityId(): String? = salesforceOpportunityId
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var accessSchedule: AccessSchedule? = null
+            private var customerId: String? = null
+            private var priority: Double? = null
+            private var productId: String? = null
+            private var type: Type? = null
+            private var applicableContractIds: List<String>? = null
+            private var applicableProductIds: List<String>? = null
+            private var applicableProductTags: List<String>? = null
+            private var customFields: CustomFields? = null
+            private var description: String? = null
+            private var invoiceContractId: String? = null
+            private var invoiceSchedule: InvoiceSchedule? = null
+            private var name: String? = null
+            private var netsuiteSalesOrderId: String? = null
+            private var salesforceOpportunityId: String? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(customerCommitCreateBody: CustomerCommitCreateBody) = apply {
+                this.accessSchedule = customerCommitCreateBody.accessSchedule
+                this.customerId = customerCommitCreateBody.customerId
+                this.priority = customerCommitCreateBody.priority
+                this.productId = customerCommitCreateBody.productId
+                this.type = customerCommitCreateBody.type
+                this.applicableContractIds = customerCommitCreateBody.applicableContractIds
+                this.applicableProductIds = customerCommitCreateBody.applicableProductIds
+                this.applicableProductTags = customerCommitCreateBody.applicableProductTags
+                this.customFields = customerCommitCreateBody.customFields
+                this.description = customerCommitCreateBody.description
+                this.invoiceContractId = customerCommitCreateBody.invoiceContractId
+                this.invoiceSchedule = customerCommitCreateBody.invoiceSchedule
+                this.name = customerCommitCreateBody.name
+                this.netsuiteSalesOrderId = customerCommitCreateBody.netsuiteSalesOrderId
+                this.salesforceOpportunityId = customerCommitCreateBody.salesforceOpportunityId
+                additionalProperties(customerCommitCreateBody.additionalProperties)
+            }
+
+            /**
+             * Schedule for distributing the commit to the customer. For "POSTPAID" commits only one
+             * schedule item is allowed and amount must match invoice_schedule total.
+             */
+            @JsonProperty("access_schedule")
+            fun accessSchedule(accessSchedule: AccessSchedule) = apply {
+                this.accessSchedule = accessSchedule
+            }
+
+            @JsonProperty("customer_id")
+            fun customerId(customerId: String) = apply { this.customerId = customerId }
+
+            /**
+             * If multiple credits or commits are applicable, the one with the lower priority will
+             * apply first.
+             */
+            @JsonProperty("priority")
+            fun priority(priority: Double) = apply { this.priority = priority }
+
+            @JsonProperty("product_id")
+            fun productId(productId: String) = apply { this.productId = productId }
+
+            @JsonProperty("type") fun type(type: Type) = apply { this.type = type }
+
+            /**
+             * Which contract the commit applies to. If not provided, the commit applies to all
+             * contracts.
+             */
+            @JsonProperty("applicable_contract_ids")
+            fun applicableContractIds(applicableContractIds: List<String>) = apply {
+                this.applicableContractIds = applicableContractIds
+            }
+
+            /**
+             * Which products the commit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the commit applies to all products.
+             */
+            @JsonProperty("applicable_product_ids")
+            fun applicableProductIds(applicableProductIds: List<String>) = apply {
+                this.applicableProductIds = applicableProductIds
+            }
+
+            /**
+             * Which tags the commit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the commit applies to all products.
+             */
+            @JsonProperty("applicable_product_tags")
+            fun applicableProductTags(applicableProductTags: List<String>) = apply {
+                this.applicableProductTags = applicableProductTags
+            }
+
+            @JsonProperty("custom_fields")
+            fun customFields(customFields: CustomFields) = apply {
+                this.customFields = customFields
+            }
+
+            /** Used only in UI/API. It is not exposed to end customers. */
+            @JsonProperty("description")
+            fun description(description: String) = apply { this.description = description }
+
+            /**
+             * The contract that this commit will be billed on. This is required for "POSTPAID"
+             * commits and for "PREPAID" commits unless there is no invoice schedule above (i.e.,
+             * the commit is 'free').
+             */
+            @JsonProperty("invoice_contract_id")
+            fun invoiceContractId(invoiceContractId: String) = apply {
+                this.invoiceContractId = invoiceContractId
+            }
+
+            /**
+             * Required for "POSTPAID" commits: the true up invoice will be generated at this time
+             * and only one schedule item is allowed; the total must match accesss_schedule amount.
+             * Optional for "PREPAID" commits: if not provided, this will be a "complimentary"
+             * commit with no invoice.
+             */
+            @JsonProperty("invoice_schedule")
+            fun invoiceSchedule(invoiceSchedule: InvoiceSchedule) = apply {
+                this.invoiceSchedule = invoiceSchedule
+            }
+
+            /** displayed on invoices */
+            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+
+            /** This field's availability is dependent on your client's configuration. */
+            @JsonProperty("netsuite_sales_order_id")
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
+                this.netsuiteSalesOrderId = netsuiteSalesOrderId
+            }
+
+            /** This field's availability is dependent on your client's configuration. */
+            @JsonProperty("salesforce_opportunity_id")
+            fun salesforceOpportunityId(salesforceOpportunityId: String) = apply {
+                this.salesforceOpportunityId = salesforceOpportunityId
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): CustomerCommitCreateBody =
+                CustomerCommitCreateBody(
+                    checkNotNull(accessSchedule) { "`accessSchedule` is required but was not set" },
+                    checkNotNull(customerId) { "`customerId` is required but was not set" },
+                    checkNotNull(priority) { "`priority` is required but was not set" },
+                    checkNotNull(productId) { "`productId` is required but was not set" },
+                    checkNotNull(type) { "`type` is required but was not set" },
+                    applicableContractIds?.toUnmodifiable(),
+                    applicableProductIds?.toUnmodifiable(),
+                    applicableProductTags?.toUnmodifiable(),
+                    customFields,
+                    description,
+                    invoiceContractId,
+                    invoiceSchedule,
+                    name,
+                    netsuiteSalesOrderId,
+                    salesforceOpportunityId,
+                    additionalProperties.toUnmodifiable(),
+                )
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomerCommitCreateBody && this.accessSchedule == other.accessSchedule && this.customerId == other.customerId && this.priority == other.priority && this.productId == other.productId && this.type == other.type && this.applicableContractIds == other.applicableContractIds && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.customFields == other.customFields && this.description == other.description && this.invoiceContractId == other.invoiceContractId && this.invoiceSchedule == other.invoiceSchedule && this.name == other.name && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.salesforceOpportunityId == other.salesforceOpportunityId && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(accessSchedule, customerId, priority, productId, type, applicableContractIds, applicableProductIds, applicableProductTags, customFields, description, invoiceContractId, invoiceSchedule, name, netsuiteSalesOrderId, salesforceOpportunityId, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CustomerCommitCreateBody{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, type=$type, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, salesforceOpportunityId=$salesforceOpportunityId, additionalProperties=$additionalProperties}"
+    }
+
+    fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
+
+    fun _additionalHeaders(): Map<String, List<String>> = additionalHeaders
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerCommitCreateParams && this.accessSchedule == other.accessSchedule && this.customerId == other.customerId && this.priority == other.priority && this.productId == other.productId && this.type == other.type && this.applicableContractIds == other.applicableContractIds && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.customFields == other.customFields && this.description == other.description && this.invoiceContractId == other.invoiceContractId && this.invoiceSchedule == other.invoiceSchedule && this.name == other.name && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.salesforceOpportunityId == other.salesforceOpportunityId && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int {
+        return /* spotless:off */ Objects.hash(accessSchedule, customerId, priority, productId, type, applicableContractIds, applicableProductIds, applicableProductTags, customFields, description, invoiceContractId, invoiceSchedule, name, netsuiteSalesOrderId, salesforceOpportunityId, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
+    }
+
+    override fun toString() =
+        "CustomerCommitCreateParams{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, type=$type, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, salesforceOpportunityId=$salesforceOpportunityId, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        @JvmStatic fun builder() = Builder()
+    }
+
+    @NoAutoDetect
+    class Builder {
+
+        private var accessSchedule: AccessSchedule? = null
+        private var customerId: String? = null
+        private var priority: Double? = null
+        private var productId: String? = null
+        private var type: Type? = null
+        private var applicableContractIds: MutableList<String> = mutableListOf()
+        private var applicableProductIds: MutableList<String> = mutableListOf()
+        private var applicableProductTags: MutableList<String> = mutableListOf()
+        private var customFields: CustomFields? = null
+        private var description: String? = null
+        private var invoiceContractId: String? = null
+        private var invoiceSchedule: InvoiceSchedule? = null
+        private var name: String? = null
+        private var netsuiteSalesOrderId: String? = null
+        private var salesforceOpportunityId: String? = null
+        private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
+        private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
+        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+        @JvmSynthetic
+        internal fun from(customerCommitCreateParams: CustomerCommitCreateParams) = apply {
+            this.accessSchedule = customerCommitCreateParams.accessSchedule
+            this.customerId = customerCommitCreateParams.customerId
+            this.priority = customerCommitCreateParams.priority
+            this.productId = customerCommitCreateParams.productId
+            this.type = customerCommitCreateParams.type
+            this.applicableContractIds(customerCommitCreateParams.applicableContractIds ?: listOf())
+            this.applicableProductIds(customerCommitCreateParams.applicableProductIds ?: listOf())
+            this.applicableProductTags(customerCommitCreateParams.applicableProductTags ?: listOf())
+            this.customFields = customerCommitCreateParams.customFields
+            this.description = customerCommitCreateParams.description
+            this.invoiceContractId = customerCommitCreateParams.invoiceContractId
+            this.invoiceSchedule = customerCommitCreateParams.invoiceSchedule
+            this.name = customerCommitCreateParams.name
+            this.netsuiteSalesOrderId = customerCommitCreateParams.netsuiteSalesOrderId
+            this.salesforceOpportunityId = customerCommitCreateParams.salesforceOpportunityId
+            additionalQueryParams(customerCommitCreateParams.additionalQueryParams)
+            additionalHeaders(customerCommitCreateParams.additionalHeaders)
+            additionalBodyProperties(customerCommitCreateParams.additionalBodyProperties)
+        }
+
+        /**
+         * Schedule for distributing the commit to the customer. For "POSTPAID" commits only one
+         * schedule item is allowed and amount must match invoice_schedule total.
+         */
+        fun accessSchedule(accessSchedule: AccessSchedule) = apply {
+            this.accessSchedule = accessSchedule
+        }
+
+        fun customerId(customerId: String) = apply { this.customerId = customerId }
+
+        /**
+         * If multiple credits or commits are applicable, the one with the lower priority will apply
+         * first.
+         */
+        fun priority(priority: Double) = apply { this.priority = priority }
+
+        fun productId(productId: String) = apply { this.productId = productId }
+
+        fun type(type: Type) = apply { this.type = type }
+
+        /**
+         * Which contract the commit applies to. If not provided, the commit applies to all
+         * contracts.
+         */
+        fun applicableContractIds(applicableContractIds: List<String>) = apply {
+            this.applicableContractIds.clear()
+            this.applicableContractIds.addAll(applicableContractIds)
+        }
+
+        /**
+         * Which contract the commit applies to. If not provided, the commit applies to all
+         * contracts.
+         */
+        fun addApplicableContractId(applicableContractId: String) = apply {
+            this.applicableContractIds.add(applicableContractId)
+        }
+
+        /**
+         * Which products the commit applies to. If both applicable_product_ids and
+         * applicable_product_tags are not provided, the commit applies to all products.
+         */
+        fun applicableProductIds(applicableProductIds: List<String>) = apply {
+            this.applicableProductIds.clear()
+            this.applicableProductIds.addAll(applicableProductIds)
+        }
+
+        /**
+         * Which products the commit applies to. If both applicable_product_ids and
+         * applicable_product_tags are not provided, the commit applies to all products.
+         */
+        fun addApplicableProductId(applicableProductId: String) = apply {
+            this.applicableProductIds.add(applicableProductId)
+        }
+
+        /**
+         * Which tags the commit applies to. If both applicable_product_ids and
+         * applicable_product_tags are not provided, the commit applies to all products.
+         */
+        fun applicableProductTags(applicableProductTags: List<String>) = apply {
+            this.applicableProductTags.clear()
+            this.applicableProductTags.addAll(applicableProductTags)
+        }
+
+        /**
+         * Which tags the commit applies to. If both applicable_product_ids and
+         * applicable_product_tags are not provided, the commit applies to all products.
+         */
+        fun addApplicableProductTag(applicableProductTag: String) = apply {
+            this.applicableProductTags.add(applicableProductTag)
+        }
+
+        fun customFields(customFields: CustomFields) = apply { this.customFields = customFields }
+
+        /** Used only in UI/API. It is not exposed to end customers. */
+        fun description(description: String) = apply { this.description = description }
+
+        /**
+         * The contract that this commit will be billed on. This is required for "POSTPAID" commits
+         * and for "PREPAID" commits unless there is no invoice schedule above (i.e., the commit is
+         * 'free').
+         */
+        fun invoiceContractId(invoiceContractId: String) = apply {
+            this.invoiceContractId = invoiceContractId
+        }
+
+        /**
+         * Required for "POSTPAID" commits: the true up invoice will be generated at this time and
+         * only one schedule item is allowed; the total must match accesss_schedule amount. Optional
+         * for "PREPAID" commits: if not provided, this will be a "complimentary" commit with no
+         * invoice.
+         */
+        fun invoiceSchedule(invoiceSchedule: InvoiceSchedule) = apply {
+            this.invoiceSchedule = invoiceSchedule
+        }
+
+        /** displayed on invoices */
+        fun name(name: String) = apply { this.name = name }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
+            this.netsuiteSalesOrderId = netsuiteSalesOrderId
+        }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun salesforceOpportunityId(salesforceOpportunityId: String) = apply {
+            this.salesforceOpportunityId = salesforceOpportunityId
+        }
+
+        fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
+            this.additionalQueryParams.clear()
+            putAllQueryParams(additionalQueryParams)
+        }
+
+        fun putQueryParam(name: String, value: String) = apply {
+            this.additionalQueryParams.getOrPut(name) { mutableListOf() }.add(value)
+        }
+
+        fun putQueryParams(name: String, values: Iterable<String>) = apply {
+            this.additionalQueryParams.getOrPut(name) { mutableListOf() }.addAll(values)
+        }
+
+        fun putAllQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
+            additionalQueryParams.forEach(this::putQueryParams)
+        }
+
+        fun removeQueryParam(name: String) = apply {
+            this.additionalQueryParams.put(name, mutableListOf())
+        }
+
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.clear()
+            putAllHeaders(additionalHeaders)
+        }
+
+        fun putHeader(name: String, value: String) = apply {
+            this.additionalHeaders.getOrPut(name) { mutableListOf() }.add(value)
+        }
+
+        fun putHeaders(name: String, values: Iterable<String>) = apply {
+            this.additionalHeaders.getOrPut(name) { mutableListOf() }.addAll(values)
+        }
+
+        fun putAllHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            additionalHeaders.forEach(this::putHeaders)
+        }
+
+        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.clear()
+            this.additionalBodyProperties.putAll(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            this.additionalBodyProperties.put(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalBodyProperties.putAll(additionalBodyProperties)
+            }
+
+        fun build(): CustomerCommitCreateParams =
+            CustomerCommitCreateParams(
+                checkNotNull(accessSchedule) { "`accessSchedule` is required but was not set" },
+                checkNotNull(customerId) { "`customerId` is required but was not set" },
+                checkNotNull(priority) { "`priority` is required but was not set" },
+                checkNotNull(productId) { "`productId` is required but was not set" },
+                checkNotNull(type) { "`type` is required but was not set" },
+                if (applicableContractIds.size == 0) null
+                else applicableContractIds.toUnmodifiable(),
+                if (applicableProductIds.size == 0) null else applicableProductIds.toUnmodifiable(),
+                if (applicableProductTags.size == 0) null
+                else applicableProductTags.toUnmodifiable(),
+                customFields,
+                description,
+                invoiceContractId,
+                invoiceSchedule,
+                name,
+                netsuiteSalesOrderId,
+                salesforceOpportunityId,
+                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalBodyProperties.toUnmodifiable(),
+            )
+    }
+
+    /**
+     * Schedule for distributing the commit to the customer. For "POSTPAID" commits only one
+     * schedule item is allowed and amount must match invoice_schedule total.
+     */
+    @JsonDeserialize(builder = AccessSchedule.Builder::class)
+    @NoAutoDetect
+    class AccessSchedule
+    private constructor(
+        private val creditTypeId: String?,
+        private val scheduleItems: List<ScheduleItem>?,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
+
+        @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem>? = scheduleItems
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var creditTypeId: String? = null
+            private var scheduleItems: List<ScheduleItem>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(accessSchedule: AccessSchedule) = apply {
+                this.creditTypeId = accessSchedule.creditTypeId
+                this.scheduleItems = accessSchedule.scheduleItems
+                additionalProperties(accessSchedule.additionalProperties)
+            }
+
+            @JsonProperty("credit_type_id")
+            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+
+            @JsonProperty("schedule_items")
+            fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
+                this.scheduleItems = scheduleItems
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): AccessSchedule =
+                AccessSchedule(
+                    creditTypeId,
+                    checkNotNull(scheduleItems) { "`scheduleItems` is required but was not set" }
+                        .toUnmodifiable(),
+                    additionalProperties.toUnmodifiable(),
+                )
+        }
+
+        @JsonDeserialize(builder = ScheduleItem.Builder::class)
+        @NoAutoDetect
+        class ScheduleItem
+        private constructor(
+            private val amount: Double?,
+            private val startingAt: OffsetDateTime?,
+            private val endingBefore: OffsetDateTime?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            @JsonProperty("amount") fun amount(): Double? = amount
+
+            /** RFC 3339 timestamp (inclusive) */
+            @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+
+            /** RFC 3339 timestamp (exclusive) */
+            @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var amount: Double? = null
+                private var startingAt: OffsetDateTime? = null
+                private var endingBefore: OffsetDateTime? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(scheduleItem: ScheduleItem) = apply {
+                    this.amount = scheduleItem.amount
+                    this.startingAt = scheduleItem.startingAt
+                    this.endingBefore = scheduleItem.endingBefore
+                    additionalProperties(scheduleItem.additionalProperties)
+                }
+
+                @JsonProperty("amount") fun amount(amount: Double) = apply { this.amount = amount }
+
+                /** RFC 3339 timestamp (inclusive) */
+                @JsonProperty("starting_at")
+                fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+
+                /** RFC 3339 timestamp (exclusive) */
+                @JsonProperty("ending_before")
+                fun endingBefore(endingBefore: OffsetDateTime) = apply {
+                    this.endingBefore = endingBefore
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): ScheduleItem =
+                    ScheduleItem(
+                        checkNotNull(amount) { "`amount` is required but was not set" },
+                        checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                        checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is ScheduleItem && this.amount == other.amount && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(amount, startingAt, endingBefore, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "ScheduleItem{amount=$amount, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is AccessSchedule && this.creditTypeId == other.creditTypeId && this.scheduleItems == other.scheduleItems && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(creditTypeId, scheduleItems, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "AccessSchedule{creditTypeId=$creditTypeId, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
+    }
+
+    class Type
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
+
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+
+        companion object {
+
+            @JvmField val PREPAID = Type(JsonField.of("PREPAID"))
+
+            @JvmField val POSTPAID = Type(JsonField.of("POSTPAID"))
+
+            @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+        }
+
+        enum class Known {
+            PREPAID,
+            POSTPAID,
+        }
+
+        enum class Value {
+            PREPAID,
+            POSTPAID,
+            _UNKNOWN,
+        }
+
+        fun value(): Value =
+            when (this) {
+                PREPAID -> Value.PREPAID
+                POSTPAID -> Value.POSTPAID
+                else -> Value._UNKNOWN
+            }
+
+        fun known(): Known =
+            when (this) {
+                PREPAID -> Known.PREPAID
+                POSTPAID -> Known.POSTPAID
+                else -> throw MetronomeInvalidDataException("Unknown Type: $value")
+            }
+
+        fun asString(): String = _value().asStringOrThrow()
+    }
+
+    @JsonDeserialize(builder = CustomFields.Builder::class)
+    @NoAutoDetect
+    class CustomFields
+    private constructor(
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(customFields: CustomFields) = apply {
+                additionalProperties(customFields.additionalProperties)
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
+    }
+
+    /**
+     * Required for "POSTPAID" commits: the true up invoice will be generated at this time and only
+     * one schedule item is allowed; the total must match accesss_schedule amount. Optional for
+     * "PREPAID" commits: if not provided, this will be a "complimentary" commit with no invoice.
+     */
+    @JsonDeserialize(builder = InvoiceSchedule.Builder::class)
+    @NoAutoDetect
+    class InvoiceSchedule
+    private constructor(
+        private val creditTypeId: String?,
+        private val scheduleItems: List<ScheduleItem>?,
+        private val recurringSchedule: RecurringSchedule?,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        /** Defaults to USD if not passed. Only USD is supported at this time. */
+        @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
+
+        /** Either provide amount or provide both unit_price and quantity. */
+        @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem>? = scheduleItems
+
+        /**
+         * Enter the unit price and quantity for the charge or instead only send the amount. If
+         * amount is sent, the unit price is assumed to be the amount and quantity is inferred to
+         * be 1.
+         */
+        @JsonProperty("recurring_schedule")
+        fun recurringSchedule(): RecurringSchedule? = recurringSchedule
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var creditTypeId: String? = null
+            private var scheduleItems: List<ScheduleItem>? = null
+            private var recurringSchedule: RecurringSchedule? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(invoiceSchedule: InvoiceSchedule) = apply {
+                this.creditTypeId = invoiceSchedule.creditTypeId
+                this.scheduleItems = invoiceSchedule.scheduleItems
+                this.recurringSchedule = invoiceSchedule.recurringSchedule
+                additionalProperties(invoiceSchedule.additionalProperties)
+            }
+
+            /** Defaults to USD if not passed. Only USD is supported at this time. */
+            @JsonProperty("credit_type_id")
+            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+
+            /** Either provide amount or provide both unit_price and quantity. */
+            @JsonProperty("schedule_items")
+            fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
+                this.scheduleItems = scheduleItems
+            }
+
+            /**
+             * Enter the unit price and quantity for the charge or instead only send the amount. If
+             * amount is sent, the unit price is assumed to be the amount and quantity is inferred
+             * to be 1.
+             */
+            @JsonProperty("recurring_schedule")
+            fun recurringSchedule(recurringSchedule: RecurringSchedule) = apply {
+                this.recurringSchedule = recurringSchedule
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): InvoiceSchedule =
+                InvoiceSchedule(
+                    creditTypeId,
+                    scheduleItems?.toUnmodifiable(),
+                    recurringSchedule,
+                    additionalProperties.toUnmodifiable(),
+                )
+        }
+
+        /**
+         * Enter the unit price and quantity for the charge or instead only send the amount. If
+         * amount is sent, the unit price is assumed to be the amount and quantity is inferred to
+         * be 1.
+         */
+        @JsonDeserialize(builder = RecurringSchedule.Builder::class)
+        @NoAutoDetect
+        class RecurringSchedule
+        private constructor(
+            private val startingAt: OffsetDateTime?,
+            private val endingBefore: OffsetDateTime?,
+            private val frequency: Frequency?,
+            private val unitPrice: Double?,
+            private val quantity: Double?,
+            private val amount: Double?,
+            private val amountDistribution: AmountDistribution?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            /** RFC 3339 timestamp (inclusive). */
+            @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+
+            /** RFC 3339 timestamp (exclusive). */
+            @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+
+            @JsonProperty("frequency") fun frequency(): Frequency? = frequency
+
+            /**
+             * Unit price for the charge. Will be multiplied by quantity to determine the amount and
+             * must be specified with quantity. If specified amount cannot be provided.
+             */
+            @JsonProperty("unit_price") fun unitPrice(): Double? = unitPrice
+
+            /**
+             * Quantity for the charge. Will be multiplied by unit_price to determine the amount and
+             * must be specified with unit_price. If specified amount cannot be provided.
+             */
+            @JsonProperty("quantity") fun quantity(): Double? = quantity
+
+            /**
+             * Amount for the charge. Can be provided instead of unit_price and quantity. If amount
+             * is sent, the unit_price is assumed to be the amount and quantity is inferred to be 1.
+             */
+            @JsonProperty("amount") fun amount(): Double? = amount
+
+            @JsonProperty("amount_distribution")
+            fun amountDistribution(): AmountDistribution? = amountDistribution
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var startingAt: OffsetDateTime? = null
+                private var endingBefore: OffsetDateTime? = null
+                private var frequency: Frequency? = null
+                private var unitPrice: Double? = null
+                private var quantity: Double? = null
+                private var amount: Double? = null
+                private var amountDistribution: AmountDistribution? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(recurringSchedule: RecurringSchedule) = apply {
+                    this.startingAt = recurringSchedule.startingAt
+                    this.endingBefore = recurringSchedule.endingBefore
+                    this.frequency = recurringSchedule.frequency
+                    this.unitPrice = recurringSchedule.unitPrice
+                    this.quantity = recurringSchedule.quantity
+                    this.amount = recurringSchedule.amount
+                    this.amountDistribution = recurringSchedule.amountDistribution
+                    additionalProperties(recurringSchedule.additionalProperties)
+                }
+
+                /** RFC 3339 timestamp (inclusive). */
+                @JsonProperty("starting_at")
+                fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+
+                /** RFC 3339 timestamp (exclusive). */
+                @JsonProperty("ending_before")
+                fun endingBefore(endingBefore: OffsetDateTime) = apply {
+                    this.endingBefore = endingBefore
+                }
+
+                @JsonProperty("frequency")
+                fun frequency(frequency: Frequency) = apply { this.frequency = frequency }
+
+                /**
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
+                 */
+                @JsonProperty("unit_price")
+                fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+
+                /**
+                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
+                 * and must be specified with unit_price. If specified amount cannot be provided.
+                 */
+                @JsonProperty("quantity")
+                fun quantity(quantity: Double) = apply { this.quantity = quantity }
+
+                /**
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                @JsonProperty("amount") fun amount(amount: Double) = apply { this.amount = amount }
+
+                @JsonProperty("amount_distribution")
+                fun amountDistribution(amountDistribution: AmountDistribution) = apply {
+                    this.amountDistribution = amountDistribution
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): RecurringSchedule =
+                    RecurringSchedule(
+                        checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                        checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
+                        checkNotNull(frequency) { "`frequency` is required but was not set" },
+                        unitPrice,
+                        quantity,
+                        amount,
+                        checkNotNull(amountDistribution) {
+                            "`amountDistribution` is required but was not set"
+                        },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class AmountDistribution
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is AmountDistribution && this.value == other.value /* spotless:on */
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DIVIDED = AmountDistribution(JsonField.of("DIVIDED"))
+
+                    @JvmField
+                    val DIVIDED_ROUNDED = AmountDistribution(JsonField.of("DIVIDED_ROUNDED"))
+
+                    @JvmField val EACH = AmountDistribution(JsonField.of("EACH"))
+
+                    @JvmStatic fun of(value: String) = AmountDistribution(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DIVIDED,
+                    DIVIDED_ROUNDED,
+                    EACH,
+                }
+
+                enum class Value {
+                    DIVIDED,
+                    DIVIDED_ROUNDED,
+                    EACH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DIVIDED -> Value.DIVIDED
+                        DIVIDED_ROUNDED -> Value.DIVIDED_ROUNDED
+                        EACH -> Value.EACH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DIVIDED -> Known.DIVIDED
+                        DIVIDED_ROUNDED -> Known.DIVIDED_ROUNDED
+                        EACH -> Known.EACH
+                        else ->
+                            throw MetronomeInvalidDataException(
+                                "Unknown AmountDistribution: $value"
+                            )
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+
+            class Frequency
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Frequency && this.value == other.value /* spotless:on */
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val MONTHLY = Frequency(JsonField.of("MONTHLY"))
+
+                    @JvmField val QUARTERLY = Frequency(JsonField.of("QUARTERLY"))
+
+                    @JvmField val SEMI_ANNUAL = Frequency(JsonField.of("SEMI_ANNUAL"))
+
+                    @JvmField val ANNUAL = Frequency(JsonField.of("ANNUAL"))
+
+                    @JvmStatic fun of(value: String) = Frequency(JsonField.of(value))
+                }
+
+                enum class Known {
+                    MONTHLY,
+                    QUARTERLY,
+                    SEMI_ANNUAL,
+                    ANNUAL,
+                }
+
+                enum class Value {
+                    MONTHLY,
+                    QUARTERLY,
+                    SEMI_ANNUAL,
+                    ANNUAL,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        ANNUAL -> Value.ANNUAL
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        ANNUAL -> Known.ANNUAL
+                        else -> throw MetronomeInvalidDataException("Unknown Frequency: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is RecurringSchedule && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.frequency == other.frequency && this.unitPrice == other.unitPrice && this.quantity == other.quantity && this.amount == other.amount && this.amountDistribution == other.amountDistribution && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(startingAt, endingBefore, frequency, unitPrice, quantity, amount, amountDistribution, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "RecurringSchedule{startingAt=$startingAt, endingBefore=$endingBefore, frequency=$frequency, unitPrice=$unitPrice, quantity=$quantity, amount=$amount, amountDistribution=$amountDistribution, additionalProperties=$additionalProperties}"
+        }
+
+        @JsonDeserialize(builder = ScheduleItem.Builder::class)
+        @NoAutoDetect
+        class ScheduleItem
+        private constructor(
+            private val unitPrice: Double?,
+            private val quantity: Double?,
+            private val amount: Double?,
+            private val timestamp: OffsetDateTime?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            /**
+             * Unit price for the charge. Will be multiplied by quantity to determine the amount and
+             * must be specified with quantity. If specified amount cannot be provided.
+             */
+            @JsonProperty("unit_price") fun unitPrice(): Double? = unitPrice
+
+            /**
+             * Quantity for the charge. Will be multiplied by unit_price to determine the amount and
+             * must be specified with unit_price. If specified amount cannot be provided.
+             */
+            @JsonProperty("quantity") fun quantity(): Double? = quantity
+
+            /**
+             * Amount for the charge. Can be provided instead of unit_price and quantity. If amount
+             * is sent, the unit_price is assumed to be the amount and quantity is inferred to be 1.
+             */
+            @JsonProperty("amount") fun amount(): Double? = amount
+
+            /** timestamp of the scheduled event */
+            @JsonProperty("timestamp") fun timestamp(): OffsetDateTime? = timestamp
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var unitPrice: Double? = null
+                private var quantity: Double? = null
+                private var amount: Double? = null
+                private var timestamp: OffsetDateTime? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(scheduleItem: ScheduleItem) = apply {
+                    this.unitPrice = scheduleItem.unitPrice
+                    this.quantity = scheduleItem.quantity
+                    this.amount = scheduleItem.amount
+                    this.timestamp = scheduleItem.timestamp
+                    additionalProperties(scheduleItem.additionalProperties)
+                }
+
+                /**
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
+                 */
+                @JsonProperty("unit_price")
+                fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+
+                /**
+                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
+                 * and must be specified with unit_price. If specified amount cannot be provided.
+                 */
+                @JsonProperty("quantity")
+                fun quantity(quantity: Double) = apply { this.quantity = quantity }
+
+                /**
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                @JsonProperty("amount") fun amount(amount: Double) = apply { this.amount = amount }
+
+                /** timestamp of the scheduled event */
+                @JsonProperty("timestamp")
+                fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): ScheduleItem =
+                    ScheduleItem(
+                        unitPrice,
+                        quantity,
+                        amount,
+                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is ScheduleItem && this.unitPrice == other.unitPrice && this.quantity == other.quantity && this.amount == other.amount && this.timestamp == other.timestamp && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(unitPrice, quantity, amount, timestamp, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "ScheduleItem{unitPrice=$unitPrice, quantity=$quantity, amount=$amount, timestamp=$timestamp, additionalProperties=$additionalProperties}"
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is InvoiceSchedule && this.creditTypeId == other.creditTypeId && this.scheduleItems == other.scheduleItems && this.recurringSchedule == other.recurringSchedule && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(creditTypeId, scheduleItems, recurringSchedule, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "InvoiceSchedule{creditTypeId=$creditTypeId, scheduleItems=$scheduleItems, recurringSchedule=$recurringSchedule, additionalProperties=$additionalProperties}"
+    }
+}

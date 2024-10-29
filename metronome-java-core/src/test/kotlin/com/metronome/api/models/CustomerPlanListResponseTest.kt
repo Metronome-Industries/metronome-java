@@ -12,82 +12,66 @@ class CustomerPlanListResponseTest {
     fun createCustomerPlanListResponse() {
         val customerPlanListResponse =
             CustomerPlanListResponse.builder()
-                .data(
-                    listOf(
-                        CustomerPlanListResponse.Data.builder()
-                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .customFields(
-                                CustomerPlanListResponse.Data.CustomFields.builder().build()
-                            )
-                            .planDescription("string")
-                            .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .planName("string")
-                            .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .netPaymentTermsDays(42.23)
-                            .trialInfo(
-                                CustomerPlanListResponse.Data.TrialInfo.builder()
-                                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .spendingCaps(
-                                        listOf(
-                                            CustomerPlanListResponse.Data.TrialInfo.SpendingCap
-                                                .builder()
-                                                .amount(42.23)
-                                                .amountRemaining(42.23)
-                                                .creditType(
-                                                    CustomerPlanListResponse.Data.TrialInfo
-                                                        .SpendingCap
-                                                        .CreditType
-                                                        .builder()
-                                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                        .name("string")
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
+                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customFields(CustomerPlanListResponse.CustomFields.builder().build())
+                .planDescription("plan_description")
+                .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .planName("plan_name")
+                .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .netPaymentTermsDays(42.23)
+                .trialInfo(
+                    CustomerPlanListResponse.TrialInfo.builder()
+                        .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .spendingCaps(
+                            listOf(
+                                CustomerPlanListResponse.TrialInfo.SpendingCap.builder()
+                                    .amount(42.23)
+                                    .amountRemaining(42.23)
+                                    .creditType(
+                                        CreditTypeData.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .name("name")
+                                            .build()
                                     )
                                     .build()
                             )
-                            .build()
-                    )
+                        )
+                        .build()
                 )
-                .nextPage("string")
                 .build()
         assertThat(customerPlanListResponse).isNotNull
-        assertThat(customerPlanListResponse.data())
-            .containsExactly(
-                CustomerPlanListResponse.Data.builder()
-                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .customFields(CustomerPlanListResponse.Data.CustomFields.builder().build())
-                    .planDescription("string")
-                    .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .planName("string")
-                    .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(customerPlanListResponse.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(customerPlanListResponse.customFields())
+            .isEqualTo(CustomerPlanListResponse.CustomFields.builder().build())
+        assertThat(customerPlanListResponse.planDescription()).isEqualTo("plan_description")
+        assertThat(customerPlanListResponse.planId())
+            .isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(customerPlanListResponse.planName()).isEqualTo("plan_name")
+        assertThat(customerPlanListResponse.startingOn())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(customerPlanListResponse.endingBefore())
+            .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(customerPlanListResponse.netPaymentTermsDays()).contains(42.23)
+        assertThat(customerPlanListResponse.trialInfo())
+            .contains(
+                CustomerPlanListResponse.TrialInfo.builder()
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .netPaymentTermsDays(42.23)
-                    .trialInfo(
-                        CustomerPlanListResponse.Data.TrialInfo.builder()
-                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .spendingCaps(
-                                listOf(
-                                    CustomerPlanListResponse.Data.TrialInfo.SpendingCap.builder()
-                                        .amount(42.23)
-                                        .amountRemaining(42.23)
-                                        .creditType(
-                                            CustomerPlanListResponse.Data.TrialInfo.SpendingCap
-                                                .CreditType
-                                                .builder()
-                                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                .name("string")
-                                                .build()
-                                        )
+                    .spendingCaps(
+                        listOf(
+                            CustomerPlanListResponse.TrialInfo.SpendingCap.builder()
+                                .amount(42.23)
+                                .amountRemaining(42.23)
+                                .creditType(
+                                    CreditTypeData.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .name("name")
                                         .build()
                                 )
-                            )
-                            .build()
+                                .build()
+                        )
                     )
                     .build()
             )
-        assertThat(customerPlanListResponse.nextPage()).contains("string")
     }
 }

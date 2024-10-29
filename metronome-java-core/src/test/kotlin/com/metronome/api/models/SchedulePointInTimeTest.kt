@@ -12,6 +12,12 @@ class SchedulePointInTimeTest {
     fun createSchedulePointInTime() {
         val schedulePointInTime =
             SchedulePointInTime.builder()
+                .creditType(
+                    CreditTypeData.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .name("name")
+                        .build()
+                )
                 .scheduleItems(
                     listOf(
                         SchedulePointInTime.ScheduleItem.builder()
@@ -26,6 +32,13 @@ class SchedulePointInTimeTest {
                 )
                 .build()
         assertThat(schedulePointInTime).isNotNull
+        assertThat(schedulePointInTime.creditType())
+            .contains(
+                CreditTypeData.builder()
+                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .name("name")
+                    .build()
+            )
         assertThat(schedulePointInTime.scheduleItems().get())
             .containsExactly(
                 SchedulePointInTime.ScheduleItem.builder()

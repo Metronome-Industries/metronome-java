@@ -5,6 +5,9 @@ package com.metronome.api.services.blocking
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.models.*
+import com.metronome.api.models.CustomerListBillableMetricsParams
+import com.metronome.api.models.CustomerListCostsParams
+import com.metronome.api.models.CustomerListParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -23,15 +26,15 @@ class CustomerServiceTest {
         val customerCreateResponse =
             customerService.create(
                 CustomerCreateParams.builder()
-                    .name("string")
+                    .name("name")
                     .billingConfig(
                         CustomerCreateParams.BillingConfig.builder()
-                            .billingProviderCustomerId("string")
+                            .billingProviderCustomerId("billing_provider_customer_id")
                             .billingProviderType(
                                 CustomerCreateParams.BillingConfig.BillingProviderType
                                     .AWS_MARKETPLACE
                             )
-                            .awsProductCode("string")
+                            .awsProductCode("aws_product_code")
                             .awsRegion(CustomerCreateParams.BillingConfig.AwsRegion.AF_SOUTH_1)
                             .stripeCollectionMethod(
                                 CustomerCreateParams.BillingConfig.StripeCollectionMethod
@@ -74,19 +77,9 @@ class CustomerServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val customerService = client.customers()
-        val customerListResponse =
-            customerService.list(
-                CustomerListParams.builder()
-                    .customerIds(listOf("string"))
-                    .ingestAlias("string")
-                    .limit(100L)
-                    .nextPage("string")
-                    .onlyArchived(true)
-                    .salesforceAccountIds(listOf("string"))
-                    .build()
-            )
-        println(customerListResponse)
-        customerListResponse.validate()
+        val response = customerService.list(CustomerListParams.builder().build())
+        println(response)
+        response.data().forEach { it.validate() }
     }
 
     @Test
@@ -113,17 +106,14 @@ class CustomerServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val customerService = client.customers()
-        val customerListBillableMetricsResponse =
+        val response =
             customerService.listBillableMetrics(
                 CustomerListBillableMetricsParams.builder()
                     .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .limit(100L)
-                    .nextPage("string")
-                    .onCurrentPlan(true)
                     .build()
             )
-        println(customerListBillableMetricsResponse)
-        customerListBillableMetricsResponse.validate()
+        println(response)
+        response.data().forEach { it.validate() }
     }
 
     @Test
@@ -134,18 +124,16 @@ class CustomerServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val customerService = client.customers()
-        val customerListCostsResponse =
+        val response =
             customerService.listCosts(
                 CustomerListCostsParams.builder()
                     .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .limit(100L)
-                    .nextPage("string")
                     .build()
             )
-        println(customerListCostsResponse)
-        customerListCostsResponse.validate()
+        println(response)
+        response.data().forEach { it.validate() }
     }
 
     @Test
@@ -176,7 +164,7 @@ class CustomerServiceTest {
             customerService.setName(
                 CustomerSetNameParams.builder()
                     .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .name("string")
+                    .name("name")
                     .build()
             )
         println(customerSetNameResponse)
@@ -195,7 +183,7 @@ class CustomerServiceTest {
             CustomerUpdateConfigParams.builder()
                 .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .leaveStripeInvoicesInDraft(true)
-                .salesforceAccountId("string")
+                .salesforceAccountId("salesforce_account_id")
                 .build()
         )
     }

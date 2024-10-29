@@ -24,11 +24,13 @@ constructor(
     private val name: String,
     private val threshold: Double,
     private val billableMetricId: String?,
+    private val creditGrantTypeFilters: List<String>?,
     private val creditTypeId: String?,
     private val customFieldFilters: List<CustomFieldFilter>?,
     private val customerId: String?,
     private val evaluateOnCreate: Boolean?,
     private val groupKeyFilter: GroupKeyFilter?,
+    private val invoiceTypesFilter: List<String>?,
     private val planId: String?,
     private val uniquenessKey: String?,
     private val additionalQueryParams: Map<String, List<String>>,
@@ -44,6 +46,9 @@ constructor(
 
     fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
+    fun creditGrantTypeFilters(): Optional<List<String>> =
+        Optional.ofNullable(creditGrantTypeFilters)
+
     fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
 
     fun customFieldFilters(): Optional<List<CustomFieldFilter>> =
@@ -54,6 +59,8 @@ constructor(
     fun evaluateOnCreate(): Optional<Boolean> = Optional.ofNullable(evaluateOnCreate)
 
     fun groupKeyFilter(): Optional<GroupKeyFilter> = Optional.ofNullable(groupKeyFilter)
+
+    fun invoiceTypesFilter(): Optional<List<String>> = Optional.ofNullable(invoiceTypesFilter)
 
     fun planId(): Optional<String> = Optional.ofNullable(planId)
 
@@ -66,11 +73,13 @@ constructor(
             name,
             threshold,
             billableMetricId,
+            creditGrantTypeFilters,
             creditTypeId,
             customFieldFilters,
             customerId,
             evaluateOnCreate,
             groupKeyFilter,
+            invoiceTypesFilter,
             planId,
             uniquenessKey,
             additionalBodyProperties,
@@ -89,17 +98,17 @@ constructor(
         private val name: String?,
         private val threshold: Double?,
         private val billableMetricId: String?,
+        private val creditGrantTypeFilters: List<String>?,
         private val creditTypeId: String?,
         private val customFieldFilters: List<CustomFieldFilter>?,
         private val customerId: String?,
         private val evaluateOnCreate: Boolean?,
         private val groupKeyFilter: GroupKeyFilter?,
+        private val invoiceTypesFilter: List<String>?,
         private val planId: String?,
         private val uniquenessKey: String?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
-
-        private var hashCode: Int = 0
 
         /** Type of the alert */
         @JsonProperty("alert_type") fun alertType(): AlertType? = alertType
@@ -107,7 +116,10 @@ constructor(
         /** Name of the alert */
         @JsonProperty("name") fun name(): String? = name
 
-        /** Threshold value of the alert policy */
+        /**
+         * Threshold value of the alert policy. Depending upon the alert type, this number may
+         * represent a financial amount, the days remaining, or a percentage reached.
+         */
         @JsonProperty("threshold") fun threshold(): Double? = threshold
 
         /**
@@ -115,6 +127,14 @@ constructor(
          * the usage for.
          */
         @JsonProperty("billable_metric_id") fun billableMetricId(): String? = billableMetricId
+
+        /**
+         * An array of strings, representing a way to filter the credit grant this alert applies to,
+         * by looking at the credit_grant_type field on the credit grant. This field is only defined
+         * for CreditPercentage and CreditBalance alerts
+         */
+        @JsonProperty("credit_grant_type_filters")
+        fun creditGrantTypeFilters(): List<String>? = creditGrantTypeFilters
 
         @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
 
@@ -145,6 +165,10 @@ constructor(
          */
         @JsonProperty("group_key_filter") fun groupKeyFilter(): GroupKeyFilter? = groupKeyFilter
 
+        /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
+        @JsonProperty("invoice_types_filter")
+        fun invoiceTypesFilter(): List<String>? = invoiceTypesFilter
+
         /**
          * If provided, will create this alert for this specific plan. To create an alert for all
          * customers, do not specify `customer_id` or `plan_id`.
@@ -164,50 +188,6 @@ constructor(
 
         fun toBuilder() = Builder().from(this)
 
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is AlertCreateBody &&
-                this.alertType == other.alertType &&
-                this.name == other.name &&
-                this.threshold == other.threshold &&
-                this.billableMetricId == other.billableMetricId &&
-                this.creditTypeId == other.creditTypeId &&
-                this.customFieldFilters == other.customFieldFilters &&
-                this.customerId == other.customerId &&
-                this.evaluateOnCreate == other.evaluateOnCreate &&
-                this.groupKeyFilter == other.groupKeyFilter &&
-                this.planId == other.planId &&
-                this.uniquenessKey == other.uniquenessKey &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        alertType,
-                        name,
-                        threshold,
-                        billableMetricId,
-                        creditTypeId,
-                        customFieldFilters,
-                        customerId,
-                        evaluateOnCreate,
-                        groupKeyFilter,
-                        planId,
-                        uniquenessKey,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "AlertCreateBody{alertType=$alertType, name=$name, threshold=$threshold, billableMetricId=$billableMetricId, creditTypeId=$creditTypeId, customFieldFilters=$customFieldFilters, customerId=$customerId, evaluateOnCreate=$evaluateOnCreate, groupKeyFilter=$groupKeyFilter, planId=$planId, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
-
         companion object {
 
             @JvmStatic fun builder() = Builder()
@@ -219,11 +199,13 @@ constructor(
             private var name: String? = null
             private var threshold: Double? = null
             private var billableMetricId: String? = null
+            private var creditGrantTypeFilters: List<String>? = null
             private var creditTypeId: String? = null
             private var customFieldFilters: List<CustomFieldFilter>? = null
             private var customerId: String? = null
             private var evaluateOnCreate: Boolean? = null
             private var groupKeyFilter: GroupKeyFilter? = null
+            private var invoiceTypesFilter: List<String>? = null
             private var planId: String? = null
             private var uniquenessKey: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -234,11 +216,13 @@ constructor(
                 this.name = alertCreateBody.name
                 this.threshold = alertCreateBody.threshold
                 this.billableMetricId = alertCreateBody.billableMetricId
+                this.creditGrantTypeFilters = alertCreateBody.creditGrantTypeFilters
                 this.creditTypeId = alertCreateBody.creditTypeId
                 this.customFieldFilters = alertCreateBody.customFieldFilters
                 this.customerId = alertCreateBody.customerId
                 this.evaluateOnCreate = alertCreateBody.evaluateOnCreate
                 this.groupKeyFilter = alertCreateBody.groupKeyFilter
+                this.invoiceTypesFilter = alertCreateBody.invoiceTypesFilter
                 this.planId = alertCreateBody.planId
                 this.uniquenessKey = alertCreateBody.uniquenessKey
                 additionalProperties(alertCreateBody.additionalProperties)
@@ -251,7 +235,10 @@ constructor(
             /** Name of the alert */
             @JsonProperty("name") fun name(name: String) = apply { this.name = name }
 
-            /** Threshold value of the alert policy */
+            /**
+             * Threshold value of the alert policy. Depending upon the alert type, this number may
+             * represent a financial amount, the days remaining, or a percentage reached.
+             */
             @JsonProperty("threshold")
             fun threshold(threshold: Double) = apply { this.threshold = threshold }
 
@@ -262,6 +249,16 @@ constructor(
             @JsonProperty("billable_metric_id")
             fun billableMetricId(billableMetricId: String) = apply {
                 this.billableMetricId = billableMetricId
+            }
+
+            /**
+             * An array of strings, representing a way to filter the credit grant this alert applies
+             * to, by looking at the credit_grant_type field on the credit grant. This field is only
+             * defined for CreditPercentage and CreditBalance alerts
+             */
+            @JsonProperty("credit_grant_type_filters")
+            fun creditGrantTypeFilters(creditGrantTypeFilters: List<String>) = apply {
+                this.creditGrantTypeFilters = creditGrantTypeFilters
             }
 
             @JsonProperty("credit_type_id")
@@ -304,6 +301,14 @@ constructor(
             }
 
             /**
+             * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
+             */
+            @JsonProperty("invoice_types_filter")
+            fun invoiceTypesFilter(invoiceTypesFilter: List<String>) = apply {
+                this.invoiceTypesFilter = invoiceTypesFilter
+            }
+
+            /**
              * If provided, will create this alert for this specific plan. To create an alert for
              * all customers, do not specify `customer_id` or `plan_id`.
              */
@@ -337,16 +342,38 @@ constructor(
                     checkNotNull(name) { "`name` is required but was not set" },
                     checkNotNull(threshold) { "`threshold` is required but was not set" },
                     billableMetricId,
+                    creditGrantTypeFilters?.toUnmodifiable(),
                     creditTypeId,
                     customFieldFilters?.toUnmodifiable(),
                     customerId,
                     evaluateOnCreate,
                     groupKeyFilter,
+                    invoiceTypesFilter?.toUnmodifiable(),
                     planId,
                     uniquenessKey,
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is AlertCreateBody && this.alertType == other.alertType && this.name == other.name && this.threshold == other.threshold && this.billableMetricId == other.billableMetricId && this.creditGrantTypeFilters == other.creditGrantTypeFilters && this.creditTypeId == other.creditTypeId && this.customFieldFilters == other.customFieldFilters && this.customerId == other.customerId && this.evaluateOnCreate == other.evaluateOnCreate && this.groupKeyFilter == other.groupKeyFilter && this.invoiceTypesFilter == other.invoiceTypesFilter && this.planId == other.planId && this.uniquenessKey == other.uniquenessKey && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(alertType, name, threshold, billableMetricId, creditGrantTypeFilters, creditTypeId, customFieldFilters, customerId, evaluateOnCreate, groupKeyFilter, invoiceTypesFilter, planId, uniquenessKey, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "AlertCreateBody{alertType=$alertType, name=$name, threshold=$threshold, billableMetricId=$billableMetricId, creditGrantTypeFilters=$creditGrantTypeFilters, creditTypeId=$creditTypeId, customFieldFilters=$customFieldFilters, customerId=$customerId, evaluateOnCreate=$evaluateOnCreate, groupKeyFilter=$groupKeyFilter, invoiceTypesFilter=$invoiceTypesFilter, planId=$planId, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -360,44 +387,15 @@ constructor(
             return true
         }
 
-        return other is AlertCreateParams &&
-            this.alertType == other.alertType &&
-            this.name == other.name &&
-            this.threshold == other.threshold &&
-            this.billableMetricId == other.billableMetricId &&
-            this.creditTypeId == other.creditTypeId &&
-            this.customFieldFilters == other.customFieldFilters &&
-            this.customerId == other.customerId &&
-            this.evaluateOnCreate == other.evaluateOnCreate &&
-            this.groupKeyFilter == other.groupKeyFilter &&
-            this.planId == other.planId &&
-            this.uniquenessKey == other.uniquenessKey &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is AlertCreateParams && this.alertType == other.alertType && this.name == other.name && this.threshold == other.threshold && this.billableMetricId == other.billableMetricId && this.creditGrantTypeFilters == other.creditGrantTypeFilters && this.creditTypeId == other.creditTypeId && this.customFieldFilters == other.customFieldFilters && this.customerId == other.customerId && this.evaluateOnCreate == other.evaluateOnCreate && this.groupKeyFilter == other.groupKeyFilter && this.invoiceTypesFilter == other.invoiceTypesFilter && this.planId == other.planId && this.uniquenessKey == other.uniquenessKey && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            alertType,
-            name,
-            threshold,
-            billableMetricId,
-            creditTypeId,
-            customFieldFilters,
-            customerId,
-            evaluateOnCreate,
-            groupKeyFilter,
-            planId,
-            uniquenessKey,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(alertType, name, threshold, billableMetricId, creditGrantTypeFilters, creditTypeId, customFieldFilters, customerId, evaluateOnCreate, groupKeyFilter, invoiceTypesFilter, planId, uniquenessKey, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
-        "AlertCreateParams{alertType=$alertType, name=$name, threshold=$threshold, billableMetricId=$billableMetricId, creditTypeId=$creditTypeId, customFieldFilters=$customFieldFilters, customerId=$customerId, evaluateOnCreate=$evaluateOnCreate, groupKeyFilter=$groupKeyFilter, planId=$planId, uniquenessKey=$uniquenessKey, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "AlertCreateParams{alertType=$alertType, name=$name, threshold=$threshold, billableMetricId=$billableMetricId, creditGrantTypeFilters=$creditGrantTypeFilters, creditTypeId=$creditTypeId, customFieldFilters=$customFieldFilters, customerId=$customerId, evaluateOnCreate=$evaluateOnCreate, groupKeyFilter=$groupKeyFilter, invoiceTypesFilter=$invoiceTypesFilter, planId=$planId, uniquenessKey=$uniquenessKey, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -413,11 +411,13 @@ constructor(
         private var name: String? = null
         private var threshold: Double? = null
         private var billableMetricId: String? = null
+        private var creditGrantTypeFilters: MutableList<String> = mutableListOf()
         private var creditTypeId: String? = null
         private var customFieldFilters: MutableList<CustomFieldFilter> = mutableListOf()
         private var customerId: String? = null
         private var evaluateOnCreate: Boolean? = null
         private var groupKeyFilter: GroupKeyFilter? = null
+        private var invoiceTypesFilter: MutableList<String> = mutableListOf()
         private var planId: String? = null
         private var uniquenessKey: String? = null
         private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
@@ -430,11 +430,13 @@ constructor(
             this.name = alertCreateParams.name
             this.threshold = alertCreateParams.threshold
             this.billableMetricId = alertCreateParams.billableMetricId
+            this.creditGrantTypeFilters(alertCreateParams.creditGrantTypeFilters ?: listOf())
             this.creditTypeId = alertCreateParams.creditTypeId
             this.customFieldFilters(alertCreateParams.customFieldFilters ?: listOf())
             this.customerId = alertCreateParams.customerId
             this.evaluateOnCreate = alertCreateParams.evaluateOnCreate
             this.groupKeyFilter = alertCreateParams.groupKeyFilter
+            this.invoiceTypesFilter(alertCreateParams.invoiceTypesFilter ?: listOf())
             this.planId = alertCreateParams.planId
             this.uniquenessKey = alertCreateParams.uniquenessKey
             additionalQueryParams(alertCreateParams.additionalQueryParams)
@@ -448,7 +450,10 @@ constructor(
         /** Name of the alert */
         fun name(name: String) = apply { this.name = name }
 
-        /** Threshold value of the alert policy */
+        /**
+         * Threshold value of the alert policy. Depending upon the alert type, this number may
+         * represent a financial amount, the days remaining, or a percentage reached.
+         */
         fun threshold(threshold: Double) = apply { this.threshold = threshold }
 
         /**
@@ -457,6 +462,25 @@ constructor(
          */
         fun billableMetricId(billableMetricId: String) = apply {
             this.billableMetricId = billableMetricId
+        }
+
+        /**
+         * An array of strings, representing a way to filter the credit grant this alert applies to,
+         * by looking at the credit_grant_type field on the credit grant. This field is only defined
+         * for CreditPercentage and CreditBalance alerts
+         */
+        fun creditGrantTypeFilters(creditGrantTypeFilters: List<String>) = apply {
+            this.creditGrantTypeFilters.clear()
+            this.creditGrantTypeFilters.addAll(creditGrantTypeFilters)
+        }
+
+        /**
+         * An array of strings, representing a way to filter the credit grant this alert applies to,
+         * by looking at the credit_grant_type field on the credit grant. This field is only defined
+         * for CreditPercentage and CreditBalance alerts
+         */
+        fun addCreditGrantTypeFilter(creditGrantTypeFilter: String) = apply {
+            this.creditGrantTypeFilters.add(creditGrantTypeFilter)
         }
 
         fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
@@ -501,6 +525,17 @@ constructor(
          */
         fun groupKeyFilter(groupKeyFilter: GroupKeyFilter) = apply {
             this.groupKeyFilter = groupKeyFilter
+        }
+
+        /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
+        fun invoiceTypesFilter(invoiceTypesFilter: List<String>) = apply {
+            this.invoiceTypesFilter.clear()
+            this.invoiceTypesFilter.addAll(invoiceTypesFilter)
+        }
+
+        /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
+        fun addInvoiceTypesFilter(invoiceTypesFilter: String) = apply {
+            this.invoiceTypesFilter.add(invoiceTypesFilter)
         }
 
         /**
@@ -576,11 +611,14 @@ constructor(
                 checkNotNull(name) { "`name` is required but was not set" },
                 checkNotNull(threshold) { "`threshold` is required but was not set" },
                 billableMetricId,
+                if (creditGrantTypeFilters.size == 0) null
+                else creditGrantTypeFilters.toUnmodifiable(),
                 creditTypeId,
                 if (customFieldFilters.size == 0) null else customFieldFilters.toUnmodifiable(),
                 customerId,
                 evaluateOnCreate,
                 groupKeyFilter,
+                if (invoiceTypesFilter.size == 0) null else invoiceTypesFilter.toUnmodifiable(),
                 planId,
                 uniquenessKey,
                 additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
@@ -602,7 +640,7 @@ constructor(
                 return true
             }
 
-            return other is AlertType && this.value == other.value
+            return /* spotless:off */ other is AlertType && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -656,6 +694,12 @@ constructor(
             val LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED =
                 AlertType(JsonField.of("low_remaining_contract_credit_percentage_reached"))
 
+            @JvmField
+            val LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED =
+                AlertType(JsonField.of("low_remaining_contract_credit_and_commit_balance_reached"))
+
+            @JvmField val INVOICE_TOTAL_REACHED = AlertType(JsonField.of("invoice_total_reached"))
+
             @JvmStatic fun of(value: String) = AlertType(JsonField.of(value))
         }
 
@@ -672,6 +716,8 @@ constructor(
             LOW_REMAINING_DAYS_FOR_CONTRACT_CREDIT_SEGMENT_REACHED,
             LOW_REMAINING_CONTRACT_CREDIT_BALANCE_REACHED,
             LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED,
+            LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED,
+            INVOICE_TOTAL_REACHED,
         }
 
         enum class Value {
@@ -687,6 +733,8 @@ constructor(
             LOW_REMAINING_DAYS_FOR_CONTRACT_CREDIT_SEGMENT_REACHED,
             LOW_REMAINING_CONTRACT_CREDIT_BALANCE_REACHED,
             LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED,
+            LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED,
+            INVOICE_TOTAL_REACHED,
             _UNKNOWN,
         }
 
@@ -711,6 +759,9 @@ constructor(
                     Value.LOW_REMAINING_CONTRACT_CREDIT_BALANCE_REACHED
                 LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED ->
                     Value.LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED
+                LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED ->
+                    Value.LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED
+                INVOICE_TOTAL_REACHED -> Value.INVOICE_TOTAL_REACHED
                 else -> Value._UNKNOWN
             }
 
@@ -735,6 +786,9 @@ constructor(
                     Known.LOW_REMAINING_CONTRACT_CREDIT_BALANCE_REACHED
                 LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED ->
                     Known.LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED
+                LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED ->
+                    Known.LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED
+                INVOICE_TOTAL_REACHED -> Known.INVOICE_TOTAL_REACHED
                 else -> throw MetronomeInvalidDataException("Unknown AlertType: $value")
             }
 
@@ -751,8 +805,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonProperty("entity") fun entity(): Entity? = entity
 
         @JsonProperty("key") fun key(): String? = key
@@ -764,34 +816,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomFieldFilter &&
-                this.entity == other.entity &&
-                this.key == other.key &&
-                this.value == other.value &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        entity,
-                        key,
-                        value,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CustomFieldFilter{entity=$entity, key=$key, value=$value, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -855,7 +879,7 @@ constructor(
                     return true
                 }
 
-                return other is Entity && this.value == other.value
+                return /* spotless:off */ other is Entity && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -904,6 +928,26 @@ constructor(
 
             fun asString(): String = _value().asStringOrThrow()
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomFieldFilter && this.entity == other.entity && this.key == other.key && this.value == other.value && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(entity, key, value, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CustomFieldFilter{entity=$entity, key=$key, value=$value, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -919,8 +963,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonProperty("key") fun key(): String? = key
 
         @JsonProperty("value") fun value(): String? = value
@@ -930,32 +972,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is GroupKeyFilter &&
-                this.key == other.key &&
-                this.value == other.value &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        key,
-                        value,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "GroupKeyFilter{key=$key, value=$value, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1000,5 +1016,25 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is GroupKeyFilter && this.key == other.key && this.value == other.value && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(key, value, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "GroupKeyFilter{key=$key, value=$value, additionalProperties=$additionalProperties}"
     }
 }

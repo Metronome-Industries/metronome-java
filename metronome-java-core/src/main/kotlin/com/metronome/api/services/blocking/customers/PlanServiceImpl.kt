@@ -4,22 +4,22 @@ package com.metronome.api.services.blocking.customers
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.handlers.errorHandler
+import com.metronome.api.core.handlers.jsonHandler
+import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
 import com.metronome.api.core.http.HttpResponse.Handler
+import com.metronome.api.core.json
 import com.metronome.api.errors.MetronomeError
 import com.metronome.api.models.CustomerPlanAddParams
 import com.metronome.api.models.CustomerPlanAddResponse
 import com.metronome.api.models.CustomerPlanEndParams
 import com.metronome.api.models.CustomerPlanEndResponse
+import com.metronome.api.models.CustomerPlanListPage
 import com.metronome.api.models.CustomerPlanListParams
+import com.metronome.api.models.CustomerPlanListPriceAdjustmentsPage
 import com.metronome.api.models.CustomerPlanListPriceAdjustmentsParams
-import com.metronome.api.models.CustomerPlanListPriceAdjustmentsResponse
-import com.metronome.api.models.CustomerPlanListResponse
-import com.metronome.api.services.errorHandler
-import com.metronome.api.services.json
-import com.metronome.api.services.jsonHandler
-import com.metronome.api.services.withErrorHandler
 
 class PlanServiceImpl
 constructor(
@@ -28,19 +28,20 @@ constructor(
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
-    private val listHandler: Handler<CustomerPlanListResponse> =
-        jsonHandler<CustomerPlanListResponse>(clientOptions.jsonMapper)
+    private val listHandler: Handler<CustomerPlanListPage.Response> =
+        jsonHandler<CustomerPlanListPage.Response>(clientOptions.jsonMapper)
             .withErrorHandler(errorHandler)
 
     /** List the given customer's plans in reverse-chronological order. */
     override fun list(
         params: CustomerPlanListParams,
         requestOptions: RequestOptions
-    ): CustomerPlanListResponse {
+    ): CustomerPlanListPage {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("customers", params.getPathParam(0), "plans")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -53,6 +54,7 @@ constructor(
                         validate()
                     }
                 }
+                .let { CustomerPlanListPage.of(this, params, it) }
         }
     }
 
@@ -73,6 +75,7 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("customers", params.getPathParam(0), "plans", "add")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -108,6 +111,7 @@ constructor(
                     params.getPathParam(1),
                     "end"
                 )
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -124,8 +128,9 @@ constructor(
         }
     }
 
-    private val listPriceAdjustmentsHandler: Handler<CustomerPlanListPriceAdjustmentsResponse> =
-        jsonHandler<CustomerPlanListPriceAdjustmentsResponse>(clientOptions.jsonMapper)
+    private val listPriceAdjustmentsHandler:
+        Handler<CustomerPlanListPriceAdjustmentsPage.Response> =
+        jsonHandler<CustomerPlanListPriceAdjustmentsPage.Response>(clientOptions.jsonMapper)
             .withErrorHandler(errorHandler)
 
     /**
@@ -136,7 +141,7 @@ constructor(
     override fun listPriceAdjustments(
         params: CustomerPlanListPriceAdjustmentsParams,
         requestOptions: RequestOptions
-    ): CustomerPlanListPriceAdjustmentsResponse {
+    ): CustomerPlanListPriceAdjustmentsPage {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
@@ -147,6 +152,7 @@ constructor(
                     params.getPathParam(1),
                     "priceAdjustments"
                 )
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -159,6 +165,7 @@ constructor(
                         validate()
                     }
                 }
+                .let { CustomerPlanListPriceAdjustmentsPage.of(this, params, it) }
         }
     }
 }

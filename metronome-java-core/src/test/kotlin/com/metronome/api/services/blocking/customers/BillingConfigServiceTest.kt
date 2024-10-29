@@ -25,8 +25,8 @@ class BillingConfigServiceTest {
                 .billingProviderType(
                     CustomerBillingConfigCreateParams.BillingProviderType.AWS_MARKETPLACE
                 )
-                .billingProviderCustomerId("string")
-                .awsProductCode("string")
+                .billingProviderCustomerId("billing_provider_customer_id")
+                .awsProductCode("aws_product_code")
                 .awsRegion(CustomerBillingConfigCreateParams.AwsRegion.AF_SOUTH_1)
                 .stripeCollectionMethod(
                     CustomerBillingConfigCreateParams.StripeCollectionMethod.CHARGE_AUTOMATICALLY

@@ -4,18 +4,20 @@ package com.metronome.api.services.async
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.handlers.emptyHandler
+import com.metronome.api.core.handlers.errorHandler
+import com.metronome.api.core.handlers.jsonHandler
+import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
 import com.metronome.api.core.http.HttpResponse.Handler
+import com.metronome.api.core.json
 import com.metronome.api.errors.MetronomeError
+import com.metronome.api.models.UsageIngestParams
 import com.metronome.api.models.UsageListParams
 import com.metronome.api.models.UsageListResponse
+import com.metronome.api.models.UsageListWithGroupsPageAsync
 import com.metronome.api.models.UsageListWithGroupsParams
-import com.metronome.api.models.UsageListWithGroupsResponse
-import com.metronome.api.services.errorHandler
-import com.metronome.api.services.json
-import com.metronome.api.services.jsonHandler
-import com.metronome.api.services.withErrorHandler
 import java.util.concurrent.CompletableFuture
 
 class UsageServiceAsyncImpl
@@ -40,6 +42,7 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("usage")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -57,8 +60,37 @@ constructor(
         }
     }
 
-    private val listWithGroupsHandler: Handler<UsageListWithGroupsResponse> =
-        jsonHandler<UsageListWithGroupsResponse>(clientOptions.jsonMapper)
+    private val ingestHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
+
+    /**
+     * Send usage events to Metronome. The body of this request is expected to be a JSON array of
+     * between 1 and 100 usage events. Compressed request bodies are supported with a
+     * `Content-Encoding: gzip` header. See
+     * [Getting usage into Metronome](https://docs.metronome.com/getting-usage-data-into-metronome/overview)
+     * to learn more about usage events.
+     */
+    override fun ingest(
+        params: UsageIngestParams,
+        requestOptions: RequestOptions
+    ): CompletableFuture<Void> {
+        val request =
+            HttpRequest.builder()
+                .method(HttpMethod.POST)
+                .addPathSegments("ingest")
+                .putAllQueryParams(clientOptions.queryParams)
+                .putAllQueryParams(params.getQueryParams())
+                .putAllHeaders(clientOptions.headers)
+                .putAllHeaders(params.getHeaders())
+                .body(json(clientOptions.jsonMapper, params.getBody()))
+                .build()
+        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
+            ->
+            response.use { ingestHandler.handle(it) }
+        }
+    }
+
+    private val listWithGroupsHandler: Handler<UsageListWithGroupsPageAsync.Response> =
+        jsonHandler<UsageListWithGroupsPageAsync.Response>(clientOptions.jsonMapper)
             .withErrorHandler(errorHandler)
 
     /**
@@ -68,11 +100,12 @@ constructor(
     override fun listWithGroups(
         params: UsageListWithGroupsParams,
         requestOptions: RequestOptions
-    ): CompletableFuture<UsageListWithGroupsResponse> {
+    ): CompletableFuture<UsageListWithGroupsPageAsync> {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("usage", "groups")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -87,6 +120,7 @@ constructor(
                         validate()
                     }
                 }
+                .let { UsageListWithGroupsPageAsync.of(this, params, it) }
         }
     }
 }

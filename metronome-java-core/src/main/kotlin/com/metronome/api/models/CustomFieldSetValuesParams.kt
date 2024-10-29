@@ -57,8 +57,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonProperty("custom_fields") fun customFields(): CustomFields? = customFields
 
         @JsonProperty("entity") fun entity(): Entity? = entity
@@ -70,34 +68,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomFieldSetValuesBody &&
-                this.customFields == other.customFields &&
-                this.entity == other.entity &&
-                this.entityId == other.entityId &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        customFields,
-                        entity,
-                        entityId,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CustomFieldSetValuesBody{customFields=$customFields, entity=$entity, entityId=$entityId, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -151,6 +121,26 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomFieldSetValuesBody && this.customFields == other.customFields && this.entity == other.entity && this.entityId == other.entityId && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(customFields, entity, entityId, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CustomFieldSetValuesBody{customFields=$customFields, entity=$entity, entityId=$entityId, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -164,24 +154,11 @@ constructor(
             return true
         }
 
-        return other is CustomFieldSetValuesParams &&
-            this.customFields == other.customFields &&
-            this.entity == other.entity &&
-            this.entityId == other.entityId &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is CustomFieldSetValuesParams && this.customFields == other.customFields && this.entity == other.entity && this.entityId == other.entityId && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            customFields,
-            entity,
-            entityId,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(customFields, entity, entityId, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
@@ -292,30 +269,11 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomFields && this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -347,6 +305,25 @@ constructor(
 
             fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
     class Entity
@@ -362,7 +339,7 @@ constructor(
                 return true
             }
 
-            return other is Entity && this.value == other.value
+            return /* spotless:off */ other is Entity && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

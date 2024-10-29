@@ -7,12 +7,12 @@ package com.metronome.api.services.blocking
 import com.metronome.api.core.RequestOptions
 import com.metronome.api.models.PlanGetDetailsParams
 import com.metronome.api.models.PlanGetDetailsResponse
+import com.metronome.api.models.PlanListChargesPage
 import com.metronome.api.models.PlanListChargesParams
-import com.metronome.api.models.PlanListChargesResponse
+import com.metronome.api.models.PlanListCustomersPage
 import com.metronome.api.models.PlanListCustomersParams
-import com.metronome.api.models.PlanListCustomersResponse
+import com.metronome.api.models.PlanListPage
 import com.metronome.api.models.PlanListParams
-import com.metronome.api.models.PlanListResponse
 
 interface PlanService {
 
@@ -21,7 +21,7 @@ interface PlanService {
     fun list(
         params: PlanListParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): PlanListResponse
+    ): PlanListPage
 
     /** Fetch high level details of a specific plan. */
     @JvmOverloads
@@ -35,7 +35,7 @@ interface PlanService {
     fun listCharges(
         params: PlanListChargesParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): PlanListChargesResponse
+    ): PlanListChargesPage
 
     /**
      * Fetches a list of customers on a specific plan (by default, only currently active plans are
@@ -45,5 +45,5 @@ interface PlanService {
     fun listCustomers(
         params: PlanListCustomersParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): PlanListCustomersResponse
+    ): PlanListCustomersPage
 }

@@ -24,19 +24,33 @@ class DashboardServiceTest {
                 DashboardGetEmbeddableUrlParams.builder()
                     .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
+                    .bmGroupKeyOverrides(
+                        listOf(
+                            DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
+                                .groupKeyName("group_key_name")
+                                .displayName("display_name")
+                                .valueDisplayNames(
+                                    DashboardGetEmbeddableUrlParams.BmGroupKeyOverride
+                                        .ValueDisplayNames
+                                        .builder()
+                                        .build()
+                                )
+                                .build()
+                        )
+                    )
                     .colorOverrides(
                         listOf(
                             DashboardGetEmbeddableUrlParams.ColorOverride.builder()
                                 .name(DashboardGetEmbeddableUrlParams.ColorOverride.Name.GRAY_DARK)
-                                .value("string")
+                                .value("value")
                                 .build()
                         )
                     )
                     .dashboardOptions(
                         listOf(
                             DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-                                .key("string")
-                                .value("string")
+                                .key("key")
+                                .value("value")
                                 .build()
                         )
                     )

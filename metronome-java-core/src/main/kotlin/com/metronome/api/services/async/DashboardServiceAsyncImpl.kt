@@ -4,16 +4,16 @@ package com.metronome.api.services.async
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.handlers.errorHandler
+import com.metronome.api.core.handlers.jsonHandler
+import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
 import com.metronome.api.core.http.HttpResponse.Handler
+import com.metronome.api.core.json
 import com.metronome.api.errors.MetronomeError
 import com.metronome.api.models.DashboardGetEmbeddableUrlParams
 import com.metronome.api.models.DashboardGetEmbeddableUrlResponse
-import com.metronome.api.services.errorHandler
-import com.metronome.api.services.json
-import com.metronome.api.services.jsonHandler
-import com.metronome.api.services.withErrorHandler
 import java.util.concurrent.CompletableFuture
 
 class DashboardServiceAsyncImpl
@@ -39,6 +39,7 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("dashboards", "getEmbeddableUrl")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())

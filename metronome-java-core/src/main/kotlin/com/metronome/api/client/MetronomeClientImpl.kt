@@ -3,54 +3,71 @@
 package com.metronome.api.client
 
 import com.metronome.api.core.ClientOptions
-import com.metronome.api.core.http.HttpResponse.Handler
-import com.metronome.api.errors.MetronomeError
+import com.metronome.api.core.getPackageVersion
 import com.metronome.api.models.*
 import com.metronome.api.services.blocking.*
-import com.metronome.api.services.errorHandler
 
 class MetronomeClientImpl
 constructor(
     private val clientOptions: ClientOptions,
 ) : MetronomeClient {
 
-    private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
+    private val clientOptionsWithUserAgent =
+        if (clientOptions.headers.containsKey("User-Agent")) clientOptions
+        else
+            clientOptions
+                .toBuilder()
+                .putHeader("User-Agent", "${javaClass.simpleName}/Java ${getPackageVersion()}")
+                .build()
 
+    // Pass the original clientOptions so that this client sets its own User-Agent.
     private val async: MetronomeClientAsync by lazy { MetronomeClientAsyncImpl(clientOptions) }
 
-    private val alerts: AlertService by lazy { AlertServiceImpl(clientOptions) }
+    private val alerts: AlertService by lazy { AlertServiceImpl(clientOptionsWithUserAgent) }
 
-    private val customerAlerts: CustomerAlertService by lazy {
-        CustomerAlertServiceImpl(clientOptions)
+    private val plans: PlanService by lazy { PlanServiceImpl(clientOptionsWithUserAgent) }
+
+    private val creditGrants: CreditGrantService by lazy {
+        CreditGrantServiceImpl(clientOptionsWithUserAgent)
     }
 
-    private val plans: PlanService by lazy { PlanServiceImpl(clientOptions) }
+    private val customers: CustomerService by lazy {
+        CustomerServiceImpl(clientOptionsWithUserAgent)
+    }
 
-    private val credits: CreditService by lazy { CreditServiceImpl(clientOptions) }
+    private val dashboards: DashboardService by lazy {
+        DashboardServiceImpl(clientOptionsWithUserAgent)
+    }
 
-    private val creditTypes: CreditTypeService by lazy { CreditTypeServiceImpl(clientOptions) }
+    private val usage: UsageService by lazy { UsageServiceImpl(clientOptionsWithUserAgent) }
 
-    private val customers: CustomerService by lazy { CustomerServiceImpl(clientOptions) }
+    private val auditLogs: AuditLogService by lazy {
+        AuditLogServiceImpl(clientOptionsWithUserAgent)
+    }
 
-    private val dashboards: DashboardService by lazy { DashboardServiceImpl(clientOptions) }
+    private val customFields: CustomFieldService by lazy {
+        CustomFieldServiceImpl(clientOptionsWithUserAgent)
+    }
 
-    private val usage: UsageService by lazy { UsageServiceImpl(clientOptions) }
+    private val billableMetrics: BillableMetricService by lazy {
+        BillableMetricServiceImpl(clientOptionsWithUserAgent)
+    }
 
-    private val auditLogs: AuditLogService by lazy { AuditLogServiceImpl(clientOptions) }
+    private val services: ServiceService by lazy { ServiceServiceImpl(clientOptionsWithUserAgent) }
 
-    private val customFields: CustomFieldService by lazy { CustomFieldServiceImpl(clientOptions) }
+    private val invoices: InvoiceService by lazy { InvoiceServiceImpl(clientOptionsWithUserAgent) }
+
+    private val contracts: ContractService by lazy {
+        ContractServiceImpl(clientOptionsWithUserAgent)
+    }
 
     override fun async(): MetronomeClientAsync = async
 
     override fun alerts(): AlertService = alerts
 
-    override fun customerAlerts(): CustomerAlertService = customerAlerts
-
     override fun plans(): PlanService = plans
 
-    override fun credits(): CreditService = credits
-
-    override fun creditTypes(): CreditTypeService = creditTypes
+    override fun creditGrants(): CreditGrantService = creditGrants
 
     override fun customers(): CustomerService = customers
 
@@ -61,4 +78,12 @@ constructor(
     override fun auditLogs(): AuditLogService = auditLogs
 
     override fun customFields(): CustomFieldService = customFields
+
+    override fun billableMetrics(): BillableMetricService = billableMetrics
+
+    override fun services(): ServiceService = services
+
+    override fun invoices(): InvoiceService = invoices
+
+    override fun contracts(): ContractService = contracts
 }

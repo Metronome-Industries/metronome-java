@@ -11,14 +11,14 @@ class CustomerCreateParamsTest {
     @Test
     fun createCustomerCreateParams() {
         CustomerCreateParams.builder()
-            .name("string")
+            .name("name")
             .billingConfig(
                 CustomerCreateParams.BillingConfig.builder()
-                    .billingProviderCustomerId("string")
+                    .billingProviderCustomerId("billing_provider_customer_id")
                     .billingProviderType(
                         CustomerCreateParams.BillingConfig.BillingProviderType.AWS_MARKETPLACE
                     )
-                    .awsProductCode("string")
+                    .awsProductCode("aws_product_code")
                     .awsRegion(CustomerCreateParams.BillingConfig.AwsRegion.AF_SOUTH_1)
                     .stripeCollectionMethod(
                         CustomerCreateParams.BillingConfig.StripeCollectionMethod
@@ -36,14 +36,14 @@ class CustomerCreateParamsTest {
     fun getBody() {
         val params =
             CustomerCreateParams.builder()
-                .name("string")
+                .name("name")
                 .billingConfig(
                     CustomerCreateParams.BillingConfig.builder()
-                        .billingProviderCustomerId("string")
+                        .billingProviderCustomerId("billing_provider_customer_id")
                         .billingProviderType(
                             CustomerCreateParams.BillingConfig.BillingProviderType.AWS_MARKETPLACE
                         )
-                        .awsProductCode("string")
+                        .awsProductCode("aws_product_code")
                         .awsRegion(CustomerCreateParams.BillingConfig.AwsRegion.AF_SOUTH_1)
                         .stripeCollectionMethod(
                             CustomerCreateParams.BillingConfig.StripeCollectionMethod
@@ -57,15 +57,15 @@ class CustomerCreateParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.name()).isEqualTo("string")
+        assertThat(body.name()).isEqualTo("name")
         assertThat(body.billingConfig())
             .isEqualTo(
                 CustomerCreateParams.BillingConfig.builder()
-                    .billingProviderCustomerId("string")
+                    .billingProviderCustomerId("billing_provider_customer_id")
                     .billingProviderType(
                         CustomerCreateParams.BillingConfig.BillingProviderType.AWS_MARKETPLACE
                     )
-                    .awsProductCode("string")
+                    .awsProductCode("aws_product_code")
                     .awsRegion(CustomerCreateParams.BillingConfig.AwsRegion.AF_SOUTH_1)
                     .stripeCollectionMethod(
                         CustomerCreateParams.BillingConfig.StripeCollectionMethod
@@ -81,9 +81,9 @@ class CustomerCreateParamsTest {
 
     @Test
     fun getBodyWithoutOptionalFields() {
-        val params = CustomerCreateParams.builder().name("string").build()
+        val params = CustomerCreateParams.builder().name("name").build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.name()).isEqualTo("string")
+        assertThat(body.name()).isEqualTo("name")
     }
 }

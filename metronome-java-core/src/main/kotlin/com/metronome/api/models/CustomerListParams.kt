@@ -2,7 +2,6 @@
 
 package com.metronome.api.models
 
-import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.toUnmodifiable
 import com.metronome.api.models.*
@@ -19,7 +18,6 @@ constructor(
     private val salesforceAccountIds: List<String>?,
     private val additionalQueryParams: Map<String, List<String>>,
     private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun customerIds(): Optional<List<String>> = Optional.ofNullable(customerIds)
@@ -57,41 +55,20 @@ constructor(
 
     fun _additionalHeaders(): Map<String, List<String>> = additionalHeaders
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is CustomerListParams &&
-            this.customerIds == other.customerIds &&
-            this.ingestAlias == other.ingestAlias &&
-            this.limit == other.limit &&
-            this.nextPage == other.nextPage &&
-            this.onlyArchived == other.onlyArchived &&
-            this.salesforceAccountIds == other.salesforceAccountIds &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is CustomerListParams && this.customerIds == other.customerIds && this.ingestAlias == other.ingestAlias && this.limit == other.limit && this.nextPage == other.nextPage && this.onlyArchived == other.onlyArchived && this.salesforceAccountIds == other.salesforceAccountIds && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            customerIds,
-            ingestAlias,
-            limit,
-            nextPage,
-            onlyArchived,
-            salesforceAccountIds,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(customerIds, ingestAlias, limit, nextPage, onlyArchived, salesforceAccountIds, additionalQueryParams, additionalHeaders) /* spotless:on */
     }
 
     override fun toString() =
-        "CustomerListParams{customerIds=$customerIds, ingestAlias=$ingestAlias, limit=$limit, nextPage=$nextPage, onlyArchived=$onlyArchived, salesforceAccountIds=$salesforceAccountIds, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerListParams{customerIds=$customerIds, ingestAlias=$ingestAlias, limit=$limit, nextPage=$nextPage, onlyArchived=$onlyArchived, salesforceAccountIds=$salesforceAccountIds, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -111,7 +88,6 @@ constructor(
         private var salesforceAccountIds: MutableList<String> = mutableListOf()
         private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerListParams: CustomerListParams) = apply {
@@ -123,7 +99,6 @@ constructor(
             this.salesforceAccountIds(customerListParams.salesforceAccountIds ?: listOf())
             additionalQueryParams(customerListParams.additionalQueryParams)
             additionalHeaders(customerListParams.additionalHeaders)
-            additionalBodyProperties(customerListParams.additionalBodyProperties)
         }
 
         /** Filter the customer list by customer_id. Up to 100 ids can be provided. */
@@ -198,20 +173,6 @@ constructor(
 
         fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            this.additionalBodyProperties.putAll(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            this.additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
         fun build(): CustomerListParams =
             CustomerListParams(
                 if (customerIds.size == 0) null else customerIds.toUnmodifiable(),
@@ -222,7 +183,6 @@ constructor(
                 if (salesforceAccountIds.size == 0) null else salesforceAccountIds.toUnmodifiable(),
                 additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
                 additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
             )
     }
 }

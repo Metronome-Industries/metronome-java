@@ -12,23 +12,29 @@ class AlertCreateParamsTest {
     fun createAlertCreateParams() {
         AlertCreateParams.builder()
             .alertType(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
-            .name("string")
+            .name("name")
             .threshold(42.23)
             .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .creditGrantTypeFilters(listOf("string"))
             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .customFieldFilters(
                 listOf(
                     AlertCreateParams.CustomFieldFilter.builder()
                         .entity(AlertCreateParams.CustomFieldFilter.Entity.CONTRACT)
-                        .key("string")
-                        .value("string")
+                        .key("key")
+                        .value("value")
                         .build()
                 )
             )
             .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .evaluateOnCreate(true)
             .groupKeyFilter(
-                AlertCreateParams.GroupKeyFilter.builder().key("string").value("string").build()
+                AlertCreateParams.GroupKeyFilter.builder().key("key").value("value").build()
+            )
+            .invoiceTypesFilter(
+                listOf(
+                    "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
+                )
             )
             .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .uniquenessKey("x")
@@ -40,23 +46,29 @@ class AlertCreateParamsTest {
         val params =
             AlertCreateParams.builder()
                 .alertType(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
-                .name("string")
+                .name("name")
                 .threshold(42.23)
                 .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .creditGrantTypeFilters(listOf("string"))
                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .customFieldFilters(
                     listOf(
                         AlertCreateParams.CustomFieldFilter.builder()
                             .entity(AlertCreateParams.CustomFieldFilter.Entity.CONTRACT)
-                            .key("string")
-                            .value("string")
+                            .key("key")
+                            .value("value")
                             .build()
                     )
                 )
                 .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .evaluateOnCreate(true)
                 .groupKeyFilter(
-                    AlertCreateParams.GroupKeyFilter.builder().key("string").value("string").build()
+                    AlertCreateParams.GroupKeyFilter.builder().key("key").value("value").build()
+                )
+                .invoiceTypesFilter(
+                    listOf(
+                        "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
+                    )
                 )
                 .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .uniquenessKey("x")
@@ -65,25 +77,30 @@ class AlertCreateParamsTest {
         assertThat(body).isNotNull
         assertThat(body.alertType())
             .isEqualTo(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
-        assertThat(body.name()).isEqualTo("string")
+        assertThat(body.name()).isEqualTo("name")
         assertThat(body.threshold()).isEqualTo(42.23)
         assertThat(body.billableMetricId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.creditGrantTypeFilters()).isEqualTo(listOf("string"))
         assertThat(body.creditTypeId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(body.customFieldFilters())
             .isEqualTo(
                 listOf(
                     AlertCreateParams.CustomFieldFilter.builder()
                         .entity(AlertCreateParams.CustomFieldFilter.Entity.CONTRACT)
-                        .key("string")
-                        .value("string")
+                        .key("key")
+                        .value("value")
                         .build()
                 )
             )
         assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(body.evaluateOnCreate()).isEqualTo(true)
         assertThat(body.groupKeyFilter())
+            .isEqualTo(AlertCreateParams.GroupKeyFilter.builder().key("key").value("value").build())
+        assertThat(body.invoiceTypesFilter())
             .isEqualTo(
-                AlertCreateParams.GroupKeyFilter.builder().key("string").value("string").build()
+                listOf(
+                    "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
+                )
             )
         assertThat(body.planId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(body.uniquenessKey()).isEqualTo("x")
@@ -94,14 +111,14 @@ class AlertCreateParamsTest {
         val params =
             AlertCreateParams.builder()
                 .alertType(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
-                .name("string")
+                .name("name")
                 .threshold(42.23)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.alertType())
             .isEqualTo(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
-        assertThat(body.name()).isEqualTo("string")
+        assertThat(body.name()).isEqualTo("name")
         assertThat(body.threshold()).isEqualTo(42.23)
     }
 }

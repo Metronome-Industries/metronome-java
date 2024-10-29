@@ -5,7 +5,6 @@ import com.google.common.collect.ListMultimap
 import com.google.common.collect.Multimap
 import com.google.common.collect.MultimapBuilder
 import com.metronome.api.core.toUnmodifiable
-import com.metronome.api.core.RequestOptions
 
 class HttpRequest
 private constructor(
@@ -18,7 +17,7 @@ private constructor(
 ) {
 
     override fun toString(): String =
-        "HttpRequest {method=$method, pathSegments=$pathSegments, queryParams=$queryParams, headers=$headers, body=$body}"
+        "HttpRequest{method=$method, pathSegments=$pathSegments, queryParams=$queryParams, headers=$headers, body=$body}"
 
     companion object {
         @JvmStatic fun builder() = Builder()

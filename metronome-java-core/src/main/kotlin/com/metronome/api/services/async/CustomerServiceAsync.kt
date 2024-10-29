@@ -9,30 +9,42 @@ import com.metronome.api.models.CustomerArchiveParams
 import com.metronome.api.models.CustomerArchiveResponse
 import com.metronome.api.models.CustomerCreateParams
 import com.metronome.api.models.CustomerCreateResponse
+import com.metronome.api.models.CustomerListBillableMetricsPageAsync
 import com.metronome.api.models.CustomerListBillableMetricsParams
-import com.metronome.api.models.CustomerListBillableMetricsResponse
+import com.metronome.api.models.CustomerListCostsPageAsync
 import com.metronome.api.models.CustomerListCostsParams
-import com.metronome.api.models.CustomerListCostsResponse
+import com.metronome.api.models.CustomerListPageAsync
 import com.metronome.api.models.CustomerListParams
-import com.metronome.api.models.CustomerListResponse
 import com.metronome.api.models.CustomerRetrieveParams
 import com.metronome.api.models.CustomerRetrieveResponse
 import com.metronome.api.models.CustomerSetIngestAliasesParams
 import com.metronome.api.models.CustomerSetNameParams
 import com.metronome.api.models.CustomerSetNameResponse
 import com.metronome.api.models.CustomerUpdateConfigParams
+import com.metronome.api.services.async.customers.AlertServiceAsync
 import com.metronome.api.services.async.customers.BillingConfigServiceAsync
+import com.metronome.api.services.async.customers.CommitServiceAsync
+import com.metronome.api.services.async.customers.CreditServiceAsync
 import com.metronome.api.services.async.customers.InvoiceServiceAsync
+import com.metronome.api.services.async.customers.NamedScheduleServiceAsync
 import com.metronome.api.services.async.customers.PlanServiceAsync
 import java.util.concurrent.CompletableFuture
 
 interface CustomerServiceAsync {
+
+    fun alerts(): AlertServiceAsync
 
     fun plans(): PlanServiceAsync
 
     fun invoices(): InvoiceServiceAsync
 
     fun billingConfig(): BillingConfigServiceAsync
+
+    fun commits(): CommitServiceAsync
+
+    fun credits(): CreditServiceAsync
+
+    fun namedSchedules(): NamedScheduleServiceAsync
 
     /** Create a new customer */
     @JvmOverloads
@@ -53,7 +65,7 @@ interface CustomerServiceAsync {
     fun list(
         params: CustomerListParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<CustomerListResponse>
+    ): CompletableFuture<CustomerListPageAsync>
 
     /** Archive a customer */
     @JvmOverloads
@@ -62,12 +74,12 @@ interface CustomerServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none()
     ): CompletableFuture<CustomerArchiveResponse>
 
-    /** List all billable metrics. */
+    /** Get all billable metrics for a given customer. */
     @JvmOverloads
     fun listBillableMetrics(
         params: CustomerListBillableMetricsParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<CustomerListBillableMetricsResponse>
+    ): CompletableFuture<CustomerListBillableMetricsPageAsync>
 
     /**
      * Fetch daily pending costs for the specified customer, broken down by credit type and line
@@ -78,7 +90,7 @@ interface CustomerServiceAsync {
     fun listCosts(
         params: CustomerListCostsParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<CustomerListCostsResponse>
+    ): CompletableFuture<CustomerListCostsPageAsync>
 
     /**
      * Sets the ingest aliases for a customer. Ingest aliases can be used in the `customer_id` field

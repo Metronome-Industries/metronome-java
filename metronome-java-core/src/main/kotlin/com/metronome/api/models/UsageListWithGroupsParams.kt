@@ -92,8 +92,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonProperty("billable_metric_id") fun billableMetricId(): String? = billableMetricId
 
         @JsonProperty("customer_id") fun customerId(): String? = customerId
@@ -123,42 +121,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is UsageListWithGroupsBody &&
-                this.billableMetricId == other.billableMetricId &&
-                this.customerId == other.customerId &&
-                this.windowSize == other.windowSize &&
-                this.currentPeriod == other.currentPeriod &&
-                this.endingBefore == other.endingBefore &&
-                this.groupBy == other.groupBy &&
-                this.startingOn == other.startingOn &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        billableMetricId,
-                        customerId,
-                        windowSize,
-                        currentPeriod,
-                        endingBefore,
-                        groupBy,
-                        startingOn,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "UsageListWithGroupsBody{billableMetricId=$billableMetricId, customerId=$customerId, windowSize=$windowSize, currentPeriod=$currentPeriod, endingBefore=$endingBefore, groupBy=$groupBy, startingOn=$startingOn, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -251,6 +213,26 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is UsageListWithGroupsBody && this.billableMetricId == other.billableMetricId && this.customerId == other.customerId && this.windowSize == other.windowSize && this.currentPeriod == other.currentPeriod && this.endingBefore == other.endingBefore && this.groupBy == other.groupBy && this.startingOn == other.startingOn && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(billableMetricId, customerId, windowSize, currentPeriod, endingBefore, groupBy, startingOn, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "UsageListWithGroupsBody{billableMetricId=$billableMetricId, customerId=$customerId, windowSize=$windowSize, currentPeriod=$currentPeriod, endingBefore=$endingBefore, groupBy=$groupBy, startingOn=$startingOn, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -264,36 +246,11 @@ constructor(
             return true
         }
 
-        return other is UsageListWithGroupsParams &&
-            this.billableMetricId == other.billableMetricId &&
-            this.customerId == other.customerId &&
-            this.windowSize == other.windowSize &&
-            this.currentPeriod == other.currentPeriod &&
-            this.endingBefore == other.endingBefore &&
-            this.groupBy == other.groupBy &&
-            this.startingOn == other.startingOn &&
-            this.limit == other.limit &&
-            this.nextPage == other.nextPage &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is UsageListWithGroupsParams && this.billableMetricId == other.billableMetricId && this.customerId == other.customerId && this.windowSize == other.windowSize && this.currentPeriod == other.currentPeriod && this.endingBefore == other.endingBefore && this.groupBy == other.groupBy && this.startingOn == other.startingOn && this.limit == other.limit && this.nextPage == other.nextPage && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            billableMetricId,
-            customerId,
-            windowSize,
-            currentPeriod,
-            endingBefore,
-            groupBy,
-            startingOn,
-            limit,
-            nextPage,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(billableMetricId, customerId, windowSize, currentPeriod, endingBefore, groupBy, startingOn, limit, nextPage, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
@@ -454,7 +411,7 @@ constructor(
                 return true
             }
 
-            return other is WindowSize && this.value == other.value
+            return /* spotless:off */ other is WindowSize && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -463,23 +420,11 @@ constructor(
 
         companion object {
 
-            @JvmField val HOUR = WindowSize(JsonField.of("hour"))
-
-            @JvmField val DAY = WindowSize(JsonField.of("day"))
-
-            @JvmField val NONE = WindowSize(JsonField.of("none"))
-
             @JvmField val HOUR = WindowSize(JsonField.of("HOUR"))
 
             @JvmField val DAY = WindowSize(JsonField.of("DAY"))
 
             @JvmField val NONE = WindowSize(JsonField.of("NONE"))
-
-            @JvmField val HOUR = WindowSize(JsonField.of("Hour"))
-
-            @JvmField val DAY = WindowSize(JsonField.of("Day"))
-
-            @JvmField val NONE = WindowSize(JsonField.of("None"))
 
             @JvmStatic fun of(value: String) = WindowSize(JsonField.of(value))
         }
@@ -488,21 +433,9 @@ constructor(
             HOUR,
             DAY,
             NONE,
-            HOUR,
-            DAY,
-            NONE,
-            HOUR,
-            DAY,
-            NONE,
         }
 
         enum class Value {
-            HOUR,
-            DAY,
-            NONE,
-            HOUR,
-            DAY,
-            NONE,
             HOUR,
             DAY,
             NONE,
@@ -514,23 +447,11 @@ constructor(
                 HOUR -> Value.HOUR
                 DAY -> Value.DAY
                 NONE -> Value.NONE
-                HOUR -> Value.HOUR
-                DAY -> Value.DAY
-                NONE -> Value.NONE
-                HOUR -> Value.HOUR
-                DAY -> Value.DAY
-                NONE -> Value.NONE
                 else -> Value._UNKNOWN
             }
 
         fun known(): Known =
             when (this) {
-                HOUR -> Known.HOUR
-                DAY -> Known.DAY
-                NONE -> Known.NONE
-                HOUR -> Known.HOUR
-                DAY -> Known.DAY
-                NONE -> Known.NONE
                 HOUR -> Known.HOUR
                 DAY -> Known.DAY
                 NONE -> Known.NONE
@@ -549,8 +470,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         /** The name of the group_by key to use */
         @JsonProperty("key") fun key(): String? = key
 
@@ -565,32 +484,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is GroupBy &&
-                this.key == other.key &&
-                this.values == other.values &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        key,
-                        values,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "GroupBy{key=$key, values=$values, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -641,5 +534,25 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is GroupBy && this.key == other.key && this.values == other.values && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(key, values, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "GroupBy{key=$key, values=$values, additionalProperties=$additionalProperties}"
     }
 }

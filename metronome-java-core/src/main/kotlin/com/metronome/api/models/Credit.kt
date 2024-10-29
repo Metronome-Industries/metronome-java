@@ -1,0 +1,2198 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.metronome.api.models
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.metronome.api.core.BaseDeserializer
+import com.metronome.api.core.BaseSerializer
+import com.metronome.api.core.Enum
+import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
+import com.metronome.api.core.JsonValue
+import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.getOrThrow
+import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.errors.MetronomeInvalidDataException
+import java.time.OffsetDateTime
+import java.util.Objects
+import java.util.Optional
+
+@JsonDeserialize(builder = Credit.Builder::class)
+@NoAutoDetect
+class Credit
+private constructor(
+    private val id: JsonField<String>,
+    private val contract: JsonField<Contract>,
+    private val type: JsonField<Type>,
+    private val name: JsonField<String>,
+    private val priority: JsonField<Double>,
+    private val product: JsonField<Product>,
+    private val accessSchedule: JsonField<ScheduleDuration>,
+    private val description: JsonField<String>,
+    private val applicableProductIds: JsonField<List<String>>,
+    private val applicableProductTags: JsonField<List<String>>,
+    private val applicableContractIds: JsonField<List<String>>,
+    private val netsuiteSalesOrderId: JsonField<String>,
+    private val salesforceOpportunityId: JsonField<String>,
+    private val ledger: JsonField<List<Ledger>>,
+    private val customFields: JsonField<CustomFields>,
+    private val additionalProperties: Map<String, JsonValue>,
+) {
+
+    private var validated: Boolean = false
+
+    fun id(): String = id.getRequired("id")
+
+    fun contract(): Optional<Contract> = Optional.ofNullable(contract.getNullable("contract"))
+
+    fun type(): Type = type.getRequired("type")
+
+    fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
+
+    /**
+     * If multiple credits or commits are applicable, the one with the lower priority will apply
+     * first.
+     */
+    fun priority(): Optional<Double> = Optional.ofNullable(priority.getNullable("priority"))
+
+    fun product(): Product = product.getRequired("product")
+
+    /** The schedule that the customer will gain access to the credits. */
+    fun accessSchedule(): Optional<ScheduleDuration> =
+        Optional.ofNullable(accessSchedule.getNullable("access_schedule"))
+
+    fun description(): Optional<String> =
+        Optional.ofNullable(description.getNullable("description"))
+
+    fun applicableProductIds(): Optional<List<String>> =
+        Optional.ofNullable(applicableProductIds.getNullable("applicable_product_ids"))
+
+    fun applicableProductTags(): Optional<List<String>> =
+        Optional.ofNullable(applicableProductTags.getNullable("applicable_product_tags"))
+
+    fun applicableContractIds(): Optional<List<String>> =
+        Optional.ofNullable(applicableContractIds.getNullable("applicable_contract_ids"))
+
+    /** This field's availability is dependent on your client's configuration. */
+    fun netsuiteSalesOrderId(): Optional<String> =
+        Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
+
+    /** This field's availability is dependent on your client's configuration. */
+    fun salesforceOpportunityId(): Optional<String> =
+        Optional.ofNullable(salesforceOpportunityId.getNullable("salesforce_opportunity_id"))
+
+    /**
+     * A list of ordered events that impact the balance of a credit. For example, an invoice
+     * deduction or an expiration.
+     */
+    fun ledger(): Optional<List<Ledger>> = Optional.ofNullable(ledger.getNullable("ledger"))
+
+    fun customFields(): Optional<CustomFields> =
+        Optional.ofNullable(customFields.getNullable("custom_fields"))
+
+    @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+    @JsonProperty("contract") @ExcludeMissing fun _contract() = contract
+
+    @JsonProperty("type") @ExcludeMissing fun _type() = type
+
+    @JsonProperty("name") @ExcludeMissing fun _name() = name
+
+    /**
+     * If multiple credits or commits are applicable, the one with the lower priority will apply
+     * first.
+     */
+    @JsonProperty("priority") @ExcludeMissing fun _priority() = priority
+
+    @JsonProperty("product") @ExcludeMissing fun _product() = product
+
+    /** The schedule that the customer will gain access to the credits. */
+    @JsonProperty("access_schedule") @ExcludeMissing fun _accessSchedule() = accessSchedule
+
+    @JsonProperty("description") @ExcludeMissing fun _description() = description
+
+    @JsonProperty("applicable_product_ids")
+    @ExcludeMissing
+    fun _applicableProductIds() = applicableProductIds
+
+    @JsonProperty("applicable_product_tags")
+    @ExcludeMissing
+    fun _applicableProductTags() = applicableProductTags
+
+    @JsonProperty("applicable_contract_ids")
+    @ExcludeMissing
+    fun _applicableContractIds() = applicableContractIds
+
+    /** This field's availability is dependent on your client's configuration. */
+    @JsonProperty("netsuite_sales_order_id")
+    @ExcludeMissing
+    fun _netsuiteSalesOrderId() = netsuiteSalesOrderId
+
+    /** This field's availability is dependent on your client's configuration. */
+    @JsonProperty("salesforce_opportunity_id")
+    @ExcludeMissing
+    fun _salesforceOpportunityId() = salesforceOpportunityId
+
+    /**
+     * A list of ordered events that impact the balance of a credit. For example, an invoice
+     * deduction or an expiration.
+     */
+    @JsonProperty("ledger") @ExcludeMissing fun _ledger() = ledger
+
+    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+
+    @JsonAnyGetter
+    @ExcludeMissing
+    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    fun validate(): Credit = apply {
+        if (!validated) {
+            id()
+            contract().map { it.validate() }
+            type()
+            name()
+            priority()
+            product().validate()
+            accessSchedule().map { it.validate() }
+            description()
+            applicableProductIds()
+            applicableProductTags()
+            applicableContractIds()
+            netsuiteSalesOrderId()
+            salesforceOpportunityId()
+            ledger()
+            customFields().map { it.validate() }
+            validated = true
+        }
+    }
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        @JvmStatic fun builder() = Builder()
+    }
+
+    class Builder {
+
+        private var id: JsonField<String> = JsonMissing.of()
+        private var contract: JsonField<Contract> = JsonMissing.of()
+        private var type: JsonField<Type> = JsonMissing.of()
+        private var name: JsonField<String> = JsonMissing.of()
+        private var priority: JsonField<Double> = JsonMissing.of()
+        private var product: JsonField<Product> = JsonMissing.of()
+        private var accessSchedule: JsonField<ScheduleDuration> = JsonMissing.of()
+        private var description: JsonField<String> = JsonMissing.of()
+        private var applicableProductIds: JsonField<List<String>> = JsonMissing.of()
+        private var applicableProductTags: JsonField<List<String>> = JsonMissing.of()
+        private var applicableContractIds: JsonField<List<String>> = JsonMissing.of()
+        private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
+        private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
+        private var ledger: JsonField<List<Ledger>> = JsonMissing.of()
+        private var customFields: JsonField<CustomFields> = JsonMissing.of()
+        private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+        @JvmSynthetic
+        internal fun from(credit: Credit) = apply {
+            this.id = credit.id
+            this.contract = credit.contract
+            this.type = credit.type
+            this.name = credit.name
+            this.priority = credit.priority
+            this.product = credit.product
+            this.accessSchedule = credit.accessSchedule
+            this.description = credit.description
+            this.applicableProductIds = credit.applicableProductIds
+            this.applicableProductTags = credit.applicableProductTags
+            this.applicableContractIds = credit.applicableContractIds
+            this.netsuiteSalesOrderId = credit.netsuiteSalesOrderId
+            this.salesforceOpportunityId = credit.salesforceOpportunityId
+            this.ledger = credit.ledger
+            this.customFields = credit.customFields
+            additionalProperties(credit.additionalProperties)
+        }
+
+        fun id(id: String) = id(JsonField.of(id))
+
+        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+
+        fun contract(contract: Contract) = contract(JsonField.of(contract))
+
+        @JsonProperty("contract")
+        @ExcludeMissing
+        fun contract(contract: JsonField<Contract>) = apply { this.contract = contract }
+
+        fun type(type: Type) = type(JsonField.of(type))
+
+        @JsonProperty("type")
+        @ExcludeMissing
+        fun type(type: JsonField<Type>) = apply { this.type = type }
+
+        fun name(name: String) = name(JsonField.of(name))
+
+        @JsonProperty("name")
+        @ExcludeMissing
+        fun name(name: JsonField<String>) = apply { this.name = name }
+
+        /**
+         * If multiple credits or commits are applicable, the one with the lower priority will apply
+         * first.
+         */
+        fun priority(priority: Double) = priority(JsonField.of(priority))
+
+        /**
+         * If multiple credits or commits are applicable, the one with the lower priority will apply
+         * first.
+         */
+        @JsonProperty("priority")
+        @ExcludeMissing
+        fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
+
+        fun product(product: Product) = product(JsonField.of(product))
+
+        @JsonProperty("product")
+        @ExcludeMissing
+        fun product(product: JsonField<Product>) = apply { this.product = product }
+
+        /** The schedule that the customer will gain access to the credits. */
+        fun accessSchedule(accessSchedule: ScheduleDuration) =
+            accessSchedule(JsonField.of(accessSchedule))
+
+        /** The schedule that the customer will gain access to the credits. */
+        @JsonProperty("access_schedule")
+        @ExcludeMissing
+        fun accessSchedule(accessSchedule: JsonField<ScheduleDuration>) = apply {
+            this.accessSchedule = accessSchedule
+        }
+
+        fun description(description: String) = description(JsonField.of(description))
+
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun description(description: JsonField<String>) = apply { this.description = description }
+
+        fun applicableProductIds(applicableProductIds: List<String>) =
+            applicableProductIds(JsonField.of(applicableProductIds))
+
+        @JsonProperty("applicable_product_ids")
+        @ExcludeMissing
+        fun applicableProductIds(applicableProductIds: JsonField<List<String>>) = apply {
+            this.applicableProductIds = applicableProductIds
+        }
+
+        fun applicableProductTags(applicableProductTags: List<String>) =
+            applicableProductTags(JsonField.of(applicableProductTags))
+
+        @JsonProperty("applicable_product_tags")
+        @ExcludeMissing
+        fun applicableProductTags(applicableProductTags: JsonField<List<String>>) = apply {
+            this.applicableProductTags = applicableProductTags
+        }
+
+        fun applicableContractIds(applicableContractIds: List<String>) =
+            applicableContractIds(JsonField.of(applicableContractIds))
+
+        @JsonProperty("applicable_contract_ids")
+        @ExcludeMissing
+        fun applicableContractIds(applicableContractIds: JsonField<List<String>>) = apply {
+            this.applicableContractIds = applicableContractIds
+        }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
+            netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
+
+        /** This field's availability is dependent on your client's configuration. */
+        @JsonProperty("netsuite_sales_order_id")
+        @ExcludeMissing
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
+            this.netsuiteSalesOrderId = netsuiteSalesOrderId
+        }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun salesforceOpportunityId(salesforceOpportunityId: String) =
+            salesforceOpportunityId(JsonField.of(salesforceOpportunityId))
+
+        /** This field's availability is dependent on your client's configuration. */
+        @JsonProperty("salesforce_opportunity_id")
+        @ExcludeMissing
+        fun salesforceOpportunityId(salesforceOpportunityId: JsonField<String>) = apply {
+            this.salesforceOpportunityId = salesforceOpportunityId
+        }
+
+        /**
+         * A list of ordered events that impact the balance of a credit. For example, an invoice
+         * deduction or an expiration.
+         */
+        fun ledger(ledger: List<Ledger>) = ledger(JsonField.of(ledger))
+
+        /**
+         * A list of ordered events that impact the balance of a credit. For example, an invoice
+         * deduction or an expiration.
+         */
+        @JsonProperty("ledger")
+        @ExcludeMissing
+        fun ledger(ledger: JsonField<List<Ledger>>) = apply { this.ledger = ledger }
+
+        fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        fun customFields(customFields: JsonField<CustomFields>) = apply {
+            this.customFields = customFields
+        }
+
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            this.additionalProperties.putAll(additionalProperties)
+        }
+
+        @JsonAnySetter
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            this.additionalProperties.put(key, value)
+        }
+
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun build(): Credit =
+            Credit(
+                id,
+                contract,
+                type,
+                name,
+                priority,
+                product,
+                accessSchedule,
+                description,
+                applicableProductIds.map { it.toUnmodifiable() },
+                applicableProductTags.map { it.toUnmodifiable() },
+                applicableContractIds.map { it.toUnmodifiable() },
+                netsuiteSalesOrderId,
+                salesforceOpportunityId,
+                ledger.map { it.toUnmodifiable() },
+                customFields,
+                additionalProperties.toUnmodifiable(),
+            )
+    }
+
+    @JsonDeserialize(builder = Product.Builder::class)
+    @NoAutoDetect
+    class Product
+    private constructor(
+        private val id: JsonField<String>,
+        private val name: JsonField<String>,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        private var validated: Boolean = false
+
+        fun id(): String = id.getRequired("id")
+
+        fun name(): String = name.getRequired("name")
+
+        @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+        @JsonProperty("name") @ExcludeMissing fun _name() = name
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun validate(): Product = apply {
+            if (!validated) {
+                id()
+                name()
+                validated = true
+            }
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var id: JsonField<String> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(product: Product) = apply {
+                this.id = product.id
+                this.name = product.name
+                additionalProperties(product.additionalProperties)
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            @JsonProperty("id")
+            @ExcludeMissing
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun name(name: String) = name(JsonField.of(name))
+
+            @JsonProperty("name")
+            @ExcludeMissing
+            fun name(name: JsonField<String>) = apply { this.name = name }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): Product =
+                Product(
+                    id,
+                    name,
+                    additionalProperties.toUnmodifiable(),
+                )
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Product && this.id == other.id && this.name == other.name && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(id, name, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Product{id=$id, name=$name, additionalProperties=$additionalProperties}"
+    }
+
+    class Type
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
+
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+
+        companion object {
+
+            @JvmField val CREDIT = Type(JsonField.of("CREDIT"))
+
+            @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+        }
+
+        enum class Known {
+            CREDIT,
+        }
+
+        enum class Value {
+            CREDIT,
+            _UNKNOWN,
+        }
+
+        fun value(): Value =
+            when (this) {
+                CREDIT -> Value.CREDIT
+                else -> Value._UNKNOWN
+            }
+
+        fun known(): Known =
+            when (this) {
+                CREDIT -> Known.CREDIT
+                else -> throw MetronomeInvalidDataException("Unknown Type: $value")
+            }
+
+        fun asString(): String = _value().asStringOrThrow()
+    }
+
+    @JsonDeserialize(builder = Contract.Builder::class)
+    @NoAutoDetect
+    class Contract
+    private constructor(
+        private val id: JsonField<String>,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        private var validated: Boolean = false
+
+        fun id(): String = id.getRequired("id")
+
+        @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun validate(): Contract = apply {
+            if (!validated) {
+                id()
+                validated = true
+            }
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var id: JsonField<String> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(contract: Contract) = apply {
+                this.id = contract.id
+                additionalProperties(contract.additionalProperties)
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            @JsonProperty("id")
+            @ExcludeMissing
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): Contract = Contract(id, additionalProperties.toUnmodifiable())
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Contract && this.id == other.id && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(id, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "Contract{id=$id, additionalProperties=$additionalProperties}"
+    }
+
+    @JsonDeserialize(builder = CustomFields.Builder::class)
+    @NoAutoDetect
+    class CustomFields
+    private constructor(
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        private var validated: Boolean = false
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun validate(): CustomFields = apply {
+            if (!validated) {
+                validated = true
+            }
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(customFields: CustomFields) = apply {
+                additionalProperties(customFields.additionalProperties)
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
+    }
+
+    @JsonDeserialize(using = Ledger.Deserializer::class)
+    @JsonSerialize(using = Ledger.Serializer::class)
+    class Ledger
+    private constructor(
+        private val creditSegmentStartLedgerEntry: CreditSegmentStartLedgerEntry? = null,
+        private val creditAutomatedInvoiceDeductionLedgerEntry:
+            CreditAutomatedInvoiceDeductionLedgerEntry? =
+            null,
+        private val creditExpirationLedgerEntry: CreditExpirationLedgerEntry? = null,
+        private val creditCanceledLedgerEntry: CreditCanceledLedgerEntry? = null,
+        private val creditCreditedLedgerEntry: CreditCreditedLedgerEntry? = null,
+        private val creditManualLedgerEntry: CreditManualLedgerEntry? = null,
+        private val _json: JsonValue? = null,
+    ) {
+
+        private var validated: Boolean = false
+
+        fun creditSegmentStartLedgerEntry(): Optional<CreditSegmentStartLedgerEntry> =
+            Optional.ofNullable(creditSegmentStartLedgerEntry)
+
+        fun creditAutomatedInvoiceDeductionLedgerEntry():
+            Optional<CreditAutomatedInvoiceDeductionLedgerEntry> =
+            Optional.ofNullable(creditAutomatedInvoiceDeductionLedgerEntry)
+
+        fun creditExpirationLedgerEntry(): Optional<CreditExpirationLedgerEntry> =
+            Optional.ofNullable(creditExpirationLedgerEntry)
+
+        fun creditCanceledLedgerEntry(): Optional<CreditCanceledLedgerEntry> =
+            Optional.ofNullable(creditCanceledLedgerEntry)
+
+        fun creditCreditedLedgerEntry(): Optional<CreditCreditedLedgerEntry> =
+            Optional.ofNullable(creditCreditedLedgerEntry)
+
+        fun creditManualLedgerEntry(): Optional<CreditManualLedgerEntry> =
+            Optional.ofNullable(creditManualLedgerEntry)
+
+        fun isCreditSegmentStartLedgerEntry(): Boolean = creditSegmentStartLedgerEntry != null
+
+        fun isCreditAutomatedInvoiceDeductionLedgerEntry(): Boolean =
+            creditAutomatedInvoiceDeductionLedgerEntry != null
+
+        fun isCreditExpirationLedgerEntry(): Boolean = creditExpirationLedgerEntry != null
+
+        fun isCreditCanceledLedgerEntry(): Boolean = creditCanceledLedgerEntry != null
+
+        fun isCreditCreditedLedgerEntry(): Boolean = creditCreditedLedgerEntry != null
+
+        fun isCreditManualLedgerEntry(): Boolean = creditManualLedgerEntry != null
+
+        fun asCreditSegmentStartLedgerEntry(): CreditSegmentStartLedgerEntry =
+            creditSegmentStartLedgerEntry.getOrThrow("creditSegmentStartLedgerEntry")
+
+        fun asCreditAutomatedInvoiceDeductionLedgerEntry():
+            CreditAutomatedInvoiceDeductionLedgerEntry =
+            creditAutomatedInvoiceDeductionLedgerEntry.getOrThrow(
+                "creditAutomatedInvoiceDeductionLedgerEntry"
+            )
+
+        fun asCreditExpirationLedgerEntry(): CreditExpirationLedgerEntry =
+            creditExpirationLedgerEntry.getOrThrow("creditExpirationLedgerEntry")
+
+        fun asCreditCanceledLedgerEntry(): CreditCanceledLedgerEntry =
+            creditCanceledLedgerEntry.getOrThrow("creditCanceledLedgerEntry")
+
+        fun asCreditCreditedLedgerEntry(): CreditCreditedLedgerEntry =
+            creditCreditedLedgerEntry.getOrThrow("creditCreditedLedgerEntry")
+
+        fun asCreditManualLedgerEntry(): CreditManualLedgerEntry =
+            creditManualLedgerEntry.getOrThrow("creditManualLedgerEntry")
+
+        fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
+
+        fun <T> accept(visitor: Visitor<T>): T {
+            return when {
+                creditSegmentStartLedgerEntry != null ->
+                    visitor.visitCreditSegmentStartLedgerEntry(creditSegmentStartLedgerEntry)
+                creditAutomatedInvoiceDeductionLedgerEntry != null ->
+                    visitor.visitCreditAutomatedInvoiceDeductionLedgerEntry(
+                        creditAutomatedInvoiceDeductionLedgerEntry
+                    )
+                creditExpirationLedgerEntry != null ->
+                    visitor.visitCreditExpirationLedgerEntry(creditExpirationLedgerEntry)
+                creditCanceledLedgerEntry != null ->
+                    visitor.visitCreditCanceledLedgerEntry(creditCanceledLedgerEntry)
+                creditCreditedLedgerEntry != null ->
+                    visitor.visitCreditCreditedLedgerEntry(creditCreditedLedgerEntry)
+                creditManualLedgerEntry != null ->
+                    visitor.visitCreditManualLedgerEntry(creditManualLedgerEntry)
+                else -> visitor.unknown(_json)
+            }
+        }
+
+        fun validate(): Ledger = apply {
+            if (!validated) {
+                if (
+                    creditSegmentStartLedgerEntry == null &&
+                        creditAutomatedInvoiceDeductionLedgerEntry == null &&
+                        creditExpirationLedgerEntry == null &&
+                        creditCanceledLedgerEntry == null &&
+                        creditCreditedLedgerEntry == null &&
+                        creditManualLedgerEntry == null
+                ) {
+                    throw MetronomeInvalidDataException("Unknown Ledger: $_json")
+                }
+                creditSegmentStartLedgerEntry?.validate()
+                creditAutomatedInvoiceDeductionLedgerEntry?.validate()
+                creditExpirationLedgerEntry?.validate()
+                creditCanceledLedgerEntry?.validate()
+                creditCreditedLedgerEntry?.validate()
+                creditManualLedgerEntry?.validate()
+                validated = true
+            }
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Ledger && this.creditSegmentStartLedgerEntry == other.creditSegmentStartLedgerEntry && this.creditAutomatedInvoiceDeductionLedgerEntry == other.creditAutomatedInvoiceDeductionLedgerEntry && this.creditExpirationLedgerEntry == other.creditExpirationLedgerEntry && this.creditCanceledLedgerEntry == other.creditCanceledLedgerEntry && this.creditCreditedLedgerEntry == other.creditCreditedLedgerEntry && this.creditManualLedgerEntry == other.creditManualLedgerEntry /* spotless:on */
+        }
+
+        override fun hashCode(): Int {
+            return /* spotless:off */ Objects.hash(creditSegmentStartLedgerEntry, creditAutomatedInvoiceDeductionLedgerEntry, creditExpirationLedgerEntry, creditCanceledLedgerEntry, creditCreditedLedgerEntry, creditManualLedgerEntry) /* spotless:on */
+        }
+
+        override fun toString(): String {
+            return when {
+                creditSegmentStartLedgerEntry != null ->
+                    "Ledger{creditSegmentStartLedgerEntry=$creditSegmentStartLedgerEntry}"
+                creditAutomatedInvoiceDeductionLedgerEntry != null ->
+                    "Ledger{creditAutomatedInvoiceDeductionLedgerEntry=$creditAutomatedInvoiceDeductionLedgerEntry}"
+                creditExpirationLedgerEntry != null ->
+                    "Ledger{creditExpirationLedgerEntry=$creditExpirationLedgerEntry}"
+                creditCanceledLedgerEntry != null ->
+                    "Ledger{creditCanceledLedgerEntry=$creditCanceledLedgerEntry}"
+                creditCreditedLedgerEntry != null ->
+                    "Ledger{creditCreditedLedgerEntry=$creditCreditedLedgerEntry}"
+                creditManualLedgerEntry != null ->
+                    "Ledger{creditManualLedgerEntry=$creditManualLedgerEntry}"
+                _json != null -> "Ledger{_unknown=$_json}"
+                else -> throw IllegalStateException("Invalid Ledger")
+            }
+        }
+
+        companion object {
+
+            @JvmStatic
+            fun ofCreditSegmentStartLedgerEntry(
+                creditSegmentStartLedgerEntry: CreditSegmentStartLedgerEntry
+            ) = Ledger(creditSegmentStartLedgerEntry = creditSegmentStartLedgerEntry)
+
+            @JvmStatic
+            fun ofCreditAutomatedInvoiceDeductionLedgerEntry(
+                creditAutomatedInvoiceDeductionLedgerEntry:
+                    CreditAutomatedInvoiceDeductionLedgerEntry
+            ) =
+                Ledger(
+                    creditAutomatedInvoiceDeductionLedgerEntry =
+                        creditAutomatedInvoiceDeductionLedgerEntry
+                )
+
+            @JvmStatic
+            fun ofCreditExpirationLedgerEntry(
+                creditExpirationLedgerEntry: CreditExpirationLedgerEntry
+            ) = Ledger(creditExpirationLedgerEntry = creditExpirationLedgerEntry)
+
+            @JvmStatic
+            fun ofCreditCanceledLedgerEntry(creditCanceledLedgerEntry: CreditCanceledLedgerEntry) =
+                Ledger(creditCanceledLedgerEntry = creditCanceledLedgerEntry)
+
+            @JvmStatic
+            fun ofCreditCreditedLedgerEntry(creditCreditedLedgerEntry: CreditCreditedLedgerEntry) =
+                Ledger(creditCreditedLedgerEntry = creditCreditedLedgerEntry)
+
+            @JvmStatic
+            fun ofCreditManualLedgerEntry(creditManualLedgerEntry: CreditManualLedgerEntry) =
+                Ledger(creditManualLedgerEntry = creditManualLedgerEntry)
+        }
+
+        interface Visitor<out T> {
+
+            fun visitCreditSegmentStartLedgerEntry(
+                creditSegmentStartLedgerEntry: CreditSegmentStartLedgerEntry
+            ): T
+
+            fun visitCreditAutomatedInvoiceDeductionLedgerEntry(
+                creditAutomatedInvoiceDeductionLedgerEntry:
+                    CreditAutomatedInvoiceDeductionLedgerEntry
+            ): T
+
+            fun visitCreditExpirationLedgerEntry(
+                creditExpirationLedgerEntry: CreditExpirationLedgerEntry
+            ): T
+
+            fun visitCreditCanceledLedgerEntry(
+                creditCanceledLedgerEntry: CreditCanceledLedgerEntry
+            ): T
+
+            fun visitCreditCreditedLedgerEntry(
+                creditCreditedLedgerEntry: CreditCreditedLedgerEntry
+            ): T
+
+            fun visitCreditManualLedgerEntry(creditManualLedgerEntry: CreditManualLedgerEntry): T
+
+            fun unknown(json: JsonValue?): T {
+                throw MetronomeInvalidDataException("Unknown Ledger: $json")
+            }
+        }
+
+        class Deserializer : BaseDeserializer<Ledger>(Ledger::class) {
+
+            override fun ObjectCodec.deserialize(node: JsonNode): Ledger {
+                val json = JsonValue.fromJsonNode(node)
+
+                tryDeserialize(node, jacksonTypeRef<CreditSegmentStartLedgerEntry>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return Ledger(creditSegmentStartLedgerEntry = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<CreditAutomatedInvoiceDeductionLedgerEntry>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return Ledger(creditAutomatedInvoiceDeductionLedgerEntry = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<CreditExpirationLedgerEntry>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return Ledger(creditExpirationLedgerEntry = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<CreditCanceledLedgerEntry>()) { it.validate() }
+                    ?.let {
+                        return Ledger(creditCanceledLedgerEntry = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<CreditCreditedLedgerEntry>()) { it.validate() }
+                    ?.let {
+                        return Ledger(creditCreditedLedgerEntry = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<CreditManualLedgerEntry>()) { it.validate() }
+                    ?.let {
+                        return Ledger(creditManualLedgerEntry = it, _json = json)
+                    }
+
+                return Ledger(_json = json)
+            }
+        }
+
+        class Serializer : BaseSerializer<Ledger>(Ledger::class) {
+
+            override fun serialize(
+                value: Ledger,
+                generator: JsonGenerator,
+                provider: SerializerProvider
+            ) {
+                when {
+                    value.creditSegmentStartLedgerEntry != null ->
+                        generator.writeObject(value.creditSegmentStartLedgerEntry)
+                    value.creditAutomatedInvoiceDeductionLedgerEntry != null ->
+                        generator.writeObject(value.creditAutomatedInvoiceDeductionLedgerEntry)
+                    value.creditExpirationLedgerEntry != null ->
+                        generator.writeObject(value.creditExpirationLedgerEntry)
+                    value.creditCanceledLedgerEntry != null ->
+                        generator.writeObject(value.creditCanceledLedgerEntry)
+                    value.creditCreditedLedgerEntry != null ->
+                        generator.writeObject(value.creditCreditedLedgerEntry)
+                    value.creditManualLedgerEntry != null ->
+                        generator.writeObject(value.creditManualLedgerEntry)
+                    value._json != null -> generator.writeObject(value._json)
+                    else -> throw IllegalStateException("Invalid Ledger")
+                }
+            }
+        }
+
+        @JsonDeserialize(builder = CreditSegmentStartLedgerEntry.Builder::class)
+        @NoAutoDetect
+        class CreditSegmentStartLedgerEntry
+        private constructor(
+            private val type: JsonField<Type>,
+            private val timestamp: JsonField<OffsetDateTime>,
+            private val amount: JsonField<Double>,
+            private val segmentId: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            fun type(): Type = type.getRequired("type")
+
+            fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
+
+            fun amount(): Double = amount.getRequired("amount")
+
+            fun segmentId(): String = segmentId.getRequired("segment_id")
+
+            @JsonProperty("type") @ExcludeMissing fun _type() = type
+
+            @JsonProperty("timestamp") @ExcludeMissing fun _timestamp() = timestamp
+
+            @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+
+            @JsonProperty("segment_id") @ExcludeMissing fun _segmentId() = segmentId
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): CreditSegmentStartLedgerEntry = apply {
+                if (!validated) {
+                    type()
+                    timestamp()
+                    amount()
+                    segmentId()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var type: JsonField<Type> = JsonMissing.of()
+                private var timestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var amount: JsonField<Double> = JsonMissing.of()
+                private var segmentId: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(creditSegmentStartLedgerEntry: CreditSegmentStartLedgerEntry) =
+                    apply {
+                        this.type = creditSegmentStartLedgerEntry.type
+                        this.timestamp = creditSegmentStartLedgerEntry.timestamp
+                        this.amount = creditSegmentStartLedgerEntry.amount
+                        this.segmentId = creditSegmentStartLedgerEntry.segmentId
+                        additionalProperties(creditSegmentStartLedgerEntry.additionalProperties)
+                    }
+
+                fun type(type: Type) = type(JsonField.of(type))
+
+                @JsonProperty("type")
+                @ExcludeMissing
+                fun type(type: JsonField<Type>) = apply { this.type = type }
+
+                fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
+
+                @JsonProperty("timestamp")
+                @ExcludeMissing
+                fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
+                    this.timestamp = timestamp
+                }
+
+                fun amount(amount: Double) = amount(JsonField.of(amount))
+
+                @JsonProperty("amount")
+                @ExcludeMissing
+                fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+                fun segmentId(segmentId: String) = segmentId(JsonField.of(segmentId))
+
+                @JsonProperty("segment_id")
+                @ExcludeMissing
+                fun segmentId(segmentId: JsonField<String>) = apply { this.segmentId = segmentId }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): CreditSegmentStartLedgerEntry =
+                    CreditSegmentStartLedgerEntry(
+                        type,
+                        timestamp,
+                        amount,
+                        segmentId,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class Type
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val CREDIT_SEGMENT_START = Type(JsonField.of("CREDIT_SEGMENT_START"))
+
+                    @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+                }
+
+                enum class Known {
+                    CREDIT_SEGMENT_START,
+                }
+
+                enum class Value {
+                    CREDIT_SEGMENT_START,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        CREDIT_SEGMENT_START -> Value.CREDIT_SEGMENT_START
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        CREDIT_SEGMENT_START -> Known.CREDIT_SEGMENT_START
+                        else -> throw MetronomeInvalidDataException("Unknown Type: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is CreditSegmentStartLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "CreditSegmentStartLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, additionalProperties=$additionalProperties}"
+        }
+
+        @JsonDeserialize(builder = CreditAutomatedInvoiceDeductionLedgerEntry.Builder::class)
+        @NoAutoDetect
+        class CreditAutomatedInvoiceDeductionLedgerEntry
+        private constructor(
+            private val type: JsonField<Type>,
+            private val timestamp: JsonField<OffsetDateTime>,
+            private val amount: JsonField<Double>,
+            private val segmentId: JsonField<String>,
+            private val invoiceId: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            fun type(): Type = type.getRequired("type")
+
+            fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
+
+            fun amount(): Double = amount.getRequired("amount")
+
+            fun segmentId(): String = segmentId.getRequired("segment_id")
+
+            fun invoiceId(): String = invoiceId.getRequired("invoice_id")
+
+            @JsonProperty("type") @ExcludeMissing fun _type() = type
+
+            @JsonProperty("timestamp") @ExcludeMissing fun _timestamp() = timestamp
+
+            @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+
+            @JsonProperty("segment_id") @ExcludeMissing fun _segmentId() = segmentId
+
+            @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): CreditAutomatedInvoiceDeductionLedgerEntry = apply {
+                if (!validated) {
+                    type()
+                    timestamp()
+                    amount()
+                    segmentId()
+                    invoiceId()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var type: JsonField<Type> = JsonMissing.of()
+                private var timestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var amount: JsonField<Double> = JsonMissing.of()
+                private var segmentId: JsonField<String> = JsonMissing.of()
+                private var invoiceId: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(
+                    creditAutomatedInvoiceDeductionLedgerEntry:
+                        CreditAutomatedInvoiceDeductionLedgerEntry
+                ) = apply {
+                    this.type = creditAutomatedInvoiceDeductionLedgerEntry.type
+                    this.timestamp = creditAutomatedInvoiceDeductionLedgerEntry.timestamp
+                    this.amount = creditAutomatedInvoiceDeductionLedgerEntry.amount
+                    this.segmentId = creditAutomatedInvoiceDeductionLedgerEntry.segmentId
+                    this.invoiceId = creditAutomatedInvoiceDeductionLedgerEntry.invoiceId
+                    additionalProperties(
+                        creditAutomatedInvoiceDeductionLedgerEntry.additionalProperties
+                    )
+                }
+
+                fun type(type: Type) = type(JsonField.of(type))
+
+                @JsonProperty("type")
+                @ExcludeMissing
+                fun type(type: JsonField<Type>) = apply { this.type = type }
+
+                fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
+
+                @JsonProperty("timestamp")
+                @ExcludeMissing
+                fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
+                    this.timestamp = timestamp
+                }
+
+                fun amount(amount: Double) = amount(JsonField.of(amount))
+
+                @JsonProperty("amount")
+                @ExcludeMissing
+                fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+                fun segmentId(segmentId: String) = segmentId(JsonField.of(segmentId))
+
+                @JsonProperty("segment_id")
+                @ExcludeMissing
+                fun segmentId(segmentId: JsonField<String>) = apply { this.segmentId = segmentId }
+
+                fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
+
+                @JsonProperty("invoice_id")
+                @ExcludeMissing
+                fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): CreditAutomatedInvoiceDeductionLedgerEntry =
+                    CreditAutomatedInvoiceDeductionLedgerEntry(
+                        type,
+                        timestamp,
+                        amount,
+                        segmentId,
+                        invoiceId,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class Type
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField
+                    val CREDIT_AUTOMATED_INVOICE_DEDUCTION =
+                        Type(JsonField.of("CREDIT_AUTOMATED_INVOICE_DEDUCTION"))
+
+                    @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+                }
+
+                enum class Known {
+                    CREDIT_AUTOMATED_INVOICE_DEDUCTION,
+                }
+
+                enum class Value {
+                    CREDIT_AUTOMATED_INVOICE_DEDUCTION,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        CREDIT_AUTOMATED_INVOICE_DEDUCTION ->
+                            Value.CREDIT_AUTOMATED_INVOICE_DEDUCTION
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        CREDIT_AUTOMATED_INVOICE_DEDUCTION ->
+                            Known.CREDIT_AUTOMATED_INVOICE_DEDUCTION
+                        else -> throw MetronomeInvalidDataException("Unknown Type: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is CreditAutomatedInvoiceDeductionLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.invoiceId == other.invoiceId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, invoiceId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "CreditAutomatedInvoiceDeductionLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
+        }
+
+        @JsonDeserialize(builder = CreditExpirationLedgerEntry.Builder::class)
+        @NoAutoDetect
+        class CreditExpirationLedgerEntry
+        private constructor(
+            private val type: JsonField<Type>,
+            private val timestamp: JsonField<OffsetDateTime>,
+            private val amount: JsonField<Double>,
+            private val segmentId: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            fun type(): Type = type.getRequired("type")
+
+            fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
+
+            fun amount(): Double = amount.getRequired("amount")
+
+            fun segmentId(): String = segmentId.getRequired("segment_id")
+
+            @JsonProperty("type") @ExcludeMissing fun _type() = type
+
+            @JsonProperty("timestamp") @ExcludeMissing fun _timestamp() = timestamp
+
+            @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+
+            @JsonProperty("segment_id") @ExcludeMissing fun _segmentId() = segmentId
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): CreditExpirationLedgerEntry = apply {
+                if (!validated) {
+                    type()
+                    timestamp()
+                    amount()
+                    segmentId()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var type: JsonField<Type> = JsonMissing.of()
+                private var timestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var amount: JsonField<Double> = JsonMissing.of()
+                private var segmentId: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(creditExpirationLedgerEntry: CreditExpirationLedgerEntry) =
+                    apply {
+                        this.type = creditExpirationLedgerEntry.type
+                        this.timestamp = creditExpirationLedgerEntry.timestamp
+                        this.amount = creditExpirationLedgerEntry.amount
+                        this.segmentId = creditExpirationLedgerEntry.segmentId
+                        additionalProperties(creditExpirationLedgerEntry.additionalProperties)
+                    }
+
+                fun type(type: Type) = type(JsonField.of(type))
+
+                @JsonProperty("type")
+                @ExcludeMissing
+                fun type(type: JsonField<Type>) = apply { this.type = type }
+
+                fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
+
+                @JsonProperty("timestamp")
+                @ExcludeMissing
+                fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
+                    this.timestamp = timestamp
+                }
+
+                fun amount(amount: Double) = amount(JsonField.of(amount))
+
+                @JsonProperty("amount")
+                @ExcludeMissing
+                fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+                fun segmentId(segmentId: String) = segmentId(JsonField.of(segmentId))
+
+                @JsonProperty("segment_id")
+                @ExcludeMissing
+                fun segmentId(segmentId: JsonField<String>) = apply { this.segmentId = segmentId }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): CreditExpirationLedgerEntry =
+                    CreditExpirationLedgerEntry(
+                        type,
+                        timestamp,
+                        amount,
+                        segmentId,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class Type
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val CREDIT_EXPIRATION = Type(JsonField.of("CREDIT_EXPIRATION"))
+
+                    @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+                }
+
+                enum class Known {
+                    CREDIT_EXPIRATION,
+                }
+
+                enum class Value {
+                    CREDIT_EXPIRATION,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        CREDIT_EXPIRATION -> Value.CREDIT_EXPIRATION
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        CREDIT_EXPIRATION -> Known.CREDIT_EXPIRATION
+                        else -> throw MetronomeInvalidDataException("Unknown Type: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is CreditExpirationLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "CreditExpirationLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, additionalProperties=$additionalProperties}"
+        }
+
+        @JsonDeserialize(builder = CreditCanceledLedgerEntry.Builder::class)
+        @NoAutoDetect
+        class CreditCanceledLedgerEntry
+        private constructor(
+            private val type: JsonField<Type>,
+            private val timestamp: JsonField<OffsetDateTime>,
+            private val amount: JsonField<Double>,
+            private val segmentId: JsonField<String>,
+            private val invoiceId: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            fun type(): Type = type.getRequired("type")
+
+            fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
+
+            fun amount(): Double = amount.getRequired("amount")
+
+            fun segmentId(): String = segmentId.getRequired("segment_id")
+
+            fun invoiceId(): String = invoiceId.getRequired("invoice_id")
+
+            @JsonProperty("type") @ExcludeMissing fun _type() = type
+
+            @JsonProperty("timestamp") @ExcludeMissing fun _timestamp() = timestamp
+
+            @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+
+            @JsonProperty("segment_id") @ExcludeMissing fun _segmentId() = segmentId
+
+            @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): CreditCanceledLedgerEntry = apply {
+                if (!validated) {
+                    type()
+                    timestamp()
+                    amount()
+                    segmentId()
+                    invoiceId()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var type: JsonField<Type> = JsonMissing.of()
+                private var timestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var amount: JsonField<Double> = JsonMissing.of()
+                private var segmentId: JsonField<String> = JsonMissing.of()
+                private var invoiceId: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(creditCanceledLedgerEntry: CreditCanceledLedgerEntry) = apply {
+                    this.type = creditCanceledLedgerEntry.type
+                    this.timestamp = creditCanceledLedgerEntry.timestamp
+                    this.amount = creditCanceledLedgerEntry.amount
+                    this.segmentId = creditCanceledLedgerEntry.segmentId
+                    this.invoiceId = creditCanceledLedgerEntry.invoiceId
+                    additionalProperties(creditCanceledLedgerEntry.additionalProperties)
+                }
+
+                fun type(type: Type) = type(JsonField.of(type))
+
+                @JsonProperty("type")
+                @ExcludeMissing
+                fun type(type: JsonField<Type>) = apply { this.type = type }
+
+                fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
+
+                @JsonProperty("timestamp")
+                @ExcludeMissing
+                fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
+                    this.timestamp = timestamp
+                }
+
+                fun amount(amount: Double) = amount(JsonField.of(amount))
+
+                @JsonProperty("amount")
+                @ExcludeMissing
+                fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+                fun segmentId(segmentId: String) = segmentId(JsonField.of(segmentId))
+
+                @JsonProperty("segment_id")
+                @ExcludeMissing
+                fun segmentId(segmentId: JsonField<String>) = apply { this.segmentId = segmentId }
+
+                fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
+
+                @JsonProperty("invoice_id")
+                @ExcludeMissing
+                fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): CreditCanceledLedgerEntry =
+                    CreditCanceledLedgerEntry(
+                        type,
+                        timestamp,
+                        amount,
+                        segmentId,
+                        invoiceId,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class Type
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val CREDIT_CANCELED = Type(JsonField.of("CREDIT_CANCELED"))
+
+                    @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+                }
+
+                enum class Known {
+                    CREDIT_CANCELED,
+                }
+
+                enum class Value {
+                    CREDIT_CANCELED,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        CREDIT_CANCELED -> Value.CREDIT_CANCELED
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        CREDIT_CANCELED -> Known.CREDIT_CANCELED
+                        else -> throw MetronomeInvalidDataException("Unknown Type: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is CreditCanceledLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.invoiceId == other.invoiceId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, invoiceId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "CreditCanceledLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
+        }
+
+        @JsonDeserialize(builder = CreditCreditedLedgerEntry.Builder::class)
+        @NoAutoDetect
+        class CreditCreditedLedgerEntry
+        private constructor(
+            private val type: JsonField<Type>,
+            private val timestamp: JsonField<OffsetDateTime>,
+            private val amount: JsonField<Double>,
+            private val segmentId: JsonField<String>,
+            private val invoiceId: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            fun type(): Type = type.getRequired("type")
+
+            fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
+
+            fun amount(): Double = amount.getRequired("amount")
+
+            fun segmentId(): String = segmentId.getRequired("segment_id")
+
+            fun invoiceId(): String = invoiceId.getRequired("invoice_id")
+
+            @JsonProperty("type") @ExcludeMissing fun _type() = type
+
+            @JsonProperty("timestamp") @ExcludeMissing fun _timestamp() = timestamp
+
+            @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+
+            @JsonProperty("segment_id") @ExcludeMissing fun _segmentId() = segmentId
+
+            @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): CreditCreditedLedgerEntry = apply {
+                if (!validated) {
+                    type()
+                    timestamp()
+                    amount()
+                    segmentId()
+                    invoiceId()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var type: JsonField<Type> = JsonMissing.of()
+                private var timestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var amount: JsonField<Double> = JsonMissing.of()
+                private var segmentId: JsonField<String> = JsonMissing.of()
+                private var invoiceId: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(creditCreditedLedgerEntry: CreditCreditedLedgerEntry) = apply {
+                    this.type = creditCreditedLedgerEntry.type
+                    this.timestamp = creditCreditedLedgerEntry.timestamp
+                    this.amount = creditCreditedLedgerEntry.amount
+                    this.segmentId = creditCreditedLedgerEntry.segmentId
+                    this.invoiceId = creditCreditedLedgerEntry.invoiceId
+                    additionalProperties(creditCreditedLedgerEntry.additionalProperties)
+                }
+
+                fun type(type: Type) = type(JsonField.of(type))
+
+                @JsonProperty("type")
+                @ExcludeMissing
+                fun type(type: JsonField<Type>) = apply { this.type = type }
+
+                fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
+
+                @JsonProperty("timestamp")
+                @ExcludeMissing
+                fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
+                    this.timestamp = timestamp
+                }
+
+                fun amount(amount: Double) = amount(JsonField.of(amount))
+
+                @JsonProperty("amount")
+                @ExcludeMissing
+                fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+                fun segmentId(segmentId: String) = segmentId(JsonField.of(segmentId))
+
+                @JsonProperty("segment_id")
+                @ExcludeMissing
+                fun segmentId(segmentId: JsonField<String>) = apply { this.segmentId = segmentId }
+
+                fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
+
+                @JsonProperty("invoice_id")
+                @ExcludeMissing
+                fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): CreditCreditedLedgerEntry =
+                    CreditCreditedLedgerEntry(
+                        type,
+                        timestamp,
+                        amount,
+                        segmentId,
+                        invoiceId,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class Type
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val CREDIT_CREDITED = Type(JsonField.of("CREDIT_CREDITED"))
+
+                    @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+                }
+
+                enum class Known {
+                    CREDIT_CREDITED,
+                }
+
+                enum class Value {
+                    CREDIT_CREDITED,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        CREDIT_CREDITED -> Value.CREDIT_CREDITED
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        CREDIT_CREDITED -> Known.CREDIT_CREDITED
+                        else -> throw MetronomeInvalidDataException("Unknown Type: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is CreditCreditedLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.invoiceId == other.invoiceId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, invoiceId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "CreditCreditedLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
+        }
+
+        @JsonDeserialize(builder = CreditManualLedgerEntry.Builder::class)
+        @NoAutoDetect
+        class CreditManualLedgerEntry
+        private constructor(
+            private val type: JsonField<Type>,
+            private val timestamp: JsonField<OffsetDateTime>,
+            private val amount: JsonField<Double>,
+            private val reason: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            fun type(): Type = type.getRequired("type")
+
+            fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
+
+            fun amount(): Double = amount.getRequired("amount")
+
+            fun reason(): String = reason.getRequired("reason")
+
+            @JsonProperty("type") @ExcludeMissing fun _type() = type
+
+            @JsonProperty("timestamp") @ExcludeMissing fun _timestamp() = timestamp
+
+            @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+
+            @JsonProperty("reason") @ExcludeMissing fun _reason() = reason
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): CreditManualLedgerEntry = apply {
+                if (!validated) {
+                    type()
+                    timestamp()
+                    amount()
+                    reason()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var type: JsonField<Type> = JsonMissing.of()
+                private var timestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var amount: JsonField<Double> = JsonMissing.of()
+                private var reason: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(creditManualLedgerEntry: CreditManualLedgerEntry) = apply {
+                    this.type = creditManualLedgerEntry.type
+                    this.timestamp = creditManualLedgerEntry.timestamp
+                    this.amount = creditManualLedgerEntry.amount
+                    this.reason = creditManualLedgerEntry.reason
+                    additionalProperties(creditManualLedgerEntry.additionalProperties)
+                }
+
+                fun type(type: Type) = type(JsonField.of(type))
+
+                @JsonProperty("type")
+                @ExcludeMissing
+                fun type(type: JsonField<Type>) = apply { this.type = type }
+
+                fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
+
+                @JsonProperty("timestamp")
+                @ExcludeMissing
+                fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
+                    this.timestamp = timestamp
+                }
+
+                fun amount(amount: Double) = amount(JsonField.of(amount))
+
+                @JsonProperty("amount")
+                @ExcludeMissing
+                fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+                fun reason(reason: String) = reason(JsonField.of(reason))
+
+                @JsonProperty("reason")
+                @ExcludeMissing
+                fun reason(reason: JsonField<String>) = apply { this.reason = reason }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): CreditManualLedgerEntry =
+                    CreditManualLedgerEntry(
+                        type,
+                        timestamp,
+                        amount,
+                        reason,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class Type
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val CREDIT_MANUAL = Type(JsonField.of("CREDIT_MANUAL"))
+
+                    @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+                }
+
+                enum class Known {
+                    CREDIT_MANUAL,
+                }
+
+                enum class Value {
+                    CREDIT_MANUAL,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        CREDIT_MANUAL -> Value.CREDIT_MANUAL
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        CREDIT_MANUAL -> Known.CREDIT_MANUAL
+                        else -> throw MetronomeInvalidDataException("Unknown Type: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is CreditManualLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.reason == other.reason && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, reason, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "CreditManualLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, reason=$reason, additionalProperties=$additionalProperties}"
+        }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is Credit && this.id == other.id && this.contract == other.contract && this.type == other.type && this.name == other.name && this.priority == other.priority && this.product == other.product && this.accessSchedule == other.accessSchedule && this.description == other.description && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.applicableContractIds == other.applicableContractIds && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.salesforceOpportunityId == other.salesforceOpportunityId && this.ledger == other.ledger && this.customFields == other.customFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(id, contract, type, name, priority, product, accessSchedule, description, applicableProductIds, applicableProductTags, applicableContractIds, netsuiteSalesOrderId, salesforceOpportunityId, ledger, customFields, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "Credit{id=$id, contract=$contract, type=$type, name=$name, priority=$priority, product=$product, accessSchedule=$accessSchedule, description=$description, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, applicableContractIds=$applicableContractIds, netsuiteSalesOrderId=$netsuiteSalesOrderId, salesforceOpportunityId=$salesforceOpportunityId, ledger=$ledger, customFields=$customFields, additionalProperties=$additionalProperties}"
+}

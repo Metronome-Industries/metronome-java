@@ -9,29 +9,41 @@ import com.metronome.api.models.CustomerArchiveParams
 import com.metronome.api.models.CustomerArchiveResponse
 import com.metronome.api.models.CustomerCreateParams
 import com.metronome.api.models.CustomerCreateResponse
+import com.metronome.api.models.CustomerListBillableMetricsPage
 import com.metronome.api.models.CustomerListBillableMetricsParams
-import com.metronome.api.models.CustomerListBillableMetricsResponse
+import com.metronome.api.models.CustomerListCostsPage
 import com.metronome.api.models.CustomerListCostsParams
-import com.metronome.api.models.CustomerListCostsResponse
+import com.metronome.api.models.CustomerListPage
 import com.metronome.api.models.CustomerListParams
-import com.metronome.api.models.CustomerListResponse
 import com.metronome.api.models.CustomerRetrieveParams
 import com.metronome.api.models.CustomerRetrieveResponse
 import com.metronome.api.models.CustomerSetIngestAliasesParams
 import com.metronome.api.models.CustomerSetNameParams
 import com.metronome.api.models.CustomerSetNameResponse
 import com.metronome.api.models.CustomerUpdateConfigParams
+import com.metronome.api.services.blocking.customers.AlertService
 import com.metronome.api.services.blocking.customers.BillingConfigService
+import com.metronome.api.services.blocking.customers.CommitService
+import com.metronome.api.services.blocking.customers.CreditService
 import com.metronome.api.services.blocking.customers.InvoiceService
+import com.metronome.api.services.blocking.customers.NamedScheduleService
 import com.metronome.api.services.blocking.customers.PlanService
 
 interface CustomerService {
+
+    fun alerts(): AlertService
 
     fun plans(): PlanService
 
     fun invoices(): InvoiceService
 
     fun billingConfig(): BillingConfigService
+
+    fun commits(): CommitService
+
+    fun credits(): CreditService
+
+    fun namedSchedules(): NamedScheduleService
 
     /** Create a new customer */
     @JvmOverloads
@@ -52,7 +64,7 @@ interface CustomerService {
     fun list(
         params: CustomerListParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CustomerListResponse
+    ): CustomerListPage
 
     /** Archive a customer */
     @JvmOverloads
@@ -61,12 +73,12 @@ interface CustomerService {
         requestOptions: RequestOptions = RequestOptions.none()
     ): CustomerArchiveResponse
 
-    /** List all billable metrics. */
+    /** Get all billable metrics for a given customer. */
     @JvmOverloads
     fun listBillableMetrics(
         params: CustomerListBillableMetricsParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CustomerListBillableMetricsResponse
+    ): CustomerListBillableMetricsPage
 
     /**
      * Fetch daily pending costs for the specified customer, broken down by credit type and line
@@ -77,7 +89,7 @@ interface CustomerService {
     fun listCosts(
         params: CustomerListCostsParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CustomerListCostsResponse
+    ): CustomerListCostsPage
 
     /**
      * Sets the ingest aliases for a customer. Ingest aliases can be used in the `customer_id` field

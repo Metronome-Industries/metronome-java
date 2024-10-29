@@ -11,56 +11,38 @@ class CustomerPlanListPriceAdjustmentsResponseTest {
     fun createCustomerPlanListPriceAdjustmentsResponse() {
         val customerPlanListPriceAdjustmentsResponse =
             CustomerPlanListPriceAdjustmentsResponse.builder()
-                .data(
+                .chargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .chargeType(CustomerPlanListPriceAdjustmentsResponse.ChargeType.USAGE)
+                .prices(
                     listOf(
-                        CustomerPlanListPriceAdjustmentsResponse.Data.builder()
-                            .chargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .chargeType(
-                                CustomerPlanListPriceAdjustmentsResponse.Data.ChargeType.USAGE
+                        CustomerPlanListPriceAdjustmentsResponse.Price.builder()
+                            .adjustmentType(
+                                CustomerPlanListPriceAdjustmentsResponse.Price.AdjustmentType.FIXED
                             )
-                            .prices(
-                                listOf(
-                                    CustomerPlanListPriceAdjustmentsResponse.Data.Price.builder()
-                                        .adjustmentType(
-                                            CustomerPlanListPriceAdjustmentsResponse.Data.Price
-                                                .AdjustmentType
-                                                .FIXED
-                                        )
-                                        .tier(42.23)
-                                        .value(42.23)
-                                        .build()
-                                )
-                            )
-                            .startPeriod(42.23)
-                            .quantity(42.23)
+                            .tier(42.23)
+                            .value(42.23)
                             .build()
                     )
                 )
-                .nextPage("string")
+                .startPeriod(42.23)
+                .quantity(42.23)
                 .build()
         assertThat(customerPlanListPriceAdjustmentsResponse).isNotNull
-        assertThat(customerPlanListPriceAdjustmentsResponse.data())
+        assertThat(customerPlanListPriceAdjustmentsResponse.chargeId())
+            .isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(customerPlanListPriceAdjustmentsResponse.chargeType())
+            .isEqualTo(CustomerPlanListPriceAdjustmentsResponse.ChargeType.USAGE)
+        assertThat(customerPlanListPriceAdjustmentsResponse.prices())
             .containsExactly(
-                CustomerPlanListPriceAdjustmentsResponse.Data.builder()
-                    .chargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .chargeType(CustomerPlanListPriceAdjustmentsResponse.Data.ChargeType.USAGE)
-                    .prices(
-                        listOf(
-                            CustomerPlanListPriceAdjustmentsResponse.Data.Price.builder()
-                                .adjustmentType(
-                                    CustomerPlanListPriceAdjustmentsResponse.Data.Price
-                                        .AdjustmentType
-                                        .FIXED
-                                )
-                                .tier(42.23)
-                                .value(42.23)
-                                .build()
-                        )
+                CustomerPlanListPriceAdjustmentsResponse.Price.builder()
+                    .adjustmentType(
+                        CustomerPlanListPriceAdjustmentsResponse.Price.AdjustmentType.FIXED
                     )
-                    .startPeriod(42.23)
-                    .quantity(42.23)
+                    .tier(42.23)
+                    .value(42.23)
                     .build()
             )
-        assertThat(customerPlanListPriceAdjustmentsResponse.nextPage()).contains("string")
+        assertThat(customerPlanListPriceAdjustmentsResponse.startPeriod()).isEqualTo(42.23)
+        assertThat(customerPlanListPriceAdjustmentsResponse.quantity()).contains(42.23)
     }
 }

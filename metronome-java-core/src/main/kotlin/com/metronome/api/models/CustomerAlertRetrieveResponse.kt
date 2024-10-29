@@ -24,8 +24,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     fun data(): CustomerAlert = data.getRequired("data")
 
     @JsonProperty("data") @ExcludeMissing fun _data() = data
@@ -42,26 +40,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is CustomerAlertRetrieveResponse &&
-            this.data == other.data &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = Objects.hash(data, additionalProperties)
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "CustomerAlertRetrieveResponse{data=$data, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -102,4 +80,24 @@ private constructor(
         fun build(): CustomerAlertRetrieveResponse =
             CustomerAlertRetrieveResponse(data, additionalProperties.toUnmodifiable())
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerAlertRetrieveResponse && this.data == other.data && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(data, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "CustomerAlertRetrieveResponse{data=$data, additionalProperties=$additionalProperties}"
 }

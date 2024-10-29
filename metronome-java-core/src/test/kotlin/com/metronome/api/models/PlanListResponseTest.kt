@@ -11,28 +11,16 @@ class PlanListResponseTest {
     fun createPlanListResponse() {
         val planListResponse =
             PlanListResponse.builder()
-                .data(
-                    listOf(
-                        PlanListResponse.Data.builder()
-                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .description("string")
-                            .name("string")
-                            .customFields(PlanListResponse.Data.CustomFields.builder().build())
-                            .build()
-                    )
-                )
-                .nextPage("string")
+                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .description("description")
+                .name("name")
+                .customFields(PlanListResponse.CustomFields.builder().build())
                 .build()
         assertThat(planListResponse).isNotNull
-        assertThat(planListResponse.data())
-            .containsExactly(
-                PlanListResponse.Data.builder()
-                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .description("string")
-                    .name("string")
-                    .customFields(PlanListResponse.Data.CustomFields.builder().build())
-                    .build()
-            )
-        assertThat(planListResponse.nextPage()).contains("string")
+        assertThat(planListResponse.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(planListResponse.description()).isEqualTo("description")
+        assertThat(planListResponse.name()).isEqualTo("name")
+        assertThat(planListResponse.customFields())
+            .contains(PlanListResponse.CustomFields.builder().build())
     }
 }

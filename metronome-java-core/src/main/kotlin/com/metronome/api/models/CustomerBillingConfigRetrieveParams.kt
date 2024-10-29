@@ -18,7 +18,6 @@ constructor(
     private val billingProviderType: BillingProviderType,
     private val additionalQueryParams: Map<String, List<String>>,
     private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun customerId(): String = customerId
@@ -41,33 +40,20 @@ constructor(
 
     fun _additionalHeaders(): Map<String, List<String>> = additionalHeaders
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is CustomerBillingConfigRetrieveParams &&
-            this.customerId == other.customerId &&
-            this.billingProviderType == other.billingProviderType &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is CustomerBillingConfigRetrieveParams && this.customerId == other.customerId && this.billingProviderType == other.billingProviderType && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            customerId,
-            billingProviderType,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(customerId, billingProviderType, additionalQueryParams, additionalHeaders) /* spotless:on */
     }
 
     override fun toString() =
-        "CustomerBillingConfigRetrieveParams{customerId=$customerId, billingProviderType=$billingProviderType, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerBillingConfigRetrieveParams{customerId=$customerId, billingProviderType=$billingProviderType, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -83,7 +69,6 @@ constructor(
         private var billingProviderType: BillingProviderType? = null
         private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(
@@ -93,7 +78,6 @@ constructor(
             this.billingProviderType = customerBillingConfigRetrieveParams.billingProviderType
             additionalQueryParams(customerBillingConfigRetrieveParams.additionalQueryParams)
             additionalHeaders(customerBillingConfigRetrieveParams.additionalHeaders)
-            additionalBodyProperties(customerBillingConfigRetrieveParams.additionalBodyProperties)
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -142,20 +126,6 @@ constructor(
 
         fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            this.additionalBodyProperties.putAll(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            this.additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
         fun build(): CustomerBillingConfigRetrieveParams =
             CustomerBillingConfigRetrieveParams(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
@@ -164,7 +134,6 @@ constructor(
                 },
                 additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
                 additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
             )
     }
 
@@ -181,7 +150,7 @@ constructor(
                 return true
             }
 
-            return other is BillingProviderType && this.value == other.value
+            return /* spotless:off */ other is BillingProviderType && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

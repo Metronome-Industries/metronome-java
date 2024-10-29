@@ -19,15 +19,15 @@ class ContractWithoutAmendmentsTest {
                             .product(
                                 Commit.Product.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .name("string")
+                                    .name("name")
                                     .build()
                             )
                             .type(Commit.Type.PREPAID)
                             .accessSchedule(
-                                Commit.AccessSchedule.builder()
+                                ScheduleDuration.builder()
                                     .scheduleItems(
                                         listOf(
-                                            Commit.AccessSchedule.ScheduleItem.builder()
+                                            ScheduleDuration.ScheduleItem.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .amount(42.23)
                                                 .endingBefore(
@@ -40,9 +40,9 @@ class ContractWithoutAmendmentsTest {
                                         )
                                     )
                                     .creditType(
-                                        Commit.AccessSchedule.CreditType.builder()
+                                        CreditTypeData.builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .name("string")
+                                            .name("name")
                                             .build()
                                     )
                                     .build()
@@ -57,7 +57,7 @@ class ContractWithoutAmendmentsTest {
                                     .build()
                             )
                             .customFields(Commit.CustomFields.builder().build())
-                            .description("string")
+                            .description("description")
                             .invoiceContract(
                                 Commit.InvoiceContract.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -65,6 +65,12 @@ class ContractWithoutAmendmentsTest {
                             )
                             .invoiceSchedule(
                                 SchedulePointInTime.builder()
+                                    .creditType(
+                                        CreditTypeData.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .name("name")
+                                            .build()
+                                    )
                                     .scheduleItems(
                                         listOf(
                                             SchedulePointInTime.ScheduleItem.builder()
@@ -99,9 +105,10 @@ class ContractWithoutAmendmentsTest {
                                     )
                                 )
                             )
-                            .name("string")
-                            .netsuiteSalesOrderId("string")
+                            .name("name")
+                            .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .priority(42.23)
+                            .rateType(Commit.RateType.COMMIT_RATE)
                             .rolledOverFrom(
                                 Commit.RolledOverFrom.builder()
                                     .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -109,20 +116,27 @@ class ContractWithoutAmendmentsTest {
                                     .build()
                             )
                             .rolloverFraction(42.23)
-                            .salesforceOpportunityId("string")
+                            .salesforceOpportunityId("salesforce_opportunity_id")
                             .build()
                     )
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .createdBy("string")
+                .createdBy("created_by")
                 .overrides(
                     listOf(
                         Override.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .applicableProductTags(listOf("string"))
+                            .creditType(
+                                CreditTypeData.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .name("name")
+                                    .build()
+                            )
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .entitled(true)
+                            .isProrated(true)
                             .multiplier(42.23)
                             .overrideSpecifiers(
                                 listOf(
@@ -141,30 +155,43 @@ class ContractWithoutAmendmentsTest {
                                         .build()
                                 )
                             )
+                            .overrideTiers(
+                                listOf(
+                                    Override.OverrideTier.builder()
+                                        .multiplier(42.23)
+                                        .size(42.23)
+                                        .build()
+                                )
+                            )
                             .overwriteRate(
                                 Override.OverwriteRate.builder()
                                     .rateType(Override.OverwriteRate.RateType.FLAT)
+                                    .creditType(
+                                        CreditTypeData.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .name("name")
+                                            .build()
+                                    )
                                     .customRate(Override.OverwriteRate.CustomRate.builder().build())
                                     .isProrated(true)
                                     .price(42.23)
                                     .quantity(42.23)
-                                    .tiers(
-                                        listOf(
-                                            Override.OverwriteRate.Tier.builder()
-                                                .price(42.23)
-                                                .size(42.23)
-                                                .build()
-                                        )
-                                    )
+                                    .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
                                     .build()
                             )
+                            .price(42.23)
+                            .priority(42.23)
                             .product(
                                 Override.Product.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .name("string")
+                                    .name("name")
                                     .build()
                             )
+                            .quantity(42.23)
+                            .rateType(Override.RateType.FLAT)
+                            .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
                             .type(Override.Type.OVERWRITE)
+                            .value(Override.Value.builder().build())
                             .build()
                     )
                 )
@@ -175,11 +202,17 @@ class ContractWithoutAmendmentsTest {
                             .product(
                                 ScheduledCharge.Product.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .name("string")
+                                    .name("name")
                                     .build()
                             )
                             .schedule(
                                 SchedulePointInTime.builder()
+                                    .creditType(
+                                        CreditTypeData.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .name("name")
+                                            .build()
+                                    )
                                     .scheduleItems(
                                         listOf(
                                             SchedulePointInTime.ScheduleItem.builder()
@@ -198,7 +231,7 @@ class ContractWithoutAmendmentsTest {
                             )
                             .customFields(ScheduledCharge.CustomFields.builder().build())
                             .name("x")
-                            .netsuiteSalesOrderId("string")
+                            .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .build()
                     )
                 )
@@ -214,6 +247,7 @@ class ContractWithoutAmendmentsTest {
                 )
                 .usageStatementSchedule(
                     ContractWithoutAmendments.UsageStatementSchedule.builder()
+                        .billingAnchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .frequency(
                             ContractWithoutAmendments.UsageStatementSchedule.Frequency.MONTHLY
                         )
@@ -221,22 +255,20 @@ class ContractWithoutAmendmentsTest {
                 )
                 .credits(
                     listOf(
-                        ContractWithoutAmendments.Credit.builder()
+                        Credit.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .product(
-                                ContractWithoutAmendments.Credit.Product.builder()
+                                Credit.Product.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .name("string")
+                                    .name("name")
                                     .build()
                             )
-                            .type(ContractWithoutAmendments.Credit.Type.CREDIT)
+                            .type(Credit.Type.CREDIT)
                             .accessSchedule(
-                                ContractWithoutAmendments.Credit.AccessSchedule.builder()
+                                ScheduleDuration.builder()
                                     .scheduleItems(
                                         listOf(
-                                            ContractWithoutAmendments.Credit.AccessSchedule
-                                                .ScheduleItem
-                                                .builder()
+                                            ScheduleDuration.ScheduleItem.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .amount(42.23)
                                                 .endingBefore(
@@ -249,10 +281,9 @@ class ContractWithoutAmendmentsTest {
                                         )
                                     )
                                     .creditType(
-                                        ContractWithoutAmendments.Credit.AccessSchedule.CreditType
-                                            .builder()
+                                        CreditTypeData.builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .name("string")
+                                            .name("name")
                                             .build()
                                     )
                                     .build()
@@ -261,40 +292,33 @@ class ContractWithoutAmendmentsTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .contract(
-                                ContractWithoutAmendments.Credit.Contract.builder()
+                                Credit.Contract.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
                             )
-                            .customFields(
-                                ContractWithoutAmendments.Credit.CustomFields.builder().build()
-                            )
-                            .description("string")
+                            .customFields(Credit.CustomFields.builder().build())
+                            .description("description")
                             .ledger(
                                 listOf(
-                                    ContractWithoutAmendments.Credit.Ledger
-                                        .ofCreditSegmentStartLedgerEntry(
-                                            ContractWithoutAmendments.Credit.Ledger
-                                                .CreditSegmentStartLedgerEntry
-                                                .builder()
-                                                .amount(42.23)
-                                                .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                .timestamp(
-                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                                )
-                                                .type(
-                                                    ContractWithoutAmendments.Credit.Ledger
-                                                        .CreditSegmentStartLedgerEntry
-                                                        .Type
-                                                        .CREDIT_SEGMENT_START
-                                                )
-                                                .build()
-                                        )
+                                    Credit.Ledger.ofCreditSegmentStartLedgerEntry(
+                                        Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
+                                            .amount(42.23)
+                                            .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .timestamp(
+                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            )
+                                            .type(
+                                                Credit.Ledger.CreditSegmentStartLedgerEntry.Type
+                                                    .CREDIT_SEGMENT_START
+                                            )
+                                            .build()
+                                    )
                                 )
                             )
-                            .name("string")
-                            .netsuiteSalesOrderId("string")
+                            .name("name")
+                            .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .priority(42.23)
-                            .salesforceOpportunityId("string")
+                            .salesforceOpportunityId("salesforce_opportunity_id")
                             .build()
                     )
                 )
@@ -305,11 +329,17 @@ class ContractWithoutAmendmentsTest {
                             .product(
                                 Discount.Product.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .name("string")
+                                    .name("name")
                                     .build()
                             )
                             .schedule(
                                 SchedulePointInTime.builder()
+                                    .creditType(
+                                        CreditTypeData.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .name("name")
+                                            .build()
+                                    )
                                     .scheduleItems(
                                         listOf(
                                             SchedulePointInTime.ScheduleItem.builder()
@@ -327,28 +357,25 @@ class ContractWithoutAmendmentsTest {
                                     .build()
                             )
                             .name("x")
-                            .netsuiteSalesOrderId("string")
+                            .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .build()
                     )
                 )
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .name("string")
+                .name("name")
                 .netPaymentTermsDays(42.23)
-                .netsuiteSalesOrderId("string")
+                .netsuiteSalesOrderId("netsuite_sales_order_id")
                 .professionalServices(
                     listOf(
-                        ContractWithoutAmendments.ProfessionalService.builder()
+                        ProService.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .maxAmount(42.23)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .quantity(42.23)
                             .unitPrice(42.23)
-                            .customFields(
-                                ContractWithoutAmendments.ProfessionalService.CustomFields.builder()
-                                    .build()
-                            )
-                            .description("string")
-                            .netsuiteSalesOrderId("string")
+                            .customFields(ProService.CustomFields.builder().build())
+                            .description("description")
+                            .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .build()
                     )
                 )
@@ -357,37 +384,37 @@ class ContractWithoutAmendmentsTest {
                     listOf(
                         ContractWithoutAmendments.ResellerRoyalty.builder()
                             .fraction(42.23)
-                            .netsuiteResellerId("string")
+                            .netsuiteResellerId("netsuite_reseller_id")
                             .resellerType(
                                 ContractWithoutAmendments.ResellerRoyalty.ResellerType.AWS
                             )
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .applicableProductIds(listOf("string"))
                             .applicableProductTags(listOf("string"))
-                            .awsAccountNumber("string")
-                            .awsOfferId("string")
-                            .awsPayerReferenceId("string")
+                            .awsAccountNumber("aws_account_number")
+                            .awsOfferId("aws_offer_id")
+                            .awsPayerReferenceId("aws_payer_reference_id")
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .gcpAccountId("string")
-                            .gcpOfferId("string")
+                            .gcpAccountId("gcp_account_id")
+                            .gcpOfferId("gcp_offer_id")
                             .resellerContractValue(42.23)
                             .build()
                     )
                 )
-                .salesforceOpportunityId("string")
+                .salesforceOpportunityId("salesforce_opportunity_id")
                 .totalContractValue(42.23)
                 .usageFilter(
                     ContractWithoutAmendments.UsageFilter.builder()
                         .current(
-                            ContractWithoutAmendments.UsageFilter.Current.builder()
-                                .groupKey("string")
+                            BaseUsageFilter.builder()
+                                .groupKey("group_key")
                                 .groupValues(listOf("string"))
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()
                         )
                         .initial(
-                            ContractWithoutAmendments.UsageFilter.Initial.builder()
-                                .groupKey("string")
+                            BaseUsageFilter.builder()
+                                .groupKey("group_key")
                                 .groupValues(listOf("string"))
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()
@@ -395,7 +422,7 @@ class ContractWithoutAmendmentsTest {
                         .updates(
                             listOf(
                                 ContractWithoutAmendments.UsageFilter.Update.builder()
-                                    .groupKey("string")
+                                    .groupKey("group_key")
                                     .groupValues(listOf("string"))
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
@@ -412,15 +439,15 @@ class ContractWithoutAmendmentsTest {
                     .product(
                         Commit.Product.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .name("string")
+                            .name("name")
                             .build()
                     )
                     .type(Commit.Type.PREPAID)
                     .accessSchedule(
-                        Commit.AccessSchedule.builder()
+                        ScheduleDuration.builder()
                             .scheduleItems(
                                 listOf(
-                                    Commit.AccessSchedule.ScheduleItem.builder()
+                                    ScheduleDuration.ScheduleItem.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .amount(42.23)
                                         .endingBefore(
@@ -433,9 +460,9 @@ class ContractWithoutAmendmentsTest {
                                 )
                             )
                             .creditType(
-                                Commit.AccessSchedule.CreditType.builder()
+                                CreditTypeData.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .name("string")
+                                    .name("name")
                                     .build()
                             )
                             .build()
@@ -448,7 +475,7 @@ class ContractWithoutAmendmentsTest {
                         Commit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
                     )
                     .customFields(Commit.CustomFields.builder().build())
-                    .description("string")
+                    .description("description")
                     .invoiceContract(
                         Commit.InvoiceContract.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -456,6 +483,12 @@ class ContractWithoutAmendmentsTest {
                     )
                     .invoiceSchedule(
                         SchedulePointInTime.builder()
+                            .creditType(
+                                CreditTypeData.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .name("name")
+                                    .build()
+                            )
                             .scheduleItems(
                                 listOf(
                                     SchedulePointInTime.ScheduleItem.builder()
@@ -485,9 +518,10 @@ class ContractWithoutAmendmentsTest {
                             )
                         )
                     )
-                    .name("string")
-                    .netsuiteSalesOrderId("string")
+                    .name("name")
+                    .netsuiteSalesOrderId("netsuite_sales_order_id")
                     .priority(42.23)
+                    .rateType(Commit.RateType.COMMIT_RATE)
                     .rolledOverFrom(
                         Commit.RolledOverFrom.builder()
                             .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -495,20 +529,27 @@ class ContractWithoutAmendmentsTest {
                             .build()
                     )
                     .rolloverFraction(42.23)
-                    .salesforceOpportunityId("string")
+                    .salesforceOpportunityId("salesforce_opportunity_id")
                     .build()
             )
         assertThat(contractWithoutAmendments.createdAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(contractWithoutAmendments.createdBy()).isEqualTo("string")
+        assertThat(contractWithoutAmendments.createdBy()).isEqualTo("created_by")
         assertThat(contractWithoutAmendments.overrides())
             .containsExactly(
                 Override.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .applicableProductTags(listOf("string"))
+                    .creditType(
+                        CreditTypeData.builder()
+                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .name("name")
+                            .build()
+                    )
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .entitled(true)
+                    .isProrated(true)
                     .multiplier(42.23)
                     .overrideSpecifiers(
                         listOf(
@@ -525,30 +566,40 @@ class ContractWithoutAmendmentsTest {
                                 .build()
                         )
                     )
+                    .overrideTiers(
+                        listOf(
+                            Override.OverrideTier.builder().multiplier(42.23).size(42.23).build()
+                        )
+                    )
                     .overwriteRate(
                         Override.OverwriteRate.builder()
                             .rateType(Override.OverwriteRate.RateType.FLAT)
+                            .creditType(
+                                CreditTypeData.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .name("name")
+                                    .build()
+                            )
                             .customRate(Override.OverwriteRate.CustomRate.builder().build())
                             .isProrated(true)
                             .price(42.23)
                             .quantity(42.23)
-                            .tiers(
-                                listOf(
-                                    Override.OverwriteRate.Tier.builder()
-                                        .price(42.23)
-                                        .size(42.23)
-                                        .build()
-                                )
-                            )
+                            .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
                             .build()
                     )
+                    .price(42.23)
+                    .priority(42.23)
                     .product(
                         Override.Product.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .name("string")
+                            .name("name")
                             .build()
                     )
+                    .quantity(42.23)
+                    .rateType(Override.RateType.FLAT)
+                    .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
                     .type(Override.Type.OVERWRITE)
+                    .value(Override.Value.builder().build())
                     .build()
             )
         assertThat(contractWithoutAmendments.scheduledCharges())
@@ -558,11 +609,17 @@ class ContractWithoutAmendmentsTest {
                     .product(
                         ScheduledCharge.Product.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .name("string")
+                            .name("name")
                             .build()
                     )
                     .schedule(
                         SchedulePointInTime.builder()
+                            .creditType(
+                                CreditTypeData.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .name("name")
+                                    .build()
+                            )
                             .scheduleItems(
                                 listOf(
                                     SchedulePointInTime.ScheduleItem.builder()
@@ -579,7 +636,7 @@ class ContractWithoutAmendmentsTest {
                     )
                     .customFields(ScheduledCharge.CustomFields.builder().build())
                     .name("x")
-                    .netsuiteSalesOrderId("string")
+                    .netsuiteSalesOrderId("netsuite_sales_order_id")
                     .build()
             )
         assertThat(contractWithoutAmendments.startingAt())
@@ -595,26 +652,26 @@ class ContractWithoutAmendmentsTest {
         assertThat(contractWithoutAmendments.usageStatementSchedule())
             .isEqualTo(
                 ContractWithoutAmendments.UsageStatementSchedule.builder()
+                    .billingAnchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .frequency(ContractWithoutAmendments.UsageStatementSchedule.Frequency.MONTHLY)
                     .build()
             )
         assertThat(contractWithoutAmendments.credits().get())
             .containsExactly(
-                ContractWithoutAmendments.Credit.builder()
+                Credit.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .product(
-                        ContractWithoutAmendments.Credit.Product.builder()
+                        Credit.Product.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .name("string")
+                            .name("name")
                             .build()
                     )
-                    .type(ContractWithoutAmendments.Credit.Type.CREDIT)
+                    .type(Credit.Type.CREDIT)
                     .accessSchedule(
-                        ContractWithoutAmendments.Credit.AccessSchedule.builder()
+                        ScheduleDuration.builder()
                             .scheduleItems(
                                 listOf(
-                                    ContractWithoutAmendments.Credit.AccessSchedule.ScheduleItem
-                                        .builder()
+                                    ScheduleDuration.ScheduleItem.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .amount(42.23)
                                         .endingBefore(
@@ -627,9 +684,9 @@ class ContractWithoutAmendmentsTest {
                                 )
                             )
                             .creditType(
-                                ContractWithoutAmendments.Credit.AccessSchedule.CreditType.builder()
+                                CreditTypeData.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .name("string")
+                                    .name("name")
                                     .build()
                             )
                             .build()
@@ -638,35 +695,29 @@ class ContractWithoutAmendmentsTest {
                     .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                     .applicableProductTags(listOf("string"))
                     .contract(
-                        ContractWithoutAmendments.Credit.Contract.builder()
-                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .build()
+                        Credit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
                     )
-                    .customFields(ContractWithoutAmendments.Credit.CustomFields.builder().build())
-                    .description("string")
+                    .customFields(Credit.CustomFields.builder().build())
+                    .description("description")
                     .ledger(
                         listOf(
-                            ContractWithoutAmendments.Credit.Ledger.ofCreditSegmentStartLedgerEntry(
-                                ContractWithoutAmendments.Credit.Ledger
-                                    .CreditSegmentStartLedgerEntry
-                                    .builder()
+                            Credit.Ledger.ofCreditSegmentStartLedgerEntry(
+                                Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
                                     .amount(42.23)
                                     .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .type(
-                                        ContractWithoutAmendments.Credit.Ledger
-                                            .CreditSegmentStartLedgerEntry
-                                            .Type
+                                        Credit.Ledger.CreditSegmentStartLedgerEntry.Type
                                             .CREDIT_SEGMENT_START
                                     )
                                     .build()
                             )
                         )
                     )
-                    .name("string")
-                    .netsuiteSalesOrderId("string")
+                    .name("name")
+                    .netsuiteSalesOrderId("netsuite_sales_order_id")
                     .priority(42.23)
-                    .salesforceOpportunityId("string")
+                    .salesforceOpportunityId("salesforce_opportunity_id")
                     .build()
             )
         assertThat(contractWithoutAmendments.discounts().get())
@@ -676,11 +727,17 @@ class ContractWithoutAmendmentsTest {
                     .product(
                         Discount.Product.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .name("string")
+                            .name("name")
                             .build()
                     )
                     .schedule(
                         SchedulePointInTime.builder()
+                            .creditType(
+                                CreditTypeData.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .name("name")
+                                    .build()
+                            )
                             .scheduleItems(
                                 listOf(
                                     SchedulePointInTime.ScheduleItem.builder()
@@ -696,27 +753,26 @@ class ContractWithoutAmendmentsTest {
                             .build()
                     )
                     .name("x")
-                    .netsuiteSalesOrderId("string")
+                    .netsuiteSalesOrderId("netsuite_sales_order_id")
                     .build()
             )
         assertThat(contractWithoutAmendments.endingBefore())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(contractWithoutAmendments.name()).contains("string")
+        assertThat(contractWithoutAmendments.name()).contains("name")
         assertThat(contractWithoutAmendments.netPaymentTermsDays()).contains(42.23)
-        assertThat(contractWithoutAmendments.netsuiteSalesOrderId()).contains("string")
+        assertThat(contractWithoutAmendments.netsuiteSalesOrderId())
+            .contains("netsuite_sales_order_id")
         assertThat(contractWithoutAmendments.professionalServices().get())
             .containsExactly(
-                ContractWithoutAmendments.ProfessionalService.builder()
+                ProService.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .maxAmount(42.23)
                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .quantity(42.23)
                     .unitPrice(42.23)
-                    .customFields(
-                        ContractWithoutAmendments.ProfessionalService.CustomFields.builder().build()
-                    )
-                    .description("string")
-                    .netsuiteSalesOrderId("string")
+                    .customFields(ProService.CustomFields.builder().build())
+                    .description("description")
+                    .netsuiteSalesOrderId("netsuite_sales_order_id")
                     .build()
             )
         assertThat(contractWithoutAmendments.rateCardId())
@@ -725,35 +781,36 @@ class ContractWithoutAmendmentsTest {
             .containsExactly(
                 ContractWithoutAmendments.ResellerRoyalty.builder()
                     .fraction(42.23)
-                    .netsuiteResellerId("string")
+                    .netsuiteResellerId("netsuite_reseller_id")
                     .resellerType(ContractWithoutAmendments.ResellerRoyalty.ResellerType.AWS)
                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .applicableProductIds(listOf("string"))
                     .applicableProductTags(listOf("string"))
-                    .awsAccountNumber("string")
-                    .awsOfferId("string")
-                    .awsPayerReferenceId("string")
+                    .awsAccountNumber("aws_account_number")
+                    .awsOfferId("aws_offer_id")
+                    .awsPayerReferenceId("aws_payer_reference_id")
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .gcpAccountId("string")
-                    .gcpOfferId("string")
+                    .gcpAccountId("gcp_account_id")
+                    .gcpOfferId("gcp_offer_id")
                     .resellerContractValue(42.23)
                     .build()
             )
-        assertThat(contractWithoutAmendments.salesforceOpportunityId()).contains("string")
+        assertThat(contractWithoutAmendments.salesforceOpportunityId())
+            .contains("salesforce_opportunity_id")
         assertThat(contractWithoutAmendments.totalContractValue()).contains(42.23)
         assertThat(contractWithoutAmendments.usageFilter())
             .contains(
                 ContractWithoutAmendments.UsageFilter.builder()
                     .current(
-                        ContractWithoutAmendments.UsageFilter.Current.builder()
-                            .groupKey("string")
+                        BaseUsageFilter.builder()
+                            .groupKey("group_key")
                             .groupValues(listOf("string"))
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .build()
                     )
                     .initial(
-                        ContractWithoutAmendments.UsageFilter.Initial.builder()
-                            .groupKey("string")
+                        BaseUsageFilter.builder()
+                            .groupKey("group_key")
                             .groupValues(listOf("string"))
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .build()
@@ -761,7 +818,7 @@ class ContractWithoutAmendmentsTest {
                     .updates(
                         listOf(
                             ContractWithoutAmendments.UsageFilter.Update.builder()
-                                .groupKey("string")
+                                .groupKey("group_key")
                                 .groupValues(listOf("string"))
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()

@@ -1,0 +1,45 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.metronome.api.services.blocking
+
+import com.metronome.api.TestServerExtension
+import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.models.*
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+
+@ExtendWith(TestServerExtension::class)
+class InvoiceServiceTest {
+
+    @Test
+    fun callRegenerate() {
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val invoiceService = client.invoices()
+        val invoiceRegenerateResponse =
+            invoiceService.regenerate(
+                InvoiceRegenerateParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+            )
+        println(invoiceRegenerateResponse)
+        invoiceRegenerateResponse.validate()
+    }
+
+    @Test
+    fun callVoid() {
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val invoiceService = client.invoices()
+        val invoiceVoidResponse =
+            invoiceService.void_(
+                InvoiceVoidParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+            )
+        println(invoiceVoidResponse)
+        invoiceVoidResponse.validate()
+    }
+}

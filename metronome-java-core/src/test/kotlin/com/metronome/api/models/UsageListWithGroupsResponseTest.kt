@@ -12,30 +12,19 @@ class UsageListWithGroupsResponseTest {
     fun createUsageListWithGroupsResponse() {
         val usageListWithGroupsResponse =
             UsageListWithGroupsResponse.builder()
-                .data(
-                    listOf(
-                        UsageListWithGroupsResponse.Data.builder()
-                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .groupKey("string")
-                            .groupValue("string")
-                            .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .value(42.23)
-                            .build()
-                    )
-                )
-                .nextPage("string")
+                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .groupKey("group_key")
+                .groupValue("group_value")
+                .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .value(42.23)
                 .build()
         assertThat(usageListWithGroupsResponse).isNotNull
-        assertThat(usageListWithGroupsResponse.data())
-            .containsExactly(
-                UsageListWithGroupsResponse.Data.builder()
-                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .groupKey("string")
-                    .groupValue("string")
-                    .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .value(42.23)
-                    .build()
-            )
-        assertThat(usageListWithGroupsResponse.nextPage()).contains("string")
+        assertThat(usageListWithGroupsResponse.endingBefore())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(usageListWithGroupsResponse.groupKey()).contains("group_key")
+        assertThat(usageListWithGroupsResponse.groupValue()).contains("group_value")
+        assertThat(usageListWithGroupsResponse.startingOn())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(usageListWithGroupsResponse.value()).contains(42.23)
     }
 }

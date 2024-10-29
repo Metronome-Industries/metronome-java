@@ -5,8 +5,12 @@
 package com.metronome.api.services.async.customers
 
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.models.CustomerInvoiceAddChargeParams
+import com.metronome.api.models.CustomerInvoiceAddChargeResponse
+import com.metronome.api.models.CustomerInvoiceListBreakdownsPageAsync
+import com.metronome.api.models.CustomerInvoiceListBreakdownsParams
+import com.metronome.api.models.CustomerInvoiceListPageAsync
 import com.metronome.api.models.CustomerInvoiceListParams
-import com.metronome.api.models.CustomerInvoiceListResponse
 import com.metronome.api.models.CustomerInvoiceRetrieveParams
 import com.metronome.api.models.CustomerInvoiceRetrieveResponse
 import java.util.concurrent.CompletableFuture
@@ -28,5 +32,22 @@ interface InvoiceServiceAsync {
     fun list(
         params: CustomerInvoiceListParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<CustomerInvoiceListResponse>
+    ): CompletableFuture<CustomerInvoiceListPageAsync>
+
+    /** Add a one time charge to the specified invoice */
+    @JvmOverloads
+    fun addCharge(
+        params: CustomerInvoiceAddChargeParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): CompletableFuture<CustomerInvoiceAddChargeResponse>
+
+    /**
+     * List daily or hourly breakdown invoices for a given customer, optionally filtered by status,
+     * date range, and/or credit type.
+     */
+    @JvmOverloads
+    fun listBreakdowns(
+        params: CustomerInvoiceListBreakdownsParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): CompletableFuture<CustomerInvoiceListBreakdownsPageAsync>
 }

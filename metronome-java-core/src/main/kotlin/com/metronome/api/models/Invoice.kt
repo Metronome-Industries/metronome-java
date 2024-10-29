@@ -29,7 +29,7 @@ private constructor(
     private val netsuiteSalesOrderId: JsonField<String>,
     private val salesforceOpportunityId: JsonField<String>,
     private val netPaymentTermsDays: JsonField<Double>,
-    private val creditType: JsonField<CreditType>,
+    private val creditType: JsonField<CreditTypeData>,
     private val invoiceAdjustments: JsonField<List<InvoiceAdjustment>>,
     private val lineItems: JsonField<List<LineItem>>,
     private val startTimestamp: JsonField<OffsetDateTime>,
@@ -56,8 +56,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     fun id(): String = id.getRequired("id")
 
     fun customerId(): String = customerId.getRequired("customer_id")
@@ -76,7 +74,7 @@ private constructor(
     fun netPaymentTermsDays(): Optional<Double> =
         Optional.ofNullable(netPaymentTermsDays.getNullable("net_payment_terms_days"))
 
-    fun creditType(): CreditType = creditType.getRequired("credit_type")
+    fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
     fun invoiceAdjustments(): Optional<List<InvoiceAdjustment>> =
         Optional.ofNullable(invoiceAdjustments.getNullable("invoice_adjustments"))
@@ -135,7 +133,9 @@ private constructor(
     fun customFields(): Optional<CustomFields> =
         Optional.ofNullable(customFields.getNullable("custom_fields"))
 
-    fun billableStatus(): BillableStatus = billableStatus.getRequired("billable_status")
+    /** This field's availability is dependent on your client's configuration. */
+    fun billableStatus(): Optional<BillableStatus> =
+        Optional.ofNullable(billableStatus.getNullable("billable_status"))
 
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
@@ -210,6 +210,7 @@ private constructor(
 
     @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
 
+    /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("billable_status") @ExcludeMissing fun _billableStatus() = billableStatus
 
     @JsonAnyGetter
@@ -252,84 +253,6 @@ private constructor(
 
     fun toBuilder() = Builder().from(this)
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is Invoice &&
-            this.id == other.id &&
-            this.customerId == other.customerId &&
-            this.customerCustomFields == other.customerCustomFields &&
-            this.netsuiteSalesOrderId == other.netsuiteSalesOrderId &&
-            this.salesforceOpportunityId == other.salesforceOpportunityId &&
-            this.netPaymentTermsDays == other.netPaymentTermsDays &&
-            this.creditType == other.creditType &&
-            this.invoiceAdjustments == other.invoiceAdjustments &&
-            this.lineItems == other.lineItems &&
-            this.startTimestamp == other.startTimestamp &&
-            this.endTimestamp == other.endTimestamp &&
-            this.issuedAt == other.issuedAt &&
-            this.createdAt == other.createdAt &&
-            this.status == other.status &&
-            this.subtotal == other.subtotal &&
-            this.total == other.total &&
-            this.type == other.type &&
-            this.externalInvoice == other.externalInvoice &&
-            this.planId == other.planId &&
-            this.planName == other.planName &&
-            this.planCustomFields == other.planCustomFields &&
-            this.contractId == other.contractId &&
-            this.contractCustomFields == other.contractCustomFields &&
-            this.amendmentId == other.amendmentId &&
-            this.correctionRecord == other.correctionRecord &&
-            this.resellerRoyalty == other.resellerRoyalty &&
-            this.customFields == other.customFields &&
-            this.billableStatus == other.billableStatus &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    customerId,
-                    customerCustomFields,
-                    netsuiteSalesOrderId,
-                    salesforceOpportunityId,
-                    netPaymentTermsDays,
-                    creditType,
-                    invoiceAdjustments,
-                    lineItems,
-                    startTimestamp,
-                    endTimestamp,
-                    issuedAt,
-                    createdAt,
-                    status,
-                    subtotal,
-                    total,
-                    type,
-                    externalInvoice,
-                    planId,
-                    planName,
-                    planCustomFields,
-                    contractId,
-                    contractCustomFields,
-                    amendmentId,
-                    correctionRecord,
-                    resellerRoyalty,
-                    customFields,
-                    billableStatus,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "Invoice{id=$id, customerId=$customerId, customerCustomFields=$customerCustomFields, netsuiteSalesOrderId=$netsuiteSalesOrderId, salesforceOpportunityId=$salesforceOpportunityId, netPaymentTermsDays=$netPaymentTermsDays, creditType=$creditType, invoiceAdjustments=$invoiceAdjustments, lineItems=$lineItems, startTimestamp=$startTimestamp, endTimestamp=$endTimestamp, issuedAt=$issuedAt, createdAt=$createdAt, status=$status, subtotal=$subtotal, total=$total, type=$type, externalInvoice=$externalInvoice, planId=$planId, planName=$planName, planCustomFields=$planCustomFields, contractId=$contractId, contractCustomFields=$contractCustomFields, amendmentId=$amendmentId, correctionRecord=$correctionRecord, resellerRoyalty=$resellerRoyalty, customFields=$customFields, billableStatus=$billableStatus, additionalProperties=$additionalProperties}"
-
     companion object {
 
         @JvmStatic fun builder() = Builder()
@@ -343,7 +266,7 @@ private constructor(
         private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
         private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
         private var netPaymentTermsDays: JsonField<Double> = JsonMissing.of()
-        private var creditType: JsonField<CreditType> = JsonMissing.of()
+        private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
         private var invoiceAdjustments: JsonField<List<InvoiceAdjustment>> = JsonMissing.of()
         private var lineItems: JsonField<List<LineItem>> = JsonMissing.of()
         private var startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -450,11 +373,13 @@ private constructor(
             this.netPaymentTermsDays = netPaymentTermsDays
         }
 
-        fun creditType(creditType: CreditType) = creditType(JsonField.of(creditType))
+        fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
         @JsonProperty("credit_type")
         @ExcludeMissing
-        fun creditType(creditType: JsonField<CreditType>) = apply { this.creditType = creditType }
+        fun creditType(creditType: JsonField<CreditTypeData>) = apply {
+            this.creditType = creditType
+        }
 
         fun invoiceAdjustments(invoiceAdjustments: List<InvoiceAdjustment>) =
             invoiceAdjustments(JsonField.of(invoiceAdjustments))
@@ -615,9 +540,11 @@ private constructor(
             this.customFields = customFields
         }
 
+        /** This field's availability is dependent on your client's configuration. */
         fun billableStatus(billableStatus: BillableStatus) =
             billableStatus(JsonField.of(billableStatus))
 
+        /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("billable_status")
         @ExcludeMissing
         fun billableStatus(billableStatus: JsonField<BillableStatus>) = apply {
@@ -672,177 +599,6 @@ private constructor(
             )
     }
 
-    class BillableStatus
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
-
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is BillableStatus && this.value == other.value
-        }
-
-        override fun hashCode() = value.hashCode()
-
-        override fun toString() = value.toString()
-
-        companion object {
-
-            @JvmField val BILLABLE = BillableStatus(JsonField.of("billable"))
-
-            @JvmField val UNBILLABLE = BillableStatus(JsonField.of("unbillable"))
-
-            @JvmStatic fun of(value: String) = BillableStatus(JsonField.of(value))
-        }
-
-        enum class Known {
-            BILLABLE,
-            UNBILLABLE,
-        }
-
-        enum class Value {
-            BILLABLE,
-            UNBILLABLE,
-            _UNKNOWN,
-        }
-
-        fun value(): Value =
-            when (this) {
-                BILLABLE -> Value.BILLABLE
-                UNBILLABLE -> Value.UNBILLABLE
-                else -> Value._UNKNOWN
-            }
-
-        fun known(): Known =
-            when (this) {
-                BILLABLE -> Known.BILLABLE
-                UNBILLABLE -> Known.UNBILLABLE
-                else -> throw MetronomeInvalidDataException("Unknown BillableStatus: $value")
-            }
-
-        fun asString(): String = _value().asStringOrThrow()
-    }
-
-    @JsonDeserialize(builder = CreditType.Builder::class)
-    @NoAutoDetect
-    class CreditType
-    private constructor(
-        private val name: JsonField<String>,
-        private val id: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        private var validated: Boolean = false
-
-        private var hashCode: Int = 0
-
-        fun name(): String = name.getRequired("name")
-
-        fun id(): String = id.getRequired("id")
-
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
-
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): CreditType = apply {
-            if (!validated) {
-                name()
-                id()
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CreditType &&
-                this.name == other.name &&
-                this.id == other.id &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        name,
-                        id,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CreditType{name=$name, id=$id, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var name: JsonField<String> = JsonMissing.of()
-            private var id: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(creditType: CreditType) = apply {
-                this.name = creditType.name
-                this.id = creditType.id
-                additionalProperties(creditType.additionalProperties)
-            }
-
-            fun name(name: String) = name(JsonField.of(name))
-
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun name(name: JsonField<String>) = apply { this.name = name }
-
-            fun id(id: String) = id(JsonField.of(id))
-
-            @JsonProperty("id")
-            @ExcludeMissing
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun build(): CreditType =
-                CreditType(
-                    name,
-                    id,
-                    additionalProperties.toUnmodifiable(),
-                )
-        }
-    }
-
     @JsonDeserialize(builder = LineItem.Builder::class)
     @NoAutoDetect
     class LineItem
@@ -853,12 +609,13 @@ private constructor(
         private val quantity: JsonField<Double>,
         private val total: JsonField<Double>,
         private val unitPrice: JsonField<Double>,
+        private val listPrice: JsonField<Rate>,
         private val productId: JsonField<String>,
         private val productCustomFields: JsonField<ProductCustomFields>,
         private val productType: JsonField<String>,
         private val netsuiteItemId: JsonField<String>,
         private val isProrated: JsonField<Boolean>,
-        private val creditType: JsonField<CreditType>,
+        private val creditType: JsonField<CreditTypeData>,
         private val startingAt: JsonField<OffsetDateTime>,
         private val endingBefore: JsonField<OffsetDateTime>,
         private val commitId: JsonField<String>,
@@ -885,8 +642,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         fun name(): String = name.getRequired("name")
 
         fun groupKey(): Optional<String> = Optional.ofNullable(groupKey.getNullable("group_key"))
@@ -900,6 +655,13 @@ private constructor(
 
         /** only present for beta contract invoices */
         fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice.getNullable("unit_price"))
+
+        /**
+         * Only present for contract invoices and when the include_list_prices query parameter is
+         * set to true. This will include the list rate for the charge if applicable. Only present
+         * for usage and subscription line items.
+         */
+        fun listPrice(): Optional<Rate> = Optional.ofNullable(listPrice.getNullable("list_price"))
 
         fun productId(): Optional<String> = Optional.ofNullable(productId.getNullable("product_id"))
 
@@ -920,7 +682,7 @@ private constructor(
         fun isProrated(): Optional<Boolean> =
             Optional.ofNullable(isProrated.getNullable("is_prorated"))
 
-        fun creditType(): CreditType = creditType.getRequired("credit_type")
+        fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
         /** only present for beta contract invoices */
         fun startingAt(): Optional<OffsetDateTime> =
@@ -933,6 +695,7 @@ private constructor(
         /** only present for beta contract invoices */
         fun commitId(): Optional<String> = Optional.ofNullable(commitId.getNullable("commit_id"))
 
+        /** only present for beta contract invoices */
         fun commitCustomFields(): Optional<CommitCustomFields> =
             Optional.ofNullable(commitCustomFields.getNullable("commit_custom_fields"))
 
@@ -1002,6 +765,7 @@ private constructor(
         fun professionalServiceId(): Optional<String> =
             Optional.ofNullable(professionalServiceId.getNullable("professional_service_id"))
 
+        /** only present for beta contract invoices */
         fun professionalServiceCustomFields(): Optional<ProfessionalServiceCustomFields> =
             Optional.ofNullable(
                 professionalServiceCustomFields.getNullable("professional_service_custom_fields")
@@ -1028,6 +792,13 @@ private constructor(
 
         /** only present for beta contract invoices */
         @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice() = unitPrice
+
+        /**
+         * Only present for contract invoices and when the include_list_prices query parameter is
+         * set to true. This will include the list rate for the charge if applicable. Only present
+         * for usage and subscription line items.
+         */
+        @JsonProperty("list_price") @ExcludeMissing fun _listPrice() = listPrice
 
         @JsonProperty("product_id") @ExcludeMissing fun _productId() = productId
 
@@ -1057,6 +828,7 @@ private constructor(
         /** only present for beta contract invoices */
         @JsonProperty("commit_id") @ExcludeMissing fun _commitId() = commitId
 
+        /** only present for beta contract invoices */
         @JsonProperty("commit_custom_fields")
         @ExcludeMissing
         fun _commitCustomFields() = commitCustomFields
@@ -1122,6 +894,7 @@ private constructor(
         @ExcludeMissing
         fun _professionalServiceId() = professionalServiceId
 
+        /** only present for beta contract invoices */
         @JsonProperty("professional_service_custom_fields")
         @ExcludeMissing
         fun _professionalServiceCustomFields() = professionalServiceCustomFields
@@ -1147,6 +920,7 @@ private constructor(
                 quantity()
                 total()
                 unitPrice()
+                listPrice().map { it.validate() }
                 productId()
                 productCustomFields().map { it.validate() }
                 productType()
@@ -1180,94 +954,6 @@ private constructor(
 
         fun toBuilder() = Builder().from(this)
 
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is LineItem &&
-                this.name == other.name &&
-                this.groupKey == other.groupKey &&
-                this.groupValue == other.groupValue &&
-                this.quantity == other.quantity &&
-                this.total == other.total &&
-                this.unitPrice == other.unitPrice &&
-                this.productId == other.productId &&
-                this.productCustomFields == other.productCustomFields &&
-                this.productType == other.productType &&
-                this.netsuiteItemId == other.netsuiteItemId &&
-                this.isProrated == other.isProrated &&
-                this.creditType == other.creditType &&
-                this.startingAt == other.startingAt &&
-                this.endingBefore == other.endingBefore &&
-                this.commitId == other.commitId &&
-                this.commitCustomFields == other.commitCustomFields &&
-                this.commitSegmentId == other.commitSegmentId &&
-                this.commitType == other.commitType &&
-                this.commitNetsuiteSalesOrderId == other.commitNetsuiteSalesOrderId &&
-                this.commitNetsuiteItemId == other.commitNetsuiteItemId &&
-                this.postpaidCommit == other.postpaidCommit &&
-                this.resellerType == other.resellerType &&
-                this.subLineItems == other.subLineItems &&
-                this.customFields == other.customFields &&
-                this.pricingGroupValues == other.pricingGroupValues &&
-                this.presentationGroupValues == other.presentationGroupValues &&
-                this.metadata == other.metadata &&
-                this.netsuiteInvoiceBillingStart == other.netsuiteInvoiceBillingStart &&
-                this.netsuiteInvoiceBillingEnd == other.netsuiteInvoiceBillingEnd &&
-                this.professionalServiceId == other.professionalServiceId &&
-                this.professionalServiceCustomFields == other.professionalServiceCustomFields &&
-                this.scheduledChargeId == other.scheduledChargeId &&
-                this.scheduledChargeCustomFields == other.scheduledChargeCustomFields &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        name,
-                        groupKey,
-                        groupValue,
-                        quantity,
-                        total,
-                        unitPrice,
-                        productId,
-                        productCustomFields,
-                        productType,
-                        netsuiteItemId,
-                        isProrated,
-                        creditType,
-                        startingAt,
-                        endingBefore,
-                        commitId,
-                        commitCustomFields,
-                        commitSegmentId,
-                        commitType,
-                        commitNetsuiteSalesOrderId,
-                        commitNetsuiteItemId,
-                        postpaidCommit,
-                        resellerType,
-                        subLineItems,
-                        customFields,
-                        pricingGroupValues,
-                        presentationGroupValues,
-                        metadata,
-                        netsuiteInvoiceBillingStart,
-                        netsuiteInvoiceBillingEnd,
-                        professionalServiceId,
-                        professionalServiceCustomFields,
-                        scheduledChargeId,
-                        scheduledChargeCustomFields,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "LineItem{name=$name, groupKey=$groupKey, groupValue=$groupValue, quantity=$quantity, total=$total, unitPrice=$unitPrice, productId=$productId, productCustomFields=$productCustomFields, productType=$productType, netsuiteItemId=$netsuiteItemId, isProrated=$isProrated, creditType=$creditType, startingAt=$startingAt, endingBefore=$endingBefore, commitId=$commitId, commitCustomFields=$commitCustomFields, commitSegmentId=$commitSegmentId, commitType=$commitType, commitNetsuiteSalesOrderId=$commitNetsuiteSalesOrderId, commitNetsuiteItemId=$commitNetsuiteItemId, postpaidCommit=$postpaidCommit, resellerType=$resellerType, subLineItems=$subLineItems, customFields=$customFields, pricingGroupValues=$pricingGroupValues, presentationGroupValues=$presentationGroupValues, metadata=$metadata, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, professionalServiceId=$professionalServiceId, professionalServiceCustomFields=$professionalServiceCustomFields, scheduledChargeId=$scheduledChargeId, scheduledChargeCustomFields=$scheduledChargeCustomFields, additionalProperties=$additionalProperties}"
-
         companion object {
 
             @JvmStatic fun builder() = Builder()
@@ -1281,12 +967,13 @@ private constructor(
             private var quantity: JsonField<Double> = JsonMissing.of()
             private var total: JsonField<Double> = JsonMissing.of()
             private var unitPrice: JsonField<Double> = JsonMissing.of()
+            private var listPrice: JsonField<Rate> = JsonMissing.of()
             private var productId: JsonField<String> = JsonMissing.of()
             private var productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of()
             private var productType: JsonField<String> = JsonMissing.of()
             private var netsuiteItemId: JsonField<String> = JsonMissing.of()
             private var isProrated: JsonField<Boolean> = JsonMissing.of()
-            private var creditType: JsonField<CreditType> = JsonMissing.of()
+            private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
             private var commitId: JsonField<String> = JsonMissing.of()
@@ -1322,6 +1009,7 @@ private constructor(
                 this.quantity = lineItem.quantity
                 this.total = lineItem.total
                 this.unitPrice = lineItem.unitPrice
+                this.listPrice = lineItem.listPrice
                 this.productId = lineItem.productId
                 this.productCustomFields = lineItem.productCustomFields
                 this.productType = lineItem.productType
@@ -1390,6 +1078,22 @@ private constructor(
             @ExcludeMissing
             fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
 
+            /**
+             * Only present for contract invoices and when the include_list_prices query parameter
+             * is set to true. This will include the list rate for the charge if applicable. Only
+             * present for usage and subscription line items.
+             */
+            fun listPrice(listPrice: Rate) = listPrice(JsonField.of(listPrice))
+
+            /**
+             * Only present for contract invoices and when the include_list_prices query parameter
+             * is set to true. This will include the list rate for the charge if applicable. Only
+             * present for usage and subscription line items.
+             */
+            @JsonProperty("list_price")
+            @ExcludeMissing
+            fun listPrice(listPrice: JsonField<Rate>) = apply { this.listPrice = listPrice }
+
             fun productId(productId: String) = productId(JsonField.of(productId))
 
             @JsonProperty("product_id")
@@ -1438,11 +1142,11 @@ private constructor(
             @ExcludeMissing
             fun isProrated(isProrated: JsonField<Boolean>) = apply { this.isProrated = isProrated }
 
-            fun creditType(creditType: CreditType) = creditType(JsonField.of(creditType))
+            fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
             @JsonProperty("credit_type")
             @ExcludeMissing
-            fun creditType(creditType: JsonField<CreditType>) = apply {
+            fun creditType(creditType: JsonField<CreditTypeData>) = apply {
                 this.creditType = creditType
             }
 
@@ -1475,9 +1179,11 @@ private constructor(
             @ExcludeMissing
             fun commitId(commitId: JsonField<String>) = apply { this.commitId = commitId }
 
+            /** only present for beta contract invoices */
             fun commitCustomFields(commitCustomFields: CommitCustomFields) =
                 commitCustomFields(JsonField.of(commitCustomFields))
 
+            /** only present for beta contract invoices */
             @JsonProperty("commit_custom_fields")
             @ExcludeMissing
             fun commitCustomFields(commitCustomFields: JsonField<CommitCustomFields>) = apply {
@@ -1645,10 +1351,12 @@ private constructor(
                 this.professionalServiceId = professionalServiceId
             }
 
+            /** only present for beta contract invoices */
             fun professionalServiceCustomFields(
                 professionalServiceCustomFields: ProfessionalServiceCustomFields
             ) = professionalServiceCustomFields(JsonField.of(professionalServiceCustomFields))
 
+            /** only present for beta contract invoices */
             @JsonProperty("professional_service_custom_fields")
             @ExcludeMissing
             fun professionalServiceCustomFields(
@@ -1698,6 +1406,7 @@ private constructor(
                     quantity,
                     total,
                     unitPrice,
+                    listPrice,
                     productId,
                     productCustomFields,
                     productType,
@@ -1729,121 +1438,7 @@ private constructor(
                 )
         }
 
-        @JsonDeserialize(builder = CreditType.Builder::class)
-        @NoAutoDetect
-        class CreditType
-        private constructor(
-            private val name: JsonField<String>,
-            private val id: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
-
-            private var validated: Boolean = false
-
-            private var hashCode: Int = 0
-
-            fun name(): String = name.getRequired("name")
-
-            fun id(): String = id.getRequired("id")
-
-            @JsonProperty("name") @ExcludeMissing fun _name() = name
-
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): CreditType = apply {
-                if (!validated) {
-                    name()
-                    id()
-                    validated = true
-                }
-            }
-
-            fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is CreditType &&
-                    this.name == other.name &&
-                    this.id == other.id &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            name,
-                            id,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "CreditType{name=$name, id=$id, additionalProperties=$additionalProperties}"
-
-            companion object {
-
-                @JvmStatic fun builder() = Builder()
-            }
-
-            class Builder {
-
-                private var name: JsonField<String> = JsonMissing.of()
-                private var id: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(creditType: CreditType) = apply {
-                    this.name = creditType.name
-                    this.id = creditType.id
-                    additionalProperties(creditType.additionalProperties)
-                }
-
-                fun name(name: String) = name(JsonField.of(name))
-
-                @JsonProperty("name")
-                @ExcludeMissing
-                fun name(name: JsonField<String>) = apply { this.name = name }
-
-                fun id(id: String) = id(JsonField.of(id))
-
-                @JsonProperty("id")
-                @ExcludeMissing
-                fun id(id: JsonField<String>) = apply { this.id = id }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
-                }
-
-                @JsonAnySetter
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun build(): CreditType =
-                    CreditType(
-                        name,
-                        id,
-                        additionalProperties.toUnmodifiable(),
-                    )
-            }
-        }
-
+        /** only present for beta contract invoices */
         @JsonDeserialize(builder = CommitCustomFields.Builder::class)
         @NoAutoDetect
         class CommitCustomFields
@@ -1852,8 +1447,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1866,25 +1459,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is CommitCustomFields &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "CommitCustomFields{additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -1918,6 +1492,26 @@ private constructor(
                 fun build(): CommitCustomFields =
                     CommitCustomFields(additionalProperties.toUnmodifiable())
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is CommitCustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "CommitCustomFields{additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = CustomFields.Builder::class)
@@ -1928,8 +1522,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1942,24 +1534,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is CustomFields &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                }
-                return hashCode
-            }
-
-            override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -1992,6 +1566,25 @@ private constructor(
 
                 fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
         }
 
         /** only present for beta contract invoices */
@@ -2004,8 +1597,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -2023,26 +1614,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PostpaidCommit &&
-                    this.id == other.id &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = Objects.hash(id, additionalProperties)
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PostpaidCommit{id=$id, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2084,6 +1655,26 @@ private constructor(
                 fun build(): PostpaidCommit =
                     PostpaidCommit(id, additionalProperties.toUnmodifiable())
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PostpaidCommit && this.id == other.id && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PostpaidCommit{id=$id, additionalProperties=$additionalProperties}"
         }
 
         /**
@@ -2099,8 +1690,6 @@ private constructor(
 
             private var validated: Boolean = false
 
-            private var hashCode: Int = 0
-
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -2112,25 +1701,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PresentationGroupValues &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PresentationGroupValues{additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2164,6 +1734,26 @@ private constructor(
                 fun build(): PresentationGroupValues =
                     PresentationGroupValues(additionalProperties.toUnmodifiable())
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PresentationGroupValues && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PresentationGroupValues{additionalProperties=$additionalProperties}"
         }
 
         /** if pricing groups are used, this will contain the values used to calculate the price */
@@ -2176,8 +1766,6 @@ private constructor(
 
             private var validated: Boolean = false
 
-            private var hashCode: Int = 0
-
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -2189,25 +1777,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PricingGroupValues &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PricingGroupValues{additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2241,6 +1810,26 @@ private constructor(
                 fun build(): PricingGroupValues =
                     PricingGroupValues(additionalProperties.toUnmodifiable())
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PricingGroupValues && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PricingGroupValues{additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = ProductCustomFields.Builder::class)
@@ -2251,8 +1840,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -2265,25 +1852,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is ProductCustomFields &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "ProductCustomFields{additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2317,8 +1885,29 @@ private constructor(
                 fun build(): ProductCustomFields =
                     ProductCustomFields(additionalProperties.toUnmodifiable())
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is ProductCustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "ProductCustomFields{additionalProperties=$additionalProperties}"
         }
 
+        /** only present for beta contract invoices */
         @JsonDeserialize(builder = ProfessionalServiceCustomFields.Builder::class)
         @NoAutoDetect
         class ProfessionalServiceCustomFields
@@ -2327,8 +1916,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -2341,25 +1928,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is ProfessionalServiceCustomFields &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "ProfessionalServiceCustomFields{additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2395,6 +1963,26 @@ private constructor(
                 fun build(): ProfessionalServiceCustomFields =
                     ProfessionalServiceCustomFields(additionalProperties.toUnmodifiable())
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is ProfessionalServiceCustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "ProfessionalServiceCustomFields{additionalProperties=$additionalProperties}"
         }
 
         class ResellerType
@@ -2410,7 +1998,7 @@ private constructor(
                     return true
                 }
 
-                return other is ResellerType && this.value == other.value
+                return /* spotless:off */ other is ResellerType && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -2475,8 +2063,6 @@ private constructor(
 
             private var validated: Boolean = false
 
-            private var hashCode: Int = 0
-
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -2488,25 +2074,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is ScheduledChargeCustomFields &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "ScheduledChargeCustomFields{additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2541,6 +2108,26 @@ private constructor(
                 fun build(): ScheduledChargeCustomFields =
                     ScheduledChargeCustomFields(additionalProperties.toUnmodifiable())
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is ScheduledChargeCustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "ScheduledChargeCustomFields{additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = SubLineItem.Builder::class)
@@ -2553,14 +2140,15 @@ private constructor(
             private val subtotal: JsonField<Double>,
             private val chargeId: JsonField<String>,
             private val creditGrantId: JsonField<String>,
+            private val tierPeriod: JsonField<TierPeriod>,
             private val tiers: JsonField<List<Tier>>,
             private val customFields: JsonField<CustomFields>,
+            private val startDate: JsonField<OffsetDateTime>,
+            private val endDate: JsonField<OffsetDateTime>,
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun name(): String = name.getRequired("name")
 
@@ -2580,9 +2168,21 @@ private constructor(
             fun creditGrantId(): Optional<String> =
                 Optional.ofNullable(creditGrantId.getNullable("credit_grant_id"))
 
+            /** when the current tier started and ends (for tiered charges only) */
+            fun tierPeriod(): Optional<TierPeriod> =
+                Optional.ofNullable(tierPeriod.getNullable("tier_period"))
+
             fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers.getNullable("tiers"))
 
             fun customFields(): CustomFields = customFields.getRequired("custom_fields")
+
+            /** The start date for the charge (for seats charges only). */
+            fun startDate(): Optional<OffsetDateTime> =
+                Optional.ofNullable(startDate.getNullable("start_date"))
+
+            /** The end date for the charge (for seats charges only). */
+            fun endDate(): Optional<OffsetDateTime> =
+                Optional.ofNullable(endDate.getNullable("end_date"))
 
             @JsonProperty("name") @ExcludeMissing fun _name() = name
 
@@ -2600,9 +2200,18 @@ private constructor(
 
             @JsonProperty("credit_grant_id") @ExcludeMissing fun _creditGrantId() = creditGrantId
 
+            /** when the current tier started and ends (for tiered charges only) */
+            @JsonProperty("tier_period") @ExcludeMissing fun _tierPeriod() = tierPeriod
+
             @JsonProperty("tiers") @ExcludeMissing fun _tiers() = tiers
 
             @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+
+            /** The start date for the charge (for seats charges only). */
+            @JsonProperty("start_date") @ExcludeMissing fun _startDate() = startDate
+
+            /** The end date for the charge (for seats charges only). */
+            @JsonProperty("end_date") @ExcludeMissing fun _endDate() = endDate
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -2616,51 +2225,16 @@ private constructor(
                     subtotal()
                     chargeId()
                     creditGrantId()
+                    tierPeriod().map { it.validate() }
                     tiers().map { it.forEach { it.validate() } }
                     customFields().validate()
+                    startDate()
+                    endDate()
                     validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is SubLineItem &&
-                    this.name == other.name &&
-                    this.price == other.price &&
-                    this.quantity == other.quantity &&
-                    this.subtotal == other.subtotal &&
-                    this.chargeId == other.chargeId &&
-                    this.creditGrantId == other.creditGrantId &&
-                    this.tiers == other.tiers &&
-                    this.customFields == other.customFields &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            name,
-                            price,
-                            quantity,
-                            subtotal,
-                            chargeId,
-                            creditGrantId,
-                            tiers,
-                            customFields,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "SubLineItem{name=$name, price=$price, quantity=$quantity, subtotal=$subtotal, chargeId=$chargeId, creditGrantId=$creditGrantId, tiers=$tiers, customFields=$customFields, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2675,8 +2249,11 @@ private constructor(
                 private var subtotal: JsonField<Double> = JsonMissing.of()
                 private var chargeId: JsonField<String> = JsonMissing.of()
                 private var creditGrantId: JsonField<String> = JsonMissing.of()
+                private var tierPeriod: JsonField<TierPeriod> = JsonMissing.of()
                 private var tiers: JsonField<List<Tier>> = JsonMissing.of()
                 private var customFields: JsonField<CustomFields> = JsonMissing.of()
+                private var startDate: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var endDate: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -2687,8 +2264,11 @@ private constructor(
                     this.subtotal = subLineItem.subtotal
                     this.chargeId = subLineItem.chargeId
                     this.creditGrantId = subLineItem.creditGrantId
+                    this.tierPeriod = subLineItem.tierPeriod
                     this.tiers = subLineItem.tiers
                     this.customFields = subLineItem.customFields
+                    this.startDate = subLineItem.startDate
+                    this.endDate = subLineItem.endDate
                     additionalProperties(subLineItem.additionalProperties)
                 }
 
@@ -2739,6 +2319,16 @@ private constructor(
                     this.creditGrantId = creditGrantId
                 }
 
+                /** when the current tier started and ends (for tiered charges only) */
+                fun tierPeriod(tierPeriod: TierPeriod) = tierPeriod(JsonField.of(tierPeriod))
+
+                /** when the current tier started and ends (for tiered charges only) */
+                @JsonProperty("tier_period")
+                @ExcludeMissing
+                fun tierPeriod(tierPeriod: JsonField<TierPeriod>) = apply {
+                    this.tierPeriod = tierPeriod
+                }
+
                 fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
                 @JsonProperty("tiers")
@@ -2753,6 +2343,24 @@ private constructor(
                 fun customFields(customFields: JsonField<CustomFields>) = apply {
                     this.customFields = customFields
                 }
+
+                /** The start date for the charge (for seats charges only). */
+                fun startDate(startDate: OffsetDateTime) = startDate(JsonField.of(startDate))
+
+                /** The start date for the charge (for seats charges only). */
+                @JsonProperty("start_date")
+                @ExcludeMissing
+                fun startDate(startDate: JsonField<OffsetDateTime>) = apply {
+                    this.startDate = startDate
+                }
+
+                /** The end date for the charge (for seats charges only). */
+                fun endDate(endDate: OffsetDateTime) = endDate(JsonField.of(endDate))
+
+                /** The end date for the charge (for seats charges only). */
+                @JsonProperty("end_date")
+                @ExcludeMissing
+                fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -2777,8 +2385,11 @@ private constructor(
                         subtotal,
                         chargeId,
                         creditGrantId,
+                        tierPeriod,
                         tiers.map { it.toUnmodifiable() },
                         customFields,
+                        startDate,
+                        endDate,
                         additionalProperties.toUnmodifiable(),
                     )
             }
@@ -2792,8 +2403,6 @@ private constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -2805,24 +2414,6 @@ private constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is CustomFields &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -2855,6 +2446,140 @@ private constructor(
 
                     fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
+            }
+
+            /** when the current tier started and ends (for tiered charges only) */
+            @JsonDeserialize(builder = TierPeriod.Builder::class)
+            @NoAutoDetect
+            class TierPeriod
+            private constructor(
+                private val startingAt: JsonField<OffsetDateTime>,
+                private val endingBefore: JsonField<OffsetDateTime>,
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
+
+                private var validated: Boolean = false
+
+                fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+                fun endingBefore(): Optional<OffsetDateTime> =
+                    Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+                @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+
+                @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                fun validate(): TierPeriod = apply {
+                    if (!validated) {
+                        startingAt()
+                        endingBefore()
+                        validated = true
+                    }
+                }
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                class Builder {
+
+                    private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
+                    private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(tierPeriod: TierPeriod) = apply {
+                        this.startingAt = tierPeriod.startingAt
+                        this.endingBefore = tierPeriod.endingBefore
+                        additionalProperties(tierPeriod.additionalProperties)
+                    }
+
+                    fun startingAt(startingAt: OffsetDateTime) =
+                        startingAt(JsonField.of(startingAt))
+
+                    @JsonProperty("starting_at")
+                    @ExcludeMissing
+                    fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                        this.startingAt = startingAt
+                    }
+
+                    fun endingBefore(endingBefore: OffsetDateTime) =
+                        endingBefore(JsonField.of(endingBefore))
+
+                    @JsonProperty("ending_before")
+                    @ExcludeMissing
+                    fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+                        this.endingBefore = endingBefore
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                    @JsonAnySetter
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        this.additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun build(): TierPeriod =
+                        TierPeriod(
+                            startingAt,
+                            endingBefore,
+                            additionalProperties.toUnmodifiable(),
+                        )
+                }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is TierPeriod && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(startingAt, endingBefore, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "TierPeriod{startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
             }
 
             @JsonDeserialize(builder = Tier.Builder::class)
@@ -2869,8 +2594,6 @@ private constructor(
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 /** at what metric amount this tier begins */
                 fun startingAt(): Double = startingAt.getRequired("starting_at")
@@ -2905,36 +2628,6 @@ private constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Tier &&
-                        this.startingAt == other.startingAt &&
-                        this.quantity == other.quantity &&
-                        this.price == other.price &&
-                        this.subtotal == other.subtotal &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                startingAt,
-                                quantity,
-                                price,
-                                subtotal,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Tier{startingAt=$startingAt, quantity=$quantity, price=$price, subtotal=$subtotal, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -3010,8 +2703,125 @@ private constructor(
                             additionalProperties.toUnmodifiable(),
                         )
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Tier && this.startingAt == other.startingAt && this.quantity == other.quantity && this.price == other.price && this.subtotal == other.subtotal && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(startingAt, quantity, price, subtotal, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Tier{startingAt=$startingAt, quantity=$quantity, price=$price, subtotal=$subtotal, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is SubLineItem && this.name == other.name && this.price == other.price && this.quantity == other.quantity && this.subtotal == other.subtotal && this.chargeId == other.chargeId && this.creditGrantId == other.creditGrantId && this.tierPeriod == other.tierPeriod && this.tiers == other.tiers && this.customFields == other.customFields && this.startDate == other.startDate && this.endDate == other.endDate && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(name, price, quantity, subtotal, chargeId, creditGrantId, tierPeriod, tiers, customFields, startDate, endDate, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "SubLineItem{name=$name, price=$price, quantity=$quantity, subtotal=$subtotal, chargeId=$chargeId, creditGrantId=$creditGrantId, tierPeriod=$tierPeriod, tiers=$tiers, customFields=$customFields, startDate=$startDate, endDate=$endDate, additionalProperties=$additionalProperties}"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is LineItem && this.name == other.name && this.groupKey == other.groupKey && this.groupValue == other.groupValue && this.quantity == other.quantity && this.total == other.total && this.unitPrice == other.unitPrice && this.listPrice == other.listPrice && this.productId == other.productId && this.productCustomFields == other.productCustomFields && this.productType == other.productType && this.netsuiteItemId == other.netsuiteItemId && this.isProrated == other.isProrated && this.creditType == other.creditType && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.commitId == other.commitId && this.commitCustomFields == other.commitCustomFields && this.commitSegmentId == other.commitSegmentId && this.commitType == other.commitType && this.commitNetsuiteSalesOrderId == other.commitNetsuiteSalesOrderId && this.commitNetsuiteItemId == other.commitNetsuiteItemId && this.postpaidCommit == other.postpaidCommit && this.resellerType == other.resellerType && this.subLineItems == other.subLineItems && this.customFields == other.customFields && this.pricingGroupValues == other.pricingGroupValues && this.presentationGroupValues == other.presentationGroupValues && this.metadata == other.metadata && this.netsuiteInvoiceBillingStart == other.netsuiteInvoiceBillingStart && this.netsuiteInvoiceBillingEnd == other.netsuiteInvoiceBillingEnd && this.professionalServiceId == other.professionalServiceId && this.professionalServiceCustomFields == other.professionalServiceCustomFields && this.scheduledChargeId == other.scheduledChargeId && this.scheduledChargeCustomFields == other.scheduledChargeCustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(name, groupKey, groupValue, quantity, total, unitPrice, listPrice, productId, productCustomFields, productType, netsuiteItemId, isProrated, creditType, startingAt, endingBefore, commitId, commitCustomFields, commitSegmentId, commitType, commitNetsuiteSalesOrderId, commitNetsuiteItemId, postpaidCommit, resellerType, subLineItems, customFields, pricingGroupValues, presentationGroupValues, metadata, netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd, professionalServiceId, professionalServiceCustomFields, scheduledChargeId, scheduledChargeCustomFields, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "LineItem{name=$name, groupKey=$groupKey, groupValue=$groupValue, quantity=$quantity, total=$total, unitPrice=$unitPrice, listPrice=$listPrice, productId=$productId, productCustomFields=$productCustomFields, productType=$productType, netsuiteItemId=$netsuiteItemId, isProrated=$isProrated, creditType=$creditType, startingAt=$startingAt, endingBefore=$endingBefore, commitId=$commitId, commitCustomFields=$commitCustomFields, commitSegmentId=$commitSegmentId, commitType=$commitType, commitNetsuiteSalesOrderId=$commitNetsuiteSalesOrderId, commitNetsuiteItemId=$commitNetsuiteItemId, postpaidCommit=$postpaidCommit, resellerType=$resellerType, subLineItems=$subLineItems, customFields=$customFields, pricingGroupValues=$pricingGroupValues, presentationGroupValues=$presentationGroupValues, metadata=$metadata, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, professionalServiceId=$professionalServiceId, professionalServiceCustomFields=$professionalServiceCustomFields, scheduledChargeId=$scheduledChargeId, scheduledChargeCustomFields=$scheduledChargeCustomFields, additionalProperties=$additionalProperties}"
+    }
+
+    class BillableStatus
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
+
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is BillableStatus && this.value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+
+        companion object {
+
+            @JvmField val BILLABLE = BillableStatus(JsonField.of("billable"))
+
+            @JvmField val UNBILLABLE = BillableStatus(JsonField.of("unbillable"))
+
+            @JvmStatic fun of(value: String) = BillableStatus(JsonField.of(value))
+        }
+
+        enum class Known {
+            BILLABLE,
+            UNBILLABLE,
+        }
+
+        enum class Value {
+            BILLABLE,
+            UNBILLABLE,
+            _UNKNOWN,
+        }
+
+        fun value(): Value =
+            when (this) {
+                BILLABLE -> Value.BILLABLE
+                UNBILLABLE -> Value.UNBILLABLE
+                else -> Value._UNKNOWN
+            }
+
+        fun known(): Known =
+            when (this) {
+                BILLABLE -> Known.BILLABLE
+                UNBILLABLE -> Known.UNBILLABLE
+                else -> throw MetronomeInvalidDataException("Unknown BillableStatus: $value")
+            }
+
+        fun asString(): String = _value().asStringOrThrow()
     }
 
     @JsonDeserialize(builder = ContractCustomFields.Builder::class)
@@ -3022,8 +2832,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -3036,24 +2844,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is ContractCustomFields &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "ContractCustomFields{additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -3086,6 +2876,25 @@ private constructor(
             fun build(): ContractCustomFields =
                 ContractCustomFields(additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is ContractCustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "ContractCustomFields{additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = CorrectionRecord.Builder::class)
@@ -3100,8 +2909,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         fun reason(): String = reason.getRequired("reason")
 
@@ -3139,36 +2946,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CorrectionRecord &&
-                this.reason == other.reason &&
-                this.memo == other.memo &&
-                this.correctedInvoiceId == other.correctedInvoiceId &&
-                this.correctedExternalInvoice == other.correctedExternalInvoice &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        reason,
-                        memo,
-                        correctedInvoiceId,
-                        correctedExternalInvoice,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CorrectionRecord{reason=$reason, memo=$memo, correctedInvoiceId=$correctedInvoiceId, correctedExternalInvoice=$correctedExternalInvoice, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -3260,8 +3037,6 @@ private constructor(
 
             private var validated: Boolean = false
 
-            private var hashCode: Int = 0
-
             fun billingProviderType(): BillingProviderType =
                 billingProviderType.getRequired("billing_provider_type")
 
@@ -3301,36 +3076,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is CorrectedExternalInvoice &&
-                    this.billingProviderType == other.billingProviderType &&
-                    this.invoiceId == other.invoiceId &&
-                    this.issuedAtTimestamp == other.issuedAtTimestamp &&
-                    this.externalStatus == other.externalStatus &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            billingProviderType,
-                            invoiceId,
-                            issuedAtTimestamp,
-                            externalStatus,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "CorrectedExternalInvoice{billingProviderType=$billingProviderType, invoiceId=$invoiceId, issuedAtTimestamp=$issuedAtTimestamp, externalStatus=$externalStatus, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -3426,7 +3171,7 @@ private constructor(
                         return true
                     }
 
-                    return other is BillingProviderType && this.value == other.value
+                    return /* spotless:off */ other is BillingProviderType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3526,7 +3271,7 @@ private constructor(
                         return true
                     }
 
-                    return other is ExternalStatus && this.value == other.value
+                    return /* spotless:off */ other is ExternalStatus && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3626,7 +3371,47 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is CorrectedExternalInvoice && this.billingProviderType == other.billingProviderType && this.invoiceId == other.invoiceId && this.issuedAtTimestamp == other.issuedAtTimestamp && this.externalStatus == other.externalStatus && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(billingProviderType, invoiceId, issuedAtTimestamp, externalStatus, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "CorrectedExternalInvoice{billingProviderType=$billingProviderType, invoiceId=$invoiceId, issuedAtTimestamp=$issuedAtTimestamp, externalStatus=$externalStatus, additionalProperties=$additionalProperties}"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CorrectionRecord && this.reason == other.reason && this.memo == other.memo && this.correctedInvoiceId == other.correctedInvoiceId && this.correctedExternalInvoice == other.correctedExternalInvoice && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(reason, memo, correctedInvoiceId, correctedExternalInvoice, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CorrectionRecord{reason=$reason, memo=$memo, correctedInvoiceId=$correctedInvoiceId, correctedExternalInvoice=$correctedExternalInvoice, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = CustomFields.Builder::class)
@@ -3637,8 +3422,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -3651,23 +3434,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomFields && this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -3699,6 +3465,25 @@ private constructor(
 
             fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = CustomerCustomFields.Builder::class)
@@ -3709,8 +3494,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -3723,24 +3506,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomerCustomFields &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "CustomerCustomFields{additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -3773,6 +3538,25 @@ private constructor(
             fun build(): CustomerCustomFields =
                 CustomerCustomFields(additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomerCustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "CustomerCustomFields{additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = ExternalInvoice.Builder::class)
@@ -3787,8 +3571,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         fun billingProviderType(): BillingProviderType =
             billingProviderType.getRequired("billing_provider_type")
@@ -3828,36 +3610,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is ExternalInvoice &&
-                this.billingProviderType == other.billingProviderType &&
-                this.invoiceId == other.invoiceId &&
-                this.issuedAtTimestamp == other.issuedAtTimestamp &&
-                this.externalStatus == other.externalStatus &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        billingProviderType,
-                        invoiceId,
-                        issuedAtTimestamp,
-                        externalStatus,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "ExternalInvoice{billingProviderType=$billingProviderType, invoiceId=$invoiceId, issuedAtTimestamp=$issuedAtTimestamp, externalStatus=$externalStatus, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -3951,7 +3703,7 @@ private constructor(
                     return true
                 }
 
-                return other is BillingProviderType && this.value == other.value
+                return /* spotless:off */ other is BillingProviderType && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -4047,7 +3799,7 @@ private constructor(
                     return true
                 }
 
-                return other is ExternalStatus && this.value == other.value
+                return /* spotless:off */ other is ExternalStatus && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -4145,6 +3897,26 @@ private constructor(
 
             fun asString(): String = _value().asStringOrThrow()
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is ExternalInvoice && this.billingProviderType == other.billingProviderType && this.invoiceId == other.invoiceId && this.issuedAtTimestamp == other.issuedAtTimestamp && this.externalStatus == other.externalStatus && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(billingProviderType, invoiceId, issuedAtTimestamp, externalStatus, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "ExternalInvoice{billingProviderType=$billingProviderType, invoiceId=$invoiceId, issuedAtTimestamp=$issuedAtTimestamp, externalStatus=$externalStatus, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = InvoiceAdjustment.Builder::class)
@@ -4153,23 +3925,25 @@ private constructor(
     private constructor(
         private val name: JsonField<String>,
         private val total: JsonField<Double>,
-        private val creditType: JsonField<CreditType>,
+        private val creditType: JsonField<CreditTypeData>,
         private val creditGrantId: JsonField<String>,
+        private val creditGrantCustomFields: JsonField<CreditGrantCustomFields>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         fun name(): String = name.getRequired("name")
 
         fun total(): Double = total.getRequired("total")
 
-        fun creditType(): CreditType = creditType.getRequired("credit_type")
+        fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
         fun creditGrantId(): Optional<String> =
             Optional.ofNullable(creditGrantId.getNullable("credit_grant_id"))
+
+        fun creditGrantCustomFields(): Optional<CreditGrantCustomFields> =
+            Optional.ofNullable(creditGrantCustomFields.getNullable("credit_grant_custom_fields"))
 
         @JsonProperty("name") @ExcludeMissing fun _name() = name
 
@@ -4178,6 +3952,10 @@ private constructor(
         @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
 
         @JsonProperty("credit_grant_id") @ExcludeMissing fun _creditGrantId() = creditGrantId
+
+        @JsonProperty("credit_grant_custom_fields")
+        @ExcludeMissing
+        fun _creditGrantCustomFields() = creditGrantCustomFields
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -4189,41 +3967,12 @@ private constructor(
                 total()
                 creditType().validate()
                 creditGrantId()
+                creditGrantCustomFields().map { it.validate() }
                 validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is InvoiceAdjustment &&
-                this.name == other.name &&
-                this.total == other.total &&
-                this.creditType == other.creditType &&
-                this.creditGrantId == other.creditGrantId &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        name,
-                        total,
-                        creditType,
-                        creditGrantId,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "InvoiceAdjustment{name=$name, total=$total, creditType=$creditType, creditGrantId=$creditGrantId, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -4234,8 +3983,10 @@ private constructor(
 
             private var name: JsonField<String> = JsonMissing.of()
             private var total: JsonField<Double> = JsonMissing.of()
-            private var creditType: JsonField<CreditType> = JsonMissing.of()
+            private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var creditGrantId: JsonField<String> = JsonMissing.of()
+            private var creditGrantCustomFields: JsonField<CreditGrantCustomFields> =
+                JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -4244,6 +3995,7 @@ private constructor(
                 this.total = invoiceAdjustment.total
                 this.creditType = invoiceAdjustment.creditType
                 this.creditGrantId = invoiceAdjustment.creditGrantId
+                this.creditGrantCustomFields = invoiceAdjustment.creditGrantCustomFields
                 additionalProperties(invoiceAdjustment.additionalProperties)
             }
 
@@ -4259,11 +4011,11 @@ private constructor(
             @ExcludeMissing
             fun total(total: JsonField<Double>) = apply { this.total = total }
 
-            fun creditType(creditType: CreditType) = creditType(JsonField.of(creditType))
+            fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
             @JsonProperty("credit_type")
             @ExcludeMissing
-            fun creditType(creditType: JsonField<CreditType>) = apply {
+            fun creditType(creditType: JsonField<CreditTypeData>) = apply {
                 this.creditType = creditType
             }
 
@@ -4274,6 +4026,15 @@ private constructor(
             fun creditGrantId(creditGrantId: JsonField<String>) = apply {
                 this.creditGrantId = creditGrantId
             }
+
+            fun creditGrantCustomFields(creditGrantCustomFields: CreditGrantCustomFields) =
+                creditGrantCustomFields(JsonField.of(creditGrantCustomFields))
+
+            @JsonProperty("credit_grant_custom_fields")
+            @ExcludeMissing
+            fun creditGrantCustomFields(
+                creditGrantCustomFields: JsonField<CreditGrantCustomFields>
+            ) = apply { this.creditGrantCustomFields = creditGrantCustomFields }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -4295,70 +4056,31 @@ private constructor(
                     total,
                     creditType,
                     creditGrantId,
+                    creditGrantCustomFields,
                     additionalProperties.toUnmodifiable(),
                 )
         }
 
-        @JsonDeserialize(builder = CreditType.Builder::class)
+        @JsonDeserialize(builder = CreditGrantCustomFields.Builder::class)
         @NoAutoDetect
-        class CreditType
+        class CreditGrantCustomFields
         private constructor(
-            private val name: JsonField<String>,
-            private val id: JsonField<String>,
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
 
-            private var hashCode: Int = 0
-
-            fun name(): String = name.getRequired("name")
-
-            fun id(): String = id.getRequired("id")
-
-            @JsonProperty("name") @ExcludeMissing fun _name() = name
-
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
-
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-            fun validate(): CreditType = apply {
+            fun validate(): CreditGrantCustomFields = apply {
                 if (!validated) {
-                    name()
-                    id()
                     validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is CreditType &&
-                    this.name == other.name &&
-                    this.id == other.id &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            name,
-                            id,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "CreditType{name=$name, id=$id, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -4367,28 +4089,12 @@ private constructor(
 
             class Builder {
 
-                private var name: JsonField<String> = JsonMissing.of()
-                private var id: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(creditType: CreditType) = apply {
-                    this.name = creditType.name
-                    this.id = creditType.id
-                    additionalProperties(creditType.additionalProperties)
+                internal fun from(creditGrantCustomFields: CreditGrantCustomFields) = apply {
+                    additionalProperties(creditGrantCustomFields.additionalProperties)
                 }
-
-                fun name(name: String) = name(JsonField.of(name))
-
-                @JsonProperty("name")
-                @ExcludeMissing
-                fun name(name: JsonField<String>) = apply { this.name = name }
-
-                fun id(id: String) = id(JsonField.of(id))
-
-                @JsonProperty("id")
-                @ExcludeMissing
-                fun id(id: JsonField<String>) = apply { this.id = id }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -4405,14 +4111,50 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): CreditType =
-                    CreditType(
-                        name,
-                        id,
-                        additionalProperties.toUnmodifiable(),
-                    )
+                fun build(): CreditGrantCustomFields =
+                    CreditGrantCustomFields(additionalProperties.toUnmodifiable())
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is CreditGrantCustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "CreditGrantCustomFields{additionalProperties=$additionalProperties}"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is InvoiceAdjustment && this.name == other.name && this.total == other.total && this.creditType == other.creditType && this.creditGrantId == other.creditGrantId && this.creditGrantCustomFields == other.creditGrantCustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(name, total, creditType, creditGrantId, creditGrantCustomFields, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "InvoiceAdjustment{name=$name, total=$total, creditType=$creditType, creditGrantId=$creditGrantId, creditGrantCustomFields=$creditGrantCustomFields, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = PlanCustomFields.Builder::class)
@@ -4423,8 +4165,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -4437,24 +4177,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is PlanCustomFields &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "PlanCustomFields{additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -4486,6 +4208,25 @@ private constructor(
 
             fun build(): PlanCustomFields = PlanCustomFields(additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is PlanCustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "PlanCustomFields{additionalProperties=$additionalProperties}"
     }
 
     /** only present for beta contract invoices with reseller royalties */
@@ -4502,8 +4243,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         fun resellerType(): ResellerType = resellerType.getRequired("reseller_type")
 
@@ -4545,38 +4284,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is ResellerRoyalty &&
-                this.resellerType == other.resellerType &&
-                this.netsuiteResellerId == other.netsuiteResellerId &&
-                this.fraction == other.fraction &&
-                this.awsOptions == other.awsOptions &&
-                this.gcpOptions == other.gcpOptions &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        resellerType,
-                        netsuiteResellerId,
-                        fraction,
-                        awsOptions,
-                        gcpOptions,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "ResellerRoyalty{resellerType=$resellerType, netsuiteResellerId=$netsuiteResellerId, fraction=$fraction, awsOptions=$awsOptions, gcpOptions=$gcpOptions, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -4679,7 +4386,7 @@ private constructor(
                     return true
                 }
 
-                return other is ResellerType && this.value == other.value
+                return /* spotless:off */ other is ResellerType && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -4747,8 +4454,6 @@ private constructor(
 
             private var validated: Boolean = false
 
-            private var hashCode: Int = 0
-
             fun awsAccountNumber(): Optional<String> =
                 Optional.ofNullable(awsAccountNumber.getNullable("aws_account_number"))
 
@@ -4782,34 +4487,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is AwsOptions &&
-                    this.awsAccountNumber == other.awsAccountNumber &&
-                    this.awsPayerReferenceId == other.awsPayerReferenceId &&
-                    this.awsOfferId == other.awsOfferId &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            awsAccountNumber,
-                            awsPayerReferenceId,
-                            awsOfferId,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "AwsOptions{awsAccountNumber=$awsAccountNumber, awsPayerReferenceId=$awsPayerReferenceId, awsOfferId=$awsOfferId, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -4880,6 +4557,26 @@ private constructor(
                         additionalProperties.toUnmodifiable(),
                     )
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is AwsOptions && this.awsAccountNumber == other.awsAccountNumber && this.awsPayerReferenceId == other.awsPayerReferenceId && this.awsOfferId == other.awsOfferId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(awsAccountNumber, awsPayerReferenceId, awsOfferId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "AwsOptions{awsAccountNumber=$awsAccountNumber, awsPayerReferenceId=$awsPayerReferenceId, awsOfferId=$awsOfferId, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = GcpOptions.Builder::class)
@@ -4892,8 +4589,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun gcpAccountId(): Optional<String> =
                 Optional.ofNullable(gcpAccountId.getNullable("gcp_account_id"))
@@ -4918,32 +4613,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is GcpOptions &&
-                    this.gcpAccountId == other.gcpAccountId &&
-                    this.gcpOfferId == other.gcpOfferId &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            gcpAccountId,
-                            gcpOfferId,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "GcpOptions{gcpAccountId=$gcpAccountId, gcpOfferId=$gcpOfferId, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -5001,6 +4670,66 @@ private constructor(
                         additionalProperties.toUnmodifiable(),
                     )
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is GcpOptions && this.gcpAccountId == other.gcpAccountId && this.gcpOfferId == other.gcpOfferId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(gcpAccountId, gcpOfferId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "GcpOptions{gcpAccountId=$gcpAccountId, gcpOfferId=$gcpOfferId, additionalProperties=$additionalProperties}"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is ResellerRoyalty && this.resellerType == other.resellerType && this.netsuiteResellerId == other.netsuiteResellerId && this.fraction == other.fraction && this.awsOptions == other.awsOptions && this.gcpOptions == other.gcpOptions && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(resellerType, netsuiteResellerId, fraction, awsOptions, gcpOptions, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "ResellerRoyalty{resellerType=$resellerType, netsuiteResellerId=$netsuiteResellerId, fraction=$fraction, awsOptions=$awsOptions, gcpOptions=$gcpOptions, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is Invoice && this.id == other.id && this.customerId == other.customerId && this.customerCustomFields == other.customerCustomFields && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.salesforceOpportunityId == other.salesforceOpportunityId && this.netPaymentTermsDays == other.netPaymentTermsDays && this.creditType == other.creditType && this.invoiceAdjustments == other.invoiceAdjustments && this.lineItems == other.lineItems && this.startTimestamp == other.startTimestamp && this.endTimestamp == other.endTimestamp && this.issuedAt == other.issuedAt && this.createdAt == other.createdAt && this.status == other.status && this.subtotal == other.subtotal && this.total == other.total && this.type == other.type && this.externalInvoice == other.externalInvoice && this.planId == other.planId && this.planName == other.planName && this.planCustomFields == other.planCustomFields && this.contractId == other.contractId && this.contractCustomFields == other.contractCustomFields && this.amendmentId == other.amendmentId && this.correctionRecord == other.correctionRecord && this.resellerRoyalty == other.resellerRoyalty && this.customFields == other.customFields && this.billableStatus == other.billableStatus && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(id, customerId, customerCustomFields, netsuiteSalesOrderId, salesforceOpportunityId, netPaymentTermsDays, creditType, invoiceAdjustments, lineItems, startTimestamp, endTimestamp, issuedAt, createdAt, status, subtotal, total, type, externalInvoice, planId, planName, planCustomFields, contractId, contractCustomFields, amendmentId, correctionRecord, resellerRoyalty, customFields, billableStatus, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "Invoice{id=$id, customerId=$customerId, customerCustomFields=$customerCustomFields, netsuiteSalesOrderId=$netsuiteSalesOrderId, salesforceOpportunityId=$salesforceOpportunityId, netPaymentTermsDays=$netPaymentTermsDays, creditType=$creditType, invoiceAdjustments=$invoiceAdjustments, lineItems=$lineItems, startTimestamp=$startTimestamp, endTimestamp=$endTimestamp, issuedAt=$issuedAt, createdAt=$createdAt, status=$status, subtotal=$subtotal, total=$total, type=$type, externalInvoice=$externalInvoice, planId=$planId, planName=$planName, planCustomFields=$planCustomFields, contractId=$contractId, contractCustomFields=$contractCustomFields, amendmentId=$amendmentId, correctionRecord=$correctionRecord, resellerRoyalty=$resellerRoyalty, customFields=$customFields, billableStatus=$billableStatus, additionalProperties=$additionalProperties}"
 }

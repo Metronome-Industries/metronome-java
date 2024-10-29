@@ -31,8 +31,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /** The status of the customer alert. If the alert is archived, null will be returned. */
     fun customerStatus(): Optional<CustomerStatus> =
         Optional.ofNullable(customerStatus.getNullable("customer_status"))
@@ -65,34 +63,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is CustomerAlert &&
-            this.customerStatus == other.customerStatus &&
-            this.triggeredBy == other.triggeredBy &&
-            this.alert == other.alert &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    customerStatus,
-                    triggeredBy,
-                    alert,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "CustomerAlert{customerStatus=$customerStatus, triggeredBy=$triggeredBy, alert=$alert, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -171,17 +141,17 @@ private constructor(
         private val uniquenessKey: JsonField<String>,
         private val type: JsonField<Type>,
         private val status: JsonField<Status>,
-        private val creditType: JsonField<CreditType>,
+        private val creditType: JsonField<CreditTypeData>,
         private val threshold: JsonField<Double>,
         private val updatedAt: JsonField<OffsetDateTime>,
+        private val creditGrantTypeFilters: JsonField<List<String>>,
         private val customFieldFilters: JsonField<List<CustomFieldFilter>>,
         private val groupKeyFilter: JsonField<GroupKeyFilter>,
+        private val invoiceTypesFilter: JsonField<List<String>>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         /** the Metronome ID of the alert */
         fun id(): String = id.getRequired("id")
@@ -203,7 +173,7 @@ private constructor(
         /** Status of the alert */
         fun status(): Status = status.getRequired("status")
 
-        fun creditType(): Optional<CreditType> =
+        fun creditType(): Optional<CreditTypeData> =
             Optional.ofNullable(creditType.getNullable("credit_type"))
 
         /** Threshold value of the alert policy */
@@ -211,6 +181,14 @@ private constructor(
 
         /** Timestamp for when the alert was last updated */
         fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
+
+        /**
+         * An array of strings, representing a way to filter the credit grant this alert applies to,
+         * by looking at the credit_grant_type field on the credit grant. This field is only defined
+         * for CreditPercentage and CreditBalance alerts
+         */
+        fun creditGrantTypeFilters(): Optional<List<String>> =
+            Optional.ofNullable(creditGrantTypeFilters.getNullable("credit_grant_type_filters"))
 
         /** A list of custom field filters for alert types that support advanced filtering */
         fun customFieldFilters(): Optional<List<CustomFieldFilter>> =
@@ -222,6 +200,10 @@ private constructor(
          */
         fun groupKeyFilter(): Optional<GroupKeyFilter> =
             Optional.ofNullable(groupKeyFilter.getNullable("group_key_filter"))
+
+        /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
+        fun invoiceTypesFilter(): Optional<List<String>> =
+            Optional.ofNullable(invoiceTypesFilter.getNullable("invoice_types_filter"))
 
         /** the Metronome ID of the alert */
         @JsonProperty("id") @ExcludeMissing fun _id() = id
@@ -250,6 +232,15 @@ private constructor(
         /** Timestamp for when the alert was last updated */
         @JsonProperty("updated_at") @ExcludeMissing fun _updatedAt() = updatedAt
 
+        /**
+         * An array of strings, representing a way to filter the credit grant this alert applies to,
+         * by looking at the credit_grant_type field on the credit grant. This field is only defined
+         * for CreditPercentage and CreditBalance alerts
+         */
+        @JsonProperty("credit_grant_type_filters")
+        @ExcludeMissing
+        fun _creditGrantTypeFilters() = creditGrantTypeFilters
+
         /** A list of custom field filters for alert types that support advanced filtering */
         @JsonProperty("custom_field_filters")
         @ExcludeMissing
@@ -260,6 +251,11 @@ private constructor(
          * Only present for spend alerts.
          */
         @JsonProperty("group_key_filter") @ExcludeMissing fun _groupKeyFilter() = groupKeyFilter
+
+        /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
+        @JsonProperty("invoice_types_filter")
+        @ExcludeMissing
+        fun _invoiceTypesFilter() = invoiceTypesFilter
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -275,55 +271,15 @@ private constructor(
                 creditType().map { it.validate() }
                 threshold()
                 updatedAt()
+                creditGrantTypeFilters()
                 customFieldFilters().map { it.forEach { it.validate() } }
                 groupKeyFilter().map { it.validate() }
+                invoiceTypesFilter()
                 validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Alert &&
-                this.id == other.id &&
-                this.name == other.name &&
-                this.uniquenessKey == other.uniquenessKey &&
-                this.type == other.type &&
-                this.status == other.status &&
-                this.creditType == other.creditType &&
-                this.threshold == other.threshold &&
-                this.updatedAt == other.updatedAt &&
-                this.customFieldFilters == other.customFieldFilters &&
-                this.groupKeyFilter == other.groupKeyFilter &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        id,
-                        name,
-                        uniquenessKey,
-                        type,
-                        status,
-                        creditType,
-                        threshold,
-                        updatedAt,
-                        customFieldFilters,
-                        groupKeyFilter,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Alert{id=$id, name=$name, uniquenessKey=$uniquenessKey, type=$type, status=$status, creditType=$creditType, threshold=$threshold, updatedAt=$updatedAt, customFieldFilters=$customFieldFilters, groupKeyFilter=$groupKeyFilter, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -337,11 +293,13 @@ private constructor(
             private var uniquenessKey: JsonField<String> = JsonMissing.of()
             private var type: JsonField<Type> = JsonMissing.of()
             private var status: JsonField<Status> = JsonMissing.of()
-            private var creditType: JsonField<CreditType> = JsonMissing.of()
+            private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var threshold: JsonField<Double> = JsonMissing.of()
             private var updatedAt: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var creditGrantTypeFilters: JsonField<List<String>> = JsonMissing.of()
             private var customFieldFilters: JsonField<List<CustomFieldFilter>> = JsonMissing.of()
             private var groupKeyFilter: JsonField<GroupKeyFilter> = JsonMissing.of()
+            private var invoiceTypesFilter: JsonField<List<String>> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -354,8 +312,10 @@ private constructor(
                 this.creditType = alert.creditType
                 this.threshold = alert.threshold
                 this.updatedAt = alert.updatedAt
+                this.creditGrantTypeFilters = alert.creditGrantTypeFilters
                 this.customFieldFilters = alert.customFieldFilters
                 this.groupKeyFilter = alert.groupKeyFilter
+                this.invoiceTypesFilter = alert.invoiceTypesFilter
                 additionalProperties(alert.additionalProperties)
             }
 
@@ -409,11 +369,11 @@ private constructor(
             @ExcludeMissing
             fun status(status: JsonField<Status>) = apply { this.status = status }
 
-            fun creditType(creditType: CreditType) = creditType(JsonField.of(creditType))
+            fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
             @JsonProperty("credit_type")
             @ExcludeMissing
-            fun creditType(creditType: JsonField<CreditType>) = apply {
+            fun creditType(creditType: JsonField<CreditTypeData>) = apply {
                 this.creditType = creditType
             }
 
@@ -433,6 +393,25 @@ private constructor(
             @ExcludeMissing
             fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply {
                 this.updatedAt = updatedAt
+            }
+
+            /**
+             * An array of strings, representing a way to filter the credit grant this alert applies
+             * to, by looking at the credit_grant_type field on the credit grant. This field is only
+             * defined for CreditPercentage and CreditBalance alerts
+             */
+            fun creditGrantTypeFilters(creditGrantTypeFilters: List<String>) =
+                creditGrantTypeFilters(JsonField.of(creditGrantTypeFilters))
+
+            /**
+             * An array of strings, representing a way to filter the credit grant this alert applies
+             * to, by looking at the credit_grant_type field on the credit grant. This field is only
+             * defined for CreditPercentage and CreditBalance alerts
+             */
+            @JsonProperty("credit_grant_type_filters")
+            @ExcludeMissing
+            fun creditGrantTypeFilters(creditGrantTypeFilters: JsonField<List<String>>) = apply {
+                this.creditGrantTypeFilters = creditGrantTypeFilters
             }
 
             /** A list of custom field filters for alert types that support advanced filtering */
@@ -463,6 +442,21 @@ private constructor(
                 this.groupKeyFilter = groupKeyFilter
             }
 
+            /**
+             * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
+             */
+            fun invoiceTypesFilter(invoiceTypesFilter: List<String>) =
+                invoiceTypesFilter(JsonField.of(invoiceTypesFilter))
+
+            /**
+             * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
+             */
+            @JsonProperty("invoice_types_filter")
+            @ExcludeMissing
+            fun invoiceTypesFilter(invoiceTypesFilter: JsonField<List<String>>) = apply {
+                this.invoiceTypesFilter = invoiceTypesFilter
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 this.additionalProperties.putAll(additionalProperties)
@@ -487,8 +481,10 @@ private constructor(
                     creditType,
                     threshold,
                     updatedAt,
+                    creditGrantTypeFilters.map { it.toUnmodifiable() },
                     customFieldFilters.map { it.toUnmodifiable() },
                     groupKeyFilter,
+                    invoiceTypesFilter.map { it.toUnmodifiable() },
                     additionalProperties.toUnmodifiable(),
                 )
         }
@@ -506,7 +502,7 @@ private constructor(
                     return true
                 }
 
-                return other is Status && this.value == other.value
+                return /* spotless:off */ other is Status && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -569,7 +565,7 @@ private constructor(
                     return true
                 }
 
-                return other is Type && this.value == other.value
+                return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -623,6 +619,12 @@ private constructor(
                 val LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED =
                     Type(JsonField.of("low_remaining_contract_credit_percentage_reached"))
 
+                @JvmField
+                val LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED =
+                    Type(JsonField.of("low_remaining_contract_credit_and_commit_balance_reached"))
+
+                @JvmField val INVOICE_TOTAL_REACHED = Type(JsonField.of("invoice_total_reached"))
+
                 @JvmStatic fun of(value: String) = Type(JsonField.of(value))
             }
 
@@ -639,6 +641,8 @@ private constructor(
                 LOW_REMAINING_DAYS_FOR_CONTRACT_CREDIT_SEGMENT_REACHED,
                 LOW_REMAINING_CONTRACT_CREDIT_BALANCE_REACHED,
                 LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED,
+                LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED,
+                INVOICE_TOTAL_REACHED,
             }
 
             enum class Value {
@@ -654,6 +658,8 @@ private constructor(
                 LOW_REMAINING_DAYS_FOR_CONTRACT_CREDIT_SEGMENT_REACHED,
                 LOW_REMAINING_CONTRACT_CREDIT_BALANCE_REACHED,
                 LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED,
+                LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED,
+                INVOICE_TOTAL_REACHED,
                 _UNKNOWN,
             }
 
@@ -679,6 +685,9 @@ private constructor(
                         Value.LOW_REMAINING_CONTRACT_CREDIT_BALANCE_REACHED
                     LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED ->
                         Value.LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED
+                    LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED ->
+                        Value.LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED
+                    INVOICE_TOTAL_REACHED -> Value.INVOICE_TOTAL_REACHED
                     else -> Value._UNKNOWN
                 }
 
@@ -704,125 +713,13 @@ private constructor(
                         Known.LOW_REMAINING_CONTRACT_CREDIT_BALANCE_REACHED
                     LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED ->
                         Known.LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED
+                    LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED ->
+                        Known.LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED
+                    INVOICE_TOTAL_REACHED -> Known.INVOICE_TOTAL_REACHED
                     else -> throw MetronomeInvalidDataException("Unknown Type: $value")
                 }
 
             fun asString(): String = _value().asStringOrThrow()
-        }
-
-        @JsonDeserialize(builder = CreditType.Builder::class)
-        @NoAutoDetect
-        class CreditType
-        private constructor(
-            private val name: JsonField<String>,
-            private val id: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
-
-            private var validated: Boolean = false
-
-            private var hashCode: Int = 0
-
-            fun name(): String = name.getRequired("name")
-
-            fun id(): String = id.getRequired("id")
-
-            @JsonProperty("name") @ExcludeMissing fun _name() = name
-
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): CreditType = apply {
-                if (!validated) {
-                    name()
-                    id()
-                    validated = true
-                }
-            }
-
-            fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is CreditType &&
-                    this.name == other.name &&
-                    this.id == other.id &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            name,
-                            id,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "CreditType{name=$name, id=$id, additionalProperties=$additionalProperties}"
-
-            companion object {
-
-                @JvmStatic fun builder() = Builder()
-            }
-
-            class Builder {
-
-                private var name: JsonField<String> = JsonMissing.of()
-                private var id: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(creditType: CreditType) = apply {
-                    this.name = creditType.name
-                    this.id = creditType.id
-                    additionalProperties(creditType.additionalProperties)
-                }
-
-                fun name(name: String) = name(JsonField.of(name))
-
-                @JsonProperty("name")
-                @ExcludeMissing
-                fun name(name: JsonField<String>) = apply { this.name = name }
-
-                fun id(id: String) = id(JsonField.of(id))
-
-                @JsonProperty("id")
-                @ExcludeMissing
-                fun id(id: JsonField<String>) = apply { this.id = id }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
-                }
-
-                @JsonAnySetter
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun build(): CreditType =
-                    CreditType(
-                        name,
-                        id,
-                        additionalProperties.toUnmodifiable(),
-                    )
-            }
         }
 
         @JsonDeserialize(builder = CustomFieldFilter.Builder::class)
@@ -836,8 +733,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun entity(): Entity = entity.getRequired("entity")
 
@@ -865,34 +760,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is CustomFieldFilter &&
-                    this.entity == other.entity &&
-                    this.key == other.key &&
-                    this.value == other.value &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            entity,
-                            key,
-                            value,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "CustomFieldFilter{entity=$entity, key=$key, value=$value, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -969,7 +836,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Entity && this.value == other.value
+                    return /* spotless:off */ other is Entity && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -1018,6 +885,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is CustomFieldFilter && this.entity == other.entity && this.key == other.key && this.value == other.value && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(entity, key, value, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "CustomFieldFilter{entity=$entity, key=$key, value=$value, additionalProperties=$additionalProperties}"
         }
 
         /**
@@ -1034,8 +921,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun key(): String = key.getRequired("key")
 
@@ -1058,32 +943,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is GroupKeyFilter &&
-                    this.key == other.key &&
-                    this.value == other.value &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            key,
-                            value,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "GroupKeyFilter{key=$key, value=$value, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -1137,7 +996,47 @@ private constructor(
                         additionalProperties.toUnmodifiable(),
                     )
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is GroupKeyFilter && this.key == other.key && this.value == other.value && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(key, value, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "GroupKeyFilter{key=$key, value=$value, additionalProperties=$additionalProperties}"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Alert && this.id == other.id && this.name == other.name && this.uniquenessKey == other.uniquenessKey && this.type == other.type && this.status == other.status && this.creditType == other.creditType && this.threshold == other.threshold && this.updatedAt == other.updatedAt && this.creditGrantTypeFilters == other.creditGrantTypeFilters && this.customFieldFilters == other.customFieldFilters && this.groupKeyFilter == other.groupKeyFilter && this.invoiceTypesFilter == other.invoiceTypesFilter && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(id, name, uniquenessKey, type, status, creditType, threshold, updatedAt, creditGrantTypeFilters, customFieldFilters, groupKeyFilter, invoiceTypesFilter, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Alert{id=$id, name=$name, uniquenessKey=$uniquenessKey, type=$type, status=$status, creditType=$creditType, threshold=$threshold, updatedAt=$updatedAt, creditGrantTypeFilters=$creditGrantTypeFilters, customFieldFilters=$customFieldFilters, groupKeyFilter=$groupKeyFilter, invoiceTypesFilter=$invoiceTypesFilter, additionalProperties=$additionalProperties}"
     }
 
     class CustomerStatus
@@ -1153,7 +1052,7 @@ private constructor(
                 return true
             }
 
-            return other is CustomerStatus && this.value == other.value
+            return /* spotless:off */ other is CustomerStatus && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -1202,4 +1101,24 @@ private constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerAlert && this.customerStatus == other.customerStatus && this.triggeredBy == other.triggeredBy && this.alert == other.alert && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(customerStatus, triggeredBy, alert, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "CustomerAlert{customerStatus=$customerStatus, triggeredBy=$triggeredBy, alert=$alert, additionalProperties=$additionalProperties}"
 }

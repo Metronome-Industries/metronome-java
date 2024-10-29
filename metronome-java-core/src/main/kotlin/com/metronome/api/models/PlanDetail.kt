@@ -31,8 +31,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     fun id(): String = id.getRequired("id")
 
     fun name(): String = name.getRequired("name")
@@ -82,42 +80,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is PlanDetail &&
-            this.id == other.id &&
-            this.name == other.name &&
-            this.description == other.description &&
-            this.minimums == other.minimums &&
-            this.overageRates == other.overageRates &&
-            this.creditGrants == other.creditGrants &&
-            this.customFields == other.customFields &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    name,
-                    description,
-                    minimums,
-                    overageRates,
-                    creditGrants,
-                    customFields,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "PlanDetail{id=$id, name=$name, description=$description, minimums=$minimums, overageRates=$overageRates, creditGrants=$creditGrants, customFields=$customFields, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -229,8 +191,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -242,23 +202,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomFields && this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -290,6 +233,25 @@ private constructor(
 
             fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = CreditGrant.Builder::class)
@@ -305,14 +267,12 @@ private constructor(
         private val reason: JsonField<String>,
         private val recurrenceDuration: JsonField<Double>,
         private val recurrenceInterval: JsonField<Double>,
-        private val amountPaidCreditType: JsonField<AmountPaidCreditType>,
-        private val amountGrantedCreditType: JsonField<AmountGrantedCreditType>,
+        private val amountPaidCreditType: JsonField<CreditTypeData>,
+        private val amountGrantedCreditType: JsonField<CreditTypeData>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         fun name(): String = name.getRequired("name")
 
@@ -334,10 +294,10 @@ private constructor(
         fun recurrenceInterval(): Optional<Double> =
             Optional.ofNullable(recurrenceInterval.getNullable("recurrence_interval"))
 
-        fun amountPaidCreditType(): AmountPaidCreditType =
+        fun amountPaidCreditType(): CreditTypeData =
             amountPaidCreditType.getRequired("amount_paid_credit_type")
 
-        fun amountGrantedCreditType(): AmountGrantedCreditType =
+        fun amountGrantedCreditType(): CreditTypeData =
             amountGrantedCreditType.getRequired("amount_granted_credit_type")
 
         @JsonProperty("name") @ExcludeMissing fun _name() = name
@@ -395,50 +355,6 @@ private constructor(
 
         fun toBuilder() = Builder().from(this)
 
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CreditGrant &&
-                this.name == other.name &&
-                this.amountGranted == other.amountGranted &&
-                this.amountPaid == other.amountPaid &&
-                this.effectiveDuration == other.effectiveDuration &&
-                this.priority == other.priority &&
-                this.sendInvoice == other.sendInvoice &&
-                this.reason == other.reason &&
-                this.recurrenceDuration == other.recurrenceDuration &&
-                this.recurrenceInterval == other.recurrenceInterval &&
-                this.amountPaidCreditType == other.amountPaidCreditType &&
-                this.amountGrantedCreditType == other.amountGrantedCreditType &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        name,
-                        amountGranted,
-                        amountPaid,
-                        effectiveDuration,
-                        priority,
-                        sendInvoice,
-                        reason,
-                        recurrenceDuration,
-                        recurrenceInterval,
-                        amountPaidCreditType,
-                        amountGrantedCreditType,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CreditGrant{name=$name, amountGranted=$amountGranted, amountPaid=$amountPaid, effectiveDuration=$effectiveDuration, priority=$priority, sendInvoice=$sendInvoice, reason=$reason, recurrenceDuration=$recurrenceDuration, recurrenceInterval=$recurrenceInterval, amountPaidCreditType=$amountPaidCreditType, amountGrantedCreditType=$amountGrantedCreditType, additionalProperties=$additionalProperties}"
-
         companion object {
 
             @JvmStatic fun builder() = Builder()
@@ -455,9 +371,8 @@ private constructor(
             private var reason: JsonField<String> = JsonMissing.of()
             private var recurrenceDuration: JsonField<Double> = JsonMissing.of()
             private var recurrenceInterval: JsonField<Double> = JsonMissing.of()
-            private var amountPaidCreditType: JsonField<AmountPaidCreditType> = JsonMissing.of()
-            private var amountGrantedCreditType: JsonField<AmountGrantedCreditType> =
-                JsonMissing.of()
+            private var amountPaidCreditType: JsonField<CreditTypeData> = JsonMissing.of()
+            private var amountGrantedCreditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -543,24 +458,24 @@ private constructor(
                 this.recurrenceInterval = recurrenceInterval
             }
 
-            fun amountPaidCreditType(amountPaidCreditType: AmountPaidCreditType) =
+            fun amountPaidCreditType(amountPaidCreditType: CreditTypeData) =
                 amountPaidCreditType(JsonField.of(amountPaidCreditType))
 
             @JsonProperty("amount_paid_credit_type")
             @ExcludeMissing
-            fun amountPaidCreditType(amountPaidCreditType: JsonField<AmountPaidCreditType>) =
-                apply {
-                    this.amountPaidCreditType = amountPaidCreditType
-                }
+            fun amountPaidCreditType(amountPaidCreditType: JsonField<CreditTypeData>) = apply {
+                this.amountPaidCreditType = amountPaidCreditType
+            }
 
-            fun amountGrantedCreditType(amountGrantedCreditType: AmountGrantedCreditType) =
+            fun amountGrantedCreditType(amountGrantedCreditType: CreditTypeData) =
                 amountGrantedCreditType(JsonField.of(amountGrantedCreditType))
 
             @JsonProperty("amount_granted_credit_type")
             @ExcludeMissing
-            fun amountGrantedCreditType(
-                amountGrantedCreditType: JsonField<AmountGrantedCreditType>
-            ) = apply { this.amountGrantedCreditType = amountGrantedCreditType }
+            fun amountGrantedCreditType(amountGrantedCreditType: JsonField<CreditTypeData>) =
+                apply {
+                    this.amountGrantedCreditType = amountGrantedCreditType
+                }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -593,235 +508,25 @@ private constructor(
                 )
         }
 
-        @JsonDeserialize(builder = AmountGrantedCreditType.Builder::class)
-        @NoAutoDetect
-        class AmountGrantedCreditType
-        private constructor(
-            private val name: JsonField<String>,
-            private val id: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
-
-            private var validated: Boolean = false
-
-            private var hashCode: Int = 0
-
-            fun name(): String = name.getRequired("name")
-
-            fun id(): String = id.getRequired("id")
-
-            @JsonProperty("name") @ExcludeMissing fun _name() = name
-
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): AmountGrantedCreditType = apply {
-                if (!validated) {
-                    name()
-                    id()
-                    validated = true
-                }
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
             }
 
-            fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is AmountGrantedCreditType &&
-                    this.name == other.name &&
-                    this.id == other.id &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            name,
-                            id,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "AmountGrantedCreditType{name=$name, id=$id, additionalProperties=$additionalProperties}"
-
-            companion object {
-
-                @JvmStatic fun builder() = Builder()
-            }
-
-            class Builder {
-
-                private var name: JsonField<String> = JsonMissing.of()
-                private var id: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(amountGrantedCreditType: AmountGrantedCreditType) = apply {
-                    this.name = amountGrantedCreditType.name
-                    this.id = amountGrantedCreditType.id
-                    additionalProperties(amountGrantedCreditType.additionalProperties)
-                }
-
-                fun name(name: String) = name(JsonField.of(name))
-
-                @JsonProperty("name")
-                @ExcludeMissing
-                fun name(name: JsonField<String>) = apply { this.name = name }
-
-                fun id(id: String) = id(JsonField.of(id))
-
-                @JsonProperty("id")
-                @ExcludeMissing
-                fun id(id: JsonField<String>) = apply { this.id = id }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
-                }
-
-                @JsonAnySetter
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun build(): AmountGrantedCreditType =
-                    AmountGrantedCreditType(
-                        name,
-                        id,
-                        additionalProperties.toUnmodifiable(),
-                    )
-            }
+            return /* spotless:off */ other is CreditGrant && this.name == other.name && this.amountGranted == other.amountGranted && this.amountPaid == other.amountPaid && this.effectiveDuration == other.effectiveDuration && this.priority == other.priority && this.sendInvoice == other.sendInvoice && this.reason == other.reason && this.recurrenceDuration == other.recurrenceDuration && this.recurrenceInterval == other.recurrenceInterval && this.amountPaidCreditType == other.amountPaidCreditType && this.amountGrantedCreditType == other.amountGrantedCreditType && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        @JsonDeserialize(builder = AmountPaidCreditType.Builder::class)
-        @NoAutoDetect
-        class AmountPaidCreditType
-        private constructor(
-            private val name: JsonField<String>,
-            private val id: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
+        private var hashCode: Int = 0
 
-            private var validated: Boolean = false
-
-            private var hashCode: Int = 0
-
-            fun name(): String = name.getRequired("name")
-
-            fun id(): String = id.getRequired("id")
-
-            @JsonProperty("name") @ExcludeMissing fun _name() = name
-
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): AmountPaidCreditType = apply {
-                if (!validated) {
-                    name()
-                    id()
-                    validated = true
-                }
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(name, amountGranted, amountPaid, effectiveDuration, priority, sendInvoice, reason, recurrenceDuration, recurrenceInterval, amountPaidCreditType, amountGrantedCreditType, additionalProperties) /* spotless:on */
             }
-
-            fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is AmountPaidCreditType &&
-                    this.name == other.name &&
-                    this.id == other.id &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            name,
-                            id,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "AmountPaidCreditType{name=$name, id=$id, additionalProperties=$additionalProperties}"
-
-            companion object {
-
-                @JvmStatic fun builder() = Builder()
-            }
-
-            class Builder {
-
-                private var name: JsonField<String> = JsonMissing.of()
-                private var id: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(amountPaidCreditType: AmountPaidCreditType) = apply {
-                    this.name = amountPaidCreditType.name
-                    this.id = amountPaidCreditType.id
-                    additionalProperties(amountPaidCreditType.additionalProperties)
-                }
-
-                fun name(name: String) = name(JsonField.of(name))
-
-                @JsonProperty("name")
-                @ExcludeMissing
-                fun name(name: JsonField<String>) = apply { this.name = name }
-
-                fun id(id: String) = id(JsonField.of(id))
-
-                @JsonProperty("id")
-                @ExcludeMissing
-                fun id(id: JsonField<String>) = apply { this.id = id }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
-                }
-
-                @JsonAnySetter
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun build(): AmountPaidCreditType =
-                    AmountPaidCreditType(
-                        name,
-                        id,
-                        additionalProperties.toUnmodifiable(),
-                    )
-            }
+            return hashCode
         }
+
+        override fun toString() =
+            "CreditGrant{name=$name, amountGranted=$amountGranted, amountPaid=$amountPaid, effectiveDuration=$effectiveDuration, priority=$priority, sendInvoice=$sendInvoice, reason=$reason, recurrenceDuration=$recurrenceDuration, recurrenceInterval=$recurrenceInterval, amountPaidCreditType=$amountPaidCreditType, amountGrantedCreditType=$amountGrantedCreditType, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = Minimum.Builder::class)
@@ -831,13 +536,11 @@ private constructor(
         private val name: JsonField<String>,
         private val value: JsonField<Double>,
         private val startPeriod: JsonField<Double>,
-        private val creditType: JsonField<CreditType>,
+        private val creditType: JsonField<CreditTypeData>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         fun name(): String = name.getRequired("name")
 
@@ -848,7 +551,7 @@ private constructor(
          */
         fun startPeriod(): Double = startPeriod.getRequired("start_period")
 
-        fun creditType(): CreditType = creditType.getRequired("credit_type")
+        fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
         @JsonProperty("name") @ExcludeMissing fun _name() = name
 
@@ -877,36 +580,6 @@ private constructor(
 
         fun toBuilder() = Builder().from(this)
 
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Minimum &&
-                this.name == other.name &&
-                this.value == other.value &&
-                this.startPeriod == other.startPeriod &&
-                this.creditType == other.creditType &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        name,
-                        value,
-                        startPeriod,
-                        creditType,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Minimum{name=$name, value=$value, startPeriod=$startPeriod, creditType=$creditType, additionalProperties=$additionalProperties}"
-
         companion object {
 
             @JvmStatic fun builder() = Builder()
@@ -917,7 +590,7 @@ private constructor(
             private var name: JsonField<String> = JsonMissing.of()
             private var value: JsonField<Double> = JsonMissing.of()
             private var startPeriod: JsonField<Double> = JsonMissing.of()
-            private var creditType: JsonField<CreditType> = JsonMissing.of()
+            private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -957,11 +630,11 @@ private constructor(
                 this.startPeriod = startPeriod
             }
 
-            fun creditType(creditType: CreditType) = creditType(JsonField.of(creditType))
+            fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
             @JsonProperty("credit_type")
             @ExcludeMissing
-            fun creditType(creditType: JsonField<CreditType>) = apply {
+            fun creditType(creditType: JsonField<CreditTypeData>) = apply {
                 this.creditType = creditType
             }
 
@@ -989,120 +662,25 @@ private constructor(
                 )
         }
 
-        @JsonDeserialize(builder = CreditType.Builder::class)
-        @NoAutoDetect
-        class CreditType
-        private constructor(
-            private val name: JsonField<String>,
-            private val id: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
-
-            private var validated: Boolean = false
-
-            private var hashCode: Int = 0
-
-            fun name(): String = name.getRequired("name")
-
-            fun id(): String = id.getRequired("id")
-
-            @JsonProperty("name") @ExcludeMissing fun _name() = name
-
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): CreditType = apply {
-                if (!validated) {
-                    name()
-                    id()
-                    validated = true
-                }
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
             }
 
-            fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is CreditType &&
-                    this.name == other.name &&
-                    this.id == other.id &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            name,
-                            id,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "CreditType{name=$name, id=$id, additionalProperties=$additionalProperties}"
-
-            companion object {
-
-                @JvmStatic fun builder() = Builder()
-            }
-
-            class Builder {
-
-                private var name: JsonField<String> = JsonMissing.of()
-                private var id: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(creditType: CreditType) = apply {
-                    this.name = creditType.name
-                    this.id = creditType.id
-                    additionalProperties(creditType.additionalProperties)
-                }
-
-                fun name(name: String) = name(JsonField.of(name))
-
-                @JsonProperty("name")
-                @ExcludeMissing
-                fun name(name: JsonField<String>) = apply { this.name = name }
-
-                fun id(id: String) = id(JsonField.of(id))
-
-                @JsonProperty("id")
-                @ExcludeMissing
-                fun id(id: JsonField<String>) = apply { this.id = id }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
-                }
-
-                @JsonAnySetter
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun build(): CreditType =
-                    CreditType(
-                        name,
-                        id,
-                        additionalProperties.toUnmodifiable(),
-                    )
-            }
+            return /* spotless:off */ other is Minimum && this.name == other.name && this.value == other.value && this.startPeriod == other.startPeriod && this.creditType == other.creditType && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(name, value, startPeriod, creditType, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Minimum{name=$name, value=$value, startPeriod=$startPeriod, creditType=$creditType, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = OverageRate.Builder::class)
@@ -1111,14 +689,12 @@ private constructor(
     private constructor(
         private val toFiatConversionFactor: JsonField<Double>,
         private val startPeriod: JsonField<Double>,
-        private val fiatCreditType: JsonField<FiatCreditType>,
-        private val creditType: JsonField<CreditType>,
+        private val fiatCreditType: JsonField<CreditTypeData>,
+        private val creditType: JsonField<CreditTypeData>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         fun toFiatConversionFactor(): Double =
             toFiatConversionFactor.getRequired("to_fiat_conversion_factor")
@@ -1128,9 +704,9 @@ private constructor(
          */
         fun startPeriod(): Double = startPeriod.getRequired("start_period")
 
-        fun fiatCreditType(): FiatCreditType = fiatCreditType.getRequired("fiat_credit_type")
+        fun fiatCreditType(): CreditTypeData = fiatCreditType.getRequired("fiat_credit_type")
 
-        fun creditType(): CreditType = creditType.getRequired("credit_type")
+        fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
         @JsonProperty("to_fiat_conversion_factor")
         @ExcludeMissing
@@ -1161,36 +737,6 @@ private constructor(
 
         fun toBuilder() = Builder().from(this)
 
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is OverageRate &&
-                this.toFiatConversionFactor == other.toFiatConversionFactor &&
-                this.startPeriod == other.startPeriod &&
-                this.fiatCreditType == other.fiatCreditType &&
-                this.creditType == other.creditType &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        toFiatConversionFactor,
-                        startPeriod,
-                        fiatCreditType,
-                        creditType,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "OverageRate{toFiatConversionFactor=$toFiatConversionFactor, startPeriod=$startPeriod, fiatCreditType=$fiatCreditType, creditType=$creditType, additionalProperties=$additionalProperties}"
-
         companion object {
 
             @JvmStatic fun builder() = Builder()
@@ -1200,8 +746,8 @@ private constructor(
 
             private var toFiatConversionFactor: JsonField<Double> = JsonMissing.of()
             private var startPeriod: JsonField<Double> = JsonMissing.of()
-            private var fiatCreditType: JsonField<FiatCreditType> = JsonMissing.of()
-            private var creditType: JsonField<CreditType> = JsonMissing.of()
+            private var fiatCreditType: JsonField<CreditTypeData> = JsonMissing.of()
+            private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -1238,20 +784,20 @@ private constructor(
                 this.startPeriod = startPeriod
             }
 
-            fun fiatCreditType(fiatCreditType: FiatCreditType) =
+            fun fiatCreditType(fiatCreditType: CreditTypeData) =
                 fiatCreditType(JsonField.of(fiatCreditType))
 
             @JsonProperty("fiat_credit_type")
             @ExcludeMissing
-            fun fiatCreditType(fiatCreditType: JsonField<FiatCreditType>) = apply {
+            fun fiatCreditType(fiatCreditType: JsonField<CreditTypeData>) = apply {
                 this.fiatCreditType = fiatCreditType
             }
 
-            fun creditType(creditType: CreditType) = creditType(JsonField.of(creditType))
+            fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
             @JsonProperty("credit_type")
             @ExcludeMissing
-            fun creditType(creditType: JsonField<CreditType>) = apply {
+            fun creditType(creditType: JsonField<CreditTypeData>) = apply {
                 this.creditType = creditType
             }
 
@@ -1279,234 +825,44 @@ private constructor(
                 )
         }
 
-        @JsonDeserialize(builder = CreditType.Builder::class)
-        @NoAutoDetect
-        class CreditType
-        private constructor(
-            private val name: JsonField<String>,
-            private val id: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
-
-            private var validated: Boolean = false
-
-            private var hashCode: Int = 0
-
-            fun name(): String = name.getRequired("name")
-
-            fun id(): String = id.getRequired("id")
-
-            @JsonProperty("name") @ExcludeMissing fun _name() = name
-
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): CreditType = apply {
-                if (!validated) {
-                    name()
-                    id()
-                    validated = true
-                }
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
             }
 
-            fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is CreditType &&
-                    this.name == other.name &&
-                    this.id == other.id &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            name,
-                            id,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "CreditType{name=$name, id=$id, additionalProperties=$additionalProperties}"
-
-            companion object {
-
-                @JvmStatic fun builder() = Builder()
-            }
-
-            class Builder {
-
-                private var name: JsonField<String> = JsonMissing.of()
-                private var id: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(creditType: CreditType) = apply {
-                    this.name = creditType.name
-                    this.id = creditType.id
-                    additionalProperties(creditType.additionalProperties)
-                }
-
-                fun name(name: String) = name(JsonField.of(name))
-
-                @JsonProperty("name")
-                @ExcludeMissing
-                fun name(name: JsonField<String>) = apply { this.name = name }
-
-                fun id(id: String) = id(JsonField.of(id))
-
-                @JsonProperty("id")
-                @ExcludeMissing
-                fun id(id: JsonField<String>) = apply { this.id = id }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
-                }
-
-                @JsonAnySetter
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun build(): CreditType =
-                    CreditType(
-                        name,
-                        id,
-                        additionalProperties.toUnmodifiable(),
-                    )
-            }
+            return /* spotless:off */ other is OverageRate && this.toFiatConversionFactor == other.toFiatConversionFactor && this.startPeriod == other.startPeriod && this.fiatCreditType == other.fiatCreditType && this.creditType == other.creditType && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        @JsonDeserialize(builder = FiatCreditType.Builder::class)
-        @NoAutoDetect
-        class FiatCreditType
-        private constructor(
-            private val name: JsonField<String>,
-            private val id: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
+        private var hashCode: Int = 0
 
-            private var validated: Boolean = false
-
-            private var hashCode: Int = 0
-
-            fun name(): String = name.getRequired("name")
-
-            fun id(): String = id.getRequired("id")
-
-            @JsonProperty("name") @ExcludeMissing fun _name() = name
-
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): FiatCreditType = apply {
-                if (!validated) {
-                    name()
-                    id()
-                    validated = true
-                }
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(toFiatConversionFactor, startPeriod, fiatCreditType, creditType, additionalProperties) /* spotless:on */
             }
-
-            fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is FiatCreditType &&
-                    this.name == other.name &&
-                    this.id == other.id &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            name,
-                            id,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "FiatCreditType{name=$name, id=$id, additionalProperties=$additionalProperties}"
-
-            companion object {
-
-                @JvmStatic fun builder() = Builder()
-            }
-
-            class Builder {
-
-                private var name: JsonField<String> = JsonMissing.of()
-                private var id: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(fiatCreditType: FiatCreditType) = apply {
-                    this.name = fiatCreditType.name
-                    this.id = fiatCreditType.id
-                    additionalProperties(fiatCreditType.additionalProperties)
-                }
-
-                fun name(name: String) = name(JsonField.of(name))
-
-                @JsonProperty("name")
-                @ExcludeMissing
-                fun name(name: JsonField<String>) = apply { this.name = name }
-
-                fun id(id: String) = id(JsonField.of(id))
-
-                @JsonProperty("id")
-                @ExcludeMissing
-                fun id(id: JsonField<String>) = apply { this.id = id }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
-                }
-
-                @JsonAnySetter
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun build(): FiatCreditType =
-                    FiatCreditType(
-                        name,
-                        id,
-                        additionalProperties.toUnmodifiable(),
-                    )
-            }
+            return hashCode
         }
+
+        override fun toString() =
+            "OverageRate{toFiatConversionFactor=$toFiatConversionFactor, startPeriod=$startPeriod, fiatCreditType=$fiatCreditType, creditType=$creditType, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is PlanDetail && this.id == other.id && this.name == other.name && this.description == other.description && this.minimums == other.minimums && this.overageRates == other.overageRates && this.creditGrants == other.creditGrants && this.customFields == other.customFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(id, name, description, minimums, overageRates, creditGrants, customFields, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "PlanDetail{id=$id, name=$name, description=$description, minimums=$minimums, overageRates=$overageRates, creditGrants=$creditGrants, customFields=$customFields, additionalProperties=$additionalProperties}"
 }

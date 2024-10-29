@@ -1,0 +1,91 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.metronome.api.models
+
+import com.metronome.api.models.*
+import java.time.OffsetDateTime
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+class ContractRateCardRateAddParamsTest {
+
+    @Test
+    fun createContractRateCardRateAddParams() {
+        ContractRateCardRateAddParams.builder()
+            .entitled(true)
+            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .rateType(ContractRateCardRateAddParams.RateType.FLAT)
+            .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+            .customRate(ContractRateCardRateAddParams.CustomRate.builder().build())
+            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .isProrated(true)
+            .price(42.23)
+            .pricingGroupValues(ContractRateCardRateAddParams.PricingGroupValues.builder().build())
+            .quantity(42.23)
+            .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
+            .useListPrices(true)
+            .build()
+    }
+
+    @Test
+    fun getBody() {
+        val params =
+            ContractRateCardRateAddParams.builder()
+                .entitled(true)
+                .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .rateType(ContractRateCardRateAddParams.RateType.FLAT)
+                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                .customRate(ContractRateCardRateAddParams.CustomRate.builder().build())
+                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .isProrated(true)
+                .price(42.23)
+                .pricingGroupValues(
+                    ContractRateCardRateAddParams.PricingGroupValues.builder().build()
+                )
+                .quantity(42.23)
+                .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
+                .useListPrices(true)
+                .build()
+        val body = params.getBody()
+        assertThat(body).isNotNull
+        assertThat(body.entitled()).isEqualTo(true)
+        assertThat(body.productId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.rateCardId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.rateType()).isEqualTo(ContractRateCardRateAddParams.RateType.FLAT)
+        assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.creditTypeId()).isEqualTo("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+        assertThat(body.customRate())
+            .isEqualTo(ContractRateCardRateAddParams.CustomRate.builder().build())
+        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.isProrated()).isEqualTo(true)
+        assertThat(body.price()).isEqualTo(42.23)
+        assertThat(body.pricingGroupValues())
+            .isEqualTo(ContractRateCardRateAddParams.PricingGroupValues.builder().build())
+        assertThat(body.quantity()).isEqualTo(42.23)
+        assertThat(body.tiers()).isEqualTo(listOf(Tier.builder().price(42.23).size(42.23).build()))
+        assertThat(body.useListPrices()).isEqualTo(true)
+    }
+
+    @Test
+    fun getBodyWithoutOptionalFields() {
+        val params =
+            ContractRateCardRateAddParams.builder()
+                .entitled(true)
+                .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .rateType(ContractRateCardRateAddParams.RateType.FLAT)
+                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .build()
+        val body = params.getBody()
+        assertThat(body).isNotNull
+        assertThat(body.entitled()).isEqualTo(true)
+        assertThat(body.productId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.rateCardId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.rateType()).isEqualTo(ContractRateCardRateAddParams.RateType.FLAT)
+        assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+    }
+}

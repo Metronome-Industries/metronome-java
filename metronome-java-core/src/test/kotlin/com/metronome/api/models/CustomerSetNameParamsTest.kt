@@ -12,7 +12,7 @@ class CustomerSetNameParamsTest {
     fun createCustomerSetNameParams() {
         CustomerSetNameParams.builder()
             .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .name("string")
+            .name("name")
             .build()
     }
 
@@ -21,11 +21,11 @@ class CustomerSetNameParamsTest {
         val params =
             CustomerSetNameParams.builder()
                 .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .name("string")
+                .name("name")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.name()).isEqualTo("string")
+        assertThat(body.name()).isEqualTo("name")
     }
 
     @Test
@@ -33,11 +33,11 @@ class CustomerSetNameParamsTest {
         val params =
             CustomerSetNameParams.builder()
                 .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .name("string")
+                .name("name")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.name()).isEqualTo("string")
+        assertThat(body.name()).isEqualTo("name")
     }
 
     @Test
@@ -45,7 +45,7 @@ class CustomerSetNameParamsTest {
         val params =
             CustomerSetNameParams.builder()
                 .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .name("string")
+                .name("name")
                 .build()
         assertThat(params).isNotNull
         // path param "customerId"

@@ -18,14 +18,11 @@ class UsageListWithGroupsParamsTest {
             .currentPeriod(true)
             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .groupBy(
-                UsageListWithGroupsParams.GroupBy.builder()
-                    .key("string")
-                    .values(listOf("x"))
-                    .build()
+                UsageListWithGroupsParams.GroupBy.builder().key("key").values(listOf("x")).build()
             )
             .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .limit(100L)
-            .nextPage("string")
+            .nextPage("next_page")
             .build()
     }
 
@@ -40,17 +37,17 @@ class UsageListWithGroupsParamsTest {
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .groupBy(
                     UsageListWithGroupsParams.GroupBy.builder()
-                        .key("string")
+                        .key("key")
                         .values(listOf("x"))
                         .build()
                 )
                 .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .limit(100L)
-                .nextPage("string")
+                .nextPage("next_page")
                 .build()
         val expected = mutableMapOf<String, List<String>>()
         expected.put("limit", listOf("100"))
-        expected.put("next_page", listOf("string"))
+        expected.put("next_page", listOf("next_page"))
         assertThat(params.getQueryParams()).isEqualTo(expected)
     }
 
@@ -77,13 +74,13 @@ class UsageListWithGroupsParamsTest {
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .groupBy(
                     UsageListWithGroupsParams.GroupBy.builder()
-                        .key("string")
+                        .key("key")
                         .values(listOf("x"))
                         .build()
                 )
                 .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .limit(100L)
-                .nextPage("string")
+                .nextPage("next_page")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -94,10 +91,7 @@ class UsageListWithGroupsParamsTest {
         assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(body.groupBy())
             .isEqualTo(
-                UsageListWithGroupsParams.GroupBy.builder()
-                    .key("string")
-                    .values(listOf("x"))
-                    .build()
+                UsageListWithGroupsParams.GroupBy.builder().key("key").values(listOf("x")).build()
             )
         assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
     }

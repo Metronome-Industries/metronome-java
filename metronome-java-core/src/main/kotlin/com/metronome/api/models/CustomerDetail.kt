@@ -35,8 +35,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /** the Metronome ID of the customer */
     fun id(): String = id.getRequired("id")
 
@@ -58,8 +56,9 @@ private constructor(
 
     fun customFields(): CustomFields = customFields.getRequired("custom_fields")
 
-    fun currentBillableStatus(): CurrentBillableStatus =
-        currentBillableStatus.getRequired("current_billable_status")
+    /** This field's availability is dependent on your client's configuration. */
+    fun currentBillableStatus(): Optional<CurrentBillableStatus> =
+        Optional.ofNullable(currentBillableStatus.getNullable("current_billable_status"))
 
     /** the Metronome ID of the customer */
     @JsonProperty("id") @ExcludeMissing fun _id() = id
@@ -82,6 +81,7 @@ private constructor(
 
     @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
 
+    /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("current_billable_status")
     @ExcludeMissing
     fun _currentBillableStatus() = currentBillableStatus
@@ -98,48 +98,12 @@ private constructor(
             name()
             customerConfig().validate()
             customFields().validate()
-            currentBillableStatus().validate()
+            currentBillableStatus().map { it.validate() }
             validated = true
         }
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is CustomerDetail &&
-            this.id == other.id &&
-            this.externalId == other.externalId &&
-            this.ingestAliases == other.ingestAliases &&
-            this.name == other.name &&
-            this.customerConfig == other.customerConfig &&
-            this.customFields == other.customFields &&
-            this.currentBillableStatus == other.currentBillableStatus &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    externalId,
-                    ingestAliases,
-                    name,
-                    customerConfig,
-                    customFields,
-                    currentBillableStatus,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "CustomerDetail{id=$id, externalId=$externalId, ingestAliases=$ingestAliases, name=$name, customerConfig=$customerConfig, customFields=$customFields, currentBillableStatus=$currentBillableStatus, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -228,9 +192,11 @@ private constructor(
             this.customFields = customFields
         }
 
+        /** This field's availability is dependent on your client's configuration. */
         fun currentBillableStatus(currentBillableStatus: CurrentBillableStatus) =
             currentBillableStatus(JsonField.of(currentBillableStatus))
 
+        /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("current_billable_status")
         @ExcludeMissing
         fun currentBillableStatus(currentBillableStatus: JsonField<CurrentBillableStatus>) = apply {
@@ -264,6 +230,177 @@ private constructor(
             )
     }
 
+    @JsonDeserialize(builder = CustomFields.Builder::class)
+    @NoAutoDetect
+    class CustomFields
+    private constructor(
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        private var validated: Boolean = false
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun validate(): CustomFields = apply {
+            if (!validated) {
+                validated = true
+            }
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(customFields: CustomFields) = apply {
+                additionalProperties(customFields.additionalProperties)
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
+    }
+
+    @JsonDeserialize(builder = CustomerConfig.Builder::class)
+    @NoAutoDetect
+    class CustomerConfig
+    private constructor(
+        private val salesforceAccountId: JsonField<String>,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        private var validated: Boolean = false
+
+        /** The Salesforce account ID for the customer */
+        fun salesforceAccountId(): Optional<String> =
+            Optional.ofNullable(salesforceAccountId.getNullable("salesforce_account_id"))
+
+        /** The Salesforce account ID for the customer */
+        @JsonProperty("salesforce_account_id")
+        @ExcludeMissing
+        fun _salesforceAccountId() = salesforceAccountId
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun validate(): CustomerConfig = apply {
+            if (!validated) {
+                salesforceAccountId()
+                validated = true
+            }
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var salesforceAccountId: JsonField<String> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(customerConfig: CustomerConfig) = apply {
+                this.salesforceAccountId = customerConfig.salesforceAccountId
+                additionalProperties(customerConfig.additionalProperties)
+            }
+
+            /** The Salesforce account ID for the customer */
+            fun salesforceAccountId(salesforceAccountId: String) =
+                salesforceAccountId(JsonField.of(salesforceAccountId))
+
+            /** The Salesforce account ID for the customer */
+            @JsonProperty("salesforce_account_id")
+            @ExcludeMissing
+            fun salesforceAccountId(salesforceAccountId: JsonField<String>) = apply {
+                this.salesforceAccountId = salesforceAccountId
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): CustomerConfig =
+                CustomerConfig(salesforceAccountId, additionalProperties.toUnmodifiable())
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomerConfig && this.salesforceAccountId == other.salesforceAccountId && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(salesforceAccountId, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CustomerConfig{salesforceAccountId=$salesforceAccountId, additionalProperties=$additionalProperties}"
+    }
+
+    /** This field's availability is dependent on your client's configuration. */
     @JsonDeserialize(builder = CurrentBillableStatus.Builder::class)
     @NoAutoDetect
     class CurrentBillableStatus
@@ -274,8 +411,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         fun value(): Value = value.getRequired("value")
 
@@ -299,32 +434,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CurrentBillableStatus &&
-                this.value == other.value &&
-                this.effectiveAt == other.effectiveAt &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        value,
-                        effectiveAt,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CurrentBillableStatus{value=$value, effectiveAt=$effectiveAt, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -393,7 +502,7 @@ private constructor(
                     return true
                 }
 
-                return other is Value && this.value == other.value
+                return /* spotless:off */ other is Value && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -436,177 +545,45 @@ private constructor(
 
             fun asString(): String = _value().asStringOrThrow()
         }
-    }
-
-    @JsonDeserialize(builder = CustomFields.Builder::class)
-    @NoAutoDetect
-    class CustomFields
-    private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        private var validated: Boolean = false
-
-        private var hashCode: Int = 0
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return other is CustomFields && this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is CurrentBillableStatus && this.value == other.value && this.effectiveAt == other.effectiveAt && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(customFields: CustomFields) = apply {
-                additionalProperties(customFields.additionalProperties)
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
-        }
-    }
-
-    @JsonDeserialize(builder = CustomerConfig.Builder::class)
-    @NoAutoDetect
-    class CustomerConfig
-    private constructor(
-        private val salesforceAccountId: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        private var validated: Boolean = false
 
         private var hashCode: Int = 0
 
-        /** The Salesforce account ID for the customer */
-        fun salesforceAccountId(): Optional<String> =
-            Optional.ofNullable(salesforceAccountId.getNullable("salesforce_account_id"))
-
-        /** The Salesforce account ID for the customer */
-        @JsonProperty("salesforce_account_id")
-        @ExcludeMissing
-        fun _salesforceAccountId() = salesforceAccountId
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): CustomerConfig = apply {
-            if (!validated) {
-                salesforceAccountId()
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomerConfig &&
-                this.salesforceAccountId == other.salesforceAccountId &&
-                this.additionalProperties == other.additionalProperties
-        }
-
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = Objects.hash(salesforceAccountId, additionalProperties)
+                hashCode = /* spotless:off */ Objects.hash(value, effectiveAt, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
 
         override fun toString() =
-            "CustomerConfig{salesforceAccountId=$salesforceAccountId, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var salesforceAccountId: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(customerConfig: CustomerConfig) = apply {
-                this.salesforceAccountId = customerConfig.salesforceAccountId
-                additionalProperties(customerConfig.additionalProperties)
-            }
-
-            /** The Salesforce account ID for the customer */
-            fun salesforceAccountId(salesforceAccountId: String) =
-                salesforceAccountId(JsonField.of(salesforceAccountId))
-
-            /** The Salesforce account ID for the customer */
-            @JsonProperty("salesforce_account_id")
-            @ExcludeMissing
-            fun salesforceAccountId(salesforceAccountId: JsonField<String>) = apply {
-                this.salesforceAccountId = salesforceAccountId
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun build(): CustomerConfig =
-                CustomerConfig(salesforceAccountId, additionalProperties.toUnmodifiable())
-        }
+            "CurrentBillableStatus{value=$value, effectiveAt=$effectiveAt, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerDetail && this.id == other.id && this.externalId == other.externalId && this.ingestAliases == other.ingestAliases && this.name == other.name && this.customerConfig == other.customerConfig && this.customFields == other.customFields && this.currentBillableStatus == other.currentBillableStatus && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(id, externalId, ingestAliases, name, customerConfig, customFields, currentBillableStatus, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "CustomerDetail{id=$id, externalId=$externalId, ingestAliases=$ingestAliases, name=$name, customerConfig=$customerConfig, customFields=$customFields, currentBillableStatus=$currentBillableStatus, additionalProperties=$additionalProperties}"
 }

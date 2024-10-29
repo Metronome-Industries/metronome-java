@@ -15,8 +15,8 @@ class CustomerBillingConfigCreateParamsTest {
             .billingProviderType(
                 CustomerBillingConfigCreateParams.BillingProviderType.AWS_MARKETPLACE
             )
-            .billingProviderCustomerId("string")
-            .awsProductCode("string")
+            .billingProviderCustomerId("billing_provider_customer_id")
+            .awsProductCode("aws_product_code")
             .awsRegion(CustomerBillingConfigCreateParams.AwsRegion.AF_SOUTH_1)
             .stripeCollectionMethod(
                 CustomerBillingConfigCreateParams.StripeCollectionMethod.CHARGE_AUTOMATICALLY
@@ -32,8 +32,8 @@ class CustomerBillingConfigCreateParamsTest {
                 .billingProviderType(
                     CustomerBillingConfigCreateParams.BillingProviderType.AWS_MARKETPLACE
                 )
-                .billingProviderCustomerId("string")
-                .awsProductCode("string")
+                .billingProviderCustomerId("billing_provider_customer_id")
+                .awsProductCode("aws_product_code")
                 .awsRegion(CustomerBillingConfigCreateParams.AwsRegion.AF_SOUTH_1)
                 .stripeCollectionMethod(
                     CustomerBillingConfigCreateParams.StripeCollectionMethod.CHARGE_AUTOMATICALLY
@@ -41,8 +41,8 @@ class CustomerBillingConfigCreateParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.billingProviderCustomerId()).isEqualTo("string")
-        assertThat(body.awsProductCode()).isEqualTo("string")
+        assertThat(body.billingProviderCustomerId()).isEqualTo("billing_provider_customer_id")
+        assertThat(body.awsProductCode()).isEqualTo("aws_product_code")
         assertThat(body.awsRegion())
             .isEqualTo(CustomerBillingConfigCreateParams.AwsRegion.AF_SOUTH_1)
         assertThat(body.stripeCollectionMethod())
@@ -59,11 +59,11 @@ class CustomerBillingConfigCreateParamsTest {
                 .billingProviderType(
                     CustomerBillingConfigCreateParams.BillingProviderType.AWS_MARKETPLACE
                 )
-                .billingProviderCustomerId("string")
+                .billingProviderCustomerId("billing_provider_customer_id")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.billingProviderCustomerId()).isEqualTo("string")
+        assertThat(body.billingProviderCustomerId()).isEqualTo("billing_provider_customer_id")
     }
 
     @Test
@@ -74,7 +74,7 @@ class CustomerBillingConfigCreateParamsTest {
                 .billingProviderType(
                     CustomerBillingConfigCreateParams.BillingProviderType.AWS_MARKETPLACE
                 )
-                .billingProviderCustomerId("string")
+                .billingProviderCustomerId("billing_provider_customer_id")
                 .build()
         assertThat(params).isNotNull
         // path param "customerId"

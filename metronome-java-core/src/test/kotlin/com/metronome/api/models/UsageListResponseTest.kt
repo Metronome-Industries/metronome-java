@@ -16,7 +16,7 @@ class UsageListResponseTest {
                     listOf(
                         UsageListResponse.Data.builder()
                             .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .billableMetricName("string")
+                            .billableMetricName("billable_metric_name")
                             .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .endTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .startTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -25,14 +25,14 @@ class UsageListResponseTest {
                             .build()
                     )
                 )
-                .nextPage("string")
+                .nextPage("next_page")
                 .build()
         assertThat(usageListResponse).isNotNull
         assertThat(usageListResponse.data())
             .containsExactly(
                 UsageListResponse.Data.builder()
                     .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .billableMetricName("string")
+                    .billableMetricName("billable_metric_name")
                     .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .endTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .startTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -40,6 +40,6 @@ class UsageListResponseTest {
                     .groups(UsageListResponse.Data.Groups.builder().build())
                     .build()
             )
-        assertThat(usageListResponse.nextPage()).contains("string")
+        assertThat(usageListResponse.nextPage()).contains("next_page")
     }
 }

@@ -29,8 +29,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     fun data(): List<Data> = data.getRequired("data")
 
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage.getNullable("next_page"))
@@ -52,32 +50,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is CustomFieldListKeysResponse &&
-            this.data == other.data &&
-            this.nextPage == other.nextPage &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    data,
-                    nextPage,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "CustomFieldListKeysResponse{data=$data, nextPage=$nextPage, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -143,8 +115,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         fun entity(): Entity = entity.getRequired("entity")
 
         fun key(): String = key.getRequired("key")
@@ -173,34 +143,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Data &&
-                this.entity == other.entity &&
-                this.key == other.key &&
-                this.enforceUniqueness == other.enforceUniqueness &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        entity,
-                        key,
-                        enforceUniqueness,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Data{entity=$entity, key=$key, enforceUniqueness=$enforceUniqueness, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -279,7 +221,7 @@ private constructor(
                     return true
                 }
 
-                return other is Entity && this.value == other.value
+                return /* spotless:off */ other is Entity && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -406,5 +348,45 @@ private constructor(
 
             fun asString(): String = _value().asStringOrThrow()
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Data && this.entity == other.entity && this.key == other.key && this.enforceUniqueness == other.enforceUniqueness && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(entity, key, enforceUniqueness, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Data{entity=$entity, key=$key, enforceUniqueness=$enforceUniqueness, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomFieldListKeysResponse && this.data == other.data && this.nextPage == other.nextPage && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(data, nextPage, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "CustomFieldListKeysResponse{data=$data, nextPage=$nextPage, additionalProperties=$additionalProperties}"
 }

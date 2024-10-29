@@ -90,8 +90,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonProperty("plan_id") fun planId(): String? = planId
 
         /**
@@ -139,42 +137,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomerPlanAddBody &&
-                this.planId == other.planId &&
-                this.startingOn == other.startingOn &&
-                this.endingBefore == other.endingBefore &&
-                this.netPaymentTermsDays == other.netPaymentTermsDays &&
-                this.overageRateAdjustments == other.overageRateAdjustments &&
-                this.priceAdjustments == other.priceAdjustments &&
-                this.trialSpec == other.trialSpec &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        planId,
-                        startingOn,
-                        endingBefore,
-                        netPaymentTermsDays,
-                        overageRateAdjustments,
-                        priceAdjustments,
-                        trialSpec,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CustomerPlanAddBody{planId=$planId, startingOn=$startingOn, endingBefore=$endingBefore, netPaymentTermsDays=$netPaymentTermsDays, overageRateAdjustments=$overageRateAdjustments, priceAdjustments=$priceAdjustments, trialSpec=$trialSpec, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -286,6 +248,26 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomerPlanAddBody && this.planId == other.planId && this.startingOn == other.startingOn && this.endingBefore == other.endingBefore && this.netPaymentTermsDays == other.netPaymentTermsDays && this.overageRateAdjustments == other.overageRateAdjustments && this.priceAdjustments == other.priceAdjustments && this.trialSpec == other.trialSpec && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(planId, startingOn, endingBefore, netPaymentTermsDays, overageRateAdjustments, priceAdjustments, trialSpec, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CustomerPlanAddBody{planId=$planId, startingOn=$startingOn, endingBefore=$endingBefore, netPaymentTermsDays=$netPaymentTermsDays, overageRateAdjustments=$overageRateAdjustments, priceAdjustments=$priceAdjustments, trialSpec=$trialSpec, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -299,34 +281,11 @@ constructor(
             return true
         }
 
-        return other is CustomerPlanAddParams &&
-            this.customerId == other.customerId &&
-            this.planId == other.planId &&
-            this.startingOn == other.startingOn &&
-            this.endingBefore == other.endingBefore &&
-            this.netPaymentTermsDays == other.netPaymentTermsDays &&
-            this.overageRateAdjustments == other.overageRateAdjustments &&
-            this.priceAdjustments == other.priceAdjustments &&
-            this.trialSpec == other.trialSpec &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is CustomerPlanAddParams && this.customerId == other.customerId && this.planId == other.planId && this.startingOn == other.startingOn && this.endingBefore == other.endingBefore && this.netPaymentTermsDays == other.netPaymentTermsDays && this.overageRateAdjustments == other.overageRateAdjustments && this.priceAdjustments == other.priceAdjustments && this.trialSpec == other.trialSpec && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            customerId,
-            planId,
-            startingOn,
-            endingBefore,
-            netPaymentTermsDays,
-            overageRateAdjustments,
-            priceAdjustments,
-            trialSpec,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(customerId, planId, startingOn, endingBefore, netPaymentTermsDays, overageRateAdjustments, priceAdjustments, trialSpec, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
@@ -516,8 +475,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonProperty("custom_credit_type_id")
         fun customCreditTypeId(): String? = customCreditTypeId
 
@@ -533,34 +490,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is OverageRateAdjustment &&
-                this.customCreditTypeId == other.customCreditTypeId &&
-                this.fiatCurrencyCreditTypeId == other.fiatCurrencyCreditTypeId &&
-                this.toFiatConversionFactor == other.toFiatConversionFactor &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        customCreditTypeId,
-                        fiatCurrencyCreditTypeId,
-                        toFiatConversionFactor,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "OverageRateAdjustment{customCreditTypeId=$customCreditTypeId, fiatCurrencyCreditTypeId=$fiatCurrencyCreditTypeId, toFiatConversionFactor=$toFiatConversionFactor, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -626,6 +555,26 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is OverageRateAdjustment && this.customCreditTypeId == other.customCreditTypeId && this.fiatCurrencyCreditTypeId == other.fiatCurrencyCreditTypeId && this.toFiatConversionFactor == other.toFiatConversionFactor && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(customCreditTypeId, fiatCurrencyCreditTypeId, toFiatConversionFactor, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "OverageRateAdjustment{customCreditTypeId=$customCreditTypeId, fiatCurrencyCreditTypeId=$fiatCurrencyCreditTypeId, toFiatConversionFactor=$toFiatConversionFactor, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = PriceAdjustment.Builder::class)
@@ -640,8 +589,6 @@ constructor(
         private val startPeriod: Double?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
-
-        private var hashCode: Int = 0
 
         @JsonProperty("charge_id") fun chargeId(): String? = chargeId
 
@@ -669,40 +616,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is PriceAdjustment &&
-                this.chargeId == other.chargeId &&
-                this.adjustmentType == other.adjustmentType &&
-                this.value == other.value &&
-                this.quantity == other.quantity &&
-                this.tier == other.tier &&
-                this.startPeriod == other.startPeriod &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        chargeId,
-                        adjustmentType,
-                        value,
-                        quantity,
-                        tier,
-                        startPeriod,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "PriceAdjustment{chargeId=$chargeId, adjustmentType=$adjustmentType, value=$value, quantity=$quantity, tier=$tier, startPeriod=$startPeriod, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -798,7 +711,7 @@ constructor(
                     return true
                 }
 
-                return other is AdjustmentType && this.value == other.value
+                return /* spotless:off */ other is AdjustmentType && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -853,6 +766,26 @@ constructor(
 
             fun asString(): String = _value().asStringOrThrow()
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is PriceAdjustment && this.chargeId == other.chargeId && this.adjustmentType == other.adjustmentType && this.value == other.value && this.quantity == other.quantity && this.tier == other.tier && this.startPeriod == other.startPeriod && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(chargeId, adjustmentType, value, quantity, tier, startPeriod, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "PriceAdjustment{chargeId=$chargeId, adjustmentType=$adjustmentType, value=$value, quantity=$quantity, tier=$tier, startPeriod=$startPeriod, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -869,8 +802,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         /** Length of the trial period in days. */
         @JsonProperty("length_in_days") fun lengthInDays(): Double? = lengthInDays
 
@@ -881,32 +812,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is TrialSpec &&
-                this.lengthInDays == other.lengthInDays &&
-                this.spendingCap == other.spendingCap &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        lengthInDays,
-                        spendingCap,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "TrialSpec{lengthInDays=$lengthInDays, spendingCap=$spendingCap, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -964,8 +869,6 @@ constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var hashCode: Int = 0
-
             /** The credit type ID for the spending cap. */
             @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
 
@@ -979,32 +882,6 @@ constructor(
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is SpendingCap &&
-                    this.creditTypeId == other.creditTypeId &&
-                    this.amount == other.amount &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            creditTypeId,
-                            amount,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "SpendingCap{creditTypeId=$creditTypeId, amount=$amount, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -1056,6 +933,46 @@ constructor(
                         additionalProperties.toUnmodifiable(),
                     )
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is SpendingCap && this.creditTypeId == other.creditTypeId && this.amount == other.amount && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(creditTypeId, amount, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "SpendingCap{creditTypeId=$creditTypeId, amount=$amount, additionalProperties=$additionalProperties}"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is TrialSpec && this.lengthInDays == other.lengthInDays && this.spendingCap == other.spendingCap && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(lengthInDays, spendingCap, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "TrialSpec{lengthInDays=$lengthInDays, spendingCap=$spendingCap, additionalProperties=$additionalProperties}"
     }
 }

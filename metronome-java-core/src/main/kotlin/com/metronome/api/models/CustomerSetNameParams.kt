@@ -50,9 +50,10 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
-        /** The new name for the customer */
+        /**
+         * The new name for the customer. This will be truncated to 160 characters if the provided
+         * name is longer.
+         */
         @JsonProperty("name") fun name(): String? = name
 
         @JsonAnyGetter
@@ -60,26 +61,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomerSetNameBody &&
-                this.name == other.name &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(name, additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CustomerSetNameBody{name=$name, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -97,7 +78,10 @@ constructor(
                 additionalProperties(customerSetNameBody.additionalProperties)
             }
 
-            /** The new name for the customer */
+            /**
+             * The new name for the customer. This will be truncated to 160 characters if the
+             * provided name is longer.
+             */
             @JsonProperty("name") fun name(name: String) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -120,6 +104,26 @@ constructor(
                     additionalProperties.toUnmodifiable()
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomerSetNameBody && this.name == other.name && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(name, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CustomerSetNameBody{name=$name, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -133,22 +137,11 @@ constructor(
             return true
         }
 
-        return other is CustomerSetNameParams &&
-            this.customerId == other.customerId &&
-            this.name == other.name &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is CustomerSetNameParams && this.customerId == other.customerId && this.name == other.name && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            customerId,
-            name,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(customerId, name, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
@@ -181,7 +174,10 @@ constructor(
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
 
-        /** The new name for the customer */
+        /**
+         * The new name for the customer. This will be truncated to 160 characters if the provided
+         * name is longer.
+         */
         fun name(name: String) = apply { this.name = name }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {

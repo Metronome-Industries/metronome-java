@@ -5,6 +5,7 @@ package com.metronome.api.services.blocking
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.models.*
+import com.metronome.api.models.UsageListWithGroupsParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -32,7 +33,7 @@ class UsageServiceTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .groupBy(
                                     UsageListParams.BillableMetric.GroupBy.builder()
-                                        .key("string")
+                                        .key("key")
                                         .values(listOf("x"))
                                         .build()
                                 )
@@ -40,11 +41,36 @@ class UsageServiceTest {
                         )
                     )
                     .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                    .nextPage("string")
+                    .nextPage("next_page")
                     .build()
             )
         println(usageListResponse)
         usageListResponse.validate()
+    }
+
+    @Test
+    fun callIngest() {
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val usageService = client.usage()
+        usageService.ingest(
+            UsageIngestParams.builder()
+                .usage(
+                    listOf(
+                        UsageIngestParams.Usage.builder()
+                            .customerId("x")
+                            .eventType("x")
+                            .timestamp("timestamp")
+                            .transactionId("x")
+                            .properties(UsageIngestParams.Usage.Properties.builder().build())
+                            .build()
+                    )
+                )
+                .build()
+        )
     }
 
     @Test
@@ -55,26 +81,15 @@ class UsageServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val usageService = client.usage()
-        val usageListWithGroupsResponse =
+        val response =
             usageService.listWithGroups(
                 UsageListWithGroupsParams.builder()
                     .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .windowSize(UsageListWithGroupsParams.WindowSize.HOUR)
-                    .currentPeriod(true)
-                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .groupBy(
-                        UsageListWithGroupsParams.GroupBy.builder()
-                            .key("string")
-                            .values(listOf("x"))
-                            .build()
-                    )
-                    .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .limit(100L)
-                    .nextPage("string")
                     .build()
             )
-        println(usageListWithGroupsResponse)
-        usageListWithGroupsResponse.validate()
+        println(response)
+        response.data().forEach { it.validate() }
     }
 }

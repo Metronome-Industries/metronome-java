@@ -16,11 +16,11 @@ class CustomFieldListKeysResponseTest {
                         CustomFieldListKeysResponse.Data.builder()
                             .enforceUniqueness(true)
                             .entity(CustomFieldListKeysResponse.Data.Entity.ALERT)
-                            .key("string")
+                            .key("key")
                             .build()
                     )
                 )
-                .nextPage("string")
+                .nextPage("next_page")
                 .build()
         assertThat(customFieldListKeysResponse).isNotNull
         assertThat(customFieldListKeysResponse.data())
@@ -28,9 +28,9 @@ class CustomFieldListKeysResponseTest {
                 CustomFieldListKeysResponse.Data.builder()
                     .enforceUniqueness(true)
                     .entity(CustomFieldListKeysResponse.Data.Entity.ALERT)
-                    .key("string")
+                    .key("key")
                     .build()
             )
-        assertThat(customFieldListKeysResponse.nextPage()).contains("string")
+        assertThat(customFieldListKeysResponse.nextPage()).contains("next_page")
     }
 }

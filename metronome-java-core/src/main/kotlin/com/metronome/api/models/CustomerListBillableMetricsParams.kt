@@ -2,7 +2,6 @@
 
 package com.metronome.api.models
 
-import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.toUnmodifiable
 import com.metronome.api.models.*
@@ -17,7 +16,6 @@ constructor(
     private val onCurrentPlan: Boolean?,
     private val additionalQueryParams: Map<String, List<String>>,
     private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun customerId(): String = customerId
@@ -51,37 +49,20 @@ constructor(
 
     fun _additionalHeaders(): Map<String, List<String>> = additionalHeaders
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is CustomerListBillableMetricsParams &&
-            this.customerId == other.customerId &&
-            this.limit == other.limit &&
-            this.nextPage == other.nextPage &&
-            this.onCurrentPlan == other.onCurrentPlan &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is CustomerListBillableMetricsParams && this.customerId == other.customerId && this.limit == other.limit && this.nextPage == other.nextPage && this.onCurrentPlan == other.onCurrentPlan && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            customerId,
-            limit,
-            nextPage,
-            onCurrentPlan,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(customerId, limit, nextPage, onCurrentPlan, additionalQueryParams, additionalHeaders) /* spotless:on */
     }
 
     override fun toString() =
-        "CustomerListBillableMetricsParams{customerId=$customerId, limit=$limit, nextPage=$nextPage, onCurrentPlan=$onCurrentPlan, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerListBillableMetricsParams{customerId=$customerId, limit=$limit, nextPage=$nextPage, onCurrentPlan=$onCurrentPlan, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -99,7 +80,6 @@ constructor(
         private var onCurrentPlan: Boolean? = null
         private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerListBillableMetricsParams: CustomerListBillableMetricsParams) =
@@ -110,7 +90,6 @@ constructor(
                 this.onCurrentPlan = customerListBillableMetricsParams.onCurrentPlan
                 additionalQueryParams(customerListBillableMetricsParams.additionalQueryParams)
                 additionalHeaders(customerListBillableMetricsParams.additionalHeaders)
-                additionalBodyProperties(customerListBillableMetricsParams.additionalBodyProperties)
             }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -167,20 +146,6 @@ constructor(
 
         fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            this.additionalBodyProperties.putAll(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            this.additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
         fun build(): CustomerListBillableMetricsParams =
             CustomerListBillableMetricsParams(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
@@ -189,7 +154,6 @@ constructor(
                 onCurrentPlan,
                 additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
                 additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
             )
     }
 }

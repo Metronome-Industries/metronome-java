@@ -16,15 +16,15 @@ class CommitTest {
                 .product(
                     Commit.Product.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .name("string")
+                        .name("name")
                         .build()
                 )
                 .type(Commit.Type.PREPAID)
                 .accessSchedule(
-                    Commit.AccessSchedule.builder()
+                    ScheduleDuration.builder()
                         .scheduleItems(
                             listOf(
-                                Commit.AccessSchedule.ScheduleItem.builder()
+                                ScheduleDuration.ScheduleItem.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .amount(42.23)
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -33,9 +33,9 @@ class CommitTest {
                             )
                         )
                         .creditType(
-                            Commit.AccessSchedule.CreditType.builder()
+                            CreditTypeData.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .name("string")
+                                .name("name")
                                 .build()
                         )
                         .build()
@@ -48,7 +48,7 @@ class CommitTest {
                     Commit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
                 )
                 .customFields(Commit.CustomFields.builder().build())
-                .description("string")
+                .description("description")
                 .invoiceContract(
                     Commit.InvoiceContract.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -56,6 +56,12 @@ class CommitTest {
                 )
                 .invoiceSchedule(
                     SchedulePointInTime.builder()
+                        .creditType(
+                            CreditTypeData.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .name("name")
+                                .build()
+                        )
                         .scheduleItems(
                             listOf(
                                 SchedulePointInTime.ScheduleItem.builder()
@@ -85,9 +91,10 @@ class CommitTest {
                         )
                     )
                 )
-                .name("string")
-                .netsuiteSalesOrderId("string")
+                .name("name")
+                .netsuiteSalesOrderId("netsuite_sales_order_id")
                 .priority(42.23)
+                .rateType(Commit.RateType.COMMIT_RATE)
                 .rolledOverFrom(
                     Commit.RolledOverFrom.builder()
                         .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -95,7 +102,7 @@ class CommitTest {
                         .build()
                 )
                 .rolloverFraction(42.23)
-                .salesforceOpportunityId("string")
+                .salesforceOpportunityId("salesforce_opportunity_id")
                 .build()
         assertThat(commit).isNotNull
         assertThat(commit.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -103,16 +110,16 @@ class CommitTest {
             .isEqualTo(
                 Commit.Product.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .name("string")
+                    .name("name")
                     .build()
             )
         assertThat(commit.type()).isEqualTo(Commit.Type.PREPAID)
         assertThat(commit.accessSchedule())
             .contains(
-                Commit.AccessSchedule.builder()
+                ScheduleDuration.builder()
                     .scheduleItems(
                         listOf(
-                            Commit.AccessSchedule.ScheduleItem.builder()
+                            ScheduleDuration.ScheduleItem.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .amount(42.23)
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -121,9 +128,9 @@ class CommitTest {
                         )
                     )
                     .creditType(
-                        Commit.AccessSchedule.CreditType.builder()
+                        CreditTypeData.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .name("string")
+                            .name("name")
                             .build()
                     )
                     .build()
@@ -137,7 +144,7 @@ class CommitTest {
         assertThat(commit.contract())
             .contains(Commit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
         assertThat(commit.customFields()).contains(Commit.CustomFields.builder().build())
-        assertThat(commit.description()).contains("string")
+        assertThat(commit.description()).contains("description")
         assertThat(commit.invoiceContract())
             .contains(
                 Commit.InvoiceContract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
@@ -145,6 +152,12 @@ class CommitTest {
         assertThat(commit.invoiceSchedule())
             .contains(
                 SchedulePointInTime.builder()
+                    .creditType(
+                        CreditTypeData.builder()
+                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .name("name")
+                            .build()
+                    )
                     .scheduleItems(
                         listOf(
                             SchedulePointInTime.ScheduleItem.builder()
@@ -173,9 +186,10 @@ class CommitTest {
                         .build()
                 )
             )
-        assertThat(commit.name()).contains("string")
-        assertThat(commit.netsuiteSalesOrderId()).contains("string")
+        assertThat(commit.name()).contains("name")
+        assertThat(commit.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
         assertThat(commit.priority()).contains(42.23)
+        assertThat(commit.rateType()).contains(Commit.RateType.COMMIT_RATE)
         assertThat(commit.rolledOverFrom())
             .contains(
                 Commit.RolledOverFrom.builder()
@@ -184,6 +198,6 @@ class CommitTest {
                     .build()
             )
         assertThat(commit.rolloverFraction()).contains(42.23)
-        assertThat(commit.salesforceOpportunityId()).contains("string")
+        assertThat(commit.salesforceOpportunityId()).contains("salesforce_opportunity_id")
     }
 }

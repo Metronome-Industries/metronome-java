@@ -54,8 +54,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         /** Optional list of entity types to return keys for */
         @JsonProperty("entities") fun entities(): List<Entity>? = entities
 
@@ -64,26 +62,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomFieldListKeysBody &&
-                this.entities == other.entities &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(entities, additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CustomFieldListKeysBody{entities=$entities, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -125,6 +103,26 @@ constructor(
                     additionalProperties.toUnmodifiable()
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomFieldListKeysBody && this.entities == other.entities && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(entities, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CustomFieldListKeysBody{entities=$entities, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -138,22 +136,11 @@ constructor(
             return true
         }
 
-        return other is CustomFieldListKeysParams &&
-            this.entities == other.entities &&
-            this.nextPage == other.nextPage &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is CustomFieldListKeysParams && this.entities == other.entities && this.nextPage == other.nextPage && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            entities,
-            nextPage,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(entities, nextPage, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
@@ -273,7 +260,7 @@ constructor(
                 return true
             }
 
-            return other is Entity && this.value == other.value
+            return /* spotless:off */ other is Entity && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

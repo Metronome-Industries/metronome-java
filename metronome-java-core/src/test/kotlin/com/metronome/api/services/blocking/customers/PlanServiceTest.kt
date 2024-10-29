@@ -5,6 +5,8 @@ package com.metronome.api.services.blocking.customers
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.models.*
+import com.metronome.api.models.CustomerPlanListParams
+import com.metronome.api.models.CustomerPlanListPriceAdjustmentsParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -20,16 +22,14 @@ class PlanServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val planService = client.customers().plans()
-        val customerPlanListResponse =
+        val response =
             planService.list(
                 CustomerPlanListParams.builder()
                     .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .limit(100L)
-                    .nextPage("string")
                     .build()
             )
-        println(customerPlanListResponse)
-        customerPlanListResponse.validate()
+        println(response)
+        response.data().forEach { it.validate() }
     }
 
     @Test
@@ -77,7 +77,7 @@ class PlanServiceTest {
                             .spendingCap(
                                 CustomerPlanAddParams.TrialSpec.SpendingCap.builder()
                                     .amount(42.23)
-                                    .creditTypeId("string")
+                                    .creditTypeId("credit_type_id")
                                     .build()
                             )
                             .build()
@@ -118,16 +118,14 @@ class PlanServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val planService = client.customers().plans()
-        val customerPlanListPriceAdjustmentsResponse =
+        val response =
             planService.listPriceAdjustments(
                 CustomerPlanListPriceAdjustmentsParams.builder()
                     .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .limit(100L)
-                    .nextPage("string")
                     .build()
             )
-        println(customerPlanListPriceAdjustmentsResponse)
-        customerPlanListPriceAdjustmentsResponse.validate()
+        println(response)
+        response.data().forEach { it.validate() }
     }
 }

@@ -23,26 +23,29 @@ class AlertServiceTest {
             alertService.create(
                 AlertCreateParams.builder()
                     .alertType(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
-                    .name("string")
+                    .name("name")
                     .threshold(42.23)
                     .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .creditGrantTypeFilters(listOf("string"))
                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .customFieldFilters(
                         listOf(
                             AlertCreateParams.CustomFieldFilter.builder()
                                 .entity(AlertCreateParams.CustomFieldFilter.Entity.CONTRACT)
-                                .key("string")
-                                .value("string")
+                                .key("key")
+                                .value("value")
                                 .build()
                         )
                     )
                     .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .evaluateOnCreate(true)
                     .groupKeyFilter(
-                        AlertCreateParams.GroupKeyFilter.builder()
-                            .key("string")
-                            .value("string")
-                            .build()
+                        AlertCreateParams.GroupKeyFilter.builder().key("key").value("value").build()
+                    )
+                    .invoiceTypesFilter(
+                        listOf(
+                            "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
+                        )
                     )
                     .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .uniquenessKey("x")
@@ -62,7 +65,10 @@ class AlertServiceTest {
         val alertService = client.alerts()
         val alertArchiveResponse =
             alertService.archive(
-                AlertArchiveParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+                AlertArchiveParams.builder()
+                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .releaseUniquenessKey(true)
+                    .build()
             )
         println(alertArchiveResponse)
         alertArchiveResponse.validate()

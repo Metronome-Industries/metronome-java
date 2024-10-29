@@ -5,6 +5,8 @@ package com.metronome.api.services.blocking.customers
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.models.*
+import com.metronome.api.models.CustomerInvoiceListBreakdownsParams
+import com.metronome.api.models.CustomerInvoiceListParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -40,21 +42,57 @@ class InvoiceServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val invoiceService = client.customers().invoices()
-        val customerInvoiceListResponse =
+        val response =
             invoiceService.list(
                 CustomerInvoiceListParams.builder()
                     .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .creditTypeId("string")
-                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .limit(100L)
-                    .nextPage("string")
-                    .skipZeroQtyLineItems(true)
-                    .sort(CustomerInvoiceListParams.Sort.DATE_ASC)
-                    .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .status("string")
                     .build()
             )
-        println(customerInvoiceListResponse)
-        customerInvoiceListResponse.validate()
+        println(response)
+        response.data().forEach { it.validate() }
+    }
+
+    @Test
+    fun callAddCharge() {
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val invoiceService = client.customers().invoices()
+        val customerInvoiceAddChargeResponse =
+            invoiceService.addCharge(
+                CustomerInvoiceAddChargeParams.builder()
+                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .chargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .description("description")
+                    .invoiceStartTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .price(42.23)
+                    .quantity(42.23)
+                    .build()
+            )
+        println(customerInvoiceAddChargeResponse)
+        customerInvoiceAddChargeResponse.validate()
+    }
+
+    @Test
+    fun callListBreakdowns() {
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val invoiceService = client.customers().invoices()
+        val response =
+            invoiceService.listBreakdowns(
+                CustomerInvoiceListBreakdownsParams.builder()
+                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .build()
+            )
+        println(response)
+        response.data().forEach { it.validate() }
     }
 }

@@ -4,21 +4,21 @@ package com.metronome.api.services.blocking
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.handlers.errorHandler
+import com.metronome.api.core.handlers.jsonHandler
+import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
 import com.metronome.api.core.http.HttpResponse.Handler
 import com.metronome.api.errors.MetronomeError
 import com.metronome.api.models.PlanGetDetailsParams
 import com.metronome.api.models.PlanGetDetailsResponse
+import com.metronome.api.models.PlanListChargesPage
 import com.metronome.api.models.PlanListChargesParams
-import com.metronome.api.models.PlanListChargesResponse
+import com.metronome.api.models.PlanListCustomersPage
 import com.metronome.api.models.PlanListCustomersParams
-import com.metronome.api.models.PlanListCustomersResponse
+import com.metronome.api.models.PlanListPage
 import com.metronome.api.models.PlanListParams
-import com.metronome.api.models.PlanListResponse
-import com.metronome.api.services.errorHandler
-import com.metronome.api.services.jsonHandler
-import com.metronome.api.services.withErrorHandler
 
 class PlanServiceImpl
 constructor(
@@ -27,15 +27,16 @@ constructor(
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
-    private val listHandler: Handler<PlanListResponse> =
-        jsonHandler<PlanListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+    private val listHandler: Handler<PlanListPage.Response> =
+        jsonHandler<PlanListPage.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
     /** List all available plans. */
-    override fun list(params: PlanListParams, requestOptions: RequestOptions): PlanListResponse {
+    override fun list(params: PlanListParams, requestOptions: RequestOptions): PlanListPage {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("plans")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -48,6 +49,7 @@ constructor(
                         validate()
                     }
                 }
+                .let { PlanListPage.of(this, params, it) }
         }
     }
 
@@ -63,6 +65,7 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("planDetails", params.getPathParam(0))
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -78,19 +81,20 @@ constructor(
         }
     }
 
-    private val listChargesHandler: Handler<PlanListChargesResponse> =
-        jsonHandler<PlanListChargesResponse>(clientOptions.jsonMapper)
+    private val listChargesHandler: Handler<PlanListChargesPage.Response> =
+        jsonHandler<PlanListChargesPage.Response>(clientOptions.jsonMapper)
             .withErrorHandler(errorHandler)
 
     /** Fetches a list of charges of a specific plan. */
     override fun listCharges(
         params: PlanListChargesParams,
         requestOptions: RequestOptions
-    ): PlanListChargesResponse {
+    ): PlanListChargesPage {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("planDetails", params.getPathParam(0), "charges")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -103,11 +107,12 @@ constructor(
                         validate()
                     }
                 }
+                .let { PlanListChargesPage.of(this, params, it) }
         }
     }
 
-    private val listCustomersHandler: Handler<PlanListCustomersResponse> =
-        jsonHandler<PlanListCustomersResponse>(clientOptions.jsonMapper)
+    private val listCustomersHandler: Handler<PlanListCustomersPage.Response> =
+        jsonHandler<PlanListCustomersPage.Response>(clientOptions.jsonMapper)
             .withErrorHandler(errorHandler)
 
     /**
@@ -117,11 +122,12 @@ constructor(
     override fun listCustomers(
         params: PlanListCustomersParams,
         requestOptions: RequestOptions
-    ): PlanListCustomersResponse {
+    ): PlanListCustomersPage {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("planDetails", params.getPathParam(0), "customers")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -134,6 +140,7 @@ constructor(
                         validate()
                     }
                 }
+                .let { PlanListCustomersPage.of(this, params, it) }
         }
     }
 }

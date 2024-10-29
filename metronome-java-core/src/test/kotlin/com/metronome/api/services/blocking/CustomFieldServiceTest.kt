@@ -23,7 +23,7 @@ class CustomFieldServiceTest {
             CustomFieldAddKeyParams.builder()
                 .enforceUniqueness(true)
                 .entity(CustomFieldAddKeyParams.Entity.ALERT)
-                .key("string")
+                .key("key")
                 .build()
         )
     }
@@ -57,7 +57,7 @@ class CustomFieldServiceTest {
             customFieldService.listKeys(
                 CustomFieldListKeysParams.builder()
                     .entities(listOf(CustomFieldListKeysParams.Entity.ALERT))
-                    .nextPage("string")
+                    .nextPage("next_page")
                     .build()
             )
         println(customFieldListKeysResponse)
@@ -75,7 +75,7 @@ class CustomFieldServiceTest {
         customFieldService.removeKey(
             CustomFieldRemoveKeyParams.builder()
                 .entity(CustomFieldRemoveKeyParams.Entity.ALERT)
-                .key("string")
+                .key("key")
                 .build()
         )
     }

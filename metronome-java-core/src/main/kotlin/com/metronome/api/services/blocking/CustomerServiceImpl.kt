@@ -4,37 +4,45 @@ package com.metronome.api.services.blocking
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.handlers.emptyHandler
+import com.metronome.api.core.handlers.errorHandler
+import com.metronome.api.core.handlers.jsonHandler
+import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
 import com.metronome.api.core.http.HttpResponse.Handler
+import com.metronome.api.core.json
 import com.metronome.api.errors.MetronomeError
 import com.metronome.api.models.CustomerArchiveParams
 import com.metronome.api.models.CustomerArchiveResponse
 import com.metronome.api.models.CustomerCreateParams
 import com.metronome.api.models.CustomerCreateResponse
+import com.metronome.api.models.CustomerListBillableMetricsPage
 import com.metronome.api.models.CustomerListBillableMetricsParams
-import com.metronome.api.models.CustomerListBillableMetricsResponse
+import com.metronome.api.models.CustomerListCostsPage
 import com.metronome.api.models.CustomerListCostsParams
-import com.metronome.api.models.CustomerListCostsResponse
+import com.metronome.api.models.CustomerListPage
 import com.metronome.api.models.CustomerListParams
-import com.metronome.api.models.CustomerListResponse
 import com.metronome.api.models.CustomerRetrieveParams
 import com.metronome.api.models.CustomerRetrieveResponse
 import com.metronome.api.models.CustomerSetIngestAliasesParams
 import com.metronome.api.models.CustomerSetNameParams
 import com.metronome.api.models.CustomerSetNameResponse
 import com.metronome.api.models.CustomerUpdateConfigParams
+import com.metronome.api.services.blocking.customers.AlertService
+import com.metronome.api.services.blocking.customers.AlertServiceImpl
 import com.metronome.api.services.blocking.customers.BillingConfigService
 import com.metronome.api.services.blocking.customers.BillingConfigServiceImpl
+import com.metronome.api.services.blocking.customers.CommitService
+import com.metronome.api.services.blocking.customers.CommitServiceImpl
+import com.metronome.api.services.blocking.customers.CreditService
+import com.metronome.api.services.blocking.customers.CreditServiceImpl
 import com.metronome.api.services.blocking.customers.InvoiceService
 import com.metronome.api.services.blocking.customers.InvoiceServiceImpl
+import com.metronome.api.services.blocking.customers.NamedScheduleService
+import com.metronome.api.services.blocking.customers.NamedScheduleServiceImpl
 import com.metronome.api.services.blocking.customers.PlanService
 import com.metronome.api.services.blocking.customers.PlanServiceImpl
-import com.metronome.api.services.emptyHandler
-import com.metronome.api.services.errorHandler
-import com.metronome.api.services.json
-import com.metronome.api.services.jsonHandler
-import com.metronome.api.services.withErrorHandler
 
 class CustomerServiceImpl
 constructor(
@@ -42,6 +50,8 @@ constructor(
 ) : CustomerService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
+
+    private val alerts: AlertService by lazy { AlertServiceImpl(clientOptions) }
 
     private val plans: PlanService by lazy { PlanServiceImpl(clientOptions) }
 
@@ -51,11 +61,27 @@ constructor(
         BillingConfigServiceImpl(clientOptions)
     }
 
+    private val commits: CommitService by lazy { CommitServiceImpl(clientOptions) }
+
+    private val credits: CreditService by lazy { CreditServiceImpl(clientOptions) }
+
+    private val namedSchedules: NamedScheduleService by lazy {
+        NamedScheduleServiceImpl(clientOptions)
+    }
+
+    override fun alerts(): AlertService = alerts
+
     override fun plans(): PlanService = plans
 
     override fun invoices(): InvoiceService = invoices
 
     override fun billingConfig(): BillingConfigService = billingConfig
+
+    override fun commits(): CommitService = commits
+
+    override fun credits(): CreditService = credits
+
+    override fun namedSchedules(): NamedScheduleService = namedSchedules
 
     private val createHandler: Handler<CustomerCreateResponse> =
         jsonHandler<CustomerCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
@@ -69,6 +95,7 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("customers")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -98,6 +125,7 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("customers", params.getPathParam(0))
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -113,18 +141,20 @@ constructor(
         }
     }
 
-    private val listHandler: Handler<CustomerListResponse> =
-        jsonHandler<CustomerListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+    private val listHandler: Handler<CustomerListPage.Response> =
+        jsonHandler<CustomerListPage.Response>(clientOptions.jsonMapper)
+            .withErrorHandler(errorHandler)
 
     /** List all customers. */
     override fun list(
         params: CustomerListParams,
         requestOptions: RequestOptions
-    ): CustomerListResponse {
+    ): CustomerListPage {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("customers")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -137,6 +167,7 @@ constructor(
                         validate()
                     }
                 }
+                .let { CustomerListPage.of(this, params, it) }
         }
     }
 
@@ -153,6 +184,7 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("customers", "archive")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -169,19 +201,20 @@ constructor(
         }
     }
 
-    private val listBillableMetricsHandler: Handler<CustomerListBillableMetricsResponse> =
-        jsonHandler<CustomerListBillableMetricsResponse>(clientOptions.jsonMapper)
+    private val listBillableMetricsHandler: Handler<CustomerListBillableMetricsPage.Response> =
+        jsonHandler<CustomerListBillableMetricsPage.Response>(clientOptions.jsonMapper)
             .withErrorHandler(errorHandler)
 
-    /** List all billable metrics. */
+    /** Get all billable metrics for a given customer. */
     override fun listBillableMetrics(
         params: CustomerListBillableMetricsParams,
         requestOptions: RequestOptions
-    ): CustomerListBillableMetricsResponse {
+    ): CustomerListBillableMetricsPage {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("customers", params.getPathParam(0), "billable-metrics")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -194,11 +227,12 @@ constructor(
                         validate()
                     }
                 }
+                .let { CustomerListBillableMetricsPage.of(this, params, it) }
         }
     }
 
-    private val listCostsHandler: Handler<CustomerListCostsResponse> =
-        jsonHandler<CustomerListCostsResponse>(clientOptions.jsonMapper)
+    private val listCostsHandler: Handler<CustomerListCostsPage.Response> =
+        jsonHandler<CustomerListCostsPage.Response>(clientOptions.jsonMapper)
             .withErrorHandler(errorHandler)
 
     /**
@@ -209,11 +243,12 @@ constructor(
     override fun listCosts(
         params: CustomerListCostsParams,
         requestOptions: RequestOptions
-    ): CustomerListCostsResponse {
+    ): CustomerListCostsPage {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("customers", params.getPathParam(0), "costs")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -226,6 +261,7 @@ constructor(
                         validate()
                     }
                 }
+                .let { CustomerListCostsPage.of(this, params, it) }
         }
     }
 
@@ -245,6 +281,7 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("customers", params.getPathParam(0), "setIngestAliases")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -268,6 +305,7 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("customers", params.getPathParam(0), "setName")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -292,6 +330,7 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("customers", params.getPathParam(0), "updateConfig")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())

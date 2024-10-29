@@ -13,7 +13,7 @@ class CustomerListBillableMetricsParamsTest {
         CustomerListBillableMetricsParams.builder()
             .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .limit(100L)
-            .nextPage("string")
+            .nextPage("next_page")
             .onCurrentPlan(true)
             .build()
     }
@@ -24,12 +24,12 @@ class CustomerListBillableMetricsParamsTest {
             CustomerListBillableMetricsParams.builder()
                 .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .limit(100L)
-                .nextPage("string")
+                .nextPage("next_page")
                 .onCurrentPlan(true)
                 .build()
         val expected = mutableMapOf<String, List<String>>()
         expected.put("limit", listOf("100"))
-        expected.put("next_page", listOf("string"))
+        expected.put("next_page", listOf("next_page"))
         expected.put("on_current_plan", listOf("true"))
         assertThat(params.getQueryParams()).isEqualTo(expected)
     }

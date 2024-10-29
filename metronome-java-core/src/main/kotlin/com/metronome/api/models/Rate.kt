@@ -30,12 +30,11 @@ private constructor(
     private val isProrated: JsonField<Boolean>,
     private val tiers: JsonField<List<Tier>>,
     private val pricingGroupValues: JsonField<PricingGroupValues>,
+    private val creditType: JsonField<CreditTypeData>,
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
     private var validated: Boolean = false
-
-    private var hashCode: Int = 0
 
     fun rateType(): RateType = rateType.getRequired("rate_type")
 
@@ -69,6 +68,9 @@ private constructor(
     fun pricingGroupValues(): Optional<PricingGroupValues> =
         Optional.ofNullable(pricingGroupValues.getNullable("pricing_group_values"))
 
+    fun creditType(): Optional<CreditTypeData> =
+        Optional.ofNullable(creditType.getNullable("credit_type"))
+
     @JsonProperty("rate_type") @ExcludeMissing fun _rateType() = rateType
 
     /**
@@ -100,6 +102,8 @@ private constructor(
     @ExcludeMissing
     fun _pricingGroupValues() = pricingGroupValues
 
+    @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -114,49 +118,12 @@ private constructor(
             isProrated()
             tiers().map { it.forEach { it.validate() } }
             pricingGroupValues().map { it.validate() }
+            creditType().map { it.validate() }
             validated = true
         }
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is Rate &&
-            this.rateType == other.rateType &&
-            this.price == other.price &&
-            this.customRate == other.customRate &&
-            this.useListPrices == other.useListPrices &&
-            this.quantity == other.quantity &&
-            this.isProrated == other.isProrated &&
-            this.tiers == other.tiers &&
-            this.pricingGroupValues == other.pricingGroupValues &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    rateType,
-                    price,
-                    customRate,
-                    useListPrices,
-                    quantity,
-                    isProrated,
-                    tiers,
-                    pricingGroupValues,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "Rate{rateType=$rateType, price=$price, customRate=$customRate, useListPrices=$useListPrices, quantity=$quantity, isProrated=$isProrated, tiers=$tiers, pricingGroupValues=$pricingGroupValues, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -173,6 +140,7 @@ private constructor(
         private var isProrated: JsonField<Boolean> = JsonMissing.of()
         private var tiers: JsonField<List<Tier>> = JsonMissing.of()
         private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
+        private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -185,6 +153,7 @@ private constructor(
             this.isProrated = rate.isProrated
             this.tiers = rate.tiers
             this.pricingGroupValues = rate.pricingGroupValues
+            this.creditType = rate.creditType
             additionalProperties(rate.additionalProperties)
         }
 
@@ -267,6 +236,14 @@ private constructor(
             this.pricingGroupValues = pricingGroupValues
         }
 
+        fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
+
+        @JsonProperty("credit_type")
+        @ExcludeMissing
+        fun creditType(creditType: JsonField<CreditTypeData>) = apply {
+            this.creditType = creditType
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             this.additionalProperties.putAll(additionalProperties)
@@ -291,6 +268,7 @@ private constructor(
                 isProrated,
                 tiers.map { it.toUnmodifiable() },
                 pricingGroupValues,
+                creditType,
                 additionalProperties.toUnmodifiable(),
             )
     }
@@ -308,7 +286,7 @@ private constructor(
                 return true
             }
 
-            return other is RateType && this.value == other.value
+            return /* spotless:off */ other is RateType && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -319,50 +297,30 @@ private constructor(
 
             @JvmField val FLAT = RateType(JsonField.of("FLAT"))
 
-            @JvmField val FLAT = RateType(JsonField.of("flat"))
-
             @JvmField val PERCENTAGE = RateType(JsonField.of("PERCENTAGE"))
-
-            @JvmField val PERCENTAGE = RateType(JsonField.of("percentage"))
 
             @JvmField val SUBSCRIPTION = RateType(JsonField.of("SUBSCRIPTION"))
 
-            @JvmField val SUBSCRIPTION = RateType(JsonField.of("subscription"))
-
             @JvmField val CUSTOM = RateType(JsonField.of("CUSTOM"))
 
-            @JvmField val CUSTOM = RateType(JsonField.of("custom"))
-
             @JvmField val TIERED = RateType(JsonField.of("TIERED"))
-
-            @JvmField val TIERED = RateType(JsonField.of("tiered"))
 
             @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
         }
 
         enum class Known {
             FLAT,
-            FLAT,
-            PERCENTAGE,
             PERCENTAGE,
             SUBSCRIPTION,
-            SUBSCRIPTION,
             CUSTOM,
-            CUSTOM,
-            TIERED,
             TIERED,
         }
 
         enum class Value {
             FLAT,
-            FLAT,
-            PERCENTAGE,
             PERCENTAGE,
             SUBSCRIPTION,
-            SUBSCRIPTION,
             CUSTOM,
-            CUSTOM,
-            TIERED,
             TIERED,
             _UNKNOWN,
         }
@@ -370,14 +328,9 @@ private constructor(
         fun value(): Value =
             when (this) {
                 FLAT -> Value.FLAT
-                FLAT -> Value.FLAT
-                PERCENTAGE -> Value.PERCENTAGE
                 PERCENTAGE -> Value.PERCENTAGE
                 SUBSCRIPTION -> Value.SUBSCRIPTION
-                SUBSCRIPTION -> Value.SUBSCRIPTION
                 CUSTOM -> Value.CUSTOM
-                CUSTOM -> Value.CUSTOM
-                TIERED -> Value.TIERED
                 TIERED -> Value.TIERED
                 else -> Value._UNKNOWN
             }
@@ -385,14 +338,9 @@ private constructor(
         fun known(): Known =
             when (this) {
                 FLAT -> Known.FLAT
-                FLAT -> Known.FLAT
-                PERCENTAGE -> Known.PERCENTAGE
                 PERCENTAGE -> Known.PERCENTAGE
                 SUBSCRIPTION -> Known.SUBSCRIPTION
-                SUBSCRIPTION -> Known.SUBSCRIPTION
                 CUSTOM -> Known.CUSTOM
-                CUSTOM -> Known.CUSTOM
-                TIERED -> Known.TIERED
                 TIERED -> Known.TIERED
                 else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
             }
@@ -410,8 +358,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -423,23 +369,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomRate && this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "CustomRate{additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -471,6 +400,25 @@ private constructor(
 
             fun build(): CustomRate = CustomRate(additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomRate && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "CustomRate{additionalProperties=$additionalProperties}"
     }
 
     /** if pricing groups are used, this will contain the values used to calculate the price */
@@ -483,8 +431,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -496,24 +442,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is PricingGroupValues &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "PricingGroupValues{additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -546,119 +474,44 @@ private constructor(
             fun build(): PricingGroupValues =
                 PricingGroupValues(additionalProperties.toUnmodifiable())
         }
-    }
-
-    @JsonDeserialize(builder = Tier.Builder::class)
-    @NoAutoDetect
-    class Tier
-    private constructor(
-        private val size: JsonField<Double>,
-        private val price: JsonField<Double>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        private var validated: Boolean = false
-
-        private var hashCode: Int = 0
-
-        fun size(): Optional<Double> = Optional.ofNullable(size.getNullable("size"))
-
-        fun price(): Double = price.getRequired("price")
-
-        @JsonProperty("size") @ExcludeMissing fun _size() = size
-
-        @JsonProperty("price") @ExcludeMissing fun _price() = price
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): Tier = apply {
-            if (!validated) {
-                size()
-                price()
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return other is Tier &&
-                this.size == other.size &&
-                this.price == other.price &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is PricingGroupValues && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
+
+        private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        size,
-                        price,
-                        additionalProperties,
-                    )
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
             }
             return hashCode
         }
 
-        override fun toString() =
-            "Tier{size=$size, price=$price, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var size: JsonField<Double> = JsonMissing.of()
-            private var price: JsonField<Double> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(tier: Tier) = apply {
-                this.size = tier.size
-                this.price = tier.price
-                additionalProperties(tier.additionalProperties)
-            }
-
-            fun size(size: Double) = size(JsonField.of(size))
-
-            @JsonProperty("size")
-            @ExcludeMissing
-            fun size(size: JsonField<Double>) = apply { this.size = size }
-
-            fun price(price: Double) = price(JsonField.of(price))
-
-            @JsonProperty("price")
-            @ExcludeMissing
-            fun price(price: JsonField<Double>) = apply { this.price = price }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun build(): Tier =
-                Tier(
-                    size,
-                    price,
-                    additionalProperties.toUnmodifiable(),
-                )
-        }
+        override fun toString() = "PricingGroupValues{additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is Rate && this.rateType == other.rateType && this.price == other.price && this.customRate == other.customRate && this.useListPrices == other.useListPrices && this.quantity == other.quantity && this.isProrated == other.isProrated && this.tiers == other.tiers && this.pricingGroupValues == other.pricingGroupValues && this.creditType == other.creditType && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(rateType, price, customRate, useListPrices, quantity, isProrated, tiers, pricingGroupValues, creditType, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "Rate{rateType=$rateType, price=$price, customRate=$customRate, useListPrices=$useListPrices, quantity=$quantity, isProrated=$isProrated, tiers=$tiers, pricingGroupValues=$pricingGroupValues, creditType=$creditType, additionalProperties=$additionalProperties}"
 }

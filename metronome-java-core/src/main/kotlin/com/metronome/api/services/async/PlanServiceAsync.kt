@@ -7,12 +7,12 @@ package com.metronome.api.services.async
 import com.metronome.api.core.RequestOptions
 import com.metronome.api.models.PlanGetDetailsParams
 import com.metronome.api.models.PlanGetDetailsResponse
+import com.metronome.api.models.PlanListChargesPageAsync
 import com.metronome.api.models.PlanListChargesParams
-import com.metronome.api.models.PlanListChargesResponse
+import com.metronome.api.models.PlanListCustomersPageAsync
 import com.metronome.api.models.PlanListCustomersParams
-import com.metronome.api.models.PlanListCustomersResponse
+import com.metronome.api.models.PlanListPageAsync
 import com.metronome.api.models.PlanListParams
-import com.metronome.api.models.PlanListResponse
 import java.util.concurrent.CompletableFuture
 
 interface PlanServiceAsync {
@@ -22,7 +22,7 @@ interface PlanServiceAsync {
     fun list(
         params: PlanListParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<PlanListResponse>
+    ): CompletableFuture<PlanListPageAsync>
 
     /** Fetch high level details of a specific plan. */
     @JvmOverloads
@@ -36,7 +36,7 @@ interface PlanServiceAsync {
     fun listCharges(
         params: PlanListChargesParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<PlanListChargesResponse>
+    ): CompletableFuture<PlanListChargesPageAsync>
 
     /**
      * Fetches a list of customers on a specific plan (by default, only currently active plans are
@@ -46,5 +46,5 @@ interface PlanServiceAsync {
     fun listCustomers(
         params: PlanListCustomersParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<PlanListCustomersResponse>
+    ): CompletableFuture<PlanListCustomersPageAsync>
 }

@@ -9,10 +9,10 @@ import com.metronome.api.models.CustomerPlanAddParams
 import com.metronome.api.models.CustomerPlanAddResponse
 import com.metronome.api.models.CustomerPlanEndParams
 import com.metronome.api.models.CustomerPlanEndResponse
+import com.metronome.api.models.CustomerPlanListPageAsync
 import com.metronome.api.models.CustomerPlanListParams
+import com.metronome.api.models.CustomerPlanListPriceAdjustmentsPageAsync
 import com.metronome.api.models.CustomerPlanListPriceAdjustmentsParams
-import com.metronome.api.models.CustomerPlanListPriceAdjustmentsResponse
-import com.metronome.api.models.CustomerPlanListResponse
 import java.util.concurrent.CompletableFuture
 
 interface PlanServiceAsync {
@@ -22,7 +22,7 @@ interface PlanServiceAsync {
     fun list(
         params: CustomerPlanListParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<CustomerPlanListResponse>
+    ): CompletableFuture<CustomerPlanListPageAsync>
 
     /**
      * Associate an existing customer with a plan for a specified date range. See the
@@ -51,5 +51,5 @@ interface PlanServiceAsync {
     fun listPriceAdjustments(
         params: CustomerPlanListPriceAdjustmentsParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<CustomerPlanListPriceAdjustmentsResponse>
+    ): CompletableFuture<CustomerPlanListPriceAdjustmentsPageAsync>
 }

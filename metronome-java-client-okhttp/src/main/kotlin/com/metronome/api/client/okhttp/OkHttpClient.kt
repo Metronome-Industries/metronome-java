@@ -4,28 +4,27 @@ import com.google.common.collect.ListMultimap
 import com.google.common.collect.MultimapBuilder
 import com.metronome.api.core.RequestOptions
 import com.metronome.api.core.http.HttpClient
+import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
 import com.metronome.api.core.http.HttpRequestBody
 import com.metronome.api.core.http.HttpResponse
-import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.errors.MetronomeIoException
 import java.io.IOException
 import java.io.InputStream
 import java.net.Proxy
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.TimeUnit
 import okhttp3.Call
 import okhttp3.Callback
+import okhttp3.Headers
 import okhttp3.HttpUrl
-import okhttp3.Response
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request
 import okhttp3.RequestBody
-import okhttp3.MediaType
-import okhttp3.Headers
-import okhttp3.HttpUrl.Companion.toHttpUrl
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
 import okio.BufferedSink
 
 class OkHttpClient
@@ -34,7 +33,8 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
 
     private fun getClient(requestOptions: RequestOptions): okhttp3.OkHttpClient {
         val timeout = requestOptions.timeout ?: return okHttpClient
-        return okHttpClient.newBuilder()
+        return okHttpClient
+            .newBuilder()
             .connectTimeout(timeout)
             .readTimeout(timeout)
             .writeTimeout(timeout)
@@ -66,7 +66,6 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
         request.body?.run { future.whenComplete { _, _ -> close() } }
 
         val call = getClient(requestOptions).newCall(request.toRequest())
-
         call.enqueue(
             object : Callback {
                 override fun onResponse(call: Call, response: Response) {
@@ -76,7 +75,8 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
                 override fun onFailure(call: Call, e: IOException) {
                     future.completeExceptionally(MetronomeIoException("Request failed", e))
                 }
-            })
+            }
+        )
 
         return future
     }
@@ -89,7 +89,7 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
 
     private fun HttpRequest.toRequest(): Request {
         var body: RequestBody? = body?.toRequestBody()
-        // OkHttpClient always requires a request body for PUT and POST methods
+        // OkHttpClient always requires a request body for PUT and POST methods.
         if (body == null && (method == HttpMethod.PUT || method == HttpMethod.POST)) {
             body = "".toRequestBody()
         }
@@ -117,21 +117,13 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
         val length = contentLength()
 
         return object : RequestBody() {
-            override fun contentType(): MediaType? {
-                return mediaType
-            }
+            override fun contentType(): MediaType? = mediaType
 
-            override fun contentLength(): Long {
-                return length
-            }
+            override fun contentLength(): Long = length
 
-            override fun isOneShot(): Boolean {
-                return !repeatable()
-            }
+            override fun isOneShot(): Boolean = !repeatable()
 
-            override fun writeTo(sink: BufferedSink) {
-                writeTo(sink.outputStream())
-            }
+            override fun writeTo(sink: BufferedSink) = writeTo(sink.outputStream())
         }
     }
 
@@ -139,21 +131,13 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
         val headers = headers.toHeaders()
 
         return object : HttpResponse {
-            override fun statusCode(): Int {
-                return code
-            }
+            override fun statusCode(): Int = code
 
-            override fun headers(): ListMultimap<String, String> {
-                return headers
-            }
+            override fun headers(): ListMultimap<String, String> = headers
 
-            override fun body(): InputStream {
-                return body!!.byteStream()
-            }
+            override fun body(): InputStream = body!!.byteStream()
 
-            override fun close() {
-                body!!.close()
-            }
+            override fun close() = body!!.close()
         }
     }
 
@@ -162,9 +146,7 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
             MultimapBuilder.treeKeys(String.CASE_INSENSITIVE_ORDER)
                 .arrayListValues()
                 .build<String, String>()
-
         forEach { pair -> headers.put(pair.first, pair.second) }
-
         return headers
     }
 
@@ -175,7 +157,7 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
     class Builder {
 
         private var baseUrl: HttpUrl? = null
-        // default timeout is 1 minute
+        // The default timeout is 1 minute.
         private var timeout: Duration = Duration.ofSeconds(60)
         private var proxy: Proxy? = null
 
@@ -185,8 +167,8 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
 
         fun proxy(proxy: Proxy?) = apply { this.proxy = proxy }
 
-        fun build(): OkHttpClient {
-            return OkHttpClient(
+        fun build(): OkHttpClient =
+            OkHttpClient(
                 okhttp3.OkHttpClient.Builder()
                     .connectTimeout(timeout)
                     .readTimeout(timeout)
@@ -196,6 +178,5 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
                     .build(),
                 checkNotNull(baseUrl) { "`baseUrl` is required but was not set" },
             )
-        }
     }
 }

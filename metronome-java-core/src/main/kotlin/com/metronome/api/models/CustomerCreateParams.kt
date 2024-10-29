@@ -68,8 +68,7 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
+        /** This will be truncated to 160 characters if the provided name is longer. */
         @JsonProperty("name") fun name(): String? = name
 
         @JsonProperty("billing_config") fun billingConfig(): BillingConfig? = billingConfig
@@ -77,8 +76,8 @@ constructor(
         @JsonProperty("custom_fields") fun customFields(): CustomFields? = customFields
 
         /**
-         * (deprecated, use ingest_aliases instead) the first ID (Metronome ID or ingest alias) that
-         * can be used in usage events
+         * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
+         * customer in usage events
          */
         @JsonProperty("external_id") fun externalId(): String? = externalId
 
@@ -90,38 +89,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomerCreateBody &&
-                this.name == other.name &&
-                this.billingConfig == other.billingConfig &&
-                this.customFields == other.customFields &&
-                this.externalId == other.externalId &&
-                this.ingestAliases == other.ingestAliases &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        name,
-                        billingConfig,
-                        customFields,
-                        externalId,
-                        ingestAliases,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CustomerCreateBody{name=$name, billingConfig=$billingConfig, customFields=$customFields, externalId=$externalId, ingestAliases=$ingestAliases, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -147,6 +114,7 @@ constructor(
                 additionalProperties(customerCreateBody.additionalProperties)
             }
 
+            /** This will be truncated to 160 characters if the provided name is longer. */
             @JsonProperty("name") fun name(name: String) = apply { this.name = name }
 
             @JsonProperty("billing_config")
@@ -160,8 +128,8 @@ constructor(
             }
 
             /**
-             * (deprecated, use ingest_aliases instead) the first ID (Metronome ID or ingest alias)
-             * that can be used in usage events
+             * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
+             * customer in usage events
              */
             @JsonProperty("external_id")
             fun externalId(externalId: String) = apply { this.externalId = externalId }
@@ -196,6 +164,26 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomerCreateBody && this.name == other.name && this.billingConfig == other.billingConfig && this.customFields == other.customFields && this.externalId == other.externalId && this.ingestAliases == other.ingestAliases && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(name, billingConfig, customFields, externalId, ingestAliases, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CustomerCreateBody{name=$name, billingConfig=$billingConfig, customFields=$customFields, externalId=$externalId, ingestAliases=$ingestAliases, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -209,28 +197,11 @@ constructor(
             return true
         }
 
-        return other is CustomerCreateParams &&
-            this.name == other.name &&
-            this.billingConfig == other.billingConfig &&
-            this.customFields == other.customFields &&
-            this.externalId == other.externalId &&
-            this.ingestAliases == other.ingestAliases &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is CustomerCreateParams && this.name == other.name && this.billingConfig == other.billingConfig && this.customFields == other.customFields && this.externalId == other.externalId && this.ingestAliases == other.ingestAliases && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            name,
-            billingConfig,
-            customFields,
-            externalId,
-            ingestAliases,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(name, billingConfig, customFields, externalId, ingestAliases, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
@@ -267,6 +238,7 @@ constructor(
             additionalBodyProperties(customerCreateParams.additionalBodyProperties)
         }
 
+        /** This will be truncated to 160 characters if the provided name is longer. */
         fun name(name: String) = apply { this.name = name }
 
         fun billingConfig(billingConfig: BillingConfig) = apply {
@@ -276,8 +248,8 @@ constructor(
         fun customFields(customFields: CustomFields) = apply { this.customFields = customFields }
 
         /**
-         * (deprecated, use ingest_aliases instead) the first ID (Metronome ID or ingest alias) that
-         * can be used in usage events
+         * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
+         * customer in usage events
          */
         fun externalId(externalId: String) = apply { this.externalId = externalId }
 
@@ -369,8 +341,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonProperty("billing_provider_type")
         fun billingProviderType(): BillingProviderType? = billingProviderType
 
@@ -389,38 +359,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is BillingConfig &&
-                this.billingProviderType == other.billingProviderType &&
-                this.billingProviderCustomerId == other.billingProviderCustomerId &&
-                this.stripeCollectionMethod == other.stripeCollectionMethod &&
-                this.awsProductCode == other.awsProductCode &&
-                this.awsRegion == other.awsRegion &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        billingProviderType,
-                        billingProviderCustomerId,
-                        stripeCollectionMethod,
-                        awsProductCode,
-                        awsRegion,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "BillingConfig{billingProviderType=$billingProviderType, billingProviderCustomerId=$billingProviderCustomerId, stripeCollectionMethod=$stripeCollectionMethod, awsProductCode=$awsProductCode, awsRegion=$awsRegion, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -511,7 +449,7 @@ constructor(
                     return true
                 }
 
-                return other is BillingProviderType && this.value == other.value
+                return /* spotless:off */ other is BillingProviderType && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -607,7 +545,7 @@ constructor(
                     return true
                 }
 
-                return other is AwsRegion && this.value == other.value
+                return /* spotless:off */ other is AwsRegion && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -802,7 +740,7 @@ constructor(
                     return true
                 }
 
-                return other is StripeCollectionMethod && this.value == other.value
+                return /* spotless:off */ other is StripeCollectionMethod && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -850,6 +788,26 @@ constructor(
 
             fun asString(): String = _value().asStringOrThrow()
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is BillingConfig && this.billingProviderType == other.billingProviderType && this.billingProviderCustomerId == other.billingProviderCustomerId && this.stripeCollectionMethod == other.stripeCollectionMethod && this.awsProductCode == other.awsProductCode && this.awsRegion == other.awsRegion && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(billingProviderType, billingProviderCustomerId, stripeCollectionMethod, awsProductCode, awsRegion, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "BillingConfig{billingProviderType=$billingProviderType, billingProviderCustomerId=$billingProviderCustomerId, stripeCollectionMethod=$stripeCollectionMethod, awsProductCode=$awsProductCode, awsRegion=$awsRegion, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = CustomFields.Builder::class)
@@ -859,30 +817,11 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomFields && this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -914,5 +853,24 @@ constructor(
 
             fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 }

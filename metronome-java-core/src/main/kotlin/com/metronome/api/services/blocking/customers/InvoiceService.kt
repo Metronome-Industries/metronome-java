@@ -5,8 +5,12 @@
 package com.metronome.api.services.blocking.customers
 
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.models.CustomerInvoiceAddChargeParams
+import com.metronome.api.models.CustomerInvoiceAddChargeResponse
+import com.metronome.api.models.CustomerInvoiceListBreakdownsPage
+import com.metronome.api.models.CustomerInvoiceListBreakdownsParams
+import com.metronome.api.models.CustomerInvoiceListPage
 import com.metronome.api.models.CustomerInvoiceListParams
-import com.metronome.api.models.CustomerInvoiceListResponse
 import com.metronome.api.models.CustomerInvoiceRetrieveParams
 import com.metronome.api.models.CustomerInvoiceRetrieveResponse
 
@@ -27,5 +31,22 @@ interface InvoiceService {
     fun list(
         params: CustomerInvoiceListParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CustomerInvoiceListResponse
+    ): CustomerInvoiceListPage
+
+    /** Add a one time charge to the specified invoice */
+    @JvmOverloads
+    fun addCharge(
+        params: CustomerInvoiceAddChargeParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): CustomerInvoiceAddChargeResponse
+
+    /**
+     * List daily or hourly breakdown invoices for a given customer, optionally filtered by status,
+     * date range, and/or credit type.
+     */
+    @JvmOverloads
+    fun listBreakdowns(
+        params: CustomerInvoiceListBreakdownsParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): CustomerInvoiceListBreakdownsPage
 }

@@ -5,8 +5,8 @@
 package com.metronome.api.services.async
 
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.models.AuditLogListPageAsync
 import com.metronome.api.models.AuditLogListParams
-import com.metronome.api.models.AuditLogListResponse
 import java.util.concurrent.CompletableFuture
 
 interface AuditLogServiceAsync {
@@ -21,5 +21,5 @@ interface AuditLogServiceAsync {
     fun list(
         params: AuditLogListParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<AuditLogListResponse>
+    ): CompletableFuture<AuditLogListPageAsync>
 }

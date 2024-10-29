@@ -1,0 +1,703 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.metronome.api.models
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.metronome.api.core.Enum
+import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonValue
+import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.errors.MetronomeInvalidDataException
+import com.metronome.api.models.*
+import java.time.OffsetDateTime
+import java.util.Objects
+
+class ContractRateCardRateAddManyParams
+constructor(
+    private val rateCardId: String,
+    private val rates: List<Rate>,
+    private val additionalQueryParams: Map<String, List<String>>,
+    private val additionalHeaders: Map<String, List<String>>,
+    private val additionalBodyProperties: Map<String, JsonValue>,
+) {
+
+    fun rateCardId(): String = rateCardId
+
+    fun rates(): List<Rate> = rates
+
+    @JvmSynthetic
+    internal fun getBody(): ContractRateCardRateAddManyBody {
+        return ContractRateCardRateAddManyBody(
+            rateCardId,
+            rates,
+            additionalBodyProperties,
+        )
+    }
+
+    @JvmSynthetic internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
+
+    @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
+
+    @JsonDeserialize(builder = ContractRateCardRateAddManyBody.Builder::class)
+    @NoAutoDetect
+    class ContractRateCardRateAddManyBody
+    internal constructor(
+        private val rateCardId: String?,
+        private val rates: List<Rate>?,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        @JsonProperty("rate_card_id") fun rateCardId(): String? = rateCardId
+
+        @JsonProperty("rates") fun rates(): List<Rate>? = rates
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var rateCardId: String? = null
+            private var rates: List<Rate>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(contractRateCardRateAddManyBody: ContractRateCardRateAddManyBody) =
+                apply {
+                    this.rateCardId = contractRateCardRateAddManyBody.rateCardId
+                    this.rates = contractRateCardRateAddManyBody.rates
+                    additionalProperties(contractRateCardRateAddManyBody.additionalProperties)
+                }
+
+            @JsonProperty("rate_card_id")
+            fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
+
+            @JsonProperty("rates") fun rates(rates: List<Rate>) = apply { this.rates = rates }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): ContractRateCardRateAddManyBody =
+                ContractRateCardRateAddManyBody(
+                    checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
+                    checkNotNull(rates) { "`rates` is required but was not set" }.toUnmodifiable(),
+                    additionalProperties.toUnmodifiable(),
+                )
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is ContractRateCardRateAddManyBody && this.rateCardId == other.rateCardId && this.rates == other.rates && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(rateCardId, rates, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "ContractRateCardRateAddManyBody{rateCardId=$rateCardId, rates=$rates, additionalProperties=$additionalProperties}"
+    }
+
+    fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
+
+    fun _additionalHeaders(): Map<String, List<String>> = additionalHeaders
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractRateCardRateAddManyParams && this.rateCardId == other.rateCardId && this.rates == other.rates && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int {
+        return /* spotless:off */ Objects.hash(rateCardId, rates, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
+    }
+
+    override fun toString() =
+        "ContractRateCardRateAddManyParams{rateCardId=$rateCardId, rates=$rates, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        @JvmStatic fun builder() = Builder()
+    }
+
+    @NoAutoDetect
+    class Builder {
+
+        private var rateCardId: String? = null
+        private var rates: MutableList<Rate> = mutableListOf()
+        private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
+        private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
+        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+        @JvmSynthetic
+        internal fun from(contractRateCardRateAddManyParams: ContractRateCardRateAddManyParams) =
+            apply {
+                this.rateCardId = contractRateCardRateAddManyParams.rateCardId
+                this.rates(contractRateCardRateAddManyParams.rates)
+                additionalQueryParams(contractRateCardRateAddManyParams.additionalQueryParams)
+                additionalHeaders(contractRateCardRateAddManyParams.additionalHeaders)
+                additionalBodyProperties(contractRateCardRateAddManyParams.additionalBodyProperties)
+            }
+
+        fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
+
+        fun rates(rates: List<Rate>) = apply {
+            this.rates.clear()
+            this.rates.addAll(rates)
+        }
+
+        fun addRate(rate: Rate) = apply { this.rates.add(rate) }
+
+        fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
+            this.additionalQueryParams.clear()
+            putAllQueryParams(additionalQueryParams)
+        }
+
+        fun putQueryParam(name: String, value: String) = apply {
+            this.additionalQueryParams.getOrPut(name) { mutableListOf() }.add(value)
+        }
+
+        fun putQueryParams(name: String, values: Iterable<String>) = apply {
+            this.additionalQueryParams.getOrPut(name) { mutableListOf() }.addAll(values)
+        }
+
+        fun putAllQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
+            additionalQueryParams.forEach(this::putQueryParams)
+        }
+
+        fun removeQueryParam(name: String) = apply {
+            this.additionalQueryParams.put(name, mutableListOf())
+        }
+
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.clear()
+            putAllHeaders(additionalHeaders)
+        }
+
+        fun putHeader(name: String, value: String) = apply {
+            this.additionalHeaders.getOrPut(name) { mutableListOf() }.add(value)
+        }
+
+        fun putHeaders(name: String, values: Iterable<String>) = apply {
+            this.additionalHeaders.getOrPut(name) { mutableListOf() }.addAll(values)
+        }
+
+        fun putAllHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            additionalHeaders.forEach(this::putHeaders)
+        }
+
+        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.clear()
+            this.additionalBodyProperties.putAll(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            this.additionalBodyProperties.put(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalBodyProperties.putAll(additionalBodyProperties)
+            }
+
+        fun build(): ContractRateCardRateAddManyParams =
+            ContractRateCardRateAddManyParams(
+                checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
+                checkNotNull(rates) { "`rates` is required but was not set" }.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalBodyProperties.toUnmodifiable(),
+            )
+    }
+
+    @JsonDeserialize(builder = Rate.Builder::class)
+    @NoAutoDetect
+    class Rate
+    private constructor(
+        private val productId: String?,
+        private val pricingGroupValues: PricingGroupValues?,
+        private val startingAt: OffsetDateTime?,
+        private val endingBefore: OffsetDateTime?,
+        private val entitled: Boolean?,
+        private val rateType: RateType?,
+        private val price: Double?,
+        private val creditTypeId: String?,
+        private val quantity: Double?,
+        private val isProrated: Boolean?,
+        private val useListPrices: Boolean?,
+        private val tiers: List<Tier>?,
+        private val customRate: CustomRate?,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        /** ID of the product to add a rate for */
+        @JsonProperty("product_id") fun productId(): String? = productId
+
+        /**
+         * Optional. List of pricing group key value pairs which will be used to calculate the
+         * price.
+         */
+        @JsonProperty("pricing_group_values")
+        fun pricingGroupValues(): PricingGroupValues? = pricingGroupValues
+
+        /** inclusive effective date */
+        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+
+        /** exclusive end date */
+        @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+
+        @JsonProperty("entitled") fun entitled(): Boolean? = entitled
+
+        @JsonProperty("rate_type") fun rateType(): RateType? = rateType
+
+        /**
+         * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
+         * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+         */
+        @JsonProperty("price") fun price(): Double? = price
+
+        /**
+         * "The Metronome ID of the credit type to associate with price, defaults to USD (cents) if
+         * not passed. Used by all rate_types except type PERCENTAGE. PERCENTAGE rates use the
+         * credit type of associated rates."
+         */
+        @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
+
+        /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+        @JsonProperty("quantity") fun quantity(): Double? = quantity
+
+        /** Default proration configuration. Only valid for SUBSCRIPTION rate_type. */
+        @JsonProperty("is_prorated") fun isProrated(): Boolean? = isProrated
+
+        /**
+         * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
+         * list prices rather than the standard rates for this product on the contract.
+         */
+        @JsonProperty("use_list_prices") fun useListPrices(): Boolean? = useListPrices
+
+        /** Only set for TIERED rate_type. */
+        @JsonProperty("tiers") fun tiers(): List<Tier>? = tiers
+
+        /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
+        @JsonProperty("custom_rate") fun customRate(): CustomRate? = customRate
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var productId: String? = null
+            private var pricingGroupValues: PricingGroupValues? = null
+            private var startingAt: OffsetDateTime? = null
+            private var endingBefore: OffsetDateTime? = null
+            private var entitled: Boolean? = null
+            private var rateType: RateType? = null
+            private var price: Double? = null
+            private var creditTypeId: String? = null
+            private var quantity: Double? = null
+            private var isProrated: Boolean? = null
+            private var useListPrices: Boolean? = null
+            private var tiers: List<Tier>? = null
+            private var customRate: CustomRate? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(rate: Rate) = apply {
+                this.productId = rate.productId
+                this.pricingGroupValues = rate.pricingGroupValues
+                this.startingAt = rate.startingAt
+                this.endingBefore = rate.endingBefore
+                this.entitled = rate.entitled
+                this.rateType = rate.rateType
+                this.price = rate.price
+                this.creditTypeId = rate.creditTypeId
+                this.quantity = rate.quantity
+                this.isProrated = rate.isProrated
+                this.useListPrices = rate.useListPrices
+                this.tiers = rate.tiers
+                this.customRate = rate.customRate
+                additionalProperties(rate.additionalProperties)
+            }
+
+            /** ID of the product to add a rate for */
+            @JsonProperty("product_id")
+            fun productId(productId: String) = apply { this.productId = productId }
+
+            /**
+             * Optional. List of pricing group key value pairs which will be used to calculate the
+             * price.
+             */
+            @JsonProperty("pricing_group_values")
+            fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
+                this.pricingGroupValues = pricingGroupValues
+            }
+
+            /** inclusive effective date */
+            @JsonProperty("starting_at")
+            fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+
+            /** exclusive end date */
+            @JsonProperty("ending_before")
+            fun endingBefore(endingBefore: OffsetDateTime) = apply {
+                this.endingBefore = endingBefore
+            }
+
+            @JsonProperty("entitled")
+            fun entitled(entitled: Boolean) = apply { this.entitled = entitled }
+
+            @JsonProperty("rate_type")
+            fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+
+            /**
+             * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
+             * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and
+             * <=1.
+             */
+            @JsonProperty("price") fun price(price: Double) = apply { this.price = price }
+
+            /**
+             * "The Metronome ID of the credit type to associate with price, defaults to USD (cents)
+             * if not passed. Used by all rate_types except type PERCENTAGE. PERCENTAGE rates use
+             * the credit type of associated rates."
+             */
+            @JsonProperty("credit_type_id")
+            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+
+            /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+            @JsonProperty("quantity")
+            fun quantity(quantity: Double) = apply { this.quantity = quantity }
+
+            /** Default proration configuration. Only valid for SUBSCRIPTION rate_type. */
+            @JsonProperty("is_prorated")
+            fun isProrated(isProrated: Boolean) = apply { this.isProrated = isProrated }
+
+            /**
+             * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
+             * list prices rather than the standard rates for this product on the contract.
+             */
+            @JsonProperty("use_list_prices")
+            fun useListPrices(useListPrices: Boolean) = apply { this.useListPrices = useListPrices }
+
+            /** Only set for TIERED rate_type. */
+            @JsonProperty("tiers") fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+
+            /**
+             * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
+             */
+            @JsonProperty("custom_rate")
+            fun customRate(customRate: CustomRate) = apply { this.customRate = customRate }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): Rate =
+                Rate(
+                    checkNotNull(productId) { "`productId` is required but was not set" },
+                    pricingGroupValues,
+                    checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                    endingBefore,
+                    checkNotNull(entitled) { "`entitled` is required but was not set" },
+                    checkNotNull(rateType) { "`rateType` is required but was not set" },
+                    price,
+                    creditTypeId,
+                    quantity,
+                    isProrated,
+                    useListPrices,
+                    tiers?.toUnmodifiable(),
+                    customRate,
+                    additionalProperties.toUnmodifiable(),
+                )
+        }
+
+        class RateType
+        @JsonCreator
+        private constructor(
+            private val value: JsonField<String>,
+        ) : Enum {
+
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is RateType && this.value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+
+            companion object {
+
+                @JvmField val FLAT = RateType(JsonField.of("FLAT"))
+
+                @JvmField val PERCENTAGE = RateType(JsonField.of("PERCENTAGE"))
+
+                @JvmField val SUBSCRIPTION = RateType(JsonField.of("SUBSCRIPTION"))
+
+                @JvmField val TIERED = RateType(JsonField.of("TIERED"))
+
+                @JvmField val CUSTOM = RateType(JsonField.of("CUSTOM"))
+
+                @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
+            }
+
+            enum class Known {
+                FLAT,
+                PERCENTAGE,
+                SUBSCRIPTION,
+                TIERED,
+                CUSTOM,
+            }
+
+            enum class Value {
+                FLAT,
+                PERCENTAGE,
+                SUBSCRIPTION,
+                TIERED,
+                CUSTOM,
+                _UNKNOWN,
+            }
+
+            fun value(): Value =
+                when (this) {
+                    FLAT -> Value.FLAT
+                    PERCENTAGE -> Value.PERCENTAGE
+                    SUBSCRIPTION -> Value.SUBSCRIPTION
+                    TIERED -> Value.TIERED
+                    CUSTOM -> Value.CUSTOM
+                    else -> Value._UNKNOWN
+                }
+
+            fun known(): Known =
+                when (this) {
+                    FLAT -> Known.FLAT
+                    PERCENTAGE -> Known.PERCENTAGE
+                    SUBSCRIPTION -> Known.SUBSCRIPTION
+                    TIERED -> Known.TIERED
+                    CUSTOM -> Known.CUSTOM
+                    else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
+                }
+
+            fun asString(): String = _value().asStringOrThrow()
+        }
+
+        /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
+        @JsonDeserialize(builder = CustomRate.Builder::class)
+        @NoAutoDetect
+        class CustomRate
+        private constructor(
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(customRate: CustomRate) = apply {
+                    additionalProperties(customRate.additionalProperties)
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): CustomRate = CustomRate(additionalProperties.toUnmodifiable())
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is CustomRate && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() = "CustomRate{additionalProperties=$additionalProperties}"
+        }
+
+        /**
+         * Optional. List of pricing group key value pairs which will be used to calculate the
+         * price.
+         */
+        @JsonDeserialize(builder = PricingGroupValues.Builder::class)
+        @NoAutoDetect
+        class PricingGroupValues
+        private constructor(
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(pricingGroupValues: PricingGroupValues) = apply {
+                    additionalProperties(pricingGroupValues.additionalProperties)
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): PricingGroupValues =
+                    PricingGroupValues(additionalProperties.toUnmodifiable())
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PricingGroupValues && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PricingGroupValues{additionalProperties=$additionalProperties}"
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Rate && this.productId == other.productId && this.pricingGroupValues == other.pricingGroupValues && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.entitled == other.entitled && this.rateType == other.rateType && this.price == other.price && this.creditTypeId == other.creditTypeId && this.quantity == other.quantity && this.isProrated == other.isProrated && this.useListPrices == other.useListPrices && this.tiers == other.tiers && this.customRate == other.customRate && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(productId, pricingGroupValues, startingAt, endingBefore, entitled, rateType, price, creditTypeId, quantity, isProrated, useListPrices, tiers, customRate, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Rate{productId=$productId, pricingGroupValues=$pricingGroupValues, startingAt=$startingAt, endingBefore=$endingBefore, entitled=$entitled, rateType=$rateType, price=$price, creditTypeId=$creditTypeId, quantity=$quantity, isProrated=$isProrated, useListPrices=$useListPrices, tiers=$tiers, customRate=$customRate, additionalProperties=$additionalProperties}"
+    }
+}

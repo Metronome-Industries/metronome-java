@@ -5,6 +5,9 @@ package com.metronome.api.services.blocking
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.models.*
+import com.metronome.api.models.PlanListChargesParams
+import com.metronome.api.models.PlanListCustomersParams
+import com.metronome.api.models.PlanListParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -19,10 +22,9 @@ class PlanServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val planService = client.plans()
-        val planListResponse =
-            planService.list(PlanListParams.builder().limit(100L).nextPage("string").build())
-        println(planListResponse)
-        planListResponse.validate()
+        val response = planService.list(PlanListParams.builder().build())
+        println(response)
+        response.data().forEach { it.validate() }
     }
 
     @Test
@@ -51,16 +53,14 @@ class PlanServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val planService = client.plans()
-        val planListChargesResponse =
+        val response =
             planService.listCharges(
                 PlanListChargesParams.builder()
                     .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .limit(100L)
-                    .nextPage("string")
                     .build()
             )
-        println(planListChargesResponse)
-        planListChargesResponse.validate()
+        println(response)
+        response.data().forEach { it.validate() }
     }
 
     @Test
@@ -71,16 +71,13 @@ class PlanServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val planService = client.plans()
-        val planListCustomersResponse =
+        val response =
             planService.listCustomers(
                 PlanListCustomersParams.builder()
                     .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .limit(100L)
-                    .nextPage("string")
-                    .status(PlanListCustomersParams.Status.ALL)
                     .build()
             )
-        println(planListCustomersResponse)
-        planListCustomersResponse.validate()
+        println(response)
+        response.data().forEach { it.validate() }
     }
 }

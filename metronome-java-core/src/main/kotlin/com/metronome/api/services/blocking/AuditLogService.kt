@@ -5,8 +5,8 @@
 package com.metronome.api.services.blocking
 
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.models.AuditLogListPage
 import com.metronome.api.models.AuditLogListParams
-import com.metronome.api.models.AuditLogListResponse
 
 interface AuditLogService {
 
@@ -20,5 +20,5 @@ interface AuditLogService {
     fun list(
         params: AuditLogListParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): AuditLogListResponse
+    ): AuditLogListPage
 }

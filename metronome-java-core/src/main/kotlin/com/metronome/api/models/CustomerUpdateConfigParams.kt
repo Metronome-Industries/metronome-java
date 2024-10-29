@@ -60,8 +60,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         /**
          * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
          * client-level config if unset, which defaults to true if unset.
@@ -78,32 +76,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomerUpdateConfigBody &&
-                this.leaveStripeInvoicesInDraft == other.leaveStripeInvoicesInDraft &&
-                this.salesforceAccountId == other.salesforceAccountId &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        leaveStripeInvoicesInDraft,
-                        salesforceAccountId,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CustomerUpdateConfigBody{leaveStripeInvoicesInDraft=$leaveStripeInvoicesInDraft, salesforceAccountId=$salesforceAccountId, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -160,6 +132,26 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomerUpdateConfigBody && this.leaveStripeInvoicesInDraft == other.leaveStripeInvoicesInDraft && this.salesforceAccountId == other.salesforceAccountId && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(leaveStripeInvoicesInDraft, salesforceAccountId, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CustomerUpdateConfigBody{leaveStripeInvoicesInDraft=$leaveStripeInvoicesInDraft, salesforceAccountId=$salesforceAccountId, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -173,24 +165,11 @@ constructor(
             return true
         }
 
-        return other is CustomerUpdateConfigParams &&
-            this.customerId == other.customerId &&
-            this.leaveStripeInvoicesInDraft == other.leaveStripeInvoicesInDraft &&
-            this.salesforceAccountId == other.salesforceAccountId &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is CustomerUpdateConfigParams && this.customerId == other.customerId && this.leaveStripeInvoicesInDraft == other.leaveStripeInvoicesInDraft && this.salesforceAccountId == other.salesforceAccountId && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            customerId,
-            leaveStripeInvoicesInDraft,
-            salesforceAccountId,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(customerId, leaveStripeInvoicesInDraft, salesforceAccountId, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =

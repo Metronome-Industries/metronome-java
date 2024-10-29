@@ -12,16 +12,16 @@ class CustomerTest {
         val customer =
             Customer.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .externalId("string")
+                .externalId("external_id")
                 .ingestAliases(listOf("string"))
-                .name("string")
+                .name("name")
                 .customFields(Customer.CustomFields.builder().build())
                 .build()
         assertThat(customer).isNotNull
         assertThat(customer.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(customer.externalId()).isEqualTo("string")
+        assertThat(customer.externalId()).isEqualTo("external_id")
         assertThat(customer.ingestAliases()).containsExactly("string")
-        assertThat(customer.name()).isEqualTo("string")
+        assertThat(customer.name()).isEqualTo("name")
         assertThat(customer.customFields()).contains(Customer.CustomFields.builder().build())
     }
 }

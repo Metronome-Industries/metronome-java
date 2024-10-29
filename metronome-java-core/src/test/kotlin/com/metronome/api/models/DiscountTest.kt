@@ -16,11 +16,17 @@ class DiscountTest {
                 .product(
                     Discount.Product.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .name("string")
+                        .name("name")
                         .build()
                 )
                 .schedule(
                     SchedulePointInTime.builder()
+                        .creditType(
+                            CreditTypeData.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .name("name")
+                                .build()
+                        )
                         .scheduleItems(
                             listOf(
                                 SchedulePointInTime.ScheduleItem.builder()
@@ -36,7 +42,7 @@ class DiscountTest {
                         .build()
                 )
                 .name("x")
-                .netsuiteSalesOrderId("string")
+                .netsuiteSalesOrderId("netsuite_sales_order_id")
                 .build()
         assertThat(discount).isNotNull
         assertThat(discount.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -44,12 +50,18 @@ class DiscountTest {
             .isEqualTo(
                 Discount.Product.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .name("string")
+                    .name("name")
                     .build()
             )
         assertThat(discount.schedule())
             .isEqualTo(
                 SchedulePointInTime.builder()
+                    .creditType(
+                        CreditTypeData.builder()
+                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .name("name")
+                            .build()
+                    )
                     .scheduleItems(
                         listOf(
                             SchedulePointInTime.ScheduleItem.builder()
@@ -65,6 +77,6 @@ class DiscountTest {
                     .build()
             )
         assertThat(discount.name()).contains("x")
-        assertThat(discount.netsuiteSalesOrderId()).contains("string")
+        assertThat(discount.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
     }
 }

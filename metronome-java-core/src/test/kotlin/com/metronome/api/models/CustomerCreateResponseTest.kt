@@ -14,9 +14,9 @@ class CustomerCreateResponseTest {
                 .data(
                     Customer.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .externalId("string")
+                        .externalId("external_id")
                         .ingestAliases(listOf("string"))
-                        .name("string")
+                        .name("name")
                         .customFields(Customer.CustomFields.builder().build())
                         .build()
                 )
@@ -26,9 +26,9 @@ class CustomerCreateResponseTest {
             .isEqualTo(
                 Customer.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .externalId("string")
+                    .externalId("external_id")
                     .ingestAliases(listOf("string"))
-                    .name("string")
+                    .name("name")
                     .customFields(Customer.CustomFields.builder().build())
                     .build()
             )

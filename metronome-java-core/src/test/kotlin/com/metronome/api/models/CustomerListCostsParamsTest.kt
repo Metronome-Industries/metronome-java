@@ -16,7 +16,7 @@ class CustomerListCostsParamsTest {
             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .limit(100L)
-            .nextPage("string")
+            .nextPage("next_page")
             .build()
     }
 
@@ -28,13 +28,13 @@ class CustomerListCostsParamsTest {
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .limit(100L)
-                .nextPage("string")
+                .nextPage("next_page")
                 .build()
         val expected = mutableMapOf<String, List<String>>()
         expected.put("ending_before", listOf("2019-12-27T18:11:19.117Z"))
         expected.put("starting_on", listOf("2019-12-27T18:11:19.117Z"))
         expected.put("limit", listOf("100"))
-        expected.put("next_page", listOf("string"))
+        expected.put("next_page", listOf("next_page"))
         assertThat(params.getQueryParams()).isEqualTo(expected)
     }
 

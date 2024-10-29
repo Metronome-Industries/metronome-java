@@ -9,10 +9,10 @@ import com.metronome.api.models.CustomerPlanAddParams
 import com.metronome.api.models.CustomerPlanAddResponse
 import com.metronome.api.models.CustomerPlanEndParams
 import com.metronome.api.models.CustomerPlanEndResponse
+import com.metronome.api.models.CustomerPlanListPage
 import com.metronome.api.models.CustomerPlanListParams
+import com.metronome.api.models.CustomerPlanListPriceAdjustmentsPage
 import com.metronome.api.models.CustomerPlanListPriceAdjustmentsParams
-import com.metronome.api.models.CustomerPlanListPriceAdjustmentsResponse
-import com.metronome.api.models.CustomerPlanListResponse
 
 interface PlanService {
 
@@ -21,7 +21,7 @@ interface PlanService {
     fun list(
         params: CustomerPlanListParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CustomerPlanListResponse
+    ): CustomerPlanListPage
 
     /**
      * Associate an existing customer with a plan for a specified date range. See the
@@ -50,5 +50,5 @@ interface PlanService {
     fun listPriceAdjustments(
         params: CustomerPlanListPriceAdjustmentsParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CustomerPlanListPriceAdjustmentsResponse
+    ): CustomerPlanListPriceAdjustmentsPage
 }

@@ -16,11 +16,17 @@ class ScheduledChargeTest {
                 .product(
                     ScheduledCharge.Product.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .name("string")
+                        .name("name")
                         .build()
                 )
                 .schedule(
                     SchedulePointInTime.builder()
+                        .creditType(
+                            CreditTypeData.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .name("name")
+                                .build()
+                        )
                         .scheduleItems(
                             listOf(
                                 SchedulePointInTime.ScheduleItem.builder()
@@ -37,7 +43,7 @@ class ScheduledChargeTest {
                 )
                 .customFields(ScheduledCharge.CustomFields.builder().build())
                 .name("x")
-                .netsuiteSalesOrderId("string")
+                .netsuiteSalesOrderId("netsuite_sales_order_id")
                 .build()
         assertThat(scheduledCharge).isNotNull
         assertThat(scheduledCharge.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -45,12 +51,18 @@ class ScheduledChargeTest {
             .isEqualTo(
                 ScheduledCharge.Product.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .name("string")
+                    .name("name")
                     .build()
             )
         assertThat(scheduledCharge.schedule())
             .isEqualTo(
                 SchedulePointInTime.builder()
+                    .creditType(
+                        CreditTypeData.builder()
+                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .name("name")
+                            .build()
+                    )
                     .scheduleItems(
                         listOf(
                             SchedulePointInTime.ScheduleItem.builder()
@@ -68,6 +80,6 @@ class ScheduledChargeTest {
         assertThat(scheduledCharge.customFields())
             .contains(ScheduledCharge.CustomFields.builder().build())
         assertThat(scheduledCharge.name()).contains("x")
-        assertThat(scheduledCharge.netsuiteSalesOrderId()).contains("string")
+        assertThat(scheduledCharge.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
     }
 }

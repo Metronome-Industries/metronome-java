@@ -5,10 +5,11 @@
 package com.metronome.api.services.async
 
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.models.UsageIngestParams
 import com.metronome.api.models.UsageListParams
 import com.metronome.api.models.UsageListResponse
+import com.metronome.api.models.UsageListWithGroupsPageAsync
 import com.metronome.api.models.UsageListWithGroupsParams
-import com.metronome.api.models.UsageListWithGroupsResponse
 import java.util.concurrent.CompletableFuture
 
 interface UsageServiceAsync {
@@ -24,6 +25,19 @@ interface UsageServiceAsync {
     ): CompletableFuture<UsageListResponse>
 
     /**
+     * Send usage events to Metronome. The body of this request is expected to be a JSON array of
+     * between 1 and 100 usage events. Compressed request bodies are supported with a
+     * `Content-Encoding: gzip` header. See
+     * [Getting usage into Metronome](https://docs.metronome.com/getting-usage-data-into-metronome/overview)
+     * to learn more about usage events.
+     */
+    @JvmOverloads
+    fun ingest(
+        params: UsageIngestParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): CompletableFuture<Void>
+
+    /**
      * Fetch aggregated usage data for the specified customer, billable-metric, and optional group,
      * broken into intervals of the specified length.
      */
@@ -31,5 +45,5 @@ interface UsageServiceAsync {
     fun listWithGroups(
         params: UsageListWithGroupsParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<UsageListWithGroupsResponse>
+    ): CompletableFuture<UsageListWithGroupsPageAsync>
 }

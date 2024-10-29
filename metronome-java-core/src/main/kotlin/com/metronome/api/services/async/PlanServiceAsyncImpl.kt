@@ -4,21 +4,21 @@ package com.metronome.api.services.async
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.handlers.errorHandler
+import com.metronome.api.core.handlers.jsonHandler
+import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
 import com.metronome.api.core.http.HttpResponse.Handler
 import com.metronome.api.errors.MetronomeError
 import com.metronome.api.models.PlanGetDetailsParams
 import com.metronome.api.models.PlanGetDetailsResponse
+import com.metronome.api.models.PlanListChargesPageAsync
 import com.metronome.api.models.PlanListChargesParams
-import com.metronome.api.models.PlanListChargesResponse
+import com.metronome.api.models.PlanListCustomersPageAsync
 import com.metronome.api.models.PlanListCustomersParams
-import com.metronome.api.models.PlanListCustomersResponse
+import com.metronome.api.models.PlanListPageAsync
 import com.metronome.api.models.PlanListParams
-import com.metronome.api.models.PlanListResponse
-import com.metronome.api.services.errorHandler
-import com.metronome.api.services.jsonHandler
-import com.metronome.api.services.withErrorHandler
 import java.util.concurrent.CompletableFuture
 
 class PlanServiceAsyncImpl
@@ -28,18 +28,20 @@ constructor(
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
-    private val listHandler: Handler<PlanListResponse> =
-        jsonHandler<PlanListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+    private val listHandler: Handler<PlanListPageAsync.Response> =
+        jsonHandler<PlanListPageAsync.Response>(clientOptions.jsonMapper)
+            .withErrorHandler(errorHandler)
 
     /** List all available plans. */
     override fun list(
         params: PlanListParams,
         requestOptions: RequestOptions
-    ): CompletableFuture<PlanListResponse> {
+    ): CompletableFuture<PlanListPageAsync> {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("plans")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -53,6 +55,7 @@ constructor(
                         validate()
                     }
                 }
+                .let { PlanListPageAsync.of(this, params, it) }
         }
     }
 
@@ -68,6 +71,7 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("planDetails", params.getPathParam(0))
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -84,19 +88,20 @@ constructor(
         }
     }
 
-    private val listChargesHandler: Handler<PlanListChargesResponse> =
-        jsonHandler<PlanListChargesResponse>(clientOptions.jsonMapper)
+    private val listChargesHandler: Handler<PlanListChargesPageAsync.Response> =
+        jsonHandler<PlanListChargesPageAsync.Response>(clientOptions.jsonMapper)
             .withErrorHandler(errorHandler)
 
     /** Fetches a list of charges of a specific plan. */
     override fun listCharges(
         params: PlanListChargesParams,
         requestOptions: RequestOptions
-    ): CompletableFuture<PlanListChargesResponse> {
+    ): CompletableFuture<PlanListChargesPageAsync> {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("planDetails", params.getPathParam(0), "charges")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -110,11 +115,12 @@ constructor(
                         validate()
                     }
                 }
+                .let { PlanListChargesPageAsync.of(this, params, it) }
         }
     }
 
-    private val listCustomersHandler: Handler<PlanListCustomersResponse> =
-        jsonHandler<PlanListCustomersResponse>(clientOptions.jsonMapper)
+    private val listCustomersHandler: Handler<PlanListCustomersPageAsync.Response> =
+        jsonHandler<PlanListCustomersPageAsync.Response>(clientOptions.jsonMapper)
             .withErrorHandler(errorHandler)
 
     /**
@@ -124,11 +130,12 @@ constructor(
     override fun listCustomers(
         params: PlanListCustomersParams,
         requestOptions: RequestOptions
-    ): CompletableFuture<PlanListCustomersResponse> {
+    ): CompletableFuture<PlanListCustomersPageAsync> {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("planDetails", params.getPathParam(0), "customers")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -142,6 +149,7 @@ constructor(
                         validate()
                     }
                 }
+                .let { PlanListCustomersPageAsync.of(this, params, it) }
         }
     }
 }

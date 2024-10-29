@@ -46,7 +46,7 @@ class CustomerPlanAddParamsTest {
                     .spendingCap(
                         CustomerPlanAddParams.TrialSpec.SpendingCap.builder()
                             .amount(42.23)
-                            .creditTypeId("string")
+                            .creditTypeId("credit_type_id")
                             .build()
                     )
                     .build()
@@ -92,7 +92,7 @@ class CustomerPlanAddParamsTest {
                         .spendingCap(
                             CustomerPlanAddParams.TrialSpec.SpendingCap.builder()
                                 .amount(42.23)
-                                .creditTypeId("string")
+                                .creditTypeId("credit_type_id")
                                 .build()
                         )
                         .build()
@@ -136,7 +136,7 @@ class CustomerPlanAddParamsTest {
                     .spendingCap(
                         CustomerPlanAddParams.TrialSpec.SpendingCap.builder()
                             .amount(42.23)
-                            .creditTypeId("string")
+                            .creditTypeId("credit_type_id")
                             .build()
                     )
                     .build()

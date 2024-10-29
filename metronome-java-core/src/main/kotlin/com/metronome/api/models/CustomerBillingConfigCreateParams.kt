@@ -78,8 +78,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         /**
          * The customer ID in the billing provider's system. For Azure, this is the subscription ID.
          */
@@ -98,36 +96,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomerBillingConfigCreateBody &&
-                this.billingProviderCustomerId == other.billingProviderCustomerId &&
-                this.awsProductCode == other.awsProductCode &&
-                this.awsRegion == other.awsRegion &&
-                this.stripeCollectionMethod == other.stripeCollectionMethod &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        billingProviderCustomerId,
-                        awsProductCode,
-                        awsRegion,
-                        stripeCollectionMethod,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CustomerBillingConfigCreateBody{billingProviderCustomerId=$billingProviderCustomerId, awsProductCode=$awsProductCode, awsRegion=$awsRegion, stripeCollectionMethod=$stripeCollectionMethod, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -201,6 +169,26 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomerBillingConfigCreateBody && this.billingProviderCustomerId == other.billingProviderCustomerId && this.awsProductCode == other.awsProductCode && this.awsRegion == other.awsRegion && this.stripeCollectionMethod == other.stripeCollectionMethod && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(billingProviderCustomerId, awsProductCode, awsRegion, stripeCollectionMethod, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CustomerBillingConfigCreateBody{billingProviderCustomerId=$billingProviderCustomerId, awsProductCode=$awsProductCode, awsRegion=$awsRegion, stripeCollectionMethod=$stripeCollectionMethod, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -214,30 +202,11 @@ constructor(
             return true
         }
 
-        return other is CustomerBillingConfigCreateParams &&
-            this.customerId == other.customerId &&
-            this.billingProviderType == other.billingProviderType &&
-            this.billingProviderCustomerId == other.billingProviderCustomerId &&
-            this.awsProductCode == other.awsProductCode &&
-            this.awsRegion == other.awsRegion &&
-            this.stripeCollectionMethod == other.stripeCollectionMethod &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is CustomerBillingConfigCreateParams && this.customerId == other.customerId && this.billingProviderType == other.billingProviderType && this.billingProviderCustomerId == other.billingProviderCustomerId && this.awsProductCode == other.awsProductCode && this.awsRegion == other.awsRegion && this.stripeCollectionMethod == other.stripeCollectionMethod && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            customerId,
-            billingProviderType,
-            billingProviderCustomerId,
-            awsProductCode,
-            awsRegion,
-            stripeCollectionMethod,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(customerId, billingProviderType, billingProviderCustomerId, awsProductCode, awsRegion, stripeCollectionMethod, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
@@ -385,7 +354,7 @@ constructor(
                 return true
             }
 
-            return other is AwsRegion && this.value == other.value
+            return /* spotless:off */ other is AwsRegion && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -580,7 +549,7 @@ constructor(
                 return true
             }
 
-            return other is StripeCollectionMethod && this.value == other.value
+            return /* spotless:off */ other is StripeCollectionMethod && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -639,7 +608,7 @@ constructor(
                 return true
             }
 
-            return other is BillingProviderType && this.value == other.value
+            return /* spotless:off */ other is BillingProviderType && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

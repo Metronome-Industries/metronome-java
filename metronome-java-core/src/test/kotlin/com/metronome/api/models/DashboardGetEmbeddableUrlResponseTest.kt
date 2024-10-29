@@ -11,10 +11,10 @@ class DashboardGetEmbeddableUrlResponseTest {
     fun createDashboardGetEmbeddableUrlResponse() {
         val dashboardGetEmbeddableUrlResponse =
             DashboardGetEmbeddableUrlResponse.builder()
-                .data(DashboardGetEmbeddableUrlResponse.Data.builder().url("string").build())
+                .data(DashboardGetEmbeddableUrlResponse.Data.builder().url("url").build())
                 .build()
         assertThat(dashboardGetEmbeddableUrlResponse).isNotNull
         assertThat(dashboardGetEmbeddableUrlResponse.data())
-            .isEqualTo(DashboardGetEmbeddableUrlResponse.Data.builder().url("string").build())
+            .isEqualTo(DashboardGetEmbeddableUrlResponse.Data.builder().url("url").build())
     }
 }

@@ -1,0 +1,356 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.metronome.api.models
+
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.metronome.api.core.Enum
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonValue
+import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.errors.MetronomeInvalidDataException
+import com.metronome.api.models.*
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Objects
+import java.util.Optional
+
+class CustomerInvoiceListBreakdownsParams
+constructor(
+    private val customerId: String,
+    private val endingBefore: OffsetDateTime,
+    private val startingOn: OffsetDateTime,
+    private val creditTypeId: String?,
+    private val limit: Long?,
+    private val nextPage: String?,
+    private val skipZeroQtyLineItems: Boolean?,
+    private val sort: Sort?,
+    private val status: String?,
+    private val windowSize: WindowSize?,
+    private val additionalQueryParams: Map<String, List<String>>,
+    private val additionalHeaders: Map<String, List<String>>,
+) {
+
+    fun customerId(): String = customerId
+
+    fun endingBefore(): OffsetDateTime = endingBefore
+
+    fun startingOn(): OffsetDateTime = startingOn
+
+    fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
+
+    fun limit(): Optional<Long> = Optional.ofNullable(limit)
+
+    fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
+
+    fun skipZeroQtyLineItems(): Optional<Boolean> = Optional.ofNullable(skipZeroQtyLineItems)
+
+    fun sort(): Optional<Sort> = Optional.ofNullable(sort)
+
+    fun status(): Optional<String> = Optional.ofNullable(status)
+
+    fun windowSize(): Optional<WindowSize> = Optional.ofNullable(windowSize)
+
+    @JvmSynthetic
+    internal fun getQueryParams(): Map<String, List<String>> {
+        val params = mutableMapOf<String, List<String>>()
+        this.endingBefore.let {
+            params.put("ending_before", listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it)))
+        }
+        this.startingOn.let {
+            params.put("starting_on", listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it)))
+        }
+        this.creditTypeId?.let { params.put("credit_type_id", listOf(it.toString())) }
+        this.limit?.let { params.put("limit", listOf(it.toString())) }
+        this.nextPage?.let { params.put("next_page", listOf(it.toString())) }
+        this.skipZeroQtyLineItems?.let {
+            params.put("skip_zero_qty_line_items", listOf(it.toString()))
+        }
+        this.sort?.let { params.put("sort", listOf(it.toString())) }
+        this.status?.let { params.put("status", listOf(it.toString())) }
+        this.windowSize?.let { params.put("window_size", listOf(it.toString())) }
+        params.putAll(additionalQueryParams)
+        return params.toUnmodifiable()
+    }
+
+    @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
+
+    fun getPathParam(index: Int): String {
+        return when (index) {
+            0 -> customerId
+            else -> ""
+        }
+    }
+
+    fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
+
+    fun _additionalHeaders(): Map<String, List<String>> = additionalHeaders
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerInvoiceListBreakdownsParams && this.customerId == other.customerId && this.endingBefore == other.endingBefore && this.startingOn == other.startingOn && this.creditTypeId == other.creditTypeId && this.limit == other.limit && this.nextPage == other.nextPage && this.skipZeroQtyLineItems == other.skipZeroQtyLineItems && this.sort == other.sort && this.status == other.status && this.windowSize == other.windowSize && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders /* spotless:on */
+    }
+
+    override fun hashCode(): Int {
+        return /* spotless:off */ Objects.hash(customerId, endingBefore, startingOn, creditTypeId, limit, nextPage, skipZeroQtyLineItems, sort, status, windowSize, additionalQueryParams, additionalHeaders) /* spotless:on */
+    }
+
+    override fun toString() =
+        "CustomerInvoiceListBreakdownsParams{customerId=$customerId, endingBefore=$endingBefore, startingOn=$startingOn, creditTypeId=$creditTypeId, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, status=$status, windowSize=$windowSize, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        @JvmStatic fun builder() = Builder()
+    }
+
+    @NoAutoDetect
+    class Builder {
+
+        private var customerId: String? = null
+        private var endingBefore: OffsetDateTime? = null
+        private var startingOn: OffsetDateTime? = null
+        private var creditTypeId: String? = null
+        private var limit: Long? = null
+        private var nextPage: String? = null
+        private var skipZeroQtyLineItems: Boolean? = null
+        private var sort: Sort? = null
+        private var status: String? = null
+        private var windowSize: WindowSize? = null
+        private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
+        private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
+
+        @JvmSynthetic
+        internal fun from(
+            customerInvoiceListBreakdownsParams: CustomerInvoiceListBreakdownsParams
+        ) = apply {
+            this.customerId = customerInvoiceListBreakdownsParams.customerId
+            this.endingBefore = customerInvoiceListBreakdownsParams.endingBefore
+            this.startingOn = customerInvoiceListBreakdownsParams.startingOn
+            this.creditTypeId = customerInvoiceListBreakdownsParams.creditTypeId
+            this.limit = customerInvoiceListBreakdownsParams.limit
+            this.nextPage = customerInvoiceListBreakdownsParams.nextPage
+            this.skipZeroQtyLineItems = customerInvoiceListBreakdownsParams.skipZeroQtyLineItems
+            this.sort = customerInvoiceListBreakdownsParams.sort
+            this.status = customerInvoiceListBreakdownsParams.status
+            this.windowSize = customerInvoiceListBreakdownsParams.windowSize
+            additionalQueryParams(customerInvoiceListBreakdownsParams.additionalQueryParams)
+            additionalHeaders(customerInvoiceListBreakdownsParams.additionalHeaders)
+        }
+
+        fun customerId(customerId: String) = apply { this.customerId = customerId }
+
+        /**
+         * RFC 3339 timestamp. Breakdowns will only be returned for time windows that end on or
+         * before this time.
+         */
+        fun endingBefore(endingBefore: OffsetDateTime) = apply { this.endingBefore = endingBefore }
+
+        /**
+         * RFC 3339 timestamp. Breakdowns will only be returned for time windows that start on or
+         * after this time.
+         */
+        fun startingOn(startingOn: OffsetDateTime) = apply { this.startingOn = startingOn }
+
+        /** Only return invoices for the specified credit type */
+        fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+
+        /**
+         * Max number of results that should be returned. For daily breakdowns, the response can
+         * return up to 35 days worth of breakdowns. For hourly breakdowns, the response can return
+         * up to 24 hours. If there are more results, a cursor to the next page is returned.
+         */
+        fun limit(limit: Long) = apply { this.limit = limit }
+
+        /** Cursor that indicates where the next page of results should start. */
+        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+
+        /** If set, all zero quantity line items will be filtered out of the response */
+        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Boolean) = apply {
+            this.skipZeroQtyLineItems = skipZeroQtyLineItems
+        }
+
+        /** Invoice sort order by issued_at, e.g. date_asc or date_desc. Defaults to date_asc. */
+        fun sort(sort: Sort) = apply { this.sort = sort }
+
+        /** Invoice status, e.g. DRAFT or FINALIZED */
+        fun status(status: String) = apply { this.status = status }
+
+        /** The granularity of the breakdowns to return. Defaults to day. */
+        fun windowSize(windowSize: WindowSize) = apply { this.windowSize = windowSize }
+
+        fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
+            this.additionalQueryParams.clear()
+            putAllQueryParams(additionalQueryParams)
+        }
+
+        fun putQueryParam(name: String, value: String) = apply {
+            this.additionalQueryParams.getOrPut(name) { mutableListOf() }.add(value)
+        }
+
+        fun putQueryParams(name: String, values: Iterable<String>) = apply {
+            this.additionalQueryParams.getOrPut(name) { mutableListOf() }.addAll(values)
+        }
+
+        fun putAllQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
+            additionalQueryParams.forEach(this::putQueryParams)
+        }
+
+        fun removeQueryParam(name: String) = apply {
+            this.additionalQueryParams.put(name, mutableListOf())
+        }
+
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.clear()
+            putAllHeaders(additionalHeaders)
+        }
+
+        fun putHeader(name: String, value: String) = apply {
+            this.additionalHeaders.getOrPut(name) { mutableListOf() }.add(value)
+        }
+
+        fun putHeaders(name: String, values: Iterable<String>) = apply {
+            this.additionalHeaders.getOrPut(name) { mutableListOf() }.addAll(values)
+        }
+
+        fun putAllHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            additionalHeaders.forEach(this::putHeaders)
+        }
+
+        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+
+        fun build(): CustomerInvoiceListBreakdownsParams =
+            CustomerInvoiceListBreakdownsParams(
+                checkNotNull(customerId) { "`customerId` is required but was not set" },
+                checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
+                checkNotNull(startingOn) { "`startingOn` is required but was not set" },
+                creditTypeId,
+                limit,
+                nextPage,
+                skipZeroQtyLineItems,
+                sort,
+                status,
+                windowSize,
+                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            )
+    }
+
+    class Sort
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
+
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Sort && this.value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+
+        companion object {
+
+            @JvmField val DATE_ASC = Sort(JsonField.of("date_asc"))
+
+            @JvmField val DATE_DESC = Sort(JsonField.of("date_desc"))
+
+            @JvmStatic fun of(value: String) = Sort(JsonField.of(value))
+        }
+
+        enum class Known {
+            DATE_ASC,
+            DATE_DESC,
+        }
+
+        enum class Value {
+            DATE_ASC,
+            DATE_DESC,
+            _UNKNOWN,
+        }
+
+        fun value(): Value =
+            when (this) {
+                DATE_ASC -> Value.DATE_ASC
+                DATE_DESC -> Value.DATE_DESC
+                else -> Value._UNKNOWN
+            }
+
+        fun known(): Known =
+            when (this) {
+                DATE_ASC -> Known.DATE_ASC
+                DATE_DESC -> Known.DATE_DESC
+                else -> throw MetronomeInvalidDataException("Unknown Sort: $value")
+            }
+
+        fun asString(): String = _value().asStringOrThrow()
+    }
+
+    class WindowSize
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
+
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is WindowSize && this.value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+
+        companion object {
+
+            @JvmField val HOUR = WindowSize(JsonField.of("HOUR"))
+
+            @JvmField val DAY = WindowSize(JsonField.of("DAY"))
+
+            @JvmStatic fun of(value: String) = WindowSize(JsonField.of(value))
+        }
+
+        enum class Known {
+            HOUR,
+            DAY,
+        }
+
+        enum class Value {
+            HOUR,
+            DAY,
+            _UNKNOWN,
+        }
+
+        fun value(): Value =
+            when (this) {
+                HOUR -> Value.HOUR
+                DAY -> Value.DAY
+                else -> Value._UNKNOWN
+            }
+
+        fun known(): Known =
+            when (this) {
+                HOUR -> Known.HOUR
+                DAY -> Known.DAY
+                else -> throw MetronomeInvalidDataException("Unknown WindowSize: $value")
+            }
+
+        fun asString(): String = _value().asStringOrThrow()
+    }
+}

@@ -4,18 +4,20 @@ package com.metronome.api.services.blocking
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.handlers.emptyHandler
+import com.metronome.api.core.handlers.errorHandler
+import com.metronome.api.core.handlers.jsonHandler
+import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
 import com.metronome.api.core.http.HttpResponse.Handler
+import com.metronome.api.core.json
 import com.metronome.api.errors.MetronomeError
+import com.metronome.api.models.UsageIngestParams
 import com.metronome.api.models.UsageListParams
 import com.metronome.api.models.UsageListResponse
+import com.metronome.api.models.UsageListWithGroupsPage
 import com.metronome.api.models.UsageListWithGroupsParams
-import com.metronome.api.models.UsageListWithGroupsResponse
-import com.metronome.api.services.errorHandler
-import com.metronome.api.services.json
-import com.metronome.api.services.jsonHandler
-import com.metronome.api.services.withErrorHandler
 
 class UsageServiceImpl
 constructor(
@@ -36,6 +38,7 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("usage")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -52,8 +55,33 @@ constructor(
         }
     }
 
-    private val listWithGroupsHandler: Handler<UsageListWithGroupsResponse> =
-        jsonHandler<UsageListWithGroupsResponse>(clientOptions.jsonMapper)
+    private val ingestHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
+
+    /**
+     * Send usage events to Metronome. The body of this request is expected to be a JSON array of
+     * between 1 and 100 usage events. Compressed request bodies are supported with a
+     * `Content-Encoding: gzip` header. See
+     * [Getting usage into Metronome](https://docs.metronome.com/getting-usage-data-into-metronome/overview)
+     * to learn more about usage events.
+     */
+    override fun ingest(params: UsageIngestParams, requestOptions: RequestOptions) {
+        val request =
+            HttpRequest.builder()
+                .method(HttpMethod.POST)
+                .addPathSegments("ingest")
+                .putAllQueryParams(clientOptions.queryParams)
+                .putAllQueryParams(params.getQueryParams())
+                .putAllHeaders(clientOptions.headers)
+                .putAllHeaders(params.getHeaders())
+                .body(json(clientOptions.jsonMapper, params.getBody()))
+                .build()
+        clientOptions.httpClient.execute(request, requestOptions).let { response ->
+            response.use { ingestHandler.handle(it) }
+        }
+    }
+
+    private val listWithGroupsHandler: Handler<UsageListWithGroupsPage.Response> =
+        jsonHandler<UsageListWithGroupsPage.Response>(clientOptions.jsonMapper)
             .withErrorHandler(errorHandler)
 
     /**
@@ -63,11 +91,12 @@ constructor(
     override fun listWithGroups(
         params: UsageListWithGroupsParams,
         requestOptions: RequestOptions
-    ): UsageListWithGroupsResponse {
+    ): UsageListWithGroupsPage {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("usage", "groups")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
@@ -81,6 +110,7 @@ constructor(
                         validate()
                     }
                 }
+                .let { UsageListWithGroupsPage.of(this, params, it) }
         }
     }
 }

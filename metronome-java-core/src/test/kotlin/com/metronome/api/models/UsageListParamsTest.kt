@@ -21,7 +21,7 @@ class UsageListParamsTest {
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .groupBy(
                             UsageListParams.BillableMetric.GroupBy.builder()
-                                .key("string")
+                                .key("key")
                                 .values(listOf("x"))
                                 .build()
                         )
@@ -29,7 +29,7 @@ class UsageListParamsTest {
                 )
             )
             .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-            .nextPage("string")
+            .nextPage("next_page")
             .build()
     }
 
@@ -46,7 +46,7 @@ class UsageListParamsTest {
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .groupBy(
                                 UsageListParams.BillableMetric.GroupBy.builder()
-                                    .key("string")
+                                    .key("key")
                                     .values(listOf("x"))
                                     .build()
                             )
@@ -54,10 +54,10 @@ class UsageListParamsTest {
                     )
                 )
                 .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .nextPage("string")
+                .nextPage("next_page")
                 .build()
         val expected = mutableMapOf<String, List<String>>()
-        expected.put("next_page", listOf("string"))
+        expected.put("next_page", listOf("next_page"))
         assertThat(params.getQueryParams()).isEqualTo(expected)
     }
 
@@ -86,7 +86,7 @@ class UsageListParamsTest {
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .groupBy(
                                 UsageListParams.BillableMetric.GroupBy.builder()
-                                    .key("string")
+                                    .key("key")
                                     .values(listOf("x"))
                                     .build()
                             )
@@ -94,7 +94,7 @@ class UsageListParamsTest {
                     )
                 )
                 .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .nextPage("string")
+                .nextPage("next_page")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -108,7 +108,7 @@ class UsageListParamsTest {
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .groupBy(
                             UsageListParams.BillableMetric.GroupBy.builder()
-                                .key("string")
+                                .key("key")
                                 .values(listOf("x"))
                                 .build()
                         )

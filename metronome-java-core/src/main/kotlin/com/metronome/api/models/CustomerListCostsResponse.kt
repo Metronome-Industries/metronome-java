@@ -14,28 +14,30 @@ import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.toUnmodifiable
 import java.time.OffsetDateTime
 import java.util.Objects
-import java.util.Optional
 
 @JsonDeserialize(builder = CustomerListCostsResponse.Builder::class)
 @NoAutoDetect
 class CustomerListCostsResponse
 private constructor(
-    private val data: JsonField<List<Data>>,
-    private val nextPage: JsonField<String>,
+    private val startTimestamp: JsonField<OffsetDateTime>,
+    private val endTimestamp: JsonField<OffsetDateTime>,
+    private val creditTypes: JsonField<CreditTypes>,
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
+    fun startTimestamp(): OffsetDateTime = startTimestamp.getRequired("start_timestamp")
 
-    fun data(): List<Data> = data.getRequired("data")
+    fun endTimestamp(): OffsetDateTime = endTimestamp.getRequired("end_timestamp")
 
-    fun nextPage(): Optional<String> = Optional.ofNullable(nextPage.getNullable("next_page"))
+    fun creditTypes(): CreditTypes = creditTypes.getRequired("credit_types")
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("start_timestamp") @ExcludeMissing fun _startTimestamp() = startTimestamp
 
-    @JsonProperty("next_page") @ExcludeMissing fun _nextPage() = nextPage
+    @JsonProperty("end_timestamp") @ExcludeMissing fun _endTimestamp() = endTimestamp
+
+    @JsonProperty("credit_types") @ExcludeMissing fun _creditTypes() = creditTypes
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -43,39 +45,14 @@ private constructor(
 
     fun validate(): CustomerListCostsResponse = apply {
         if (!validated) {
-            data().forEach { it.validate() }
-            nextPage()
+            startTimestamp()
+            endTimestamp()
+            creditTypes().validate()
             validated = true
         }
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is CustomerListCostsResponse &&
-            this.data == other.data &&
-            this.nextPage == other.nextPage &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    data,
-                    nextPage,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "CustomerListCostsResponse{data=$data, nextPage=$nextPage, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -84,28 +61,43 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<List<Data>> = JsonMissing.of()
-        private var nextPage: JsonField<String> = JsonMissing.of()
+        private var startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var creditTypes: JsonField<CreditTypes> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerListCostsResponse: CustomerListCostsResponse) = apply {
-            this.data = customerListCostsResponse.data
-            this.nextPage = customerListCostsResponse.nextPage
+            this.startTimestamp = customerListCostsResponse.startTimestamp
+            this.endTimestamp = customerListCostsResponse.endTimestamp
+            this.creditTypes = customerListCostsResponse.creditTypes
             additionalProperties(customerListCostsResponse.additionalProperties)
         }
 
-        fun data(data: List<Data>) = data(JsonField.of(data))
+        fun startTimestamp(startTimestamp: OffsetDateTime) =
+            startTimestamp(JsonField.of(startTimestamp))
 
-        @JsonProperty("data")
+        @JsonProperty("start_timestamp")
         @ExcludeMissing
-        fun data(data: JsonField<List<Data>>) = apply { this.data = data }
+        fun startTimestamp(startTimestamp: JsonField<OffsetDateTime>) = apply {
+            this.startTimestamp = startTimestamp
+        }
 
-        fun nextPage(nextPage: String) = nextPage(JsonField.of(nextPage))
+        fun endTimestamp(endTimestamp: OffsetDateTime) = endTimestamp(JsonField.of(endTimestamp))
 
-        @JsonProperty("next_page")
+        @JsonProperty("end_timestamp")
         @ExcludeMissing
-        fun nextPage(nextPage: JsonField<String>) = apply { this.nextPage = nextPage }
+        fun endTimestamp(endTimestamp: JsonField<OffsetDateTime>) = apply {
+            this.endTimestamp = endTimestamp
+        }
+
+        fun creditTypes(creditTypes: CreditTypes) = creditTypes(JsonField.of(creditTypes))
+
+        @JsonProperty("credit_types")
+        @ExcludeMissing
+        fun creditTypes(creditTypes: JsonField<CreditTypes>) = apply {
+            this.creditTypes = creditTypes
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -123,80 +115,33 @@ private constructor(
 
         fun build(): CustomerListCostsResponse =
             CustomerListCostsResponse(
-                data.map { it.toUnmodifiable() },
-                nextPage,
+                startTimestamp,
+                endTimestamp,
+                creditTypes,
                 additionalProperties.toUnmodifiable(),
             )
     }
 
-    @JsonDeserialize(builder = Data.Builder::class)
+    @JsonDeserialize(builder = CreditTypes.Builder::class)
     @NoAutoDetect
-    class Data
+    class CreditTypes
     private constructor(
-        private val startTimestamp: JsonField<OffsetDateTime>,
-        private val endTimestamp: JsonField<OffsetDateTime>,
-        private val creditTypes: JsonField<CreditTypes>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
-        fun startTimestamp(): OffsetDateTime = startTimestamp.getRequired("start_timestamp")
-
-        fun endTimestamp(): OffsetDateTime = endTimestamp.getRequired("end_timestamp")
-
-        fun creditTypes(): CreditTypes = creditTypes.getRequired("credit_types")
-
-        @JsonProperty("start_timestamp") @ExcludeMissing fun _startTimestamp() = startTimestamp
-
-        @JsonProperty("end_timestamp") @ExcludeMissing fun _endTimestamp() = endTimestamp
-
-        @JsonProperty("credit_types") @ExcludeMissing fun _creditTypes() = creditTypes
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-        fun validate(): Data = apply {
+        fun validate(): CreditTypes = apply {
             if (!validated) {
-                startTimestamp()
-                endTimestamp()
-                creditTypes().validate()
                 validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Data &&
-                this.startTimestamp == other.startTimestamp &&
-                this.endTimestamp == other.endTimestamp &&
-                this.creditTypes == other.creditTypes &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        startTimestamp,
-                        endTimestamp,
-                        creditTypes,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Data{startTimestamp=$startTimestamp, endTimestamp=$endTimestamp, creditTypes=$creditTypes, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -205,43 +150,11 @@ private constructor(
 
         class Builder {
 
-            private var startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var creditTypes: JsonField<CreditTypes> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(data: Data) = apply {
-                this.startTimestamp = data.startTimestamp
-                this.endTimestamp = data.endTimestamp
-                this.creditTypes = data.creditTypes
-                additionalProperties(data.additionalProperties)
-            }
-
-            fun startTimestamp(startTimestamp: OffsetDateTime) =
-                startTimestamp(JsonField.of(startTimestamp))
-
-            @JsonProperty("start_timestamp")
-            @ExcludeMissing
-            fun startTimestamp(startTimestamp: JsonField<OffsetDateTime>) = apply {
-                this.startTimestamp = startTimestamp
-            }
-
-            fun endTimestamp(endTimestamp: OffsetDateTime) =
-                endTimestamp(JsonField.of(endTimestamp))
-
-            @JsonProperty("end_timestamp")
-            @ExcludeMissing
-            fun endTimestamp(endTimestamp: JsonField<OffsetDateTime>) = apply {
-                this.endTimestamp = endTimestamp
-            }
-
-            fun creditTypes(creditTypes: CreditTypes) = creditTypes(JsonField.of(creditTypes))
-
-            @JsonProperty("credit_types")
-            @ExcludeMissing
-            fun creditTypes(creditTypes: JsonField<CreditTypes>) = apply {
-                this.creditTypes = creditTypes
+            internal fun from(creditTypes: CreditTypes) = apply {
+                additionalProperties(creditTypes.additionalProperties)
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -258,87 +171,46 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Data =
-                Data(
-                    startTimestamp,
-                    endTimestamp,
-                    creditTypes,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): CreditTypes = CreditTypes(additionalProperties.toUnmodifiable())
         }
 
-        @JsonDeserialize(builder = CreditTypes.Builder::class)
-        @NoAutoDetect
-        class CreditTypes
-        private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
-
-            private var validated: Boolean = false
-
-            private var hashCode: Int = 0
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): CreditTypes = apply {
-                if (!validated) {
-                    validated = true
-                }
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
             }
 
-            fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is CreditTypes &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                }
-                return hashCode
-            }
-
-            override fun toString() = "CreditTypes{additionalProperties=$additionalProperties}"
-
-            companion object {
-
-                @JvmStatic fun builder() = Builder()
-            }
-
-            class Builder {
-
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(creditTypes: CreditTypes) = apply {
-                    additionalProperties(creditTypes.additionalProperties)
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
-                }
-
-                @JsonAnySetter
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun build(): CreditTypes = CreditTypes(additionalProperties.toUnmodifiable())
-            }
+            return /* spotless:off */ other is CreditTypes && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "CreditTypes{additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerListCostsResponse && this.startTimestamp == other.startTimestamp && this.endTimestamp == other.endTimestamp && this.creditTypes == other.creditTypes && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(startTimestamp, endTimestamp, creditTypes, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "CustomerListCostsResponse{startTimestamp=$startTimestamp, endTimestamp=$endTimestamp, creditTypes=$creditTypes, additionalProperties=$additionalProperties}"
 }

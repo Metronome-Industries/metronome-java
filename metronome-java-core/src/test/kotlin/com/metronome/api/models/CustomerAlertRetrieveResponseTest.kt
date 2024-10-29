@@ -16,16 +16,17 @@ class CustomerAlertRetrieveResponseTest {
                     CustomerAlert.builder()
                         .alert(
                             CustomerAlert.Alert.builder()
-                                .id("string")
-                                .name("string")
+                                .id("id")
+                                .name("name")
                                 .status(CustomerAlert.Alert.Status.ENABLED)
                                 .threshold(42.23)
                                 .type(CustomerAlert.Alert.Type.LOW_CREDIT_BALANCE_REACHED)
                                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .creditGrantTypeFilters(listOf("string"))
                                 .creditType(
-                                    CustomerAlert.Alert.CreditType.builder()
+                                    CreditTypeData.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .name("string")
+                                        .name("name")
                                         .build()
                                 )
                                 .customFieldFilters(
@@ -35,22 +36,27 @@ class CustomerAlertRetrieveResponseTest {
                                                 CustomerAlert.Alert.CustomFieldFilter.Entity
                                                     .CONTRACT
                                             )
-                                            .key("string")
-                                            .value("string")
+                                            .key("key")
+                                            .value("value")
                                             .build()
                                     )
                                 )
                                 .groupKeyFilter(
                                     CustomerAlert.Alert.GroupKeyFilter.builder()
-                                        .key("string")
-                                        .value("string")
+                                        .key("key")
+                                        .value("value")
                                         .build()
+                                )
+                                .invoiceTypesFilter(
+                                    listOf(
+                                        "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
+                                    )
                                 )
                                 .uniquenessKey("x")
                                 .build()
                         )
                         .customerStatus(CustomerAlert.CustomerStatus.OK)
-                        .triggeredBy("string")
+                        .triggeredBy("triggered_by")
                         .build()
                 )
                 .build()
@@ -60,16 +66,17 @@ class CustomerAlertRetrieveResponseTest {
                 CustomerAlert.builder()
                     .alert(
                         CustomerAlert.Alert.builder()
-                            .id("string")
-                            .name("string")
+                            .id("id")
+                            .name("name")
                             .status(CustomerAlert.Alert.Status.ENABLED)
                             .threshold(42.23)
                             .type(CustomerAlert.Alert.Type.LOW_CREDIT_BALANCE_REACHED)
                             .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .creditGrantTypeFilters(listOf("string"))
                             .creditType(
-                                CustomerAlert.Alert.CreditType.builder()
+                                CreditTypeData.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .name("string")
+                                    .name("name")
                                     .build()
                             )
                             .customFieldFilters(
@@ -78,22 +85,27 @@ class CustomerAlertRetrieveResponseTest {
                                         .entity(
                                             CustomerAlert.Alert.CustomFieldFilter.Entity.CONTRACT
                                         )
-                                        .key("string")
-                                        .value("string")
+                                        .key("key")
+                                        .value("value")
                                         .build()
                                 )
                             )
                             .groupKeyFilter(
                                 CustomerAlert.Alert.GroupKeyFilter.builder()
-                                    .key("string")
-                                    .value("string")
+                                    .key("key")
+                                    .value("value")
                                     .build()
+                            )
+                            .invoiceTypesFilter(
+                                listOf(
+                                    "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
+                                )
                             )
                             .uniquenessKey("x")
                             .build()
                     )
                     .customerStatus(CustomerAlert.CustomerStatus.OK)
-                    .triggeredBy("string")
+                    .triggeredBy("triggered_by")
                     .build()
             )
     }

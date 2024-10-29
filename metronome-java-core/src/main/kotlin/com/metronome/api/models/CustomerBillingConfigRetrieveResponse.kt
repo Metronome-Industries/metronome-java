@@ -29,8 +29,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     fun data(): Data = data.getRequired("data")
 
     @JsonProperty("data") @ExcludeMissing fun _data() = data
@@ -47,26 +45,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is CustomerBillingConfigRetrieveResponse &&
-            this.data == other.data &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = Objects.hash(data, additionalProperties)
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "CustomerBillingConfigRetrieveResponse{data=$data, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -128,8 +106,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         fun billingProviderCustomerId(): Optional<String> =
             Optional.ofNullable(
                 billingProviderCustomerId.getNullable("billing_provider_customer_id")
@@ -146,8 +122,8 @@ private constructor(
 
         /**
          * Contract expiration date for the customer. The expected format is RFC 3339 and can be
-         * retrieved from AWS's GetEntitlements API. (See
-         * https://docs.aws.amazon.com/marketplaceentitlement/latest/APIReference/API_GetEntitlements.html.)
+         * retrieved from
+         * [AWS's GetEntitlements API](https://docs.aws.amazon.com/marketplaceentitlement/latest/APIReference/API_GetEntitlements.html).
          */
         fun awsExpirationDate(): Optional<OffsetDateTime> =
             Optional.ofNullable(awsExpirationDate.getNullable("aws_expiration_date"))
@@ -160,16 +136,16 @@ private constructor(
 
         /**
          * Subscription term start/end date for the customer. The expected format is RFC 3339 and
-         * can be retrieved from Azure's Get Subscription API. (See
-         * https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription.)
+         * can be retrieved from
+         * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
          */
         fun azureStartDate(): Optional<OffsetDateTime> =
             Optional.ofNullable(azureStartDate.getNullable("azure_start_date"))
 
         /**
          * Subscription term start/end date for the customer. The expected format is RFC 3339 and
-         * can be retrieved from Azure's Get Subscription API. (See
-         * https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription.)
+         * can be retrieved from
+         * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
          */
         fun azureExpirationDate(): Optional<OffsetDateTime> =
             Optional.ofNullable(azureExpirationDate.getNullable("azure_expiration_date"))
@@ -188,8 +164,8 @@ private constructor(
 
         /**
          * Contract expiration date for the customer. The expected format is RFC 3339 and can be
-         * retrieved from AWS's GetEntitlements API. (See
-         * https://docs.aws.amazon.com/marketplaceentitlement/latest/APIReference/API_GetEntitlements.html.)
+         * retrieved from
+         * [AWS's GetEntitlements API](https://docs.aws.amazon.com/marketplaceentitlement/latest/APIReference/API_GetEntitlements.html).
          */
         @JsonProperty("aws_expiration_date")
         @ExcludeMissing
@@ -203,15 +179,15 @@ private constructor(
 
         /**
          * Subscription term start/end date for the customer. The expected format is RFC 3339 and
-         * can be retrieved from Azure's Get Subscription API. (See
-         * https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription.)
+         * can be retrieved from
+         * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
          */
         @JsonProperty("azure_start_date") @ExcludeMissing fun _azureStartDate() = azureStartDate
 
         /**
          * Subscription term start/end date for the customer. The expected format is RFC 3339 and
-         * can be retrieved from Azure's Get Subscription API. (See
-         * https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription.)
+         * can be retrieved from
+         * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
          */
         @JsonProperty("azure_expiration_date")
         @ExcludeMissing
@@ -237,46 +213,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Data &&
-                this.billingProviderCustomerId == other.billingProviderCustomerId &&
-                this.stripeCollectionMethod == other.stripeCollectionMethod &&
-                this.awsProductCode == other.awsProductCode &&
-                this.awsRegion == other.awsRegion &&
-                this.awsExpirationDate == other.awsExpirationDate &&
-                this.azureSubscriptionStatus == other.azureSubscriptionStatus &&
-                this.azurePlanId == other.azurePlanId &&
-                this.azureStartDate == other.azureStartDate &&
-                this.azureExpirationDate == other.azureExpirationDate &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        billingProviderCustomerId,
-                        stripeCollectionMethod,
-                        awsProductCode,
-                        awsRegion,
-                        awsExpirationDate,
-                        azureSubscriptionStatus,
-                        azurePlanId,
-                        azureStartDate,
-                        azureExpirationDate,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Data{billingProviderCustomerId=$billingProviderCustomerId, stripeCollectionMethod=$stripeCollectionMethod, awsProductCode=$awsProductCode, awsRegion=$awsRegion, awsExpirationDate=$awsExpirationDate, azureSubscriptionStatus=$azureSubscriptionStatus, azurePlanId=$azurePlanId, azureStartDate=$azureStartDate, azureExpirationDate=$azureExpirationDate, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -347,16 +283,16 @@ private constructor(
 
             /**
              * Contract expiration date for the customer. The expected format is RFC 3339 and can be
-             * retrieved from AWS's GetEntitlements API. (See
-             * https://docs.aws.amazon.com/marketplaceentitlement/latest/APIReference/API_GetEntitlements.html.)
+             * retrieved from
+             * [AWS's GetEntitlements API](https://docs.aws.amazon.com/marketplaceentitlement/latest/APIReference/API_GetEntitlements.html).
              */
             fun awsExpirationDate(awsExpirationDate: OffsetDateTime) =
                 awsExpirationDate(JsonField.of(awsExpirationDate))
 
             /**
              * Contract expiration date for the customer. The expected format is RFC 3339 and can be
-             * retrieved from AWS's GetEntitlements API. (See
-             * https://docs.aws.amazon.com/marketplaceentitlement/latest/APIReference/API_GetEntitlements.html.)
+             * retrieved from
+             * [AWS's GetEntitlements API](https://docs.aws.amazon.com/marketplaceentitlement/latest/APIReference/API_GetEntitlements.html).
              */
             @JsonProperty("aws_expiration_date")
             @ExcludeMissing
@@ -383,16 +319,16 @@ private constructor(
 
             /**
              * Subscription term start/end date for the customer. The expected format is RFC 3339
-             * and can be retrieved from Azure's Get Subscription API. (See
-             * https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription.)
+             * and can be retrieved from
+             * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
              */
             fun azureStartDate(azureStartDate: OffsetDateTime) =
                 azureStartDate(JsonField.of(azureStartDate))
 
             /**
              * Subscription term start/end date for the customer. The expected format is RFC 3339
-             * and can be retrieved from Azure's Get Subscription API. (See
-             * https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription.)
+             * and can be retrieved from
+             * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
              */
             @JsonProperty("azure_start_date")
             @ExcludeMissing
@@ -402,16 +338,16 @@ private constructor(
 
             /**
              * Subscription term start/end date for the customer. The expected format is RFC 3339
-             * and can be retrieved from Azure's Get Subscription API. (See
-             * https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription.)
+             * and can be retrieved from
+             * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
              */
             fun azureExpirationDate(azureExpirationDate: OffsetDateTime) =
                 azureExpirationDate(JsonField.of(azureExpirationDate))
 
             /**
              * Subscription term start/end date for the customer. The expected format is RFC 3339
-             * and can be retrieved from Azure's Get Subscription API. (See
-             * https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription.)
+             * and can be retrieved from
+             * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
              */
             @JsonProperty("azure_expiration_date")
             @ExcludeMissing
@@ -461,7 +397,7 @@ private constructor(
                     return true
                 }
 
-                return other is AwsRegion && this.value == other.value
+                return /* spotless:off */ other is AwsRegion && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -656,7 +592,7 @@ private constructor(
                     return true
                 }
 
-                return other is AzureSubscriptionStatus && this.value == other.value
+                return /* spotless:off */ other is AzureSubscriptionStatus && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -730,7 +666,7 @@ private constructor(
                     return true
                 }
 
-                return other is StripeCollectionMethod && this.value == other.value
+                return /* spotless:off */ other is StripeCollectionMethod && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -778,5 +714,45 @@ private constructor(
 
             fun asString(): String = _value().asStringOrThrow()
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Data && this.billingProviderCustomerId == other.billingProviderCustomerId && this.stripeCollectionMethod == other.stripeCollectionMethod && this.awsProductCode == other.awsProductCode && this.awsRegion == other.awsRegion && this.awsExpirationDate == other.awsExpirationDate && this.azureSubscriptionStatus == other.azureSubscriptionStatus && this.azurePlanId == other.azurePlanId && this.azureStartDate == other.azureStartDate && this.azureExpirationDate == other.azureExpirationDate && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(billingProviderCustomerId, stripeCollectionMethod, awsProductCode, awsRegion, awsExpirationDate, azureSubscriptionStatus, azurePlanId, azureStartDate, azureExpirationDate, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Data{billingProviderCustomerId=$billingProviderCustomerId, stripeCollectionMethod=$stripeCollectionMethod, awsProductCode=$awsProductCode, awsRegion=$awsRegion, awsExpirationDate=$awsExpirationDate, azureSubscriptionStatus=$azureSubscriptionStatus, azurePlanId=$azurePlanId, azureStartDate=$azureStartDate, azureExpirationDate=$azureExpirationDate, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerBillingConfigRetrieveResponse && this.data == other.data && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(data, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "CustomerBillingConfigRetrieveResponse{data=$data, additionalProperties=$additionalProperties}"
 }

@@ -69,8 +69,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         /**
          * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
          * UTC (midnight). If not provided, the plan end date will be cleared.
@@ -96,34 +94,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomerPlanEndBody &&
-                this.endingBefore == other.endingBefore &&
-                this.voidInvoices == other.voidInvoices &&
-                this.voidStripeInvoices == other.voidStripeInvoices &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        endingBefore,
-                        voidInvoices,
-                        voidStripeInvoices,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CustomerPlanEndBody{endingBefore=$endingBefore, voidInvoices=$voidInvoices, voidStripeInvoices=$voidStripeInvoices, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -193,6 +163,26 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomerPlanEndBody && this.endingBefore == other.endingBefore && this.voidInvoices == other.voidInvoices && this.voidStripeInvoices == other.voidStripeInvoices && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(endingBefore, voidInvoices, voidStripeInvoices, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CustomerPlanEndBody{endingBefore=$endingBefore, voidInvoices=$voidInvoices, voidStripeInvoices=$voidStripeInvoices, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -206,28 +196,11 @@ constructor(
             return true
         }
 
-        return other is CustomerPlanEndParams &&
-            this.customerId == other.customerId &&
-            this.customerPlanId == other.customerPlanId &&
-            this.endingBefore == other.endingBefore &&
-            this.voidInvoices == other.voidInvoices &&
-            this.voidStripeInvoices == other.voidStripeInvoices &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is CustomerPlanEndParams && this.customerId == other.customerId && this.customerPlanId == other.customerPlanId && this.endingBefore == other.endingBefore && this.voidInvoices == other.voidInvoices && this.voidStripeInvoices == other.voidStripeInvoices && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            customerId,
-            customerPlanId,
-            endingBefore,
-            voidInvoices,
-            voidStripeInvoices,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(customerId, customerPlanId, endingBefore, voidInvoices, voidStripeInvoices, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =

@@ -20,16 +20,20 @@ import java.util.Optional
 @NoAutoDetect
 class SchedulePointInTime
 private constructor(
+    private val creditType: JsonField<CreditTypeData>,
     private val scheduleItems: JsonField<List<ScheduleItem>>,
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
+    fun creditType(): Optional<CreditTypeData> =
+        Optional.ofNullable(creditType.getNullable("credit_type"))
 
     fun scheduleItems(): Optional<List<ScheduleItem>> =
         Optional.ofNullable(scheduleItems.getNullable("schedule_items"))
+
+    @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
 
     @JsonProperty("schedule_items") @ExcludeMissing fun _scheduleItems() = scheduleItems
 
@@ -39,32 +43,13 @@ private constructor(
 
     fun validate(): SchedulePointInTime = apply {
         if (!validated) {
+            creditType().map { it.validate() }
             scheduleItems().map { it.forEach { it.validate() } }
             validated = true
         }
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is SchedulePointInTime &&
-            this.scheduleItems == other.scheduleItems &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = Objects.hash(scheduleItems, additionalProperties)
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "SchedulePointInTime{scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -73,13 +58,23 @@ private constructor(
 
     class Builder {
 
+        private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
         private var scheduleItems: JsonField<List<ScheduleItem>> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(schedulePointInTime: SchedulePointInTime) = apply {
+            this.creditType = schedulePointInTime.creditType
             this.scheduleItems = schedulePointInTime.scheduleItems
             additionalProperties(schedulePointInTime.additionalProperties)
+        }
+
+        fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
+
+        @JsonProperty("credit_type")
+        @ExcludeMissing
+        fun creditType(creditType: JsonField<CreditTypeData>) = apply {
+            this.creditType = creditType
         }
 
         fun scheduleItems(scheduleItems: List<ScheduleItem>) =
@@ -107,8 +102,9 @@ private constructor(
 
         fun build(): SchedulePointInTime =
             SchedulePointInTime(
+                creditType,
                 scheduleItems.map { it.toUnmodifiable() },
-                additionalProperties.toUnmodifiable()
+                additionalProperties.toUnmodifiable(),
             )
     }
 
@@ -126,8 +122,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         fun id(): String = id.getRequired("id")
 
@@ -170,40 +164,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is ScheduleItem &&
-                this.id == other.id &&
-                this.invoiceId == other.invoiceId &&
-                this.amount == other.amount &&
-                this.unitPrice == other.unitPrice &&
-                this.quantity == other.quantity &&
-                this.timestamp == other.timestamp &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        id,
-                        invoiceId,
-                        amount,
-                        unitPrice,
-                        quantity,
-                        timestamp,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "ScheduleItem{id=$id, invoiceId=$invoiceId, amount=$amount, unitPrice=$unitPrice, quantity=$quantity, timestamp=$timestamp, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -294,5 +254,45 @@ private constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is ScheduleItem && this.id == other.id && this.invoiceId == other.invoiceId && this.amount == other.amount && this.unitPrice == other.unitPrice && this.quantity == other.quantity && this.timestamp == other.timestamp && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(id, invoiceId, amount, unitPrice, quantity, timestamp, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "ScheduleItem{id=$id, invoiceId=$invoiceId, amount=$amount, unitPrice=$unitPrice, quantity=$quantity, timestamp=$timestamp, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is SchedulePointInTime && this.creditType == other.creditType && this.scheduleItems == other.scheduleItems && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(creditType, scheduleItems, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "SchedulePointInTime{creditType=$creditType, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
 }

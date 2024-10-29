@@ -26,7 +26,6 @@ constructor(
     private val startingOn: OffsetDateTime?,
     private val additionalQueryParams: Map<String, List<String>>,
     private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
@@ -67,43 +66,20 @@ constructor(
 
     fun _additionalHeaders(): Map<String, List<String>> = additionalHeaders
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is AuditLogListParams &&
-            this.endingBefore == other.endingBefore &&
-            this.limit == other.limit &&
-            this.nextPage == other.nextPage &&
-            this.resourceId == other.resourceId &&
-            this.resourceType == other.resourceType &&
-            this.sort == other.sort &&
-            this.startingOn == other.startingOn &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is AuditLogListParams && this.endingBefore == other.endingBefore && this.limit == other.limit && this.nextPage == other.nextPage && this.resourceId == other.resourceId && this.resourceType == other.resourceType && this.sort == other.sort && this.startingOn == other.startingOn && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            endingBefore,
-            limit,
-            nextPage,
-            resourceId,
-            resourceType,
-            sort,
-            startingOn,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(endingBefore, limit, nextPage, resourceId, resourceType, sort, startingOn, additionalQueryParams, additionalHeaders) /* spotless:on */
     }
 
     override fun toString() =
-        "AuditLogListParams{endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, resourceId=$resourceId, resourceType=$resourceType, sort=$sort, startingOn=$startingOn, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "AuditLogListParams{endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, resourceId=$resourceId, resourceType=$resourceType, sort=$sort, startingOn=$startingOn, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -124,7 +100,6 @@ constructor(
         private var startingOn: OffsetDateTime? = null
         private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(auditLogListParams: AuditLogListParams) = apply {
@@ -137,7 +112,6 @@ constructor(
             this.startingOn = auditLogListParams.startingOn
             additionalQueryParams(auditLogListParams.additionalQueryParams)
             additionalHeaders(auditLogListParams.additionalHeaders)
-            additionalBodyProperties(auditLogListParams.additionalBodyProperties)
         }
 
         /** RFC 3339 timestamp (exclusive). Cannot be used with 'next_page'. */
@@ -209,20 +183,6 @@ constructor(
 
         fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            this.additionalBodyProperties.putAll(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            this.additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
         fun build(): AuditLogListParams =
             AuditLogListParams(
                 endingBefore,
@@ -234,7 +194,6 @@ constructor(
                 startingOn,
                 additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
                 additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
             )
     }
 
@@ -251,7 +210,7 @@ constructor(
                 return true
             }
 
-            return other is Sort && this.value == other.value
+            return /* spotless:off */ other is Sort && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

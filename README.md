@@ -14,7 +14,7 @@ It is generated with [Stainless](https://www.stainlessapi.com/).
 
 ## Documentation
 
-The REST API documentation can be found [on docs.metronome.com](https://docs.metronome.com).
+The REST API documentation can be found on [docs.metronome.com](https://docs.metronome.com).
 
 ---
 
@@ -78,16 +78,39 @@ Read the documentation for more configuration options.
 
 ### Example: creating a resource
 
-To create a new alert, first use the `AlertCreateParams` builder to specify attributes,
-then pass that to the `create` method of the `alerts` service.
+To create a new usage, first use the `UsageIngestParams` builder to specify attributes,
+then pass that to the `ingest` method of the `usage` service.
 
 ```java
-import com.metronome.api.models.AlertCreateParams;
-import com.metronome.api.models.AlertCreateResponse;
+import com.metronome.api.models.UsageIngestParams;
 
-AlertCreateParams params = AlertCreateParams.builder().build();
-AlertCreateResponse alertCreateResponse = client.alerts().create(params);
+UsageIngestParams params = UsageIngestParams.builder()
+    .usage(List.of(UsageIngestParams.Usage.builder()
+        .customerId("team@example.com")
+        .eventType("heartbeat")
+        .timestamp("2021-01-01T00:00:00Z")
+        .transactionId("2021-01-01T00:00:00Z_cluster42")
+        .build()))
+    .build();
+client.usage().ingest(params)
 ```
+
+### Example: listing resources
+
+The Metronome API provides a `list` method to get a paginated list of products.
+You can retrieve the first page by:
+
+```java
+import com.metronome.api.models.ContractProductListResponse;
+import com.metronome.api.models.Page;
+
+ContractProductListPage page = client.contracts().products().list();
+for (ContractProductListResponse product : page.data()) {
+    System.out.println(product);
+}
+```
+
+See [Pagination](#pagination) below for more information on transparently working with lists of objects without worrying about fetching each page.
 
 ---
 
@@ -97,16 +120,17 @@ AlertCreateResponse alertCreateResponse = client.alerts().create(params);
 
 To make a request to the Metronome API, you generally build an instance of the appropriate `Params` class.
 
-In [Example: creating a resource](#example-creating-a-resource) above, we used the `AlertCreateParams.builder()` to pass to
-the `create` method of the `alerts` service.
+In [Example: creating a resource](#example-creating-a-resource) above, we used the `ContractCreateParams.builder()` to pass to
+the `create` method of the `contracts` service.
 
 Sometimes, the API may support other properties that are not yet supported in the Java SDK types. In that case,
 you can attach them using the `putAdditionalProperty` method.
 
 ```java
-AlertCreateParams params = AlertCreateParams.builder()
+import com.metronome.api.models.core.JsonValue;
+ContractCreateParams params = ContractCreateParams.builder()
     // ... normal properties
-    .putAdditionalProperty("secret_param", "4242")
+    .putAdditionalProperty("secret_param", JsonValue.from("4242"))
     .build();
 ```
 
@@ -117,7 +141,7 @@ AlertCreateParams params = AlertCreateParams.builder()
 When receiving a response, the Metronome Java SDK will deserialize it into instances of the typed model classes. In rare cases, the API may return a response property that doesn't match the expected Java type. If you directly access the mistaken property, the SDK will throw an unchecked `MetronomeInvalidDataException` at runtime. If you would prefer to check in advance that that response is completely well-typed, call `.validate()` on the returned model.
 
 ```java
-AlertCreateResponse alertCreateResponse = client.alerts().create().validate();
+ContractCreateResponse contract = client.contracts().create().validate();
 ```
 
 ### Response properties as JSON
@@ -147,10 +171,61 @@ if (field.isMissing()) {
 Sometimes, the server response may include additional properties that are not yet available in this library's types. You can access them using the model's `_additionalProperties` method:
 
 ```java
-JsonValue secret = alertCreateResponse._additionalProperties().get("secret_field");
+JsonValue secret = baseUsageFilter._additionalProperties().get("secret_field");
 ```
 
 ---
+
+## Pagination
+
+For methods that return a paginated list of results, this library provides convenient ways access
+the results either one page at a time, or item-by-item across all pages.
+
+### Auto-pagination
+
+To iterate through all results across all pages, you can use `autoPager`,
+which automatically handles fetching more pages for you:
+
+### Synchronous
+
+```java
+// As an Iterable:
+ContractProductListPage page = client.contracts().products().list(params);
+for (ContractProductListResponse product : page.autoPager()) {
+    System.out.println(product);
+};
+
+// As a Stream:
+client.contracts().products().list(params).autoPager().stream()
+    .limit(50)
+    .forEach(product -> System.out.println(product));
+```
+
+### Asynchronous
+
+```java
+// Using forEach, which returns CompletableFuture<Void>:
+asyncClient.contracts().products().list(params).autoPager()
+    .forEach(product -> System.out.println(product), executor);
+```
+
+### Manual pagination
+
+If none of the above helpers meet your needs, you can also manually request pages one-by-one.
+A page of results has a `data()` method to fetch the list of objects, as well as top-level
+`response` and other methods to fetch top-level data about the page. It also has methods
+`hasNextPage`, `getNextPage`, and `getNextPageParams` methods to help with pagination.
+
+```java
+ContractProductListPage page = client.contracts().products().list(params);
+while (page != null) {
+    for (ContractProductListResponse product : page.data()) {
+        System.out.println(product);
+    }
+
+    page = page.getNextPage().orElse(null);
+}
+```
 
 ---
 
@@ -250,3 +325,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
 We are keen for your feedback; please open an [issue](https://www.github.com/Metronome-Industries/metronome-java/issues) with questions, bugs, or suggestions.
+
+## Requirements
+
+This library requires Java 8 or later.

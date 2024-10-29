@@ -15,11 +15,10 @@ class CustomerInvoiceRetrieveResponseTest {
                 .data(
                     Invoice.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .billableStatus(Invoice.BillableStatus.BILLABLE)
                         .creditType(
-                            Invoice.CreditType.builder()
+                            CreditTypeData.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .name("string")
+                                .name("name")
                                 .build()
                         )
                         .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -27,34 +26,58 @@ class CustomerInvoiceRetrieveResponseTest {
                             listOf(
                                 Invoice.LineItem.builder()
                                     .creditType(
-                                        Invoice.LineItem.CreditType.builder()
+                                        CreditTypeData.builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .name("string")
+                                            .name("name")
                                             .build()
                                     )
-                                    .name("string")
+                                    .name("name")
                                     .total(42.23)
                                     .commitCustomFields(
                                         Invoice.LineItem.CommitCustomFields.builder().build()
                                     )
                                     .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .commitNetsuiteItemId("string")
-                                    .commitNetsuiteSalesOrderId("string")
+                                    .commitNetsuiteItemId("commit_netsuite_item_id")
+                                    .commitNetsuiteSalesOrderId("commit_netsuite_sales_order_id")
                                     .commitSegmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .commitType("string")
+                                    .commitType("commit_type")
                                     .customFields(Invoice.LineItem.CustomFields.builder().build())
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .groupKey("string")
-                                    .groupValue("string")
+                                    .groupKey("group_key")
+                                    .groupValue("group_value")
                                     .isProrated(true)
-                                    .metadata("string")
+                                    .listPrice(
+                                        Rate.builder()
+                                            .rateType(Rate.RateType.FLAT)
+                                            .creditType(
+                                                CreditTypeData.builder()
+                                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                                    .name("name")
+                                                    .build()
+                                            )
+                                            .customRate(Rate.CustomRate.builder().build())
+                                            .isProrated(true)
+                                            .price(42.23)
+                                            .pricingGroupValues(
+                                                Rate.PricingGroupValues.builder().build()
+                                            )
+                                            .quantity(42.23)
+                                            .tiers(
+                                                listOf(
+                                                    Tier.builder().price(42.23).size(42.23).build()
+                                                )
+                                            )
+                                            .useListPrices(true)
+                                            .build()
+                                    )
+                                    .metadata("metadata")
                                     .netsuiteInvoiceBillingEnd(
                                         OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                     )
                                     .netsuiteInvoiceBillingStart(
                                         OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                     )
-                                    .netsuiteItemId("string")
+                                    .netsuiteItemId("netsuite_item_id")
                                     .postpaidCommit(
                                         Invoice.LineItem.PostpaidCommit.builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -70,7 +93,7 @@ class CustomerInvoiceRetrieveResponseTest {
                                         Invoice.LineItem.ProductCustomFields.builder().build()
                                     )
                                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .productType("string")
+                                    .productType("product_type")
                                     .professionalServiceCustomFields(
                                         Invoice.LineItem.ProfessionalServiceCustomFields.builder()
                                             .build()
@@ -92,14 +115,35 @@ class CustomerInvoiceRetrieveResponseTest {
                                                         .builder()
                                                         .build()
                                                 )
-                                                .name("string")
+                                                .name("name")
                                                 .quantity(42.23)
                                                 .subtotal(42.23)
                                                 .chargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .creditGrantId(
                                                     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                 )
+                                                .endDate(
+                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                                )
                                                 .price(42.23)
+                                                .startDate(
+                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                                )
+                                                .tierPeriod(
+                                                    Invoice.LineItem.SubLineItem.TierPeriod
+                                                        .builder()
+                                                        .startingAt(
+                                                            OffsetDateTime.parse(
+                                                                "2019-12-27T18:11:19.117Z"
+                                                            )
+                                                        )
+                                                        .endingBefore(
+                                                            OffsetDateTime.parse(
+                                                                "2019-12-27T18:11:19.117Z"
+                                                            )
+                                                        )
+                                                        .build()
+                                                )
                                                 .tiers(
                                                     listOf(
                                                         Invoice.LineItem.SubLineItem.Tier.builder()
@@ -123,13 +167,14 @@ class CustomerInvoiceRetrieveResponseTest {
                             "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
                         )
                         .amendmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .billableStatus(Invoice.BillableStatus.BILLABLE)
                         .contractCustomFields(Invoice.ContractCustomFields.builder().build())
                         .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .correctionRecord(
                             Invoice.CorrectionRecord.builder()
                                 .correctedInvoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .memo("string")
-                                .reason("string")
+                                .memo("memo")
+                                .reason("reason")
                                 .correctedExternalInvoice(
                                     Invoice.CorrectionRecord.CorrectedExternalInvoice.builder()
                                         .billingProviderType(
@@ -142,7 +187,7 @@ class CustomerInvoiceRetrieveResponseTest {
                                                 .ExternalStatus
                                                 .DRAFT
                                         )
-                                        .invoiceId("string")
+                                        .invoiceId("invoice_id")
                                         .issuedAtTimestamp(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
@@ -160,7 +205,7 @@ class CustomerInvoiceRetrieveResponseTest {
                                     Invoice.ExternalInvoice.BillingProviderType.AWS_MARKETPLACE
                                 )
                                 .externalStatus(Invoice.ExternalInvoice.ExternalStatus.DRAFT)
-                                .invoiceId("string")
+                                .invoiceId("invoice_id")
                                 .issuedAtTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()
                         )
@@ -168,44 +213,48 @@ class CustomerInvoiceRetrieveResponseTest {
                             listOf(
                                 Invoice.InvoiceAdjustment.builder()
                                     .creditType(
-                                        Invoice.InvoiceAdjustment.CreditType.builder()
+                                        CreditTypeData.builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .name("string")
+                                            .name("name")
                                             .build()
                                     )
                                     .name("Monthly minimum (\$1,000)")
                                     .total(42.23)
-                                    .creditGrantId("string")
+                                    .creditGrantCustomFields(
+                                        Invoice.InvoiceAdjustment.CreditGrantCustomFields.builder()
+                                            .build()
+                                    )
+                                    .creditGrantId("credit_grant_id")
                                     .build()
                             )
                         )
                         .issuedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .netPaymentTermsDays(42.23)
-                        .netsuiteSalesOrderId("string")
+                        .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .planCustomFields(Invoice.PlanCustomFields.builder().build())
                         .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .planName("string")
+                        .planName("plan_name")
                         .resellerRoyalty(
                             Invoice.ResellerRoyalty.builder()
-                                .fraction("string")
-                                .netsuiteResellerId("string")
+                                .fraction("fraction")
+                                .netsuiteResellerId("netsuite_reseller_id")
                                 .resellerType(Invoice.ResellerRoyalty.ResellerType.AWS)
                                 .awsOptions(
                                     Invoice.ResellerRoyalty.AwsOptions.builder()
-                                        .awsAccountNumber("string")
-                                        .awsOfferId("string")
-                                        .awsPayerReferenceId("string")
+                                        .awsAccountNumber("aws_account_number")
+                                        .awsOfferId("aws_offer_id")
+                                        .awsPayerReferenceId("aws_payer_reference_id")
                                         .build()
                                 )
                                 .gcpOptions(
                                     Invoice.ResellerRoyalty.GcpOptions.builder()
-                                        .gcpAccountId("string")
-                                        .gcpOfferId("string")
+                                        .gcpAccountId("gcp_account_id")
+                                        .gcpOfferId("gcp_offer_id")
                                         .build()
                                 )
                                 .build()
                         )
-                        .salesforceOpportunityId("string")
+                        .salesforceOpportunityId("salesforce_opportunity_id")
                         .startTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .subtotal(42.23)
                         .build()
@@ -216,11 +265,10 @@ class CustomerInvoiceRetrieveResponseTest {
             .isEqualTo(
                 Invoice.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .billableStatus(Invoice.BillableStatus.BILLABLE)
                     .creditType(
-                        Invoice.CreditType.builder()
+                        CreditTypeData.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .name("string")
+                            .name("name")
                             .build()
                     )
                     .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -228,34 +276,56 @@ class CustomerInvoiceRetrieveResponseTest {
                         listOf(
                             Invoice.LineItem.builder()
                                 .creditType(
-                                    Invoice.LineItem.CreditType.builder()
+                                    CreditTypeData.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .name("string")
+                                        .name("name")
                                         .build()
                                 )
-                                .name("string")
+                                .name("name")
                                 .total(42.23)
                                 .commitCustomFields(
                                     Invoice.LineItem.CommitCustomFields.builder().build()
                                 )
                                 .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .commitNetsuiteItemId("string")
-                                .commitNetsuiteSalesOrderId("string")
+                                .commitNetsuiteItemId("commit_netsuite_item_id")
+                                .commitNetsuiteSalesOrderId("commit_netsuite_sales_order_id")
                                 .commitSegmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .commitType("string")
+                                .commitType("commit_type")
                                 .customFields(Invoice.LineItem.CustomFields.builder().build())
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .groupKey("string")
-                                .groupValue("string")
+                                .groupKey("group_key")
+                                .groupValue("group_value")
                                 .isProrated(true)
-                                .metadata("string")
+                                .listPrice(
+                                    Rate.builder()
+                                        .rateType(Rate.RateType.FLAT)
+                                        .creditType(
+                                            CreditTypeData.builder()
+                                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                                .name("name")
+                                                .build()
+                                        )
+                                        .customRate(Rate.CustomRate.builder().build())
+                                        .isProrated(true)
+                                        .price(42.23)
+                                        .pricingGroupValues(
+                                            Rate.PricingGroupValues.builder().build()
+                                        )
+                                        .quantity(42.23)
+                                        .tiers(
+                                            listOf(Tier.builder().price(42.23).size(42.23).build())
+                                        )
+                                        .useListPrices(true)
+                                        .build()
+                                )
+                                .metadata("metadata")
                                 .netsuiteInvoiceBillingEnd(
                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                 )
                                 .netsuiteInvoiceBillingStart(
                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                 )
-                                .netsuiteItemId("string")
+                                .netsuiteItemId("netsuite_item_id")
                                 .postpaidCommit(
                                     Invoice.LineItem.PostpaidCommit.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -271,7 +341,7 @@ class CustomerInvoiceRetrieveResponseTest {
                                     Invoice.LineItem.ProductCustomFields.builder().build()
                                 )
                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .productType("string")
+                                .productType("product_type")
                                 .professionalServiceCustomFields(
                                     Invoice.LineItem.ProfessionalServiceCustomFields.builder()
                                         .build()
@@ -291,12 +361,32 @@ class CustomerInvoiceRetrieveResponseTest {
                                                 Invoice.LineItem.SubLineItem.CustomFields.builder()
                                                     .build()
                                             )
-                                            .name("string")
+                                            .name("name")
                                             .quantity(42.23)
                                             .subtotal(42.23)
                                             .chargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .endDate(
+                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            )
                                             .price(42.23)
+                                            .startDate(
+                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            )
+                                            .tierPeriod(
+                                                Invoice.LineItem.SubLineItem.TierPeriod.builder()
+                                                    .startingAt(
+                                                        OffsetDateTime.parse(
+                                                            "2019-12-27T18:11:19.117Z"
+                                                        )
+                                                    )
+                                                    .endingBefore(
+                                                        OffsetDateTime.parse(
+                                                            "2019-12-27T18:11:19.117Z"
+                                                        )
+                                                    )
+                                                    .build()
+                                            )
                                             .tiers(
                                                 listOf(
                                                     Invoice.LineItem.SubLineItem.Tier.builder()
@@ -320,13 +410,14 @@ class CustomerInvoiceRetrieveResponseTest {
                         "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
                     )
                     .amendmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .billableStatus(Invoice.BillableStatus.BILLABLE)
                     .contractCustomFields(Invoice.ContractCustomFields.builder().build())
                     .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .correctionRecord(
                         Invoice.CorrectionRecord.builder()
                             .correctedInvoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .memo("string")
-                            .reason("string")
+                            .memo("memo")
+                            .reason("reason")
                             .correctedExternalInvoice(
                                 Invoice.CorrectionRecord.CorrectedExternalInvoice.builder()
                                     .billingProviderType(
@@ -339,7 +430,7 @@ class CustomerInvoiceRetrieveResponseTest {
                                             .ExternalStatus
                                             .DRAFT
                                     )
-                                    .invoiceId("string")
+                                    .invoiceId("invoice_id")
                                     .issuedAtTimestamp(
                                         OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                     )
@@ -357,7 +448,7 @@ class CustomerInvoiceRetrieveResponseTest {
                                 Invoice.ExternalInvoice.BillingProviderType.AWS_MARKETPLACE
                             )
                             .externalStatus(Invoice.ExternalInvoice.ExternalStatus.DRAFT)
-                            .invoiceId("string")
+                            .invoiceId("invoice_id")
                             .issuedAtTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .build()
                     )
@@ -365,44 +456,48 @@ class CustomerInvoiceRetrieveResponseTest {
                         listOf(
                             Invoice.InvoiceAdjustment.builder()
                                 .creditType(
-                                    Invoice.InvoiceAdjustment.CreditType.builder()
+                                    CreditTypeData.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .name("string")
+                                        .name("name")
                                         .build()
                                 )
                                 .name("Monthly minimum (\$1,000)")
                                 .total(42.23)
-                                .creditGrantId("string")
+                                .creditGrantCustomFields(
+                                    Invoice.InvoiceAdjustment.CreditGrantCustomFields.builder()
+                                        .build()
+                                )
+                                .creditGrantId("credit_grant_id")
                                 .build()
                         )
                     )
                     .issuedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .netPaymentTermsDays(42.23)
-                    .netsuiteSalesOrderId("string")
+                    .netsuiteSalesOrderId("netsuite_sales_order_id")
                     .planCustomFields(Invoice.PlanCustomFields.builder().build())
                     .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .planName("string")
+                    .planName("plan_name")
                     .resellerRoyalty(
                         Invoice.ResellerRoyalty.builder()
-                            .fraction("string")
-                            .netsuiteResellerId("string")
+                            .fraction("fraction")
+                            .netsuiteResellerId("netsuite_reseller_id")
                             .resellerType(Invoice.ResellerRoyalty.ResellerType.AWS)
                             .awsOptions(
                                 Invoice.ResellerRoyalty.AwsOptions.builder()
-                                    .awsAccountNumber("string")
-                                    .awsOfferId("string")
-                                    .awsPayerReferenceId("string")
+                                    .awsAccountNumber("aws_account_number")
+                                    .awsOfferId("aws_offer_id")
+                                    .awsPayerReferenceId("aws_payer_reference_id")
                                     .build()
                             )
                             .gcpOptions(
                                 Invoice.ResellerRoyalty.GcpOptions.builder()
-                                    .gcpAccountId("string")
-                                    .gcpOfferId("string")
+                                    .gcpAccountId("gcp_account_id")
+                                    .gcpOfferId("gcp_offer_id")
                                     .build()
                             )
                             .build()
                     )
-                    .salesforceOpportunityId("string")
+                    .salesforceOpportunityId("salesforce_opportunity_id")
                     .startTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .subtotal(42.23)
                     .build()

@@ -62,8 +62,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         /** The Metronome ID of the customer */
         @JsonProperty("customer_id") fun customerId(): String? = customerId
 
@@ -75,32 +73,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomerAlertListBody &&
-                this.customerId == other.customerId &&
-                this.alertStatuses == other.alertStatuses &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        customerId,
-                        alertStatuses,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CustomerAlertListBody{customerId=$customerId, alertStatuses=$alertStatuses, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -153,6 +125,26 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomerAlertListBody && this.customerId == other.customerId && this.alertStatuses == other.alertStatuses && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(customerId, alertStatuses, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CustomerAlertListBody{customerId=$customerId, alertStatuses=$alertStatuses, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -166,24 +158,11 @@ constructor(
             return true
         }
 
-        return other is CustomerAlertListParams &&
-            this.customerId == other.customerId &&
-            this.alertStatuses == other.alertStatuses &&
-            this.nextPage == other.nextPage &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is CustomerAlertListParams && this.customerId == other.customerId && this.alertStatuses == other.alertStatuses && this.nextPage == other.nextPage && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            customerId,
-            alertStatuses,
-            nextPage,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(customerId, alertStatuses, nextPage, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
@@ -309,7 +288,7 @@ constructor(
                 return true
             }
 
-            return other is AlertStatus && this.value == other.value
+            return /* spotless:off */ other is AlertStatus && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -318,23 +297,11 @@ constructor(
 
         companion object {
 
-            @JvmField val ENABLED = AlertStatus(JsonField.of("enabled"))
-
-            @JvmField val DISABLED = AlertStatus(JsonField.of("disabled"))
-
-            @JvmField val ARCHIVED = AlertStatus(JsonField.of("archived"))
-
             @JvmField val ENABLED = AlertStatus(JsonField.of("ENABLED"))
 
             @JvmField val DISABLED = AlertStatus(JsonField.of("DISABLED"))
 
             @JvmField val ARCHIVED = AlertStatus(JsonField.of("ARCHIVED"))
-
-            @JvmField val ENABLED = AlertStatus(JsonField.of("Enabled"))
-
-            @JvmField val DISABLED = AlertStatus(JsonField.of("Disabled"))
-
-            @JvmField val ARCHIVED = AlertStatus(JsonField.of("Archived"))
 
             @JvmStatic fun of(value: String) = AlertStatus(JsonField.of(value))
         }
@@ -343,21 +310,9 @@ constructor(
             ENABLED,
             DISABLED,
             ARCHIVED,
-            ENABLED,
-            DISABLED,
-            ARCHIVED,
-            ENABLED,
-            DISABLED,
-            ARCHIVED,
         }
 
         enum class Value {
-            ENABLED,
-            DISABLED,
-            ARCHIVED,
-            ENABLED,
-            DISABLED,
-            ARCHIVED,
             ENABLED,
             DISABLED,
             ARCHIVED,
@@ -369,23 +324,11 @@ constructor(
                 ENABLED -> Value.ENABLED
                 DISABLED -> Value.DISABLED
                 ARCHIVED -> Value.ARCHIVED
-                ENABLED -> Value.ENABLED
-                DISABLED -> Value.DISABLED
-                ARCHIVED -> Value.ARCHIVED
-                ENABLED -> Value.ENABLED
-                DISABLED -> Value.DISABLED
-                ARCHIVED -> Value.ARCHIVED
                 else -> Value._UNKNOWN
             }
 
         fun known(): Known =
             when (this) {
-                ENABLED -> Known.ENABLED
-                DISABLED -> Known.DISABLED
-                ARCHIVED -> Known.ARCHIVED
-                ENABLED -> Known.ENABLED
-                DISABLED -> Known.DISABLED
-                ARCHIVED -> Known.ARCHIVED
                 ENABLED -> Known.ENABLED
                 DISABLED -> Known.DISABLED
                 ARCHIVED -> Known.ARCHIVED

@@ -13,7 +13,7 @@ class CustomerUpdateConfigParamsTest {
         CustomerUpdateConfigParams.builder()
             .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .leaveStripeInvoicesInDraft(true)
-            .salesforceAccountId("string")
+            .salesforceAccountId("salesforce_account_id")
             .build()
     }
 
@@ -23,12 +23,12 @@ class CustomerUpdateConfigParamsTest {
             CustomerUpdateConfigParams.builder()
                 .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .leaveStripeInvoicesInDraft(true)
-                .salesforceAccountId("string")
+                .salesforceAccountId("salesforce_account_id")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.leaveStripeInvoicesInDraft()).isEqualTo(true)
-        assertThat(body.salesforceAccountId()).isEqualTo("string")
+        assertThat(body.salesforceAccountId()).isEqualTo("salesforce_account_id")
     }
 
     @Test

@@ -57,8 +57,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonProperty("entity") fun entity(): Entity? = entity
 
         @JsonProperty("entity_id") fun entityId(): String? = entityId
@@ -70,34 +68,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomFieldDeleteValuesBody &&
-                this.entity == other.entity &&
-                this.entityId == other.entityId &&
-                this.keys == other.keys &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        entity,
-                        entityId,
-                        keys,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CustomFieldDeleteValuesBody{entity=$entity, entityId=$entityId, keys=$keys, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -148,6 +118,26 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomFieldDeleteValuesBody && this.entity == other.entity && this.entityId == other.entityId && this.keys == other.keys && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(entity, entityId, keys, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CustomFieldDeleteValuesBody{entity=$entity, entityId=$entityId, keys=$keys, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -161,24 +151,11 @@ constructor(
             return true
         }
 
-        return other is CustomFieldDeleteValuesParams &&
-            this.entity == other.entity &&
-            this.entityId == other.entityId &&
-            this.keys == other.keys &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is CustomFieldDeleteValuesParams && this.entity == other.entity && this.entityId == other.entityId && this.keys == other.keys && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            entity,
-            entityId,
-            keys,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(entity, entityId, keys, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
@@ -300,7 +277,7 @@ constructor(
                 return true
             }
 
-            return other is Entity && this.value == other.value
+            return /* spotless:off */ other is Entity && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

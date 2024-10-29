@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.client
 
 import com.metronome.api.models.*
@@ -13,13 +11,9 @@ interface MetronomeClient {
 
     fun alerts(): AlertService
 
-    fun customerAlerts(): CustomerAlertService
-
     fun plans(): PlanService
 
-    fun credits(): CreditService
-
-    fun creditTypes(): CreditTypeService
+    fun creditGrants(): CreditGrantService
 
     fun customers(): CustomerService
 
@@ -30,4 +24,12 @@ interface MetronomeClient {
     fun auditLogs(): AuditLogService
 
     fun customFields(): CustomFieldService
+
+    fun billableMetrics(): BillableMetricService
+
+    fun services(): ServiceService
+
+    fun invoices(): InvoiceService
+
+    fun contracts(): ContractService
 }
