@@ -9,13 +9,8 @@ import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Collections
 
 @JvmSynthetic
-internal fun <T : Any> T?.getOrThrow(name: String): T {
-    if (this == null) {
-        throw MetronomeInvalidDataException("'${name}' is not present")
-    }
-
-    return this
-}
+internal fun <T : Any> T?.getOrThrow(name: String): T =
+    this ?: throw MetronomeInvalidDataException("`${name}` is not present")
 
 @JvmSynthetic
 internal fun <T> List<T>.toUnmodifiable(): List<T> {
