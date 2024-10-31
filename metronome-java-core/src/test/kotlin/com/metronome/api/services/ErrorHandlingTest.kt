@@ -156,6 +156,7 @@ class ErrorHandlingTest {
                             .priority(42.23)
                             .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                             .rolloverFraction(42.23)
+                            .temporaryId("temporary_id")
                             .build()
                     )
                 )
@@ -262,10 +263,12 @@ class ErrorHandlingTest {
                             .applicableProductTags(listOf("string"))
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .entitled(true)
+                            .isCommitSpecific(true)
                             .multiplier(42.23)
                             .overrideSpecifiers(
                                 listOf(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .commitIds(listOf("string"))
                                         .presentationGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
@@ -302,6 +305,7 @@ class ErrorHandlingTest {
                             )
                             .priority(42.23)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .target(ContractCreateParams.Override.Target.COMMIT_RATE)
                             .tiers(
                                 listOf(
                                     ContractCreateParams.Override.Tier.builder()
@@ -560,6 +564,7 @@ class ErrorHandlingTest {
                             .priority(42.23)
                             .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                             .rolloverFraction(42.23)
+                            .temporaryId("temporary_id")
                             .build()
                     )
                 )
@@ -666,10 +671,12 @@ class ErrorHandlingTest {
                             .applicableProductTags(listOf("string"))
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .entitled(true)
+                            .isCommitSpecific(true)
                             .multiplier(42.23)
                             .overrideSpecifiers(
                                 listOf(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .commitIds(listOf("string"))
                                         .presentationGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
@@ -706,6 +713,7 @@ class ErrorHandlingTest {
                             )
                             .priority(42.23)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .target(ContractCreateParams.Override.Target.COMMIT_RATE)
                             .tiers(
                                 listOf(
                                     ContractCreateParams.Override.Tier.builder()
@@ -965,6 +973,7 @@ class ErrorHandlingTest {
                             .priority(42.23)
                             .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                             .rolloverFraction(42.23)
+                            .temporaryId("temporary_id")
                             .build()
                     )
                 )
@@ -1071,10 +1080,12 @@ class ErrorHandlingTest {
                             .applicableProductTags(listOf("string"))
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .entitled(true)
+                            .isCommitSpecific(true)
                             .multiplier(42.23)
                             .overrideSpecifiers(
                                 listOf(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .commitIds(listOf("string"))
                                         .presentationGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
@@ -1111,6 +1122,7 @@ class ErrorHandlingTest {
                             )
                             .priority(42.23)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .target(ContractCreateParams.Override.Target.COMMIT_RATE)
                             .tiers(
                                 listOf(
                                     ContractCreateParams.Override.Tier.builder()
@@ -1370,6 +1382,7 @@ class ErrorHandlingTest {
                             .priority(42.23)
                             .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                             .rolloverFraction(42.23)
+                            .temporaryId("temporary_id")
                             .build()
                     )
                 )
@@ -1476,10 +1489,12 @@ class ErrorHandlingTest {
                             .applicableProductTags(listOf("string"))
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .entitled(true)
+                            .isCommitSpecific(true)
                             .multiplier(42.23)
                             .overrideSpecifiers(
                                 listOf(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .commitIds(listOf("string"))
                                         .presentationGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
@@ -1516,6 +1531,7 @@ class ErrorHandlingTest {
                             )
                             .priority(42.23)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .target(ContractCreateParams.Override.Target.COMMIT_RATE)
                             .tiers(
                                 listOf(
                                     ContractCreateParams.Override.Tier.builder()
@@ -1775,6 +1791,7 @@ class ErrorHandlingTest {
                             .priority(42.23)
                             .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                             .rolloverFraction(42.23)
+                            .temporaryId("temporary_id")
                             .build()
                     )
                 )
@@ -1881,10 +1898,12 @@ class ErrorHandlingTest {
                             .applicableProductTags(listOf("string"))
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .entitled(true)
+                            .isCommitSpecific(true)
                             .multiplier(42.23)
                             .overrideSpecifiers(
                                 listOf(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .commitIds(listOf("string"))
                                         .presentationGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
@@ -1921,6 +1940,7 @@ class ErrorHandlingTest {
                             )
                             .priority(42.23)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .target(ContractCreateParams.Override.Target.COMMIT_RATE)
                             .tiers(
                                 listOf(
                                     ContractCreateParams.Override.Tier.builder()
@@ -2180,6 +2200,7 @@ class ErrorHandlingTest {
                             .priority(42.23)
                             .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                             .rolloverFraction(42.23)
+                            .temporaryId("temporary_id")
                             .build()
                     )
                 )
@@ -2286,10 +2307,12 @@ class ErrorHandlingTest {
                             .applicableProductTags(listOf("string"))
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .entitled(true)
+                            .isCommitSpecific(true)
                             .multiplier(42.23)
                             .overrideSpecifiers(
                                 listOf(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .commitIds(listOf("string"))
                                         .presentationGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
@@ -2326,6 +2349,7 @@ class ErrorHandlingTest {
                             )
                             .priority(42.23)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .target(ContractCreateParams.Override.Target.COMMIT_RATE)
                             .tiers(
                                 listOf(
                                     ContractCreateParams.Override.Tier.builder()
@@ -2589,6 +2613,7 @@ class ErrorHandlingTest {
                             .priority(42.23)
                             .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                             .rolloverFraction(42.23)
+                            .temporaryId("temporary_id")
                             .build()
                     )
                 )
@@ -2695,10 +2720,12 @@ class ErrorHandlingTest {
                             .applicableProductTags(listOf("string"))
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .entitled(true)
+                            .isCommitSpecific(true)
                             .multiplier(42.23)
                             .overrideSpecifiers(
                                 listOf(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .commitIds(listOf("string"))
                                         .presentationGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
@@ -2735,6 +2762,7 @@ class ErrorHandlingTest {
                             )
                             .priority(42.23)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .target(ContractCreateParams.Override.Target.COMMIT_RATE)
                             .tiers(
                                 listOf(
                                     ContractCreateParams.Override.Tier.builder()
@@ -2994,6 +3022,7 @@ class ErrorHandlingTest {
                             .priority(42.23)
                             .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                             .rolloverFraction(42.23)
+                            .temporaryId("temporary_id")
                             .build()
                     )
                 )
@@ -3100,10 +3129,12 @@ class ErrorHandlingTest {
                             .applicableProductTags(listOf("string"))
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .entitled(true)
+                            .isCommitSpecific(true)
                             .multiplier(42.23)
                             .overrideSpecifiers(
                                 listOf(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .commitIds(listOf("string"))
                                         .presentationGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
@@ -3140,6 +3171,7 @@ class ErrorHandlingTest {
                             )
                             .priority(42.23)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .target(ContractCreateParams.Override.Target.COMMIT_RATE)
                             .tiers(
                                 listOf(
                                     ContractCreateParams.Override.Tier.builder()
@@ -3399,6 +3431,7 @@ class ErrorHandlingTest {
                             .priority(42.23)
                             .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                             .rolloverFraction(42.23)
+                            .temporaryId("temporary_id")
                             .build()
                     )
                 )
@@ -3505,10 +3538,12 @@ class ErrorHandlingTest {
                             .applicableProductTags(listOf("string"))
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .entitled(true)
+                            .isCommitSpecific(true)
                             .multiplier(42.23)
                             .overrideSpecifiers(
                                 listOf(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .commitIds(listOf("string"))
                                         .presentationGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
@@ -3545,6 +3580,7 @@ class ErrorHandlingTest {
                             )
                             .priority(42.23)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .target(ContractCreateParams.Override.Target.COMMIT_RATE)
                             .tiers(
                                 listOf(
                                     ContractCreateParams.Override.Tier.builder()
@@ -3809,6 +3845,7 @@ class ErrorHandlingTest {
                             .priority(42.23)
                             .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                             .rolloverFraction(42.23)
+                            .temporaryId("temporary_id")
                             .build()
                     )
                 )
@@ -3915,10 +3952,12 @@ class ErrorHandlingTest {
                             .applicableProductTags(listOf("string"))
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .entitled(true)
+                            .isCommitSpecific(true)
                             .multiplier(42.23)
                             .overrideSpecifiers(
                                 listOf(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .commitIds(listOf("string"))
                                         .presentationGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
@@ -3955,6 +3994,7 @@ class ErrorHandlingTest {
                             )
                             .priority(42.23)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .target(ContractCreateParams.Override.Target.COMMIT_RATE)
                             .tiers(
                                 listOf(
                                     ContractCreateParams.Override.Tier.builder()
@@ -4213,6 +4253,7 @@ class ErrorHandlingTest {
                             .priority(42.23)
                             .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                             .rolloverFraction(42.23)
+                            .temporaryId("temporary_id")
                             .build()
                     )
                 )
@@ -4319,10 +4360,12 @@ class ErrorHandlingTest {
                             .applicableProductTags(listOf("string"))
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .entitled(true)
+                            .isCommitSpecific(true)
                             .multiplier(42.23)
                             .overrideSpecifiers(
                                 listOf(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .commitIds(listOf("string"))
                                         .presentationGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
@@ -4359,6 +4402,7 @@ class ErrorHandlingTest {
                             )
                             .priority(42.23)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .target(ContractCreateParams.Override.Target.COMMIT_RATE)
                             .tiers(
                                 listOf(
                                     ContractCreateParams.Override.Tier.builder()

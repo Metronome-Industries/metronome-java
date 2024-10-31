@@ -577,6 +577,7 @@ constructor(
         private val applicableProductTags: List<String>?,
         private val netsuiteSalesOrderId: String?,
         private val customFields: CustomFields?,
+        private val temporaryId: String?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
@@ -635,6 +636,12 @@ constructor(
 
         @JsonProperty("custom_fields") fun customFields(): CustomFields? = customFields
 
+        /**
+         * A temporary ID for the commit that can be used to reference the commit for commit
+         * specific overrides.
+         */
+        @JsonProperty("temporary_id") fun temporaryId(): String? = temporaryId
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -662,6 +669,7 @@ constructor(
             private var applicableProductTags: List<String>? = null
             private var netsuiteSalesOrderId: String? = null
             private var customFields: CustomFields? = null
+            private var temporaryId: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -680,6 +688,7 @@ constructor(
                 this.applicableProductTags = commit.applicableProductTags
                 this.netsuiteSalesOrderId = commit.netsuiteSalesOrderId
                 this.customFields = commit.customFields
+                this.temporaryId = commit.temporaryId
                 additionalProperties(commit.additionalProperties)
             }
 
@@ -763,6 +772,13 @@ constructor(
                 this.customFields = customFields
             }
 
+            /**
+             * A temporary ID for the commit that can be used to reference the commit for commit
+             * specific overrides.
+             */
+            @JsonProperty("temporary_id")
+            fun temporaryId(temporaryId: String) = apply { this.temporaryId = temporaryId }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 this.additionalProperties.putAll(additionalProperties)
@@ -793,6 +809,7 @@ constructor(
                     applicableProductTags?.toUnmodifiable(),
                     netsuiteSalesOrderId,
                     customFields,
+                    temporaryId,
                     additionalProperties.toUnmodifiable(),
                 )
         }
@@ -1769,20 +1786,20 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Commit && this.type == other.type && this.rateType == other.rateType && this.name == other.name && this.productId == other.productId && this.accessSchedule == other.accessSchedule && this.invoiceSchedule == other.invoiceSchedule && this.amount == other.amount && this.description == other.description && this.rolloverFraction == other.rolloverFraction && this.priority == other.priority && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.customFields == other.customFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Commit && this.type == other.type && this.rateType == other.rateType && this.name == other.name && this.productId == other.productId && this.accessSchedule == other.accessSchedule && this.invoiceSchedule == other.invoiceSchedule && this.amount == other.amount && this.description == other.description && this.rolloverFraction == other.rolloverFraction && this.priority == other.priority && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.customFields == other.customFields && this.temporaryId == other.temporaryId && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(type, rateType, name, productId, accessSchedule, invoiceSchedule, amount, description, rolloverFraction, priority, applicableProductIds, applicableProductTags, netsuiteSalesOrderId, customFields, additionalProperties) /* spotless:on */
+                hashCode = /* spotless:off */ Objects.hash(type, rateType, name, productId, accessSchedule, invoiceSchedule, amount, description, rolloverFraction, priority, applicableProductIds, applicableProductTags, netsuiteSalesOrderId, customFields, temporaryId, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
 
         override fun toString() =
-            "Commit{type=$type, rateType=$rateType, name=$name, productId=$productId, accessSchedule=$accessSchedule, invoiceSchedule=$invoiceSchedule, amount=$amount, description=$description, rolloverFraction=$rolloverFraction, priority=$priority, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, netsuiteSalesOrderId=$netsuiteSalesOrderId, customFields=$customFields, additionalProperties=$additionalProperties}"
+            "Commit{type=$type, rateType=$rateType, name=$name, productId=$productId, accessSchedule=$accessSchedule, invoiceSchedule=$invoiceSchedule, amount=$amount, description=$description, rolloverFraction=$rolloverFraction, priority=$priority, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, netsuiteSalesOrderId=$netsuiteSalesOrderId, customFields=$customFields, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = Credit.Builder::class)
@@ -2998,6 +3015,8 @@ constructor(
         private val applicableProductTags: List<String>?,
         private val overrideSpecifiers: List<OverrideSpecifier>?,
         private val tiers: List<Tier>?,
+        private val isCommitSpecific: Boolean?,
+        private val target: Target?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
@@ -3042,6 +3061,19 @@ constructor(
         /** Required for TIERED type. Must have at least one tier. */
         @JsonProperty("tiers") fun tiers(): List<Tier>? = tiers
 
+        /**
+         * Indicates whether the override should only apply to commits. Defaults to `false`. If
+         * `true`, you can specify relevant commits in `override_specifiers` by passing
+         * `commit_ids`.
+         */
+        @JsonProperty("is_commit_specific") fun isCommitSpecific(): Boolean? = isCommitSpecific
+
+        /**
+         * Indicates whether the override applies to commit rates or list rates. Can only be used
+         * for overrides that have `is_commit_specific` set to `true`. Defaults to `"LIST_RATE"`.
+         */
+        @JsonProperty("target") fun target(): Target? = target
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -3066,6 +3098,8 @@ constructor(
             private var applicableProductTags: List<String>? = null
             private var overrideSpecifiers: List<OverrideSpecifier>? = null
             private var tiers: List<Tier>? = null
+            private var isCommitSpecific: Boolean? = null
+            private var target: Target? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -3081,6 +3115,8 @@ constructor(
                 this.applicableProductTags = override.applicableProductTags
                 this.overrideSpecifiers = override.overrideSpecifiers
                 this.tiers = override.tiers
+                this.isCommitSpecific = override.isCommitSpecific
+                this.target = override.target
                 additionalProperties(override.additionalProperties)
             }
 
@@ -3141,6 +3177,23 @@ constructor(
             /** Required for TIERED type. Must have at least one tier. */
             @JsonProperty("tiers") fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
 
+            /**
+             * Indicates whether the override should only apply to commits. Defaults to `false`. If
+             * `true`, you can specify relevant commits in `override_specifiers` by passing
+             * `commit_ids`.
+             */
+            @JsonProperty("is_commit_specific")
+            fun isCommitSpecific(isCommitSpecific: Boolean) = apply {
+                this.isCommitSpecific = isCommitSpecific
+            }
+
+            /**
+             * Indicates whether the override applies to commit rates or list rates. Can only be
+             * used for overrides that have `is_commit_specific` set to `true`. Defaults to
+             * `"LIST_RATE"`.
+             */
+            @JsonProperty("target") fun target(target: Target) = apply { this.target = target }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 this.additionalProperties.putAll(additionalProperties)
@@ -3168,6 +3221,8 @@ constructor(
                     applicableProductTags?.toUnmodifiable(),
                     overrideSpecifiers?.toUnmodifiable(),
                     tiers?.toUnmodifiable(),
+                    isCommitSpecific,
+                    target,
                     additionalProperties.toUnmodifiable(),
                 )
         }
@@ -3176,12 +3231,20 @@ constructor(
         @NoAutoDetect
         class OverrideSpecifier
         private constructor(
+            private val commitIds: List<String>?,
             private val productId: String?,
             private val productTags: List<String>?,
             private val pricingGroupValues: PricingGroupValues?,
             private val presentationGroupValues: PresentationGroupValues?,
             private val additionalProperties: Map<String, JsonValue>,
         ) {
+
+            /**
+             * If provided, the override will only apply to the specified commits. Can only be used
+             * for commit specific overrides. If not provided, the override will apply to all
+             * commits.
+             */
+            @JsonProperty("commit_ids") fun commitIds(): List<String>? = commitIds
 
             /** If provided, the override will only apply to the product with the specified ID. */
             @JsonProperty("product_id") fun productId(): String? = productId
@@ -3218,6 +3281,7 @@ constructor(
 
             class Builder {
 
+                private var commitIds: List<String>? = null
                 private var productId: String? = null
                 private var productTags: List<String>? = null
                 private var pricingGroupValues: PricingGroupValues? = null
@@ -3226,12 +3290,21 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(overrideSpecifier: OverrideSpecifier) = apply {
+                    this.commitIds = overrideSpecifier.commitIds
                     this.productId = overrideSpecifier.productId
                     this.productTags = overrideSpecifier.productTags
                     this.pricingGroupValues = overrideSpecifier.pricingGroupValues
                     this.presentationGroupValues = overrideSpecifier.presentationGroupValues
                     additionalProperties(overrideSpecifier.additionalProperties)
                 }
+
+                /**
+                 * If provided, the override will only apply to the specified commits. Can only be
+                 * used for commit specific overrides. If not provided, the override will apply to
+                 * all commits.
+                 */
+                @JsonProperty("commit_ids")
+                fun commitIds(commitIds: List<String>) = apply { this.commitIds = commitIds }
 
                 /**
                  * If provided, the override will only apply to the product with the specified ID.
@@ -3285,6 +3358,7 @@ constructor(
 
                 fun build(): OverrideSpecifier =
                     OverrideSpecifier(
+                        commitIds?.toUnmodifiable(),
                         productId,
                         productTags?.toUnmodifiable(),
                         pricingGroupValues,
@@ -3440,20 +3514,20 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is OverrideSpecifier && this.productId == other.productId && this.productTags == other.productTags && this.pricingGroupValues == other.pricingGroupValues && this.presentationGroupValues == other.presentationGroupValues && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is OverrideSpecifier && this.commitIds == other.commitIds && this.productId == other.productId && this.productTags == other.productTags && this.pricingGroupValues == other.pricingGroupValues && this.presentationGroupValues == other.presentationGroupValues && this.additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             private var hashCode: Int = 0
 
             override fun hashCode(): Int {
                 if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(productId, productTags, pricingGroupValues, presentationGroupValues, additionalProperties) /* spotless:on */
+                    hashCode = /* spotless:off */ Objects.hash(commitIds, productId, productTags, pricingGroupValues, presentationGroupValues, additionalProperties) /* spotless:on */
                 }
                 return hashCode
             }
 
             override fun toString() =
-                "OverrideSpecifier{productId=$productId, productTags=$productTags, pricingGroupValues=$pricingGroupValues, presentationGroupValues=$presentationGroupValues, additionalProperties=$additionalProperties}"
+                "OverrideSpecifier{commitIds=$commitIds, productId=$productId, productTags=$productTags, pricingGroupValues=$pricingGroupValues, presentationGroupValues=$presentationGroupValues, additionalProperties=$additionalProperties}"
         }
 
         /** Required for OVERWRITE type. */
@@ -3751,6 +3825,75 @@ constructor(
                 "OverwriteRate{rateType=$rateType, price=$price, quantity=$quantity, isProrated=$isProrated, tiers=$tiers, customRate=$customRate, creditTypeId=$creditTypeId, additionalProperties=$additionalProperties}"
         }
 
+        class Target
+        @JsonCreator
+        private constructor(
+            private val value: JsonField<String>,
+        ) : Enum {
+
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Target && this.value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+
+            companion object {
+
+                @JvmField val COMMIT_RATE = Target(JsonField.of("COMMIT_RATE"))
+
+                @JvmField val COMMIT_RATE = Target(JsonField.of("commit_rate"))
+
+                @JvmField val LIST_RATE = Target(JsonField.of("LIST_RATE"))
+
+                @JvmField val LIST_RATE = Target(JsonField.of("list_rate"))
+
+                @JvmStatic fun of(value: String) = Target(JsonField.of(value))
+            }
+
+            enum class Known {
+                COMMIT_RATE,
+                COMMIT_RATE,
+                LIST_RATE,
+                LIST_RATE,
+            }
+
+            enum class Value {
+                COMMIT_RATE,
+                COMMIT_RATE,
+                LIST_RATE,
+                LIST_RATE,
+                _UNKNOWN,
+            }
+
+            fun value(): Value =
+                when (this) {
+                    COMMIT_RATE -> Value.COMMIT_RATE
+                    COMMIT_RATE -> Value.COMMIT_RATE
+                    LIST_RATE -> Value.LIST_RATE
+                    LIST_RATE -> Value.LIST_RATE
+                    else -> Value._UNKNOWN
+                }
+
+            fun known(): Known =
+                when (this) {
+                    COMMIT_RATE -> Known.COMMIT_RATE
+                    COMMIT_RATE -> Known.COMMIT_RATE
+                    LIST_RATE -> Known.LIST_RATE
+                    LIST_RATE -> Known.LIST_RATE
+                    else -> throw MetronomeInvalidDataException("Unknown Target: $value")
+                }
+
+            fun asString(): String = _value().asStringOrThrow()
+        }
+
         @JsonDeserialize(builder = Tier.Builder::class)
         @NoAutoDetect
         class Tier
@@ -3905,20 +4048,20 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Override && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.entitled == other.entitled && this.type == other.type && this.multiplier == other.multiplier && this.priority == other.priority && this.overwriteRate == other.overwriteRate && this.productId == other.productId && this.applicableProductTags == other.applicableProductTags && this.overrideSpecifiers == other.overrideSpecifiers && this.tiers == other.tiers && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Override && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.entitled == other.entitled && this.type == other.type && this.multiplier == other.multiplier && this.priority == other.priority && this.overwriteRate == other.overwriteRate && this.productId == other.productId && this.applicableProductTags == other.applicableProductTags && this.overrideSpecifiers == other.overrideSpecifiers && this.tiers == other.tiers && this.isCommitSpecific == other.isCommitSpecific && this.target == other.target && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(startingAt, endingBefore, entitled, type, multiplier, priority, overwriteRate, productId, applicableProductTags, overrideSpecifiers, tiers, additionalProperties) /* spotless:on */
+                hashCode = /* spotless:off */ Objects.hash(startingAt, endingBefore, entitled, type, multiplier, priority, overwriteRate, productId, applicableProductTags, overrideSpecifiers, tiers, isCommitSpecific, target, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
 
         override fun toString() =
-            "Override{startingAt=$startingAt, endingBefore=$endingBefore, entitled=$entitled, type=$type, multiplier=$multiplier, priority=$priority, overwriteRate=$overwriteRate, productId=$productId, applicableProductTags=$applicableProductTags, overrideSpecifiers=$overrideSpecifiers, tiers=$tiers, additionalProperties=$additionalProperties}"
+            "Override{startingAt=$startingAt, endingBefore=$endingBefore, entitled=$entitled, type=$type, multiplier=$multiplier, priority=$priority, overwriteRate=$overwriteRate, productId=$productId, applicableProductTags=$applicableProductTags, overrideSpecifiers=$overrideSpecifiers, tiers=$tiers, isCommitSpecific=$isCommitSpecific, target=$target, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = ProfessionalService.Builder::class)

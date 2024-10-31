@@ -183,11 +183,13 @@ class ContractRetrieveResponseTest {
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
                                                 .entitled(true)
+                                                .isCommitSpecific(true)
                                                 .isProrated(true)
                                                 .multiplier(42.23)
                                                 .overrideSpecifiers(
                                                     listOf(
                                                         Override.OverrideSpecifier.builder()
+                                                            .commitIds(listOf("string"))
                                                             .presentationGroupValues(
                                                                 Override.OverrideSpecifier
                                                                     .PresentationGroupValues
@@ -256,6 +258,7 @@ class ContractRetrieveResponseTest {
                                                 )
                                                 .quantity(42.23)
                                                 .rateType(Override.RateType.FLAT)
+                                                .target(Override.Target.COMMIT_RATE)
                                                 .tiers(
                                                     listOf(
                                                         Tier.builder()
@@ -673,11 +676,13 @@ class ContractRetrieveResponseTest {
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
                                             .entitled(true)
+                                            .isCommitSpecific(true)
                                             .isProrated(true)
                                             .multiplier(42.23)
                                             .overrideSpecifiers(
                                                 listOf(
                                                     Override.OverrideSpecifier.builder()
+                                                        .commitIds(listOf("string"))
                                                         .presentationGroupValues(
                                                             Override.OverrideSpecifier
                                                                 .PresentationGroupValues
@@ -743,6 +748,7 @@ class ContractRetrieveResponseTest {
                                             )
                                             .quantity(42.23)
                                             .rateType(Override.RateType.FLAT)
+                                            .target(Override.Target.COMMIT_RATE)
                                             .tiers(
                                                 listOf(
                                                     Tier.builder().price(42.23).size(42.23).build()
@@ -1214,11 +1220,13 @@ class ContractRetrieveResponseTest {
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
                                             .entitled(true)
+                                            .isCommitSpecific(true)
                                             .isProrated(true)
                                             .multiplier(42.23)
                                             .overrideSpecifiers(
                                                 listOf(
                                                     Override.OverrideSpecifier.builder()
+                                                        .commitIds(listOf("string"))
                                                         .presentationGroupValues(
                                                             Override.OverrideSpecifier
                                                                 .PresentationGroupValues
@@ -1284,6 +1292,7 @@ class ContractRetrieveResponseTest {
                                             )
                                             .quantity(42.23)
                                             .rateType(Override.RateType.FLAT)
+                                            .target(Override.Target.COMMIT_RATE)
                                             .tiers(
                                                 listOf(
                                                     Tier.builder().price(42.23).size(42.23).build()
@@ -1783,11 +1792,13 @@ class ContractRetrieveResponseTest {
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
                                             .entitled(true)
+                                            .isCommitSpecific(true)
                                             .isProrated(true)
                                             .multiplier(42.23)
                                             .overrideSpecifiers(
                                                 listOf(
                                                     Override.OverrideSpecifier.builder()
+                                                        .commitIds(listOf("string"))
                                                         .presentationGroupValues(
                                                             Override.OverrideSpecifier
                                                                 .PresentationGroupValues
@@ -1853,6 +1864,7 @@ class ContractRetrieveResponseTest {
                                             )
                                             .quantity(42.23)
                                             .rateType(Override.RateType.FLAT)
+                                            .target(Override.Target.COMMIT_RATE)
                                             .tiers(
                                                 listOf(
                                                     Tier.builder().price(42.23).size(42.23).build()
@@ -2251,11 +2263,13 @@ class ContractRetrieveResponseTest {
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
                                         .entitled(true)
+                                        .isCommitSpecific(true)
                                         .isProrated(true)
                                         .multiplier(42.23)
                                         .overrideSpecifiers(
                                             listOf(
                                                 Override.OverrideSpecifier.builder()
+                                                    .commitIds(listOf("string"))
                                                     .presentationGroupValues(
                                                         Override.OverrideSpecifier
                                                             .PresentationGroupValues
@@ -2319,6 +2333,7 @@ class ContractRetrieveResponseTest {
                                         )
                                         .quantity(42.23)
                                         .rateType(Override.RateType.FLAT)
+                                        .target(Override.Target.COMMIT_RATE)
                                         .tiers(
                                             listOf(Tier.builder().price(42.23).size(42.23).build())
                                         )
@@ -2764,11 +2779,13 @@ class ContractRetrieveResponseTest {
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
                                         .entitled(true)
+                                        .isCommitSpecific(true)
                                         .isProrated(true)
                                         .multiplier(42.23)
                                         .overrideSpecifiers(
                                             listOf(
                                                 Override.OverrideSpecifier.builder()
+                                                    .commitIds(listOf("string"))
                                                     .presentationGroupValues(
                                                         Override.OverrideSpecifier
                                                             .PresentationGroupValues
@@ -2832,6 +2849,7 @@ class ContractRetrieveResponseTest {
                                         )
                                         .quantity(42.23)
                                         .rateType(Override.RateType.FLAT)
+                                        .target(Override.Target.COMMIT_RATE)
                                         .tiers(
                                             listOf(Tier.builder().price(42.23).size(42.23).build())
                                         )
