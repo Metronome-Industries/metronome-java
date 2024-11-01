@@ -12,7 +12,7 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
@@ -104,8 +104,8 @@ constructor(
             fun build(): ContractRateCardRateAddManyBody =
                 ContractRateCardRateAddManyBody(
                     checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
-                    checkNotNull(rates) { "`rates` is required but was not set" }.toUnmodifiable(),
-                    additionalProperties.toUnmodifiable(),
+                    checkNotNull(rates) { "`rates` is required but was not set" }.toImmutable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -243,10 +243,10 @@ constructor(
         fun build(): ContractRateCardRateAddManyParams =
             ContractRateCardRateAddManyParams(
                 checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
-                checkNotNull(rates) { "`rates` is required but was not set" }.toUnmodifiable(),
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                checkNotNull(rates) { "`rates` is required but was not set" }.toImmutable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -462,9 +462,9 @@ constructor(
                     quantity,
                     isProrated,
                     useListPrices,
-                    tiers?.toUnmodifiable(),
+                    tiers?.toImmutable(),
                     customRate,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -586,7 +586,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): CustomRate = CustomRate(additionalProperties.toUnmodifiable())
+                fun build(): CustomRate = CustomRate(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -656,7 +656,7 @@ constructor(
                     }
 
                 fun build(): PricingGroupValues =
-                    PricingGroupValues(additionalProperties.toUnmodifiable())
+                    PricingGroupValues(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -392,19 +392,19 @@ constructor(
                     checkNotNull(productId) { "`productId` is required but was not set" },
                     checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                     billableMetricId,
-                    compositeProductIds?.toUnmodifiable(),
-                    compositeTags?.toUnmodifiable(),
+                    compositeProductIds?.toImmutable(),
+                    compositeTags?.toImmutable(),
                     excludeFreeUsage,
                     isRefundable,
                     name,
                     netsuiteInternalItemId,
                     netsuiteOverageItemId,
-                    presentationGroupKey?.toUnmodifiable(),
-                    pricingGroupKey?.toUnmodifiable(),
+                    presentationGroupKey?.toImmutable(),
+                    pricingGroupKey?.toImmutable(),
                     quantityConversion,
                     quantityRounding,
-                    tags?.toUnmodifiable(),
-                    additionalProperties.toUnmodifiable(),
+                    tags?.toImmutable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -701,21 +701,21 @@ constructor(
                 checkNotNull(productId) { "`productId` is required but was not set" },
                 checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                 billableMetricId,
-                if (compositeProductIds.size == 0) null else compositeProductIds.toUnmodifiable(),
-                if (compositeTags.size == 0) null else compositeTags.toUnmodifiable(),
+                if (compositeProductIds.size == 0) null else compositeProductIds.toImmutable(),
+                if (compositeTags.size == 0) null else compositeTags.toImmutable(),
                 excludeFreeUsage,
                 isRefundable,
                 name,
                 netsuiteInternalItemId,
                 netsuiteOverageItemId,
-                if (presentationGroupKey.size == 0) null else presentationGroupKey.toUnmodifiable(),
-                if (pricingGroupKey.size == 0) null else pricingGroupKey.toUnmodifiable(),
+                if (presentationGroupKey.size == 0) null else presentationGroupKey.toImmutable(),
+                if (pricingGroupKey.size == 0) null else pricingGroupKey.toImmutable(),
                 quantityConversion,
                 quantityRounding,
-                if (tags.size == 0) null else tags.toUnmodifiable(),
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                if (tags.size == 0) null else tags.toImmutable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 }

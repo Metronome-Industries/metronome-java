@@ -13,7 +13,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 
@@ -82,8 +82,8 @@ private constructor(
 
         fun build(): ServiceListResponse =
             ServiceListResponse(
-                services.map { it.toUnmodifiable() },
-                additionalProperties.toUnmodifiable()
+                services.map { it.toImmutable() },
+                additionalProperties.toImmutable()
             )
     }
 
@@ -182,8 +182,8 @@ private constructor(
                 Service(
                     name,
                     usage,
-                    ips.map { it.toUnmodifiable() },
-                    additionalProperties.toUnmodifiable(),
+                    ips.map { it.toImmutable() },
+                    additionalProperties.toImmutable(),
                 )
         }
 

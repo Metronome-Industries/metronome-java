@@ -11,7 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
@@ -80,7 +80,7 @@ private constructor(
         }
 
         fun build(): DashboardGetEmbeddableUrlResponse =
-            DashboardGetEmbeddableUrlResponse(data, additionalProperties.toUnmodifiable())
+            DashboardGetEmbeddableUrlResponse(data, additionalProperties.toImmutable())
     }
 
     @JsonDeserialize(builder = Data.Builder::class)
@@ -146,7 +146,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Data = Data(url, additionalProperties.toUnmodifiable())
+            fun build(): Data = Data(url, additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {

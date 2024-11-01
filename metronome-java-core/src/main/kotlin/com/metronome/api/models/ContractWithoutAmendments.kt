@@ -13,7 +13,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -434,14 +434,14 @@ private constructor(
                 salesforceOpportunityId,
                 rateCardId,
                 startingAt,
-                commits.map { it.toUnmodifiable() },
-                credits.map { it.toUnmodifiable() },
-                overrides.map { it.toUnmodifiable() },
-                discounts.map { it.toUnmodifiable() },
-                professionalServices.map { it.toUnmodifiable() },
-                scheduledCharges.map { it.toUnmodifiable() },
-                transitions.map { it.toUnmodifiable() },
-                resellerRoyalties.map { it.toUnmodifiable() },
+                commits.map { it.toImmutable() },
+                credits.map { it.toImmutable() },
+                overrides.map { it.toImmutable() },
+                discounts.map { it.toImmutable() },
+                professionalServices.map { it.toImmutable() },
+                scheduledCharges.map { it.toImmutable() },
+                transitions.map { it.toImmutable() },
+                resellerRoyalties.map { it.toImmutable() },
                 createdAt,
                 createdBy,
                 netsuiteSalesOrderId,
@@ -450,7 +450,7 @@ private constructor(
                 totalContractValue,
                 usageFilter,
                 usageStatementSchedule,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -555,7 +555,7 @@ private constructor(
                     type,
                     fromContractId,
                     toContractId,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -728,7 +728,7 @@ private constructor(
                 UsageStatementSchedule(
                     frequency,
                     billingAnchorDate,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1099,8 +1099,8 @@ private constructor(
                 ResellerRoyalty(
                     resellerType,
                     fraction,
-                    applicableProductTags.map { it.toUnmodifiable() },
-                    applicableProductIds.map { it.toUnmodifiable() },
+                    applicableProductTags.map { it.toImmutable() },
+                    applicableProductIds.map { it.toImmutable() },
                     netsuiteResellerId,
                     startingAt,
                     endingBefore,
@@ -1110,7 +1110,7 @@ private constructor(
                     awsOfferId,
                     gcpAccountId,
                     gcpOfferId,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1300,8 +1300,8 @@ private constructor(
                 UsageFilter(
                     initial,
                     current,
-                    updates.map { it.toUnmodifiable() },
-                    additionalProperties.toUnmodifiable(),
+                    updates.map { it.toImmutable() },
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1404,9 +1404,9 @@ private constructor(
                 fun build(): Update =
                     Update(
                         groupKey,
-                        groupValues.map { it.toUnmodifiable() },
+                        groupValues.map { it.toImmutable() },
                         startingAt,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 

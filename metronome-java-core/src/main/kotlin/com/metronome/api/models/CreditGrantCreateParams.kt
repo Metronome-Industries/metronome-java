@@ -18,7 +18,7 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.getOrThrow
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
@@ -317,11 +317,11 @@ constructor(
                     customFields,
                     effectiveAt,
                     invoiceDate,
-                    productIds?.toUnmodifiable(),
+                    productIds?.toImmutable(),
                     reason,
                     rolloverSettings,
                     uniquenessKey,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -547,13 +547,13 @@ constructor(
                 customFields,
                 effectiveAt,
                 invoiceDate,
-                if (productIds.size == 0) null else productIds.toUnmodifiable(),
+                if (productIds.size == 0) null else productIds.toImmutable(),
                 reason,
                 rolloverSettings,
                 uniquenessKey,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -620,7 +620,7 @@ constructor(
                 GrantAmount(
                     checkNotNull(amount) { "`amount` is required but was not set" },
                     checkNotNull(creditTypeId) { "`creditTypeId` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -708,7 +708,7 @@ constructor(
                 PaidAmount(
                     checkNotNull(amount) { "`amount` is required but was not set" },
                     checkNotNull(creditTypeId) { "`creditTypeId` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -775,7 +775,7 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+            fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -886,7 +886,7 @@ constructor(
                     checkNotNull(expiresAt) { "`expiresAt` is required but was not set" },
                     checkNotNull(priority) { "`priority` is required but was not set" },
                     checkNotNull(rolloverAmount) { "`rolloverAmount` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 

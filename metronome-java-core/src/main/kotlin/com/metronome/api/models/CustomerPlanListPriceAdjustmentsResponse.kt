@@ -13,7 +13,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
@@ -145,8 +145,8 @@ private constructor(
                 chargeType,
                 startPeriod,
                 quantity,
-                prices.map { it.toUnmodifiable() },
-                additionalProperties.toUnmodifiable(),
+                prices.map { it.toImmutable() },
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -332,7 +332,7 @@ private constructor(
                     adjustmentType,
                     value,
                     tier,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 

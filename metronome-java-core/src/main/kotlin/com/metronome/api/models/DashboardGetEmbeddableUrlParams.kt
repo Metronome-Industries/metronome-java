@@ -12,7 +12,7 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.*
 import java.util.Objects
@@ -159,10 +159,10 @@ constructor(
                 DashboardGetEmbeddableUrlBody(
                     checkNotNull(customerId) { "`customerId` is required but was not set" },
                     checkNotNull(dashboard) { "`dashboard` is required but was not set" },
-                    bmGroupKeyOverrides?.toUnmodifiable(),
-                    colorOverrides?.toUnmodifiable(),
-                    dashboardOptions?.toUnmodifiable(),
-                    additionalProperties.toUnmodifiable(),
+                    bmGroupKeyOverrides?.toImmutable(),
+                    colorOverrides?.toImmutable(),
+                    dashboardOptions?.toImmutable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -338,12 +338,12 @@ constructor(
             DashboardGetEmbeddableUrlParams(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
                 checkNotNull(dashboard) { "`dashboard` is required but was not set" },
-                if (bmGroupKeyOverrides.size == 0) null else bmGroupKeyOverrides.toUnmodifiable(),
-                if (colorOverrides.size == 0) null else colorOverrides.toUnmodifiable(),
-                if (dashboardOptions.size == 0) null else dashboardOptions.toUnmodifiable(),
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                if (bmGroupKeyOverrides.size == 0) null else bmGroupKeyOverrides.toImmutable(),
+                if (colorOverrides.size == 0) null else colorOverrides.toImmutable(),
+                if (dashboardOptions.size == 0) null else dashboardOptions.toImmutable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -495,7 +495,7 @@ constructor(
                     checkNotNull(groupKeyName) { "`groupKeyName` is required but was not set" },
                     displayName,
                     valueDisplayNames,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -546,7 +546,7 @@ constructor(
                     }
 
                 fun build(): ValueDisplayNames =
-                    ValueDisplayNames(additionalProperties.toUnmodifiable())
+                    ValueDisplayNames(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -654,7 +654,7 @@ constructor(
                 ColorOverride(
                     name,
                     value,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -901,7 +901,7 @@ constructor(
                 DashboardOption(
                     checkNotNull(key) { "`key` is required but was not set" },
                     checkNotNull(value) { "`value` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 

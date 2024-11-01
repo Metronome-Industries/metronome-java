@@ -13,7 +13,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -192,7 +192,7 @@ private constructor(
                 action,
                 status,
                 description,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -292,7 +292,7 @@ private constructor(
                     id,
                     email,
                     name,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 

@@ -12,7 +12,7 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
@@ -356,9 +356,9 @@ constructor(
                     checkNotNull(priority) { "`priority` is required but was not set" },
                     checkNotNull(productId) { "`productId` is required but was not set" },
                     checkNotNull(type) { "`type` is required but was not set" },
-                    applicableContractIds?.toUnmodifiable(),
-                    applicableProductIds?.toUnmodifiable(),
-                    applicableProductTags?.toUnmodifiable(),
+                    applicableContractIds?.toImmutable(),
+                    applicableProductIds?.toImmutable(),
+                    applicableProductTags?.toImmutable(),
                     customFields,
                     description,
                     invoiceContractId,
@@ -366,7 +366,7 @@ constructor(
                     name,
                     netsuiteSalesOrderId,
                     salesforceOpportunityId,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -632,11 +632,9 @@ constructor(
                 checkNotNull(priority) { "`priority` is required but was not set" },
                 checkNotNull(productId) { "`productId` is required but was not set" },
                 checkNotNull(type) { "`type` is required but was not set" },
-                if (applicableContractIds.size == 0) null
-                else applicableContractIds.toUnmodifiable(),
-                if (applicableProductIds.size == 0) null else applicableProductIds.toUnmodifiable(),
-                if (applicableProductTags.size == 0) null
-                else applicableProductTags.toUnmodifiable(),
+                if (applicableContractIds.size == 0) null else applicableContractIds.toImmutable(),
+                if (applicableProductIds.size == 0) null else applicableProductIds.toImmutable(),
+                if (applicableProductTags.size == 0) null else applicableProductTags.toImmutable(),
                 customFields,
                 description,
                 invoiceContractId,
@@ -644,9 +642,9 @@ constructor(
                 name,
                 netsuiteSalesOrderId,
                 salesforceOpportunityId,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -717,8 +715,8 @@ constructor(
                 AccessSchedule(
                     creditTypeId,
                     checkNotNull(scheduleItems) { "`scheduleItems` is required but was not set" }
-                        .toUnmodifiable(),
-                    additionalProperties.toUnmodifiable(),
+                        .toImmutable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -798,7 +796,7 @@ constructor(
                         checkNotNull(amount) { "`amount` is required but was not set" },
                         checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                         checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -942,7 +940,7 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+            fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -1057,9 +1055,9 @@ constructor(
             fun build(): InvoiceSchedule =
                 InvoiceSchedule(
                     creditTypeId,
-                    scheduleItems?.toUnmodifiable(),
+                    scheduleItems?.toImmutable(),
                     recurringSchedule,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1210,7 +1208,7 @@ constructor(
                         checkNotNull(amountDistribution) {
                             "`amountDistribution` is required but was not set"
                         },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -1477,7 +1475,7 @@ constructor(
                         quantity,
                         amount,
                         checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 

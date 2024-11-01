@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.models.*
 import java.util.Objects
 
@@ -168,9 +168,9 @@ constructor(
 
         fun build(): UsageIngestParams =
             UsageIngestParams(
-                checkNotNull(usage) { "`usage` is required but was not set" }.toUnmodifiable(),
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                checkNotNull(usage) { "`usage` is required but was not set" }.toImmutable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
             )
     }
 
@@ -264,7 +264,7 @@ constructor(
                     checkNotNull(eventType) { "`eventType` is required but was not set" },
                     checkNotNull(timestamp) { "`timestamp` is required but was not set" },
                     properties,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -310,7 +310,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Properties = Properties(additionalProperties.toUnmodifiable())
+                fun build(): Properties = Properties(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {

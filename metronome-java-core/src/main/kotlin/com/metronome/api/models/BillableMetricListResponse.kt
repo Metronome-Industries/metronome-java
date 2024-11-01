@@ -13,7 +13,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
@@ -287,13 +287,13 @@ private constructor(
                 id,
                 name,
                 eventTypeFilter,
-                propertyFilters.map { it.toUnmodifiable() },
+                propertyFilters.map { it.toImmutable() },
                 aggregationType,
                 aggregationKey,
-                groupKeys.map { it.toUnmodifiable() },
+                groupKeys.map { it.toImmutable() },
                 customFields,
                 sql,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -421,7 +421,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+            fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {

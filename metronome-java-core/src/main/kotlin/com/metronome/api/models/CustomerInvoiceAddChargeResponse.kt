@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import java.util.Objects
 
 @JsonDeserialize(builder = CustomerInvoiceAddChargeResponse.Builder::class)
@@ -62,7 +62,7 @@ private constructor(
         }
 
         fun build(): CustomerInvoiceAddChargeResponse =
-            CustomerInvoiceAddChargeResponse(additionalProperties.toUnmodifiable())
+            CustomerInvoiceAddChargeResponse(additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {

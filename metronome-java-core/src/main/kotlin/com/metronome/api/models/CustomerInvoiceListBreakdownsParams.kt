@@ -7,7 +7,7 @@ import com.metronome.api.core.Enum
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
@@ -70,7 +70,7 @@ constructor(
         this.status?.let { params.put("status", listOf(it.toString())) }
         this.windowSize?.let { params.put("window_size", listOf(it.toString())) }
         params.putAll(additionalQueryParams)
-        return params.toUnmodifiable()
+        return params.toImmutable()
     }
 
     @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
@@ -235,8 +235,8 @@ constructor(
                 sort,
                 status,
                 windowSize,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
             )
     }
 

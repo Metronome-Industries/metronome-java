@@ -11,7 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
@@ -115,9 +115,9 @@ private constructor(
         fun build(): BaseUsageFilter =
             BaseUsageFilter(
                 groupKey,
-                groupValues.map { it.toUnmodifiable() },
+                groupValues.map { it.toImmutable() },
                 startingAt,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 

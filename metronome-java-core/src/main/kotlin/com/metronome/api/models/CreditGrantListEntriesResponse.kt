@@ -11,7 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
@@ -95,9 +95,9 @@ private constructor(
 
         fun build(): CreditGrantListEntriesResponse =
             CreditGrantListEntriesResponse(
-                data.map { it.toUnmodifiable() },
+                data.map { it.toImmutable() },
                 nextPage,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -181,8 +181,8 @@ private constructor(
             fun build(): Data =
                 Data(
                     customerId,
-                    ledgers.map { it.toUnmodifiable() },
-                    additionalProperties.toUnmodifiable(),
+                    ledgers.map { it.toImmutable() },
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -331,9 +331,9 @@ private constructor(
                         creditType,
                         startingBalance,
                         endingBalance,
-                        entries.map { it.toUnmodifiable() },
-                        pendingEntries.map { it.toUnmodifiable() },
-                        additionalProperties.toUnmodifiable(),
+                        entries.map { it.toImmutable() },
+                        pendingEntries.map { it.toImmutable() },
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -500,7 +500,7 @@ private constructor(
                             excludingPending,
                             includingPending,
                             effectiveAt,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -683,7 +683,7 @@ private constructor(
                             excludingPending,
                             includingPending,
                             effectiveAt,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 

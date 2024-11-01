@@ -12,7 +12,7 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.*
 import java.util.Objects
@@ -114,8 +114,8 @@ constructor(
                 CustomFieldDeleteValuesBody(
                     checkNotNull(entity) { "`entity` is required but was not set" },
                     checkNotNull(entityId) { "`entityId` is required but was not set" },
-                    checkNotNull(keys) { "`keys` is required but was not set" }.toUnmodifiable(),
-                    additionalProperties.toUnmodifiable(),
+                    checkNotNull(keys) { "`keys` is required but was not set" }.toImmutable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -257,10 +257,10 @@ constructor(
             CustomFieldDeleteValuesParams(
                 checkNotNull(entity) { "`entity` is required but was not set" },
                 checkNotNull(entityId) { "`entityId` is required but was not set" },
-                checkNotNull(keys) { "`keys` is required but was not set" }.toUnmodifiable(),
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                checkNotNull(keys) { "`keys` is required but was not set" }.toImmutable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 

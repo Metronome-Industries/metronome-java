@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import java.util.Objects
 
 @JsonDeserialize(builder = MetronomeError.Builder::class)
@@ -60,6 +60,6 @@ constructor(
             this.additionalProperties.putAll(additionalProperties)
         }
 
-        fun build(): MetronomeError = MetronomeError(additionalProperties.toUnmodifiable())
+        fun build(): MetronomeError = MetronomeError(additionalProperties.toImmutable())
     }
 }

@@ -12,7 +12,7 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.*
 import java.util.Objects
@@ -342,16 +342,16 @@ constructor(
                     checkNotNull(name) { "`name` is required but was not set" },
                     checkNotNull(threshold) { "`threshold` is required but was not set" },
                     billableMetricId,
-                    creditGrantTypeFilters?.toUnmodifiable(),
+                    creditGrantTypeFilters?.toImmutable(),
                     creditTypeId,
-                    customFieldFilters?.toUnmodifiable(),
+                    customFieldFilters?.toImmutable(),
                     customerId,
                     evaluateOnCreate,
                     groupKeyFilter,
-                    invoiceTypesFilter?.toUnmodifiable(),
+                    invoiceTypesFilter?.toImmutable(),
                     planId,
                     uniquenessKey,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -612,18 +612,18 @@ constructor(
                 checkNotNull(threshold) { "`threshold` is required but was not set" },
                 billableMetricId,
                 if (creditGrantTypeFilters.size == 0) null
-                else creditGrantTypeFilters.toUnmodifiable(),
+                else creditGrantTypeFilters.toImmutable(),
                 creditTypeId,
-                if (customFieldFilters.size == 0) null else customFieldFilters.toUnmodifiable(),
+                if (customFieldFilters.size == 0) null else customFieldFilters.toImmutable(),
                 customerId,
                 evaluateOnCreate,
                 groupKeyFilter,
-                if (invoiceTypesFilter.size == 0) null else invoiceTypesFilter.toUnmodifiable(),
+                if (invoiceTypesFilter.size == 0) null else invoiceTypesFilter.toImmutable(),
                 planId,
                 uniquenessKey,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -862,7 +862,7 @@ constructor(
                     checkNotNull(entity) { "`entity` is required but was not set" },
                     checkNotNull(key) { "`key` is required but was not set" },
                     checkNotNull(value) { "`value` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1013,7 +1013,7 @@ constructor(
                 GroupKeyFilter(
                     checkNotNull(key) { "`key` is required but was not set" },
                     checkNotNull(value) { "`value` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 

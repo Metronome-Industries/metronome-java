@@ -11,7 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
@@ -224,7 +224,7 @@ private constructor(
                 netPaymentTermsDays,
                 trialInfo,
                 customFields,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -277,7 +277,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+            fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -386,8 +386,8 @@ private constructor(
             fun build(): TrialInfo =
                 TrialInfo(
                     endingBefore,
-                    spendingCaps.map { it.toUnmodifiable() },
-                    additionalProperties.toUnmodifiable(),
+                    spendingCaps.map { it.toImmutable() },
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -495,7 +495,7 @@ private constructor(
                         creditType,
                         amount,
                         amountRemaining,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 

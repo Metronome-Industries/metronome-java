@@ -13,7 +13,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -83,10 +83,7 @@ private constructor(
         }
 
         fun build(): ContractListResponse =
-            ContractListResponse(
-                data.map { it.toUnmodifiable() },
-                additionalProperties.toUnmodifiable()
-            )
+            ContractListResponse(data.map { it.toImmutable() }, additionalProperties.toImmutable())
     }
 
     @JsonDeserialize(builder = Data.Builder::class)
@@ -314,10 +311,10 @@ private constructor(
                     uniquenessKey,
                     initial,
                     current,
-                    amendments.map { it.toUnmodifiable() },
+                    amendments.map { it.toImmutable() },
                     customFields,
                     customerBillingProviderConfiguration,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -621,17 +618,17 @@ private constructor(
                         id,
                         salesforceOpportunityId,
                         startingAt,
-                        commits.map { it.toUnmodifiable() },
-                        credits.map { it.toUnmodifiable() },
-                        overrides.map { it.toUnmodifiable() },
-                        discounts.map { it.toUnmodifiable() },
-                        professionalServices.map { it.toUnmodifiable() },
-                        scheduledCharges.map { it.toUnmodifiable() },
-                        resellerRoyalties.map { it.toUnmodifiable() },
+                        commits.map { it.toImmutable() },
+                        credits.map { it.toImmutable() },
+                        overrides.map { it.toImmutable() },
+                        discounts.map { it.toImmutable() },
+                        professionalServices.map { it.toImmutable() },
+                        scheduledCharges.map { it.toImmutable() },
+                        resellerRoyalties.map { it.toImmutable() },
                         createdAt,
                         createdBy,
                         netsuiteSalesOrderId,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -900,7 +897,7 @@ private constructor(
                             awsOfferId,
                             gcpAccountId,
                             gcpOfferId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -1069,7 +1066,7 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+                fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -1185,7 +1182,7 @@ private constructor(
                     CustomerBillingProviderConfiguration(
                         billingProvider,
                         deliveryMethod,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 

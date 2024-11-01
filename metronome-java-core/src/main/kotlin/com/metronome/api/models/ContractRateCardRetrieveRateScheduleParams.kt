@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -57,7 +57,7 @@ constructor(
         this.limit?.let { params.put("limit", listOf(it.toString())) }
         this.nextPage?.let { params.put("next_page", listOf(it.toString())) }
         params.putAll(additionalQueryParams)
-        return params.toUnmodifiable()
+        return params.toImmutable()
     }
 
     @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
@@ -164,8 +164,8 @@ constructor(
                     checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
                     checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                     endingBefore,
-                    selectors?.toUnmodifiable(),
-                    additionalProperties.toUnmodifiable(),
+                    selectors?.toImmutable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -342,10 +342,10 @@ constructor(
                 limit,
                 nextPage,
                 endingBefore,
-                if (selectors.size == 0) null else selectors.toUnmodifiable(),
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                if (selectors.size == 0) null else selectors.toImmutable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -444,7 +444,7 @@ constructor(
                     productId,
                     pricingGroupValues,
                     partialPricingGroupValues,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -495,7 +495,7 @@ constructor(
                     }
 
                 fun build(): PartialPricingGroupValues =
-                    PartialPricingGroupValues(additionalProperties.toUnmodifiable())
+                    PartialPricingGroupValues(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -566,7 +566,7 @@ constructor(
                     }
 
                 fun build(): PricingGroupValues =
-                    PricingGroupValues(additionalProperties.toUnmodifiable())
+                    PricingGroupValues(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {

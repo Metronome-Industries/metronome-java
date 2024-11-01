@@ -13,7 +13,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
@@ -353,20 +353,20 @@ private constructor(
 
         fun build(): CustomerListBillableMetricsResponse =
             CustomerListBillableMetricsResponse(
-                groupBy.map { it.toUnmodifiable() },
-                groupKeys.map { it.toUnmodifiable() },
+                groupBy.map { it.toImmutable() },
+                groupKeys.map { it.toImmutable() },
                 name,
                 id,
                 aggregate,
-                aggregateKeys.map { it.toUnmodifiable() },
+                aggregateKeys.map { it.toImmutable() },
                 filter,
                 aggregationType,
                 aggregationKey,
                 eventTypeFilter,
-                propertyFilters.map { it.toUnmodifiable() },
+                propertyFilters.map { it.toImmutable() },
                 customFields,
                 sql,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -494,7 +494,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+            fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -567,7 +567,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Filter = Filter(additionalProperties.toUnmodifiable())
+            fun build(): Filter = Filter(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {

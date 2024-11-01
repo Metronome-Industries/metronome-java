@@ -3,7 +3,7 @@
 package com.metronome.api.models
 
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.models.*
 import java.util.Objects
 
@@ -112,8 +112,8 @@ constructor(
         fun build(): CustomerRetrieveParams =
             CustomerRetrieveParams(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
             )
     }
 }

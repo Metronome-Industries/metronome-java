@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -53,7 +53,7 @@ constructor(
         val params = mutableMapOf<String, List<String>>()
         this.nextPage?.let { params.put("next_page", listOf(it.toString())) }
         params.putAll(additionalQueryParams)
-        return params.toUnmodifiable()
+        return params.toImmutable()
     }
 
     @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
@@ -167,11 +167,11 @@ constructor(
 
             fun build(): CreditGrantListEntriesBody =
                 CreditGrantListEntriesBody(
-                    creditTypeIds?.toUnmodifiable(),
-                    customerIds?.toUnmodifiable(),
+                    creditTypeIds?.toImmutable(),
+                    customerIds?.toImmutable(),
                     endingBefore,
                     startingOn,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -348,13 +348,13 @@ constructor(
         fun build(): CreditGrantListEntriesParams =
             CreditGrantListEntriesParams(
                 nextPage,
-                if (creditTypeIds.size == 0) null else creditTypeIds.toUnmodifiable(),
-                if (customerIds.size == 0) null else customerIds.toUnmodifiable(),
+                if (creditTypeIds.size == 0) null else creditTypeIds.toImmutable(),
+                if (customerIds.size == 0) null else customerIds.toImmutable(),
                 endingBefore,
                 startingOn,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 }

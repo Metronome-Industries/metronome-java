@@ -11,7 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import java.util.Objects
 
 @JsonDeserialize(builder = AlertArchiveResponse.Builder::class)
@@ -78,7 +78,7 @@ private constructor(
         }
 
         fun build(): AlertArchiveResponse =
-            AlertArchiveResponse(data, additionalProperties.toUnmodifiable())
+            AlertArchiveResponse(data, additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {

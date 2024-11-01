@@ -3,7 +3,7 @@
 package com.metronome.api.models
 
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.models.*
 import java.util.Objects
 import java.util.Optional
@@ -46,7 +46,7 @@ constructor(
             params.put("salesforce_account_ids", listOf(it.joinToString(separator = ",")))
         }
         params.putAll(additionalQueryParams)
-        return params.toUnmodifiable()
+        return params.toImmutable()
     }
 
     @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
@@ -175,14 +175,14 @@ constructor(
 
         fun build(): CustomerListParams =
             CustomerListParams(
-                if (customerIds.size == 0) null else customerIds.toUnmodifiable(),
+                if (customerIds.size == 0) null else customerIds.toImmutable(),
                 ingestAlias,
                 limit,
                 nextPage,
                 onlyArchived,
-                if (salesforceAccountIds.size == 0) null else salesforceAccountIds.toUnmodifiable(),
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                if (salesforceAccountIds.size == 0) null else salesforceAccountIds.toImmutable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
             )
     }
 }

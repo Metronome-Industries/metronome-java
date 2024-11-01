@@ -13,7 +13,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -128,7 +128,7 @@ private constructor(
                 customerStatus,
                 triggeredBy,
                 alert,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -481,11 +481,11 @@ private constructor(
                     creditType,
                     threshold,
                     updatedAt,
-                    creditGrantTypeFilters.map { it.toUnmodifiable() },
-                    customFieldFilters.map { it.toUnmodifiable() },
+                    creditGrantTypeFilters.map { it.toImmutable() },
+                    customFieldFilters.map { it.toImmutable() },
                     groupKeyFilter,
-                    invoiceTypesFilter.map { it.toUnmodifiable() },
-                    additionalProperties.toUnmodifiable(),
+                    invoiceTypesFilter.map { it.toImmutable() },
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -819,7 +819,7 @@ private constructor(
                         entity,
                         key,
                         value,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -993,7 +993,7 @@ private constructor(
                     GroupKeyFilter(
                         key,
                         value,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 

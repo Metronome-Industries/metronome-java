@@ -13,7 +13,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -85,7 +85,7 @@ private constructor(
         }
 
         fun build(): CustomerBillingConfigRetrieveResponse =
-            CustomerBillingConfigRetrieveResponse(data, additionalProperties.toUnmodifiable())
+            CustomerBillingConfigRetrieveResponse(data, additionalProperties.toImmutable())
     }
 
     @JsonDeserialize(builder = Data.Builder::class)
@@ -380,7 +380,7 @@ private constructor(
                     azurePlanId,
                     azureStartDate,
                     azureExpirationDate,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 

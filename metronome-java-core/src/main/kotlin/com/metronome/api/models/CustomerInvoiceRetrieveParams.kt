@@ -3,7 +3,7 @@
 package com.metronome.api.models
 
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.models.*
 import java.util.Objects
 import java.util.Optional
@@ -30,7 +30,7 @@ constructor(
             params.put("skip_zero_qty_line_items", listOf(it.toString()))
         }
         params.putAll(additionalQueryParams)
-        return params.toUnmodifiable()
+        return params.toImmutable()
     }
 
     @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
@@ -141,8 +141,8 @@ constructor(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
                 checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
                 skipZeroQtyLineItems,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
             )
     }
 }

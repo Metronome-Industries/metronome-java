@@ -22,7 +22,7 @@ import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.getOrThrow
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -498,15 +498,15 @@ private constructor(
                 rolledOverFrom,
                 description,
                 rolloverFraction,
-                applicableProductIds.map { it.toUnmodifiable() },
-                applicableProductTags.map { it.toUnmodifiable() },
-                applicableContractIds.map { it.toUnmodifiable() },
+                applicableProductIds.map { it.toImmutable() },
+                applicableProductTags.map { it.toImmutable() },
+                applicableContractIds.map { it.toImmutable() },
                 netsuiteSalesOrderId,
                 amount,
                 salesforceOpportunityId,
-                ledger.map { it.toUnmodifiable() },
+                ledger.map { it.toImmutable() },
                 customFields,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -591,7 +591,7 @@ private constructor(
                 Product(
                     id,
                     name,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -736,7 +736,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Contract = Contract(id, additionalProperties.toUnmodifiable())
+            fun build(): Contract = Contract(id, additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -808,7 +808,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+            fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -895,8 +895,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): InvoiceContract =
-                InvoiceContract(id, additionalProperties.toUnmodifiable())
+            fun build(): InvoiceContract = InvoiceContract(id, additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -1604,7 +1603,7 @@ private constructor(
                         timestamp,
                         amount,
                         segmentId,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -1816,7 +1815,7 @@ private constructor(
                         amount,
                         segmentId,
                         invoiceId,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -2030,7 +2029,7 @@ private constructor(
                         amount,
                         segmentId,
                         newContractId,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -2223,7 +2222,7 @@ private constructor(
                         timestamp,
                         amount,
                         segmentId,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -2431,7 +2430,7 @@ private constructor(
                         amount,
                         segmentId,
                         invoiceId,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -2639,7 +2638,7 @@ private constructor(
                         amount,
                         segmentId,
                         invoiceId,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -2819,7 +2818,7 @@ private constructor(
                         type,
                         timestamp,
                         amount,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -3033,7 +3032,7 @@ private constructor(
                         amount,
                         segmentId,
                         invoiceId,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -3247,7 +3246,7 @@ private constructor(
                         amount,
                         segmentId,
                         newContractId,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -3440,7 +3439,7 @@ private constructor(
                         timestamp,
                         amount,
                         invoiceId,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -3632,7 +3631,7 @@ private constructor(
                         timestamp,
                         amount,
                         reason,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -3825,7 +3824,7 @@ private constructor(
                         timestamp,
                         amount,
                         reason,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -4003,7 +4002,7 @@ private constructor(
                         type,
                         timestamp,
                         amount,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -4220,7 +4219,7 @@ private constructor(
                 RolledOverFrom(
                     commitId,
                     contractId,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 

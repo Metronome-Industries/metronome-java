@@ -20,7 +20,7 @@ import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.getOrThrow
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
@@ -104,9 +104,9 @@ private constructor(
 
         fun build(): ContractListBalancesResponse =
             ContractListBalancesResponse(
-                data.map { it.toUnmodifiable() },
+                data.map { it.toImmutable() },
                 nextPage,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 

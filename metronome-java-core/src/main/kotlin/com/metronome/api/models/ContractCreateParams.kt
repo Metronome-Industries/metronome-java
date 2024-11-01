@@ -12,7 +12,7 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
@@ -455,28 +455,28 @@ constructor(
                     checkNotNull(customerId) { "`customerId` is required but was not set" },
                     checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                     billingProviderConfiguration,
-                    commits?.toUnmodifiable(),
-                    credits?.toUnmodifiable(),
+                    commits?.toImmutable(),
+                    credits?.toImmutable(),
                     customFields,
-                    discounts?.toUnmodifiable(),
+                    discounts?.toImmutable(),
                     endingBefore,
                     multiplierOverridePrioritization,
                     name,
                     netPaymentTermsDays,
                     netsuiteSalesOrderId,
-                    overrides?.toUnmodifiable(),
-                    professionalServices?.toUnmodifiable(),
+                    overrides?.toImmutable(),
+                    professionalServices?.toImmutable(),
                     rateCardAlias,
                     rateCardId,
-                    resellerRoyalties?.toUnmodifiable(),
+                    resellerRoyalties?.toImmutable(),
                     salesforceOpportunityId,
-                    scheduledCharges?.toUnmodifiable(),
+                    scheduledCharges?.toImmutable(),
                     totalContractValue,
                     transition,
                     uniquenessKey,
                     usageFilter,
                     usageStatementSchedule,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -778,30 +778,30 @@ constructor(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
                 checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                 billingProviderConfiguration,
-                if (commits.size == 0) null else commits.toUnmodifiable(),
-                if (credits.size == 0) null else credits.toUnmodifiable(),
+                if (commits.size == 0) null else commits.toImmutable(),
+                if (credits.size == 0) null else credits.toImmutable(),
                 customFields,
-                if (discounts.size == 0) null else discounts.toUnmodifiable(),
+                if (discounts.size == 0) null else discounts.toImmutable(),
                 endingBefore,
                 multiplierOverridePrioritization,
                 name,
                 netPaymentTermsDays,
                 netsuiteSalesOrderId,
-                if (overrides.size == 0) null else overrides.toUnmodifiable(),
-                if (professionalServices.size == 0) null else professionalServices.toUnmodifiable(),
+                if (overrides.size == 0) null else overrides.toImmutable(),
+                if (professionalServices.size == 0) null else professionalServices.toImmutable(),
                 rateCardAlias,
                 rateCardId,
-                if (resellerRoyalties.size == 0) null else resellerRoyalties.toUnmodifiable(),
+                if (resellerRoyalties.size == 0) null else resellerRoyalties.toImmutable(),
                 salesforceOpportunityId,
-                if (scheduledCharges.size == 0) null else scheduledCharges.toUnmodifiable(),
+                if (scheduledCharges.size == 0) null else scheduledCharges.toImmutable(),
                 totalContractValue,
                 transition,
                 uniquenessKey,
                 usageFilter,
                 usageStatementSchedule,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -886,7 +886,7 @@ constructor(
                     billingProviderConfigurationId,
                     billingProvider,
                     deliveryMethod,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1303,12 +1303,12 @@ constructor(
                     description,
                     rolloverFraction,
                     priority,
-                    applicableProductIds?.toUnmodifiable(),
-                    applicableProductTags?.toUnmodifiable(),
+                    applicableProductIds?.toImmutable(),
+                    applicableProductTags?.toImmutable(),
                     netsuiteSalesOrderId,
                     customFields,
                     temporaryId,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1439,8 +1439,8 @@ constructor(
                         checkNotNull(scheduleItems) {
                                 "`scheduleItems` is required but was not set"
                             }
-                            .toUnmodifiable(),
-                        additionalProperties.toUnmodifiable(),
+                            .toImmutable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -1525,7 +1525,7 @@ constructor(
                             checkNotNull(endingBefore) {
                                 "`endingBefore` is required but was not set"
                             },
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -1613,7 +1613,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+                fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -1730,9 +1730,9 @@ constructor(
                 fun build(): InvoiceSchedule =
                     InvoiceSchedule(
                         creditTypeId,
-                        scheduleItems?.toUnmodifiable(),
+                        scheduleItems?.toImmutable(),
                         recurringSchedule,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -1891,7 +1891,7 @@ constructor(
                             checkNotNull(amountDistribution) {
                                 "`amountDistribution` is required but was not set"
                             },
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -2164,7 +2164,7 @@ constructor(
                             quantity,
                             amount,
                             checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -2459,12 +2459,12 @@ constructor(
                     checkNotNull(productId) { "`productId` is required but was not set" },
                     checkNotNull(accessSchedule) { "`accessSchedule` is required but was not set" },
                     description,
-                    applicableProductIds?.toUnmodifiable(),
-                    applicableProductTags?.toUnmodifiable(),
+                    applicableProductIds?.toImmutable(),
+                    applicableProductTags?.toImmutable(),
                     netsuiteSalesOrderId,
                     priority,
                     customFields,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -2535,8 +2535,8 @@ constructor(
                         checkNotNull(scheduleItems) {
                                 "`scheduleItems` is required but was not set"
                             }
-                            .toUnmodifiable(),
-                        additionalProperties.toUnmodifiable(),
+                            .toImmutable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -2621,7 +2621,7 @@ constructor(
                             checkNotNull(endingBefore) {
                                 "`endingBefore` is required but was not set"
                             },
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -2709,7 +2709,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+                fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -2794,7 +2794,7 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+            fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -2904,7 +2904,7 @@ constructor(
                     name,
                     checkNotNull(schedule) { "`schedule` is required but was not set" },
                     netsuiteSalesOrderId,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -2997,9 +2997,9 @@ constructor(
                 fun build(): Schedule =
                     Schedule(
                         creditTypeId,
-                        scheduleItems?.toUnmodifiable(),
+                        scheduleItems?.toImmutable(),
                         recurringSchedule,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -3158,7 +3158,7 @@ constructor(
                             checkNotNull(amountDistribution) {
                                 "`amountDistribution` is required but was not set"
                             },
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -3431,7 +3431,7 @@ constructor(
                             quantity,
                             amount,
                             checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -3778,12 +3778,12 @@ constructor(
                     priority,
                     overwriteRate,
                     productId,
-                    applicableProductTags?.toUnmodifiable(),
-                    overrideSpecifiers?.toUnmodifiable(),
-                    tiers?.toUnmodifiable(),
+                    applicableProductTags?.toImmutable(),
+                    overrideSpecifiers?.toImmutable(),
+                    tiers?.toImmutable(),
                     isCommitSpecific,
                     target,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -3918,12 +3918,12 @@ constructor(
 
                 fun build(): OverrideSpecifier =
                     OverrideSpecifier(
-                        commitIds?.toUnmodifiable(),
+                        commitIds?.toImmutable(),
                         productId,
-                        productTags?.toUnmodifiable(),
+                        productTags?.toImmutable(),
                         pricingGroupValues,
                         presentationGroupValues,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -3974,7 +3974,7 @@ constructor(
                         }
 
                     fun build(): PresentationGroupValues =
-                        PresentationGroupValues(additionalProperties.toUnmodifiable())
+                        PresentationGroupValues(additionalProperties.toImmutable())
                 }
 
                 override fun equals(other: Any?): Boolean {
@@ -4045,7 +4045,7 @@ constructor(
                         }
 
                     fun build(): PricingGroupValues =
-                        PricingGroupValues(additionalProperties.toUnmodifiable())
+                        PricingGroupValues(additionalProperties.toImmutable())
                 }
 
                 override fun equals(other: Any?): Boolean {
@@ -4214,10 +4214,10 @@ constructor(
                         price,
                         quantity,
                         isProrated,
-                        tiers?.toUnmodifiable(),
+                        tiers?.toImmutable(),
                         customRate,
                         creditTypeId,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -4341,7 +4341,7 @@ constructor(
                             this.additionalProperties.putAll(additionalProperties)
                         }
 
-                    fun build(): CustomRate = CustomRate(additionalProperties.toUnmodifiable())
+                    fun build(): CustomRate = CustomRate(additionalProperties.toImmutable())
                 }
 
                 override fun equals(other: Any?): Boolean {
@@ -4515,7 +4515,7 @@ constructor(
                     Tier(
                         size,
                         checkNotNull(multiplier) { "`multiplier` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -4751,7 +4751,7 @@ constructor(
                     checkNotNull(quantity) { "`quantity` is required but was not set" },
                     checkNotNull(maxAmount) { "`maxAmount` is required but was not set" },
                     customFields,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -4797,7 +4797,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+                fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -4988,14 +4988,14 @@ constructor(
                     checkNotNull(netsuiteResellerId) {
                         "`netsuiteResellerId` is required but was not set"
                     },
-                    applicableProductIds?.toUnmodifiable(),
-                    applicableProductTags?.toUnmodifiable(),
+                    applicableProductIds?.toImmutable(),
+                    applicableProductTags?.toImmutable(),
                     checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                     endingBefore,
                     resellerContractValue,
                     awsOptions,
                     gcpOptions,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -5144,7 +5144,7 @@ constructor(
                         awsAccountNumber,
                         awsPayerReferenceId,
                         awsOfferId,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -5231,7 +5231,7 @@ constructor(
                     GcpOptions(
                         gcpAccountId,
                         gcpOfferId,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -5364,7 +5364,7 @@ constructor(
                     name,
                     checkNotNull(schedule) { "`schedule` is required but was not set" },
                     netsuiteSalesOrderId,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -5457,9 +5457,9 @@ constructor(
                 fun build(): Schedule =
                     Schedule(
                         creditTypeId,
-                        scheduleItems?.toUnmodifiable(),
+                        scheduleItems?.toImmutable(),
                         recurringSchedule,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -5618,7 +5618,7 @@ constructor(
                             checkNotNull(amountDistribution) {
                                 "`amountDistribution` is required but was not set"
                             },
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -5891,7 +5891,7 @@ constructor(
                             quantity,
                             amount,
                             checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -6034,7 +6034,7 @@ constructor(
                     checkNotNull(type) { "`type` is required but was not set" },
                     checkNotNull(fromContractId) { "`fromContractId` is required but was not set" },
                     futureInvoiceBehavior,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -6153,7 +6153,7 @@ constructor(
                     }
 
                 fun build(): FutureInvoiceBehavior =
-                    FutureInvoiceBehavior(trueup, additionalProperties.toUnmodifiable())
+                    FutureInvoiceBehavior(trueup, additionalProperties.toImmutable())
             }
 
             class Trueup
@@ -6368,7 +6368,7 @@ constructor(
                     day,
                     billingAnchorDate,
                     invoiceGenerationStartingAt,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 

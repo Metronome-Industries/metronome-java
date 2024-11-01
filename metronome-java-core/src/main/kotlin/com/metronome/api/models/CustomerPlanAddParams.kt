@@ -12,7 +12,7 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
@@ -242,10 +242,10 @@ constructor(
                     checkNotNull(startingOn) { "`startingOn` is required but was not set" },
                     endingBefore,
                     netPaymentTermsDays,
-                    overageRateAdjustments?.toUnmodifiable(),
-                    priceAdjustments?.toUnmodifiable(),
+                    overageRateAdjustments?.toImmutable(),
+                    priceAdjustments?.toImmutable(),
                     trialSpec,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -456,12 +456,12 @@ constructor(
                 endingBefore,
                 netPaymentTermsDays,
                 if (overageRateAdjustments.size == 0) null
-                else overageRateAdjustments.toUnmodifiable(),
-                if (priceAdjustments.size == 0) null else priceAdjustments.toUnmodifiable(),
+                else overageRateAdjustments.toImmutable(),
+                if (priceAdjustments.size == 0) null else priceAdjustments.toImmutable(),
                 trialSpec,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -552,7 +552,7 @@ constructor(
                     checkNotNull(toFiatConversionFactor) {
                         "`toFiatConversionFactor` is required but was not set"
                     },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -694,7 +694,7 @@ constructor(
                     quantity,
                     tier,
                     checkNotNull(startPeriod) { "`startPeriod` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -856,7 +856,7 @@ constructor(
                 TrialSpec(
                     checkNotNull(lengthInDays) { "`lengthInDays` is required but was not set" },
                     spendingCap,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -930,7 +930,7 @@ constructor(
                     SpendingCap(
                         checkNotNull(creditTypeId) { "`creditTypeId` is required but was not set" },
                         checkNotNull(amount) { "`amount` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 

@@ -12,7 +12,7 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
@@ -61,7 +61,7 @@ constructor(
         val params = mutableMapOf<String, List<String>>()
         this.nextPage?.let { params.put("next_page", listOf(it.toString())) }
         params.putAll(additionalQueryParams)
-        return params.toUnmodifiable()
+        return params.toImmutable()
     }
 
     @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
@@ -183,9 +183,9 @@ constructor(
                     checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
                     checkNotNull(startingOn) { "`startingOn` is required but was not set" },
                     checkNotNull(windowSize) { "`windowSize` is required but was not set" },
-                    billableMetrics?.toUnmodifiable(),
-                    customerIds?.toUnmodifiable(),
-                    additionalProperties.toUnmodifiable(),
+                    billableMetrics?.toImmutable(),
+                    customerIds?.toImmutable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -370,11 +370,11 @@ constructor(
                 checkNotNull(startingOn) { "`startingOn` is required but was not set" },
                 checkNotNull(windowSize) { "`windowSize` is required but was not set" },
                 nextPage,
-                if (billableMetrics.size == 0) null else billableMetrics.toUnmodifiable(),
-                if (customerIds.size == 0) null else customerIds.toUnmodifiable(),
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                if (billableMetrics.size == 0) null else billableMetrics.toImmutable(),
+                if (customerIds.size == 0) null else customerIds.toImmutable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -501,7 +501,7 @@ constructor(
                 BillableMetric(
                     checkNotNull(id) { "`id` is required but was not set" },
                     groupBy,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -575,8 +575,8 @@ constructor(
                 fun build(): GroupBy =
                     GroupBy(
                         checkNotNull(key) { "`key` is required but was not set" },
-                        values?.toUnmodifiable(),
-                        additionalProperties.toUnmodifiable(),
+                        values?.toImmutable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 

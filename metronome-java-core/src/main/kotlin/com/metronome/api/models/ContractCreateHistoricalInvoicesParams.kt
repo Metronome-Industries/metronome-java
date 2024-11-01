@@ -12,7 +12,7 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
@@ -106,9 +106,9 @@ constructor(
             fun build(): ContractCreateHistoricalInvoicesBody =
                 ContractCreateHistoricalInvoicesBody(
                     checkNotNull(invoices) { "`invoices` is required but was not set" }
-                        .toUnmodifiable(),
+                        .toImmutable(),
                     checkNotNull(preview) { "`preview` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -248,12 +248,11 @@ constructor(
 
         fun build(): ContractCreateHistoricalInvoicesParams =
             ContractCreateHistoricalInvoicesParams(
-                checkNotNull(invoices) { "`invoices` is required but was not set" }
-                    .toUnmodifiable(),
+                checkNotNull(invoices) { "`invoices` is required but was not set" }.toImmutable(),
                 checkNotNull(preview) { "`preview` is required but was not set" },
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -410,10 +409,10 @@ constructor(
                     checkNotNull(issueDate) { "`issueDate` is required but was not set" },
                     breakdownGranularity,
                     checkNotNull(usageLineItems) { "`usageLineItems` is required but was not set" }
-                        .toUnmodifiable(),
+                        .toImmutable(),
                     billableStatus,
                     customFields,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -544,8 +543,8 @@ constructor(
                         quantity,
                         pricingGroupValues,
                         presentationGroupValues,
-                        subtotalsWithQuantity?.toUnmodifiable(),
-                        additionalProperties.toUnmodifiable(),
+                        subtotalsWithQuantity?.toImmutable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -592,7 +591,7 @@ constructor(
                         }
 
                     fun build(): PresentationGroupValues =
-                        PresentationGroupValues(additionalProperties.toUnmodifiable())
+                        PresentationGroupValues(additionalProperties.toImmutable())
                 }
 
                 override fun equals(other: Any?): Boolean {
@@ -659,7 +658,7 @@ constructor(
                         }
 
                     fun build(): PricingGroupValues =
-                        PricingGroupValues(additionalProperties.toUnmodifiable())
+                        PricingGroupValues(additionalProperties.toImmutable())
                 }
 
                 override fun equals(other: Any?): Boolean {
@@ -764,7 +763,7 @@ constructor(
                                 "`exclusiveEndDate` is required but was not set"
                             },
                             checkNotNull(quantity) { "`quantity` is required but was not set" },
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -967,7 +966,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+                fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {

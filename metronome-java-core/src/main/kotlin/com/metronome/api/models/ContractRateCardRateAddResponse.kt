@@ -13,7 +13,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
@@ -83,7 +83,7 @@ private constructor(
         }
 
         fun build(): ContractRateCardRateAddResponse =
-            ContractRateCardRateAddResponse(data, additionalProperties.toUnmodifiable())
+            ContractRateCardRateAddResponse(data, additionalProperties.toImmutable())
     }
 
     @JsonDeserialize(builder = Data.Builder::class)
@@ -345,10 +345,10 @@ private constructor(
                     useListPrices,
                     quantity,
                     isProrated,
-                    tiers.map { it.toUnmodifiable() },
+                    tiers.map { it.toImmutable() },
                     pricingGroupValues,
                     creditType,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -508,7 +508,7 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): CustomRate = CustomRate(additionalProperties.toUnmodifiable())
+                fun build(): CustomRate = CustomRate(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -583,7 +583,7 @@ private constructor(
                     }
 
                 fun build(): PricingGroupValues =
-                    PricingGroupValues(additionalProperties.toUnmodifiable())
+                    PricingGroupValues(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {

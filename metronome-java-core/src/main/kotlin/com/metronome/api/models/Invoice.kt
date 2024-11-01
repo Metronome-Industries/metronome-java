@@ -13,7 +13,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -574,8 +574,8 @@ private constructor(
                 salesforceOpportunityId,
                 netPaymentTermsDays,
                 creditType,
-                invoiceAdjustments.map { it.toUnmodifiable() },
-                lineItems.map { it.toUnmodifiable() },
+                invoiceAdjustments.map { it.toImmutable() },
+                lineItems.map { it.toImmutable() },
                 startTimestamp,
                 endTimestamp,
                 issuedAt,
@@ -595,7 +595,7 @@ private constructor(
                 resellerRoyalty,
                 customFields,
                 billableStatus,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -1423,7 +1423,7 @@ private constructor(
                     commitNetsuiteItemId,
                     postpaidCommit,
                     resellerType,
-                    subLineItems.map { it.toUnmodifiable() },
+                    subLineItems.map { it.toImmutable() },
                     customFields,
                     pricingGroupValues,
                     presentationGroupValues,
@@ -1434,7 +1434,7 @@ private constructor(
                     professionalServiceCustomFields,
                     scheduledChargeId,
                     scheduledChargeCustomFields,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1490,7 +1490,7 @@ private constructor(
                     }
 
                 fun build(): CommitCustomFields =
-                    CommitCustomFields(additionalProperties.toUnmodifiable())
+                    CommitCustomFields(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -1564,7 +1564,7 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+                fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -1652,8 +1652,7 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): PostpaidCommit =
-                    PostpaidCommit(id, additionalProperties.toUnmodifiable())
+                fun build(): PostpaidCommit = PostpaidCommit(id, additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -1732,7 +1731,7 @@ private constructor(
                     }
 
                 fun build(): PresentationGroupValues =
-                    PresentationGroupValues(additionalProperties.toUnmodifiable())
+                    PresentationGroupValues(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -1808,7 +1807,7 @@ private constructor(
                     }
 
                 fun build(): PricingGroupValues =
-                    PricingGroupValues(additionalProperties.toUnmodifiable())
+                    PricingGroupValues(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -1883,7 +1882,7 @@ private constructor(
                     }
 
                 fun build(): ProductCustomFields =
-                    ProductCustomFields(additionalProperties.toUnmodifiable())
+                    ProductCustomFields(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -1961,7 +1960,7 @@ private constructor(
                     }
 
                 fun build(): ProfessionalServiceCustomFields =
-                    ProfessionalServiceCustomFields(additionalProperties.toUnmodifiable())
+                    ProfessionalServiceCustomFields(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -2106,7 +2105,7 @@ private constructor(
                     }
 
                 fun build(): ScheduledChargeCustomFields =
-                    ScheduledChargeCustomFields(additionalProperties.toUnmodifiable())
+                    ScheduledChargeCustomFields(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -2386,11 +2385,11 @@ private constructor(
                         chargeId,
                         creditGrantId,
                         tierPeriod,
-                        tiers.map { it.toUnmodifiable() },
+                        tiers.map { it.toImmutable() },
                         customFields,
                         startDate,
                         endDate,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -2444,7 +2443,7 @@ private constructor(
                             this.additionalProperties.putAll(additionalProperties)
                         }
 
-                    fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+                    fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
                 }
 
                 override fun equals(other: Any?): Boolean {
@@ -2557,7 +2556,7 @@ private constructor(
                         TierPeriod(
                             startingAt,
                             endingBefore,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -2700,7 +2699,7 @@ private constructor(
                             quantity,
                             price,
                             subtotal,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -2874,7 +2873,7 @@ private constructor(
             }
 
             fun build(): ContractCustomFields =
-                ContractCustomFields(additionalProperties.toUnmodifiable())
+                ContractCustomFields(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -3020,7 +3019,7 @@ private constructor(
                     memo,
                     correctedInvoiceId,
                     correctedExternalInvoice,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -3154,7 +3153,7 @@ private constructor(
                         invoiceId,
                         issuedAtTimestamp,
                         externalStatus,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -3463,7 +3462,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+            fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -3536,7 +3535,7 @@ private constructor(
             }
 
             fun build(): CustomerCustomFields =
-                CustomerCustomFields(additionalProperties.toUnmodifiable())
+                CustomerCustomFields(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -3686,7 +3685,7 @@ private constructor(
                     invoiceId,
                     issuedAtTimestamp,
                     externalStatus,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -4057,7 +4056,7 @@ private constructor(
                     creditType,
                     creditGrantId,
                     creditGrantCustomFields,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -4112,7 +4111,7 @@ private constructor(
                     }
 
                 fun build(): CreditGrantCustomFields =
-                    CreditGrantCustomFields(additionalProperties.toUnmodifiable())
+                    CreditGrantCustomFields(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -4206,7 +4205,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): PlanCustomFields = PlanCustomFields(additionalProperties.toUnmodifiable())
+            fun build(): PlanCustomFields = PlanCustomFields(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -4369,7 +4368,7 @@ private constructor(
                     fraction,
                     awsOptions,
                     gcpOptions,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -4554,7 +4553,7 @@ private constructor(
                         awsAccountNumber,
                         awsPayerReferenceId,
                         awsOfferId,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -4667,7 +4666,7 @@ private constructor(
                     GcpOptions(
                         gcpAccountId,
                         gcpOfferId,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 

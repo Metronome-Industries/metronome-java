@@ -11,7 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
@@ -99,8 +99,8 @@ private constructor(
         fun build(): ContractRateCardRetrieveRateScheduleResponse =
             ContractRateCardRetrieveRateScheduleResponse(
                 nextPage,
-                data.map { it.toUnmodifiable() },
-                additionalProperties.toUnmodifiable(),
+                data.map { it.toImmutable() },
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -285,13 +285,13 @@ private constructor(
                 Data(
                     productId,
                     productName,
-                    productTags.map { it.toUnmodifiable() },
+                    productTags.map { it.toImmutable() },
                     pricingGroupValues,
                     startingAt,
                     endingBefore,
                     entitled,
                     rate,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -346,7 +346,7 @@ private constructor(
                     }
 
                 fun build(): PricingGroupValues =
-                    PricingGroupValues(additionalProperties.toUnmodifiable())
+                    PricingGroupValues(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {

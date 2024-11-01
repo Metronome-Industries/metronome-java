@@ -12,7 +12,7 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.*
 import java.util.Objects
@@ -231,10 +231,10 @@ constructor(
                     aggregationType,
                     customFields,
                     eventTypeFilter,
-                    groupKeys?.toUnmodifiable(),
-                    propertyFilters?.toUnmodifiable(),
+                    groupKeys?.toImmutable(),
+                    propertyFilters?.toImmutable(),
                     sql,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -439,12 +439,12 @@ constructor(
                 aggregationType,
                 customFields,
                 eventTypeFilter,
-                if (groupKeys.size == 0) null else groupKeys.toUnmodifiable(),
-                if (propertyFilters.size == 0) null else propertyFilters.toUnmodifiable(),
+                if (groupKeys.size == 0) null else groupKeys.toImmutable(),
+                if (propertyFilters.size == 0) null else propertyFilters.toImmutable(),
                 sql,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -565,7 +565,7 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+            fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {

@@ -12,7 +12,7 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
@@ -316,9 +316,9 @@ constructor(
                     price,
                     pricingGroupValues,
                     quantity,
-                    tiers?.toUnmodifiable(),
+                    tiers?.toImmutable(),
                     useListPrices,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -542,11 +542,11 @@ constructor(
                 price,
                 pricingGroupValues,
                 quantity,
-                if (tiers.size == 0) null else tiers.toUnmodifiable(),
+                if (tiers.size == 0) null else tiers.toImmutable(),
                 useListPrices,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -667,7 +667,7 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CustomRate = CustomRate(additionalProperties.toUnmodifiable())
+            fun build(): CustomRate = CustomRate(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -734,8 +734,7 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): PricingGroupValues =
-                PricingGroupValues(additionalProperties.toUnmodifiable())
+            fun build(): PricingGroupValues = PricingGroupValues(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {

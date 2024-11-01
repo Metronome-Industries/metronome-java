@@ -11,7 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
@@ -102,8 +102,8 @@ private constructor(
         fun build(): ScheduleDuration =
             ScheduleDuration(
                 creditType,
-                scheduleItems.map { it.toUnmodifiable() },
-                additionalProperties.toUnmodifiable(),
+                scheduleItems.map { it.toImmutable() },
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -223,7 +223,7 @@ private constructor(
                     amount,
                     startingAt,
                     endingBefore,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 

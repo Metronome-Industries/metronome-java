@@ -11,7 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
@@ -437,16 +437,16 @@ private constructor(
                 createdBy,
                 netsuiteOverageItemId,
                 billableMetricId,
-                compositeProductIds.map { it.toUnmodifiable() },
+                compositeProductIds.map { it.toImmutable() },
                 quantityConversion,
                 quantityRounding,
-                compositeTags.map { it.toUnmodifiable() },
+                compositeTags.map { it.toImmutable() },
                 isRefundable,
-                tags.map { it.toUnmodifiable() },
+                tags.map { it.toImmutable() },
                 excludeFreeUsage,
-                pricingGroupKey.map { it.toUnmodifiable() },
-                presentationGroupKey.map { it.toUnmodifiable() },
-                additionalProperties.toUnmodifiable(),
+                pricingGroupKey.map { it.toImmutable() },
+                presentationGroupKey.map { it.toImmutable() },
+                additionalProperties.toImmutable(),
             )
     }
 

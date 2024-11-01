@@ -11,7 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import java.util.Objects
 
 @JsonDeserialize(builder = ContractRateCardProductOrderSetResponse.Builder::class)
@@ -80,7 +80,7 @@ private constructor(
         }
 
         fun build(): ContractRateCardProductOrderSetResponse =
-            ContractRateCardProductOrderSetResponse(data, additionalProperties.toUnmodifiable())
+            ContractRateCardProductOrderSetResponse(data, additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {

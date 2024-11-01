@@ -12,7 +12,7 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.*
 import java.util.Objects
@@ -41,7 +41,7 @@ constructor(
         val params = mutableMapOf<String, List<String>>()
         this.nextPage?.let { params.put("next_page", listOf(it.toString())) }
         params.putAll(additionalQueryParams)
-        return params.toUnmodifiable()
+        return params.toImmutable()
     }
 
     @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
@@ -98,10 +98,7 @@ constructor(
             }
 
             fun build(): CustomFieldListKeysBody =
-                CustomFieldListKeysBody(
-                    entities?.toUnmodifiable(),
-                    additionalProperties.toUnmodifiable()
-                )
+                CustomFieldListKeysBody(entities?.toImmutable(), additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -240,10 +237,10 @@ constructor(
         fun build(): CustomFieldListKeysParams =
             CustomFieldListKeysParams(
                 nextPage,
-                if (entities.size == 0) null else entities.toUnmodifiable(),
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                if (entities.size == 0) null else entities.toImmutable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 

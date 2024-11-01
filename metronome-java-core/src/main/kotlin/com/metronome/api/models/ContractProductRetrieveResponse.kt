@@ -13,7 +13,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -84,7 +84,7 @@ private constructor(
         }
 
         fun build(): ContractProductRetrieveResponse =
-            ContractProductRetrieveResponse(data, additionalProperties.toUnmodifiable())
+            ContractProductRetrieveResponse(data, additionalProperties.toImmutable())
     }
 
     @JsonDeserialize(builder = Data.Builder::class)
@@ -247,9 +247,9 @@ private constructor(
                     archivedAt,
                     initial,
                     current,
-                    updates.map { it.toUnmodifiable() },
+                    updates.map { it.toImmutable() },
                     customFields,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -766,13 +766,13 @@ private constructor(
                         quantityRounding,
                         netsuiteInternalItemId,
                         netsuiteOverageItemId,
-                        compositeProductIds.map { it.toUnmodifiable() },
-                        compositeTags.map { it.toUnmodifiable() },
-                        tags.map { it.toUnmodifiable() },
+                        compositeProductIds.map { it.toImmutable() },
+                        compositeTags.map { it.toImmutable() },
+                        tags.map { it.toImmutable() },
                         excludeFreeUsage,
-                        pricingGroupKey.map { it.toUnmodifiable() },
-                        presentationGroupKey.map { it.toUnmodifiable() },
-                        additionalProperties.toUnmodifiable(),
+                        pricingGroupKey.map { it.toImmutable() },
+                        presentationGroupKey.map { it.toImmutable() },
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -847,7 +847,7 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+                fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {

@@ -13,7 +13,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -427,8 +427,8 @@ private constructor(
             Override(
                 id,
                 product,
-                applicableProductTags.map { it.toUnmodifiable() },
-                overrideSpecifiers.map { it.toUnmodifiable() },
+                applicableProductTags.map { it.toImmutable() },
+                overrideSpecifiers.map { it.toImmutable() },
                 startingAt,
                 endingBefore,
                 entitled,
@@ -436,17 +436,17 @@ private constructor(
                 priority,
                 multiplier,
                 overwriteRate,
-                overrideTiers.map { it.toUnmodifiable() },
+                overrideTiers.map { it.toImmutable() },
                 isCommitSpecific,
                 target,
                 rateType,
                 price,
                 quantity,
                 isProrated,
-                tiers.map { it.toUnmodifiable() },
+                tiers.map { it.toImmutable() },
                 value,
                 creditType,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -589,11 +589,11 @@ private constructor(
             fun build(): OverrideSpecifier =
                 OverrideSpecifier(
                     productId,
-                    productTags.map { it.toUnmodifiable() },
+                    productTags.map { it.toImmutable() },
                     pricingGroupValues,
                     presentationGroupValues,
-                    commitIds.map { it.toUnmodifiable() },
-                    additionalProperties.toUnmodifiable(),
+                    commitIds.map { it.toImmutable() },
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -648,7 +648,7 @@ private constructor(
                     }
 
                 fun build(): PresentationGroupValues =
-                    PresentationGroupValues(additionalProperties.toUnmodifiable())
+                    PresentationGroupValues(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -723,7 +723,7 @@ private constructor(
                     }
 
                 fun build(): PricingGroupValues =
-                    PricingGroupValues(additionalProperties.toUnmodifiable())
+                    PricingGroupValues(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -849,7 +849,7 @@ private constructor(
                 OverrideTier(
                     size,
                     multiplier,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1070,10 +1070,10 @@ private constructor(
                     price,
                     quantity,
                     isProrated,
-                    tiers.map { it.toUnmodifiable() },
+                    tiers.map { it.toImmutable() },
                     customRate,
                     creditType,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1203,7 +1203,7 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): CustomRate = CustomRate(additionalProperties.toUnmodifiable())
+                fun build(): CustomRate = CustomRate(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -1328,7 +1328,7 @@ private constructor(
                 Product(
                     id,
                     name,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1598,7 +1598,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Value = Value(additionalProperties.toUnmodifiable())
+            fun build(): Value = Value(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {

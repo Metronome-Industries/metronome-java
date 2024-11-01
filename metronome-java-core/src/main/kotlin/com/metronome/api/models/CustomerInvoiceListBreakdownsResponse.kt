@@ -11,7 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
@@ -654,8 +654,8 @@ private constructor(
                 salesforceOpportunityId,
                 netPaymentTermsDays,
                 creditType,
-                invoiceAdjustments.map { it.toUnmodifiable() },
-                lineItems.map { it.toUnmodifiable() },
+                invoiceAdjustments.map { it.toImmutable() },
+                lineItems.map { it.toImmutable() },
                 startTimestamp,
                 endTimestamp,
                 issuedAt,
@@ -677,7 +677,7 @@ private constructor(
                 billableStatus,
                 breakdownStartTimestamp,
                 breakdownEndTimestamp,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 

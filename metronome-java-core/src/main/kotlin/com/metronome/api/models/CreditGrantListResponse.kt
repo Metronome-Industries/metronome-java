@@ -11,7 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
@@ -421,11 +421,11 @@ private constructor(
                 grantAmount,
                 paidAmount,
                 balance,
-                deductions.map { it.toUnmodifiable() },
-                pendingDeductions.map { it.toUnmodifiable() },
-                products.map { it.toUnmodifiable() },
+                deductions.map { it.toImmutable() },
+                pendingDeductions.map { it.toImmutable() },
+                products.map { it.toImmutable() },
                 customFields,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -580,7 +580,7 @@ private constructor(
                     excludingPending,
                     includingPending,
                     effectiveAt,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -654,7 +654,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CustomFields = CustomFields(additionalProperties.toUnmodifiable())
+            fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -765,7 +765,7 @@ private constructor(
                 GrantAmount(
                     amount,
                     creditType,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -878,7 +878,7 @@ private constructor(
                 PaidAmount(
                     amount,
                     creditType,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -984,7 +984,7 @@ private constructor(
                 Product(
                     id,
                     name,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 

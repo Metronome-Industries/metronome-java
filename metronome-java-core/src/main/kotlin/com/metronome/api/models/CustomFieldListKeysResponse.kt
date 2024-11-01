@@ -13,7 +13,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.toUnmodifiable
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
@@ -97,9 +97,9 @@ private constructor(
 
         fun build(): CustomFieldListKeysResponse =
             CustomFieldListKeysResponse(
-                data.map { it.toUnmodifiable() },
+                data.map { it.toImmutable() },
                 nextPage,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -204,7 +204,7 @@ private constructor(
                     entity,
                     key,
                     enforceUniqueness,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
