@@ -108,7 +108,6 @@ class CustomerCommitListResponseTest {
                             .name("name")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .priority(42.23)
-                            .rateType(Commit.RateType.COMMIT_RATE)
                             .rolledOverFrom(
                                 Commit.RolledOverFrom.builder()
                                     .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -212,7 +211,6 @@ class CustomerCommitListResponseTest {
                     .name("name")
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                     .priority(42.23)
-                    .rateType(Commit.RateType.COMMIT_RATE)
                     .rolledOverFrom(
                         Commit.RolledOverFrom.builder()
                             .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

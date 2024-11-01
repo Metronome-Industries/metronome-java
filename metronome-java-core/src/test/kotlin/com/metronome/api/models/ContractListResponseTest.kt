@@ -158,7 +158,6 @@ class ContractListResponseTest {
                                                     .name("name")
                                                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                                                     .priority(42.23)
-                                                    .rateType(Commit.RateType.COMMIT_RATE)
                                                     .rolledOverFrom(
                                                         Commit.RolledOverFrom.builder()
                                                             .commitId(
@@ -202,13 +201,11 @@ class ContractListResponseTest {
                                                         )
                                                     )
                                                     .entitled(true)
-                                                    .isCommitSpecific(true)
                                                     .isProrated(true)
                                                     .multiplier(42.23)
                                                     .overrideSpecifiers(
                                                         listOf(
                                                             Override.OverrideSpecifier.builder()
-                                                                .commitIds(listOf("string"))
                                                                 .presentationGroupValues(
                                                                     Override.OverrideSpecifier
                                                                         .PresentationGroupValues
@@ -279,7 +276,6 @@ class ContractListResponseTest {
                                                     )
                                                     .quantity(42.23)
                                                     .rateType(Override.RateType.FLAT)
-                                                    .target(Override.Target.COMMIT_RATE)
                                                     .tiers(
                                                         listOf(
                                                             Tier.builder()
@@ -685,7 +681,6 @@ class ContractListResponseTest {
                                                 .name("name")
                                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                                 .priority(42.23)
-                                                .rateType(Commit.RateType.COMMIT_RATE)
                                                 .rolledOverFrom(
                                                     Commit.RolledOverFrom.builder()
                                                         .commitId(
@@ -723,13 +718,11 @@ class ContractListResponseTest {
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
                                                 .entitled(true)
-                                                .isCommitSpecific(true)
                                                 .isProrated(true)
                                                 .multiplier(42.23)
                                                 .overrideSpecifiers(
                                                     listOf(
                                                         Override.OverrideSpecifier.builder()
-                                                            .commitIds(listOf("string"))
                                                             .presentationGroupValues(
                                                                 Override.OverrideSpecifier
                                                                     .PresentationGroupValues
@@ -798,7 +791,6 @@ class ContractListResponseTest {
                                                 )
                                                 .quantity(42.23)
                                                 .rateType(Override.RateType.FLAT)
-                                                .target(Override.Target.COMMIT_RATE)
                                                 .tiers(
                                                     listOf(
                                                         Tier.builder()
@@ -1254,7 +1246,6 @@ class ContractListResponseTest {
                                                 .name("name")
                                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                                 .priority(42.23)
-                                                .rateType(Commit.RateType.COMMIT_RATE)
                                                 .rolledOverFrom(
                                                     Commit.RolledOverFrom.builder()
                                                         .commitId(
@@ -1292,13 +1283,11 @@ class ContractListResponseTest {
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
                                                 .entitled(true)
-                                                .isCommitSpecific(true)
                                                 .isProrated(true)
                                                 .multiplier(42.23)
                                                 .overrideSpecifiers(
                                                     listOf(
                                                         Override.OverrideSpecifier.builder()
-                                                            .commitIds(listOf("string"))
                                                             .presentationGroupValues(
                                                                 Override.OverrideSpecifier
                                                                     .PresentationGroupValues
@@ -1367,7 +1356,6 @@ class ContractListResponseTest {
                                                 )
                                                 .quantity(42.23)
                                                 .rateType(Override.RateType.FLAT)
-                                                .target(Override.Target.COMMIT_RATE)
                                                 .tiers(
                                                     listOf(
                                                         Tier.builder()
@@ -1851,7 +1839,6 @@ class ContractListResponseTest {
                                             .name("name")
                                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                                             .priority(42.23)
-                                            .rateType(Commit.RateType.COMMIT_RATE)
                                             .rolledOverFrom(
                                                 Commit.RolledOverFrom.builder()
                                                     .commitId(
@@ -1887,13 +1874,11 @@ class ContractListResponseTest {
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
                                             .entitled(true)
-                                            .isCommitSpecific(true)
                                             .isProrated(true)
                                             .multiplier(42.23)
                                             .overrideSpecifiers(
                                                 listOf(
                                                     Override.OverrideSpecifier.builder()
-                                                        .commitIds(listOf("string"))
                                                         .presentationGroupValues(
                                                             Override.OverrideSpecifier
                                                                 .PresentationGroupValues
@@ -1959,7 +1944,6 @@ class ContractListResponseTest {
                                             )
                                             .quantity(42.23)
                                             .rateType(Override.RateType.FLAT)
-                                            .target(Override.Target.COMMIT_RATE)
                                             .tiers(
                                                 listOf(
                                                     Tier.builder().price(42.23).size(42.23).build()
@@ -2325,7 +2309,6 @@ class ContractListResponseTest {
                                         .name("name")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                                         .priority(42.23)
-                                        .rateType(Commit.RateType.COMMIT_RATE)
                                         .rolledOverFrom(
                                             Commit.RolledOverFrom.builder()
                                                 .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2357,13 +2340,11 @@ class ContractListResponseTest {
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
                                         .entitled(true)
-                                        .isCommitSpecific(true)
                                         .isProrated(true)
                                         .multiplier(42.23)
                                         .overrideSpecifiers(
                                             listOf(
                                                 Override.OverrideSpecifier.builder()
-                                                    .commitIds(listOf("string"))
                                                     .presentationGroupValues(
                                                         Override.OverrideSpecifier
                                                             .PresentationGroupValues
@@ -2427,7 +2408,6 @@ class ContractListResponseTest {
                                         )
                                         .quantity(42.23)
                                         .rateType(Override.RateType.FLAT)
-                                        .target(Override.Target.COMMIT_RATE)
                                         .tiers(
                                             listOf(Tier.builder().price(42.23).size(42.23).build())
                                         )
@@ -2841,7 +2821,6 @@ class ContractListResponseTest {
                                         .name("name")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                                         .priority(42.23)
-                                        .rateType(Commit.RateType.COMMIT_RATE)
                                         .rolledOverFrom(
                                             Commit.RolledOverFrom.builder()
                                                 .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2873,13 +2852,11 @@ class ContractListResponseTest {
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
                                         .entitled(true)
-                                        .isCommitSpecific(true)
                                         .isProrated(true)
                                         .multiplier(42.23)
                                         .overrideSpecifiers(
                                             listOf(
                                                 Override.OverrideSpecifier.builder()
-                                                    .commitIds(listOf("string"))
                                                     .presentationGroupValues(
                                                         Override.OverrideSpecifier
                                                             .PresentationGroupValues
@@ -2943,7 +2920,6 @@ class ContractListResponseTest {
                                         )
                                         .quantity(42.23)
                                         .rateType(Override.RateType.FLAT)
-                                        .target(Override.Target.COMMIT_RATE)
                                         .tiers(
                                             listOf(Tier.builder().price(42.23).size(42.23).build())
                                         )

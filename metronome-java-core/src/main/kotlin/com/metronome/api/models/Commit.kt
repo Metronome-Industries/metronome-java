@@ -35,7 +35,6 @@ private constructor(
     private val id: JsonField<String>,
     private val contract: JsonField<Contract>,
     private val type: JsonField<Type>,
-    private val rateType: JsonField<RateType>,
     private val name: JsonField<String>,
     private val priority: JsonField<Double>,
     private val product: JsonField<Product>,
@@ -63,8 +62,6 @@ private constructor(
     fun contract(): Optional<Contract> = Optional.ofNullable(contract.getNullable("contract"))
 
     fun type(): Type = type.getRequired("type")
-
-    fun rateType(): Optional<RateType> = Optional.ofNullable(rateType.getNullable("rate_type"))
 
     fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
 
@@ -131,8 +128,6 @@ private constructor(
     @JsonProperty("contract") @ExcludeMissing fun _contract() = contract
 
     @JsonProperty("type") @ExcludeMissing fun _type() = type
-
-    @JsonProperty("rate_type") @ExcludeMissing fun _rateType() = rateType
 
     @JsonProperty("name") @ExcludeMissing fun _name() = name
 
@@ -201,7 +196,6 @@ private constructor(
             id()
             contract().map { it.validate() }
             type()
-            rateType()
             name()
             priority()
             product().validate()
@@ -235,7 +229,6 @@ private constructor(
         private var id: JsonField<String> = JsonMissing.of()
         private var contract: JsonField<Contract> = JsonMissing.of()
         private var type: JsonField<Type> = JsonMissing.of()
-        private var rateType: JsonField<RateType> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
         private var priority: JsonField<Double> = JsonMissing.of()
         private var product: JsonField<Product> = JsonMissing.of()
@@ -260,7 +253,6 @@ private constructor(
             this.id = commit.id
             this.contract = commit.contract
             this.type = commit.type
-            this.rateType = commit.rateType
             this.name = commit.name
             this.priority = commit.priority
             this.product = commit.product
@@ -296,12 +288,6 @@ private constructor(
         @JsonProperty("type")
         @ExcludeMissing
         fun type(type: JsonField<Type>) = apply { this.type = type }
-
-        fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
-
-        @JsonProperty("rate_type")
-        @ExcludeMissing
-        fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
 
         fun name(name: String) = name(JsonField.of(name))
 
@@ -488,7 +474,6 @@ private constructor(
                 id,
                 contract,
                 type,
-                rateType,
                 name,
                 priority,
                 product,
@@ -4081,63 +4066,6 @@ private constructor(
         }
     }
 
-    class RateType
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
-
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is RateType && this.value == other.value /* spotless:on */
-        }
-
-        override fun hashCode() = value.hashCode()
-
-        override fun toString() = value.toString()
-
-        companion object {
-
-            @JvmField val COMMIT_RATE = RateType(JsonField.of("COMMIT_RATE"))
-
-            @JvmField val LIST_RATE = RateType(JsonField.of("LIST_RATE"))
-
-            @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
-        }
-
-        enum class Known {
-            COMMIT_RATE,
-            LIST_RATE,
-        }
-
-        enum class Value {
-            COMMIT_RATE,
-            LIST_RATE,
-            _UNKNOWN,
-        }
-
-        fun value(): Value =
-            when (this) {
-                COMMIT_RATE -> Value.COMMIT_RATE
-                LIST_RATE -> Value.LIST_RATE
-                else -> Value._UNKNOWN
-            }
-
-        fun known(): Known =
-            when (this) {
-                COMMIT_RATE -> Known.COMMIT_RATE
-                LIST_RATE -> Known.LIST_RATE
-                else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
-            }
-
-        fun asString(): String = _value().asStringOrThrow()
-    }
-
     @JsonDeserialize(builder = RolledOverFrom.Builder::class)
     @NoAutoDetect
     class RolledOverFrom
@@ -4249,18 +4177,18 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Commit && this.id == other.id && this.contract == other.contract && this.type == other.type && this.rateType == other.rateType && this.name == other.name && this.priority == other.priority && this.product == other.product && this.accessSchedule == other.accessSchedule && this.invoiceSchedule == other.invoiceSchedule && this.invoiceContract == other.invoiceContract && this.rolledOverFrom == other.rolledOverFrom && this.description == other.description && this.rolloverFraction == other.rolloverFraction && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.applicableContractIds == other.applicableContractIds && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.amount == other.amount && this.salesforceOpportunityId == other.salesforceOpportunityId && this.ledger == other.ledger && this.customFields == other.customFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Commit && this.id == other.id && this.contract == other.contract && this.type == other.type && this.name == other.name && this.priority == other.priority && this.product == other.product && this.accessSchedule == other.accessSchedule && this.invoiceSchedule == other.invoiceSchedule && this.invoiceContract == other.invoiceContract && this.rolledOverFrom == other.rolledOverFrom && this.description == other.description && this.rolloverFraction == other.rolloverFraction && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.applicableContractIds == other.applicableContractIds && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.amount == other.amount && this.salesforceOpportunityId == other.salesforceOpportunityId && this.ledger == other.ledger && this.customFields == other.customFields && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(id, contract, type, rateType, name, priority, product, accessSchedule, invoiceSchedule, invoiceContract, rolledOverFrom, description, rolloverFraction, applicableProductIds, applicableProductTags, applicableContractIds, netsuiteSalesOrderId, amount, salesforceOpportunityId, ledger, customFields, additionalProperties) /* spotless:on */
+            hashCode = /* spotless:off */ Objects.hash(id, contract, type, name, priority, product, accessSchedule, invoiceSchedule, invoiceContract, rolledOverFrom, description, rolloverFraction, applicableProductIds, applicableProductTags, applicableContractIds, netsuiteSalesOrderId, amount, salesforceOpportunityId, ledger, customFields, additionalProperties) /* spotless:on */
         }
         return hashCode
     }
 
     override fun toString() =
-        "Commit{id=$id, contract=$contract, type=$type, rateType=$rateType, name=$name, priority=$priority, product=$product, accessSchedule=$accessSchedule, invoiceSchedule=$invoiceSchedule, invoiceContract=$invoiceContract, rolledOverFrom=$rolledOverFrom, description=$description, rolloverFraction=$rolloverFraction, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, applicableContractIds=$applicableContractIds, netsuiteSalesOrderId=$netsuiteSalesOrderId, amount=$amount, salesforceOpportunityId=$salesforceOpportunityId, ledger=$ledger, customFields=$customFields, additionalProperties=$additionalProperties}"
+        "Commit{id=$id, contract=$contract, type=$type, name=$name, priority=$priority, product=$product, accessSchedule=$accessSchedule, invoiceSchedule=$invoiceSchedule, invoiceContract=$invoiceContract, rolledOverFrom=$rolledOverFrom, description=$description, rolloverFraction=$rolloverFraction, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, applicableContractIds=$applicableContractIds, netsuiteSalesOrderId=$netsuiteSalesOrderId, amount=$amount, salesforceOpportunityId=$salesforceOpportunityId, ledger=$ledger, customFields=$customFields, additionalProperties=$additionalProperties}"
 }

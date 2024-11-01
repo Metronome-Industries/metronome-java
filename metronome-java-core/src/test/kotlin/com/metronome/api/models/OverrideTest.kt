@@ -23,13 +23,11 @@ class OverrideTest {
                 )
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .entitled(true)
-                .isCommitSpecific(true)
                 .isProrated(true)
                 .multiplier(42.23)
                 .overrideSpecifiers(
                     listOf(
                         Override.OverrideSpecifier.builder()
-                            .commitIds(listOf("string"))
                             .presentationGroupValues(
                                 Override.OverrideSpecifier.PresentationGroupValues.builder().build()
                             )
@@ -70,7 +68,6 @@ class OverrideTest {
                 )
                 .quantity(42.23)
                 .rateType(Override.RateType.FLAT)
-                .target(Override.Target.COMMIT_RATE)
                 .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
                 .type(Override.Type.OVERWRITE)
                 .value(Override.Value.builder().build())
@@ -90,13 +87,11 @@ class OverrideTest {
         assertThat(override.endingBefore())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(override.entitled()).contains(true)
-        assertThat(override.isCommitSpecific()).contains(true)
         assertThat(override.isProrated()).contains(true)
         assertThat(override.multiplier()).contains(42.23)
         assertThat(override.overrideSpecifiers().get())
             .containsExactly(
                 Override.OverrideSpecifier.builder()
-                    .commitIds(listOf("string"))
                     .presentationGroupValues(
                         Override.OverrideSpecifier.PresentationGroupValues.builder().build()
                     )
@@ -137,7 +132,6 @@ class OverrideTest {
             )
         assertThat(override.quantity()).contains(42.23)
         assertThat(override.rateType()).contains(Override.RateType.FLAT)
-        assertThat(override.target()).contains(Override.Target.COMMIT_RATE)
         assertThat(override.tiers().get())
             .containsExactly(Tier.builder().price(42.23).size(42.23).build())
         assertThat(override.type()).contains(Override.Type.OVERWRITE)
