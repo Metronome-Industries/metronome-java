@@ -173,13 +173,19 @@ constructor(
         @JsonProperty("netsuite_overage_item_id")
         fun netsuiteOverageItemId(): String? = netsuiteOverageItemId
 
-        /** For USAGE products only. Groups usage line items on invoices. */
+        /**
+         * For USAGE products only. Groups usage line items on invoices. The superset of values in
+         * the pricing group key and presentation group key must be set as one compound group key on
+         * the billable metric.
+         */
         @JsonProperty("presentation_group_key")
         fun presentationGroupKey(): List<String>? = presentationGroupKey
 
         /**
          * For USAGE products only. If set, pricing for this product will be determined for each
-         * pricing_group_key value, as opposed to the product as a whole.
+         * pricing_group_key value, as opposed to the product as a whole. The superset of values in
+         * the pricing group key and presentation group key must be set as one compound group key on
+         * the billable metric.
          */
         @JsonProperty("pricing_group_key") fun pricingGroupKey(): List<String>? = pricingGroupKey
 
@@ -331,7 +337,11 @@ constructor(
                 this.netsuiteOverageItemId = netsuiteOverageItemId
             }
 
-            /** For USAGE products only. Groups usage line items on invoices. */
+            /**
+             * For USAGE products only. Groups usage line items on invoices. The superset of values
+             * in the pricing group key and presentation group key must be set as one compound group
+             * key on the billable metric.
+             */
             @JsonProperty("presentation_group_key")
             fun presentationGroupKey(presentationGroupKey: List<String>) = apply {
                 this.presentationGroupKey = presentationGroupKey
@@ -339,7 +349,9 @@ constructor(
 
             /**
              * For USAGE products only. If set, pricing for this product will be determined for each
-             * pricing_group_key value, as opposed to the product as a whole.
+             * pricing_group_key value, as opposed to the product as a whole. The superset of values
+             * in the pricing group key and presentation group key must be set as one compound group
+             * key on the billable metric.
              */
             @JsonProperty("pricing_group_key")
             fun pricingGroupKey(pricingGroupKey: List<String>) = apply {
@@ -584,20 +596,30 @@ constructor(
             this.netsuiteOverageItemId = netsuiteOverageItemId
         }
 
-        /** For USAGE products only. Groups usage line items on invoices. */
+        /**
+         * For USAGE products only. Groups usage line items on invoices. The superset of values in
+         * the pricing group key and presentation group key must be set as one compound group key on
+         * the billable metric.
+         */
         fun presentationGroupKey(presentationGroupKey: List<String>) = apply {
             this.presentationGroupKey.clear()
             this.presentationGroupKey.addAll(presentationGroupKey)
         }
 
-        /** For USAGE products only. Groups usage line items on invoices. */
+        /**
+         * For USAGE products only. Groups usage line items on invoices. The superset of values in
+         * the pricing group key and presentation group key must be set as one compound group key on
+         * the billable metric.
+         */
         fun addPresentationGroupKey(presentationGroupKey: String) = apply {
             this.presentationGroupKey.add(presentationGroupKey)
         }
 
         /**
          * For USAGE products only. If set, pricing for this product will be determined for each
-         * pricing_group_key value, as opposed to the product as a whole.
+         * pricing_group_key value, as opposed to the product as a whole. The superset of values in
+         * the pricing group key and presentation group key must be set as one compound group key on
+         * the billable metric.
          */
         fun pricingGroupKey(pricingGroupKey: List<String>) = apply {
             this.pricingGroupKey.clear()
@@ -606,7 +628,9 @@ constructor(
 
         /**
          * For USAGE products only. If set, pricing for this product will be determined for each
-         * pricing_group_key value, as opposed to the product as a whole.
+         * pricing_group_key value, as opposed to the product as a whole. The superset of values in
+         * the pricing group key and presentation group key must be set as one compound group key on
+         * the billable metric.
          */
         fun addPricingGroupKey(pricingGroupKey: String) = apply {
             this.pricingGroupKey.add(pricingGroupKey)

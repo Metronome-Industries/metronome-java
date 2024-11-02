@@ -409,12 +409,18 @@ private constructor(
 
             /**
              * For USAGE products only. If set, pricing for this product will be determined for each
-             * pricing_group_key value, as opposed to the product as a whole.
+             * pricing_group_key value, as opposed to the product as a whole. The superset of values
+             * in the pricing group key and presentation group key must be set as one compound group
+             * key on the billable metric.
              */
             fun pricingGroupKey(): Optional<List<String>> =
                 Optional.ofNullable(pricingGroupKey.getNullable("pricing_group_key"))
 
-            /** For USAGE products only. Groups usage line items on invoices. */
+            /**
+             * For USAGE products only. Groups usage line items on invoices. The superset of values
+             * in the pricing group key and presentation group key must be set as one compound group
+             * key on the billable metric.
+             */
             fun presentationGroupKey(): Optional<List<String>> =
                 Optional.ofNullable(presentationGroupKey.getNullable("presentation_group_key"))
 
@@ -478,13 +484,19 @@ private constructor(
 
             /**
              * For USAGE products only. If set, pricing for this product will be determined for each
-             * pricing_group_key value, as opposed to the product as a whole.
+             * pricing_group_key value, as opposed to the product as a whole. The superset of values
+             * in the pricing group key and presentation group key must be set as one compound group
+             * key on the billable metric.
              */
             @JsonProperty("pricing_group_key")
             @ExcludeMissing
             fun _pricingGroupKey() = pricingGroupKey
 
-            /** For USAGE products only. Groups usage line items on invoices. */
+            /**
+             * For USAGE products only. Groups usage line items on invoices. The superset of values
+             * in the pricing group key and presentation group key must be set as one compound group
+             * key on the billable metric.
+             */
             @JsonProperty("presentation_group_key")
             @ExcludeMissing
             fun _presentationGroupKey() = presentationGroupKey
@@ -713,14 +725,18 @@ private constructor(
 
                 /**
                  * For USAGE products only. If set, pricing for this product will be determined for
-                 * each pricing_group_key value, as opposed to the product as a whole.
+                 * each pricing_group_key value, as opposed to the product as a whole. The superset
+                 * of values in the pricing group key and presentation group key must be set as one
+                 * compound group key on the billable metric.
                  */
                 fun pricingGroupKey(pricingGroupKey: List<String>) =
                     pricingGroupKey(JsonField.of(pricingGroupKey))
 
                 /**
                  * For USAGE products only. If set, pricing for this product will be determined for
-                 * each pricing_group_key value, as opposed to the product as a whole.
+                 * each pricing_group_key value, as opposed to the product as a whole. The superset
+                 * of values in the pricing group key and presentation group key must be set as one
+                 * compound group key on the billable metric.
                  */
                 @JsonProperty("pricing_group_key")
                 @ExcludeMissing
@@ -728,11 +744,19 @@ private constructor(
                     this.pricingGroupKey = pricingGroupKey
                 }
 
-                /** For USAGE products only. Groups usage line items on invoices. */
+                /**
+                 * For USAGE products only. Groups usage line items on invoices. The superset of
+                 * values in the pricing group key and presentation group key must be set as one
+                 * compound group key on the billable metric.
+                 */
                 fun presentationGroupKey(presentationGroupKey: List<String>) =
                     presentationGroupKey(JsonField.of(presentationGroupKey))
 
-                /** For USAGE products only. Groups usage line items on invoices. */
+                /**
+                 * For USAGE products only. Groups usage line items on invoices. The superset of
+                 * values in the pricing group key and presentation group key must be set as one
+                 * compound group key on the billable metric.
+                 */
                 @JsonProperty("presentation_group_key")
                 @ExcludeMissing
                 fun presentationGroupKey(presentationGroupKey: JsonField<List<String>>) = apply {
