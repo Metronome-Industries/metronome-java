@@ -15,6 +15,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
+import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
@@ -31,6 +32,7 @@ private constructor(
     private val groupKeys: JsonField<List<List<String>>>,
     private val customFields: JsonField<CustomFields>,
     private val sql: JsonField<String>,
+    private val archivedAt: JsonField<OffsetDateTime>,
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
@@ -77,6 +79,13 @@ private constructor(
     /** The SQL query associated with the billable metric */
     fun sql(): Optional<String> = Optional.ofNullable(sql.getNullable("sql"))
 
+    /**
+     * RFC 3339 timestamp indicating when the billable metric was archived. If not provided, the
+     * billable metric is not archived.
+     */
+    fun archivedAt(): Optional<OffsetDateTime> =
+        Optional.ofNullable(archivedAt.getNullable("archived_at"))
+
     /** ID of the billable metric */
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
@@ -112,6 +121,12 @@ private constructor(
     /** The SQL query associated with the billable metric */
     @JsonProperty("sql") @ExcludeMissing fun _sql() = sql
 
+    /**
+     * RFC 3339 timestamp indicating when the billable metric was archived. If not provided, the
+     * billable metric is not archived.
+     */
+    @JsonProperty("archived_at") @ExcludeMissing fun _archivedAt() = archivedAt
+
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -127,6 +142,7 @@ private constructor(
             groupKeys()
             customFields().map { it.validate() }
             sql()
+            archivedAt()
             validated = true
         }
     }
@@ -149,6 +165,7 @@ private constructor(
         private var groupKeys: JsonField<List<List<String>>> = JsonMissing.of()
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var sql: JsonField<String> = JsonMissing.of()
+        private var archivedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -162,6 +179,7 @@ private constructor(
             this.groupKeys = billableMetricListResponse.groupKeys
             this.customFields = billableMetricListResponse.customFields
             this.sql = billableMetricListResponse.sql
+            this.archivedAt = billableMetricListResponse.archivedAt
             additionalProperties(billableMetricListResponse.additionalProperties)
         }
 
@@ -268,6 +286,22 @@ private constructor(
         @ExcludeMissing
         fun sql(sql: JsonField<String>) = apply { this.sql = sql }
 
+        /**
+         * RFC 3339 timestamp indicating when the billable metric was archived. If not provided, the
+         * billable metric is not archived.
+         */
+        fun archivedAt(archivedAt: OffsetDateTime) = archivedAt(JsonField.of(archivedAt))
+
+        /**
+         * RFC 3339 timestamp indicating when the billable metric was archived. If not provided, the
+         * billable metric is not archived.
+         */
+        @JsonProperty("archived_at")
+        @ExcludeMissing
+        fun archivedAt(archivedAt: JsonField<OffsetDateTime>) = apply {
+            this.archivedAt = archivedAt
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             this.additionalProperties.putAll(additionalProperties)
@@ -293,6 +327,7 @@ private constructor(
                 groupKeys.map { it.toImmutable() },
                 customFields,
                 sql,
+                archivedAt,
                 additionalProperties.toImmutable(),
             )
     }
@@ -449,18 +484,18 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is BillableMetricListResponse && this.id == other.id && this.name == other.name && this.eventTypeFilter == other.eventTypeFilter && this.propertyFilters == other.propertyFilters && this.aggregationType == other.aggregationType && this.aggregationKey == other.aggregationKey && this.groupKeys == other.groupKeys && this.customFields == other.customFields && this.sql == other.sql && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is BillableMetricListResponse && this.id == other.id && this.name == other.name && this.eventTypeFilter == other.eventTypeFilter && this.propertyFilters == other.propertyFilters && this.aggregationType == other.aggregationType && this.aggregationKey == other.aggregationKey && this.groupKeys == other.groupKeys && this.customFields == other.customFields && this.sql == other.sql && this.archivedAt == other.archivedAt && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(id, name, eventTypeFilter, propertyFilters, aggregationType, aggregationKey, groupKeys, customFields, sql, additionalProperties) /* spotless:on */
+            hashCode = /* spotless:off */ Objects.hash(id, name, eventTypeFilter, propertyFilters, aggregationType, aggregationKey, groupKeys, customFields, sql, archivedAt, additionalProperties) /* spotless:on */
         }
         return hashCode
     }
 
     override fun toString() =
-        "BillableMetricListResponse{id=$id, name=$name, eventTypeFilter=$eventTypeFilter, propertyFilters=$propertyFilters, aggregationType=$aggregationType, aggregationKey=$aggregationKey, groupKeys=$groupKeys, customFields=$customFields, sql=$sql, additionalProperties=$additionalProperties}"
+        "BillableMetricListResponse{id=$id, name=$name, eventTypeFilter=$eventTypeFilter, propertyFilters=$propertyFilters, aggregationType=$aggregationType, aggregationKey=$aggregationKey, groupKeys=$groupKeys, customFields=$customFields, sql=$sql, archivedAt=$archivedAt, additionalProperties=$additionalProperties}"
 }

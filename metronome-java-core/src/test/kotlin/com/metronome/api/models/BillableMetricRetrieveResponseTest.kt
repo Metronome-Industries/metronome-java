@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,6 +18,7 @@ class BillableMetricRetrieveResponseTest {
                         .name("name")
                         .aggregationKey("aggregation_key")
                         .aggregationType(BillableMetricRetrieveResponse.Data.AggregationType.COUNT)
+                        .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customFields(
                             BillableMetricRetrieveResponse.Data.CustomFields.builder().build()
                         )
@@ -49,6 +51,7 @@ class BillableMetricRetrieveResponseTest {
                     .name("name")
                     .aggregationKey("aggregation_key")
                     .aggregationType(BillableMetricRetrieveResponse.Data.AggregationType.COUNT)
+                    .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .customFields(
                         BillableMetricRetrieveResponse.Data.CustomFields.builder().build()
                     )

@@ -13,6 +13,7 @@ import java.util.Optional
 class CustomerListBillableMetricsParams
 constructor(
     private val customerId: String,
+    private val includeArchived: Boolean?,
     private val limit: Long?,
     private val nextPage: String?,
     private val onCurrentPlan: Boolean?,
@@ -21,6 +22,8 @@ constructor(
 ) {
 
     fun customerId(): String = customerId
+
+    fun includeArchived(): Optional<Boolean> = Optional.ofNullable(includeArchived)
 
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
@@ -33,6 +36,7 @@ constructor(
     @JvmSynthetic
     internal fun getQueryParams(): Map<String, List<String>> {
         val params = mutableMapOf<String, List<String>>()
+        this.includeArchived?.let { params.put("include_archived", listOf(it.toString())) }
         this.limit?.let { params.put("limit", listOf(it.toString())) }
         this.nextPage?.let { params.put("next_page", listOf(it.toString())) }
         this.onCurrentPlan?.let { params.put("on_current_plan", listOf(it.toString())) }
@@ -56,15 +60,15 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerListBillableMetricsParams && this.customerId == other.customerId && this.limit == other.limit && this.nextPage == other.nextPage && this.onCurrentPlan == other.onCurrentPlan && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is CustomerListBillableMetricsParams && this.customerId == other.customerId && this.includeArchived == other.includeArchived && this.limit == other.limit && this.nextPage == other.nextPage && this.onCurrentPlan == other.onCurrentPlan && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, limit, nextPage, onCurrentPlan, additionalHeaders, additionalQueryParams) /* spotless:on */
+        return /* spotless:off */ Objects.hash(customerId, includeArchived, limit, nextPage, onCurrentPlan, additionalHeaders, additionalQueryParams) /* spotless:on */
     }
 
     override fun toString() =
-        "CustomerListBillableMetricsParams{customerId=$customerId, limit=$limit, nextPage=$nextPage, onCurrentPlan=$onCurrentPlan, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "CustomerListBillableMetricsParams{customerId=$customerId, includeArchived=$includeArchived, limit=$limit, nextPage=$nextPage, onCurrentPlan=$onCurrentPlan, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -77,6 +81,7 @@ constructor(
     class Builder {
 
         private var customerId: String? = null
+        private var includeArchived: Boolean? = null
         private var limit: Long? = null
         private var nextPage: String? = null
         private var onCurrentPlan: Boolean? = null
@@ -87,6 +92,7 @@ constructor(
         internal fun from(customerListBillableMetricsParams: CustomerListBillableMetricsParams) =
             apply {
                 this.customerId = customerListBillableMetricsParams.customerId
+                this.includeArchived = customerListBillableMetricsParams.includeArchived
                 this.limit = customerListBillableMetricsParams.limit
                 this.nextPage = customerListBillableMetricsParams.nextPage
                 this.onCurrentPlan = customerListBillableMetricsParams.onCurrentPlan
@@ -95,6 +101,11 @@ constructor(
             }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
+
+        /** If true, the list of returned metrics will include archived metrics */
+        fun includeArchived(includeArchived: Boolean) = apply {
+            this.includeArchived = includeArchived
+        }
 
         /** Max number of results that should be returned */
         fun limit(limit: Long) = apply { this.limit = limit }
@@ -185,6 +196,7 @@ constructor(
         fun build(): CustomerListBillableMetricsParams =
             CustomerListBillableMetricsParams(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
+                includeArchived,
                 limit,
                 nextPage,
                 onCurrentPlan,

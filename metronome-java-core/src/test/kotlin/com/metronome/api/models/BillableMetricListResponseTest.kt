@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -15,6 +16,7 @@ class BillableMetricListResponseTest {
                 .name("name")
                 .aggregationKey("aggregation_key")
                 .aggregationType(BillableMetricListResponse.AggregationType.COUNT)
+                .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .customFields(BillableMetricListResponse.CustomFields.builder().build())
                 .eventTypeFilter(
                     EventTypeFilter.builder()
@@ -42,6 +44,8 @@ class BillableMetricListResponseTest {
         assertThat(billableMetricListResponse.aggregationKey()).contains("aggregation_key")
         assertThat(billableMetricListResponse.aggregationType())
             .contains(BillableMetricListResponse.AggregationType.COUNT)
+        assertThat(billableMetricListResponse.archivedAt())
+            .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(billableMetricListResponse.customFields())
             .contains(BillableMetricListResponse.CustomFields.builder().build())
         assertThat(billableMetricListResponse.eventTypeFilter())

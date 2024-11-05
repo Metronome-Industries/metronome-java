@@ -15,6 +15,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
+import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
@@ -35,6 +36,7 @@ private constructor(
     private val propertyFilters: JsonField<List<PropertyFilter>>,
     private val customFields: JsonField<CustomFields>,
     private val sql: JsonField<String>,
+    private val archivedAt: JsonField<OffsetDateTime>,
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
@@ -92,6 +94,13 @@ private constructor(
     /** The SQL query associated with the billable metric */
     fun sql(): Optional<String> = Optional.ofNullable(sql.getNullable("sql"))
 
+    /**
+     * RFC 3339 timestamp indicating when the billable metric was archived. If not provided, the
+     * billable metric is not archived.
+     */
+    fun archivedAt(): Optional<OffsetDateTime> =
+        Optional.ofNullable(archivedAt.getNullable("archived_at"))
+
     /** (DEPRECATED) use group_keys instead */
     @JsonProperty("group_by") @ExcludeMissing fun _groupBy() = groupBy
 
@@ -137,6 +146,12 @@ private constructor(
     /** The SQL query associated with the billable metric */
     @JsonProperty("sql") @ExcludeMissing fun _sql() = sql
 
+    /**
+     * RFC 3339 timestamp indicating when the billable metric was archived. If not provided, the
+     * billable metric is not archived.
+     */
+    @JsonProperty("archived_at") @ExcludeMissing fun _archivedAt() = archivedAt
+
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -156,6 +171,7 @@ private constructor(
             propertyFilters().map { it.forEach { it.validate() } }
             customFields().map { it.validate() }
             sql()
+            archivedAt()
             validated = true
         }
     }
@@ -182,6 +198,7 @@ private constructor(
         private var propertyFilters: JsonField<List<PropertyFilter>> = JsonMissing.of()
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var sql: JsonField<String> = JsonMissing.of()
+        private var archivedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -201,6 +218,7 @@ private constructor(
             this.propertyFilters = customerListBillableMetricsResponse.propertyFilters
             this.customFields = customerListBillableMetricsResponse.customFields
             this.sql = customerListBillableMetricsResponse.sql
+            this.archivedAt = customerListBillableMetricsResponse.archivedAt
             additionalProperties(customerListBillableMetricsResponse.additionalProperties)
         }
 
@@ -337,6 +355,22 @@ private constructor(
         @ExcludeMissing
         fun sql(sql: JsonField<String>) = apply { this.sql = sql }
 
+        /**
+         * RFC 3339 timestamp indicating when the billable metric was archived. If not provided, the
+         * billable metric is not archived.
+         */
+        fun archivedAt(archivedAt: OffsetDateTime) = archivedAt(JsonField.of(archivedAt))
+
+        /**
+         * RFC 3339 timestamp indicating when the billable metric was archived. If not provided, the
+         * billable metric is not archived.
+         */
+        @JsonProperty("archived_at")
+        @ExcludeMissing
+        fun archivedAt(archivedAt: JsonField<OffsetDateTime>) = apply {
+            this.archivedAt = archivedAt
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             this.additionalProperties.putAll(additionalProperties)
@@ -366,6 +400,7 @@ private constructor(
                 propertyFilters.map { it.toImmutable() },
                 customFields,
                 sql,
+                archivedAt,
                 additionalProperties.toImmutable(),
             )
     }
@@ -595,18 +630,18 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerListBillableMetricsResponse && this.groupBy == other.groupBy && this.groupKeys == other.groupKeys && this.name == other.name && this.id == other.id && this.aggregate == other.aggregate && this.aggregateKeys == other.aggregateKeys && this.filter == other.filter && this.aggregationType == other.aggregationType && this.aggregationKey == other.aggregationKey && this.eventTypeFilter == other.eventTypeFilter && this.propertyFilters == other.propertyFilters && this.customFields == other.customFields && this.sql == other.sql && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerListBillableMetricsResponse && this.groupBy == other.groupBy && this.groupKeys == other.groupKeys && this.name == other.name && this.id == other.id && this.aggregate == other.aggregate && this.aggregateKeys == other.aggregateKeys && this.filter == other.filter && this.aggregationType == other.aggregationType && this.aggregationKey == other.aggregationKey && this.eventTypeFilter == other.eventTypeFilter && this.propertyFilters == other.propertyFilters && this.customFields == other.customFields && this.sql == other.sql && this.archivedAt == other.archivedAt && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(groupBy, groupKeys, name, id, aggregate, aggregateKeys, filter, aggregationType, aggregationKey, eventTypeFilter, propertyFilters, customFields, sql, additionalProperties) /* spotless:on */
+            hashCode = /* spotless:off */ Objects.hash(groupBy, groupKeys, name, id, aggregate, aggregateKeys, filter, aggregationType, aggregationKey, eventTypeFilter, propertyFilters, customFields, sql, archivedAt, additionalProperties) /* spotless:on */
         }
         return hashCode
     }
 
     override fun toString() =
-        "CustomerListBillableMetricsResponse{groupBy=$groupBy, groupKeys=$groupKeys, name=$name, id=$id, aggregate=$aggregate, aggregateKeys=$aggregateKeys, filter=$filter, aggregationType=$aggregationType, aggregationKey=$aggregationKey, eventTypeFilter=$eventTypeFilter, propertyFilters=$propertyFilters, customFields=$customFields, sql=$sql, additionalProperties=$additionalProperties}"
+        "CustomerListBillableMetricsResponse{groupBy=$groupBy, groupKeys=$groupKeys, name=$name, id=$id, aggregate=$aggregate, aggregateKeys=$aggregateKeys, filter=$filter, aggregationType=$aggregationType, aggregationKey=$aggregationKey, eventTypeFilter=$eventTypeFilter, propertyFilters=$propertyFilters, customFields=$customFields, sql=$sql, archivedAt=$archivedAt, additionalProperties=$additionalProperties}"
 }
