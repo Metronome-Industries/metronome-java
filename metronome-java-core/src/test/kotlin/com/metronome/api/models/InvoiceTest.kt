@@ -31,6 +31,12 @@ class InvoiceTest {
                             )
                             .name("name")
                             .total(42.23)
+                            .appliedCommitOrCredit(
+                                Invoice.LineItem.AppliedCommitOrCredit.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .type(Invoice.LineItem.AppliedCommitOrCredit.Type.PREPAID)
+                                    .build()
+                            )
                             .commitCustomFields(
                                 Invoice.LineItem.CommitCustomFields.builder().build()
                             )
@@ -253,6 +259,12 @@ class InvoiceTest {
                     )
                     .name("name")
                     .total(42.23)
+                    .appliedCommitOrCredit(
+                        Invoice.LineItem.AppliedCommitOrCredit.builder()
+                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .type(Invoice.LineItem.AppliedCommitOrCredit.Type.PREPAID)
+                            .build()
+                    )
                     .commitCustomFields(Invoice.LineItem.CommitCustomFields.builder().build())
                     .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .commitNetsuiteItemId("commit_netsuite_item_id")

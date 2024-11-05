@@ -619,6 +619,7 @@ private constructor(
         private val startingAt: JsonField<OffsetDateTime>,
         private val endingBefore: JsonField<OffsetDateTime>,
         private val commitId: JsonField<String>,
+        private val appliedCommitOrCredit: JsonField<AppliedCommitOrCredit>,
         private val commitCustomFields: JsonField<CommitCustomFields>,
         private val commitSegmentId: JsonField<String>,
         private val commitType: JsonField<String>,
@@ -694,6 +695,10 @@ private constructor(
 
         /** only present for beta contract invoices */
         fun commitId(): Optional<String> = Optional.ofNullable(commitId.getNullable("commit_id"))
+
+        /** only present for beta contract invoices */
+        fun appliedCommitOrCredit(): Optional<AppliedCommitOrCredit> =
+            Optional.ofNullable(appliedCommitOrCredit.getNullable("applied_commit_or_credit"))
 
         /** only present for beta contract invoices */
         fun commitCustomFields(): Optional<CommitCustomFields> =
@@ -829,6 +834,11 @@ private constructor(
         @JsonProperty("commit_id") @ExcludeMissing fun _commitId() = commitId
 
         /** only present for beta contract invoices */
+        @JsonProperty("applied_commit_or_credit")
+        @ExcludeMissing
+        fun _appliedCommitOrCredit() = appliedCommitOrCredit
+
+        /** only present for beta contract invoices */
         @JsonProperty("commit_custom_fields")
         @ExcludeMissing
         fun _commitCustomFields() = commitCustomFields
@@ -930,6 +940,7 @@ private constructor(
                 startingAt()
                 endingBefore()
                 commitId()
+                appliedCommitOrCredit().map { it.validate() }
                 commitCustomFields().map { it.validate() }
                 commitSegmentId()
                 commitType()
@@ -977,6 +988,7 @@ private constructor(
             private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
             private var commitId: JsonField<String> = JsonMissing.of()
+            private var appliedCommitOrCredit: JsonField<AppliedCommitOrCredit> = JsonMissing.of()
             private var commitCustomFields: JsonField<CommitCustomFields> = JsonMissing.of()
             private var commitSegmentId: JsonField<String> = JsonMissing.of()
             private var commitType: JsonField<String> = JsonMissing.of()
@@ -1019,6 +1031,7 @@ private constructor(
                 this.startingAt = lineItem.startingAt
                 this.endingBefore = lineItem.endingBefore
                 this.commitId = lineItem.commitId
+                this.appliedCommitOrCredit = lineItem.appliedCommitOrCredit
                 this.commitCustomFields = lineItem.commitCustomFields
                 this.commitSegmentId = lineItem.commitSegmentId
                 this.commitType = lineItem.commitType
@@ -1178,6 +1191,18 @@ private constructor(
             @JsonProperty("commit_id")
             @ExcludeMissing
             fun commitId(commitId: JsonField<String>) = apply { this.commitId = commitId }
+
+            /** only present for beta contract invoices */
+            fun appliedCommitOrCredit(appliedCommitOrCredit: AppliedCommitOrCredit) =
+                appliedCommitOrCredit(JsonField.of(appliedCommitOrCredit))
+
+            /** only present for beta contract invoices */
+            @JsonProperty("applied_commit_or_credit")
+            @ExcludeMissing
+            fun appliedCommitOrCredit(appliedCommitOrCredit: JsonField<AppliedCommitOrCredit>) =
+                apply {
+                    this.appliedCommitOrCredit = appliedCommitOrCredit
+                }
 
             /** only present for beta contract invoices */
             fun commitCustomFields(commitCustomFields: CommitCustomFields) =
@@ -1416,6 +1441,7 @@ private constructor(
                     startingAt,
                     endingBefore,
                     commitId,
+                    appliedCommitOrCredit,
                     commitCustomFields,
                     commitSegmentId,
                     commitType,
@@ -1436,6 +1462,177 @@ private constructor(
                     scheduledChargeCustomFields,
                     additionalProperties.toImmutable(),
                 )
+        }
+
+        /** only present for beta contract invoices */
+        @JsonDeserialize(builder = AppliedCommitOrCredit.Builder::class)
+        @NoAutoDetect
+        class AppliedCommitOrCredit
+        private constructor(
+            private val id: JsonField<String>,
+            private val type: JsonField<Type>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            fun id(): String = id.getRequired("id")
+
+            fun type(): Type = type.getRequired("type")
+
+            @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+            @JsonProperty("type") @ExcludeMissing fun _type() = type
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): AppliedCommitOrCredit = apply {
+                if (!validated) {
+                    id()
+                    type()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var id: JsonField<String> = JsonMissing.of()
+                private var type: JsonField<Type> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(appliedCommitOrCredit: AppliedCommitOrCredit) = apply {
+                    this.id = appliedCommitOrCredit.id
+                    this.type = appliedCommitOrCredit.type
+                    additionalProperties(appliedCommitOrCredit.additionalProperties)
+                }
+
+                fun id(id: String) = id(JsonField.of(id))
+
+                @JsonProperty("id")
+                @ExcludeMissing
+                fun id(id: JsonField<String>) = apply { this.id = id }
+
+                fun type(type: Type) = type(JsonField.of(type))
+
+                @JsonProperty("type")
+                @ExcludeMissing
+                fun type(type: JsonField<Type>) = apply { this.type = type }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): AppliedCommitOrCredit =
+                    AppliedCommitOrCredit(
+                        id,
+                        type,
+                        additionalProperties.toImmutable(),
+                    )
+            }
+
+            class Type
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val PREPAID = Type(JsonField.of("PREPAID"))
+
+                    @JvmField val POSTPAID = Type(JsonField.of("POSTPAID"))
+
+                    @JvmField val CREDIT = Type(JsonField.of("CREDIT"))
+
+                    @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+                }
+
+                enum class Known {
+                    PREPAID,
+                    POSTPAID,
+                    CREDIT,
+                }
+
+                enum class Value {
+                    PREPAID,
+                    POSTPAID,
+                    CREDIT,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        PREPAID -> Value.PREPAID
+                        POSTPAID -> Value.POSTPAID
+                        CREDIT -> Value.CREDIT
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        PREPAID -> Known.PREPAID
+                        POSTPAID -> Known.POSTPAID
+                        CREDIT -> Known.CREDIT
+                        else -> throw MetronomeInvalidDataException("Unknown Type: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is AppliedCommitOrCredit && this.id == other.id && this.type == other.type && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, type, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "AppliedCommitOrCredit{id=$id, type=$type, additionalProperties=$additionalProperties}"
         }
 
         /** only present for beta contract invoices */
@@ -2750,20 +2947,20 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is LineItem && this.name == other.name && this.groupKey == other.groupKey && this.groupValue == other.groupValue && this.quantity == other.quantity && this.total == other.total && this.unitPrice == other.unitPrice && this.listPrice == other.listPrice && this.productId == other.productId && this.productCustomFields == other.productCustomFields && this.productType == other.productType && this.netsuiteItemId == other.netsuiteItemId && this.isProrated == other.isProrated && this.creditType == other.creditType && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.commitId == other.commitId && this.commitCustomFields == other.commitCustomFields && this.commitSegmentId == other.commitSegmentId && this.commitType == other.commitType && this.commitNetsuiteSalesOrderId == other.commitNetsuiteSalesOrderId && this.commitNetsuiteItemId == other.commitNetsuiteItemId && this.postpaidCommit == other.postpaidCommit && this.resellerType == other.resellerType && this.subLineItems == other.subLineItems && this.customFields == other.customFields && this.pricingGroupValues == other.pricingGroupValues && this.presentationGroupValues == other.presentationGroupValues && this.metadata == other.metadata && this.netsuiteInvoiceBillingStart == other.netsuiteInvoiceBillingStart && this.netsuiteInvoiceBillingEnd == other.netsuiteInvoiceBillingEnd && this.professionalServiceId == other.professionalServiceId && this.professionalServiceCustomFields == other.professionalServiceCustomFields && this.scheduledChargeId == other.scheduledChargeId && this.scheduledChargeCustomFields == other.scheduledChargeCustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is LineItem && this.name == other.name && this.groupKey == other.groupKey && this.groupValue == other.groupValue && this.quantity == other.quantity && this.total == other.total && this.unitPrice == other.unitPrice && this.listPrice == other.listPrice && this.productId == other.productId && this.productCustomFields == other.productCustomFields && this.productType == other.productType && this.netsuiteItemId == other.netsuiteItemId && this.isProrated == other.isProrated && this.creditType == other.creditType && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.commitId == other.commitId && this.appliedCommitOrCredit == other.appliedCommitOrCredit && this.commitCustomFields == other.commitCustomFields && this.commitSegmentId == other.commitSegmentId && this.commitType == other.commitType && this.commitNetsuiteSalesOrderId == other.commitNetsuiteSalesOrderId && this.commitNetsuiteItemId == other.commitNetsuiteItemId && this.postpaidCommit == other.postpaidCommit && this.resellerType == other.resellerType && this.subLineItems == other.subLineItems && this.customFields == other.customFields && this.pricingGroupValues == other.pricingGroupValues && this.presentationGroupValues == other.presentationGroupValues && this.metadata == other.metadata && this.netsuiteInvoiceBillingStart == other.netsuiteInvoiceBillingStart && this.netsuiteInvoiceBillingEnd == other.netsuiteInvoiceBillingEnd && this.professionalServiceId == other.professionalServiceId && this.professionalServiceCustomFields == other.professionalServiceCustomFields && this.scheduledChargeId == other.scheduledChargeId && this.scheduledChargeCustomFields == other.scheduledChargeCustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(name, groupKey, groupValue, quantity, total, unitPrice, listPrice, productId, productCustomFields, productType, netsuiteItemId, isProrated, creditType, startingAt, endingBefore, commitId, commitCustomFields, commitSegmentId, commitType, commitNetsuiteSalesOrderId, commitNetsuiteItemId, postpaidCommit, resellerType, subLineItems, customFields, pricingGroupValues, presentationGroupValues, metadata, netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd, professionalServiceId, professionalServiceCustomFields, scheduledChargeId, scheduledChargeCustomFields, additionalProperties) /* spotless:on */
+                hashCode = /* spotless:off */ Objects.hash(name, groupKey, groupValue, quantity, total, unitPrice, listPrice, productId, productCustomFields, productType, netsuiteItemId, isProrated, creditType, startingAt, endingBefore, commitId, appliedCommitOrCredit, commitCustomFields, commitSegmentId, commitType, commitNetsuiteSalesOrderId, commitNetsuiteItemId, postpaidCommit, resellerType, subLineItems, customFields, pricingGroupValues, presentationGroupValues, metadata, netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd, professionalServiceId, professionalServiceCustomFields, scheduledChargeId, scheduledChargeCustomFields, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
 
         override fun toString() =
-            "LineItem{name=$name, groupKey=$groupKey, groupValue=$groupValue, quantity=$quantity, total=$total, unitPrice=$unitPrice, listPrice=$listPrice, productId=$productId, productCustomFields=$productCustomFields, productType=$productType, netsuiteItemId=$netsuiteItemId, isProrated=$isProrated, creditType=$creditType, startingAt=$startingAt, endingBefore=$endingBefore, commitId=$commitId, commitCustomFields=$commitCustomFields, commitSegmentId=$commitSegmentId, commitType=$commitType, commitNetsuiteSalesOrderId=$commitNetsuiteSalesOrderId, commitNetsuiteItemId=$commitNetsuiteItemId, postpaidCommit=$postpaidCommit, resellerType=$resellerType, subLineItems=$subLineItems, customFields=$customFields, pricingGroupValues=$pricingGroupValues, presentationGroupValues=$presentationGroupValues, metadata=$metadata, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, professionalServiceId=$professionalServiceId, professionalServiceCustomFields=$professionalServiceCustomFields, scheduledChargeId=$scheduledChargeId, scheduledChargeCustomFields=$scheduledChargeCustomFields, additionalProperties=$additionalProperties}"
+            "LineItem{name=$name, groupKey=$groupKey, groupValue=$groupValue, quantity=$quantity, total=$total, unitPrice=$unitPrice, listPrice=$listPrice, productId=$productId, productCustomFields=$productCustomFields, productType=$productType, netsuiteItemId=$netsuiteItemId, isProrated=$isProrated, creditType=$creditType, startingAt=$startingAt, endingBefore=$endingBefore, commitId=$commitId, appliedCommitOrCredit=$appliedCommitOrCredit, commitCustomFields=$commitCustomFields, commitSegmentId=$commitSegmentId, commitType=$commitType, commitNetsuiteSalesOrderId=$commitNetsuiteSalesOrderId, commitNetsuiteItemId=$commitNetsuiteItemId, postpaidCommit=$postpaidCommit, resellerType=$resellerType, subLineItems=$subLineItems, customFields=$customFields, pricingGroupValues=$pricingGroupValues, presentationGroupValues=$presentationGroupValues, metadata=$metadata, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, professionalServiceId=$professionalServiceId, professionalServiceCustomFields=$professionalServiceCustomFields, scheduledChargeId=$scheduledChargeId, scheduledChargeCustomFields=$scheduledChargeCustomFields, additionalProperties=$additionalProperties}"
     }
 
     class BillableStatus
