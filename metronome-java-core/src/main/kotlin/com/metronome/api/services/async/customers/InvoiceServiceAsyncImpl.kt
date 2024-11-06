@@ -134,7 +134,7 @@ constructor(
             .withErrorHandler(errorHandler)
 
     /**
-     * List daily or hourly breakdown invoices for a given customer, optionally filtered by status,
+     * List daily or hourly invoice breakdowns for a given customer, optionally filtered by status,
      * date range, and/or credit type.
      */
     override fun listBreakdowns(
