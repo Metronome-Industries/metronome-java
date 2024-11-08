@@ -1,9 +1,9 @@
 package com.metronome.api.errors
 
-import com.google.common.collect.ListMultimap
+import com.metronome.api.core.http.Headers
 
 class BadRequestException(
-    headers: ListMultimap<String, String>,
+    headers: Headers,
     body: String,
     error: MetronomeError,
 ) : MetronomeServiceException(400, headers, body, error)

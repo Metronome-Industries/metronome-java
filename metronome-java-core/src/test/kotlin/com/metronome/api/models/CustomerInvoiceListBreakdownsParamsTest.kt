@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.http.QueryParams
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -40,20 +41,17 @@ class CustomerInvoiceListBreakdownsParamsTest {
                 .status("status")
                 .windowSize(CustomerInvoiceListBreakdownsParams.WindowSize.HOUR)
                 .build()
-        val expected = mutableMapOf<String, List<String>>()
-        expected.put("ending_before", listOf("2019-12-27T18:11:19.117Z"))
-        expected.put("starting_on", listOf("2019-12-27T18:11:19.117Z"))
-        expected.put("credit_type_id", listOf("credit_type_id"))
-        expected.put("limit", listOf("100"))
-        expected.put("next_page", listOf("next_page"))
-        expected.put("skip_zero_qty_line_items", listOf("true"))
-        expected.put("sort", listOf(CustomerInvoiceListBreakdownsParams.Sort.DATE_ASC.toString()))
-        expected.put("status", listOf("status"))
-        expected.put(
-            "window_size",
-            listOf(CustomerInvoiceListBreakdownsParams.WindowSize.HOUR.toString())
-        )
-        assertThat(params.getQueryParams()).isEqualTo(expected)
+        val expected = QueryParams.builder()
+        expected.put("ending_before", "2019-12-27T18:11:19.117Z")
+        expected.put("starting_on", "2019-12-27T18:11:19.117Z")
+        expected.put("credit_type_id", "credit_type_id")
+        expected.put("limit", "100")
+        expected.put("next_page", "next_page")
+        expected.put("skip_zero_qty_line_items", "true")
+        expected.put("sort", CustomerInvoiceListBreakdownsParams.Sort.DATE_ASC.toString())
+        expected.put("status", "status")
+        expected.put("window_size", CustomerInvoiceListBreakdownsParams.WindowSize.HOUR.toString())
+        assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }
 
     @Test
@@ -64,10 +62,10 @@ class CustomerInvoiceListBreakdownsParamsTest {
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
-        val expected = mutableMapOf<String, List<String>>()
-        expected.put("ending_before", listOf("2019-12-27T18:11:19.117Z"))
-        expected.put("starting_on", listOf("2019-12-27T18:11:19.117Z"))
-        assertThat(params.getQueryParams()).isEqualTo(expected)
+        val expected = QueryParams.builder()
+        expected.put("ending_before", "2019-12-27T18:11:19.117Z")
+        expected.put("starting_on", "2019-12-27T18:11:19.117Z")
+        assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }
 
     @Test

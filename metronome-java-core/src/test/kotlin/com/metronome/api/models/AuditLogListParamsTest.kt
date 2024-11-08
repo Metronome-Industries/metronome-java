@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.http.QueryParams
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -34,21 +35,21 @@ class AuditLogListParamsTest {
                 .sort(AuditLogListParams.Sort.DATE_ASC)
                 .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
-        val expected = mutableMapOf<String, List<String>>()
-        expected.put("ending_before", listOf("2019-12-27T18:11:19.117Z"))
-        expected.put("limit", listOf("100"))
-        expected.put("next_page", listOf("next_page"))
-        expected.put("resource_id", listOf("resource_id"))
-        expected.put("resource_type", listOf("resource_type"))
-        expected.put("sort", listOf(AuditLogListParams.Sort.DATE_ASC.toString()))
-        expected.put("starting_on", listOf("2019-12-27T18:11:19.117Z"))
-        assertThat(params.getQueryParams()).isEqualTo(expected)
+        val expected = QueryParams.builder()
+        expected.put("ending_before", "2019-12-27T18:11:19.117Z")
+        expected.put("limit", "100")
+        expected.put("next_page", "next_page")
+        expected.put("resource_id", "resource_id")
+        expected.put("resource_type", "resource_type")
+        expected.put("sort", AuditLogListParams.Sort.DATE_ASC.toString())
+        expected.put("starting_on", "2019-12-27T18:11:19.117Z")
+        assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }
 
     @Test
     fun getQueryParamsWithoutOptionalFields() {
         val params = AuditLogListParams.builder().build()
-        val expected = mutableMapOf<String, List<String>>()
-        assertThat(params.getQueryParams()).isEqualTo(expected)
+        val expected = QueryParams.builder()
+        assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }
 }

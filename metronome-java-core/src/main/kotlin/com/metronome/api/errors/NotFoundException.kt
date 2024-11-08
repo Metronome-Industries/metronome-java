@@ -1,9 +1,9 @@
 package com.metronome.api.errors
 
-import com.google.common.collect.ListMultimap
+import com.metronome.api.core.http.Headers
 
 class NotFoundException(
-    headers: ListMultimap<String, String>,
+    headers: Headers,
     body: String,
     error: MetronomeError,
 ) : MetronomeServiceException(404, headers, body, error)

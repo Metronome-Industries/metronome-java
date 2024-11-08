@@ -7,15 +7,15 @@ import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.ok
 import com.github.tomakehurst.wiremock.client.WireMock.post
+import com.github.tomakehurst.wiremock.client.WireMock.put
 import com.github.tomakehurst.wiremock.client.WireMock.status
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
-import com.google.common.collect.ImmutableListMultimap
-import com.google.common.collect.ListMultimap
 import com.metronome.api.client.MetronomeClient
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonString
+import com.metronome.api.core.http.Headers
 import com.metronome.api.core.jsonMapper
 import com.metronome.api.errors.BadRequestException
 import com.metronome.api.errors.InternalServerException
@@ -859,7 +859,7 @@ class ErrorHandlingTest {
 
         assertThatThrownBy({ client.contracts().create(params) })
             .satisfies({ e ->
-                assertBadRequest(e, ImmutableListMultimap.of("Foo", "Bar"), METRONOME_ERROR)
+                assertBadRequest(e, Headers.builder().put("Foo", "Bar").build(), METRONOME_ERROR)
             })
     }
 
@@ -1263,7 +1263,7 @@ class ErrorHandlingTest {
 
         assertThatThrownBy({ client.contracts().create(params) })
             .satisfies({ e ->
-                assertUnauthorized(e, ImmutableListMultimap.of("Foo", "Bar"), METRONOME_ERROR)
+                assertUnauthorized(e, Headers.builder().put("Foo", "Bar").build(), METRONOME_ERROR)
             })
     }
 
@@ -1667,7 +1667,11 @@ class ErrorHandlingTest {
 
         assertThatThrownBy({ client.contracts().create(params) })
             .satisfies({ e ->
-                assertPermissionDenied(e, ImmutableListMultimap.of("Foo", "Bar"), METRONOME_ERROR)
+                assertPermissionDenied(
+                    e,
+                    Headers.builder().put("Foo", "Bar").build(),
+                    METRONOME_ERROR
+                )
             })
     }
 
@@ -2071,7 +2075,7 @@ class ErrorHandlingTest {
 
         assertThatThrownBy({ client.contracts().create(params) })
             .satisfies({ e ->
-                assertNotFound(e, ImmutableListMultimap.of("Foo", "Bar"), METRONOME_ERROR)
+                assertNotFound(e, Headers.builder().put("Foo", "Bar").build(), METRONOME_ERROR)
             })
     }
 
@@ -2477,7 +2481,7 @@ class ErrorHandlingTest {
             .satisfies({ e ->
                 assertUnprocessableEntity(
                     e,
-                    ImmutableListMultimap.of("Foo", "Bar"),
+                    Headers.builder().put("Foo", "Bar").build(),
                     METRONOME_ERROR
                 )
             })
@@ -2883,7 +2887,7 @@ class ErrorHandlingTest {
 
         assertThatThrownBy({ client.contracts().create(params) })
             .satisfies({ e ->
-                assertRateLimit(e, ImmutableListMultimap.of("Foo", "Bar"), METRONOME_ERROR)
+                assertRateLimit(e, Headers.builder().put("Foo", "Bar").build(), METRONOME_ERROR)
             })
     }
 
@@ -3287,7 +3291,11 @@ class ErrorHandlingTest {
 
         assertThatThrownBy({ client.contracts().create(params) })
             .satisfies({ e ->
-                assertInternalServer(e, ImmutableListMultimap.of("Foo", "Bar"), METRONOME_ERROR)
+                assertInternalServer(
+                    e,
+                    Headers.builder().put("Foo", "Bar").build(),
+                    METRONOME_ERROR
+                )
             })
     }
 
@@ -3694,7 +3702,7 @@ class ErrorHandlingTest {
                 assertUnexpectedStatusCodeException(
                     e,
                     999,
-                    ImmutableListMultimap.of("Foo", "Bar"),
+                    Headers.builder().put("Foo", "Bar").build(),
                     toJson(METRONOME_ERROR)
                 )
             })
@@ -4500,7 +4508,7 @@ class ErrorHandlingTest {
 
         assertThatThrownBy({ client.contracts().create(params) })
             .satisfies({ e ->
-                assertBadRequest(e, ImmutableListMultimap.of(), MetronomeError.builder().build())
+                assertBadRequest(e, Headers.builder().build(), MetronomeError.builder().build())
             })
     }
 
@@ -4511,7 +4519,7 @@ class ErrorHandlingTest {
     private fun assertUnexpectedStatusCodeException(
         throwable: Throwable,
         statusCode: Int,
-        headers: ListMultimap<String, String>,
+        headers: Headers,
         responseBody: ByteArray
     ) {
         assertThat(throwable)
@@ -4521,41 +4529,33 @@ class ErrorHandlingTest {
             .satisfies({ e ->
                 assertThat(e.statusCode()).isEqualTo(statusCode)
                 assertThat(e.body()).isEqualTo(String(responseBody))
-                assertThat(e.headers()).containsAllEntriesOf(headers)
+                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
             })
     }
 
-    private fun assertBadRequest(
-        throwable: Throwable,
-        headers: ListMultimap<String, String>,
-        error: MetronomeError
-    ) {
+    private fun assertBadRequest(throwable: Throwable, headers: Headers, error: MetronomeError) {
         assertThat(throwable)
             .asInstanceOf(InstanceOfAssertFactories.throwable(BadRequestException::class.java))
             .satisfies({ e ->
                 assertThat(e.statusCode()).isEqualTo(400)
                 assertThat(e.error()).isEqualTo(error)
-                assertThat(e.headers()).containsAllEntriesOf(headers)
+                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
             })
     }
 
-    private fun assertUnauthorized(
-        throwable: Throwable,
-        headers: ListMultimap<String, String>,
-        error: MetronomeError
-    ) {
+    private fun assertUnauthorized(throwable: Throwable, headers: Headers, error: MetronomeError) {
         assertThat(throwable)
             .asInstanceOf(InstanceOfAssertFactories.throwable(UnauthorizedException::class.java))
             .satisfies({ e ->
                 assertThat(e.statusCode()).isEqualTo(401)
                 assertThat(e.error()).isEqualTo(error)
-                assertThat(e.headers()).containsAllEntriesOf(headers)
+                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
             })
     }
 
     private fun assertPermissionDenied(
         throwable: Throwable,
-        headers: ListMultimap<String, String>,
+        headers: Headers,
         error: MetronomeError
     ) {
         assertThat(throwable)
@@ -4565,27 +4565,23 @@ class ErrorHandlingTest {
             .satisfies({ e ->
                 assertThat(e.statusCode()).isEqualTo(403)
                 assertThat(e.error()).isEqualTo(error)
-                assertThat(e.headers()).containsAllEntriesOf(headers)
+                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
             })
     }
 
-    private fun assertNotFound(
-        throwable: Throwable,
-        headers: ListMultimap<String, String>,
-        error: MetronomeError
-    ) {
+    private fun assertNotFound(throwable: Throwable, headers: Headers, error: MetronomeError) {
         assertThat(throwable)
             .asInstanceOf(InstanceOfAssertFactories.throwable(NotFoundException::class.java))
             .satisfies({ e ->
                 assertThat(e.statusCode()).isEqualTo(404)
                 assertThat(e.error()).isEqualTo(error)
-                assertThat(e.headers()).containsAllEntriesOf(headers)
+                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
             })
     }
 
     private fun assertUnprocessableEntity(
         throwable: Throwable,
-        headers: ListMultimap<String, String>,
+        headers: Headers,
         error: MetronomeError
     ) {
         assertThat(throwable)
@@ -4595,27 +4591,23 @@ class ErrorHandlingTest {
             .satisfies({ e ->
                 assertThat(e.statusCode()).isEqualTo(422)
                 assertThat(e.error()).isEqualTo(error)
-                assertThat(e.headers()).containsAllEntriesOf(headers)
+                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
             })
     }
 
-    private fun assertRateLimit(
-        throwable: Throwable,
-        headers: ListMultimap<String, String>,
-        error: MetronomeError
-    ) {
+    private fun assertRateLimit(throwable: Throwable, headers: Headers, error: MetronomeError) {
         assertThat(throwable)
             .asInstanceOf(InstanceOfAssertFactories.throwable(RateLimitException::class.java))
             .satisfies({ e ->
                 assertThat(e.statusCode()).isEqualTo(429)
                 assertThat(e.error()).isEqualTo(error)
-                assertThat(e.headers()).containsAllEntriesOf(headers)
+                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
             })
     }
 
     private fun assertInternalServer(
         throwable: Throwable,
-        headers: ListMultimap<String, String>,
+        headers: Headers,
         error: MetronomeError
     ) {
         assertThat(throwable)
@@ -4623,7 +4615,12 @@ class ErrorHandlingTest {
             .satisfies({ e ->
                 assertThat(e.statusCode()).isEqualTo(500)
                 assertThat(e.error()).isEqualTo(error)
-                assertThat(e.headers()).containsAllEntriesOf(headers)
+                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
             })
     }
+
+    private fun Headers.toMap(): Map<String, List<String>> =
+        mutableMapOf<String, List<String>>().also { map ->
+            names().forEach { map[it] = values(it) }
+        }
 }

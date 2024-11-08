@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.http.QueryParams
 import com.metronome.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -31,20 +32,20 @@ class CustomerListParamsTest {
                 .onlyArchived(true)
                 .salesforceAccountIds(listOf("string"))
                 .build()
-        val expected = mutableMapOf<String, List<String>>()
-        expected.put("customer_ids", listOf("string"))
-        expected.put("ingest_alias", listOf("ingest_alias"))
-        expected.put("limit", listOf("100"))
-        expected.put("next_page", listOf("next_page"))
-        expected.put("only_archived", listOf("true"))
-        expected.put("salesforce_account_ids", listOf("string"))
-        assertThat(params.getQueryParams()).isEqualTo(expected)
+        val expected = QueryParams.builder()
+        expected.put("customer_ids", "string")
+        expected.put("ingest_alias", "ingest_alias")
+        expected.put("limit", "100")
+        expected.put("next_page", "next_page")
+        expected.put("only_archived", "true")
+        expected.put("salesforce_account_ids", "string")
+        assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }
 
     @Test
     fun getQueryParamsWithoutOptionalFields() {
         val params = CustomerListParams.builder().build()
-        val expected = mutableMapOf<String, List<String>>()
-        assertThat(params.getQueryParams()).isEqualTo(expected)
+        val expected = QueryParams.builder()
+        assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }
 }

@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.http.QueryParams
 import com.metronome.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -25,9 +26,9 @@ class CustomerInvoiceRetrieveParamsTest {
                 .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .skipZeroQtyLineItems(true)
                 .build()
-        val expected = mutableMapOf<String, List<String>>()
-        expected.put("skip_zero_qty_line_items", listOf("true"))
-        assertThat(params.getQueryParams()).isEqualTo(expected)
+        val expected = QueryParams.builder()
+        expected.put("skip_zero_qty_line_items", "true")
+        assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }
 
     @Test
@@ -37,8 +38,8 @@ class CustomerInvoiceRetrieveParamsTest {
                 .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .build()
-        val expected = mutableMapOf<String, List<String>>()
-        assertThat(params.getQueryParams()).isEqualTo(expected)
+        val expected = QueryParams.builder()
+        assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }
 
     @Test

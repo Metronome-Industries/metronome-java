@@ -42,9 +42,9 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("customers", params.getPathParam(0), "plans")
-                .putAllQueryParams(clientOptions.queryParams.asMap())
+                .putAllQueryParams(clientOptions.queryParams)
                 .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers.asMap())
+                .putAllHeaders(clientOptions.headers)
                 .replaceAllHeaders(params.getHeaders())
                 .build()
         return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
@@ -77,9 +77,9 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("customers", params.getPathParam(0), "plans", "add")
-                .putAllQueryParams(clientOptions.queryParams.asMap())
+                .putAllQueryParams(clientOptions.queryParams)
                 .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers.asMap())
+                .putAllHeaders(clientOptions.headers)
                 .replaceAllHeaders(params.getHeaders())
                 .body(json(clientOptions.jsonMapper, params.getBody()))
                 .build()
@@ -114,9 +114,9 @@ constructor(
                     params.getPathParam(1),
                     "end"
                 )
-                .putAllQueryParams(clientOptions.queryParams.asMap())
+                .putAllQueryParams(clientOptions.queryParams)
                 .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers.asMap())
+                .putAllHeaders(clientOptions.headers)
                 .replaceAllHeaders(params.getHeaders())
                 .body(json(clientOptions.jsonMapper, params.getBody()))
                 .build()
@@ -156,9 +156,9 @@ constructor(
                     params.getPathParam(1),
                     "priceAdjustments"
                 )
-                .putAllQueryParams(clientOptions.queryParams.asMap())
+                .putAllQueryParams(clientOptions.queryParams)
                 .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers.asMap())
+                .putAllHeaders(clientOptions.headers)
                 .replaceAllHeaders(params.getHeaders())
                 .build()
         return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response

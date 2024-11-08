@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.http.QueryParams
 import com.metronome.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -29,12 +30,12 @@ class CustomerListBillableMetricsParamsTest {
                 .nextPage("next_page")
                 .onCurrentPlan(true)
                 .build()
-        val expected = mutableMapOf<String, List<String>>()
-        expected.put("include_archived", listOf("true"))
-        expected.put("limit", listOf("100"))
-        expected.put("next_page", listOf("next_page"))
-        expected.put("on_current_plan", listOf("true"))
-        assertThat(params.getQueryParams()).isEqualTo(expected)
+        val expected = QueryParams.builder()
+        expected.put("include_archived", "true")
+        expected.put("limit", "100")
+        expected.put("next_page", "next_page")
+        expected.put("on_current_plan", "true")
+        assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }
 
     @Test
@@ -43,8 +44,8 @@ class CustomerListBillableMetricsParamsTest {
             CustomerListBillableMetricsParams.builder()
                 .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .build()
-        val expected = mutableMapOf<String, List<String>>()
-        assertThat(params.getQueryParams()).isEqualTo(expected)
+        val expected = QueryParams.builder()
+        assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }
 
     @Test
