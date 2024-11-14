@@ -94,6 +94,7 @@ class CommitTest {
                 .name("name")
                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                 .priority(42.23)
+                .rateType(Commit.RateType.COMMIT_RATE)
                 .rolledOverFrom(
                     Commit.RolledOverFrom.builder()
                         .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -188,6 +189,7 @@ class CommitTest {
         assertThat(commit.name()).contains("name")
         assertThat(commit.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
         assertThat(commit.priority()).contains(42.23)
+        assertThat(commit.rateType()).contains(Commit.RateType.COMMIT_RATE)
         assertThat(commit.rolledOverFrom())
             .contains(
                 Commit.RolledOverFrom.builder()

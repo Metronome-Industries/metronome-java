@@ -89,6 +89,7 @@ class CommitServiceTest {
                     )
                     .name("x")
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
+                    .rateType(CustomerCommitCreateParams.RateType.COMMIT_RATE)
                     .salesforceOpportunityId("salesforce_opportunity_id")
                     .build()
             )

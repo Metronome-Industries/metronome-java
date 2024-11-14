@@ -28,6 +28,7 @@ constructor(
     private val rateCardId: String,
     private val rateType: RateType,
     private val startingAt: OffsetDateTime,
+    private val commitRate: CommitRate?,
     private val creditTypeId: String?,
     private val customRate: CustomRate?,
     private val endingBefore: OffsetDateTime?,
@@ -51,6 +52,8 @@ constructor(
     fun rateType(): RateType = rateType
 
     fun startingAt(): OffsetDateTime = startingAt
+
+    fun commitRate(): Optional<CommitRate> = Optional.ofNullable(commitRate)
 
     fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
 
@@ -78,6 +81,7 @@ constructor(
             rateCardId,
             rateType,
             startingAt,
+            commitRate,
             creditTypeId,
             customRate,
             endingBefore,
@@ -104,6 +108,7 @@ constructor(
         private val rateCardId: String?,
         private val rateType: RateType?,
         private val startingAt: OffsetDateTime?,
+        private val commitRate: CommitRate?,
         private val creditTypeId: String?,
         private val customRate: CustomRate?,
         private val endingBefore: OffsetDateTime?,
@@ -128,6 +133,13 @@ constructor(
 
         /** inclusive effective date */
         @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+
+        /**
+         * A distinct rate on the rate card. You can choose to use this rate rather than list rate
+         * when consuming a credit or commit. This feature requires opt-in before it can be used.
+         * Please contact Metronome support to enable this feature.
+         */
+        @JsonProperty("commit_rate") fun commitRate(): CommitRate? = commitRate
 
         /**
          * The Metronome ID of the credit type to associate with price, defaults to USD (cents) if
@@ -188,6 +200,7 @@ constructor(
             private var rateCardId: String? = null
             private var rateType: RateType? = null
             private var startingAt: OffsetDateTime? = null
+            private var commitRate: CommitRate? = null
             private var creditTypeId: String? = null
             private var customRate: CustomRate? = null
             private var endingBefore: OffsetDateTime? = null
@@ -206,6 +219,7 @@ constructor(
                 this.rateCardId = contractRateCardRateAddBody.rateCardId
                 this.rateType = contractRateCardRateAddBody.rateType
                 this.startingAt = contractRateCardRateAddBody.startingAt
+                this.commitRate = contractRateCardRateAddBody.commitRate
                 this.creditTypeId = contractRateCardRateAddBody.creditTypeId
                 this.customRate = contractRateCardRateAddBody.customRate
                 this.endingBefore = contractRateCardRateAddBody.endingBefore
@@ -235,6 +249,14 @@ constructor(
             /** inclusive effective date */
             @JsonProperty("starting_at")
             fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+
+            /**
+             * A distinct rate on the rate card. You can choose to use this rate rather than list
+             * rate when consuming a credit or commit. This feature requires opt-in before it can be
+             * used. Please contact Metronome support to enable this feature.
+             */
+            @JsonProperty("commit_rate")
+            fun commitRate(commitRate: CommitRate) = apply { this.commitRate = commitRate }
 
             /**
              * The Metronome ID of the credit type to associate with price, defaults to USD (cents)
@@ -311,6 +333,7 @@ constructor(
                     checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
                     checkNotNull(rateType) { "`rateType` is required but was not set" },
                     checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                    commitRate,
                     creditTypeId,
                     customRate,
                     endingBefore,
@@ -329,20 +352,20 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractRateCardRateAddBody && this.entitled == other.entitled && this.productId == other.productId && this.rateCardId == other.rateCardId && this.rateType == other.rateType && this.startingAt == other.startingAt && this.creditTypeId == other.creditTypeId && this.customRate == other.customRate && this.endingBefore == other.endingBefore && this.isProrated == other.isProrated && this.price == other.price && this.pricingGroupValues == other.pricingGroupValues && this.quantity == other.quantity && this.tiers == other.tiers && this.useListPrices == other.useListPrices && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractRateCardRateAddBody && this.entitled == other.entitled && this.productId == other.productId && this.rateCardId == other.rateCardId && this.rateType == other.rateType && this.startingAt == other.startingAt && this.commitRate == other.commitRate && this.creditTypeId == other.creditTypeId && this.customRate == other.customRate && this.endingBefore == other.endingBefore && this.isProrated == other.isProrated && this.price == other.price && this.pricingGroupValues == other.pricingGroupValues && this.quantity == other.quantity && this.tiers == other.tiers && this.useListPrices == other.useListPrices && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(entitled, productId, rateCardId, rateType, startingAt, creditTypeId, customRate, endingBefore, isProrated, price, pricingGroupValues, quantity, tiers, useListPrices, additionalProperties) /* spotless:on */
+                hashCode = /* spotless:off */ Objects.hash(entitled, productId, rateCardId, rateType, startingAt, commitRate, creditTypeId, customRate, endingBefore, isProrated, price, pricingGroupValues, quantity, tiers, useListPrices, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
 
         override fun toString() =
-            "ContractRateCardRateAddBody{entitled=$entitled, productId=$productId, rateCardId=$rateCardId, rateType=$rateType, startingAt=$startingAt, creditTypeId=$creditTypeId, customRate=$customRate, endingBefore=$endingBefore, isProrated=$isProrated, price=$price, pricingGroupValues=$pricingGroupValues, quantity=$quantity, tiers=$tiers, useListPrices=$useListPrices, additionalProperties=$additionalProperties}"
+            "ContractRateCardRateAddBody{entitled=$entitled, productId=$productId, rateCardId=$rateCardId, rateType=$rateType, startingAt=$startingAt, commitRate=$commitRate, creditTypeId=$creditTypeId, customRate=$customRate, endingBefore=$endingBefore, isProrated=$isProrated, price=$price, pricingGroupValues=$pricingGroupValues, quantity=$quantity, tiers=$tiers, useListPrices=$useListPrices, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -356,15 +379,15 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardRateAddParams && this.entitled == other.entitled && this.productId == other.productId && this.rateCardId == other.rateCardId && this.rateType == other.rateType && this.startingAt == other.startingAt && this.creditTypeId == other.creditTypeId && this.customRate == other.customRate && this.endingBefore == other.endingBefore && this.isProrated == other.isProrated && this.price == other.price && this.pricingGroupValues == other.pricingGroupValues && this.quantity == other.quantity && this.tiers == other.tiers && this.useListPrices == other.useListPrices && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardRateAddParams && this.entitled == other.entitled && this.productId == other.productId && this.rateCardId == other.rateCardId && this.rateType == other.rateType && this.startingAt == other.startingAt && this.commitRate == other.commitRate && this.creditTypeId == other.creditTypeId && this.customRate == other.customRate && this.endingBefore == other.endingBefore && this.isProrated == other.isProrated && this.price == other.price && this.pricingGroupValues == other.pricingGroupValues && this.quantity == other.quantity && this.tiers == other.tiers && this.useListPrices == other.useListPrices && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(entitled, productId, rateCardId, rateType, startingAt, creditTypeId, customRate, endingBefore, isProrated, price, pricingGroupValues, quantity, tiers, useListPrices, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+        return /* spotless:off */ Objects.hash(entitled, productId, rateCardId, rateType, startingAt, commitRate, creditTypeId, customRate, endingBefore, isProrated, price, pricingGroupValues, quantity, tiers, useListPrices, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
-        "ContractRateCardRateAddParams{entitled=$entitled, productId=$productId, rateCardId=$rateCardId, rateType=$rateType, startingAt=$startingAt, creditTypeId=$creditTypeId, customRate=$customRate, endingBefore=$endingBefore, isProrated=$isProrated, price=$price, pricingGroupValues=$pricingGroupValues, quantity=$quantity, tiers=$tiers, useListPrices=$useListPrices, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractRateCardRateAddParams{entitled=$entitled, productId=$productId, rateCardId=$rateCardId, rateType=$rateType, startingAt=$startingAt, commitRate=$commitRate, creditTypeId=$creditTypeId, customRate=$customRate, endingBefore=$endingBefore, isProrated=$isProrated, price=$price, pricingGroupValues=$pricingGroupValues, quantity=$quantity, tiers=$tiers, useListPrices=$useListPrices, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -381,6 +404,7 @@ constructor(
         private var rateCardId: String? = null
         private var rateType: RateType? = null
         private var startingAt: OffsetDateTime? = null
+        private var commitRate: CommitRate? = null
         private var creditTypeId: String? = null
         private var customRate: CustomRate? = null
         private var endingBefore: OffsetDateTime? = null
@@ -401,6 +425,7 @@ constructor(
             this.rateCardId = contractRateCardRateAddParams.rateCardId
             this.rateType = contractRateCardRateAddParams.rateType
             this.startingAt = contractRateCardRateAddParams.startingAt
+            this.commitRate = contractRateCardRateAddParams.commitRate
             this.creditTypeId = contractRateCardRateAddParams.creditTypeId
             this.customRate = contractRateCardRateAddParams.customRate
             this.endingBefore = contractRateCardRateAddParams.endingBefore
@@ -427,6 +452,13 @@ constructor(
 
         /** inclusive effective date */
         fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+
+        /**
+         * A distinct rate on the rate card. You can choose to use this rate rather than list rate
+         * when consuming a credit or commit. This feature requires opt-in before it can be used.
+         * Please contact Metronome support to enable this feature.
+         */
+        fun commitRate(commitRate: CommitRate) = apply { this.commitRate = commitRate }
 
         /**
          * The Metronome ID of the credit type to associate with price, defaults to USD (cents) if
@@ -603,6 +635,7 @@ constructor(
                 checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
                 checkNotNull(rateType) { "`rateType` is required but was not set" },
                 checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                commitRate,
                 creditTypeId,
                 customRate,
                 endingBefore,
@@ -691,6 +724,213 @@ constructor(
             }
 
         fun asString(): String = _value().asStringOrThrow()
+    }
+
+    /**
+     * A distinct rate on the rate card. You can choose to use this rate rather than list rate when
+     * consuming a credit or commit. This feature requires opt-in before it can be used. Please
+     * contact Metronome support to enable this feature.
+     */
+    @JsonDeserialize(builder = CommitRate.Builder::class)
+    @NoAutoDetect
+    class CommitRate
+    private constructor(
+        private val rateType: RateType?,
+        private val price: Double?,
+        private val tiers: List<Tier>?,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        @JsonProperty("rate_type") fun rateType(): RateType? = rateType
+
+        /** Commit rate price. For FLAT rate_type, this must be >=0. */
+        @JsonProperty("price") fun price(): Double? = price
+
+        /** Only set for TIERED rate_type. */
+        @JsonProperty("tiers") fun tiers(): List<Tier>? = tiers
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var rateType: RateType? = null
+            private var price: Double? = null
+            private var tiers: List<Tier>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(commitRate: CommitRate) = apply {
+                this.rateType = commitRate.rateType
+                this.price = commitRate.price
+                this.tiers = commitRate.tiers
+                additionalProperties(commitRate.additionalProperties)
+            }
+
+            @JsonProperty("rate_type")
+            fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+
+            /** Commit rate price. For FLAT rate_type, this must be >=0. */
+            @JsonProperty("price") fun price(price: Double) = apply { this.price = price }
+
+            /** Only set for TIERED rate_type. */
+            @JsonProperty("tiers") fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): CommitRate =
+                CommitRate(
+                    checkNotNull(rateType) { "`rateType` is required but was not set" },
+                    price,
+                    tiers?.toImmutable(),
+                    additionalProperties.toImmutable(),
+                )
+        }
+
+        class RateType
+        @JsonCreator
+        private constructor(
+            private val value: JsonField<String>,
+        ) : Enum {
+
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is RateType && this.value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+
+            companion object {
+
+                @JvmField val FLAT = RateType(JsonField.of("FLAT"))
+
+                @JvmField val FLAT = RateType(JsonField.of("flat"))
+
+                @JvmField val PERCENTAGE = RateType(JsonField.of("PERCENTAGE"))
+
+                @JvmField val PERCENTAGE = RateType(JsonField.of("percentage"))
+
+                @JvmField val SUBSCRIPTION = RateType(JsonField.of("SUBSCRIPTION"))
+
+                @JvmField val SUBSCRIPTION = RateType(JsonField.of("subscription"))
+
+                @JvmField val TIERED = RateType(JsonField.of("TIERED"))
+
+                @JvmField val TIERED = RateType(JsonField.of("tiered"))
+
+                @JvmField val CUSTOM = RateType(JsonField.of("CUSTOM"))
+
+                @JvmField val CUSTOM = RateType(JsonField.of("custom"))
+
+                @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
+            }
+
+            enum class Known {
+                FLAT,
+                FLAT,
+                PERCENTAGE,
+                PERCENTAGE,
+                SUBSCRIPTION,
+                SUBSCRIPTION,
+                TIERED,
+                TIERED,
+                CUSTOM,
+                CUSTOM,
+            }
+
+            enum class Value {
+                FLAT,
+                FLAT,
+                PERCENTAGE,
+                PERCENTAGE,
+                SUBSCRIPTION,
+                SUBSCRIPTION,
+                TIERED,
+                TIERED,
+                CUSTOM,
+                CUSTOM,
+                _UNKNOWN,
+            }
+
+            fun value(): Value =
+                when (this) {
+                    FLAT -> Value.FLAT
+                    FLAT -> Value.FLAT
+                    PERCENTAGE -> Value.PERCENTAGE
+                    PERCENTAGE -> Value.PERCENTAGE
+                    SUBSCRIPTION -> Value.SUBSCRIPTION
+                    SUBSCRIPTION -> Value.SUBSCRIPTION
+                    TIERED -> Value.TIERED
+                    TIERED -> Value.TIERED
+                    CUSTOM -> Value.CUSTOM
+                    CUSTOM -> Value.CUSTOM
+                    else -> Value._UNKNOWN
+                }
+
+            fun known(): Known =
+                when (this) {
+                    FLAT -> Known.FLAT
+                    FLAT -> Known.FLAT
+                    PERCENTAGE -> Known.PERCENTAGE
+                    PERCENTAGE -> Known.PERCENTAGE
+                    SUBSCRIPTION -> Known.SUBSCRIPTION
+                    SUBSCRIPTION -> Known.SUBSCRIPTION
+                    TIERED -> Known.TIERED
+                    TIERED -> Known.TIERED
+                    CUSTOM -> Known.CUSTOM
+                    CUSTOM -> Known.CUSTOM
+                    else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
+                }
+
+            fun asString(): String = _value().asStringOrThrow()
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CommitRate && this.rateType == other.rateType && this.price == other.price && this.tiers == other.tiers && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(rateType, price, tiers, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CommitRate{rateType=$rateType, price=$price, tiers=$tiers, additionalProperties=$additionalProperties}"
     }
 
     /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */

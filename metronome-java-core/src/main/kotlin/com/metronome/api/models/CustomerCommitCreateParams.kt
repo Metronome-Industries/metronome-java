@@ -37,6 +37,7 @@ constructor(
     private val invoiceSchedule: InvoiceSchedule?,
     private val name: String?,
     private val netsuiteSalesOrderId: String?,
+    private val rateType: RateType?,
     private val salesforceOpportunityId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -71,6 +72,8 @@ constructor(
 
     fun netsuiteSalesOrderId(): Optional<String> = Optional.ofNullable(netsuiteSalesOrderId)
 
+    fun rateType(): Optional<RateType> = Optional.ofNullable(rateType)
+
     fun salesforceOpportunityId(): Optional<String> = Optional.ofNullable(salesforceOpportunityId)
 
     @JvmSynthetic
@@ -90,6 +93,7 @@ constructor(
             invoiceSchedule,
             name,
             netsuiteSalesOrderId,
+            rateType,
             salesforceOpportunityId,
             additionalBodyProperties,
         )
@@ -117,6 +121,7 @@ constructor(
         private val invoiceSchedule: InvoiceSchedule?,
         private val name: String?,
         private val netsuiteSalesOrderId: String?,
+        private val rateType: RateType?,
         private val salesforceOpportunityId: String?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
@@ -187,6 +192,8 @@ constructor(
         @JsonProperty("netsuite_sales_order_id")
         fun netsuiteSalesOrderId(): String? = netsuiteSalesOrderId
 
+        @JsonProperty("rate_type") fun rateType(): RateType? = rateType
+
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("salesforce_opportunity_id")
         fun salesforceOpportunityId(): String? = salesforceOpportunityId
@@ -218,6 +225,7 @@ constructor(
             private var invoiceSchedule: InvoiceSchedule? = null
             private var name: String? = null
             private var netsuiteSalesOrderId: String? = null
+            private var rateType: RateType? = null
             private var salesforceOpportunityId: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -237,6 +245,7 @@ constructor(
                 this.invoiceSchedule = customerCommitCreateBody.invoiceSchedule
                 this.name = customerCommitCreateBody.name
                 this.netsuiteSalesOrderId = customerCommitCreateBody.netsuiteSalesOrderId
+                this.rateType = customerCommitCreateBody.rateType
                 this.salesforceOpportunityId = customerCommitCreateBody.salesforceOpportunityId
                 additionalProperties(customerCommitCreateBody.additionalProperties)
             }
@@ -331,6 +340,9 @@ constructor(
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
 
+            @JsonProperty("rate_type")
+            fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+
             /** This field's availability is dependent on your client's configuration. */
             @JsonProperty("salesforce_opportunity_id")
             fun salesforceOpportunityId(salesforceOpportunityId: String) = apply {
@@ -367,6 +379,7 @@ constructor(
                     invoiceSchedule,
                     name,
                     netsuiteSalesOrderId,
+                    rateType,
                     salesforceOpportunityId,
                     additionalProperties.toImmutable(),
                 )
@@ -377,20 +390,20 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerCommitCreateBody && this.accessSchedule == other.accessSchedule && this.customerId == other.customerId && this.priority == other.priority && this.productId == other.productId && this.type == other.type && this.applicableContractIds == other.applicableContractIds && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.customFields == other.customFields && this.description == other.description && this.invoiceContractId == other.invoiceContractId && this.invoiceSchedule == other.invoiceSchedule && this.name == other.name && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.salesforceOpportunityId == other.salesforceOpportunityId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomerCommitCreateBody && this.accessSchedule == other.accessSchedule && this.customerId == other.customerId && this.priority == other.priority && this.productId == other.productId && this.type == other.type && this.applicableContractIds == other.applicableContractIds && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.customFields == other.customFields && this.description == other.description && this.invoiceContractId == other.invoiceContractId && this.invoiceSchedule == other.invoiceSchedule && this.name == other.name && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.rateType == other.rateType && this.salesforceOpportunityId == other.salesforceOpportunityId && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(accessSchedule, customerId, priority, productId, type, applicableContractIds, applicableProductIds, applicableProductTags, customFields, description, invoiceContractId, invoiceSchedule, name, netsuiteSalesOrderId, salesforceOpportunityId, additionalProperties) /* spotless:on */
+                hashCode = /* spotless:off */ Objects.hash(accessSchedule, customerId, priority, productId, type, applicableContractIds, applicableProductIds, applicableProductTags, customFields, description, invoiceContractId, invoiceSchedule, name, netsuiteSalesOrderId, rateType, salesforceOpportunityId, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
 
         override fun toString() =
-            "CustomerCommitCreateBody{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, type=$type, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, salesforceOpportunityId=$salesforceOpportunityId, additionalProperties=$additionalProperties}"
+            "CustomerCommitCreateBody{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, type=$type, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -404,15 +417,15 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCommitCreateParams && this.accessSchedule == other.accessSchedule && this.customerId == other.customerId && this.priority == other.priority && this.productId == other.productId && this.type == other.type && this.applicableContractIds == other.applicableContractIds && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.customFields == other.customFields && this.description == other.description && this.invoiceContractId == other.invoiceContractId && this.invoiceSchedule == other.invoiceSchedule && this.name == other.name && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.salesforceOpportunityId == other.salesforceOpportunityId && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerCommitCreateParams && this.accessSchedule == other.accessSchedule && this.customerId == other.customerId && this.priority == other.priority && this.productId == other.productId && this.type == other.type && this.applicableContractIds == other.applicableContractIds && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.customFields == other.customFields && this.description == other.description && this.invoiceContractId == other.invoiceContractId && this.invoiceSchedule == other.invoiceSchedule && this.name == other.name && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.rateType == other.rateType && this.salesforceOpportunityId == other.salesforceOpportunityId && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(accessSchedule, customerId, priority, productId, type, applicableContractIds, applicableProductIds, applicableProductTags, customFields, description, invoiceContractId, invoiceSchedule, name, netsuiteSalesOrderId, salesforceOpportunityId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+        return /* spotless:off */ Objects.hash(accessSchedule, customerId, priority, productId, type, applicableContractIds, applicableProductIds, applicableProductTags, customFields, description, invoiceContractId, invoiceSchedule, name, netsuiteSalesOrderId, rateType, salesforceOpportunityId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
-        "CustomerCommitCreateParams{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, type=$type, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, salesforceOpportunityId=$salesforceOpportunityId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerCommitCreateParams{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, type=$type, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -438,6 +451,7 @@ constructor(
         private var invoiceSchedule: InvoiceSchedule? = null
         private var name: String? = null
         private var netsuiteSalesOrderId: String? = null
+        private var rateType: RateType? = null
         private var salesforceOpportunityId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -459,6 +473,7 @@ constructor(
             this.invoiceSchedule = customerCommitCreateParams.invoiceSchedule
             this.name = customerCommitCreateParams.name
             this.netsuiteSalesOrderId = customerCommitCreateParams.netsuiteSalesOrderId
+            this.rateType = customerCommitCreateParams.rateType
             this.salesforceOpportunityId = customerCommitCreateParams.salesforceOpportunityId
             additionalHeaders(customerCommitCreateParams.additionalHeaders)
             additionalQueryParams(customerCommitCreateParams.additionalQueryParams)
@@ -567,6 +582,8 @@ constructor(
         fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
             this.netsuiteSalesOrderId = netsuiteSalesOrderId
         }
+
+        fun rateType(rateType: RateType) = apply { this.rateType = rateType }
 
         /** This field's availability is dependent on your client's configuration. */
         fun salesforceOpportunityId(salesforceOpportunityId: String) = apply {
@@ -709,6 +726,7 @@ constructor(
                 invoiceSchedule,
                 name,
                 netsuiteSalesOrderId,
+                rateType,
                 salesforceOpportunityId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -1587,5 +1605,74 @@ constructor(
 
         override fun toString() =
             "InvoiceSchedule{creditTypeId=$creditTypeId, scheduleItems=$scheduleItems, recurringSchedule=$recurringSchedule, additionalProperties=$additionalProperties}"
+    }
+
+    class RateType
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
+
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is RateType && this.value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+
+        companion object {
+
+            @JvmField val COMMIT_RATE = RateType(JsonField.of("COMMIT_RATE"))
+
+            @JvmField val COMMIT_RATE = RateType(JsonField.of("commit_rate"))
+
+            @JvmField val LIST_RATE = RateType(JsonField.of("LIST_RATE"))
+
+            @JvmField val LIST_RATE = RateType(JsonField.of("list_rate"))
+
+            @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
+        }
+
+        enum class Known {
+            COMMIT_RATE,
+            COMMIT_RATE,
+            LIST_RATE,
+            LIST_RATE,
+        }
+
+        enum class Value {
+            COMMIT_RATE,
+            COMMIT_RATE,
+            LIST_RATE,
+            LIST_RATE,
+            _UNKNOWN,
+        }
+
+        fun value(): Value =
+            when (this) {
+                COMMIT_RATE -> Value.COMMIT_RATE
+                COMMIT_RATE -> Value.COMMIT_RATE
+                LIST_RATE -> Value.LIST_RATE
+                LIST_RATE -> Value.LIST_RATE
+                else -> Value._UNKNOWN
+            }
+
+        fun known(): Known =
+            when (this) {
+                COMMIT_RATE -> Known.COMMIT_RATE
+                COMMIT_RATE -> Known.COMMIT_RATE
+                LIST_RATE -> Known.LIST_RATE
+                LIST_RATE -> Known.LIST_RATE
+                else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
+            }
+
+        fun asString(): String = _value().asStringOrThrow()
     }
 }

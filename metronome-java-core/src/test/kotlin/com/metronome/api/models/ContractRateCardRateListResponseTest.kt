@@ -35,6 +35,13 @@ class ContractRateCardRateListResponseTest {
                         .build()
                 )
                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .commitRate(
+                    ContractRateCardRateListResponse.CommitRate.builder()
+                        .rateType(ContractRateCardRateListResponse.CommitRate.RateType.FLAT)
+                        .price(42.23)
+                        .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
+                        .build()
+                )
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .pricingGroupValues(
                     ContractRateCardRateListResponse.PricingGroupValues.builder().build()
@@ -67,6 +74,14 @@ class ContractRateCardRateListResponseTest {
             )
         assertThat(contractRateCardRateListResponse.startingAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(contractRateCardRateListResponse.commitRate())
+            .contains(
+                ContractRateCardRateListResponse.CommitRate.builder()
+                    .rateType(ContractRateCardRateListResponse.CommitRate.RateType.FLAT)
+                    .price(42.23)
+                    .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
+                    .build()
+            )
         assertThat(contractRateCardRateListResponse.endingBefore())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(contractRateCardRateListResponse.pricingGroupValues())

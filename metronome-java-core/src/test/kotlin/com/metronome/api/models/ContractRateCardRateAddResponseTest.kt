@@ -14,6 +14,15 @@ class ContractRateCardRateAddResponseTest {
                 .data(
                     ContractRateCardRateAddResponse.Data.builder()
                         .rateType(ContractRateCardRateAddResponse.Data.RateType.FLAT)
+                        .commitRate(
+                            ContractRateCardRateAddResponse.Data.CommitRate.builder()
+                                .rateType(
+                                    ContractRateCardRateAddResponse.Data.CommitRate.RateType.FLAT
+                                )
+                                .price(42.23)
+                                .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
+                                .build()
+                        )
                         .creditType(
                             CreditTypeData.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -40,6 +49,13 @@ class ContractRateCardRateAddResponseTest {
             .isEqualTo(
                 ContractRateCardRateAddResponse.Data.builder()
                     .rateType(ContractRateCardRateAddResponse.Data.RateType.FLAT)
+                    .commitRate(
+                        ContractRateCardRateAddResponse.Data.CommitRate.builder()
+                            .rateType(ContractRateCardRateAddResponse.Data.CommitRate.RateType.FLAT)
+                            .price(42.23)
+                            .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
+                            .build()
+                    )
                     .creditType(
                         CreditTypeData.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

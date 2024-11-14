@@ -125,7 +125,7 @@ private constructor(
         fun customFields(): Optional<CustomFields> =
             Optional.ofNullable(customFields.getNullable("custom_fields"))
 
-        /** This field's availability is dependent on your client's configuration. */
+        /** The billing provider configuration associated with a contract. */
         fun customerBillingProviderConfiguration(): Optional<CustomerBillingProviderConfiguration> =
             Optional.ofNullable(
                 customerBillingProviderConfiguration.getNullable(
@@ -152,7 +152,7 @@ private constructor(
 
         @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
 
-        /** This field's availability is dependent on your client's configuration. */
+        /** The billing provider configuration associated with a contract. */
         @JsonProperty("customer_billing_provider_configuration")
         @ExcludeMissing
         fun _customerBillingProviderConfiguration() = customerBillingProviderConfiguration
@@ -272,7 +272,7 @@ private constructor(
                 this.customFields = customFields
             }
 
-            /** This field's availability is dependent on your client's configuration. */
+            /** The billing provider configuration associated with a contract. */
             fun customerBillingProviderConfiguration(
                 customerBillingProviderConfiguration: CustomerBillingProviderConfiguration
             ) =
@@ -280,7 +280,7 @@ private constructor(
                     JsonField.of(customerBillingProviderConfiguration)
                 )
 
-            /** This field's availability is dependent on your client's configuration. */
+            /** The billing provider configuration associated with a contract. */
             @JsonProperty("customer_billing_provider_configuration")
             @ExcludeMissing
             fun customerBillingProviderConfiguration(
@@ -1089,7 +1089,7 @@ private constructor(
             override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
         }
 
-        /** This field's availability is dependent on your client's configuration. */
+        /** The billing provider configuration associated with a contract. */
         @JsonDeserialize(builder = CustomerBillingProviderConfiguration.Builder::class)
         @NoAutoDetect
         class CustomerBillingProviderConfiguration

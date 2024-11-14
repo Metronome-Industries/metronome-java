@@ -38,6 +38,18 @@ class ContractRateCardRetrieveRateScheduleResponseTest {
                                     .build()
                             )
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .commitRate(
+                                ContractRateCardRetrieveRateScheduleResponse.Data.CommitRate
+                                    .builder()
+                                    .rateType(
+                                        ContractRateCardRetrieveRateScheduleResponse.Data.CommitRate
+                                            .RateType
+                                            .FLAT
+                                    )
+                                    .price(42.23)
+                                    .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
+                                    .build()
+                            )
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .pricingGroupValues(
                                 ContractRateCardRetrieveRateScheduleResponse.Data.PricingGroupValues
@@ -76,6 +88,17 @@ class ContractRateCardRetrieveRateScheduleResponseTest {
                             .build()
                     )
                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .commitRate(
+                        ContractRateCardRetrieveRateScheduleResponse.Data.CommitRate.builder()
+                            .rateType(
+                                ContractRateCardRetrieveRateScheduleResponse.Data.CommitRate
+                                    .RateType
+                                    .FLAT
+                            )
+                            .price(42.23)
+                            .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
+                            .build()
+                    )
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .pricingGroupValues(
                         ContractRateCardRetrieveRateScheduleResponse.Data.PricingGroupValues

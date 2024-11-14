@@ -35,6 +35,8 @@ private constructor(
     private val multiplier: JsonField<Double>,
     private val overwriteRate: JsonField<OverwriteRate>,
     private val overrideTiers: JsonField<List<OverrideTier>>,
+    private val isCommitSpecific: JsonField<Boolean>,
+    private val target: JsonField<Target>,
     private val rateType: JsonField<RateType>,
     private val price: JsonField<Double>,
     private val quantity: JsonField<Double>,
@@ -75,6 +77,11 @@ private constructor(
 
     fun overrideTiers(): Optional<List<OverrideTier>> =
         Optional.ofNullable(overrideTiers.getNullable("override_tiers"))
+
+    fun isCommitSpecific(): Optional<Boolean> =
+        Optional.ofNullable(isCommitSpecific.getNullable("is_commit_specific"))
+
+    fun target(): Optional<Target> = Optional.ofNullable(target.getNullable("target"))
 
     fun rateType(): Optional<RateType> = Optional.ofNullable(rateType.getNullable("rate_type"))
 
@@ -127,6 +134,10 @@ private constructor(
 
     @JsonProperty("override_tiers") @ExcludeMissing fun _overrideTiers() = overrideTiers
 
+    @JsonProperty("is_commit_specific") @ExcludeMissing fun _isCommitSpecific() = isCommitSpecific
+
+    @JsonProperty("target") @ExcludeMissing fun _target() = target
+
     @JsonProperty("rate_type") @ExcludeMissing fun _rateType() = rateType
 
     /**
@@ -167,6 +178,8 @@ private constructor(
             multiplier()
             overwriteRate().map { it.validate() }
             overrideTiers().map { it.forEach { it.validate() } }
+            isCommitSpecific()
+            target()
             rateType()
             price()
             quantity()
@@ -199,6 +212,8 @@ private constructor(
         private var multiplier: JsonField<Double> = JsonMissing.of()
         private var overwriteRate: JsonField<OverwriteRate> = JsonMissing.of()
         private var overrideTiers: JsonField<List<OverrideTier>> = JsonMissing.of()
+        private var isCommitSpecific: JsonField<Boolean> = JsonMissing.of()
+        private var target: JsonField<Target> = JsonMissing.of()
         private var rateType: JsonField<RateType> = JsonMissing.of()
         private var price: JsonField<Double> = JsonMissing.of()
         private var quantity: JsonField<Double> = JsonMissing.of()
@@ -222,6 +237,8 @@ private constructor(
             this.multiplier = override.multiplier
             this.overwriteRate = override.overwriteRate
             this.overrideTiers = override.overrideTiers
+            this.isCommitSpecific = override.isCommitSpecific
+            this.target = override.target
             this.rateType = override.rateType
             this.price = override.price
             this.quantity = override.quantity
@@ -317,6 +334,21 @@ private constructor(
             this.overrideTiers = overrideTiers
         }
 
+        fun isCommitSpecific(isCommitSpecific: Boolean) =
+            isCommitSpecific(JsonField.of(isCommitSpecific))
+
+        @JsonProperty("is_commit_specific")
+        @ExcludeMissing
+        fun isCommitSpecific(isCommitSpecific: JsonField<Boolean>) = apply {
+            this.isCommitSpecific = isCommitSpecific
+        }
+
+        fun target(target: Target) = target(JsonField.of(target))
+
+        @JsonProperty("target")
+        @ExcludeMissing
+        fun target(target: JsonField<Target>) = apply { this.target = target }
+
         fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
 
         @JsonProperty("rate_type")
@@ -405,6 +437,8 @@ private constructor(
                 multiplier,
                 overwriteRate,
                 overrideTiers.map { it.toImmutable() },
+                isCommitSpecific,
+                target,
                 rateType,
                 price,
                 quantity,
@@ -424,6 +458,7 @@ private constructor(
         private val productTags: JsonField<List<String>>,
         private val pricingGroupValues: JsonField<PricingGroupValues>,
         private val presentationGroupValues: JsonField<PresentationGroupValues>,
+        private val commitIds: JsonField<List<String>>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
@@ -440,6 +475,9 @@ private constructor(
         fun presentationGroupValues(): Optional<PresentationGroupValues> =
             Optional.ofNullable(presentationGroupValues.getNullable("presentation_group_values"))
 
+        fun commitIds(): Optional<List<String>> =
+            Optional.ofNullable(commitIds.getNullable("commit_ids"))
+
         @JsonProperty("product_id") @ExcludeMissing fun _productId() = productId
 
         @JsonProperty("product_tags") @ExcludeMissing fun _productTags() = productTags
@@ -452,6 +490,8 @@ private constructor(
         @ExcludeMissing
         fun _presentationGroupValues() = presentationGroupValues
 
+        @JsonProperty("commit_ids") @ExcludeMissing fun _commitIds() = commitIds
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -462,6 +502,7 @@ private constructor(
                 productTags()
                 pricingGroupValues().map { it.validate() }
                 presentationGroupValues().map { it.validate() }
+                commitIds()
                 validated = true
             }
         }
@@ -480,6 +521,7 @@ private constructor(
             private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
             private var presentationGroupValues: JsonField<PresentationGroupValues> =
                 JsonMissing.of()
+            private var commitIds: JsonField<List<String>> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -488,6 +530,7 @@ private constructor(
                 this.productTags = overrideSpecifier.productTags
                 this.pricingGroupValues = overrideSpecifier.pricingGroupValues
                 this.presentationGroupValues = overrideSpecifier.presentationGroupValues
+                this.commitIds = overrideSpecifier.commitIds
                 additionalProperties(overrideSpecifier.additionalProperties)
             }
 
@@ -523,6 +566,12 @@ private constructor(
                 presentationGroupValues: JsonField<PresentationGroupValues>
             ) = apply { this.presentationGroupValues = presentationGroupValues }
 
+            fun commitIds(commitIds: List<String>) = commitIds(JsonField.of(commitIds))
+
+            @JsonProperty("commit_ids")
+            @ExcludeMissing
+            fun commitIds(commitIds: JsonField<List<String>>) = apply { this.commitIds = commitIds }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 this.additionalProperties.putAll(additionalProperties)
@@ -543,6 +592,7 @@ private constructor(
                     productTags.map { it.toImmutable() },
                     pricingGroupValues,
                     presentationGroupValues,
+                    commitIds.map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -702,20 +752,20 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is OverrideSpecifier && this.productId == other.productId && this.productTags == other.productTags && this.pricingGroupValues == other.pricingGroupValues && this.presentationGroupValues == other.presentationGroupValues && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is OverrideSpecifier && this.productId == other.productId && this.productTags == other.productTags && this.pricingGroupValues == other.pricingGroupValues && this.presentationGroupValues == other.presentationGroupValues && this.commitIds == other.commitIds && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(productId, productTags, pricingGroupValues, presentationGroupValues, additionalProperties) /* spotless:on */
+                hashCode = /* spotless:off */ Objects.hash(productId, productTags, pricingGroupValues, presentationGroupValues, commitIds, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
 
         override fun toString() =
-            "OverrideSpecifier{productId=$productId, productTags=$productTags, pricingGroupValues=$pricingGroupValues, presentationGroupValues=$presentationGroupValues, additionalProperties=$additionalProperties}"
+            "OverrideSpecifier{productId=$productId, productTags=$productTags, pricingGroupValues=$pricingGroupValues, presentationGroupValues=$presentationGroupValues, commitIds=$commitIds, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = OverrideTier.Builder::class)
@@ -1378,6 +1428,63 @@ private constructor(
         fun asString(): String = _value().asStringOrThrow()
     }
 
+    class Target
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
+
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Target && this.value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+
+        companion object {
+
+            @JvmField val COMMIT_RATE = Target(JsonField.of("COMMIT_RATE"))
+
+            @JvmField val LIST_RATE = Target(JsonField.of("LIST_RATE"))
+
+            @JvmStatic fun of(value: String) = Target(JsonField.of(value))
+        }
+
+        enum class Known {
+            COMMIT_RATE,
+            LIST_RATE,
+        }
+
+        enum class Value {
+            COMMIT_RATE,
+            LIST_RATE,
+            _UNKNOWN,
+        }
+
+        fun value(): Value =
+            when (this) {
+                COMMIT_RATE -> Value.COMMIT_RATE
+                LIST_RATE -> Value.LIST_RATE
+                else -> Value._UNKNOWN
+            }
+
+        fun known(): Known =
+            when (this) {
+                COMMIT_RATE -> Known.COMMIT_RATE
+                LIST_RATE -> Known.LIST_RATE
+                else -> throw MetronomeInvalidDataException("Unknown Target: $value")
+            }
+
+        fun asString(): String = _value().asStringOrThrow()
+    }
+
     class Type
     @JsonCreator
     private constructor(
@@ -1519,18 +1626,18 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Override && this.id == other.id && this.product == other.product && this.applicableProductTags == other.applicableProductTags && this.overrideSpecifiers == other.overrideSpecifiers && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.entitled == other.entitled && this.type == other.type && this.priority == other.priority && this.multiplier == other.multiplier && this.overwriteRate == other.overwriteRate && this.overrideTiers == other.overrideTiers && this.rateType == other.rateType && this.price == other.price && this.quantity == other.quantity && this.isProrated == other.isProrated && this.tiers == other.tiers && this.value == other.value && this.creditType == other.creditType && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Override && this.id == other.id && this.product == other.product && this.applicableProductTags == other.applicableProductTags && this.overrideSpecifiers == other.overrideSpecifiers && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.entitled == other.entitled && this.type == other.type && this.priority == other.priority && this.multiplier == other.multiplier && this.overwriteRate == other.overwriteRate && this.overrideTiers == other.overrideTiers && this.isCommitSpecific == other.isCommitSpecific && this.target == other.target && this.rateType == other.rateType && this.price == other.price && this.quantity == other.quantity && this.isProrated == other.isProrated && this.tiers == other.tiers && this.value == other.value && this.creditType == other.creditType && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(id, product, applicableProductTags, overrideSpecifiers, startingAt, endingBefore, entitled, type, priority, multiplier, overwriteRate, overrideTiers, rateType, price, quantity, isProrated, tiers, value, creditType, additionalProperties) /* spotless:on */
+            hashCode = /* spotless:off */ Objects.hash(id, product, applicableProductTags, overrideSpecifiers, startingAt, endingBefore, entitled, type, priority, multiplier, overwriteRate, overrideTiers, isCommitSpecific, target, rateType, price, quantity, isProrated, tiers, value, creditType, additionalProperties) /* spotless:on */
         }
         return hashCode
     }
 
     override fun toString() =
-        "Override{id=$id, product=$product, applicableProductTags=$applicableProductTags, overrideSpecifiers=$overrideSpecifiers, startingAt=$startingAt, endingBefore=$endingBefore, entitled=$entitled, type=$type, priority=$priority, multiplier=$multiplier, overwriteRate=$overwriteRate, overrideTiers=$overrideTiers, rateType=$rateType, price=$price, quantity=$quantity, isProrated=$isProrated, tiers=$tiers, value=$value, creditType=$creditType, additionalProperties=$additionalProperties}"
+        "Override{id=$id, product=$product, applicableProductTags=$applicableProductTags, overrideSpecifiers=$overrideSpecifiers, startingAt=$startingAt, endingBefore=$endingBefore, entitled=$entitled, type=$type, priority=$priority, multiplier=$multiplier, overwriteRate=$overwriteRate, overrideTiers=$overrideTiers, isCommitSpecific=$isCommitSpecific, target=$target, rateType=$rateType, price=$price, quantity=$quantity, isProrated=$isProrated, tiers=$tiers, value=$value, creditType=$creditType, additionalProperties=$additionalProperties}"
 }

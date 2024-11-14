@@ -91,7 +91,9 @@ class ContractAmendParamsTest {
                         .name("x")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .priority(42.23)
+                        .rateType(ContractAmendParams.Commit.RateType.COMMIT_RATE)
                         .rolloverFraction(42.23)
+                        .temporaryId("temporary_id")
                         .build()
                 )
             )
@@ -187,10 +189,12 @@ class ContractAmendParamsTest {
                         .applicableProductTags(listOf("string"))
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .entitled(true)
+                        .isCommitSpecific(true)
                         .multiplier(42.23)
                         .overrideSpecifiers(
                             listOf(
                                 ContractAmendParams.Override.OverrideSpecifier.builder()
+                                    .commitIds(listOf("string"))
                                     .presentationGroupValues(
                                         ContractAmendParams.Override.OverrideSpecifier
                                             .PresentationGroupValues
@@ -224,6 +228,7 @@ class ContractAmendParamsTest {
                         )
                         .priority(42.23)
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .target(ContractAmendParams.Override.Target.COMMIT_RATE)
                         .tiers(
                             listOf(
                                 ContractAmendParams.Override.Tier.builder()
@@ -419,7 +424,9 @@ class ContractAmendParamsTest {
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .priority(42.23)
+                            .rateType(ContractAmendParams.Commit.RateType.COMMIT_RATE)
                             .rolloverFraction(42.23)
+                            .temporaryId("temporary_id")
                             .build()
                     )
                 )
@@ -518,10 +525,12 @@ class ContractAmendParamsTest {
                             .applicableProductTags(listOf("string"))
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .entitled(true)
+                            .isCommitSpecific(true)
                             .multiplier(42.23)
                             .overrideSpecifiers(
                                 listOf(
                                     ContractAmendParams.Override.OverrideSpecifier.builder()
+                                        .commitIds(listOf("string"))
                                         .presentationGroupValues(
                                             ContractAmendParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
@@ -558,6 +567,7 @@ class ContractAmendParamsTest {
                             )
                             .priority(42.23)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .target(ContractAmendParams.Override.Target.COMMIT_RATE)
                             .tiers(
                                 listOf(
                                     ContractAmendParams.Override.Tier.builder()
@@ -753,7 +763,9 @@ class ContractAmendParamsTest {
                         .name("x")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .priority(42.23)
+                        .rateType(ContractAmendParams.Commit.RateType.COMMIT_RATE)
                         .rolloverFraction(42.23)
+                        .temporaryId("temporary_id")
                         .build()
                 )
             )
@@ -853,10 +865,12 @@ class ContractAmendParamsTest {
                         .applicableProductTags(listOf("string"))
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .entitled(true)
+                        .isCommitSpecific(true)
                         .multiplier(42.23)
                         .overrideSpecifiers(
                             listOf(
                                 ContractAmendParams.Override.OverrideSpecifier.builder()
+                                    .commitIds(listOf("string"))
                                     .presentationGroupValues(
                                         ContractAmendParams.Override.OverrideSpecifier
                                             .PresentationGroupValues
@@ -890,6 +904,7 @@ class ContractAmendParamsTest {
                         )
                         .priority(42.23)
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .target(ContractAmendParams.Override.Target.COMMIT_RATE)
                         .tiers(
                             listOf(
                                 ContractAmendParams.Override.Tier.builder()
