@@ -190,6 +190,7 @@ class ServiceParamsTest {
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .priority(42.23)
+                            .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
                             .build()
                     )
                 )

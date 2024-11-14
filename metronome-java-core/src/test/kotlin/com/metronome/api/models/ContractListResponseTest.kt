@@ -447,6 +447,7 @@ class ContractListResponseTest {
                                                     .name("name")
                                                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                                                     .priority(42.23)
+                                                    .rateType(Credit.RateType.COMMIT_RATE)
                                                     .salesforceOpportunityId(
                                                         "salesforce_opportunity_id"
                                                     )
@@ -979,6 +980,7 @@ class ContractListResponseTest {
                                                 .name("name")
                                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                                 .priority(42.23)
+                                                .rateType(Credit.RateType.COMMIT_RATE)
                                                 .salesforceOpportunityId(
                                                     "salesforce_opportunity_id"
                                                 )
@@ -1548,6 +1550,7 @@ class ContractListResponseTest {
                                                 .name("name")
                                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                                 .priority(42.23)
+                                                .rateType(Credit.RateType.COMMIT_RATE)
                                                 .salesforceOpportunityId(
                                                     "salesforce_opportunity_id"
                                                 )
@@ -2106,6 +2109,7 @@ class ContractListResponseTest {
                                             .name("name")
                                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                                             .priority(42.23)
+                                            .rateType(Credit.RateType.COMMIT_RATE)
                                             .salesforceOpportunityId("salesforce_opportunity_id")
                                             .build()
                                     )
@@ -2587,6 +2591,7 @@ class ContractListResponseTest {
                                         .name("name")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                                         .priority(42.23)
+                                        .rateType(Credit.RateType.COMMIT_RATE)
                                         .salesforceOpportunityId("salesforce_opportunity_id")
                                         .build()
                                 )
@@ -3103,6 +3108,7 @@ class ContractListResponseTest {
                                         .name("name")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                                         .priority(42.23)
+                                        .rateType(Credit.RateType.COMMIT_RATE)
                                         .salesforceOpportunityId("salesforce_opportunity_id")
                                         .build()
                                 )

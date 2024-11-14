@@ -1883,6 +1883,7 @@ constructor(
         private val netsuiteSalesOrderId: String?,
         private val priority: Double?,
         private val customFields: CustomFields?,
+        private val rateType: RateType?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
@@ -1920,6 +1921,8 @@ constructor(
 
         @JsonProperty("custom_fields") fun customFields(): CustomFields? = customFields
 
+        @JsonProperty("rate_type") fun rateType(): RateType? = rateType
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -1942,6 +1945,7 @@ constructor(
             private var netsuiteSalesOrderId: String? = null
             private var priority: Double? = null
             private var customFields: CustomFields? = null
+            private var rateType: RateType? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -1955,6 +1959,7 @@ constructor(
                 this.netsuiteSalesOrderId = credit.netsuiteSalesOrderId
                 this.priority = credit.priority
                 this.customFields = credit.customFields
+                this.rateType = credit.rateType
                 additionalProperties(credit.additionalProperties)
             }
 
@@ -2009,6 +2014,9 @@ constructor(
                 this.customFields = customFields
             }
 
+            @JsonProperty("rate_type")
+            fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 this.additionalProperties.putAll(additionalProperties)
@@ -2034,6 +2042,7 @@ constructor(
                     netsuiteSalesOrderId,
                     priority,
                     customFields,
+                    rateType,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -2302,25 +2311,94 @@ constructor(
             override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
         }
 
+        class RateType
+        @JsonCreator
+        private constructor(
+            private val value: JsonField<String>,
+        ) : Enum {
+
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is RateType && this.value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+
+            companion object {
+
+                @JvmField val COMMIT_RATE = RateType(JsonField.of("COMMIT_RATE"))
+
+                @JvmField val COMMIT_RATE = RateType(JsonField.of("commit_rate"))
+
+                @JvmField val LIST_RATE = RateType(JsonField.of("LIST_RATE"))
+
+                @JvmField val LIST_RATE = RateType(JsonField.of("list_rate"))
+
+                @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
+            }
+
+            enum class Known {
+                COMMIT_RATE,
+                COMMIT_RATE,
+                LIST_RATE,
+                LIST_RATE,
+            }
+
+            enum class Value {
+                COMMIT_RATE,
+                COMMIT_RATE,
+                LIST_RATE,
+                LIST_RATE,
+                _UNKNOWN,
+            }
+
+            fun value(): Value =
+                when (this) {
+                    COMMIT_RATE -> Value.COMMIT_RATE
+                    COMMIT_RATE -> Value.COMMIT_RATE
+                    LIST_RATE -> Value.LIST_RATE
+                    LIST_RATE -> Value.LIST_RATE
+                    else -> Value._UNKNOWN
+                }
+
+            fun known(): Known =
+                when (this) {
+                    COMMIT_RATE -> Known.COMMIT_RATE
+                    COMMIT_RATE -> Known.COMMIT_RATE
+                    LIST_RATE -> Known.LIST_RATE
+                    LIST_RATE -> Known.LIST_RATE
+                    else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
+                }
+
+            fun asString(): String = _value().asStringOrThrow()
+        }
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Credit && this.name == other.name && this.productId == other.productId && this.accessSchedule == other.accessSchedule && this.description == other.description && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.priority == other.priority && this.customFields == other.customFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Credit && this.name == other.name && this.productId == other.productId && this.accessSchedule == other.accessSchedule && this.description == other.description && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.priority == other.priority && this.customFields == other.customFields && this.rateType == other.rateType && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(name, productId, accessSchedule, description, applicableProductIds, applicableProductTags, netsuiteSalesOrderId, priority, customFields, additionalProperties) /* spotless:on */
+                hashCode = /* spotless:off */ Objects.hash(name, productId, accessSchedule, description, applicableProductIds, applicableProductTags, netsuiteSalesOrderId, priority, customFields, rateType, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
 
         override fun toString() =
-            "Credit{name=$name, productId=$productId, accessSchedule=$accessSchedule, description=$description, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, customFields=$customFields, additionalProperties=$additionalProperties}"
+            "Credit{name=$name, productId=$productId, accessSchedule=$accessSchedule, description=$description, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, customFields=$customFields, rateType=$rateType, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = CustomFields.Builder::class)

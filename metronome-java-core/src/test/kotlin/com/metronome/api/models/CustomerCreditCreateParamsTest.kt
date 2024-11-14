@@ -36,6 +36,7 @@ class CustomerCreditCreateParamsTest {
             .description("description")
             .name("x")
             .netsuiteSalesOrderId("netsuite_sales_order_id")
+            .rateType(CustomerCreditCreateParams.RateType.COMMIT_RATE)
             .salesforceOpportunityId("salesforce_opportunity_id")
             .build()
     }
@@ -68,6 +69,7 @@ class CustomerCreditCreateParamsTest {
                 .description("description")
                 .name("x")
                 .netsuiteSalesOrderId("netsuite_sales_order_id")
+                .rateType(CustomerCreditCreateParams.RateType.COMMIT_RATE)
                 .salesforceOpportunityId("salesforce_opportunity_id")
                 .build()
         val body = params.getBody()
@@ -99,6 +101,7 @@ class CustomerCreditCreateParamsTest {
         assertThat(body.description()).isEqualTo("description")
         assertThat(body.name()).isEqualTo("x")
         assertThat(body.netsuiteSalesOrderId()).isEqualTo("netsuite_sales_order_id")
+        assertThat(body.rateType()).isEqualTo(CustomerCreditCreateParams.RateType.COMMIT_RATE)
         assertThat(body.salesforceOpportunityId()).isEqualTo("salesforce_opportunity_id")
     }
 

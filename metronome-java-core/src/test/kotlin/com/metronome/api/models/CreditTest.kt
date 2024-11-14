@@ -66,6 +66,7 @@ class CreditTest {
                 .name("name")
                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                 .priority(42.23)
+                .rateType(Credit.RateType.COMMIT_RATE)
                 .salesforceOpportunityId("salesforce_opportunity_id")
                 .build()
         assertThat(credit).isNotNull
@@ -122,6 +123,7 @@ class CreditTest {
         assertThat(credit.name()).contains("name")
         assertThat(credit.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
         assertThat(credit.priority()).contains(42.23)
+        assertThat(credit.rateType()).contains(Credit.RateType.COMMIT_RATE)
         assertThat(credit.salesforceOpportunityId()).contains("salesforce_opportunity_id")
     }
 }

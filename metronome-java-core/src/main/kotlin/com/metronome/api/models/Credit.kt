@@ -47,6 +47,7 @@ private constructor(
     private val salesforceOpportunityId: JsonField<String>,
     private val ledger: JsonField<List<Ledger>>,
     private val customFields: JsonField<CustomFields>,
+    private val rateType: JsonField<RateType>,
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
@@ -101,6 +102,8 @@ private constructor(
     fun customFields(): Optional<CustomFields> =
         Optional.ofNullable(customFields.getNullable("custom_fields"))
 
+    fun rateType(): Optional<RateType> = Optional.ofNullable(rateType.getNullable("rate_type"))
+
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
     @JsonProperty("contract") @ExcludeMissing fun _contract() = contract
@@ -152,6 +155,8 @@ private constructor(
 
     @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
 
+    @JsonProperty("rate_type") @ExcludeMissing fun _rateType() = rateType
+
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -173,6 +178,7 @@ private constructor(
             salesforceOpportunityId()
             ledger()
             customFields().map { it.validate() }
+            rateType()
             validated = true
         }
     }
@@ -201,6 +207,7 @@ private constructor(
         private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
         private var ledger: JsonField<List<Ledger>> = JsonMissing.of()
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
+        private var rateType: JsonField<RateType> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -220,6 +227,7 @@ private constructor(
             this.salesforceOpportunityId = credit.salesforceOpportunityId
             this.ledger = credit.ledger
             this.customFields = credit.customFields
+            this.rateType = credit.rateType
             additionalProperties(credit.additionalProperties)
         }
 
@@ -353,6 +361,12 @@ private constructor(
             this.customFields = customFields
         }
 
+        fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
+
+        @JsonProperty("rate_type")
+        @ExcludeMissing
+        fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             this.additionalProperties.putAll(additionalProperties)
@@ -384,6 +398,7 @@ private constructor(
                 salesforceOpportunityId,
                 ledger.map { it.toImmutable() },
                 customFields,
+                rateType,
                 additionalProperties.toImmutable(),
             )
     }
@@ -2176,23 +2191,80 @@ private constructor(
         }
     }
 
+    class RateType
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
+
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is RateType && this.value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+
+        companion object {
+
+            @JvmField val COMMIT_RATE = RateType(JsonField.of("COMMIT_RATE"))
+
+            @JvmField val LIST_RATE = RateType(JsonField.of("LIST_RATE"))
+
+            @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
+        }
+
+        enum class Known {
+            COMMIT_RATE,
+            LIST_RATE,
+        }
+
+        enum class Value {
+            COMMIT_RATE,
+            LIST_RATE,
+            _UNKNOWN,
+        }
+
+        fun value(): Value =
+            when (this) {
+                COMMIT_RATE -> Value.COMMIT_RATE
+                LIST_RATE -> Value.LIST_RATE
+                else -> Value._UNKNOWN
+            }
+
+        fun known(): Known =
+            when (this) {
+                COMMIT_RATE -> Known.COMMIT_RATE
+                LIST_RATE -> Known.LIST_RATE
+                else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
+            }
+
+        fun asString(): String = _value().asStringOrThrow()
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is Credit && this.id == other.id && this.contract == other.contract && this.type == other.type && this.name == other.name && this.priority == other.priority && this.product == other.product && this.accessSchedule == other.accessSchedule && this.description == other.description && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.applicableContractIds == other.applicableContractIds && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.salesforceOpportunityId == other.salesforceOpportunityId && this.ledger == other.ledger && this.customFields == other.customFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Credit && this.id == other.id && this.contract == other.contract && this.type == other.type && this.name == other.name && this.priority == other.priority && this.product == other.product && this.accessSchedule == other.accessSchedule && this.description == other.description && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.applicableContractIds == other.applicableContractIds && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.salesforceOpportunityId == other.salesforceOpportunityId && this.ledger == other.ledger && this.customFields == other.customFields && this.rateType == other.rateType && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(id, contract, type, name, priority, product, accessSchedule, description, applicableProductIds, applicableProductTags, applicableContractIds, netsuiteSalesOrderId, salesforceOpportunityId, ledger, customFields, additionalProperties) /* spotless:on */
+            hashCode = /* spotless:off */ Objects.hash(id, contract, type, name, priority, product, accessSchedule, description, applicableProductIds, applicableProductTags, applicableContractIds, netsuiteSalesOrderId, salesforceOpportunityId, ledger, customFields, rateType, additionalProperties) /* spotless:on */
         }
         return hashCode
     }
 
     override fun toString() =
-        "Credit{id=$id, contract=$contract, type=$type, name=$name, priority=$priority, product=$product, accessSchedule=$accessSchedule, description=$description, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, applicableContractIds=$applicableContractIds, netsuiteSalesOrderId=$netsuiteSalesOrderId, salesforceOpportunityId=$salesforceOpportunityId, ledger=$ledger, customFields=$customFields, additionalProperties=$additionalProperties}"
+        "Credit{id=$id, contract=$contract, type=$type, name=$name, priority=$priority, product=$product, accessSchedule=$accessSchedule, description=$description, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, applicableContractIds=$applicableContractIds, netsuiteSalesOrderId=$netsuiteSalesOrderId, salesforceOpportunityId=$salesforceOpportunityId, ledger=$ledger, customFields=$customFields, rateType=$rateType, additionalProperties=$additionalProperties}"
 }
