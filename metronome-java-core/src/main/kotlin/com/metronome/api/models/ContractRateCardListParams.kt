@@ -107,17 +107,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractRateCardListBody && this.body == other.body && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractRateCardListBody && body == other.body && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(body, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(body, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "ContractRateCardListBody{body=$body, additionalProperties=$additionalProperties}"
@@ -132,12 +129,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardListParams && this.body == other.body && this.limit == other.limit && this.nextPage == other.nextPage && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardListParams && body == other.body && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(body, limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
         "ContractRateCardListParams{body=$body, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

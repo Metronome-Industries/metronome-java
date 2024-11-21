@@ -196,7 +196,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is Type && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -728,17 +728,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Update && this.name == other.name && this.startingAt == other.startingAt && this.isRefundable == other.isRefundable && this.createdAt == other.createdAt && this.createdBy == other.createdBy && this.billableMetricId == other.billableMetricId && this.quantityConversion == other.quantityConversion && this.quantityRounding == other.quantityRounding && this.netsuiteInternalItemId == other.netsuiteInternalItemId && this.netsuiteOverageItemId == other.netsuiteOverageItemId && this.compositeProductIds == other.compositeProductIds && this.compositeTags == other.compositeTags && this.tags == other.tags && this.excludeFreeUsage == other.excludeFreeUsage && this.pricingGroupKey == other.pricingGroupKey && this.presentationGroupKey == other.presentationGroupKey && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Update && name == other.name && startingAt == other.startingAt && isRefundable == other.isRefundable && createdAt == other.createdAt && createdBy == other.createdBy && billableMetricId == other.billableMetricId && quantityConversion == other.quantityConversion && quantityRounding == other.quantityRounding && netsuiteInternalItemId == other.netsuiteInternalItemId && netsuiteOverageItemId == other.netsuiteOverageItemId && compositeProductIds == other.compositeProductIds && compositeTags == other.compositeTags && tags == other.tags && excludeFreeUsage == other.excludeFreeUsage && pricingGroupKey == other.pricingGroupKey && presentationGroupKey == other.presentationGroupKey && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(name, startingAt, isRefundable, createdAt, createdBy, billableMetricId, quantityConversion, quantityRounding, netsuiteInternalItemId, netsuiteOverageItemId, compositeProductIds, compositeTags, tags, excludeFreeUsage, pricingGroupKey, presentationGroupKey, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(name, startingAt, isRefundable, createdAt, createdBy, billableMetricId, quantityConversion, quantityRounding, netsuiteInternalItemId, netsuiteOverageItemId, compositeProductIds, compositeTags, tags, excludeFreeUsage, pricingGroupKey, presentationGroupKey, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Update{name=$name, startingAt=$startingAt, isRefundable=$isRefundable, createdAt=$createdAt, createdBy=$createdBy, billableMetricId=$billableMetricId, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, tags=$tags, excludeFreeUsage=$excludeFreeUsage, pricingGroupKey=$pricingGroupKey, presentationGroupKey=$presentationGroupKey, additionalProperties=$additionalProperties}"
@@ -801,17 +798,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomFields && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
@@ -821,17 +815,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractProductListResponse && this.id == other.id && this.type == other.type && this.archivedAt == other.archivedAt && this.initial == other.initial && this.current == other.current && this.updates == other.updates && this.customFields == other.customFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ContractProductListResponse && id == other.id && type == other.type && archivedAt == other.archivedAt && initial == other.initial && current == other.current && updates == other.updates && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(id, type, archivedAt, initial, current, updates, customFields, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(id, type, archivedAt, initial, current, updates, customFields, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "ContractProductListResponse{id=$id, type=$type, archivedAt=$archivedAt, initial=$initial, current=$current, updates=$updates, customFields=$customFields, additionalProperties=$additionalProperties}"

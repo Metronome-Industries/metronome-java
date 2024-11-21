@@ -201,17 +201,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerInvoiceAddChargeBody && this.chargeId == other.chargeId && this.customerPlanId == other.customerPlanId && this.description == other.description && this.invoiceStartTimestamp == other.invoiceStartTimestamp && this.price == other.price && this.quantity == other.quantity && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomerInvoiceAddChargeBody && chargeId == other.chargeId && customerPlanId == other.customerPlanId && description == other.description && invoiceStartTimestamp == other.invoiceStartTimestamp && price == other.price && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(chargeId, customerPlanId, description, invoiceStartTimestamp, price, quantity, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(chargeId, customerPlanId, description, invoiceStartTimestamp, price, quantity, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CustomerInvoiceAddChargeBody{chargeId=$chargeId, customerPlanId=$customerPlanId, description=$description, invoiceStartTimestamp=$invoiceStartTimestamp, price=$price, quantity=$quantity, additionalProperties=$additionalProperties}"
@@ -228,12 +225,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerInvoiceAddChargeParams && this.customerId == other.customerId && this.chargeId == other.chargeId && this.customerPlanId == other.customerPlanId && this.description == other.description && this.invoiceStartTimestamp == other.invoiceStartTimestamp && this.price == other.price && this.quantity == other.quantity && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerInvoiceAddChargeParams && customerId == other.customerId && chargeId == other.chargeId && customerPlanId == other.customerPlanId && description == other.description && invoiceStartTimestamp == other.invoiceStartTimestamp && price == other.price && quantity == other.quantity && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, chargeId, customerPlanId, description, invoiceStartTimestamp, price, quantity, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, chargeId, customerPlanId, description, invoiceStartTimestamp, price, quantity, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "CustomerInvoiceAddChargeParams{customerId=$customerId, chargeId=$chargeId, customerPlanId=$customerPlanId, description=$description, invoiceStartTimestamp=$invoiceStartTimestamp, price=$price, quantity=$quantity, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

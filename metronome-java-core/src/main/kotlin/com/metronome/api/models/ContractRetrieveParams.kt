@@ -135,17 +135,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractRetrieveBody && this.contractId == other.contractId && this.customerId == other.customerId && this.includeLedgers == other.includeLedgers && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractRetrieveBody && contractId == other.contractId && customerId == other.customerId && includeLedgers == other.includeLedgers && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(contractId, customerId, includeLedgers, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(contractId, customerId, includeLedgers, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "ContractRetrieveBody{contractId=$contractId, customerId=$customerId, includeLedgers=$includeLedgers, additionalProperties=$additionalProperties}"
@@ -162,12 +159,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRetrieveParams && this.contractId == other.contractId && this.customerId == other.customerId && this.includeLedgers == other.includeLedgers && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRetrieveParams && contractId == other.contractId && customerId == other.customerId && includeLedgers == other.includeLedgers && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(contractId, customerId, includeLedgers, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, includeLedgers, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "ContractRetrieveParams{contractId=$contractId, customerId=$customerId, includeLedgers=$includeLedgers, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

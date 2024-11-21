@@ -126,17 +126,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomFieldDeleteValuesBody && this.entity == other.entity && this.entityId == other.entityId && this.keys == other.keys && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomFieldDeleteValuesBody && entity == other.entity && entityId == other.entityId && keys == other.keys && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(entity, entityId, keys, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(entity, entityId, keys, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CustomFieldDeleteValuesBody{entity=$entity, entityId=$entityId, keys=$keys, additionalProperties=$additionalProperties}"
@@ -153,12 +150,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomFieldDeleteValuesParams && this.entity == other.entity && this.entityId == other.entityId && this.keys == other.keys && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomFieldDeleteValuesParams && entity == other.entity && entityId == other.entityId && keys == other.keys && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(entity, entityId, keys, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(entity, entityId, keys, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "CustomFieldDeleteValuesParams{entity=$entity, entityId=$entityId, keys=$keys, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
@@ -345,7 +340,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Entity && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is Entity && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

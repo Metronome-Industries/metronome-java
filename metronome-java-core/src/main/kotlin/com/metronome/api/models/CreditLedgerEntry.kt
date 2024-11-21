@@ -231,17 +231,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditLedgerEntry && this.amount == other.amount && this.reason == other.reason && this.runningBalance == other.runningBalance && this.effectiveAt == other.effectiveAt && this.createdBy == other.createdBy && this.creditGrantId == other.creditGrantId && this.invoiceId == other.invoiceId && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CreditLedgerEntry && amount == other.amount && reason == other.reason && runningBalance == other.runningBalance && effectiveAt == other.effectiveAt && createdBy == other.createdBy && creditGrantId == other.creditGrantId && invoiceId == other.invoiceId && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(amount, reason, runningBalance, effectiveAt, createdBy, creditGrantId, invoiceId, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(amount, reason, runningBalance, effectiveAt, createdBy, creditGrantId, invoiceId, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "CreditLedgerEntry{amount=$amount, reason=$reason, runningBalance=$runningBalance, effectiveAt=$effectiveAt, createdBy=$createdBy, creditGrantId=$creditGrantId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"

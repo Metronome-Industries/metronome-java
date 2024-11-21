@@ -155,17 +155,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is UsageListWithGroupsResponse && this.startingOn == other.startingOn && this.endingBefore == other.endingBefore && this.groupKey == other.groupKey && this.groupValue == other.groupValue && this.value == other.value && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is UsageListWithGroupsResponse && startingOn == other.startingOn && endingBefore == other.endingBefore && groupKey == other.groupKey && groupValue == other.groupValue && value == other.value && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(startingOn, endingBefore, groupKey, groupValue, value, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(startingOn, endingBefore, groupKey, groupValue, value, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "UsageListWithGroupsResponse{startingOn=$startingOn, endingBefore=$endingBefore, groupKey=$groupKey, groupValue=$groupValue, value=$value, additionalProperties=$additionalProperties}"

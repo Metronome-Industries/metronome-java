@@ -66,17 +66,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is UsageIngestBody && this.usage == other.usage /* spotless:on */
+            return /* spotless:off */ other is UsageIngestBody && usage == other.usage /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(usage) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(usage) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "UsageIngestBody{usage=$usage}"
     }
@@ -90,12 +87,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is UsageIngestParams && this.usage == other.usage && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is UsageIngestParams && usage == other.usage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(usage, additionalHeaders, additionalQueryParams) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(usage, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
         "UsageIngestParams{usage=$usage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
@@ -378,17 +373,14 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Properties && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Properties && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() = "Properties{additionalProperties=$additionalProperties}"
         }
@@ -398,17 +390,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Usage && this.transactionId == other.transactionId && this.customerId == other.customerId && this.eventType == other.eventType && this.timestamp == other.timestamp && this.properties == other.properties && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Usage && transactionId == other.transactionId && customerId == other.customerId && eventType == other.eventType && timestamp == other.timestamp && properties == other.properties && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(transactionId, customerId, eventType, timestamp, properties, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(transactionId, customerId, eventType, timestamp, properties, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Usage{transactionId=$transactionId, customerId=$customerId, eventType=$eventType, timestamp=$timestamp, properties=$properties, additionalProperties=$additionalProperties}"

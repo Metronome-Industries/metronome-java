@@ -37,12 +37,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is PlanGetDetailsParams && this.planId == other.planId && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is PlanGetDetailsParams && planId == other.planId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(planId, additionalHeaders, additionalQueryParams) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(planId, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
         "PlanGetDetailsParams{planId=$planId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

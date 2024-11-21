@@ -176,17 +176,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractRateCardRetrieveRateScheduleBody && this.rateCardId == other.rateCardId && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.selectors == other.selectors && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractRateCardRetrieveRateScheduleBody && rateCardId == other.rateCardId && startingAt == other.startingAt && endingBefore == other.endingBefore && selectors == other.selectors && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(rateCardId, startingAt, endingBefore, selectors, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(rateCardId, startingAt, endingBefore, selectors, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "ContractRateCardRetrieveRateScheduleBody{rateCardId=$rateCardId, startingAt=$startingAt, endingBefore=$endingBefore, selectors=$selectors, additionalProperties=$additionalProperties}"
@@ -203,12 +200,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardRetrieveRateScheduleParams && this.rateCardId == other.rateCardId && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.selectors == other.selectors && this.limit == other.limit && this.nextPage == other.nextPage && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardRetrieveRateScheduleParams && rateCardId == other.rateCardId && startingAt == other.startingAt && endingBefore == other.endingBefore && selectors == other.selectors && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(rateCardId, startingAt, endingBefore, selectors, limit, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(rateCardId, startingAt, endingBefore, selectors, limit, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "ContractRateCardRetrieveRateScheduleParams{rateCardId=$rateCardId, startingAt=$startingAt, endingBefore=$endingBefore, selectors=$selectors, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
@@ -571,17 +566,14 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PartialPricingGroupValues && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PartialPricingGroupValues && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PartialPricingGroupValues{additionalProperties=$additionalProperties}"
@@ -642,17 +634,14 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PricingGroupValues && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PricingGroupValues && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PricingGroupValues{additionalProperties=$additionalProperties}"
@@ -663,17 +652,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Selector && this.productId == other.productId && this.pricingGroupValues == other.pricingGroupValues && this.partialPricingGroupValues == other.partialPricingGroupValues && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Selector && productId == other.productId && pricingGroupValues == other.pricingGroupValues && partialPricingGroupValues == other.partialPricingGroupValues && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(productId, pricingGroupValues, partialPricingGroupValues, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(productId, pricingGroupValues, partialPricingGroupValues, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Selector{productId=$productId, pricingGroupValues=$pricingGroupValues, partialPricingGroupValues=$partialPricingGroupValues, additionalProperties=$additionalProperties}"

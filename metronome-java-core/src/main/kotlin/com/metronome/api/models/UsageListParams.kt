@@ -196,17 +196,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is UsageListBody && this.endingBefore == other.endingBefore && this.startingOn == other.startingOn && this.windowSize == other.windowSize && this.billableMetrics == other.billableMetrics && this.customerIds == other.customerIds && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is UsageListBody && endingBefore == other.endingBefore && startingOn == other.startingOn && windowSize == other.windowSize && billableMetrics == other.billableMetrics && customerIds == other.customerIds && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(endingBefore, startingOn, windowSize, billableMetrics, customerIds, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(endingBefore, startingOn, windowSize, billableMetrics, customerIds, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "UsageListBody{endingBefore=$endingBefore, startingOn=$startingOn, windowSize=$windowSize, billableMetrics=$billableMetrics, customerIds=$customerIds, additionalProperties=$additionalProperties}"
@@ -223,12 +220,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is UsageListParams && this.endingBefore == other.endingBefore && this.startingOn == other.startingOn && this.windowSize == other.windowSize && this.billableMetrics == other.billableMetrics && this.customerIds == other.customerIds && this.nextPage == other.nextPage && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is UsageListParams && endingBefore == other.endingBefore && startingOn == other.startingOn && windowSize == other.windowSize && billableMetrics == other.billableMetrics && customerIds == other.customerIds && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(endingBefore, startingOn, windowSize, billableMetrics, customerIds, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(endingBefore, startingOn, windowSize, billableMetrics, customerIds, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "UsageListParams{endingBefore=$endingBefore, startingOn=$startingOn, windowSize=$windowSize, billableMetrics=$billableMetrics, customerIds=$customerIds, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
@@ -459,7 +454,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is WindowSize && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is WindowSize && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -653,17 +648,14 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is GroupBy && this.key == other.key && this.values == other.values && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is GroupBy && key == other.key && values == other.values && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(key, values, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(key, values, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "GroupBy{key=$key, values=$values, additionalProperties=$additionalProperties}"
@@ -674,17 +666,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is BillableMetric && this.id == other.id && this.groupBy == other.groupBy && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is BillableMetric && id == other.id && groupBy == other.groupBy && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, groupBy, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(id, groupBy, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "BillableMetric{id=$id, groupBy=$groupBy, additionalProperties=$additionalProperties}"

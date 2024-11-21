@@ -177,17 +177,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerBillingConfigCreateBody && this.billingProviderCustomerId == other.billingProviderCustomerId && this.awsProductCode == other.awsProductCode && this.awsRegion == other.awsRegion && this.stripeCollectionMethod == other.stripeCollectionMethod && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomerBillingConfigCreateBody && billingProviderCustomerId == other.billingProviderCustomerId && awsProductCode == other.awsProductCode && awsRegion == other.awsRegion && stripeCollectionMethod == other.stripeCollectionMethod && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(billingProviderCustomerId, awsProductCode, awsRegion, stripeCollectionMethod, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(billingProviderCustomerId, awsProductCode, awsRegion, stripeCollectionMethod, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CustomerBillingConfigCreateBody{billingProviderCustomerId=$billingProviderCustomerId, awsProductCode=$awsProductCode, awsRegion=$awsRegion, stripeCollectionMethod=$stripeCollectionMethod, additionalProperties=$additionalProperties}"
@@ -204,12 +201,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerBillingConfigCreateParams && this.customerId == other.customerId && this.billingProviderType == other.billingProviderType && this.billingProviderCustomerId == other.billingProviderCustomerId && this.awsProductCode == other.awsProductCode && this.awsRegion == other.awsRegion && this.stripeCollectionMethod == other.stripeCollectionMethod && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerBillingConfigCreateParams && customerId == other.customerId && billingProviderType == other.billingProviderType && billingProviderCustomerId == other.billingProviderCustomerId && awsProductCode == other.awsProductCode && awsRegion == other.awsRegion && stripeCollectionMethod == other.stripeCollectionMethod && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, billingProviderType, billingProviderCustomerId, awsProductCode, awsRegion, stripeCollectionMethod, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, billingProviderType, billingProviderCustomerId, awsProductCode, awsRegion, stripeCollectionMethod, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "CustomerBillingConfigCreateParams{customerId=$customerId, billingProviderType=$billingProviderType, billingProviderCustomerId=$billingProviderCustomerId, awsProductCode=$awsProductCode, awsRegion=$awsRegion, stripeCollectionMethod=$stripeCollectionMethod, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
@@ -422,7 +417,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is AwsRegion && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is AwsRegion && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -617,7 +612,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is StripeCollectionMethod && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is StripeCollectionMethod && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -676,7 +671,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is BillingProviderType && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is BillingProviderType && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

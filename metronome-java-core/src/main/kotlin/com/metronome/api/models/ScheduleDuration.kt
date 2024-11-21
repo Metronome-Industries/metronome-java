@@ -232,17 +232,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ScheduleItem && this.id == other.id && this.amount == other.amount && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ScheduleItem && id == other.id && amount == other.amount && startingAt == other.startingAt && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, amount, startingAt, endingBefore, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(id, amount, startingAt, endingBefore, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "ScheduleItem{id=$id, amount=$amount, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
@@ -253,17 +250,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ScheduleDuration && this.creditType == other.creditType && this.scheduleItems == other.scheduleItems && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ScheduleDuration && creditType == other.creditType && scheduleItems == other.scheduleItems && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(creditType, scheduleItems, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(creditType, scheduleItems, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "ScheduleDuration{creditType=$creditType, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"

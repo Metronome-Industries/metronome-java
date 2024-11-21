@@ -133,17 +133,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerAlertListBody && this.customerId == other.customerId && this.alertStatuses == other.alertStatuses && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomerAlertListBody && customerId == other.customerId && alertStatuses == other.alertStatuses && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(customerId, alertStatuses, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(customerId, alertStatuses, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CustomerAlertListBody{customerId=$customerId, alertStatuses=$alertStatuses, additionalProperties=$additionalProperties}"
@@ -160,12 +157,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerAlertListParams && this.customerId == other.customerId && this.alertStatuses == other.alertStatuses && this.nextPage == other.nextPage && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerAlertListParams && customerId == other.customerId && alertStatuses == other.alertStatuses && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, alertStatuses, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, alertStatuses, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "CustomerAlertListParams{customerId=$customerId, alertStatuses=$alertStatuses, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
@@ -356,7 +351,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is AlertStatus && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is AlertStatus && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

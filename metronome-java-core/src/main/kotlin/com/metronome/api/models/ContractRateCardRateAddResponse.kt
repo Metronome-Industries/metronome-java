@@ -403,7 +403,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is RateType && this.value == other.value /* spotless:on */
+                return /* spotless:off */ other is RateType && value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -622,7 +622,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is RateType && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is RateType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -719,17 +719,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is CommitRate && this.rateType == other.rateType && this.price == other.price && this.tiers == other.tiers && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is CommitRate && rateType == other.rateType && price == other.price && tiers == other.tiers && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(rateType, price, tiers, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(rateType, price, tiers, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "CommitRate{rateType=$rateType, price=$price, tiers=$tiers, additionalProperties=$additionalProperties}"
@@ -794,17 +791,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is CustomRate && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is CustomRate && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() = "CustomRate{additionalProperties=$additionalProperties}"
         }
@@ -869,17 +863,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PricingGroupValues && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PricingGroupValues && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PricingGroupValues{additionalProperties=$additionalProperties}"
@@ -890,17 +881,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && this.rateType == other.rateType && this.price == other.price && this.customRate == other.customRate && this.useListPrices == other.useListPrices && this.quantity == other.quantity && this.isProrated == other.isProrated && this.tiers == other.tiers && this.pricingGroupValues == other.pricingGroupValues && this.creditType == other.creditType && this.commitRate == other.commitRate && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && rateType == other.rateType && price == other.price && customRate == other.customRate && useListPrices == other.useListPrices && quantity == other.quantity && isProrated == other.isProrated && tiers == other.tiers && pricingGroupValues == other.pricingGroupValues && creditType == other.creditType && commitRate == other.commitRate && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(rateType, price, customRate, useListPrices, quantity, isProrated, tiers, pricingGroupValues, creditType, commitRate, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(rateType, price, customRate, useListPrices, quantity, isProrated, tiers, pricingGroupValues, creditType, commitRate, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Data{rateType=$rateType, price=$price, customRate=$customRate, useListPrices=$useListPrices, quantity=$quantity, isProrated=$isProrated, tiers=$tiers, pricingGroupValues=$pricingGroupValues, creditType=$creditType, commitRate=$commitRate, additionalProperties=$additionalProperties}"
@@ -911,17 +899,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardRateAddResponse && this.data == other.data && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardRateAddResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(data, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(data, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "ContractRateCardRateAddResponse{data=$data, additionalProperties=$additionalProperties}"

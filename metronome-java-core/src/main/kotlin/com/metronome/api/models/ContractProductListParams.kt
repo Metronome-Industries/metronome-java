@@ -114,17 +114,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractProductListBody && this.archiveFilter == other.archiveFilter && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractProductListBody && archiveFilter == other.archiveFilter && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(archiveFilter, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(archiveFilter, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "ContractProductListBody{archiveFilter=$archiveFilter, additionalProperties=$additionalProperties}"
@@ -141,12 +138,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractProductListParams && this.archiveFilter == other.archiveFilter && this.limit == other.limit && this.nextPage == other.nextPage && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractProductListParams && archiveFilter == other.archiveFilter && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(archiveFilter, limit, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(archiveFilter, limit, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "ContractProductListParams{archiveFilter=$archiveFilter, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
@@ -333,7 +328,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ArchiveFilter && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is ArchiveFilter && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

@@ -60,12 +60,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is PlanListCustomersParams && this.planId == other.planId && this.limit == other.limit && this.nextPage == other.nextPage && this.status == other.status && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is PlanListCustomersParams && planId == other.planId && limit == other.limit && nextPage == other.nextPage && status == other.status && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(planId, limit, nextPage, status, additionalHeaders, additionalQueryParams) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(planId, limit, nextPage, status, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
         "PlanListCustomersParams{planId=$planId, limit=$limit, nextPage=$nextPage, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
@@ -239,7 +237,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Status && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

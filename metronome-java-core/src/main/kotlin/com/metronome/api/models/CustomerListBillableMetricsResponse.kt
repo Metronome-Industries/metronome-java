@@ -418,7 +418,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is AggregationType && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is AggregationType && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -537,17 +537,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomFields && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
@@ -610,17 +607,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Filter && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Filter && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "Filter{additionalProperties=$additionalProperties}"
     }
@@ -630,17 +624,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerListBillableMetricsResponse && this.groupBy == other.groupBy && this.groupKeys == other.groupKeys && this.name == other.name && this.id == other.id && this.aggregate == other.aggregate && this.aggregateKeys == other.aggregateKeys && this.filter == other.filter && this.aggregationType == other.aggregationType && this.aggregationKey == other.aggregationKey && this.eventTypeFilter == other.eventTypeFilter && this.propertyFilters == other.propertyFilters && this.customFields == other.customFields && this.sql == other.sql && this.archivedAt == other.archivedAt && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerListBillableMetricsResponse && groupBy == other.groupBy && groupKeys == other.groupKeys && name == other.name && id == other.id && aggregate == other.aggregate && aggregateKeys == other.aggregateKeys && filter == other.filter && aggregationType == other.aggregationType && aggregationKey == other.aggregationKey && eventTypeFilter == other.eventTypeFilter && propertyFilters == other.propertyFilters && customFields == other.customFields && sql == other.sql && archivedAt == other.archivedAt && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(groupBy, groupKeys, name, id, aggregate, aggregateKeys, filter, aggregationType, aggregationKey, eventTypeFilter, propertyFilters, customFields, sql, archivedAt, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(groupBy, groupKeys, name, id, aggregate, aggregateKeys, filter, aggregationType, aggregationKey, eventTypeFilter, propertyFilters, customFields, sql, archivedAt, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "CustomerListBillableMetricsResponse{groupBy=$groupBy, groupKeys=$groupKeys, name=$name, id=$id, aggregate=$aggregate, aggregateKeys=$aggregateKeys, filter=$filter, aggregationType=$aggregationType, aggregationKey=$aggregationKey, eventTypeFilter=$eventTypeFilter, propertyFilters=$propertyFilters, customFields=$customFields, sql=$sql, archivedAt=$archivedAt, additionalProperties=$additionalProperties}"

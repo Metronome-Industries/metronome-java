@@ -509,17 +509,14 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is EndingBalance && this.excludingPending == other.excludingPending && this.includingPending == other.includingPending && this.effectiveAt == other.effectiveAt && this.additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is EndingBalance && excludingPending == other.excludingPending && includingPending == other.includingPending && effectiveAt == other.effectiveAt && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
-                private var hashCode: Int = 0
+                /* spotless:off */
+                private val hashCode: Int by lazy { Objects.hash(excludingPending, includingPending, effectiveAt, additionalProperties) }
+                /* spotless:on */
 
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = /* spotless:off */ Objects.hash(excludingPending, includingPending, effectiveAt, additionalProperties) /* spotless:on */
-                    }
-                    return hashCode
-                }
+                override fun hashCode(): Int = hashCode
 
                 override fun toString() =
                     "EndingBalance{excludingPending=$excludingPending, includingPending=$includingPending, effectiveAt=$effectiveAt, additionalProperties=$additionalProperties}"
@@ -692,17 +689,14 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is StartingBalance && this.excludingPending == other.excludingPending && this.includingPending == other.includingPending && this.effectiveAt == other.effectiveAt && this.additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is StartingBalance && excludingPending == other.excludingPending && includingPending == other.includingPending && effectiveAt == other.effectiveAt && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
-                private var hashCode: Int = 0
+                /* spotless:off */
+                private val hashCode: Int by lazy { Objects.hash(excludingPending, includingPending, effectiveAt, additionalProperties) }
+                /* spotless:on */
 
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = /* spotless:off */ Objects.hash(excludingPending, includingPending, effectiveAt, additionalProperties) /* spotless:on */
-                    }
-                    return hashCode
-                }
+                override fun hashCode(): Int = hashCode
 
                 override fun toString() =
                     "StartingBalance{excludingPending=$excludingPending, includingPending=$includingPending, effectiveAt=$effectiveAt, additionalProperties=$additionalProperties}"
@@ -713,17 +707,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Ledger && this.creditType == other.creditType && this.startingBalance == other.startingBalance && this.endingBalance == other.endingBalance && this.entries == other.entries && this.pendingEntries == other.pendingEntries && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Ledger && creditType == other.creditType && startingBalance == other.startingBalance && endingBalance == other.endingBalance && entries == other.entries && pendingEntries == other.pendingEntries && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(creditType, startingBalance, endingBalance, entries, pendingEntries, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(creditType, startingBalance, endingBalance, entries, pendingEntries, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "Ledger{creditType=$creditType, startingBalance=$startingBalance, endingBalance=$endingBalance, entries=$entries, pendingEntries=$pendingEntries, additionalProperties=$additionalProperties}"
@@ -734,17 +725,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && this.customerId == other.customerId && this.ledgers == other.ledgers && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && customerId == other.customerId && ledgers == other.ledgers && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(customerId, ledgers, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(customerId, ledgers, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Data{customerId=$customerId, ledgers=$ledgers, additionalProperties=$additionalProperties}"
@@ -755,17 +743,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditGrantListEntriesResponse && this.data == other.data && this.nextPage == other.nextPage && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CreditGrantListEntriesResponse && data == other.data && nextPage == other.nextPage && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(data, nextPage, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(data, nextPage, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "CreditGrantListEntriesResponse{data=$data, nextPage=$nextPage, additionalProperties=$additionalProperties}"

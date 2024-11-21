@@ -243,17 +243,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Product && this.id == other.id && this.name == other.name && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Product && id == other.id && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, name, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(id, name, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Product{id=$id, name=$name, additionalProperties=$additionalProperties}"
@@ -264,17 +261,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Discount && this.id == other.id && this.product == other.product && this.schedule == other.schedule && this.name == other.name && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Discount && id == other.id && product == other.product && schedule == other.schedule && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(id, product, schedule, name, netsuiteSalesOrderId, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(id, product, schedule, name, netsuiteSalesOrderId, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "Discount{id=$id, product=$product, schedule=$schedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, additionalProperties=$additionalProperties}"

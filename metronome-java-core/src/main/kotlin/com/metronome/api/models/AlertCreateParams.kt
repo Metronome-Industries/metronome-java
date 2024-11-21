@@ -362,17 +362,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is AlertCreateBody && this.alertType == other.alertType && this.name == other.name && this.threshold == other.threshold && this.billableMetricId == other.billableMetricId && this.creditGrantTypeFilters == other.creditGrantTypeFilters && this.creditTypeId == other.creditTypeId && this.customFieldFilters == other.customFieldFilters && this.customerId == other.customerId && this.evaluateOnCreate == other.evaluateOnCreate && this.groupKeyFilter == other.groupKeyFilter && this.invoiceTypesFilter == other.invoiceTypesFilter && this.planId == other.planId && this.uniquenessKey == other.uniquenessKey && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is AlertCreateBody && alertType == other.alertType && name == other.name && threshold == other.threshold && billableMetricId == other.billableMetricId && creditGrantTypeFilters == other.creditGrantTypeFilters && creditTypeId == other.creditTypeId && customFieldFilters == other.customFieldFilters && customerId == other.customerId && evaluateOnCreate == other.evaluateOnCreate && groupKeyFilter == other.groupKeyFilter && invoiceTypesFilter == other.invoiceTypesFilter && planId == other.planId && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(alertType, name, threshold, billableMetricId, creditGrantTypeFilters, creditTypeId, customFieldFilters, customerId, evaluateOnCreate, groupKeyFilter, invoiceTypesFilter, planId, uniquenessKey, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(alertType, name, threshold, billableMetricId, creditGrantTypeFilters, creditTypeId, customFieldFilters, customerId, evaluateOnCreate, groupKeyFilter, invoiceTypesFilter, planId, uniquenessKey, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "AlertCreateBody{alertType=$alertType, name=$name, threshold=$threshold, billableMetricId=$billableMetricId, creditGrantTypeFilters=$creditGrantTypeFilters, creditTypeId=$creditTypeId, customFieldFilters=$customFieldFilters, customerId=$customerId, evaluateOnCreate=$evaluateOnCreate, groupKeyFilter=$groupKeyFilter, invoiceTypesFilter=$invoiceTypesFilter, planId=$planId, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
@@ -389,12 +386,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is AlertCreateParams && this.alertType == other.alertType && this.name == other.name && this.threshold == other.threshold && this.billableMetricId == other.billableMetricId && this.creditGrantTypeFilters == other.creditGrantTypeFilters && this.creditTypeId == other.creditTypeId && this.customFieldFilters == other.customFieldFilters && this.customerId == other.customerId && this.evaluateOnCreate == other.evaluateOnCreate && this.groupKeyFilter == other.groupKeyFilter && this.invoiceTypesFilter == other.invoiceTypesFilter && this.planId == other.planId && this.uniquenessKey == other.uniquenessKey && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is AlertCreateParams && alertType == other.alertType && name == other.name && threshold == other.threshold && billableMetricId == other.billableMetricId && creditGrantTypeFilters == other.creditGrantTypeFilters && creditTypeId == other.creditTypeId && customFieldFilters == other.customFieldFilters && customerId == other.customerId && evaluateOnCreate == other.evaluateOnCreate && groupKeyFilter == other.groupKeyFilter && invoiceTypesFilter == other.invoiceTypesFilter && planId == other.planId && uniquenessKey == other.uniquenessKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(alertType, name, threshold, billableMetricId, creditGrantTypeFilters, creditTypeId, customFieldFilters, customerId, evaluateOnCreate, groupKeyFilter, invoiceTypesFilter, planId, uniquenessKey, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertType, name, threshold, billableMetricId, creditGrantTypeFilters, creditTypeId, customFieldFilters, customerId, evaluateOnCreate, groupKeyFilter, invoiceTypesFilter, planId, uniquenessKey, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "AlertCreateParams{alertType=$alertType, name=$name, threshold=$threshold, billableMetricId=$billableMetricId, creditGrantTypeFilters=$creditGrantTypeFilters, creditTypeId=$creditTypeId, customFieldFilters=$customFieldFilters, customerId=$customerId, evaluateOnCreate=$evaluateOnCreate, groupKeyFilter=$groupKeyFilter, invoiceTypesFilter=$invoiceTypesFilter, planId=$planId, uniquenessKey=$uniquenessKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
@@ -708,7 +703,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is AlertType && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is AlertType && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -947,7 +942,7 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Entity && this.value == other.value /* spotless:on */
+                return /* spotless:off */ other is Entity && value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -1002,17 +997,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomFieldFilter && this.entity == other.entity && this.key == other.key && this.value == other.value && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomFieldFilter && entity == other.entity && key == other.key && value == other.value && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(entity, key, value, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(entity, key, value, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CustomFieldFilter{entity=$entity, key=$key, value=$value, additionalProperties=$additionalProperties}"
@@ -1090,17 +1082,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is GroupKeyFilter && this.key == other.key && this.value == other.value && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is GroupKeyFilter && key == other.key && value == other.value && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(key, value, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(key, value, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "GroupKeyFilter{key=$key, value=$value, additionalProperties=$additionalProperties}"

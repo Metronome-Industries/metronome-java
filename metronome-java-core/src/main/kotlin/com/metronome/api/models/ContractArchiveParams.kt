@@ -132,17 +132,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractArchiveBody && this.contractId == other.contractId && this.customerId == other.customerId && this.voidInvoices == other.voidInvoices && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractArchiveBody && contractId == other.contractId && customerId == other.customerId && voidInvoices == other.voidInvoices && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(contractId, customerId, voidInvoices, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(contractId, customerId, voidInvoices, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "ContractArchiveBody{contractId=$contractId, customerId=$customerId, voidInvoices=$voidInvoices, additionalProperties=$additionalProperties}"
@@ -159,12 +156,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractArchiveParams && this.contractId == other.contractId && this.customerId == other.customerId && this.voidInvoices == other.voidInvoices && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractArchiveParams && contractId == other.contractId && customerId == other.customerId && voidInvoices == other.voidInvoices && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(contractId, customerId, voidInvoices, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, voidInvoices, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "ContractArchiveParams{contractId=$contractId, customerId=$customerId, voidInvoices=$voidInvoices, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

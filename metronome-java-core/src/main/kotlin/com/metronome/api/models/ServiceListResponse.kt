@@ -200,7 +200,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Usage && this.value == other.value /* spotless:on */
+                return /* spotless:off */ other is Usage && value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -249,17 +249,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Service && this.name == other.name && this.usage == other.usage && this.ips == other.ips && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Service && name == other.name && usage == other.usage && ips == other.ips && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(name, usage, ips, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(name, usage, ips, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Service{name=$name, usage=$usage, ips=$ips, additionalProperties=$additionalProperties}"
@@ -270,17 +267,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ServiceListResponse && this.services == other.services && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ServiceListResponse && services == other.services && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(services, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(services, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "ServiceListResponse{services=$services, additionalProperties=$additionalProperties}"

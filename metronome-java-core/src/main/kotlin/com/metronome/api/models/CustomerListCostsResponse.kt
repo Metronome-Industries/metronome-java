@@ -179,17 +179,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CreditTypes && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CreditTypes && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "CreditTypes{additionalProperties=$additionalProperties}"
     }
@@ -199,17 +196,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerListCostsResponse && this.startTimestamp == other.startTimestamp && this.endTimestamp == other.endTimestamp && this.creditTypes == other.creditTypes && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerListCostsResponse && startTimestamp == other.startTimestamp && endTimestamp == other.endTimestamp && creditTypes == other.creditTypes && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(startTimestamp, endTimestamp, creditTypes, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(startTimestamp, endTimestamp, creditTypes, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "CustomerListCostsResponse{startTimestamp=$startTimestamp, endTimestamp=$endTimestamp, creditTypes=$creditTypes, additionalProperties=$additionalProperties}"

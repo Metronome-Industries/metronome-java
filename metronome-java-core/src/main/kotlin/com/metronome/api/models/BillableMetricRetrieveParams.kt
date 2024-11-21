@@ -37,12 +37,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is BillableMetricRetrieveParams && this.billableMetricId == other.billableMetricId && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is BillableMetricRetrieveParams && billableMetricId == other.billableMetricId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(billableMetricId, additionalHeaders, additionalQueryParams) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(billableMetricId, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
         "BillableMetricRetrieveParams{billableMetricId=$billableMetricId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

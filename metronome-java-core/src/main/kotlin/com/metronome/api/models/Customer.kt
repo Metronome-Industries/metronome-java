@@ -241,17 +241,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomFields && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
@@ -261,17 +258,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Customer && this.id == other.id && this.externalId == other.externalId && this.ingestAliases == other.ingestAliases && this.name == other.name && this.customFields == other.customFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Customer && id == other.id && externalId == other.externalId && ingestAliases == other.ingestAliases && name == other.name && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(id, externalId, ingestAliases, name, customFields, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(id, externalId, ingestAliases, name, customFields, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "Customer{id=$id, externalId=$externalId, ingestAliases=$ingestAliases, name=$name, customFields=$customFields, additionalProperties=$additionalProperties}"

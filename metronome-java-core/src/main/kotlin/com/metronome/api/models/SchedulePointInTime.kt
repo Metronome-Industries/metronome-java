@@ -260,17 +260,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ScheduleItem && this.id == other.id && this.invoiceId == other.invoiceId && this.amount == other.amount && this.unitPrice == other.unitPrice && this.quantity == other.quantity && this.timestamp == other.timestamp && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ScheduleItem && id == other.id && invoiceId == other.invoiceId && amount == other.amount && unitPrice == other.unitPrice && quantity == other.quantity && timestamp == other.timestamp && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, invoiceId, amount, unitPrice, quantity, timestamp, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(id, invoiceId, amount, unitPrice, quantity, timestamp, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "ScheduleItem{id=$id, invoiceId=$invoiceId, amount=$amount, unitPrice=$unitPrice, quantity=$quantity, timestamp=$timestamp, additionalProperties=$additionalProperties}"
@@ -281,17 +278,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SchedulePointInTime && this.creditType == other.creditType && this.scheduleItems == other.scheduleItems && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is SchedulePointInTime && creditType == other.creditType && scheduleItems == other.scheduleItems && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(creditType, scheduleItems, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(creditType, scheduleItems, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "SchedulePointInTime{creditType=$creditType, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"

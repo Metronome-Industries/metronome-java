@@ -239,17 +239,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomFields && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
@@ -513,17 +510,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CreditGrant && this.name == other.name && this.amountGranted == other.amountGranted && this.amountPaid == other.amountPaid && this.effectiveDuration == other.effectiveDuration && this.priority == other.priority && this.sendInvoice == other.sendInvoice && this.reason == other.reason && this.recurrenceDuration == other.recurrenceDuration && this.recurrenceInterval == other.recurrenceInterval && this.amountPaidCreditType == other.amountPaidCreditType && this.amountGrantedCreditType == other.amountGrantedCreditType && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CreditGrant && name == other.name && amountGranted == other.amountGranted && amountPaid == other.amountPaid && effectiveDuration == other.effectiveDuration && priority == other.priority && sendInvoice == other.sendInvoice && reason == other.reason && recurrenceDuration == other.recurrenceDuration && recurrenceInterval == other.recurrenceInterval && amountPaidCreditType == other.amountPaidCreditType && amountGrantedCreditType == other.amountGrantedCreditType && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(name, amountGranted, amountPaid, effectiveDuration, priority, sendInvoice, reason, recurrenceDuration, recurrenceInterval, amountPaidCreditType, amountGrantedCreditType, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(name, amountGranted, amountPaid, effectiveDuration, priority, sendInvoice, reason, recurrenceDuration, recurrenceInterval, amountPaidCreditType, amountGrantedCreditType, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CreditGrant{name=$name, amountGranted=$amountGranted, amountPaid=$amountPaid, effectiveDuration=$effectiveDuration, priority=$priority, sendInvoice=$sendInvoice, reason=$reason, recurrenceDuration=$recurrenceDuration, recurrenceInterval=$recurrenceInterval, amountPaidCreditType=$amountPaidCreditType, amountGrantedCreditType=$amountGrantedCreditType, additionalProperties=$additionalProperties}"
@@ -667,17 +661,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Minimum && this.name == other.name && this.value == other.value && this.startPeriod == other.startPeriod && this.creditType == other.creditType && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Minimum && name == other.name && value == other.value && startPeriod == other.startPeriod && creditType == other.creditType && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(name, value, startPeriod, creditType, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(name, value, startPeriod, creditType, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Minimum{name=$name, value=$value, startPeriod=$startPeriod, creditType=$creditType, additionalProperties=$additionalProperties}"
@@ -830,17 +821,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is OverageRate && this.toFiatConversionFactor == other.toFiatConversionFactor && this.startPeriod == other.startPeriod && this.fiatCreditType == other.fiatCreditType && this.creditType == other.creditType && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is OverageRate && toFiatConversionFactor == other.toFiatConversionFactor && startPeriod == other.startPeriod && fiatCreditType == other.fiatCreditType && creditType == other.creditType && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(toFiatConversionFactor, startPeriod, fiatCreditType, creditType, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(toFiatConversionFactor, startPeriod, fiatCreditType, creditType, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "OverageRate{toFiatConversionFactor=$toFiatConversionFactor, startPeriod=$startPeriod, fiatCreditType=$fiatCreditType, creditType=$creditType, additionalProperties=$additionalProperties}"
@@ -851,17 +839,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is PlanDetail && this.id == other.id && this.name == other.name && this.description == other.description && this.minimums == other.minimums && this.overageRates == other.overageRates && this.creditGrants == other.creditGrants && this.customFields == other.customFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is PlanDetail && id == other.id && name == other.name && description == other.description && minimums == other.minimums && overageRates == other.overageRates && creditGrants == other.creditGrants && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(id, name, description, minimums, overageRates, creditGrants, customFields, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(id, name, description, minimums, overageRates, creditGrants, customFields, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "PlanDetail{id=$id, name=$name, description=$description, minimums=$minimums, overageRates=$overageRates, creditGrants=$creditGrants, customFields=$customFields, additionalProperties=$additionalProperties}"

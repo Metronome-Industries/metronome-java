@@ -115,17 +115,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerAlertRetrieveBody && this.alertId == other.alertId && this.customerId == other.customerId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomerAlertRetrieveBody && alertId == other.alertId && customerId == other.customerId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(alertId, customerId, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(alertId, customerId, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CustomerAlertRetrieveBody{alertId=$alertId, customerId=$customerId, additionalProperties=$additionalProperties}"
@@ -142,12 +139,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerAlertRetrieveParams && this.alertId == other.alertId && this.customerId == other.customerId && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerAlertRetrieveParams && alertId == other.alertId && customerId == other.customerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(alertId, customerId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertId, customerId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "CustomerAlertRetrieveParams{alertId=$alertId, customerId=$customerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

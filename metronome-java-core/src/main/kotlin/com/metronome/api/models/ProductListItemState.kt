@@ -479,17 +479,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ProductListItemState && this.name == other.name && this.startingAt == other.startingAt && this.netsuiteInternalItemId == other.netsuiteInternalItemId && this.createdAt == other.createdAt && this.createdBy == other.createdBy && this.netsuiteOverageItemId == other.netsuiteOverageItemId && this.billableMetricId == other.billableMetricId && this.compositeProductIds == other.compositeProductIds && this.quantityConversion == other.quantityConversion && this.quantityRounding == other.quantityRounding && this.compositeTags == other.compositeTags && this.isRefundable == other.isRefundable && this.tags == other.tags && this.excludeFreeUsage == other.excludeFreeUsage && this.pricingGroupKey == other.pricingGroupKey && this.presentationGroupKey == other.presentationGroupKey && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ProductListItemState && name == other.name && startingAt == other.startingAt && netsuiteInternalItemId == other.netsuiteInternalItemId && createdAt == other.createdAt && createdBy == other.createdBy && netsuiteOverageItemId == other.netsuiteOverageItemId && billableMetricId == other.billableMetricId && compositeProductIds == other.compositeProductIds && quantityConversion == other.quantityConversion && quantityRounding == other.quantityRounding && compositeTags == other.compositeTags && isRefundable == other.isRefundable && tags == other.tags && excludeFreeUsage == other.excludeFreeUsage && pricingGroupKey == other.pricingGroupKey && presentationGroupKey == other.presentationGroupKey && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(name, startingAt, netsuiteInternalItemId, createdAt, createdBy, netsuiteOverageItemId, billableMetricId, compositeProductIds, quantityConversion, quantityRounding, compositeTags, isRefundable, tags, excludeFreeUsage, pricingGroupKey, presentationGroupKey, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(name, startingAt, netsuiteInternalItemId, createdAt, createdBy, netsuiteOverageItemId, billableMetricId, compositeProductIds, quantityConversion, quantityRounding, compositeTags, isRefundable, tags, excludeFreeUsage, pricingGroupKey, presentationGroupKey, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "ProductListItemState{name=$name, startingAt=$startingAt, netsuiteInternalItemId=$netsuiteInternalItemId, createdAt=$createdAt, createdBy=$createdBy, netsuiteOverageItemId=$netsuiteOverageItemId, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, compositeTags=$compositeTags, isRefundable=$isRefundable, tags=$tags, excludeFreeUsage=$excludeFreeUsage, pricingGroupKey=$pricingGroupKey, presentationGroupKey=$presentationGroupKey, additionalProperties=$additionalProperties}"

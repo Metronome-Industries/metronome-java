@@ -201,17 +201,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CreditGrantListBody && this.creditGrantIds == other.creditGrantIds && this.creditTypeIds == other.creditTypeIds && this.customerIds == other.customerIds && this.effectiveBefore == other.effectiveBefore && this.notExpiringBefore == other.notExpiringBefore && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CreditGrantListBody && creditGrantIds == other.creditGrantIds && creditTypeIds == other.creditTypeIds && customerIds == other.customerIds && effectiveBefore == other.effectiveBefore && notExpiringBefore == other.notExpiringBefore && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(creditGrantIds, creditTypeIds, customerIds, effectiveBefore, notExpiringBefore, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(creditGrantIds, creditTypeIds, customerIds, effectiveBefore, notExpiringBefore, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CreditGrantListBody{creditGrantIds=$creditGrantIds, creditTypeIds=$creditTypeIds, customerIds=$customerIds, effectiveBefore=$effectiveBefore, notExpiringBefore=$notExpiringBefore, additionalProperties=$additionalProperties}"
@@ -228,12 +225,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditGrantListParams && this.creditGrantIds == other.creditGrantIds && this.creditTypeIds == other.creditTypeIds && this.customerIds == other.customerIds && this.effectiveBefore == other.effectiveBefore && this.notExpiringBefore == other.notExpiringBefore && this.limit == other.limit && this.nextPage == other.nextPage && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CreditGrantListParams && creditGrantIds == other.creditGrantIds && creditTypeIds == other.creditTypeIds && customerIds == other.customerIds && effectiveBefore == other.effectiveBefore && notExpiringBefore == other.notExpiringBefore && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(creditGrantIds, creditTypeIds, customerIds, effectiveBefore, notExpiringBefore, limit, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(creditGrantIds, creditTypeIds, customerIds, effectiveBefore, notExpiringBefore, limit, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "CreditGrantListParams{creditGrantIds=$creditGrantIds, creditTypeIds=$creditTypeIds, customerIds=$customerIds, effectiveBefore=$effectiveBefore, notExpiringBefore=$notExpiringBefore, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

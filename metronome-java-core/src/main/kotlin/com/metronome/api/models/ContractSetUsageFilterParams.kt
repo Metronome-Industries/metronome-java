@@ -152,17 +152,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractSetUsageFilterBody && this.contractId == other.contractId && this.customerId == other.customerId && this.groupKey == other.groupKey && this.groupValues == other.groupValues && this.startingAt == other.startingAt && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractSetUsageFilterBody && contractId == other.contractId && customerId == other.customerId && groupKey == other.groupKey && groupValues == other.groupValues && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(contractId, customerId, groupKey, groupValues, startingAt, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(contractId, customerId, groupKey, groupValues, startingAt, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "ContractSetUsageFilterBody{contractId=$contractId, customerId=$customerId, groupKey=$groupKey, groupValues=$groupValues, startingAt=$startingAt, additionalProperties=$additionalProperties}"
@@ -179,12 +176,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractSetUsageFilterParams && this.contractId == other.contractId && this.customerId == other.customerId && this.groupKey == other.groupKey && this.groupValues == other.groupValues && this.startingAt == other.startingAt && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractSetUsageFilterParams && contractId == other.contractId && customerId == other.customerId && groupKey == other.groupKey && groupValues == other.groupValues && startingAt == other.startingAt && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(contractId, customerId, groupKey, groupValues, startingAt, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, groupKey, groupValues, startingAt, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "ContractSetUsageFilterParams{contractId=$contractId, customerId=$customerId, groupKey=$groupKey, groupValues=$groupValues, startingAt=$startingAt, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

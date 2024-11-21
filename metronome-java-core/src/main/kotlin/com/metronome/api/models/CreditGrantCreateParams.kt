@@ -332,17 +332,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CreditGrantCreateBody && this.customerId == other.customerId && this.expiresAt == other.expiresAt && this.grantAmount == other.grantAmount && this.name == other.name && this.paidAmount == other.paidAmount && this.priority == other.priority && this.creditGrantType == other.creditGrantType && this.customFields == other.customFields && this.effectiveAt == other.effectiveAt && this.invoiceDate == other.invoiceDate && this.productIds == other.productIds && this.reason == other.reason && this.rolloverSettings == other.rolloverSettings && this.uniquenessKey == other.uniquenessKey && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CreditGrantCreateBody && customerId == other.customerId && expiresAt == other.expiresAt && grantAmount == other.grantAmount && name == other.name && paidAmount == other.paidAmount && priority == other.priority && creditGrantType == other.creditGrantType && customFields == other.customFields && effectiveAt == other.effectiveAt && invoiceDate == other.invoiceDate && productIds == other.productIds && reason == other.reason && rolloverSettings == other.rolloverSettings && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(customerId, expiresAt, grantAmount, name, paidAmount, priority, creditGrantType, customFields, effectiveAt, invoiceDate, productIds, reason, rolloverSettings, uniquenessKey, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(customerId, expiresAt, grantAmount, name, paidAmount, priority, creditGrantType, customFields, effectiveAt, invoiceDate, productIds, reason, rolloverSettings, uniquenessKey, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CreditGrantCreateBody{customerId=$customerId, expiresAt=$expiresAt, grantAmount=$grantAmount, name=$name, paidAmount=$paidAmount, priority=$priority, creditGrantType=$creditGrantType, customFields=$customFields, effectiveAt=$effectiveAt, invoiceDate=$invoiceDate, productIds=$productIds, reason=$reason, rolloverSettings=$rolloverSettings, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
@@ -359,12 +356,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditGrantCreateParams && this.customerId == other.customerId && this.expiresAt == other.expiresAt && this.grantAmount == other.grantAmount && this.name == other.name && this.paidAmount == other.paidAmount && this.priority == other.priority && this.creditGrantType == other.creditGrantType && this.customFields == other.customFields && this.effectiveAt == other.effectiveAt && this.invoiceDate == other.invoiceDate && this.productIds == other.productIds && this.reason == other.reason && this.rolloverSettings == other.rolloverSettings && this.uniquenessKey == other.uniquenessKey && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CreditGrantCreateParams && customerId == other.customerId && expiresAt == other.expiresAt && grantAmount == other.grantAmount && name == other.name && paidAmount == other.paidAmount && priority == other.priority && creditGrantType == other.creditGrantType && customFields == other.customFields && effectiveAt == other.effectiveAt && invoiceDate == other.invoiceDate && productIds == other.productIds && reason == other.reason && rolloverSettings == other.rolloverSettings && uniquenessKey == other.uniquenessKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, expiresAt, grantAmount, name, paidAmount, priority, creditGrantType, customFields, effectiveAt, invoiceDate, productIds, reason, rolloverSettings, uniquenessKey, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, expiresAt, grantAmount, name, paidAmount, priority, creditGrantType, customFields, effectiveAt, invoiceDate, productIds, reason, rolloverSettings, uniquenessKey, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "CreditGrantCreateParams{customerId=$customerId, expiresAt=$expiresAt, grantAmount=$grantAmount, name=$name, paidAmount=$paidAmount, priority=$priority, creditGrantType=$creditGrantType, customFields=$customFields, effectiveAt=$effectiveAt, invoiceDate=$invoiceDate, productIds=$productIds, reason=$reason, rolloverSettings=$rolloverSettings, uniquenessKey=$uniquenessKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
@@ -697,17 +692,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is GrantAmount && this.amount == other.amount && this.creditTypeId == other.creditTypeId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is GrantAmount && amount == other.amount && creditTypeId == other.creditTypeId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(amount, creditTypeId, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(amount, creditTypeId, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "GrantAmount{amount=$amount, creditTypeId=$creditTypeId, additionalProperties=$additionalProperties}"
@@ -785,17 +777,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is PaidAmount && this.amount == other.amount && this.creditTypeId == other.creditTypeId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is PaidAmount && amount == other.amount && creditTypeId == other.creditTypeId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(amount, creditTypeId, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(amount, creditTypeId, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "PaidAmount{amount=$amount, creditTypeId=$creditTypeId, additionalProperties=$additionalProperties}"
@@ -851,17 +840,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomFields && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
@@ -1013,15 +999,13 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is RolloverAmount && this.rolloverAmountMaxPercentage == other.rolloverAmountMaxPercentage && this.rolloverAmountMaxAmount == other.rolloverAmountMaxAmount /* spotless:on */
+                return /* spotless:off */ other is RolloverAmount && rolloverAmountMaxPercentage == other.rolloverAmountMaxPercentage && rolloverAmountMaxAmount == other.rolloverAmountMaxAmount /* spotless:on */
             }
 
-            override fun hashCode(): Int {
-                return /* spotless:off */ Objects.hash(rolloverAmountMaxPercentage, rolloverAmountMaxAmount) /* spotless:on */
-            }
+            override fun hashCode(): Int = /* spotless:off */ Objects.hash(rolloverAmountMaxPercentage, rolloverAmountMaxAmount) /* spotless:on */
 
-            override fun toString(): String {
-                return when {
+            override fun toString(): String =
+                when {
                     rolloverAmountMaxPercentage != null ->
                         "RolloverAmount{rolloverAmountMaxPercentage=$rolloverAmountMaxPercentage}"
                     rolloverAmountMaxAmount != null ->
@@ -1029,7 +1013,6 @@ constructor(
                     _json != null -> "RolloverAmount{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid RolloverAmount")
                 }
-            }
 
             companion object {
 
@@ -1104,17 +1087,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is RolloverSettings && this.expiresAt == other.expiresAt && this.priority == other.priority && this.rolloverAmount == other.rolloverAmount && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is RolloverSettings && expiresAt == other.expiresAt && priority == other.priority && rolloverAmount == other.rolloverAmount && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(expiresAt, priority, rolloverAmount, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(expiresAt, priority, rolloverAmount, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "RolloverSettings{expiresAt=$expiresAt, priority=$priority, rolloverAmount=$rolloverAmount, additionalProperties=$additionalProperties}"

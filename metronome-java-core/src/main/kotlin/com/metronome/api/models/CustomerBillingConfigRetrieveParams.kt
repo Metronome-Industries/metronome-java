@@ -46,12 +46,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerBillingConfigRetrieveParams && this.customerId == other.customerId && this.billingProviderType == other.billingProviderType && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is CustomerBillingConfigRetrieveParams && customerId == other.customerId && billingProviderType == other.billingProviderType && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, billingProviderType, additionalHeaders, additionalQueryParams) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, billingProviderType, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
         "CustomerBillingConfigRetrieveParams{customerId=$customerId, billingProviderType=$billingProviderType, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
@@ -209,7 +207,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is BillingProviderType && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is BillingProviderType && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

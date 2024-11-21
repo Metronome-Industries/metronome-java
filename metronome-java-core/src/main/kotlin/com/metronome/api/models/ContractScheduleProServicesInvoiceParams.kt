@@ -186,17 +186,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractScheduleProServicesInvoiceBody && this.contractId == other.contractId && this.customerId == other.customerId && this.issuedAt == other.issuedAt && this.lineItems == other.lineItems && this.netsuiteInvoiceHeaderEnd == other.netsuiteInvoiceHeaderEnd && this.netsuiteInvoiceHeaderStart == other.netsuiteInvoiceHeaderStart && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractScheduleProServicesInvoiceBody && contractId == other.contractId && customerId == other.customerId && issuedAt == other.issuedAt && lineItems == other.lineItems && netsuiteInvoiceHeaderEnd == other.netsuiteInvoiceHeaderEnd && netsuiteInvoiceHeaderStart == other.netsuiteInvoiceHeaderStart && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(contractId, customerId, issuedAt, lineItems, netsuiteInvoiceHeaderEnd, netsuiteInvoiceHeaderStart, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(contractId, customerId, issuedAt, lineItems, netsuiteInvoiceHeaderEnd, netsuiteInvoiceHeaderStart, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "ContractScheduleProServicesInvoiceBody{contractId=$contractId, customerId=$customerId, issuedAt=$issuedAt, lineItems=$lineItems, netsuiteInvoiceHeaderEnd=$netsuiteInvoiceHeaderEnd, netsuiteInvoiceHeaderStart=$netsuiteInvoiceHeaderStart, additionalProperties=$additionalProperties}"
@@ -213,12 +210,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractScheduleProServicesInvoiceParams && this.contractId == other.contractId && this.customerId == other.customerId && this.issuedAt == other.issuedAt && this.lineItems == other.lineItems && this.netsuiteInvoiceHeaderEnd == other.netsuiteInvoiceHeaderEnd && this.netsuiteInvoiceHeaderStart == other.netsuiteInvoiceHeaderStart && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractScheduleProServicesInvoiceParams && contractId == other.contractId && customerId == other.customerId && issuedAt == other.issuedAt && lineItems == other.lineItems && netsuiteInvoiceHeaderEnd == other.netsuiteInvoiceHeaderEnd && netsuiteInvoiceHeaderStart == other.netsuiteInvoiceHeaderStart && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(contractId, customerId, issuedAt, lineItems, netsuiteInvoiceHeaderEnd, netsuiteInvoiceHeaderStart, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, issuedAt, lineItems, netsuiteInvoiceHeaderEnd, netsuiteInvoiceHeaderStart, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "ContractScheduleProServicesInvoiceParams{contractId=$contractId, customerId=$customerId, issuedAt=$issuedAt, lineItems=$lineItems, netsuiteInvoiceHeaderEnd=$netsuiteInvoiceHeaderEnd, netsuiteInvoiceHeaderStart=$netsuiteInvoiceHeaderStart, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
@@ -579,17 +574,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is LineItem && this.professionalServiceId == other.professionalServiceId && this.amendmentId == other.amendmentId && this.unitPrice == other.unitPrice && this.quantity == other.quantity && this.amount == other.amount && this.netsuiteInvoiceBillingStart == other.netsuiteInvoiceBillingStart && this.netsuiteInvoiceBillingEnd == other.netsuiteInvoiceBillingEnd && this.metadata == other.metadata && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is LineItem && professionalServiceId == other.professionalServiceId && amendmentId == other.amendmentId && unitPrice == other.unitPrice && quantity == other.quantity && amount == other.amount && netsuiteInvoiceBillingStart == other.netsuiteInvoiceBillingStart && netsuiteInvoiceBillingEnd == other.netsuiteInvoiceBillingEnd && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(professionalServiceId, amendmentId, unitPrice, quantity, amount, netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd, metadata, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(professionalServiceId, amendmentId, unitPrice, quantity, amount, netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd, metadata, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "LineItem{professionalServiceId=$professionalServiceId, amendmentId=$amendmentId, unitPrice=$unitPrice, quantity=$quantity, amount=$amount, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, metadata=$metadata, additionalProperties=$additionalProperties}"

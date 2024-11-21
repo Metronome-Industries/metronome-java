@@ -294,17 +294,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is RateCardEntries && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is RateCardEntries && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "RateCardEntries{additionalProperties=$additionalProperties}"
     }
@@ -421,17 +418,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Alias && this.name == other.name && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Alias && name == other.name && startingAt == other.startingAt && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(name, startingAt, endingBefore, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(name, startingAt, endingBefore, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Alias{name=$name, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
@@ -538,17 +532,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CreditTypeConversion && this.fiatPerCustomCredit == other.fiatPerCustomCredit && this.customCreditType == other.customCreditType && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CreditTypeConversion && fiatPerCustomCredit == other.fiatPerCustomCredit && customCreditType == other.customCreditType && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(fiatPerCustomCredit, customCreditType, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(fiatPerCustomCredit, customCreditType, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CreditTypeConversion{fiatPerCustomCredit=$fiatPerCustomCredit, customCreditType=$customCreditType, additionalProperties=$additionalProperties}"
@@ -611,17 +602,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomFields && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
@@ -631,17 +619,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardListResponse && this.id == other.id && this.name == other.name && this.rateCardEntries == other.rateCardEntries && this.createdAt == other.createdAt && this.createdBy == other.createdBy && this.description == other.description && this.fiatCreditType == other.fiatCreditType && this.creditTypeConversions == other.creditTypeConversions && this.aliases == other.aliases && this.customFields == other.customFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardListResponse && id == other.id && name == other.name && rateCardEntries == other.rateCardEntries && createdAt == other.createdAt && createdBy == other.createdBy && description == other.description && fiatCreditType == other.fiatCreditType && creditTypeConversions == other.creditTypeConversions && aliases == other.aliases && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(id, name, rateCardEntries, createdAt, createdBy, description, fiatCreditType, creditTypeConversions, aliases, customFields, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(id, name, rateCardEntries, createdAt, createdBy, description, fiatCreditType, creditTypeConversions, aliases, customFields, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "ContractRateCardListResponse{id=$id, name=$name, rateCardEntries=$rateCardEntries, createdAt=$createdAt, createdBy=$createdBy, description=$description, fiatCreditType=$fiatCreditType, creditTypeConversions=$creditTypeConversions, aliases=$aliases, customFields=$customFields, additionalProperties=$additionalProperties}"

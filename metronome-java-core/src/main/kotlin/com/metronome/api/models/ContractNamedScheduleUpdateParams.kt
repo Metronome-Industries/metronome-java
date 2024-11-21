@@ -166,17 +166,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractNamedScheduleUpdateBody && this.rateCardId == other.rateCardId && this.scheduleName == other.scheduleName && this.startingAt == other.startingAt && this.value == other.value && this.endingBefore == other.endingBefore && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractNamedScheduleUpdateBody && rateCardId == other.rateCardId && scheduleName == other.scheduleName && startingAt == other.startingAt && value == other.value && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(rateCardId, scheduleName, startingAt, value, endingBefore, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(rateCardId, scheduleName, startingAt, value, endingBefore, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "ContractNamedScheduleUpdateBody{rateCardId=$rateCardId, scheduleName=$scheduleName, startingAt=$startingAt, value=$value, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
@@ -193,12 +190,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractNamedScheduleUpdateParams && this.rateCardId == other.rateCardId && this.scheduleName == other.scheduleName && this.startingAt == other.startingAt && this.value == other.value && this.endingBefore == other.endingBefore && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractNamedScheduleUpdateParams && rateCardId == other.rateCardId && scheduleName == other.scheduleName && startingAt == other.startingAt && value == other.value && endingBefore == other.endingBefore && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(rateCardId, scheduleName, startingAt, value, endingBefore, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(rateCardId, scheduleName, startingAt, value, endingBefore, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "ContractNamedScheduleUpdateParams{rateCardId=$rateCardId, scheduleName=$scheduleName, startingAt=$startingAt, value=$value, endingBefore=$endingBefore, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

@@ -173,17 +173,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is DashboardGetEmbeddableUrlBody && this.customerId == other.customerId && this.dashboard == other.dashboard && this.bmGroupKeyOverrides == other.bmGroupKeyOverrides && this.colorOverrides == other.colorOverrides && this.dashboardOptions == other.dashboardOptions && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is DashboardGetEmbeddableUrlBody && customerId == other.customerId && dashboard == other.dashboard && bmGroupKeyOverrides == other.bmGroupKeyOverrides && colorOverrides == other.colorOverrides && dashboardOptions == other.dashboardOptions && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(customerId, dashboard, bmGroupKeyOverrides, colorOverrides, dashboardOptions, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(customerId, dashboard, bmGroupKeyOverrides, colorOverrides, dashboardOptions, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "DashboardGetEmbeddableUrlBody{customerId=$customerId, dashboard=$dashboard, bmGroupKeyOverrides=$bmGroupKeyOverrides, colorOverrides=$colorOverrides, dashboardOptions=$dashboardOptions, additionalProperties=$additionalProperties}"
@@ -200,12 +197,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is DashboardGetEmbeddableUrlParams && this.customerId == other.customerId && this.dashboard == other.dashboard && this.bmGroupKeyOverrides == other.bmGroupKeyOverrides && this.colorOverrides == other.colorOverrides && this.dashboardOptions == other.dashboardOptions && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is DashboardGetEmbeddableUrlParams && customerId == other.customerId && dashboard == other.dashboard && bmGroupKeyOverrides == other.bmGroupKeyOverrides && colorOverrides == other.colorOverrides && dashboardOptions == other.dashboardOptions && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, dashboard, bmGroupKeyOverrides, colorOverrides, dashboardOptions, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, dashboard, bmGroupKeyOverrides, colorOverrides, dashboardOptions, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "DashboardGetEmbeddableUrlParams{customerId=$customerId, dashboard=$dashboard, bmGroupKeyOverrides=$bmGroupKeyOverrides, colorOverrides=$colorOverrides, dashboardOptions=$dashboardOptions, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
@@ -428,7 +423,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Dashboard && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is Dashboard && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -622,17 +617,14 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ValueDisplayNames && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is ValueDisplayNames && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "ValueDisplayNames{additionalProperties=$additionalProperties}"
@@ -643,17 +635,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is BmGroupKeyOverride && this.groupKeyName == other.groupKeyName && this.displayName == other.displayName && this.valueDisplayNames == other.valueDisplayNames && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is BmGroupKeyOverride && groupKeyName == other.groupKeyName && displayName == other.displayName && valueDisplayNames == other.valueDisplayNames && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(groupKeyName, displayName, valueDisplayNames, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(groupKeyName, displayName, valueDisplayNames, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "BmGroupKeyOverride{groupKeyName=$groupKeyName, displayName=$displayName, valueDisplayNames=$valueDisplayNames, additionalProperties=$additionalProperties}"
@@ -739,7 +728,7 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Name && this.value == other.value /* spotless:on */
+                return /* spotless:off */ other is Name && value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -890,17 +879,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ColorOverride && this.name == other.name && this.value == other.value && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ColorOverride && name == other.name && value == other.value && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(name, value, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(name, value, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "ColorOverride{name=$name, value=$value, additionalProperties=$additionalProperties}"
@@ -978,17 +964,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is DashboardOption && this.key == other.key && this.value == other.value && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is DashboardOption && key == other.key && value == other.value && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(key, value, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(key, value, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "DashboardOption{key=$key, value=$value, additionalProperties=$additionalProperties}"

@@ -129,17 +129,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomFieldSetValuesBody && this.customFields == other.customFields && this.entity == other.entity && this.entityId == other.entityId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomFieldSetValuesBody && customFields == other.customFields && entity == other.entity && entityId == other.entityId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(customFields, entity, entityId, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(customFields, entity, entityId, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CustomFieldSetValuesBody{customFields=$customFields, entity=$entity, entityId=$entityId, additionalProperties=$additionalProperties}"
@@ -156,12 +153,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomFieldSetValuesParams && this.customFields == other.customFields && this.entity == other.entity && this.entityId == other.entityId && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomFieldSetValuesParams && customFields == other.customFields && entity == other.entity && entityId == other.entityId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customFields, entity, entityId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customFields, entity, entityId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "CustomFieldSetValuesParams{customFields=$customFields, entity=$entity, entityId=$entityId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
@@ -379,17 +374,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomFields && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
@@ -407,7 +399,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Entity && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is Entity && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

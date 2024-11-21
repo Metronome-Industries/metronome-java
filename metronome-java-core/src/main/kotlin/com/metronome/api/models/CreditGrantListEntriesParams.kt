@@ -182,17 +182,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CreditGrantListEntriesBody && this.creditTypeIds == other.creditTypeIds && this.customerIds == other.customerIds && this.endingBefore == other.endingBefore && this.startingOn == other.startingOn && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CreditGrantListEntriesBody && creditTypeIds == other.creditTypeIds && customerIds == other.customerIds && endingBefore == other.endingBefore && startingOn == other.startingOn && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(creditTypeIds, customerIds, endingBefore, startingOn, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(creditTypeIds, customerIds, endingBefore, startingOn, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CreditGrantListEntriesBody{creditTypeIds=$creditTypeIds, customerIds=$customerIds, endingBefore=$endingBefore, startingOn=$startingOn, additionalProperties=$additionalProperties}"
@@ -209,12 +206,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditGrantListEntriesParams && this.creditTypeIds == other.creditTypeIds && this.customerIds == other.customerIds && this.endingBefore == other.endingBefore && this.startingOn == other.startingOn && this.nextPage == other.nextPage && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CreditGrantListEntriesParams && creditTypeIds == other.creditTypeIds && customerIds == other.customerIds && endingBefore == other.endingBefore && startingOn == other.startingOn && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(creditTypeIds, customerIds, endingBefore, startingOn, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(creditTypeIds, customerIds, endingBefore, startingOn, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "CreditGrantListEntriesParams{creditTypeIds=$creditTypeIds, customerIds=$customerIds, endingBefore=$endingBefore, startingOn=$startingOn, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

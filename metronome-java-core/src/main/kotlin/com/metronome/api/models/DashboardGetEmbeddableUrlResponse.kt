@@ -154,17 +154,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && this.url == other.url && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(url, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(url, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "Data{url=$url, additionalProperties=$additionalProperties}"
     }
@@ -174,17 +171,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is DashboardGetEmbeddableUrlResponse && this.data == other.data && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is DashboardGetEmbeddableUrlResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(data, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(data, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "DashboardGetEmbeddableUrlResponse{data=$data, additionalProperties=$additionalProperties}"

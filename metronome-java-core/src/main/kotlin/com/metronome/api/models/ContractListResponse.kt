@@ -915,7 +915,7 @@ private constructor(
                             return true
                         }
 
-                        return /* spotless:off */ other is ResellerType && this.value == other.value /* spotless:on */
+                        return /* spotless:off */ other is ResellerType && value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -979,17 +979,14 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is ResellerRoyalty && this.resellerType == other.resellerType && this.fraction == other.fraction && this.netsuiteResellerId == other.netsuiteResellerId && this.startingAt == other.startingAt && this.endingBefore == other.endingBefore && this.resellerContractValue == other.resellerContractValue && this.awsAccountNumber == other.awsAccountNumber && this.awsPayerReferenceId == other.awsPayerReferenceId && this.awsOfferId == other.awsOfferId && this.gcpAccountId == other.gcpAccountId && this.gcpOfferId == other.gcpOfferId && this.additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is ResellerRoyalty && resellerType == other.resellerType && fraction == other.fraction && netsuiteResellerId == other.netsuiteResellerId && startingAt == other.startingAt && endingBefore == other.endingBefore && resellerContractValue == other.resellerContractValue && awsAccountNumber == other.awsAccountNumber && awsPayerReferenceId == other.awsPayerReferenceId && awsOfferId == other.awsOfferId && gcpAccountId == other.gcpAccountId && gcpOfferId == other.gcpOfferId && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
-                private var hashCode: Int = 0
+                /* spotless:off */
+                private val hashCode: Int by lazy { Objects.hash(resellerType, fraction, netsuiteResellerId, startingAt, endingBefore, resellerContractValue, awsAccountNumber, awsPayerReferenceId, awsOfferId, gcpAccountId, gcpOfferId, additionalProperties) }
+                /* spotless:on */
 
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = /* spotless:off */ Objects.hash(resellerType, fraction, netsuiteResellerId, startingAt, endingBefore, resellerContractValue, awsAccountNumber, awsPayerReferenceId, awsOfferId, gcpAccountId, gcpOfferId, additionalProperties) /* spotless:on */
-                    }
-                    return hashCode
-                }
+                override fun hashCode(): Int = hashCode
 
                 override fun toString() =
                     "ResellerRoyalty{resellerType=$resellerType, fraction=$fraction, netsuiteResellerId=$netsuiteResellerId, startingAt=$startingAt, endingBefore=$endingBefore, resellerContractValue=$resellerContractValue, awsAccountNumber=$awsAccountNumber, awsPayerReferenceId=$awsPayerReferenceId, awsOfferId=$awsOfferId, gcpAccountId=$gcpAccountId, gcpOfferId=$gcpOfferId, additionalProperties=$additionalProperties}"
@@ -1000,17 +997,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Amendment && this.id == other.id && this.salesforceOpportunityId == other.salesforceOpportunityId && this.startingAt == other.startingAt && this.commits == other.commits && this.credits == other.credits && this.overrides == other.overrides && this.discounts == other.discounts && this.professionalServices == other.professionalServices && this.scheduledCharges == other.scheduledCharges && this.resellerRoyalties == other.resellerRoyalties && this.createdAt == other.createdAt && this.createdBy == other.createdBy && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Amendment && id == other.id && salesforceOpportunityId == other.salesforceOpportunityId && startingAt == other.startingAt && commits == other.commits && credits == other.credits && overrides == other.overrides && discounts == other.discounts && professionalServices == other.professionalServices && scheduledCharges == other.scheduledCharges && resellerRoyalties == other.resellerRoyalties && createdAt == other.createdAt && createdBy == other.createdBy && netsuiteSalesOrderId == other.netsuiteSalesOrderId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(id, salesforceOpportunityId, startingAt, commits, credits, overrides, discounts, professionalServices, scheduledCharges, resellerRoyalties, createdAt, createdBy, netsuiteSalesOrderId, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(id, salesforceOpportunityId, startingAt, commits, credits, overrides, discounts, professionalServices, scheduledCharges, resellerRoyalties, createdAt, createdBy, netsuiteSalesOrderId, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "Amendment{id=$id, salesforceOpportunityId=$salesforceOpportunityId, startingAt=$startingAt, commits=$commits, credits=$credits, overrides=$overrides, discounts=$discounts, professionalServices=$professionalServices, scheduledCharges=$scheduledCharges, resellerRoyalties=$resellerRoyalties, createdAt=$createdAt, createdBy=$createdBy, netsuiteSalesOrderId=$netsuiteSalesOrderId, additionalProperties=$additionalProperties}"
@@ -1074,17 +1068,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is CustomFields && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
         }
@@ -1199,7 +1190,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is BillingProvider && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is BillingProvider && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -1295,7 +1286,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is DeliveryMethod && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is DeliveryMethod && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -1359,17 +1350,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is CustomerBillingProviderConfiguration && this.billingProvider == other.billingProvider && this.deliveryMethod == other.deliveryMethod && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is CustomerBillingProviderConfiguration && billingProvider == other.billingProvider && deliveryMethod == other.deliveryMethod && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(billingProvider, deliveryMethod, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(billingProvider, deliveryMethod, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "CustomerBillingProviderConfiguration{billingProvider=$billingProvider, deliveryMethod=$deliveryMethod, additionalProperties=$additionalProperties}"
@@ -1380,17 +1368,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && this.id == other.id && this.customerId == other.customerId && this.uniquenessKey == other.uniquenessKey && this.initial == other.initial && this.current == other.current && this.amendments == other.amendments && this.customFields == other.customFields && this.customerBillingProviderConfiguration == other.customerBillingProviderConfiguration && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && id == other.id && customerId == other.customerId && uniquenessKey == other.uniquenessKey && initial == other.initial && current == other.current && amendments == other.amendments && customFields == other.customFields && customerBillingProviderConfiguration == other.customerBillingProviderConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, customerId, uniquenessKey, initial, current, amendments, customFields, customerBillingProviderConfiguration, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(id, customerId, uniquenessKey, initial, current, amendments, customFields, customerBillingProviderConfiguration, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Data{id=$id, customerId=$customerId, uniquenessKey=$uniquenessKey, initial=$initial, current=$current, amendments=$amendments, customFields=$customFields, customerBillingProviderConfiguration=$customerBillingProviderConfiguration, additionalProperties=$additionalProperties}"
@@ -1401,17 +1386,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractListResponse && this.data == other.data && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ContractListResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(data, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(data, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "ContractListResponse{data=$data, additionalProperties=$additionalProperties}"

@@ -600,17 +600,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Product && this.id == other.id && this.name == other.name && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Product && id == other.id && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, name, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(id, name, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Product{id=$id, name=$name, additionalProperties=$additionalProperties}"
@@ -629,7 +626,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is Type && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -744,17 +741,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Contract && this.id == other.id && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Contract && id == other.id && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(id, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "Contract{id=$id, additionalProperties=$additionalProperties}"
     }
@@ -816,17 +810,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomFields && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
@@ -903,17 +894,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is InvoiceContract && this.id == other.id && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is InvoiceContract && id == other.id && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(id, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "InvoiceContract{id=$id, additionalProperties=$additionalProperties}"
@@ -1160,15 +1148,13 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Ledger && this.prepaidCommitSegmentStartLedgerEntry == other.prepaidCommitSegmentStartLedgerEntry && this.prepaidCommitAutomatedInvoiceDeductionLedgerEntry == other.prepaidCommitAutomatedInvoiceDeductionLedgerEntry && this.prepaidCommitRolloverLedgerEntry == other.prepaidCommitRolloverLedgerEntry && this.prepaidCommitExpirationLedgerEntry == other.prepaidCommitExpirationLedgerEntry && this.prepaidCommitCanceledLedgerEntry == other.prepaidCommitCanceledLedgerEntry && this.prepaidCommitCreditedLedgerEntry == other.prepaidCommitCreditedLedgerEntry && this.postpaidCommitInitialBalanceLedgerEntry == other.postpaidCommitInitialBalanceLedgerEntry && this.postpaidCommitAutomatedInvoiceDeductionLedgerEntry == other.postpaidCommitAutomatedInvoiceDeductionLedgerEntry && this.postpaidCommitRolloverLedgerEntry == other.postpaidCommitRolloverLedgerEntry && this.postpaidCommitTrueupLedgerEntry == other.postpaidCommitTrueupLedgerEntry && this.prepaidCommitManualLedgerEntry == other.prepaidCommitManualLedgerEntry && this.postpaidCommitManualLedgerEntry == other.postpaidCommitManualLedgerEntry && this.postpaidCommitExpirationLedgerEntry == other.postpaidCommitExpirationLedgerEntry /* spotless:on */
+            return /* spotless:off */ other is Ledger && prepaidCommitSegmentStartLedgerEntry == other.prepaidCommitSegmentStartLedgerEntry && prepaidCommitAutomatedInvoiceDeductionLedgerEntry == other.prepaidCommitAutomatedInvoiceDeductionLedgerEntry && prepaidCommitRolloverLedgerEntry == other.prepaidCommitRolloverLedgerEntry && prepaidCommitExpirationLedgerEntry == other.prepaidCommitExpirationLedgerEntry && prepaidCommitCanceledLedgerEntry == other.prepaidCommitCanceledLedgerEntry && prepaidCommitCreditedLedgerEntry == other.prepaidCommitCreditedLedgerEntry && postpaidCommitInitialBalanceLedgerEntry == other.postpaidCommitInitialBalanceLedgerEntry && postpaidCommitAutomatedInvoiceDeductionLedgerEntry == other.postpaidCommitAutomatedInvoiceDeductionLedgerEntry && postpaidCommitRolloverLedgerEntry == other.postpaidCommitRolloverLedgerEntry && postpaidCommitTrueupLedgerEntry == other.postpaidCommitTrueupLedgerEntry && prepaidCommitManualLedgerEntry == other.prepaidCommitManualLedgerEntry && postpaidCommitManualLedgerEntry == other.postpaidCommitManualLedgerEntry && postpaidCommitExpirationLedgerEntry == other.postpaidCommitExpirationLedgerEntry /* spotless:on */
         }
 
-        override fun hashCode(): Int {
-            return /* spotless:off */ Objects.hash(prepaidCommitSegmentStartLedgerEntry, prepaidCommitAutomatedInvoiceDeductionLedgerEntry, prepaidCommitRolloverLedgerEntry, prepaidCommitExpirationLedgerEntry, prepaidCommitCanceledLedgerEntry, prepaidCommitCreditedLedgerEntry, postpaidCommitInitialBalanceLedgerEntry, postpaidCommitAutomatedInvoiceDeductionLedgerEntry, postpaidCommitRolloverLedgerEntry, postpaidCommitTrueupLedgerEntry, prepaidCommitManualLedgerEntry, postpaidCommitManualLedgerEntry, postpaidCommitExpirationLedgerEntry) /* spotless:on */
-        }
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(prepaidCommitSegmentStartLedgerEntry, prepaidCommitAutomatedInvoiceDeductionLedgerEntry, prepaidCommitRolloverLedgerEntry, prepaidCommitExpirationLedgerEntry, prepaidCommitCanceledLedgerEntry, prepaidCommitCreditedLedgerEntry, postpaidCommitInitialBalanceLedgerEntry, postpaidCommitAutomatedInvoiceDeductionLedgerEntry, postpaidCommitRolloverLedgerEntry, postpaidCommitTrueupLedgerEntry, prepaidCommitManualLedgerEntry, postpaidCommitManualLedgerEntry, postpaidCommitExpirationLedgerEntry) /* spotless:on */
 
-        override fun toString(): String {
-            return when {
+        override fun toString(): String =
+            when {
                 prepaidCommitSegmentStartLedgerEntry != null ->
                     "Ledger{prepaidCommitSegmentStartLedgerEntry=$prepaidCommitSegmentStartLedgerEntry}"
                 prepaidCommitAutomatedInvoiceDeductionLedgerEntry != null ->
@@ -1198,7 +1184,6 @@ private constructor(
                 _json != null -> "Ledger{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Ledger")
             }
-        }
 
         companion object {
 
@@ -1620,7 +1605,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -1665,17 +1650,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PrepaidCommitSegmentStartLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PrepaidCommitSegmentStartLedgerEntry && type == other.type && timestamp == other.timestamp && amount == other.amount && segmentId == other.segmentId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(type, timestamp, amount, segmentId, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PrepaidCommitSegmentStartLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, additionalProperties=$additionalProperties}"
@@ -1832,7 +1814,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -1879,17 +1861,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PrepaidCommitAutomatedInvoiceDeductionLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.invoiceId == other.invoiceId && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PrepaidCommitAutomatedInvoiceDeductionLedgerEntry && type == other.type && timestamp == other.timestamp && amount == other.amount && segmentId == other.segmentId && invoiceId == other.invoiceId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(type, timestamp, amount, segmentId, invoiceId, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, invoiceId, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PrepaidCommitAutomatedInvoiceDeductionLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
@@ -2046,7 +2025,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2090,17 +2069,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PrepaidCommitRolloverLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.newContractId == other.newContractId && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PrepaidCommitRolloverLedgerEntry && type == other.type && timestamp == other.timestamp && amount == other.amount && segmentId == other.segmentId && newContractId == other.newContractId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(type, timestamp, amount, segmentId, newContractId, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, newContractId, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PrepaidCommitRolloverLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, newContractId=$newContractId, additionalProperties=$additionalProperties}"
@@ -2239,7 +2215,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2283,17 +2259,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PrepaidCommitExpirationLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PrepaidCommitExpirationLedgerEntry && type == other.type && timestamp == other.timestamp && amount == other.amount && segmentId == other.segmentId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(type, timestamp, amount, segmentId, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PrepaidCommitExpirationLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, additionalProperties=$additionalProperties}"
@@ -2447,7 +2420,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2491,17 +2464,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PrepaidCommitCanceledLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.invoiceId == other.invoiceId && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PrepaidCommitCanceledLedgerEntry && type == other.type && timestamp == other.timestamp && amount == other.amount && segmentId == other.segmentId && invoiceId == other.invoiceId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(type, timestamp, amount, segmentId, invoiceId, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, invoiceId, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PrepaidCommitCanceledLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
@@ -2655,7 +2625,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2699,17 +2669,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PrepaidCommitCreditedLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.invoiceId == other.invoiceId && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PrepaidCommitCreditedLedgerEntry && type == other.type && timestamp == other.timestamp && amount == other.amount && segmentId == other.segmentId && invoiceId == other.invoiceId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(type, timestamp, amount, segmentId, invoiceId, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, invoiceId, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PrepaidCommitCreditedLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
@@ -2835,7 +2802,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2880,17 +2847,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PostpaidCommitInitialBalanceLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PostpaidCommitInitialBalanceLedgerEntry && type == other.type && timestamp == other.timestamp && amount == other.amount && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(type, timestamp, amount, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PostpaidCommitInitialBalanceLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, additionalProperties=$additionalProperties}"
@@ -3049,7 +3013,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3096,17 +3060,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PostpaidCommitAutomatedInvoiceDeductionLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.invoiceId == other.invoiceId && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PostpaidCommitAutomatedInvoiceDeductionLedgerEntry && type == other.type && timestamp == other.timestamp && amount == other.amount && segmentId == other.segmentId && invoiceId == other.invoiceId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(type, timestamp, amount, segmentId, invoiceId, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, invoiceId, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PostpaidCommitAutomatedInvoiceDeductionLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
@@ -3263,7 +3224,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3307,17 +3268,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PostpaidCommitRolloverLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.segmentId == other.segmentId && this.newContractId == other.newContractId && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PostpaidCommitRolloverLedgerEntry && type == other.type && timestamp == other.timestamp && amount == other.amount && segmentId == other.segmentId && newContractId == other.newContractId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(type, timestamp, amount, segmentId, newContractId, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, segmentId, newContractId, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PostpaidCommitRolloverLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, segmentId=$segmentId, newContractId=$newContractId, additionalProperties=$additionalProperties}"
@@ -3456,7 +3414,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3500,17 +3458,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PostpaidCommitTrueupLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.invoiceId == other.invoiceId && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PostpaidCommitTrueupLedgerEntry && type == other.type && timestamp == other.timestamp && amount == other.amount && invoiceId == other.invoiceId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(type, timestamp, amount, invoiceId, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, invoiceId, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PostpaidCommitTrueupLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
@@ -3648,7 +3603,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3692,17 +3647,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PrepaidCommitManualLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.reason == other.reason && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PrepaidCommitManualLedgerEntry && type == other.type && timestamp == other.timestamp && amount == other.amount && reason == other.reason && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(type, timestamp, amount, reason, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, reason, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PrepaidCommitManualLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, reason=$reason, additionalProperties=$additionalProperties}"
@@ -3841,7 +3793,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3885,17 +3837,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PostpaidCommitManualLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.reason == other.reason && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PostpaidCommitManualLedgerEntry && type == other.type && timestamp == other.timestamp && amount == other.amount && reason == other.reason && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(type, timestamp, amount, reason, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, reason, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PostpaidCommitManualLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, reason=$reason, additionalProperties=$additionalProperties}"
@@ -4019,7 +3968,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -4064,17 +4013,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PostpaidCommitExpirationLedgerEntry && this.type == other.type && this.timestamp == other.timestamp && this.amount == other.amount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PostpaidCommitExpirationLedgerEntry && type == other.type && timestamp == other.timestamp && amount == other.amount && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(type, timestamp, amount, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(type, timestamp, amount, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PostpaidCommitExpirationLedgerEntry{type=$type, timestamp=$timestamp, amount=$amount, additionalProperties=$additionalProperties}"
@@ -4094,7 +4040,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is RateType && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is RateType && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -4228,17 +4174,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is RolledOverFrom && this.commitId == other.commitId && this.contractId == other.contractId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is RolledOverFrom && commitId == other.commitId && contractId == other.contractId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(commitId, contractId, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(commitId, contractId, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "RolledOverFrom{commitId=$commitId, contractId=$contractId, additionalProperties=$additionalProperties}"
@@ -4249,17 +4192,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Commit && this.id == other.id && this.contract == other.contract && this.type == other.type && this.rateType == other.rateType && this.name == other.name && this.priority == other.priority && this.product == other.product && this.accessSchedule == other.accessSchedule && this.invoiceSchedule == other.invoiceSchedule && this.invoiceContract == other.invoiceContract && this.rolledOverFrom == other.rolledOverFrom && this.description == other.description && this.rolloverFraction == other.rolloverFraction && this.applicableProductIds == other.applicableProductIds && this.applicableProductTags == other.applicableProductTags && this.applicableContractIds == other.applicableContractIds && this.netsuiteSalesOrderId == other.netsuiteSalesOrderId && this.amount == other.amount && this.salesforceOpportunityId == other.salesforceOpportunityId && this.ledger == other.ledger && this.customFields == other.customFields && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Commit && id == other.id && contract == other.contract && type == other.type && rateType == other.rateType && name == other.name && priority == other.priority && product == other.product && accessSchedule == other.accessSchedule && invoiceSchedule == other.invoiceSchedule && invoiceContract == other.invoiceContract && rolledOverFrom == other.rolledOverFrom && description == other.description && rolloverFraction == other.rolloverFraction && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && applicableContractIds == other.applicableContractIds && netsuiteSalesOrderId == other.netsuiteSalesOrderId && amount == other.amount && salesforceOpportunityId == other.salesforceOpportunityId && ledger == other.ledger && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(id, contract, type, rateType, name, priority, product, accessSchedule, invoiceSchedule, invoiceContract, rolledOverFrom, description, rolloverFraction, applicableProductIds, applicableProductTags, applicableContractIds, netsuiteSalesOrderId, amount, salesforceOpportunityId, ledger, customFields, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(id, contract, type, rateType, name, priority, product, accessSchedule, invoiceSchedule, invoiceContract, rolledOverFrom, description, rolloverFraction, applicableProductIds, applicableProductTags, applicableContractIds, netsuiteSalesOrderId, amount, salesforceOpportunityId, ledger, customFields, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "Commit{id=$id, contract=$contract, type=$type, rateType=$rateType, name=$name, priority=$priority, product=$product, accessSchedule=$accessSchedule, invoiceSchedule=$invoiceSchedule, invoiceContract=$invoiceContract, rolledOverFrom=$rolledOverFrom, description=$description, rolloverFraction=$rolloverFraction, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, applicableContractIds=$applicableContractIds, netsuiteSalesOrderId=$netsuiteSalesOrderId, amount=$amount, salesforceOpportunityId=$salesforceOpportunityId, ledger=$ledger, customFields=$customFields, additionalProperties=$additionalProperties}"

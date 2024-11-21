@@ -98,12 +98,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerInvoiceListBreakdownsParams && this.customerId == other.customerId && this.endingBefore == other.endingBefore && this.startingOn == other.startingOn && this.creditTypeId == other.creditTypeId && this.limit == other.limit && this.nextPage == other.nextPage && this.skipZeroQtyLineItems == other.skipZeroQtyLineItems && this.sort == other.sort && this.status == other.status && this.windowSize == other.windowSize && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is CustomerInvoiceListBreakdownsParams && customerId == other.customerId && endingBefore == other.endingBefore && startingOn == other.startingOn && creditTypeId == other.creditTypeId && limit == other.limit && nextPage == other.nextPage && skipZeroQtyLineItems == other.skipZeroQtyLineItems && sort == other.sort && status == other.status && windowSize == other.windowSize && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, endingBefore, startingOn, creditTypeId, limit, nextPage, skipZeroQtyLineItems, sort, status, windowSize, additionalHeaders, additionalQueryParams) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, endingBefore, startingOn, creditTypeId, limit, nextPage, skipZeroQtyLineItems, sort, status, windowSize, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
         "CustomerInvoiceListBreakdownsParams{customerId=$customerId, endingBefore=$endingBefore, startingOn=$startingOn, creditTypeId=$creditTypeId, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, status=$status, windowSize=$windowSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
@@ -318,7 +316,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Sort && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is Sort && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -375,7 +373,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is WindowSize && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is WindowSize && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

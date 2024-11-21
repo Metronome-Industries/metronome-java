@@ -53,12 +53,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerInvoiceRetrieveParams && this.customerId == other.customerId && this.invoiceId == other.invoiceId && this.skipZeroQtyLineItems == other.skipZeroQtyLineItems && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is CustomerInvoiceRetrieveParams && customerId == other.customerId && invoiceId == other.invoiceId && skipZeroQtyLineItems == other.skipZeroQtyLineItems && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, invoiceId, skipZeroQtyLineItems, additionalHeaders, additionalQueryParams) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, invoiceId, skipZeroQtyLineItems, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
         "CustomerInvoiceRetrieveParams{customerId=$customerId, invoiceId=$invoiceId, skipZeroQtyLineItems=$skipZeroQtyLineItems, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

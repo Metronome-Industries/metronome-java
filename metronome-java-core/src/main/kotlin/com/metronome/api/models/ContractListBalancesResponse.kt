@@ -159,21 +159,18 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && this.commit == other.commit && this.credit == other.credit /* spotless:on */
+            return /* spotless:off */ other is Data && commit == other.commit && credit == other.credit /* spotless:on */
         }
 
-        override fun hashCode(): Int {
-            return /* spotless:off */ Objects.hash(commit, credit) /* spotless:on */
-        }
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(commit, credit) /* spotless:on */
 
-        override fun toString(): String {
-            return when {
+        override fun toString(): String =
+            when {
                 commit != null -> "Data{commit=$commit}"
                 credit != null -> "Data{credit=$credit}"
                 _json != null -> "Data{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Data")
             }
-        }
 
         companion object {
 
@@ -233,17 +230,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractListBalancesResponse && this.data == other.data && this.nextPage == other.nextPage && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ContractListBalancesResponse && data == other.data && nextPage == other.nextPage && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(data, nextPage, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(data, nextPage, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "ContractListBalancesResponse{data=$data, nextPage=$nextPage, additionalProperties=$additionalProperties}"

@@ -221,7 +221,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Entity && this.value == other.value /* spotless:on */
+                return /* spotless:off */ other is Entity && value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -354,17 +354,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && this.entity == other.entity && this.key == other.key && this.enforceUniqueness == other.enforceUniqueness && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && entity == other.entity && key == other.key && enforceUniqueness == other.enforceUniqueness && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(entity, key, enforceUniqueness, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(entity, key, enforceUniqueness, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Data{entity=$entity, key=$key, enforceUniqueness=$enforceUniqueness, additionalProperties=$additionalProperties}"
@@ -375,17 +372,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomFieldListKeysResponse && this.data == other.data && this.nextPage == other.nextPage && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CustomFieldListKeysResponse && data == other.data && nextPage == other.nextPage && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(data, nextPage, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(data, nextPage, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "CustomFieldListKeysResponse{data=$data, nextPage=$nextPage, additionalProperties=$additionalProperties}"

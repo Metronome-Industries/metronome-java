@@ -59,12 +59,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerListBillableMetricsParams && this.customerId == other.customerId && this.includeArchived == other.includeArchived && this.limit == other.limit && this.nextPage == other.nextPage && this.onCurrentPlan == other.onCurrentPlan && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is CustomerListBillableMetricsParams && customerId == other.customerId && includeArchived == other.includeArchived && limit == other.limit && nextPage == other.nextPage && onCurrentPlan == other.onCurrentPlan && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, includeArchived, limit, nextPage, onCurrentPlan, additionalHeaders, additionalQueryParams) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, includeArchived, limit, nextPage, onCurrentPlan, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
         "CustomerListBillableMetricsParams{customerId=$customerId, includeArchived=$includeArchived, limit=$limit, nextPage=$nextPage, onCurrentPlan=$onCurrentPlan, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

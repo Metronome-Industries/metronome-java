@@ -119,17 +119,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditGrantListCreditTypesResponse && this.name == other.name && this.id == other.id && this.isCurrency == other.isCurrency && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CreditGrantListCreditTypesResponse && name == other.name && id == other.id && isCurrency == other.isCurrency && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(name, id, isCurrency, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(name, id, isCurrency, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "CreditGrantListCreditTypesResponse{name=$name, id=$id, isCurrency=$isCurrency, additionalProperties=$additionalProperties}"

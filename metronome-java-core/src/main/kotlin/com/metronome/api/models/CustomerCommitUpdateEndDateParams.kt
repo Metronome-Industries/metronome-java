@@ -167,17 +167,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerCommitUpdateEndDateBody && this.commitId == other.commitId && this.customerId == other.customerId && this.accessEndingBefore == other.accessEndingBefore && this.invoicesEndingBefore == other.invoicesEndingBefore && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomerCommitUpdateEndDateBody && commitId == other.commitId && customerId == other.customerId && accessEndingBefore == other.accessEndingBefore && invoicesEndingBefore == other.invoicesEndingBefore && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(commitId, customerId, accessEndingBefore, invoicesEndingBefore, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(commitId, customerId, accessEndingBefore, invoicesEndingBefore, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CustomerCommitUpdateEndDateBody{commitId=$commitId, customerId=$customerId, accessEndingBefore=$accessEndingBefore, invoicesEndingBefore=$invoicesEndingBefore, additionalProperties=$additionalProperties}"
@@ -194,12 +191,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCommitUpdateEndDateParams && this.commitId == other.commitId && this.customerId == other.customerId && this.accessEndingBefore == other.accessEndingBefore && this.invoicesEndingBefore == other.invoicesEndingBefore && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerCommitUpdateEndDateParams && commitId == other.commitId && customerId == other.customerId && accessEndingBefore == other.accessEndingBefore && invoicesEndingBefore == other.invoicesEndingBefore && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(commitId, customerId, accessEndingBefore, invoicesEndingBefore, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(commitId, customerId, accessEndingBefore, invoicesEndingBefore, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "CustomerCommitUpdateEndDateParams{commitId=$commitId, customerId=$customerId, accessEndingBefore=$accessEndingBefore, invoicesEndingBefore=$invoicesEndingBefore, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

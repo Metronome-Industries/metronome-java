@@ -230,17 +230,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractListBalancesBody && this.customerId == other.customerId && this.id == other.id && this.coveringDate == other.coveringDate && this.effectiveBefore == other.effectiveBefore && this.includeArchived == other.includeArchived && this.includeContractBalances == other.includeContractBalances && this.includeLedgers == other.includeLedgers && this.nextPage == other.nextPage && this.startingAt == other.startingAt && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractListBalancesBody && customerId == other.customerId && id == other.id && coveringDate == other.coveringDate && effectiveBefore == other.effectiveBefore && includeArchived == other.includeArchived && includeContractBalances == other.includeContractBalances && includeLedgers == other.includeLedgers && nextPage == other.nextPage && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(customerId, id, coveringDate, effectiveBefore, includeArchived, includeContractBalances, includeLedgers, nextPage, startingAt, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(customerId, id, coveringDate, effectiveBefore, includeArchived, includeContractBalances, includeLedgers, nextPage, startingAt, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "ContractListBalancesBody{customerId=$customerId, id=$id, coveringDate=$coveringDate, effectiveBefore=$effectiveBefore, includeArchived=$includeArchived, includeContractBalances=$includeContractBalances, includeLedgers=$includeLedgers, nextPage=$nextPage, startingAt=$startingAt, additionalProperties=$additionalProperties}"
@@ -257,12 +254,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractListBalancesParams && this.customerId == other.customerId && this.id == other.id && this.coveringDate == other.coveringDate && this.effectiveBefore == other.effectiveBefore && this.includeArchived == other.includeArchived && this.includeContractBalances == other.includeContractBalances && this.includeLedgers == other.includeLedgers && this.nextPage == other.nextPage && this.startingAt == other.startingAt && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractListBalancesParams && customerId == other.customerId && id == other.id && coveringDate == other.coveringDate && effectiveBefore == other.effectiveBefore && includeArchived == other.includeArchived && includeContractBalances == other.includeContractBalances && includeLedgers == other.includeLedgers && nextPage == other.nextPage && startingAt == other.startingAt && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, id, coveringDate, effectiveBefore, includeArchived, includeContractBalances, includeLedgers, nextPage, startingAt, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, id, coveringDate, effectiveBefore, includeArchived, includeContractBalances, includeLedgers, nextPage, startingAt, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "ContractListBalancesParams{customerId=$customerId, id=$id, coveringDate=$coveringDate, effectiveBefore=$effectiveBefore, includeArchived=$includeArchived, includeContractBalances=$includeContractBalances, includeLedgers=$includeLedgers, nextPage=$nextPage, startingAt=$startingAt, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

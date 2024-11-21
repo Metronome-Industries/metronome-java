@@ -157,17 +157,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractRateCardNamedScheduleRetrieveBody && this.contractId == other.contractId && this.customerId == other.customerId && this.scheduleName == other.scheduleName && this.coveringDate == other.coveringDate && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractRateCardNamedScheduleRetrieveBody && contractId == other.contractId && customerId == other.customerId && scheduleName == other.scheduleName && coveringDate == other.coveringDate && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(contractId, customerId, scheduleName, coveringDate, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(contractId, customerId, scheduleName, coveringDate, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "ContractRateCardNamedScheduleRetrieveBody{contractId=$contractId, customerId=$customerId, scheduleName=$scheduleName, coveringDate=$coveringDate, additionalProperties=$additionalProperties}"
@@ -184,12 +181,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardNamedScheduleRetrieveParams && this.contractId == other.contractId && this.customerId == other.customerId && this.scheduleName == other.scheduleName && this.coveringDate == other.coveringDate && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardNamedScheduleRetrieveParams && contractId == other.contractId && customerId == other.customerId && scheduleName == other.scheduleName && coveringDate == other.coveringDate && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(contractId, customerId, scheduleName, coveringDate, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, scheduleName, coveringDate, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "ContractRateCardNamedScheduleRetrieveParams{contractId=$contractId, customerId=$customerId, scheduleName=$scheduleName, coveringDate=$coveringDate, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

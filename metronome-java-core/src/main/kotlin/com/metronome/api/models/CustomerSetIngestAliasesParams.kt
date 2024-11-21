@@ -108,17 +108,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerSetIngestAliasesBody && this.ingestAliases == other.ingestAliases && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomerSetIngestAliasesBody && ingestAliases == other.ingestAliases && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(ingestAliases, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(ingestAliases, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CustomerSetIngestAliasesBody{ingestAliases=$ingestAliases, additionalProperties=$additionalProperties}"
@@ -135,12 +132,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerSetIngestAliasesParams && this.customerId == other.customerId && this.ingestAliases == other.ingestAliases && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerSetIngestAliasesParams && customerId == other.customerId && ingestAliases == other.ingestAliases && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, ingestAliases, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, ingestAliases, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "CustomerSetIngestAliasesParams{customerId=$customerId, ingestAliases=$ingestAliases, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

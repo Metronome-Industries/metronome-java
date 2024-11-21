@@ -94,12 +94,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerInvoiceListParams && this.customerId == other.customerId && this.creditTypeId == other.creditTypeId && this.endingBefore == other.endingBefore && this.limit == other.limit && this.nextPage == other.nextPage && this.skipZeroQtyLineItems == other.skipZeroQtyLineItems && this.sort == other.sort && this.startingOn == other.startingOn && this.status == other.status && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is CustomerInvoiceListParams && customerId == other.customerId && creditTypeId == other.creditTypeId && endingBefore == other.endingBefore && limit == other.limit && nextPage == other.nextPage && skipZeroQtyLineItems == other.skipZeroQtyLineItems && sort == other.sort && startingOn == other.startingOn && status == other.status && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, creditTypeId, endingBefore, limit, nextPage, skipZeroQtyLineItems, sort, startingOn, status, additionalHeaders, additionalQueryParams) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, creditTypeId, endingBefore, limit, nextPage, skipZeroQtyLineItems, sort, startingOn, status, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
         "CustomerInvoiceListParams{customerId=$customerId, creditTypeId=$creditTypeId, endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, startingOn=$startingOn, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
@@ -302,7 +300,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Sort && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is Sort && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

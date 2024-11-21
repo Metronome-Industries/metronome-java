@@ -286,7 +286,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is RateType && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is RateType && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -406,17 +406,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomRate && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomRate && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "CustomRate{additionalProperties=$additionalProperties}"
     }
@@ -479,17 +476,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is PricingGroupValues && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is PricingGroupValues && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "PricingGroupValues{additionalProperties=$additionalProperties}"
     }
@@ -499,17 +493,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Rate && this.rateType == other.rateType && this.price == other.price && this.customRate == other.customRate && this.useListPrices == other.useListPrices && this.quantity == other.quantity && this.isProrated == other.isProrated && this.tiers == other.tiers && this.pricingGroupValues == other.pricingGroupValues && this.creditType == other.creditType && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Rate && rateType == other.rateType && price == other.price && customRate == other.customRate && useListPrices == other.useListPrices && quantity == other.quantity && isProrated == other.isProrated && tiers == other.tiers && pricingGroupValues == other.pricingGroupValues && creditType == other.creditType && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(rateType, price, customRate, useListPrices, quantity, isProrated, tiers, pricingGroupValues, creditType, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(rateType, price, customRate, useListPrices, quantity, isProrated, tiers, pricingGroupValues, creditType, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "Rate{rateType=$rateType, price=$price, customRate=$customRate, useListPrices=$useListPrices, quantity=$quantity, isProrated=$isProrated, tiers=$tiers, pricingGroupValues=$pricingGroupValues, creditType=$creditType, additionalProperties=$additionalProperties}"

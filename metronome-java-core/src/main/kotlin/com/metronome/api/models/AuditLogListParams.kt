@@ -78,12 +78,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is AuditLogListParams && this.endingBefore == other.endingBefore && this.limit == other.limit && this.nextPage == other.nextPage && this.resourceId == other.resourceId && this.resourceType == other.resourceType && this.sort == other.sort && this.startingOn == other.startingOn && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is AuditLogListParams && endingBefore == other.endingBefore && limit == other.limit && nextPage == other.nextPage && resourceId == other.resourceId && resourceType == other.resourceType && sort == other.sort && startingOn == other.startingOn && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(endingBefore, limit, nextPage, resourceId, resourceType, sort, startingOn, additionalHeaders, additionalQueryParams) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(endingBefore, limit, nextPage, resourceId, resourceType, sort, startingOn, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
         "AuditLogListParams{endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, resourceId=$resourceId, resourceType=$resourceType, sort=$sort, startingOn=$startingOn, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
@@ -275,7 +273,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Sort && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is Sort && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

@@ -71,12 +71,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerListCostsParams && this.customerId == other.customerId && this.endingBefore == other.endingBefore && this.startingOn == other.startingOn && this.limit == other.limit && this.nextPage == other.nextPage && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is CustomerListCostsParams && customerId == other.customerId && endingBefore == other.endingBefore && startingOn == other.startingOn && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, endingBefore, startingOn, limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, endingBefore, startingOn, limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
         "CustomerListCostsParams{customerId=$customerId, endingBefore=$endingBefore, startingOn=$startingOn, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

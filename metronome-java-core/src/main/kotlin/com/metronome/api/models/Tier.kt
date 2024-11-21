@@ -105,17 +105,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Tier && this.size == other.size && this.price == other.price && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Tier && size == other.size && price == other.price && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(size, price, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(size, price, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "Tier{size=$size, price=$price, additionalProperties=$additionalProperties}"

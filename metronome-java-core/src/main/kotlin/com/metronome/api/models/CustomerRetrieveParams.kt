@@ -37,12 +37,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerRetrieveParams && this.customerId == other.customerId && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is CustomerRetrieveParams && customerId == other.customerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, additionalHeaders, additionalQueryParams) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
         "CustomerRetrieveParams{customerId=$customerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

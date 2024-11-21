@@ -256,17 +256,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerPlanAddBody && this.planId == other.planId && this.startingOn == other.startingOn && this.endingBefore == other.endingBefore && this.netPaymentTermsDays == other.netPaymentTermsDays && this.overageRateAdjustments == other.overageRateAdjustments && this.priceAdjustments == other.priceAdjustments && this.trialSpec == other.trialSpec && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomerPlanAddBody && planId == other.planId && startingOn == other.startingOn && endingBefore == other.endingBefore && netPaymentTermsDays == other.netPaymentTermsDays && overageRateAdjustments == other.overageRateAdjustments && priceAdjustments == other.priceAdjustments && trialSpec == other.trialSpec && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(planId, startingOn, endingBefore, netPaymentTermsDays, overageRateAdjustments, priceAdjustments, trialSpec, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(planId, startingOn, endingBefore, netPaymentTermsDays, overageRateAdjustments, priceAdjustments, trialSpec, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CustomerPlanAddBody{planId=$planId, startingOn=$startingOn, endingBefore=$endingBefore, netPaymentTermsDays=$netPaymentTermsDays, overageRateAdjustments=$overageRateAdjustments, priceAdjustments=$priceAdjustments, trialSpec=$trialSpec, additionalProperties=$additionalProperties}"
@@ -283,12 +280,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerPlanAddParams && this.customerId == other.customerId && this.planId == other.planId && this.startingOn == other.startingOn && this.endingBefore == other.endingBefore && this.netPaymentTermsDays == other.netPaymentTermsDays && this.overageRateAdjustments == other.overageRateAdjustments && this.priceAdjustments == other.priceAdjustments && this.trialSpec == other.trialSpec && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerPlanAddParams && customerId == other.customerId && planId == other.planId && startingOn == other.startingOn && endingBefore == other.endingBefore && netPaymentTermsDays == other.netPaymentTermsDays && overageRateAdjustments == other.overageRateAdjustments && priceAdjustments == other.priceAdjustments && trialSpec == other.trialSpec && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, planId, startingOn, endingBefore, netPaymentTermsDays, overageRateAdjustments, priceAdjustments, trialSpec, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, planId, startingOn, endingBefore, netPaymentTermsDays, overageRateAdjustments, priceAdjustments, trialSpec, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "CustomerPlanAddParams{customerId=$customerId, planId=$planId, startingOn=$startingOn, endingBefore=$endingBefore, netPaymentTermsDays=$netPaymentTermsDays, overageRateAdjustments=$overageRateAdjustments, priceAdjustments=$priceAdjustments, trialSpec=$trialSpec, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
@@ -629,17 +624,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is OverageRateAdjustment && this.customCreditTypeId == other.customCreditTypeId && this.fiatCurrencyCreditTypeId == other.fiatCurrencyCreditTypeId && this.toFiatConversionFactor == other.toFiatConversionFactor && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is OverageRateAdjustment && customCreditTypeId == other.customCreditTypeId && fiatCurrencyCreditTypeId == other.fiatCurrencyCreditTypeId && toFiatConversionFactor == other.toFiatConversionFactor && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(customCreditTypeId, fiatCurrencyCreditTypeId, toFiatConversionFactor, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(customCreditTypeId, fiatCurrencyCreditTypeId, toFiatConversionFactor, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "OverageRateAdjustment{customCreditTypeId=$customCreditTypeId, fiatCurrencyCreditTypeId=$fiatCurrencyCreditTypeId, toFiatConversionFactor=$toFiatConversionFactor, additionalProperties=$additionalProperties}"
@@ -779,7 +771,7 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is AdjustmentType && this.value == other.value /* spotless:on */
+                return /* spotless:off */ other is AdjustmentType && value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -840,17 +832,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is PriceAdjustment && this.chargeId == other.chargeId && this.adjustmentType == other.adjustmentType && this.value == other.value && this.quantity == other.quantity && this.tier == other.tier && this.startPeriod == other.startPeriod && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is PriceAdjustment && chargeId == other.chargeId && adjustmentType == other.adjustmentType && value == other.value && quantity == other.quantity && tier == other.tier && startPeriod == other.startPeriod && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(chargeId, adjustmentType, value, quantity, tier, startPeriod, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(chargeId, adjustmentType, value, quantity, tier, startPeriod, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "PriceAdjustment{chargeId=$chargeId, adjustmentType=$adjustmentType, value=$value, quantity=$quantity, tier=$tier, startPeriod=$startPeriod, additionalProperties=$additionalProperties}"
@@ -1007,17 +996,14 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is SpendingCap && this.creditTypeId == other.creditTypeId && this.amount == other.amount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is SpendingCap && creditTypeId == other.creditTypeId && amount == other.amount && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(creditTypeId, amount, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(creditTypeId, amount, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "SpendingCap{creditTypeId=$creditTypeId, amount=$amount, additionalProperties=$additionalProperties}"
@@ -1028,17 +1014,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is TrialSpec && this.lengthInDays == other.lengthInDays && this.spendingCap == other.spendingCap && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is TrialSpec && lengthInDays == other.lengthInDays && spendingCap == other.spendingCap && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(lengthInDays, spendingCap, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(lengthInDays, spendingCap, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "TrialSpec{lengthInDays=$lengthInDays, spendingCap=$spendingCap, additionalProperties=$additionalProperties}"

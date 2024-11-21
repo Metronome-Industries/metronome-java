@@ -397,7 +397,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is AwsRegion && this.value == other.value /* spotless:on */
+                return /* spotless:off */ other is AwsRegion && value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -592,7 +592,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is AzureSubscriptionStatus && this.value == other.value /* spotless:on */
+                return /* spotless:off */ other is AzureSubscriptionStatus && value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -666,7 +666,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is StripeCollectionMethod && this.value == other.value /* spotless:on */
+                return /* spotless:off */ other is StripeCollectionMethod && value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -720,17 +720,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && this.billingProviderCustomerId == other.billingProviderCustomerId && this.stripeCollectionMethod == other.stripeCollectionMethod && this.awsProductCode == other.awsProductCode && this.awsRegion == other.awsRegion && this.awsExpirationDate == other.awsExpirationDate && this.azureSubscriptionStatus == other.azureSubscriptionStatus && this.azurePlanId == other.azurePlanId && this.azureStartDate == other.azureStartDate && this.azureExpirationDate == other.azureExpirationDate && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && billingProviderCustomerId == other.billingProviderCustomerId && stripeCollectionMethod == other.stripeCollectionMethod && awsProductCode == other.awsProductCode && awsRegion == other.awsRegion && awsExpirationDate == other.awsExpirationDate && azureSubscriptionStatus == other.azureSubscriptionStatus && azurePlanId == other.azurePlanId && azureStartDate == other.azureStartDate && azureExpirationDate == other.azureExpirationDate && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(billingProviderCustomerId, stripeCollectionMethod, awsProductCode, awsRegion, awsExpirationDate, azureSubscriptionStatus, azurePlanId, azureStartDate, azureExpirationDate, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(billingProviderCustomerId, stripeCollectionMethod, awsProductCode, awsRegion, awsExpirationDate, azureSubscriptionStatus, azurePlanId, azureStartDate, azureExpirationDate, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Data{billingProviderCustomerId=$billingProviderCustomerId, stripeCollectionMethod=$stripeCollectionMethod, awsProductCode=$awsProductCode, awsRegion=$awsRegion, awsExpirationDate=$awsExpirationDate, azureSubscriptionStatus=$azureSubscriptionStatus, azurePlanId=$azurePlanId, azureStartDate=$azureStartDate, azureExpirationDate=$azureExpirationDate, additionalProperties=$additionalProperties}"
@@ -741,17 +738,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerBillingConfigRetrieveResponse && this.data == other.data && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerBillingConfigRetrieveResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(data, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(data, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "CustomerBillingConfigRetrieveResponse{data=$data, additionalProperties=$additionalProperties}"

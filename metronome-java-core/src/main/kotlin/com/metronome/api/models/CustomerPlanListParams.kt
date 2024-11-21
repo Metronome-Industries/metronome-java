@@ -51,12 +51,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerPlanListParams && this.customerId == other.customerId && this.limit == other.limit && this.nextPage == other.nextPage && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is CustomerPlanListParams && customerId == other.customerId && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
         "CustomerPlanListParams{customerId=$customerId, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

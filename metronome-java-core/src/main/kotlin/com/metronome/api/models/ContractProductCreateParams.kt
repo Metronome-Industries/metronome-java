@@ -371,17 +371,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractProductCreateBody && this.name == other.name && this.type == other.type && this.billableMetricId == other.billableMetricId && this.compositeProductIds == other.compositeProductIds && this.compositeTags == other.compositeTags && this.excludeFreeUsage == other.excludeFreeUsage && this.isRefundable == other.isRefundable && this.netsuiteInternalItemId == other.netsuiteInternalItemId && this.netsuiteOverageItemId == other.netsuiteOverageItemId && this.presentationGroupKey == other.presentationGroupKey && this.pricingGroupKey == other.pricingGroupKey && this.quantityConversion == other.quantityConversion && this.quantityRounding == other.quantityRounding && this.tags == other.tags && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractProductCreateBody && name == other.name && type == other.type && billableMetricId == other.billableMetricId && compositeProductIds == other.compositeProductIds && compositeTags == other.compositeTags && excludeFreeUsage == other.excludeFreeUsage && isRefundable == other.isRefundable && netsuiteInternalItemId == other.netsuiteInternalItemId && netsuiteOverageItemId == other.netsuiteOverageItemId && presentationGroupKey == other.presentationGroupKey && pricingGroupKey == other.pricingGroupKey && quantityConversion == other.quantityConversion && quantityRounding == other.quantityRounding && tags == other.tags && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(name, type, billableMetricId, compositeProductIds, compositeTags, excludeFreeUsage, isRefundable, netsuiteInternalItemId, netsuiteOverageItemId, presentationGroupKey, pricingGroupKey, quantityConversion, quantityRounding, tags, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(name, type, billableMetricId, compositeProductIds, compositeTags, excludeFreeUsage, isRefundable, netsuiteInternalItemId, netsuiteOverageItemId, presentationGroupKey, pricingGroupKey, quantityConversion, quantityRounding, tags, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "ContractProductCreateBody{name=$name, type=$type, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, tags=$tags, additionalProperties=$additionalProperties}"
@@ -398,12 +395,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractProductCreateParams && this.name == other.name && this.type == other.type && this.billableMetricId == other.billableMetricId && this.compositeProductIds == other.compositeProductIds && this.compositeTags == other.compositeTags && this.excludeFreeUsage == other.excludeFreeUsage && this.isRefundable == other.isRefundable && this.netsuiteInternalItemId == other.netsuiteInternalItemId && this.netsuiteOverageItemId == other.netsuiteOverageItemId && this.presentationGroupKey == other.presentationGroupKey && this.pricingGroupKey == other.pricingGroupKey && this.quantityConversion == other.quantityConversion && this.quantityRounding == other.quantityRounding && this.tags == other.tags && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractProductCreateParams && name == other.name && type == other.type && billableMetricId == other.billableMetricId && compositeProductIds == other.compositeProductIds && compositeTags == other.compositeTags && excludeFreeUsage == other.excludeFreeUsage && isRefundable == other.isRefundable && netsuiteInternalItemId == other.netsuiteInternalItemId && netsuiteOverageItemId == other.netsuiteOverageItemId && presentationGroupKey == other.presentationGroupKey && pricingGroupKey == other.pricingGroupKey && quantityConversion == other.quantityConversion && quantityRounding == other.quantityRounding && tags == other.tags && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(name, type, billableMetricId, compositeProductIds, compositeTags, excludeFreeUsage, isRefundable, netsuiteInternalItemId, netsuiteOverageItemId, presentationGroupKey, pricingGroupKey, quantityConversion, quantityRounding, tags, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(name, type, billableMetricId, compositeProductIds, compositeTags, excludeFreeUsage, isRefundable, netsuiteInternalItemId, netsuiteOverageItemId, presentationGroupKey, pricingGroupKey, quantityConversion, quantityRounding, tags, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "ContractProductCreateParams{name=$name, type=$type, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, tags=$tags, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
@@ -733,7 +728,7 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is Type && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

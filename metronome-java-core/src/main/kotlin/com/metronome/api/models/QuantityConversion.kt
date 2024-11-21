@@ -154,7 +154,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Operation && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is Operation && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -203,17 +203,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is QuantityConversion && this.name == other.name && this.conversionFactor == other.conversionFactor && this.operation == other.operation && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is QuantityConversion && name == other.name && conversionFactor == other.conversionFactor && operation == other.operation && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(name, conversionFactor, operation, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(name, conversionFactor, operation, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "QuantityConversion{name=$name, conversionFactor=$conversionFactor, operation=$operation, additionalProperties=$additionalProperties}"

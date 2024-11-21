@@ -502,7 +502,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Status && this.value == other.value /* spotless:on */
+                return /* spotless:off */ other is Status && value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -565,7 +565,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
+                return /* spotless:off */ other is Type && value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -836,7 +836,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Entity && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Entity && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -891,17 +891,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is CustomFieldFilter && this.entity == other.entity && this.key == other.key && this.value == other.value && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is CustomFieldFilter && entity == other.entity && key == other.key && value == other.value && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(entity, key, value, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(entity, key, value, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "CustomFieldFilter{entity=$entity, key=$key, value=$value, additionalProperties=$additionalProperties}"
@@ -1002,17 +999,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is GroupKeyFilter && this.key == other.key && this.value == other.value && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is GroupKeyFilter && key == other.key && value == other.value && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(key, value, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(key, value, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "GroupKeyFilter{key=$key, value=$value, additionalProperties=$additionalProperties}"
@@ -1023,17 +1017,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Alert && this.id == other.id && this.name == other.name && this.uniquenessKey == other.uniquenessKey && this.type == other.type && this.status == other.status && this.creditType == other.creditType && this.threshold == other.threshold && this.updatedAt == other.updatedAt && this.creditGrantTypeFilters == other.creditGrantTypeFilters && this.customFieldFilters == other.customFieldFilters && this.groupKeyFilter == other.groupKeyFilter && this.invoiceTypesFilter == other.invoiceTypesFilter && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Alert && id == other.id && name == other.name && uniquenessKey == other.uniquenessKey && type == other.type && status == other.status && creditType == other.creditType && threshold == other.threshold && updatedAt == other.updatedAt && creditGrantTypeFilters == other.creditGrantTypeFilters && customFieldFilters == other.customFieldFilters && groupKeyFilter == other.groupKeyFilter && invoiceTypesFilter == other.invoiceTypesFilter && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, name, uniquenessKey, type, status, creditType, threshold, updatedAt, creditGrantTypeFilters, customFieldFilters, groupKeyFilter, invoiceTypesFilter, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(id, name, uniquenessKey, type, status, creditType, threshold, updatedAt, creditGrantTypeFilters, customFieldFilters, groupKeyFilter, invoiceTypesFilter, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Alert{id=$id, name=$name, uniquenessKey=$uniquenessKey, type=$type, status=$status, creditType=$creditType, threshold=$threshold, updatedAt=$updatedAt, creditGrantTypeFilters=$creditGrantTypeFilters, customFieldFilters=$customFieldFilters, groupKeyFilter=$groupKeyFilter, invoiceTypesFilter=$invoiceTypesFilter, additionalProperties=$additionalProperties}"
@@ -1052,7 +1043,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerStatus && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is CustomerStatus && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -1107,17 +1098,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerAlert && this.customerStatus == other.customerStatus && this.triggeredBy == other.triggeredBy && this.alert == other.alert && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerAlert && customerStatus == other.customerStatus && triggeredBy == other.triggeredBy && alert == other.alert && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(customerStatus, triggeredBy, alert, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(customerStatus, triggeredBy, alert, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "CustomerAlert{customerStatus=$customerStatus, triggeredBy=$triggeredBy, alert=$alert, additionalProperties=$additionalProperties}"

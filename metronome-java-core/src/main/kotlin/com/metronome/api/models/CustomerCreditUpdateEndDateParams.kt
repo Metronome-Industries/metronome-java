@@ -143,17 +143,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerCreditUpdateEndDateBody && this.accessEndingBefore == other.accessEndingBefore && this.creditId == other.creditId && this.customerId == other.customerId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomerCreditUpdateEndDateBody && accessEndingBefore == other.accessEndingBefore && creditId == other.creditId && customerId == other.customerId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(accessEndingBefore, creditId, customerId, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(accessEndingBefore, creditId, customerId, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CustomerCreditUpdateEndDateBody{accessEndingBefore=$accessEndingBefore, creditId=$creditId, customerId=$customerId, additionalProperties=$additionalProperties}"
@@ -170,12 +167,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCreditUpdateEndDateParams && this.accessEndingBefore == other.accessEndingBefore && this.creditId == other.creditId && this.customerId == other.customerId && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerCreditUpdateEndDateParams && accessEndingBefore == other.accessEndingBefore && creditId == other.creditId && customerId == other.customerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(accessEndingBefore, creditId, customerId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(accessEndingBefore, creditId, customerId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "CustomerCreditUpdateEndDateParams{accessEndingBefore=$accessEndingBefore, creditId=$creditId, customerId=$customerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

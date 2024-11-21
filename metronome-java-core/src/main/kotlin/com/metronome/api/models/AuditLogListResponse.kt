@@ -301,17 +301,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Actor && this.id == other.id && this.email == other.email && this.name == other.name && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Actor && id == other.id && email == other.email && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, email, name, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(id, email, name, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Actor{id=$id, email=$email, name=$name, additionalProperties=$additionalProperties}"
@@ -330,7 +327,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Status && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -385,17 +382,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is AuditLogListResponse && this.id == other.id && this.timestamp == other.timestamp && this.actor == other.actor && this.resourceType == other.resourceType && this.resourceId == other.resourceId && this.action == other.action && this.status == other.status && this.description == other.description && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is AuditLogListResponse && id == other.id && timestamp == other.timestamp && actor == other.actor && resourceType == other.resourceType && resourceId == other.resourceId && action == other.action && status == other.status && description == other.description && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(id, timestamp, actor, resourceType, resourceId, action, status, description, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(id, timestamp, actor, resourceType, resourceId, action, status, description, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "AuditLogListResponse{id=$id, timestamp=$timestamp, actor=$actor, resourceType=$resourceType, resourceId=$resourceId, action=$action, status=$status, description=$description, additionalProperties=$additionalProperties}"

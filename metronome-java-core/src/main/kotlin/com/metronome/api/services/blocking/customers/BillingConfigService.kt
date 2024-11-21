@@ -54,7 +54,7 @@ interface BillingConfigService {
                 return true
             }
 
-            return /* spotless:off */ other is BillingProviderType && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is BillingProviderType && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

@@ -62,12 +62,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerListParams && this.customerIds == other.customerIds && this.ingestAlias == other.ingestAlias && this.limit == other.limit && this.nextPage == other.nextPage && this.onlyArchived == other.onlyArchived && this.salesforceAccountIds == other.salesforceAccountIds && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is CustomerListParams && customerIds == other.customerIds && ingestAlias == other.ingestAlias && limit == other.limit && nextPage == other.nextPage && onlyArchived == other.onlyArchived && salesforceAccountIds == other.salesforceAccountIds && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerIds, ingestAlias, limit, nextPage, onlyArchived, salesforceAccountIds, additionalHeaders, additionalQueryParams) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerIds, ingestAlias, limit, nextPage, onlyArchived, salesforceAccountIds, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
         "CustomerListParams{customerIds=$customerIds, ingestAlias=$ingestAlias, limit=$limit, nextPage=$nextPage, onlyArchived=$onlyArchived, salesforceAccountIds=$salesforceAccountIds, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

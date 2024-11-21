@@ -355,17 +355,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Groups && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Groups && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() = "Groups{additionalProperties=$additionalProperties}"
         }
@@ -375,17 +372,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && this.customerId == other.customerId && this.billableMetricId == other.billableMetricId && this.billableMetricName == other.billableMetricName && this.startTimestamp == other.startTimestamp && this.endTimestamp == other.endTimestamp && this.value == other.value && this.groups == other.groups && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && customerId == other.customerId && billableMetricId == other.billableMetricId && billableMetricName == other.billableMetricName && startTimestamp == other.startTimestamp && endTimestamp == other.endTimestamp && value == other.value && groups == other.groups && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(customerId, billableMetricId, billableMetricName, startTimestamp, endTimestamp, value, groups, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(customerId, billableMetricId, billableMetricName, startTimestamp, endTimestamp, value, groups, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "Data{customerId=$customerId, billableMetricId=$billableMetricId, billableMetricName=$billableMetricName, startTimestamp=$startTimestamp, endTimestamp=$endTimestamp, value=$value, groups=$groups, additionalProperties=$additionalProperties}"
@@ -396,17 +390,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is UsageListResponse && this.data == other.data && this.nextPage == other.nextPage && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is UsageListResponse && data == other.data && nextPage == other.nextPage && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(data, nextPage, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(data, nextPage, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "UsageListResponse{data=$data, nextPage=$nextPage, additionalProperties=$additionalProperties}"

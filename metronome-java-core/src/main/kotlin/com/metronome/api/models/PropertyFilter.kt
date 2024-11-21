@@ -202,17 +202,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is PropertyFilter && this.name == other.name && this.exists == other.exists && this.inValues == other.inValues && this.notInValues == other.notInValues && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is PropertyFilter && name == other.name && exists == other.exists && inValues == other.inValues && notInValues == other.notInValues && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(name, exists, inValues, notInValues, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(name, exists, inValues, notInValues, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "PropertyFilter{name=$name, exists=$exists, inValues=$inValues, notInValues=$notInValues, additionalProperties=$additionalProperties}"

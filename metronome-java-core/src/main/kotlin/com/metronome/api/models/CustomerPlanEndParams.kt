@@ -171,17 +171,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerPlanEndBody && this.endingBefore == other.endingBefore && this.voidInvoices == other.voidInvoices && this.voidStripeInvoices == other.voidStripeInvoices && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomerPlanEndBody && endingBefore == other.endingBefore && voidInvoices == other.voidInvoices && voidStripeInvoices == other.voidStripeInvoices && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(endingBefore, voidInvoices, voidStripeInvoices, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(endingBefore, voidInvoices, voidStripeInvoices, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CustomerPlanEndBody{endingBefore=$endingBefore, voidInvoices=$voidInvoices, voidStripeInvoices=$voidStripeInvoices, additionalProperties=$additionalProperties}"
@@ -198,12 +195,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerPlanEndParams && this.customerId == other.customerId && this.customerPlanId == other.customerPlanId && this.endingBefore == other.endingBefore && this.voidInvoices == other.voidInvoices && this.voidStripeInvoices == other.voidStripeInvoices && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerPlanEndParams && customerId == other.customerId && customerPlanId == other.customerPlanId && endingBefore == other.endingBefore && voidInvoices == other.voidInvoices && voidStripeInvoices == other.voidStripeInvoices && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(customerId, customerPlanId, endingBefore, voidInvoices, voidStripeInvoices, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, customerPlanId, endingBefore, voidInvoices, voidStripeInvoices, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "CustomerPlanEndParams{customerId=$customerId, customerPlanId=$customerPlanId, endingBefore=$endingBefore, voidInvoices=$voidInvoices, voidStripeInvoices=$voidStripeInvoices, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
