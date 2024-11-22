@@ -16,7 +16,6 @@ class ContractRateCardListResponseTest {
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .createdBy("created_by")
                 .name("name")
-                .rateCardEntries(ContractRateCardListResponse.RateCardEntries.builder().build())
                 .aliases(
                     listOf(
                         ContractRateCardListResponse.Alias.builder()
@@ -55,8 +54,6 @@ class ContractRateCardListResponseTest {
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(contractRateCardListResponse.createdBy()).isEqualTo("created_by")
         assertThat(contractRateCardListResponse.name()).isEqualTo("name")
-        assertThat(contractRateCardListResponse.rateCardEntries())
-            .isEqualTo(ContractRateCardListResponse.RateCardEntries.builder().build())
         assertThat(contractRateCardListResponse.aliases().get())
             .containsExactly(
                 ContractRateCardListResponse.Alias.builder()

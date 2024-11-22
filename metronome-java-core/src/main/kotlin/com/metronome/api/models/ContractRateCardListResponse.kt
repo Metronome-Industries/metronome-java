@@ -22,7 +22,6 @@ class ContractRateCardListResponse
 private constructor(
     private val id: JsonField<String>,
     private val name: JsonField<String>,
-    private val rateCardEntries: JsonField<RateCardEntries>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val createdBy: JsonField<String>,
     private val description: JsonField<String>,
@@ -38,8 +37,6 @@ private constructor(
     fun id(): String = id.getRequired("id")
 
     fun name(): String = name.getRequired("name")
-
-    fun rateCardEntries(): RateCardEntries = rateCardEntries.getRequired("rate_card_entries")
 
     fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
@@ -62,8 +59,6 @@ private constructor(
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
     @JsonProperty("name") @ExcludeMissing fun _name() = name
-
-    @JsonProperty("rate_card_entries") @ExcludeMissing fun _rateCardEntries() = rateCardEntries
 
     @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
 
@@ -89,7 +84,6 @@ private constructor(
         if (!validated) {
             id()
             name()
-            rateCardEntries().validate()
             createdAt()
             createdBy()
             description()
@@ -112,7 +106,6 @@ private constructor(
 
         private var id: JsonField<String> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
-        private var rateCardEntries: JsonField<RateCardEntries> = JsonMissing.of()
         private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var createdBy: JsonField<String> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
@@ -126,7 +119,6 @@ private constructor(
         internal fun from(contractRateCardListResponse: ContractRateCardListResponse) = apply {
             this.id = contractRateCardListResponse.id
             this.name = contractRateCardListResponse.name
-            this.rateCardEntries = contractRateCardListResponse.rateCardEntries
             this.createdAt = contractRateCardListResponse.createdAt
             this.createdBy = contractRateCardListResponse.createdBy
             this.description = contractRateCardListResponse.description
@@ -146,15 +138,6 @@ private constructor(
         @JsonProperty("name")
         @ExcludeMissing
         fun name(name: JsonField<String>) = apply { this.name = name }
-
-        fun rateCardEntries(rateCardEntries: RateCardEntries) =
-            rateCardEntries(JsonField.of(rateCardEntries))
-
-        @JsonProperty("rate_card_entries")
-        @ExcludeMissing
-        fun rateCardEntries(rateCardEntries: JsonField<RateCardEntries>) = apply {
-            this.rateCardEntries = rateCardEntries
-        }
 
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
@@ -225,7 +208,6 @@ private constructor(
             ContractRateCardListResponse(
                 id,
                 name,
-                rateCardEntries,
                 createdAt,
                 createdBy,
                 description,
@@ -235,75 +217,6 @@ private constructor(
                 customFields,
                 additionalProperties.toImmutable(),
             )
-    }
-
-    @JsonDeserialize(builder = RateCardEntries.Builder::class)
-    @NoAutoDetect
-    class RateCardEntries
-    private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        private var validated: Boolean = false
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): RateCardEntries = apply {
-            if (!validated) {
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(rateCardEntries: RateCardEntries) = apply {
-                additionalProperties(rateCardEntries.additionalProperties)
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun build(): RateCardEntries = RateCardEntries(additionalProperties.toImmutable())
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is RateCardEntries && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "RateCardEntries{additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = Alias.Builder::class)
@@ -619,15 +532,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardListResponse && id == other.id && name == other.name && rateCardEntries == other.rateCardEntries && createdAt == other.createdAt && createdBy == other.createdBy && description == other.description && fiatCreditType == other.fiatCreditType && creditTypeConversions == other.creditTypeConversions && aliases == other.aliases && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardListResponse && id == other.id && name == other.name && createdAt == other.createdAt && createdBy == other.createdBy && description == other.description && fiatCreditType == other.fiatCreditType && creditTypeConversions == other.creditTypeConversions && aliases == other.aliases && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, name, rateCardEntries, createdAt, createdBy, description, fiatCreditType, creditTypeConversions, aliases, customFields, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, name, createdAt, createdBy, description, fiatCreditType, creditTypeConversions, aliases, customFields, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ContractRateCardListResponse{id=$id, name=$name, rateCardEntries=$rateCardEntries, createdAt=$createdAt, createdBy=$createdBy, description=$description, fiatCreditType=$fiatCreditType, creditTypeConversions=$creditTypeConversions, aliases=$aliases, customFields=$customFields, additionalProperties=$additionalProperties}"
+        "ContractRateCardListResponse{id=$id, name=$name, createdAt=$createdAt, createdBy=$createdBy, description=$description, fiatCreditType=$fiatCreditType, creditTypeConversions=$creditTypeConversions, aliases=$aliases, customFields=$customFields, additionalProperties=$additionalProperties}"
 }

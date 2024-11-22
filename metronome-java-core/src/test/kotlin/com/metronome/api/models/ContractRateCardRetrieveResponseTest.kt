@@ -18,9 +18,6 @@ class ContractRateCardRetrieveResponseTest {
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .createdBy("created_by")
                         .name("name")
-                        .rateCardEntries(
-                            ContractRateCardRetrieveResponse.Data.RateCardEntries.builder().build()
-                        )
                         .aliases(
                             listOf(
                                 ContractRateCardRetrieveResponse.Data.Alias.builder()
@@ -64,9 +61,6 @@ class ContractRateCardRetrieveResponseTest {
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .createdBy("created_by")
                     .name("name")
-                    .rateCardEntries(
-                        ContractRateCardRetrieveResponse.Data.RateCardEntries.builder().build()
-                    )
                     .aliases(
                         listOf(
                             ContractRateCardRetrieveResponse.Data.Alias.builder()
