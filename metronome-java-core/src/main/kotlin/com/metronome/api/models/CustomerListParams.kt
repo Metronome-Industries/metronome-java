@@ -34,6 +34,10 @@ constructor(
 
     fun salesforceAccountIds(): Optional<List<String>> = Optional.ofNullable(salesforceAccountIds)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic
@@ -52,23 +56,6 @@ constructor(
         queryParams.putAll(additionalQueryParams)
         return queryParams.build()
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerListParams && customerIds == other.customerIds && ingestAlias == other.ingestAlias && limit == other.limit && nextPage == other.nextPage && onlyArchived == other.onlyArchived && salesforceAccountIds == other.salesforceAccountIds && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerIds, ingestAlias, limit, nextPage, onlyArchived, salesforceAccountIds, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CustomerListParams{customerIds=$customerIds, ingestAlias=$ingestAlias, limit=$limit, nextPage=$nextPage, onlyArchived=$onlyArchived, salesforceAccountIds=$salesforceAccountIds, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -91,14 +78,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerListParams: CustomerListParams) = apply {
-            this.customerIds(customerListParams.customerIds ?: listOf())
-            this.ingestAlias = customerListParams.ingestAlias
-            this.limit = customerListParams.limit
-            this.nextPage = customerListParams.nextPage
-            this.onlyArchived = customerListParams.onlyArchived
-            this.salesforceAccountIds(customerListParams.salesforceAccountIds ?: listOf())
-            additionalHeaders(customerListParams.additionalHeaders)
-            additionalQueryParams(customerListParams.additionalQueryParams)
+            customerIds = customerListParams.customerIds?.toMutableList() ?: mutableListOf()
+            ingestAlias = customerListParams.ingestAlias
+            limit = customerListParams.limit
+            nextPage = customerListParams.nextPage
+            onlyArchived = customerListParams.onlyArchived
+            salesforceAccountIds =
+                customerListParams.salesforceAccountIds?.toMutableList() ?: mutableListOf()
+            additionalHeaders = customerListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerListParams.additionalQueryParams.toBuilder()
         }
 
         /** Filter the customer list by customer_id. Up to 100 ids can be provided. */
@@ -233,14 +221,27 @@ constructor(
 
         fun build(): CustomerListParams =
             CustomerListParams(
-                if (customerIds.size == 0) null else customerIds.toImmutable(),
+                customerIds.toImmutable().ifEmpty { null },
                 ingestAlias,
                 limit,
                 nextPage,
                 onlyArchived,
-                if (salesforceAccountIds.size == 0) null else salesforceAccountIds.toImmutable(),
+                salesforceAccountIds.toImmutable().ifEmpty { null },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerListParams && customerIds == other.customerIds && ingestAlias == other.ingestAlias && limit == other.limit && nextPage == other.nextPage && onlyArchived == other.onlyArchived && salesforceAccountIds == other.salesforceAccountIds && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerIds, ingestAlias, limit, nextPage, onlyArchived, salesforceAccountIds, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CustomerListParams{customerIds=$customerIds, ingestAlias=$ingestAlias, limit=$limit, nextPage=$nextPage, onlyArchived=$onlyArchived, salesforceAccountIds=$salesforceAccountIds, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

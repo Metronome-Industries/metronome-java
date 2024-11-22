@@ -35,6 +35,12 @@ constructor(
 
     fun entityId(): String = entityId
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomFieldSetValuesBody {
         return CustomFieldSetValuesBody(
@@ -142,25 +148,6 @@ constructor(
             "CustomFieldSetValuesBody{customFields=$customFields, entity=$entity, entityId=$entityId, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomFieldSetValuesParams && customFields == other.customFields && entity == other.entity && entityId == other.entityId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customFields, entity, entityId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomFieldSetValuesParams{customFields=$customFields, entity=$entity, entityId=$entityId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -180,12 +167,13 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customFieldSetValuesParams: CustomFieldSetValuesParams) = apply {
-            this.customFields = customFieldSetValuesParams.customFields
-            this.entity = customFieldSetValuesParams.entity
-            this.entityId = customFieldSetValuesParams.entityId
-            additionalHeaders(customFieldSetValuesParams.additionalHeaders)
-            additionalQueryParams(customFieldSetValuesParams.additionalQueryParams)
-            additionalBodyProperties(customFieldSetValuesParams.additionalBodyProperties)
+            customFields = customFieldSetValuesParams.customFields
+            entity = customFieldSetValuesParams.entity
+            entityId = customFieldSetValuesParams.entityId
+            additionalHeaders = customFieldSetValuesParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customFieldSetValuesParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                customFieldSetValuesParams.additionalBodyProperties.toMutableMap()
         }
 
         fun customFields(customFields: CustomFields) = apply { this.customFields = customFields }
@@ -526,4 +514,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomFieldSetValuesParams && customFields == other.customFields && entity == other.entity && entityId == other.entityId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customFields, entity, entityId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomFieldSetValuesParams{customFields=$customFields, entity=$entity, entityId=$entityId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

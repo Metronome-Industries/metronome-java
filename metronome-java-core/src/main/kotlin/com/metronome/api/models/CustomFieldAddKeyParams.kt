@@ -35,6 +35,12 @@ constructor(
 
     fun key(): String = key
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomFieldAddKeyBody {
         return CustomFieldAddKeyBody(
@@ -143,25 +149,6 @@ constructor(
             "CustomFieldAddKeyBody{enforceUniqueness=$enforceUniqueness, entity=$entity, key=$key, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomFieldAddKeyParams && enforceUniqueness == other.enforceUniqueness && entity == other.entity && key == other.key && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(enforceUniqueness, entity, key, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomFieldAddKeyParams{enforceUniqueness=$enforceUniqueness, entity=$entity, key=$key, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -181,12 +168,13 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customFieldAddKeyParams: CustomFieldAddKeyParams) = apply {
-            this.enforceUniqueness = customFieldAddKeyParams.enforceUniqueness
-            this.entity = customFieldAddKeyParams.entity
-            this.key = customFieldAddKeyParams.key
-            additionalHeaders(customFieldAddKeyParams.additionalHeaders)
-            additionalQueryParams(customFieldAddKeyParams.additionalQueryParams)
-            additionalBodyProperties(customFieldAddKeyParams.additionalBodyProperties)
+            enforceUniqueness = customFieldAddKeyParams.enforceUniqueness
+            entity = customFieldAddKeyParams.entity
+            key = customFieldAddKeyParams.key
+            additionalHeaders = customFieldAddKeyParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customFieldAddKeyParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                customFieldAddKeyParams.additionalBodyProperties.toMutableMap()
         }
 
         fun enforceUniqueness(enforceUniqueness: Boolean) = apply {
@@ -470,4 +458,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomFieldAddKeyParams && enforceUniqueness == other.enforceUniqueness && entity == other.entity && key == other.key && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(enforceUniqueness, entity, key, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomFieldAddKeyParams{enforceUniqueness=$enforceUniqueness, entity=$entity, key=$key, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

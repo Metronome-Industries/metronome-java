@@ -42,6 +42,12 @@ constructor(
 
     fun selectors(): Optional<List<Selector>> = Optional.ofNullable(selectors)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractRetrieveRateScheduleBody {
         return ContractRetrieveRateScheduleBody(
@@ -185,25 +191,6 @@ constructor(
             "ContractRetrieveRateScheduleBody{contractId=$contractId, customerId=$customerId, at=$at, selectors=$selectors, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractRetrieveRateScheduleParams && contractId == other.contractId && customerId == other.customerId && at == other.at && selectors == other.selectors && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, at, selectors, limit, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractRetrieveRateScheduleParams{contractId=$contractId, customerId=$customerId, at=$at, selectors=$selectors, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -227,17 +214,18 @@ constructor(
         @JvmSynthetic
         internal fun from(contractRetrieveRateScheduleParams: ContractRetrieveRateScheduleParams) =
             apply {
-                this.contractId = contractRetrieveRateScheduleParams.contractId
-                this.customerId = contractRetrieveRateScheduleParams.customerId
-                this.limit = contractRetrieveRateScheduleParams.limit
-                this.nextPage = contractRetrieveRateScheduleParams.nextPage
-                this.at = contractRetrieveRateScheduleParams.at
-                this.selectors(contractRetrieveRateScheduleParams.selectors ?: listOf())
-                additionalHeaders(contractRetrieveRateScheduleParams.additionalHeaders)
-                additionalQueryParams(contractRetrieveRateScheduleParams.additionalQueryParams)
-                additionalBodyProperties(
-                    contractRetrieveRateScheduleParams.additionalBodyProperties
-                )
+                contractId = contractRetrieveRateScheduleParams.contractId
+                customerId = contractRetrieveRateScheduleParams.customerId
+                limit = contractRetrieveRateScheduleParams.limit
+                nextPage = contractRetrieveRateScheduleParams.nextPage
+                at = contractRetrieveRateScheduleParams.at
+                selectors =
+                    contractRetrieveRateScheduleParams.selectors?.toMutableList() ?: mutableListOf()
+                additionalHeaders = contractRetrieveRateScheduleParams.additionalHeaders.toBuilder()
+                additionalQueryParams =
+                    contractRetrieveRateScheduleParams.additionalQueryParams.toBuilder()
+                additionalBodyProperties =
+                    contractRetrieveRateScheduleParams.additionalBodyProperties.toMutableMap()
             }
 
         /** ID of the contract to get the rate schedule for. */
@@ -400,7 +388,7 @@ constructor(
                 limit,
                 nextPage,
                 at,
-                if (selectors.size == 0) null else selectors.toImmutable(),
+                selectors.toImmutable().ifEmpty { null },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -675,4 +663,17 @@ constructor(
         override fun toString() =
             "Selector{productId=$productId, productTags=$productTags, pricingGroupValues=$pricingGroupValues, partialPricingGroupValues=$partialPricingGroupValues, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractRetrieveRateScheduleParams && contractId == other.contractId && customerId == other.customerId && limit == other.limit && nextPage == other.nextPage && at == other.at && selectors == other.selectors && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, limit, nextPage, at, selectors, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractRetrieveRateScheduleParams{contractId=$contractId, customerId=$customerId, limit=$limit, nextPage=$nextPage, at=$at, selectors=$selectors, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

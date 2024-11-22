@@ -68,6 +68,12 @@ constructor(
 
     fun uniquenessKey(): Optional<String> = Optional.ofNullable(uniquenessKey)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): AlertCreateBody {
         return AlertCreateBody(
@@ -375,25 +381,6 @@ constructor(
             "AlertCreateBody{alertType=$alertType, name=$name, threshold=$threshold, billableMetricId=$billableMetricId, creditGrantTypeFilters=$creditGrantTypeFilters, creditTypeId=$creditTypeId, customFieldFilters=$customFieldFilters, customerId=$customerId, evaluateOnCreate=$evaluateOnCreate, groupKeyFilter=$groupKeyFilter, invoiceTypesFilter=$invoiceTypesFilter, planId=$planId, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is AlertCreateParams && alertType == other.alertType && name == other.name && threshold == other.threshold && billableMetricId == other.billableMetricId && creditGrantTypeFilters == other.creditGrantTypeFilters && creditTypeId == other.creditTypeId && customFieldFilters == other.customFieldFilters && customerId == other.customerId && evaluateOnCreate == other.evaluateOnCreate && groupKeyFilter == other.groupKeyFilter && invoiceTypesFilter == other.invoiceTypesFilter && planId == other.planId && uniquenessKey == other.uniquenessKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertType, name, threshold, billableMetricId, creditGrantTypeFilters, creditTypeId, customFieldFilters, customerId, evaluateOnCreate, groupKeyFilter, invoiceTypesFilter, planId, uniquenessKey, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "AlertCreateParams{alertType=$alertType, name=$name, threshold=$threshold, billableMetricId=$billableMetricId, creditGrantTypeFilters=$creditGrantTypeFilters, creditTypeId=$creditTypeId, customFieldFilters=$customFieldFilters, customerId=$customerId, evaluateOnCreate=$evaluateOnCreate, groupKeyFilter=$groupKeyFilter, invoiceTypesFilter=$invoiceTypesFilter, planId=$planId, uniquenessKey=$uniquenessKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -423,22 +410,25 @@ constructor(
 
         @JvmSynthetic
         internal fun from(alertCreateParams: AlertCreateParams) = apply {
-            this.alertType = alertCreateParams.alertType
-            this.name = alertCreateParams.name
-            this.threshold = alertCreateParams.threshold
-            this.billableMetricId = alertCreateParams.billableMetricId
-            this.creditGrantTypeFilters(alertCreateParams.creditGrantTypeFilters ?: listOf())
-            this.creditTypeId = alertCreateParams.creditTypeId
-            this.customFieldFilters(alertCreateParams.customFieldFilters ?: listOf())
-            this.customerId = alertCreateParams.customerId
-            this.evaluateOnCreate = alertCreateParams.evaluateOnCreate
-            this.groupKeyFilter = alertCreateParams.groupKeyFilter
-            this.invoiceTypesFilter(alertCreateParams.invoiceTypesFilter ?: listOf())
-            this.planId = alertCreateParams.planId
-            this.uniquenessKey = alertCreateParams.uniquenessKey
-            additionalHeaders(alertCreateParams.additionalHeaders)
-            additionalQueryParams(alertCreateParams.additionalQueryParams)
-            additionalBodyProperties(alertCreateParams.additionalBodyProperties)
+            alertType = alertCreateParams.alertType
+            name = alertCreateParams.name
+            threshold = alertCreateParams.threshold
+            billableMetricId = alertCreateParams.billableMetricId
+            creditGrantTypeFilters =
+                alertCreateParams.creditGrantTypeFilters?.toMutableList() ?: mutableListOf()
+            creditTypeId = alertCreateParams.creditTypeId
+            customFieldFilters =
+                alertCreateParams.customFieldFilters?.toMutableList() ?: mutableListOf()
+            customerId = alertCreateParams.customerId
+            evaluateOnCreate = alertCreateParams.evaluateOnCreate
+            groupKeyFilter = alertCreateParams.groupKeyFilter
+            invoiceTypesFilter =
+                alertCreateParams.invoiceTypesFilter?.toMutableList() ?: mutableListOf()
+            planId = alertCreateParams.planId
+            uniquenessKey = alertCreateParams.uniquenessKey
+            additionalHeaders = alertCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = alertCreateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = alertCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Type of the alert */
@@ -674,14 +664,13 @@ constructor(
                 checkNotNull(name) { "`name` is required but was not set" },
                 checkNotNull(threshold) { "`threshold` is required but was not set" },
                 billableMetricId,
-                if (creditGrantTypeFilters.size == 0) null
-                else creditGrantTypeFilters.toImmutable(),
+                creditGrantTypeFilters.toImmutable().ifEmpty { null },
                 creditTypeId,
-                if (customFieldFilters.size == 0) null else customFieldFilters.toImmutable(),
+                customFieldFilters.toImmutable().ifEmpty { null },
                 customerId,
                 evaluateOnCreate,
                 groupKeyFilter,
-                if (invoiceTypesFilter.size == 0) null else invoiceTypesFilter.toImmutable(),
+                invoiceTypesFilter.toImmutable().ifEmpty { null },
                 planId,
                 uniquenessKey,
                 additionalHeaders.build(),
@@ -1094,4 +1083,17 @@ constructor(
         override fun toString() =
             "GroupKeyFilter{key=$key, value=$value, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is AlertCreateParams && alertType == other.alertType && name == other.name && threshold == other.threshold && billableMetricId == other.billableMetricId && creditGrantTypeFilters == other.creditGrantTypeFilters && creditTypeId == other.creditTypeId && customFieldFilters == other.customFieldFilters && customerId == other.customerId && evaluateOnCreate == other.evaluateOnCreate && groupKeyFilter == other.groupKeyFilter && invoiceTypesFilter == other.invoiceTypesFilter && planId == other.planId && uniquenessKey == other.uniquenessKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertType, name, threshold, billableMetricId, creditGrantTypeFilters, creditTypeId, customFieldFilters, customerId, evaluateOnCreate, groupKeyFilter, invoiceTypesFilter, planId, uniquenessKey, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "AlertCreateParams{alertType=$alertType, name=$name, threshold=$threshold, billableMetricId=$billableMetricId, creditGrantTypeFilters=$creditGrantTypeFilters, creditTypeId=$creditTypeId, customFieldFilters=$customFieldFilters, customerId=$customerId, evaluateOnCreate=$evaluateOnCreate, groupKeyFilter=$groupKeyFilter, invoiceTypesFilter=$invoiceTypesFilter, planId=$planId, uniquenessKey=$uniquenessKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

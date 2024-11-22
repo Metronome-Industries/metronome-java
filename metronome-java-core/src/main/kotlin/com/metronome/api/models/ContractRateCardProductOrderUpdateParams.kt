@@ -28,6 +28,12 @@ constructor(
 
     fun rateCardId(): String = rateCardId
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractRateCardProductOrderUpdateBody {
         return ContractRateCardProductOrderUpdateBody(
@@ -131,25 +137,6 @@ constructor(
             "ContractRateCardProductOrderUpdateBody{productMoves=$productMoves, rateCardId=$rateCardId, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractRateCardProductOrderUpdateParams && productMoves == other.productMoves && rateCardId == other.rateCardId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(productMoves, rateCardId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractRateCardProductOrderUpdateParams{productMoves=$productMoves, rateCardId=$rateCardId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -170,13 +157,14 @@ constructor(
         internal fun from(
             contractRateCardProductOrderUpdateParams: ContractRateCardProductOrderUpdateParams
         ) = apply {
-            this.productMoves(contractRateCardProductOrderUpdateParams.productMoves)
-            this.rateCardId = contractRateCardProductOrderUpdateParams.rateCardId
-            additionalHeaders(contractRateCardProductOrderUpdateParams.additionalHeaders)
-            additionalQueryParams(contractRateCardProductOrderUpdateParams.additionalQueryParams)
-            additionalBodyProperties(
-                contractRateCardProductOrderUpdateParams.additionalBodyProperties
-            )
+            productMoves = contractRateCardProductOrderUpdateParams.productMoves.toMutableList()
+            rateCardId = contractRateCardProductOrderUpdateParams.rateCardId
+            additionalHeaders =
+                contractRateCardProductOrderUpdateParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                contractRateCardProductOrderUpdateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractRateCardProductOrderUpdateParams.additionalBodyProperties.toMutableMap()
         }
 
         fun productMoves(productMoves: List<ProductMove>) = apply {
@@ -311,8 +299,7 @@ constructor(
 
         fun build(): ContractRateCardProductOrderUpdateParams =
             ContractRateCardProductOrderUpdateParams(
-                checkNotNull(productMoves) { "`productMoves` is required but was not set" }
-                    .toImmutable(),
+                productMoves.toImmutable(),
                 checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -406,4 +393,17 @@ constructor(
         override fun toString() =
             "ProductMove{productId=$productId, position=$position, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractRateCardProductOrderUpdateParams && productMoves == other.productMoves && rateCardId == other.rateCardId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(productMoves, rateCardId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractRateCardProductOrderUpdateParams{productMoves=$productMoves, rateCardId=$rateCardId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

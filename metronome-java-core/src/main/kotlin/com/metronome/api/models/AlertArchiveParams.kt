@@ -29,6 +29,12 @@ constructor(
 
     fun releaseUniquenessKey(): Optional<Boolean> = Optional.ofNullable(releaseUniquenessKey)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): AlertArchiveBody {
         return AlertArchiveBody(
@@ -131,25 +137,6 @@ constructor(
             "AlertArchiveBody{id=$id, releaseUniquenessKey=$releaseUniquenessKey, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is AlertArchiveParams && id == other.id && releaseUniquenessKey == other.releaseUniquenessKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, releaseUniquenessKey, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "AlertArchiveParams{id=$id, releaseUniquenessKey=$releaseUniquenessKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -168,11 +155,11 @@ constructor(
 
         @JvmSynthetic
         internal fun from(alertArchiveParams: AlertArchiveParams) = apply {
-            this.id = alertArchiveParams.id
-            this.releaseUniquenessKey = alertArchiveParams.releaseUniquenessKey
-            additionalHeaders(alertArchiveParams.additionalHeaders)
-            additionalQueryParams(alertArchiveParams.additionalQueryParams)
-            additionalBodyProperties(alertArchiveParams.additionalBodyProperties)
+            id = alertArchiveParams.id
+            releaseUniquenessKey = alertArchiveParams.releaseUniquenessKey
+            additionalHeaders = alertArchiveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = alertArchiveParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = alertArchiveParams.additionalBodyProperties.toMutableMap()
         }
 
         /** The Metronome ID of the alert */
@@ -312,4 +299,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is AlertArchiveParams && id == other.id && releaseUniquenessKey == other.releaseUniquenessKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, releaseUniquenessKey, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "AlertArchiveParams{id=$id, releaseUniquenessKey=$releaseUniquenessKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

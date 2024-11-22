@@ -39,6 +39,12 @@ constructor(
 
     fun voidStripeInvoices(): Optional<Boolean> = Optional.ofNullable(voidStripeInvoices)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomerPlanEndBody {
         return CustomerPlanEndBody(
@@ -184,25 +190,6 @@ constructor(
             "CustomerPlanEndBody{endingBefore=$endingBefore, voidInvoices=$voidInvoices, voidStripeInvoices=$voidStripeInvoices, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerPlanEndParams && customerId == other.customerId && customerPlanId == other.customerPlanId && endingBefore == other.endingBefore && voidInvoices == other.voidInvoices && voidStripeInvoices == other.voidStripeInvoices && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, customerPlanId, endingBefore, voidInvoices, voidStripeInvoices, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerPlanEndParams{customerId=$customerId, customerPlanId=$customerPlanId, endingBefore=$endingBefore, voidInvoices=$voidInvoices, voidStripeInvoices=$voidStripeInvoices, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -224,14 +211,14 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerPlanEndParams: CustomerPlanEndParams) = apply {
-            this.customerId = customerPlanEndParams.customerId
-            this.customerPlanId = customerPlanEndParams.customerPlanId
-            this.endingBefore = customerPlanEndParams.endingBefore
-            this.voidInvoices = customerPlanEndParams.voidInvoices
-            this.voidStripeInvoices = customerPlanEndParams.voidStripeInvoices
-            additionalHeaders(customerPlanEndParams.additionalHeaders)
-            additionalQueryParams(customerPlanEndParams.additionalQueryParams)
-            additionalBodyProperties(customerPlanEndParams.additionalBodyProperties)
+            customerId = customerPlanEndParams.customerId
+            customerPlanId = customerPlanEndParams.customerPlanId
+            endingBefore = customerPlanEndParams.endingBefore
+            voidInvoices = customerPlanEndParams.voidInvoices
+            voidStripeInvoices = customerPlanEndParams.voidStripeInvoices
+            additionalHeaders = customerPlanEndParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerPlanEndParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = customerPlanEndParams.additionalBodyProperties.toMutableMap()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -391,4 +378,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerPlanEndParams && customerId == other.customerId && customerPlanId == other.customerPlanId && endingBefore == other.endingBefore && voidInvoices == other.voidInvoices && voidStripeInvoices == other.voidStripeInvoices && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, customerPlanId, endingBefore, voidInvoices, voidStripeInvoices, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerPlanEndParams{customerId=$customerId, customerPlanId=$customerPlanId, endingBefore=$endingBefore, voidInvoices=$voidInvoices, voidStripeInvoices=$voidStripeInvoices, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

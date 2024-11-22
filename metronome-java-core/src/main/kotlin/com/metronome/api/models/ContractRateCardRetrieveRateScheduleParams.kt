@@ -42,6 +42,12 @@ constructor(
 
     fun selectors(): Optional<List<Selector>> = Optional.ofNullable(selectors)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractRateCardRetrieveRateScheduleBody {
         return ContractRateCardRetrieveRateScheduleBody(
@@ -189,25 +195,6 @@ constructor(
             "ContractRateCardRetrieveRateScheduleBody{rateCardId=$rateCardId, startingAt=$startingAt, endingBefore=$endingBefore, selectors=$selectors, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractRateCardRetrieveRateScheduleParams && rateCardId == other.rateCardId && startingAt == other.startingAt && endingBefore == other.endingBefore && selectors == other.selectors && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(rateCardId, startingAt, endingBefore, selectors, limit, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractRateCardRetrieveRateScheduleParams{rateCardId=$rateCardId, startingAt=$startingAt, endingBefore=$endingBefore, selectors=$selectors, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -232,17 +219,20 @@ constructor(
         internal fun from(
             contractRateCardRetrieveRateScheduleParams: ContractRateCardRetrieveRateScheduleParams
         ) = apply {
-            this.rateCardId = contractRateCardRetrieveRateScheduleParams.rateCardId
-            this.startingAt = contractRateCardRetrieveRateScheduleParams.startingAt
-            this.limit = contractRateCardRetrieveRateScheduleParams.limit
-            this.nextPage = contractRateCardRetrieveRateScheduleParams.nextPage
-            this.endingBefore = contractRateCardRetrieveRateScheduleParams.endingBefore
-            this.selectors(contractRateCardRetrieveRateScheduleParams.selectors ?: listOf())
-            additionalHeaders(contractRateCardRetrieveRateScheduleParams.additionalHeaders)
-            additionalQueryParams(contractRateCardRetrieveRateScheduleParams.additionalQueryParams)
-            additionalBodyProperties(
-                contractRateCardRetrieveRateScheduleParams.additionalBodyProperties
-            )
+            rateCardId = contractRateCardRetrieveRateScheduleParams.rateCardId
+            startingAt = contractRateCardRetrieveRateScheduleParams.startingAt
+            limit = contractRateCardRetrieveRateScheduleParams.limit
+            nextPage = contractRateCardRetrieveRateScheduleParams.nextPage
+            endingBefore = contractRateCardRetrieveRateScheduleParams.endingBefore
+            selectors =
+                contractRateCardRetrieveRateScheduleParams.selectors?.toMutableList()
+                    ?: mutableListOf()
+            additionalHeaders =
+                contractRateCardRetrieveRateScheduleParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                contractRateCardRetrieveRateScheduleParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractRateCardRetrieveRateScheduleParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the rate card to get the schedule for */
@@ -405,7 +395,7 @@ constructor(
                 limit,
                 nextPage,
                 endingBefore,
-                if (selectors.size == 0) null else selectors.toImmutable(),
+                selectors.toImmutable().ifEmpty { null },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -664,4 +654,17 @@ constructor(
         override fun toString() =
             "Selector{productId=$productId, pricingGroupValues=$pricingGroupValues, partialPricingGroupValues=$partialPricingGroupValues, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractRateCardRetrieveRateScheduleParams && rateCardId == other.rateCardId && startingAt == other.startingAt && limit == other.limit && nextPage == other.nextPage && endingBefore == other.endingBefore && selectors == other.selectors && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(rateCardId, startingAt, limit, nextPage, endingBefore, selectors, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractRateCardRetrieveRateScheduleParams{rateCardId=$rateCardId, startingAt=$startingAt, limit=$limit, nextPage=$nextPage, endingBefore=$endingBefore, selectors=$selectors, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

@@ -76,6 +76,12 @@ constructor(
 
     fun salesforceOpportunityId(): Optional<String> = Optional.ofNullable(salesforceOpportunityId)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomerCommitCreateBody {
         return CustomerCommitCreateBody(
@@ -403,25 +409,6 @@ constructor(
             "CustomerCommitCreateBody{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, type=$type, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerCommitCreateParams && accessSchedule == other.accessSchedule && customerId == other.customerId && priority == other.priority && productId == other.productId && type == other.type && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && customFields == other.customFields && description == other.description && invoiceContractId == other.invoiceContractId && invoiceSchedule == other.invoiceSchedule && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rateType == other.rateType && salesforceOpportunityId == other.salesforceOpportunityId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(accessSchedule, customerId, priority, productId, type, applicableContractIds, applicableProductIds, applicableProductTags, customFields, description, invoiceContractId, invoiceSchedule, name, netsuiteSalesOrderId, rateType, salesforceOpportunityId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerCommitCreateParams{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, type=$type, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -454,25 +441,29 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerCommitCreateParams: CustomerCommitCreateParams) = apply {
-            this.accessSchedule = customerCommitCreateParams.accessSchedule
-            this.customerId = customerCommitCreateParams.customerId
-            this.priority = customerCommitCreateParams.priority
-            this.productId = customerCommitCreateParams.productId
-            this.type = customerCommitCreateParams.type
-            this.applicableContractIds(customerCommitCreateParams.applicableContractIds ?: listOf())
-            this.applicableProductIds(customerCommitCreateParams.applicableProductIds ?: listOf())
-            this.applicableProductTags(customerCommitCreateParams.applicableProductTags ?: listOf())
-            this.customFields = customerCommitCreateParams.customFields
-            this.description = customerCommitCreateParams.description
-            this.invoiceContractId = customerCommitCreateParams.invoiceContractId
-            this.invoiceSchedule = customerCommitCreateParams.invoiceSchedule
-            this.name = customerCommitCreateParams.name
-            this.netsuiteSalesOrderId = customerCommitCreateParams.netsuiteSalesOrderId
-            this.rateType = customerCommitCreateParams.rateType
-            this.salesforceOpportunityId = customerCommitCreateParams.salesforceOpportunityId
-            additionalHeaders(customerCommitCreateParams.additionalHeaders)
-            additionalQueryParams(customerCommitCreateParams.additionalQueryParams)
-            additionalBodyProperties(customerCommitCreateParams.additionalBodyProperties)
+            accessSchedule = customerCommitCreateParams.accessSchedule
+            customerId = customerCommitCreateParams.customerId
+            priority = customerCommitCreateParams.priority
+            productId = customerCommitCreateParams.productId
+            type = customerCommitCreateParams.type
+            applicableContractIds =
+                customerCommitCreateParams.applicableContractIds?.toMutableList() ?: mutableListOf()
+            applicableProductIds =
+                customerCommitCreateParams.applicableProductIds?.toMutableList() ?: mutableListOf()
+            applicableProductTags =
+                customerCommitCreateParams.applicableProductTags?.toMutableList() ?: mutableListOf()
+            customFields = customerCommitCreateParams.customFields
+            description = customerCommitCreateParams.description
+            invoiceContractId = customerCommitCreateParams.invoiceContractId
+            invoiceSchedule = customerCommitCreateParams.invoiceSchedule
+            name = customerCommitCreateParams.name
+            netsuiteSalesOrderId = customerCommitCreateParams.netsuiteSalesOrderId
+            rateType = customerCommitCreateParams.rateType
+            salesforceOpportunityId = customerCommitCreateParams.salesforceOpportunityId
+            additionalHeaders = customerCommitCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerCommitCreateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                customerCommitCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /**
@@ -712,9 +703,9 @@ constructor(
                 checkNotNull(priority) { "`priority` is required but was not set" },
                 checkNotNull(productId) { "`productId` is required but was not set" },
                 checkNotNull(type) { "`type` is required but was not set" },
-                if (applicableContractIds.size == 0) null else applicableContractIds.toImmutable(),
-                if (applicableProductIds.size == 0) null else applicableProductIds.toImmutable(),
-                if (applicableProductTags.size == 0) null else applicableProductTags.toImmutable(),
+                applicableContractIds.toImmutable().ifEmpty { null },
+                applicableProductIds.toImmutable().ifEmpty { null },
+                applicableProductTags.toImmutable().ifEmpty { null },
                 customFields,
                 description,
                 invoiceContractId,
@@ -1652,4 +1643,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerCommitCreateParams && accessSchedule == other.accessSchedule && customerId == other.customerId && priority == other.priority && productId == other.productId && type == other.type && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && customFields == other.customFields && description == other.description && invoiceContractId == other.invoiceContractId && invoiceSchedule == other.invoiceSchedule && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rateType == other.rateType && salesforceOpportunityId == other.salesforceOpportunityId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(accessSchedule, customerId, priority, productId, type, applicableContractIds, applicableProductIds, applicableProductTags, customFields, description, invoiceContractId, invoiceSchedule, name, netsuiteSalesOrderId, rateType, salesforceOpportunityId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerCommitCreateParams{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, type=$type, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

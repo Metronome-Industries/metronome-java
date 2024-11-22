@@ -73,6 +73,12 @@ constructor(
 
     fun useListPrices(): Optional<Boolean> = Optional.ofNullable(useListPrices)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractRateCardRateAddBody {
         return ContractRateCardRateAddBody(
@@ -365,25 +371,6 @@ constructor(
             "ContractRateCardRateAddBody{entitled=$entitled, productId=$productId, rateCardId=$rateCardId, rateType=$rateType, startingAt=$startingAt, commitRate=$commitRate, creditTypeId=$creditTypeId, customRate=$customRate, endingBefore=$endingBefore, isProrated=$isProrated, price=$price, pricingGroupValues=$pricingGroupValues, quantity=$quantity, tiers=$tiers, useListPrices=$useListPrices, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractRateCardRateAddParams && entitled == other.entitled && productId == other.productId && rateCardId == other.rateCardId && rateType == other.rateType && startingAt == other.startingAt && commitRate == other.commitRate && creditTypeId == other.creditTypeId && customRate == other.customRate && endingBefore == other.endingBefore && isProrated == other.isProrated && price == other.price && pricingGroupValues == other.pricingGroupValues && quantity == other.quantity && tiers == other.tiers && useListPrices == other.useListPrices && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(entitled, productId, rateCardId, rateType, startingAt, commitRate, creditTypeId, customRate, endingBefore, isProrated, price, pricingGroupValues, quantity, tiers, useListPrices, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractRateCardRateAddParams{entitled=$entitled, productId=$productId, rateCardId=$rateCardId, rateType=$rateType, startingAt=$startingAt, commitRate=$commitRate, creditTypeId=$creditTypeId, customRate=$customRate, endingBefore=$endingBefore, isProrated=$isProrated, price=$price, pricingGroupValues=$pricingGroupValues, quantity=$quantity, tiers=$tiers, useListPrices=$useListPrices, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -415,24 +402,25 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractRateCardRateAddParams: ContractRateCardRateAddParams) = apply {
-            this.entitled = contractRateCardRateAddParams.entitled
-            this.productId = contractRateCardRateAddParams.productId
-            this.rateCardId = contractRateCardRateAddParams.rateCardId
-            this.rateType = contractRateCardRateAddParams.rateType
-            this.startingAt = contractRateCardRateAddParams.startingAt
-            this.commitRate = contractRateCardRateAddParams.commitRate
-            this.creditTypeId = contractRateCardRateAddParams.creditTypeId
-            this.customRate = contractRateCardRateAddParams.customRate
-            this.endingBefore = contractRateCardRateAddParams.endingBefore
-            this.isProrated = contractRateCardRateAddParams.isProrated
-            this.price = contractRateCardRateAddParams.price
-            this.pricingGroupValues = contractRateCardRateAddParams.pricingGroupValues
-            this.quantity = contractRateCardRateAddParams.quantity
-            this.tiers(contractRateCardRateAddParams.tiers ?: listOf())
-            this.useListPrices = contractRateCardRateAddParams.useListPrices
-            additionalHeaders(contractRateCardRateAddParams.additionalHeaders)
-            additionalQueryParams(contractRateCardRateAddParams.additionalQueryParams)
-            additionalBodyProperties(contractRateCardRateAddParams.additionalBodyProperties)
+            entitled = contractRateCardRateAddParams.entitled
+            productId = contractRateCardRateAddParams.productId
+            rateCardId = contractRateCardRateAddParams.rateCardId
+            rateType = contractRateCardRateAddParams.rateType
+            startingAt = contractRateCardRateAddParams.startingAt
+            commitRate = contractRateCardRateAddParams.commitRate
+            creditTypeId = contractRateCardRateAddParams.creditTypeId
+            customRate = contractRateCardRateAddParams.customRate
+            endingBefore = contractRateCardRateAddParams.endingBefore
+            isProrated = contractRateCardRateAddParams.isProrated
+            price = contractRateCardRateAddParams.price
+            pricingGroupValues = contractRateCardRateAddParams.pricingGroupValues
+            quantity = contractRateCardRateAddParams.quantity
+            tiers = contractRateCardRateAddParams.tiers?.toMutableList() ?: mutableListOf()
+            useListPrices = contractRateCardRateAddParams.useListPrices
+            additionalHeaders = contractRateCardRateAddParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractRateCardRateAddParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractRateCardRateAddParams.additionalBodyProperties.toMutableMap()
         }
 
         fun entitled(entitled: Boolean) = apply { this.entitled = entitled }
@@ -638,7 +626,7 @@ constructor(
                 price,
                 pricingGroupValues,
                 quantity,
-                if (tiers.size == 0) null else tiers.toImmutable(),
+                tiers.toImmutable().ifEmpty { null },
                 useListPrices,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -1050,4 +1038,17 @@ constructor(
 
         override fun toString() = "PricingGroupValues{additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractRateCardRateAddParams && entitled == other.entitled && productId == other.productId && rateCardId == other.rateCardId && rateType == other.rateType && startingAt == other.startingAt && commitRate == other.commitRate && creditTypeId == other.creditTypeId && customRate == other.customRate && endingBefore == other.endingBefore && isProrated == other.isProrated && price == other.price && pricingGroupValues == other.pricingGroupValues && quantity == other.quantity && tiers == other.tiers && useListPrices == other.useListPrices && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(entitled, productId, rateCardId, rateType, startingAt, commitRate, creditTypeId, customRate, endingBefore, isProrated, price, pricingGroupValues, quantity, tiers, useListPrices, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractRateCardRateAddParams{entitled=$entitled, productId=$productId, rateCardId=$rateCardId, rateType=$rateType, startingAt=$startingAt, commitRate=$commitRate, creditTypeId=$creditTypeId, customRate=$customRate, endingBefore=$endingBefore, isProrated=$isProrated, price=$price, pricingGroupValues=$pricingGroupValues, quantity=$quantity, tiers=$tiers, useListPrices=$useListPrices, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

@@ -25,6 +25,12 @@ constructor(
 
     fun id(): String = id
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): BillableMetricArchiveBody {
         return BillableMetricArchiveBody(id, additionalBodyProperties)
@@ -107,25 +113,6 @@ constructor(
             "BillableMetricArchiveBody{id=$id, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is BillableMetricArchiveParams && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "BillableMetricArchiveParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -143,10 +130,11 @@ constructor(
 
         @JvmSynthetic
         internal fun from(billableMetricArchiveParams: BillableMetricArchiveParams) = apply {
-            this.id = billableMetricArchiveParams.id
-            additionalHeaders(billableMetricArchiveParams.additionalHeaders)
-            additionalQueryParams(billableMetricArchiveParams.additionalQueryParams)
-            additionalBodyProperties(billableMetricArchiveParams.additionalBodyProperties)
+            id = billableMetricArchiveParams.id
+            additionalHeaders = billableMetricArchiveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = billableMetricArchiveParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                billableMetricArchiveParams.additionalBodyProperties.toMutableMap()
         }
 
         fun id(id: String) = apply { this.id = id }
@@ -279,4 +267,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is BillableMetricArchiveParams && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "BillableMetricArchiveParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

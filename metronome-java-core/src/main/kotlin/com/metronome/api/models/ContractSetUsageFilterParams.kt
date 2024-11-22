@@ -38,6 +38,12 @@ constructor(
 
     fun startingAt(): OffsetDateTime = startingAt
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractSetUsageFilterBody {
         return ContractSetUsageFilterBody(
@@ -165,25 +171,6 @@ constructor(
             "ContractSetUsageFilterBody{contractId=$contractId, customerId=$customerId, groupKey=$groupKey, groupValues=$groupValues, startingAt=$startingAt, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractSetUsageFilterParams && contractId == other.contractId && customerId == other.customerId && groupKey == other.groupKey && groupValues == other.groupValues && startingAt == other.startingAt && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, groupKey, groupValues, startingAt, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractSetUsageFilterParams{contractId=$contractId, customerId=$customerId, groupKey=$groupKey, groupValues=$groupValues, startingAt=$startingAt, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -205,14 +192,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractSetUsageFilterParams: ContractSetUsageFilterParams) = apply {
-            this.contractId = contractSetUsageFilterParams.contractId
-            this.customerId = contractSetUsageFilterParams.customerId
-            this.groupKey = contractSetUsageFilterParams.groupKey
-            this.groupValues(contractSetUsageFilterParams.groupValues)
-            this.startingAt = contractSetUsageFilterParams.startingAt
-            additionalHeaders(contractSetUsageFilterParams.additionalHeaders)
-            additionalQueryParams(contractSetUsageFilterParams.additionalQueryParams)
-            additionalBodyProperties(contractSetUsageFilterParams.additionalBodyProperties)
+            contractId = contractSetUsageFilterParams.contractId
+            customerId = contractSetUsageFilterParams.customerId
+            groupKey = contractSetUsageFilterParams.groupKey
+            groupValues = contractSetUsageFilterParams.groupValues.toMutableList()
+            startingAt = contractSetUsageFilterParams.startingAt
+            additionalHeaders = contractSetUsageFilterParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractSetUsageFilterParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractSetUsageFilterParams.additionalBodyProperties.toMutableMap()
         }
 
         fun contractId(contractId: String) = apply { this.contractId = contractId }
@@ -355,12 +343,24 @@ constructor(
                 checkNotNull(contractId) { "`contractId` is required but was not set" },
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
                 checkNotNull(groupKey) { "`groupKey` is required but was not set" },
-                checkNotNull(groupValues) { "`groupValues` is required but was not set" }
-                    .toImmutable(),
+                groupValues.toImmutable(),
                 checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractSetUsageFilterParams && contractId == other.contractId && customerId == other.customerId && groupKey == other.groupKey && groupValues == other.groupValues && startingAt == other.startingAt && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, groupKey, groupValues, startingAt, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractSetUsageFilterParams{contractId=$contractId, customerId=$customerId, groupKey=$groupKey, groupValues=$groupValues, startingAt=$startingAt, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

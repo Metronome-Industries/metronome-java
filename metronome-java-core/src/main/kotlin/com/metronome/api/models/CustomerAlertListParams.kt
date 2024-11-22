@@ -36,6 +36,12 @@ constructor(
 
     fun alertStatuses(): Optional<List<AlertStatus>> = Optional.ofNullable(alertStatuses)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomerAlertListBody {
         return CustomerAlertListBody(
@@ -146,25 +152,6 @@ constructor(
             "CustomerAlertListBody{customerId=$customerId, alertStatuses=$alertStatuses, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerAlertListParams && customerId == other.customerId && alertStatuses == other.alertStatuses && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, alertStatuses, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerAlertListParams{customerId=$customerId, alertStatuses=$alertStatuses, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -184,12 +171,14 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerAlertListParams: CustomerAlertListParams) = apply {
-            this.customerId = customerAlertListParams.customerId
-            this.nextPage = customerAlertListParams.nextPage
-            this.alertStatuses(customerAlertListParams.alertStatuses ?: listOf())
-            additionalHeaders(customerAlertListParams.additionalHeaders)
-            additionalQueryParams(customerAlertListParams.additionalQueryParams)
-            additionalBodyProperties(customerAlertListParams.additionalBodyProperties)
+            customerId = customerAlertListParams.customerId
+            nextPage = customerAlertListParams.nextPage
+            alertStatuses =
+                customerAlertListParams.alertStatuses?.toMutableList() ?: mutableListOf()
+            additionalHeaders = customerAlertListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerAlertListParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                customerAlertListParams.additionalBodyProperties.toMutableMap()
         }
 
         /** The Metronome ID of the customer */
@@ -331,7 +320,7 @@ constructor(
             CustomerAlertListParams(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
                 nextPage,
-                if (alertStatuses.size == 0) null else alertStatuses.toImmutable(),
+                alertStatuses.toImmutable().ifEmpty { null },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -400,4 +389,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerAlertListParams && customerId == other.customerId && nextPage == other.nextPage && alertStatuses == other.alertStatuses && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, nextPage, alertStatuses, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerAlertListParams{customerId=$customerId, nextPage=$nextPage, alertStatuses=$alertStatuses, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

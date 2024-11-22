@@ -72,6 +72,12 @@ constructor(
 
     fun totalContractValue(): Optional<Double> = Optional.ofNullable(totalContractValue)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractAmendBody {
         return ContractAmendBody(
@@ -325,25 +331,6 @@ constructor(
             "ContractAmendBody{contractId=$contractId, customerId=$customerId, startingAt=$startingAt, commits=$commits, credits=$credits, customFields=$customFields, discounts=$discounts, netsuiteSalesOrderId=$netsuiteSalesOrderId, overrides=$overrides, professionalServices=$professionalServices, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledCharges=$scheduledCharges, totalContractValue=$totalContractValue, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractAmendParams && contractId == other.contractId && customerId == other.customerId && startingAt == other.startingAt && commits == other.commits && credits == other.credits && customFields == other.customFields && discounts == other.discounts && netsuiteSalesOrderId == other.netsuiteSalesOrderId && overrides == other.overrides && professionalServices == other.professionalServices && resellerRoyalties == other.resellerRoyalties && salesforceOpportunityId == other.salesforceOpportunityId && scheduledCharges == other.scheduledCharges && totalContractValue == other.totalContractValue && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, startingAt, commits, credits, customFields, discounts, netsuiteSalesOrderId, overrides, professionalServices, resellerRoyalties, salesforceOpportunityId, scheduledCharges, totalContractValue, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractAmendParams{contractId=$contractId, customerId=$customerId, startingAt=$startingAt, commits=$commits, credits=$credits, customFields=$customFields, discounts=$discounts, netsuiteSalesOrderId=$netsuiteSalesOrderId, overrides=$overrides, professionalServices=$professionalServices, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledCharges=$scheduledCharges, totalContractValue=$totalContractValue, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -374,23 +361,26 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractAmendParams: ContractAmendParams) = apply {
-            this.contractId = contractAmendParams.contractId
-            this.customerId = contractAmendParams.customerId
-            this.startingAt = contractAmendParams.startingAt
-            this.commits(contractAmendParams.commits ?: listOf())
-            this.credits(contractAmendParams.credits ?: listOf())
-            this.customFields = contractAmendParams.customFields
-            this.discounts(contractAmendParams.discounts ?: listOf())
-            this.netsuiteSalesOrderId = contractAmendParams.netsuiteSalesOrderId
-            this.overrides(contractAmendParams.overrides ?: listOf())
-            this.professionalServices(contractAmendParams.professionalServices ?: listOf())
-            this.resellerRoyalties(contractAmendParams.resellerRoyalties ?: listOf())
-            this.salesforceOpportunityId = contractAmendParams.salesforceOpportunityId
-            this.scheduledCharges(contractAmendParams.scheduledCharges ?: listOf())
-            this.totalContractValue = contractAmendParams.totalContractValue
-            additionalHeaders(contractAmendParams.additionalHeaders)
-            additionalQueryParams(contractAmendParams.additionalQueryParams)
-            additionalBodyProperties(contractAmendParams.additionalBodyProperties)
+            contractId = contractAmendParams.contractId
+            customerId = contractAmendParams.customerId
+            startingAt = contractAmendParams.startingAt
+            commits = contractAmendParams.commits?.toMutableList() ?: mutableListOf()
+            credits = contractAmendParams.credits?.toMutableList() ?: mutableListOf()
+            customFields = contractAmendParams.customFields
+            discounts = contractAmendParams.discounts?.toMutableList() ?: mutableListOf()
+            netsuiteSalesOrderId = contractAmendParams.netsuiteSalesOrderId
+            overrides = contractAmendParams.overrides?.toMutableList() ?: mutableListOf()
+            professionalServices =
+                contractAmendParams.professionalServices?.toMutableList() ?: mutableListOf()
+            resellerRoyalties =
+                contractAmendParams.resellerRoyalties?.toMutableList() ?: mutableListOf()
+            salesforceOpportunityId = contractAmendParams.salesforceOpportunityId
+            scheduledCharges =
+                contractAmendParams.scheduledCharges?.toMutableList() ?: mutableListOf()
+            totalContractValue = contractAmendParams.totalContractValue
+            additionalHeaders = contractAmendParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractAmendParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = contractAmendParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the contract to amend */
@@ -605,16 +595,16 @@ constructor(
                 checkNotNull(contractId) { "`contractId` is required but was not set" },
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
                 checkNotNull(startingAt) { "`startingAt` is required but was not set" },
-                if (commits.size == 0) null else commits.toImmutable(),
-                if (credits.size == 0) null else credits.toImmutable(),
+                commits.toImmutable().ifEmpty { null },
+                credits.toImmutable().ifEmpty { null },
                 customFields,
-                if (discounts.size == 0) null else discounts.toImmutable(),
+                discounts.toImmutable().ifEmpty { null },
                 netsuiteSalesOrderId,
-                if (overrides.size == 0) null else overrides.toImmutable(),
-                if (professionalServices.size == 0) null else professionalServices.toImmutable(),
-                if (resellerRoyalties.size == 0) null else resellerRoyalties.toImmutable(),
+                overrides.toImmutable().ifEmpty { null },
+                professionalServices.toImmutable().ifEmpty { null },
+                resellerRoyalties.toImmutable().ifEmpty { null },
                 salesforceOpportunityId,
-                if (scheduledCharges.size == 0) null else scheduledCharges.toImmutable(),
+                scheduledCharges.toImmutable().ifEmpty { null },
                 totalContractValue,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -5458,4 +5448,17 @@ constructor(
         override fun toString() =
             "ScheduledCharge{productId=$productId, name=$name, schedule=$schedule, netsuiteSalesOrderId=$netsuiteSalesOrderId, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractAmendParams && contractId == other.contractId && customerId == other.customerId && startingAt == other.startingAt && commits == other.commits && credits == other.credits && customFields == other.customFields && discounts == other.discounts && netsuiteSalesOrderId == other.netsuiteSalesOrderId && overrides == other.overrides && professionalServices == other.professionalServices && resellerRoyalties == other.resellerRoyalties && salesforceOpportunityId == other.salesforceOpportunityId && scheduledCharges == other.scheduledCharges && totalContractValue == other.totalContractValue && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, startingAt, commits, credits, customFields, discounts, netsuiteSalesOrderId, overrides, professionalServices, resellerRoyalties, salesforceOpportunityId, scheduledCharges, totalContractValue, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractAmendParams{contractId=$contractId, customerId=$customerId, startingAt=$startingAt, commits=$commits, credits=$credits, customFields=$customFields, discounts=$discounts, netsuiteSalesOrderId=$netsuiteSalesOrderId, overrides=$overrides, professionalServices=$professionalServices, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledCharges=$scheduledCharges, totalContractValue=$totalContractValue, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

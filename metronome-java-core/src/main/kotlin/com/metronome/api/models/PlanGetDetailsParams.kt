@@ -17,6 +17,10 @@ constructor(
 
     fun planId(): String = planId
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
@@ -27,23 +31,6 @@ constructor(
             else -> ""
         }
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is PlanGetDetailsParams && planId == other.planId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(planId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "PlanGetDetailsParams{planId=$planId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -61,9 +48,9 @@ constructor(
 
         @JvmSynthetic
         internal fun from(planGetDetailsParams: PlanGetDetailsParams) = apply {
-            this.planId = planGetDetailsParams.planId
-            additionalHeaders(planGetDetailsParams.additionalHeaders)
-            additionalQueryParams(planGetDetailsParams.additionalQueryParams)
+            planId = planGetDetailsParams.planId
+            additionalHeaders = planGetDetailsParams.additionalHeaders.toBuilder()
+            additionalQueryParams = planGetDetailsParams.additionalQueryParams.toBuilder()
         }
 
         fun planId(planId: String) = apply { this.planId = planId }
@@ -173,4 +160,17 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is PlanGetDetailsParams && planId == other.planId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(planId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "PlanGetDetailsParams{planId=$planId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -28,6 +28,12 @@ constructor(
 
     fun customerId(): String = customerId
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomerAlertResetBody {
         return CustomerAlertResetBody(
@@ -128,25 +134,6 @@ constructor(
             "CustomerAlertResetBody{alertId=$alertId, customerId=$customerId, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerAlertResetParams && alertId == other.alertId && customerId == other.customerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertId, customerId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerAlertResetParams{alertId=$alertId, customerId=$customerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -165,11 +152,12 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerAlertResetParams: CustomerAlertResetParams) = apply {
-            this.alertId = customerAlertResetParams.alertId
-            this.customerId = customerAlertResetParams.customerId
-            additionalHeaders(customerAlertResetParams.additionalHeaders)
-            additionalQueryParams(customerAlertResetParams.additionalQueryParams)
-            additionalBodyProperties(customerAlertResetParams.additionalBodyProperties)
+            alertId = customerAlertResetParams.alertId
+            customerId = customerAlertResetParams.customerId
+            additionalHeaders = customerAlertResetParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerAlertResetParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                customerAlertResetParams.additionalBodyProperties.toMutableMap()
         }
 
         /** The Metronome ID of the alert */
@@ -307,4 +295,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerAlertResetParams && alertId == other.alertId && customerId == other.customerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertId, customerId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerAlertResetParams{alertId=$alertId, customerId=$customerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

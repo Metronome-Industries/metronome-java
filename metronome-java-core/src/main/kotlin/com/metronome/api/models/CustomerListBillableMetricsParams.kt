@@ -30,6 +30,10 @@ constructor(
 
     fun onCurrentPlan(): Optional<Boolean> = Optional.ofNullable(onCurrentPlan)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic
@@ -49,23 +53,6 @@ constructor(
             else -> ""
         }
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerListBillableMetricsParams && customerId == other.customerId && includeArchived == other.includeArchived && limit == other.limit && nextPage == other.nextPage && onCurrentPlan == other.onCurrentPlan && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, includeArchived, limit, nextPage, onCurrentPlan, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CustomerListBillableMetricsParams{customerId=$customerId, includeArchived=$includeArchived, limit=$limit, nextPage=$nextPage, onCurrentPlan=$onCurrentPlan, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -88,13 +75,14 @@ constructor(
         @JvmSynthetic
         internal fun from(customerListBillableMetricsParams: CustomerListBillableMetricsParams) =
             apply {
-                this.customerId = customerListBillableMetricsParams.customerId
-                this.includeArchived = customerListBillableMetricsParams.includeArchived
-                this.limit = customerListBillableMetricsParams.limit
-                this.nextPage = customerListBillableMetricsParams.nextPage
-                this.onCurrentPlan = customerListBillableMetricsParams.onCurrentPlan
-                additionalHeaders(customerListBillableMetricsParams.additionalHeaders)
-                additionalQueryParams(customerListBillableMetricsParams.additionalQueryParams)
+                customerId = customerListBillableMetricsParams.customerId
+                includeArchived = customerListBillableMetricsParams.includeArchived
+                limit = customerListBillableMetricsParams.limit
+                nextPage = customerListBillableMetricsParams.nextPage
+                onCurrentPlan = customerListBillableMetricsParams.onCurrentPlan
+                additionalHeaders = customerListBillableMetricsParams.additionalHeaders.toBuilder()
+                additionalQueryParams =
+                    customerListBillableMetricsParams.additionalQueryParams.toBuilder()
             }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -225,4 +213,17 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerListBillableMetricsParams && customerId == other.customerId && includeArchived == other.includeArchived && limit == other.limit && nextPage == other.nextPage && onCurrentPlan == other.onCurrentPlan && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, includeArchived, limit, nextPage, onCurrentPlan, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CustomerListBillableMetricsParams{customerId=$customerId, includeArchived=$includeArchived, limit=$limit, nextPage=$nextPage, onCurrentPlan=$onCurrentPlan, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -36,6 +36,12 @@ constructor(
 
     fun archiveFilter(): Optional<ArchiveFilter> = Optional.ofNullable(archiveFilter)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractProductListBody {
         return ContractProductListBody(archiveFilter, additionalBodyProperties)
@@ -127,25 +133,6 @@ constructor(
             "ContractProductListBody{archiveFilter=$archiveFilter, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractProductListParams && archiveFilter == other.archiveFilter && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(archiveFilter, limit, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractProductListParams{archiveFilter=$archiveFilter, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -165,12 +152,13 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractProductListParams: ContractProductListParams) = apply {
-            this.limit = contractProductListParams.limit
-            this.nextPage = contractProductListParams.nextPage
-            this.archiveFilter = contractProductListParams.archiveFilter
-            additionalHeaders(contractProductListParams.additionalHeaders)
-            additionalQueryParams(contractProductListParams.additionalQueryParams)
-            additionalBodyProperties(contractProductListParams.additionalBodyProperties)
+            limit = contractProductListParams.limit
+            nextPage = contractProductListParams.nextPage
+            archiveFilter = contractProductListParams.archiveFilter
+            additionalHeaders = contractProductListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractProductListParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractProductListParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Max number of results that should be returned */
@@ -377,4 +365,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractProductListParams && limit == other.limit && nextPage == other.nextPage && archiveFilter == other.archiveFilter && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(limit, nextPage, archiveFilter, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractProductListParams{limit=$limit, nextPage=$nextPage, archiveFilter=$archiveFilter, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

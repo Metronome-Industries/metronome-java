@@ -36,6 +36,12 @@ constructor(
 
     fun coveringDate(): Optional<OffsetDateTime> = Optional.ofNullable(coveringDate)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractRateCardNamedScheduleRetrieveBody {
         return ContractRateCardNamedScheduleRetrieveBody(
@@ -170,25 +176,6 @@ constructor(
             "ContractRateCardNamedScheduleRetrieveBody{contractId=$contractId, customerId=$customerId, scheduleName=$scheduleName, coveringDate=$coveringDate, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractRateCardNamedScheduleRetrieveParams && contractId == other.contractId && customerId == other.customerId && scheduleName == other.scheduleName && coveringDate == other.coveringDate && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, scheduleName, coveringDate, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractRateCardNamedScheduleRetrieveParams{contractId=$contractId, customerId=$customerId, scheduleName=$scheduleName, coveringDate=$coveringDate, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -211,15 +198,16 @@ constructor(
         internal fun from(
             contractRateCardNamedScheduleRetrieveParams: ContractRateCardNamedScheduleRetrieveParams
         ) = apply {
-            this.contractId = contractRateCardNamedScheduleRetrieveParams.contractId
-            this.customerId = contractRateCardNamedScheduleRetrieveParams.customerId
-            this.scheduleName = contractRateCardNamedScheduleRetrieveParams.scheduleName
-            this.coveringDate = contractRateCardNamedScheduleRetrieveParams.coveringDate
-            additionalHeaders(contractRateCardNamedScheduleRetrieveParams.additionalHeaders)
-            additionalQueryParams(contractRateCardNamedScheduleRetrieveParams.additionalQueryParams)
-            additionalBodyProperties(
-                contractRateCardNamedScheduleRetrieveParams.additionalBodyProperties
-            )
+            contractId = contractRateCardNamedScheduleRetrieveParams.contractId
+            customerId = contractRateCardNamedScheduleRetrieveParams.customerId
+            scheduleName = contractRateCardNamedScheduleRetrieveParams.scheduleName
+            coveringDate = contractRateCardNamedScheduleRetrieveParams.coveringDate
+            additionalHeaders =
+                contractRateCardNamedScheduleRetrieveParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                contractRateCardNamedScheduleRetrieveParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractRateCardNamedScheduleRetrieveParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the contract whose named schedule is to be retrieved */
@@ -368,4 +356,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractRateCardNamedScheduleRetrieveParams && contractId == other.contractId && customerId == other.customerId && scheduleName == other.scheduleName && coveringDate == other.coveringDate && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, scheduleName, coveringDate, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractRateCardNamedScheduleRetrieveParams{contractId=$contractId, customerId=$customerId, scheduleName=$scheduleName, coveringDate=$coveringDate, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

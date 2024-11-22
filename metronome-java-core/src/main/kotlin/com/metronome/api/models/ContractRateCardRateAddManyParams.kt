@@ -33,6 +33,12 @@ constructor(
 
     fun rates(): List<Rate> = rates
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractRateCardRateAddManyBody {
         return ContractRateCardRateAddManyBody(
@@ -129,25 +135,6 @@ constructor(
             "ContractRateCardRateAddManyBody{rateCardId=$rateCardId, rates=$rates, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractRateCardRateAddManyParams && rateCardId == other.rateCardId && rates == other.rates && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(rateCardId, rates, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractRateCardRateAddManyParams{rateCardId=$rateCardId, rates=$rates, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -167,11 +154,13 @@ constructor(
         @JvmSynthetic
         internal fun from(contractRateCardRateAddManyParams: ContractRateCardRateAddManyParams) =
             apply {
-                this.rateCardId = contractRateCardRateAddManyParams.rateCardId
-                this.rates(contractRateCardRateAddManyParams.rates)
-                additionalHeaders(contractRateCardRateAddManyParams.additionalHeaders)
-                additionalQueryParams(contractRateCardRateAddManyParams.additionalQueryParams)
-                additionalBodyProperties(contractRateCardRateAddManyParams.additionalBodyProperties)
+                rateCardId = contractRateCardRateAddManyParams.rateCardId
+                rates = contractRateCardRateAddManyParams.rates.toMutableList()
+                additionalHeaders = contractRateCardRateAddManyParams.additionalHeaders.toBuilder()
+                additionalQueryParams =
+                    contractRateCardRateAddManyParams.additionalQueryParams.toBuilder()
+                additionalBodyProperties =
+                    contractRateCardRateAddManyParams.additionalBodyProperties.toMutableMap()
             }
 
         fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
@@ -306,7 +295,7 @@ constructor(
         fun build(): ContractRateCardRateAddManyParams =
             ContractRateCardRateAddManyParams(
                 checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
-                checkNotNull(rates) { "`rates` is required but was not set" }.toImmutable(),
+                rates.toImmutable(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -978,4 +967,17 @@ constructor(
         override fun toString() =
             "Rate{productId=$productId, pricingGroupValues=$pricingGroupValues, startingAt=$startingAt, endingBefore=$endingBefore, entitled=$entitled, rateType=$rateType, price=$price, creditTypeId=$creditTypeId, quantity=$quantity, isProrated=$isProrated, useListPrices=$useListPrices, tiers=$tiers, customRate=$customRate, commitRate=$commitRate, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractRateCardRateAddManyParams && rateCardId == other.rateCardId && rates == other.rates && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(rateCardId, rates, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractRateCardRateAddManyParams{rateCardId=$rateCardId, rates=$rates, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

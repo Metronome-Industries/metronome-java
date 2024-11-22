@@ -31,6 +31,12 @@ constructor(
 
     fun voidInvoices(): Boolean = voidInvoices
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractArchiveBody {
         return ContractArchiveBody(
@@ -145,25 +151,6 @@ constructor(
             "ContractArchiveBody{contractId=$contractId, customerId=$customerId, voidInvoices=$voidInvoices, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractArchiveParams && contractId == other.contractId && customerId == other.customerId && voidInvoices == other.voidInvoices && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, voidInvoices, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractArchiveParams{contractId=$contractId, customerId=$customerId, voidInvoices=$voidInvoices, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -183,12 +170,12 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractArchiveParams: ContractArchiveParams) = apply {
-            this.contractId = contractArchiveParams.contractId
-            this.customerId = contractArchiveParams.customerId
-            this.voidInvoices = contractArchiveParams.voidInvoices
-            additionalHeaders(contractArchiveParams.additionalHeaders)
-            additionalQueryParams(contractArchiveParams.additionalQueryParams)
-            additionalBodyProperties(contractArchiveParams.additionalBodyProperties)
+            contractId = contractArchiveParams.contractId
+            customerId = contractArchiveParams.customerId
+            voidInvoices = contractArchiveParams.voidInvoices
+            additionalHeaders = contractArchiveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractArchiveParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = contractArchiveParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the contract to archive */
@@ -330,4 +317,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractArchiveParams && contractId == other.contractId && customerId == other.customerId && voidInvoices == other.voidInvoices && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, voidInvoices, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractArchiveParams{contractId=$contractId, customerId=$customerId, voidInvoices=$voidInvoices, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

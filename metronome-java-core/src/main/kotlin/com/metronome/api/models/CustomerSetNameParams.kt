@@ -28,6 +28,12 @@ constructor(
 
     fun name(): String = name
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomerSetNameBody {
         return CustomerSetNameBody(name, additionalBodyProperties)
@@ -125,25 +131,6 @@ constructor(
             "CustomerSetNameBody{name=$name, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerSetNameParams && customerId == other.customerId && name == other.name && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, name, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerSetNameParams{customerId=$customerId, name=$name, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -162,11 +149,11 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerSetNameParams: CustomerSetNameParams) = apply {
-            this.customerId = customerSetNameParams.customerId
-            this.name = customerSetNameParams.name
-            additionalHeaders(customerSetNameParams.additionalHeaders)
-            additionalQueryParams(customerSetNameParams.additionalQueryParams)
-            additionalBodyProperties(customerSetNameParams.additionalBodyProperties)
+            customerId = customerSetNameParams.customerId
+            name = customerSetNameParams.name
+            additionalHeaders = customerSetNameParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerSetNameParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = customerSetNameParams.additionalBodyProperties.toMutableMap()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -306,4 +293,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerSetNameParams && customerId == other.customerId && name == other.name && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, name, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerSetNameParams{customerId=$customerId, name=$name, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

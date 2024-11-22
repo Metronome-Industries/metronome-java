@@ -36,6 +36,12 @@ constructor(
 
     fun name(): Optional<String> = Optional.ofNullable(name)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CreditGrantEditBody {
         return CreditGrantEditBody(
@@ -160,25 +166,6 @@ constructor(
             "CreditGrantEditBody{id=$id, creditGrantType=$creditGrantType, expiresAt=$expiresAt, name=$name, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CreditGrantEditParams && id == other.id && creditGrantType == other.creditGrantType && expiresAt == other.expiresAt && name == other.name && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, creditGrantType, expiresAt, name, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CreditGrantEditParams{id=$id, creditGrantType=$creditGrantType, expiresAt=$expiresAt, name=$name, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -199,13 +186,13 @@ constructor(
 
         @JvmSynthetic
         internal fun from(creditGrantEditParams: CreditGrantEditParams) = apply {
-            this.id = creditGrantEditParams.id
-            this.creditGrantType = creditGrantEditParams.creditGrantType
-            this.expiresAt = creditGrantEditParams.expiresAt
-            this.name = creditGrantEditParams.name
-            additionalHeaders(creditGrantEditParams.additionalHeaders)
-            additionalQueryParams(creditGrantEditParams.additionalQueryParams)
-            additionalBodyProperties(creditGrantEditParams.additionalBodyProperties)
+            id = creditGrantEditParams.id
+            creditGrantType = creditGrantEditParams.creditGrantType
+            expiresAt = creditGrantEditParams.expiresAt
+            name = creditGrantEditParams.name
+            additionalHeaders = creditGrantEditParams.additionalHeaders.toBuilder()
+            additionalQueryParams = creditGrantEditParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = creditGrantEditParams.additionalBodyProperties.toMutableMap()
         }
 
         /** the ID of the credit grant */
@@ -353,4 +340,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CreditGrantEditParams && id == other.id && creditGrantType == other.creditGrantType && expiresAt == other.expiresAt && name == other.name && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, creditGrantType, expiresAt, name, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CreditGrantEditParams{id=$id, creditGrantType=$creditGrantType, expiresAt=$expiresAt, name=$name, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

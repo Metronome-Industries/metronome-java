@@ -42,6 +42,12 @@ constructor(
 
     fun ingestAliases(): Optional<List<String>> = Optional.ofNullable(ingestAliases)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomerCreateBody {
         return CustomerCreateBody(
@@ -185,25 +191,6 @@ constructor(
             "CustomerCreateBody{name=$name, billingConfig=$billingConfig, customFields=$customFields, externalId=$externalId, ingestAliases=$ingestAliases, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerCreateParams && name == other.name && billingConfig == other.billingConfig && customFields == other.customFields && externalId == other.externalId && ingestAliases == other.ingestAliases && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(name, billingConfig, customFields, externalId, ingestAliases, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerCreateParams{name=$name, billingConfig=$billingConfig, customFields=$customFields, externalId=$externalId, ingestAliases=$ingestAliases, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -225,14 +212,14 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerCreateParams: CustomerCreateParams) = apply {
-            this.name = customerCreateParams.name
-            this.billingConfig = customerCreateParams.billingConfig
-            this.customFields = customerCreateParams.customFields
-            this.externalId = customerCreateParams.externalId
-            this.ingestAliases(customerCreateParams.ingestAliases ?: listOf())
-            additionalHeaders(customerCreateParams.additionalHeaders)
-            additionalQueryParams(customerCreateParams.additionalQueryParams)
-            additionalBodyProperties(customerCreateParams.additionalBodyProperties)
+            name = customerCreateParams.name
+            billingConfig = customerCreateParams.billingConfig
+            customFields = customerCreateParams.customFields
+            externalId = customerCreateParams.externalId
+            ingestAliases = customerCreateParams.ingestAliases?.toMutableList() ?: mutableListOf()
+            additionalHeaders = customerCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerCreateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = customerCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** This will be truncated to 160 characters if the provided name is longer. */
@@ -385,7 +372,7 @@ constructor(
                 billingConfig,
                 customFields,
                 externalId,
-                if (ingestAliases.size == 0) null else ingestAliases.toImmutable(),
+                ingestAliases.toImmutable().ifEmpty { null },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -930,4 +917,17 @@ constructor(
 
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerCreateParams && name == other.name && billingConfig == other.billingConfig && customFields == other.customFields && externalId == other.externalId && ingestAliases == other.ingestAliases && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(name, billingConfig, customFields, externalId, ingestAliases, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerCreateParams{name=$name, billingConfig=$billingConfig, customFields=$customFields, externalId=$externalId, ingestAliases=$ingestAliases, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

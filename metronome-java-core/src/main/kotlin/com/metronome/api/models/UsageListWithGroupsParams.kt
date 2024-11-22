@@ -55,6 +55,12 @@ constructor(
 
     fun startingOn(): Optional<OffsetDateTime> = Optional.ofNullable(startingOn)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): UsageListWithGroupsBody {
         return UsageListWithGroupsBody(
@@ -234,25 +240,6 @@ constructor(
             "UsageListWithGroupsBody{billableMetricId=$billableMetricId, customerId=$customerId, windowSize=$windowSize, currentPeriod=$currentPeriod, endingBefore=$endingBefore, groupBy=$groupBy, startingOn=$startingOn, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is UsageListWithGroupsParams && billableMetricId == other.billableMetricId && customerId == other.customerId && windowSize == other.windowSize && currentPeriod == other.currentPeriod && endingBefore == other.endingBefore && groupBy == other.groupBy && startingOn == other.startingOn && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(billableMetricId, customerId, windowSize, currentPeriod, endingBefore, groupBy, startingOn, limit, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "UsageListWithGroupsParams{billableMetricId=$billableMetricId, customerId=$customerId, windowSize=$windowSize, currentPeriod=$currentPeriod, endingBefore=$endingBefore, groupBy=$groupBy, startingOn=$startingOn, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -278,18 +265,19 @@ constructor(
 
         @JvmSynthetic
         internal fun from(usageListWithGroupsParams: UsageListWithGroupsParams) = apply {
-            this.billableMetricId = usageListWithGroupsParams.billableMetricId
-            this.customerId = usageListWithGroupsParams.customerId
-            this.windowSize = usageListWithGroupsParams.windowSize
-            this.limit = usageListWithGroupsParams.limit
-            this.nextPage = usageListWithGroupsParams.nextPage
-            this.currentPeriod = usageListWithGroupsParams.currentPeriod
-            this.endingBefore = usageListWithGroupsParams.endingBefore
-            this.groupBy = usageListWithGroupsParams.groupBy
-            this.startingOn = usageListWithGroupsParams.startingOn
-            additionalHeaders(usageListWithGroupsParams.additionalHeaders)
-            additionalQueryParams(usageListWithGroupsParams.additionalQueryParams)
-            additionalBodyProperties(usageListWithGroupsParams.additionalBodyProperties)
+            billableMetricId = usageListWithGroupsParams.billableMetricId
+            customerId = usageListWithGroupsParams.customerId
+            windowSize = usageListWithGroupsParams.windowSize
+            limit = usageListWithGroupsParams.limit
+            nextPage = usageListWithGroupsParams.nextPage
+            currentPeriod = usageListWithGroupsParams.currentPeriod
+            endingBefore = usageListWithGroupsParams.endingBefore
+            groupBy = usageListWithGroupsParams.groupBy
+            startingOn = usageListWithGroupsParams.startingOn
+            additionalHeaders = usageListWithGroupsParams.additionalHeaders.toBuilder()
+            additionalQueryParams = usageListWithGroupsParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                usageListWithGroupsParams.additionalBodyProperties.toMutableMap()
         }
 
         fun billableMetricId(billableMetricId: String) = apply {
@@ -615,4 +603,17 @@ constructor(
         override fun toString() =
             "GroupBy{key=$key, values=$values, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is UsageListWithGroupsParams && billableMetricId == other.billableMetricId && customerId == other.customerId && windowSize == other.windowSize && limit == other.limit && nextPage == other.nextPage && currentPeriod == other.currentPeriod && endingBefore == other.endingBefore && groupBy == other.groupBy && startingOn == other.startingOn && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(billableMetricId, customerId, windowSize, limit, nextPage, currentPeriod, endingBefore, groupBy, startingOn, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "UsageListWithGroupsParams{billableMetricId=$billableMetricId, customerId=$customerId, windowSize=$windowSize, limit=$limit, nextPage=$nextPage, currentPeriod=$currentPeriod, endingBefore=$endingBefore, groupBy=$groupBy, startingOn=$startingOn, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

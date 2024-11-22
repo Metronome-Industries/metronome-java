@@ -33,6 +33,12 @@ constructor(
 
     fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractUpdateEndDateBody {
         return ContractUpdateEndDateBody(
@@ -153,25 +159,6 @@ constructor(
             "ContractUpdateEndDateBody{contractId=$contractId, customerId=$customerId, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractUpdateEndDateParams && contractId == other.contractId && customerId == other.customerId && endingBefore == other.endingBefore && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, endingBefore, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractUpdateEndDateParams{contractId=$contractId, customerId=$customerId, endingBefore=$endingBefore, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -191,12 +178,13 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractUpdateEndDateParams: ContractUpdateEndDateParams) = apply {
-            this.contractId = contractUpdateEndDateParams.contractId
-            this.customerId = contractUpdateEndDateParams.customerId
-            this.endingBefore = contractUpdateEndDateParams.endingBefore
-            additionalHeaders(contractUpdateEndDateParams.additionalHeaders)
-            additionalQueryParams(contractUpdateEndDateParams.additionalQueryParams)
-            additionalBodyProperties(contractUpdateEndDateParams.additionalBodyProperties)
+            contractId = contractUpdateEndDateParams.contractId
+            customerId = contractUpdateEndDateParams.customerId
+            endingBefore = contractUpdateEndDateParams.endingBefore
+            additionalHeaders = contractUpdateEndDateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractUpdateEndDateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractUpdateEndDateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the contract to update */
@@ -341,4 +329,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractUpdateEndDateParams && contractId == other.contractId && customerId == other.customerId && endingBefore == other.endingBefore && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, endingBefore, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractUpdateEndDateParams{contractId=$contractId, customerId=$customerId, endingBefore=$endingBefore, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

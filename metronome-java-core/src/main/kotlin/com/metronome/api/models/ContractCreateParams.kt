@@ -105,6 +105,12 @@ constructor(
     fun usageStatementSchedule(): Optional<UsageStatementSchedule> =
         Optional.ofNullable(usageStatementSchedule)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractCreateBody {
         return ContractCreateBody(
@@ -500,25 +506,6 @@ constructor(
             "ContractCreateBody{customerId=$customerId, startingAt=$startingAt, billingProviderConfiguration=$billingProviderConfiguration, commits=$commits, credits=$credits, customFields=$customFields, discounts=$discounts, endingBefore=$endingBefore, multiplierOverridePrioritization=$multiplierOverridePrioritization, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, overrides=$overrides, professionalServices=$professionalServices, rateCardAlias=$rateCardAlias, rateCardId=$rateCardId, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledCharges=$scheduledCharges, totalContractValue=$totalContractValue, transition=$transition, uniquenessKey=$uniquenessKey, usageFilter=$usageFilter, usageStatementSchedule=$usageStatementSchedule, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractCreateParams && customerId == other.customerId && startingAt == other.startingAt && billingProviderConfiguration == other.billingProviderConfiguration && commits == other.commits && credits == other.credits && customFields == other.customFields && discounts == other.discounts && endingBefore == other.endingBefore && multiplierOverridePrioritization == other.multiplierOverridePrioritization && name == other.name && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && overrides == other.overrides && professionalServices == other.professionalServices && rateCardAlias == other.rateCardAlias && rateCardId == other.rateCardId && resellerRoyalties == other.resellerRoyalties && salesforceOpportunityId == other.salesforceOpportunityId && scheduledCharges == other.scheduledCharges && totalContractValue == other.totalContractValue && transition == other.transition && uniquenessKey == other.uniquenessKey && usageFilter == other.usageFilter && usageStatementSchedule == other.usageStatementSchedule && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, startingAt, billingProviderConfiguration, commits, credits, customFields, discounts, endingBefore, multiplierOverridePrioritization, name, netPaymentTermsDays, netsuiteSalesOrderId, overrides, professionalServices, rateCardAlias, rateCardId, resellerRoyalties, salesforceOpportunityId, scheduledCharges, totalContractValue, transition, uniquenessKey, usageFilter, usageStatementSchedule, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractCreateParams{customerId=$customerId, startingAt=$startingAt, billingProviderConfiguration=$billingProviderConfiguration, commits=$commits, credits=$credits, customFields=$customFields, discounts=$discounts, endingBefore=$endingBefore, multiplierOverridePrioritization=$multiplierOverridePrioritization, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, overrides=$overrides, professionalServices=$professionalServices, rateCardAlias=$rateCardAlias, rateCardId=$rateCardId, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledCharges=$scheduledCharges, totalContractValue=$totalContractValue, transition=$transition, uniquenessKey=$uniquenessKey, usageFilter=$usageFilter, usageStatementSchedule=$usageStatementSchedule, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -559,34 +546,36 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractCreateParams: ContractCreateParams) = apply {
-            this.customerId = contractCreateParams.customerId
-            this.startingAt = contractCreateParams.startingAt
-            this.billingProviderConfiguration = contractCreateParams.billingProviderConfiguration
-            this.commits(contractCreateParams.commits ?: listOf())
-            this.credits(contractCreateParams.credits ?: listOf())
-            this.customFields = contractCreateParams.customFields
-            this.discounts(contractCreateParams.discounts ?: listOf())
-            this.endingBefore = contractCreateParams.endingBefore
-            this.multiplierOverridePrioritization =
-                contractCreateParams.multiplierOverridePrioritization
-            this.name = contractCreateParams.name
-            this.netPaymentTermsDays = contractCreateParams.netPaymentTermsDays
-            this.netsuiteSalesOrderId = contractCreateParams.netsuiteSalesOrderId
-            this.overrides(contractCreateParams.overrides ?: listOf())
-            this.professionalServices(contractCreateParams.professionalServices ?: listOf())
-            this.rateCardAlias = contractCreateParams.rateCardAlias
-            this.rateCardId = contractCreateParams.rateCardId
-            this.resellerRoyalties(contractCreateParams.resellerRoyalties ?: listOf())
-            this.salesforceOpportunityId = contractCreateParams.salesforceOpportunityId
-            this.scheduledCharges(contractCreateParams.scheduledCharges ?: listOf())
-            this.totalContractValue = contractCreateParams.totalContractValue
-            this.transition = contractCreateParams.transition
-            this.uniquenessKey = contractCreateParams.uniquenessKey
-            this.usageFilter = contractCreateParams.usageFilter
-            this.usageStatementSchedule = contractCreateParams.usageStatementSchedule
-            additionalHeaders(contractCreateParams.additionalHeaders)
-            additionalQueryParams(contractCreateParams.additionalQueryParams)
-            additionalBodyProperties(contractCreateParams.additionalBodyProperties)
+            customerId = contractCreateParams.customerId
+            startingAt = contractCreateParams.startingAt
+            billingProviderConfiguration = contractCreateParams.billingProviderConfiguration
+            commits = contractCreateParams.commits?.toMutableList() ?: mutableListOf()
+            credits = contractCreateParams.credits?.toMutableList() ?: mutableListOf()
+            customFields = contractCreateParams.customFields
+            discounts = contractCreateParams.discounts?.toMutableList() ?: mutableListOf()
+            endingBefore = contractCreateParams.endingBefore
+            multiplierOverridePrioritization = contractCreateParams.multiplierOverridePrioritization
+            name = contractCreateParams.name
+            netPaymentTermsDays = contractCreateParams.netPaymentTermsDays
+            netsuiteSalesOrderId = contractCreateParams.netsuiteSalesOrderId
+            overrides = contractCreateParams.overrides?.toMutableList() ?: mutableListOf()
+            professionalServices =
+                contractCreateParams.professionalServices?.toMutableList() ?: mutableListOf()
+            rateCardAlias = contractCreateParams.rateCardAlias
+            rateCardId = contractCreateParams.rateCardId
+            resellerRoyalties =
+                contractCreateParams.resellerRoyalties?.toMutableList() ?: mutableListOf()
+            salesforceOpportunityId = contractCreateParams.salesforceOpportunityId
+            scheduledCharges =
+                contractCreateParams.scheduledCharges?.toMutableList() ?: mutableListOf()
+            totalContractValue = contractCreateParams.totalContractValue
+            transition = contractCreateParams.transition
+            uniquenessKey = contractCreateParams.uniquenessKey
+            usageFilter = contractCreateParams.usageFilter
+            usageStatementSchedule = contractCreateParams.usageStatementSchedule
+            additionalHeaders = contractCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractCreateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = contractCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -841,22 +830,22 @@ constructor(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
                 checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                 billingProviderConfiguration,
-                if (commits.size == 0) null else commits.toImmutable(),
-                if (credits.size == 0) null else credits.toImmutable(),
+                commits.toImmutable().ifEmpty { null },
+                credits.toImmutable().ifEmpty { null },
                 customFields,
-                if (discounts.size == 0) null else discounts.toImmutable(),
+                discounts.toImmutable().ifEmpty { null },
                 endingBefore,
                 multiplierOverridePrioritization,
                 name,
                 netPaymentTermsDays,
                 netsuiteSalesOrderId,
-                if (overrides.size == 0) null else overrides.toImmutable(),
-                if (professionalServices.size == 0) null else professionalServices.toImmutable(),
+                overrides.toImmutable().ifEmpty { null },
+                professionalServices.toImmutable().ifEmpty { null },
                 rateCardAlias,
                 rateCardId,
-                if (resellerRoyalties.size == 0) null else resellerRoyalties.toImmutable(),
+                resellerRoyalties.toImmutable().ifEmpty { null },
                 salesforceOpportunityId,
-                if (scheduledCharges.size == 0) null else scheduledCharges.toImmutable(),
+                scheduledCharges.toImmutable().ifEmpty { null },
                 totalContractValue,
                 transition,
                 uniquenessKey,
@@ -6573,4 +6562,17 @@ constructor(
         override fun toString() =
             "UsageStatementSchedule{frequency=$frequency, day=$day, billingAnchorDate=$billingAnchorDate, invoiceGenerationStartingAt=$invoiceGenerationStartingAt, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractCreateParams && customerId == other.customerId && startingAt == other.startingAt && billingProviderConfiguration == other.billingProviderConfiguration && commits == other.commits && credits == other.credits && customFields == other.customFields && discounts == other.discounts && endingBefore == other.endingBefore && multiplierOverridePrioritization == other.multiplierOverridePrioritization && name == other.name && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && overrides == other.overrides && professionalServices == other.professionalServices && rateCardAlias == other.rateCardAlias && rateCardId == other.rateCardId && resellerRoyalties == other.resellerRoyalties && salesforceOpportunityId == other.salesforceOpportunityId && scheduledCharges == other.scheduledCharges && totalContractValue == other.totalContractValue && transition == other.transition && uniquenessKey == other.uniquenessKey && usageFilter == other.usageFilter && usageStatementSchedule == other.usageStatementSchedule && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, startingAt, billingProviderConfiguration, commits, credits, customFields, discounts, endingBefore, multiplierOverridePrioritization, name, netPaymentTermsDays, netsuiteSalesOrderId, overrides, professionalServices, rateCardAlias, rateCardId, resellerRoyalties, salesforceOpportunityId, scheduledCharges, totalContractValue, transition, uniquenessKey, usageFilter, usageStatementSchedule, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractCreateParams{customerId=$customerId, startingAt=$startingAt, billingProviderConfiguration=$billingProviderConfiguration, commits=$commits, credits=$credits, customFields=$customFields, discounts=$discounts, endingBefore=$endingBefore, multiplierOverridePrioritization=$multiplierOverridePrioritization, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, overrides=$overrides, professionalServices=$professionalServices, rateCardAlias=$rateCardAlias, rateCardId=$rateCardId, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledCharges=$scheduledCharges, totalContractValue=$totalContractValue, transition=$transition, uniquenessKey=$uniquenessKey, usageFilter=$usageFilter, usageStatementSchedule=$usageStatementSchedule, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

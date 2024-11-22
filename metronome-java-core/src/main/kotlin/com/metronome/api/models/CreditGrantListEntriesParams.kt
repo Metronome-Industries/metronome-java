@@ -39,6 +39,12 @@ constructor(
 
     fun startingOn(): Optional<OffsetDateTime> = Optional.ofNullable(startingOn)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CreditGrantListEntriesBody {
         return CreditGrantListEntriesBody(
@@ -195,25 +201,6 @@ constructor(
             "CreditGrantListEntriesBody{creditTypeIds=$creditTypeIds, customerIds=$customerIds, endingBefore=$endingBefore, startingOn=$startingOn, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CreditGrantListEntriesParams && creditTypeIds == other.creditTypeIds && customerIds == other.customerIds && endingBefore == other.endingBefore && startingOn == other.startingOn && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(creditTypeIds, customerIds, endingBefore, startingOn, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CreditGrantListEntriesParams{creditTypeIds=$creditTypeIds, customerIds=$customerIds, endingBefore=$endingBefore, startingOn=$startingOn, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -235,14 +222,17 @@ constructor(
 
         @JvmSynthetic
         internal fun from(creditGrantListEntriesParams: CreditGrantListEntriesParams) = apply {
-            this.nextPage = creditGrantListEntriesParams.nextPage
-            this.creditTypeIds(creditGrantListEntriesParams.creditTypeIds ?: listOf())
-            this.customerIds(creditGrantListEntriesParams.customerIds ?: listOf())
-            this.endingBefore = creditGrantListEntriesParams.endingBefore
-            this.startingOn = creditGrantListEntriesParams.startingOn
-            additionalHeaders(creditGrantListEntriesParams.additionalHeaders)
-            additionalQueryParams(creditGrantListEntriesParams.additionalQueryParams)
-            additionalBodyProperties(creditGrantListEntriesParams.additionalBodyProperties)
+            nextPage = creditGrantListEntriesParams.nextPage
+            creditTypeIds =
+                creditGrantListEntriesParams.creditTypeIds?.toMutableList() ?: mutableListOf()
+            customerIds =
+                creditGrantListEntriesParams.customerIds?.toMutableList() ?: mutableListOf()
+            endingBefore = creditGrantListEntriesParams.endingBefore
+            startingOn = creditGrantListEntriesParams.startingOn
+            additionalHeaders = creditGrantListEntriesParams.additionalHeaders.toBuilder()
+            additionalQueryParams = creditGrantListEntriesParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                creditGrantListEntriesParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Cursor that indicates where the next page of results should start. */
@@ -411,8 +401,8 @@ constructor(
         fun build(): CreditGrantListEntriesParams =
             CreditGrantListEntriesParams(
                 nextPage,
-                if (creditTypeIds.size == 0) null else creditTypeIds.toImmutable(),
-                if (customerIds.size == 0) null else customerIds.toImmutable(),
+                creditTypeIds.toImmutable().ifEmpty { null },
+                customerIds.toImmutable().ifEmpty { null },
                 endingBefore,
                 startingOn,
                 additionalHeaders.build(),
@@ -420,4 +410,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CreditGrantListEntriesParams && nextPage == other.nextPage && creditTypeIds == other.creditTypeIds && customerIds == other.customerIds && endingBefore == other.endingBefore && startingOn == other.startingOn && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(nextPage, creditTypeIds, customerIds, endingBefore, startingOn, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CreditGrantListEntriesParams{nextPage=$nextPage, creditTypeIds=$creditTypeIds, customerIds=$customerIds, endingBefore=$endingBefore, startingOn=$startingOn, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

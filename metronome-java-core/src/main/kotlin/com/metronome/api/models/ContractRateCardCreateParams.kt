@@ -43,6 +43,12 @@ constructor(
 
     fun fiatCreditTypeId(): Optional<String> = Optional.ofNullable(fiatCreditTypeId)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractRateCardCreateBody {
         return ContractRateCardCreateBody(
@@ -207,25 +213,6 @@ constructor(
             "ContractRateCardCreateBody{name=$name, aliases=$aliases, creditTypeConversions=$creditTypeConversions, customFields=$customFields, description=$description, fiatCreditTypeId=$fiatCreditTypeId, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractRateCardCreateParams && name == other.name && aliases == other.aliases && creditTypeConversions == other.creditTypeConversions && customFields == other.customFields && description == other.description && fiatCreditTypeId == other.fiatCreditTypeId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(name, aliases, creditTypeConversions, customFields, description, fiatCreditTypeId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractRateCardCreateParams{name=$name, aliases=$aliases, creditTypeConversions=$creditTypeConversions, customFields=$customFields, description=$description, fiatCreditTypeId=$fiatCreditTypeId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -248,17 +235,18 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractRateCardCreateParams: ContractRateCardCreateParams) = apply {
-            this.name = contractRateCardCreateParams.name
-            this.aliases(contractRateCardCreateParams.aliases ?: listOf())
-            this.creditTypeConversions(
-                contractRateCardCreateParams.creditTypeConversions ?: listOf()
-            )
-            this.customFields = contractRateCardCreateParams.customFields
-            this.description = contractRateCardCreateParams.description
-            this.fiatCreditTypeId = contractRateCardCreateParams.fiatCreditTypeId
-            additionalHeaders(contractRateCardCreateParams.additionalHeaders)
-            additionalQueryParams(contractRateCardCreateParams.additionalQueryParams)
-            additionalBodyProperties(contractRateCardCreateParams.additionalBodyProperties)
+            name = contractRateCardCreateParams.name
+            aliases = contractRateCardCreateParams.aliases?.toMutableList() ?: mutableListOf()
+            creditTypeConversions =
+                contractRateCardCreateParams.creditTypeConversions?.toMutableList()
+                    ?: mutableListOf()
+            customFields = contractRateCardCreateParams.customFields
+            description = contractRateCardCreateParams.description
+            fiatCreditTypeId = contractRateCardCreateParams.fiatCreditTypeId
+            additionalHeaders = contractRateCardCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractRateCardCreateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractRateCardCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Used only in UI/API. It is not exposed to end customers. */
@@ -427,8 +415,8 @@ constructor(
         fun build(): ContractRateCardCreateParams =
             ContractRateCardCreateParams(
                 checkNotNull(name) { "`name` is required but was not set" },
-                if (aliases.size == 0) null else aliases.toImmutable(),
-                if (creditTypeConversions.size == 0) null else creditTypeConversions.toImmutable(),
+                aliases.toImmutable().ifEmpty { null },
+                creditTypeConversions.toImmutable().ifEmpty { null },
                 customFields,
                 description,
                 fiatCreditTypeId,
@@ -684,4 +672,17 @@ constructor(
 
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractRateCardCreateParams && name == other.name && aliases == other.aliases && creditTypeConversions == other.creditTypeConversions && customFields == other.customFields && description == other.description && fiatCreditTypeId == other.fiatCreditTypeId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(name, aliases, creditTypeConversions, customFields, description, fiatCreditTypeId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractRateCardCreateParams{name=$name, aliases=$aliases, creditTypeConversions=$creditTypeConversions, customFields=$customFields, description=$description, fiatCreditTypeId=$fiatCreditTypeId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

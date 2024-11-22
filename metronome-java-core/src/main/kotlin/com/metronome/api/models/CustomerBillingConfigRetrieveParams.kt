@@ -25,6 +25,10 @@ constructor(
 
     fun billingProviderType(): BillingProviderType = billingProviderType
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
@@ -36,23 +40,6 @@ constructor(
             else -> ""
         }
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerBillingConfigRetrieveParams && customerId == other.customerId && billingProviderType == other.billingProviderType && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, billingProviderType, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CustomerBillingConfigRetrieveParams{customerId=$customerId, billingProviderType=$billingProviderType, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -73,10 +60,11 @@ constructor(
         internal fun from(
             customerBillingConfigRetrieveParams: CustomerBillingConfigRetrieveParams
         ) = apply {
-            this.customerId = customerBillingConfigRetrieveParams.customerId
-            this.billingProviderType = customerBillingConfigRetrieveParams.billingProviderType
-            additionalHeaders(customerBillingConfigRetrieveParams.additionalHeaders)
-            additionalQueryParams(customerBillingConfigRetrieveParams.additionalQueryParams)
+            customerId = customerBillingConfigRetrieveParams.customerId
+            billingProviderType = customerBillingConfigRetrieveParams.billingProviderType
+            additionalHeaders = customerBillingConfigRetrieveParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                customerBillingConfigRetrieveParams.additionalQueryParams.toBuilder()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -286,4 +274,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerBillingConfigRetrieveParams && customerId == other.customerId && billingProviderType == other.billingProviderType && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, billingProviderType, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CustomerBillingConfigRetrieveParams{customerId=$customerId, billingProviderType=$billingProviderType, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

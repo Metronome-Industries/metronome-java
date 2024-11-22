@@ -67,6 +67,12 @@ constructor(
 
     fun salesforceOpportunityId(): Optional<String> = Optional.ofNullable(salesforceOpportunityId)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomerCreditCreateBody {
         return CustomerCreditCreateBody(
@@ -333,25 +339,6 @@ constructor(
             "CustomerCreditCreateBody{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerCreditCreateParams && accessSchedule == other.accessSchedule && customerId == other.customerId && priority == other.priority && productId == other.productId && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && customFields == other.customFields && description == other.description && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rateType == other.rateType && salesforceOpportunityId == other.salesforceOpportunityId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(accessSchedule, customerId, priority, productId, applicableContractIds, applicableProductIds, applicableProductTags, customFields, description, name, netsuiteSalesOrderId, rateType, salesforceOpportunityId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerCreditCreateParams{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -381,22 +368,26 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerCreditCreateParams: CustomerCreditCreateParams) = apply {
-            this.accessSchedule = customerCreditCreateParams.accessSchedule
-            this.customerId = customerCreditCreateParams.customerId
-            this.priority = customerCreditCreateParams.priority
-            this.productId = customerCreditCreateParams.productId
-            this.applicableContractIds(customerCreditCreateParams.applicableContractIds ?: listOf())
-            this.applicableProductIds(customerCreditCreateParams.applicableProductIds ?: listOf())
-            this.applicableProductTags(customerCreditCreateParams.applicableProductTags ?: listOf())
-            this.customFields = customerCreditCreateParams.customFields
-            this.description = customerCreditCreateParams.description
-            this.name = customerCreditCreateParams.name
-            this.netsuiteSalesOrderId = customerCreditCreateParams.netsuiteSalesOrderId
-            this.rateType = customerCreditCreateParams.rateType
-            this.salesforceOpportunityId = customerCreditCreateParams.salesforceOpportunityId
-            additionalHeaders(customerCreditCreateParams.additionalHeaders)
-            additionalQueryParams(customerCreditCreateParams.additionalQueryParams)
-            additionalBodyProperties(customerCreditCreateParams.additionalBodyProperties)
+            accessSchedule = customerCreditCreateParams.accessSchedule
+            customerId = customerCreditCreateParams.customerId
+            priority = customerCreditCreateParams.priority
+            productId = customerCreditCreateParams.productId
+            applicableContractIds =
+                customerCreditCreateParams.applicableContractIds?.toMutableList() ?: mutableListOf()
+            applicableProductIds =
+                customerCreditCreateParams.applicableProductIds?.toMutableList() ?: mutableListOf()
+            applicableProductTags =
+                customerCreditCreateParams.applicableProductTags?.toMutableList() ?: mutableListOf()
+            customFields = customerCreditCreateParams.customFields
+            description = customerCreditCreateParams.description
+            name = customerCreditCreateParams.name
+            netsuiteSalesOrderId = customerCreditCreateParams.netsuiteSalesOrderId
+            rateType = customerCreditCreateParams.rateType
+            salesforceOpportunityId = customerCreditCreateParams.salesforceOpportunityId
+            additionalHeaders = customerCreditCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerCreditCreateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                customerCreditCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Schedule for distributing the credit to the customer. */
@@ -611,9 +602,9 @@ constructor(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
                 checkNotNull(priority) { "`priority` is required but was not set" },
                 checkNotNull(productId) { "`productId` is required but was not set" },
-                if (applicableContractIds.size == 0) null else applicableContractIds.toImmutable(),
-                if (applicableProductIds.size == 0) null else applicableProductIds.toImmutable(),
-                if (applicableProductTags.size == 0) null else applicableProductTags.toImmutable(),
+                applicableContractIds.toImmutable().ifEmpty { null },
+                applicableProductIds.toImmutable().ifEmpty { null },
+                applicableProductTags.toImmutable().ifEmpty { null },
                 customFields,
                 description,
                 name,
@@ -940,4 +931,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerCreditCreateParams && accessSchedule == other.accessSchedule && customerId == other.customerId && priority == other.priority && productId == other.productId && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && customFields == other.customFields && description == other.description && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rateType == other.rateType && salesforceOpportunityId == other.salesforceOpportunityId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(accessSchedule, customerId, priority, productId, applicableContractIds, applicableProductIds, applicableProductTags, customFields, description, name, netsuiteSalesOrderId, rateType, salesforceOpportunityId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerCreditCreateParams{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

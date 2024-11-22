@@ -76,6 +76,12 @@ constructor(
 
     fun uniquenessKey(): Optional<String> = Optional.ofNullable(uniquenessKey)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CreditGrantCreateBody {
         return CreditGrantCreateBody(
@@ -345,25 +351,6 @@ constructor(
             "CreditGrantCreateBody{customerId=$customerId, expiresAt=$expiresAt, grantAmount=$grantAmount, name=$name, paidAmount=$paidAmount, priority=$priority, creditGrantType=$creditGrantType, customFields=$customFields, effectiveAt=$effectiveAt, invoiceDate=$invoiceDate, productIds=$productIds, reason=$reason, rolloverSettings=$rolloverSettings, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CreditGrantCreateParams && customerId == other.customerId && expiresAt == other.expiresAt && grantAmount == other.grantAmount && name == other.name && paidAmount == other.paidAmount && priority == other.priority && creditGrantType == other.creditGrantType && customFields == other.customFields && effectiveAt == other.effectiveAt && invoiceDate == other.invoiceDate && productIds == other.productIds && reason == other.reason && rolloverSettings == other.rolloverSettings && uniquenessKey == other.uniquenessKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, expiresAt, grantAmount, name, paidAmount, priority, creditGrantType, customFields, effectiveAt, invoiceDate, productIds, reason, rolloverSettings, uniquenessKey, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CreditGrantCreateParams{customerId=$customerId, expiresAt=$expiresAt, grantAmount=$grantAmount, name=$name, paidAmount=$paidAmount, priority=$priority, creditGrantType=$creditGrantType, customFields=$customFields, effectiveAt=$effectiveAt, invoiceDate=$invoiceDate, productIds=$productIds, reason=$reason, rolloverSettings=$rolloverSettings, uniquenessKey=$uniquenessKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -394,23 +381,24 @@ constructor(
 
         @JvmSynthetic
         internal fun from(creditGrantCreateParams: CreditGrantCreateParams) = apply {
-            this.customerId = creditGrantCreateParams.customerId
-            this.expiresAt = creditGrantCreateParams.expiresAt
-            this.grantAmount = creditGrantCreateParams.grantAmount
-            this.name = creditGrantCreateParams.name
-            this.paidAmount = creditGrantCreateParams.paidAmount
-            this.priority = creditGrantCreateParams.priority
-            this.creditGrantType = creditGrantCreateParams.creditGrantType
-            this.customFields = creditGrantCreateParams.customFields
-            this.effectiveAt = creditGrantCreateParams.effectiveAt
-            this.invoiceDate = creditGrantCreateParams.invoiceDate
-            this.productIds(creditGrantCreateParams.productIds ?: listOf())
-            this.reason = creditGrantCreateParams.reason
-            this.rolloverSettings = creditGrantCreateParams.rolloverSettings
-            this.uniquenessKey = creditGrantCreateParams.uniquenessKey
-            additionalHeaders(creditGrantCreateParams.additionalHeaders)
-            additionalQueryParams(creditGrantCreateParams.additionalQueryParams)
-            additionalBodyProperties(creditGrantCreateParams.additionalBodyProperties)
+            customerId = creditGrantCreateParams.customerId
+            expiresAt = creditGrantCreateParams.expiresAt
+            grantAmount = creditGrantCreateParams.grantAmount
+            name = creditGrantCreateParams.name
+            paidAmount = creditGrantCreateParams.paidAmount
+            priority = creditGrantCreateParams.priority
+            creditGrantType = creditGrantCreateParams.creditGrantType
+            customFields = creditGrantCreateParams.customFields
+            effectiveAt = creditGrantCreateParams.effectiveAt
+            invoiceDate = creditGrantCreateParams.invoiceDate
+            productIds = creditGrantCreateParams.productIds?.toMutableList() ?: mutableListOf()
+            reason = creditGrantCreateParams.reason
+            rolloverSettings = creditGrantCreateParams.rolloverSettings
+            uniquenessKey = creditGrantCreateParams.uniquenessKey
+            additionalHeaders = creditGrantCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = creditGrantCreateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                creditGrantCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** the Metronome ID of the customer */
@@ -610,7 +598,7 @@ constructor(
                 customFields,
                 effectiveAt,
                 invoiceDate,
-                if (productIds.size == 0) null else productIds.toImmutable(),
+                productIds.toImmutable().ifEmpty { null },
                 reason,
                 rolloverSettings,
                 uniquenessKey,
@@ -1099,4 +1087,17 @@ constructor(
         override fun toString() =
             "RolloverSettings{expiresAt=$expiresAt, priority=$priority, rolloverAmount=$rolloverAmount, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CreditGrantCreateParams && customerId == other.customerId && expiresAt == other.expiresAt && grantAmount == other.grantAmount && name == other.name && paidAmount == other.paidAmount && priority == other.priority && creditGrantType == other.creditGrantType && customFields == other.customFields && effectiveAt == other.effectiveAt && invoiceDate == other.invoiceDate && productIds == other.productIds && reason == other.reason && rolloverSettings == other.rolloverSettings && uniquenessKey == other.uniquenessKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, expiresAt, grantAmount, name, paidAmount, priority, creditGrantType, customFields, effectiveAt, invoiceDate, productIds, reason, rolloverSettings, uniquenessKey, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CreditGrantCreateParams{customerId=$customerId, expiresAt=$expiresAt, grantAmount=$grantAmount, name=$name, paidAmount=$paidAmount, priority=$priority, creditGrantType=$creditGrantType, customFields=$customFields, effectiveAt=$effectiveAt, invoiceDate=$invoiceDate, productIds=$productIds, reason=$reason, rolloverSettings=$rolloverSettings, uniquenessKey=$uniquenessKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

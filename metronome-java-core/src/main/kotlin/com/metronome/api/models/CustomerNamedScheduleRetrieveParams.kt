@@ -33,6 +33,12 @@ constructor(
 
     fun coveringDate(): Optional<OffsetDateTime> = Optional.ofNullable(coveringDate)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomerNamedScheduleRetrieveBody {
         return CustomerNamedScheduleRetrieveBody(
@@ -155,25 +161,6 @@ constructor(
             "CustomerNamedScheduleRetrieveBody{customerId=$customerId, scheduleName=$scheduleName, coveringDate=$coveringDate, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerNamedScheduleRetrieveParams && customerId == other.customerId && scheduleName == other.scheduleName && coveringDate == other.coveringDate && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, scheduleName, coveringDate, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerNamedScheduleRetrieveParams{customerId=$customerId, scheduleName=$scheduleName, coveringDate=$coveringDate, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -195,12 +182,14 @@ constructor(
         internal fun from(
             customerNamedScheduleRetrieveParams: CustomerNamedScheduleRetrieveParams
         ) = apply {
-            this.customerId = customerNamedScheduleRetrieveParams.customerId
-            this.scheduleName = customerNamedScheduleRetrieveParams.scheduleName
-            this.coveringDate = customerNamedScheduleRetrieveParams.coveringDate
-            additionalHeaders(customerNamedScheduleRetrieveParams.additionalHeaders)
-            additionalQueryParams(customerNamedScheduleRetrieveParams.additionalQueryParams)
-            additionalBodyProperties(customerNamedScheduleRetrieveParams.additionalBodyProperties)
+            customerId = customerNamedScheduleRetrieveParams.customerId
+            scheduleName = customerNamedScheduleRetrieveParams.scheduleName
+            coveringDate = customerNamedScheduleRetrieveParams.coveringDate
+            additionalHeaders = customerNamedScheduleRetrieveParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                customerNamedScheduleRetrieveParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                customerNamedScheduleRetrieveParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the customer whose named schedule is to be retrieved */
@@ -345,4 +334,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerNamedScheduleRetrieveParams && customerId == other.customerId && scheduleName == other.scheduleName && coveringDate == other.coveringDate && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, scheduleName, coveringDate, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerNamedScheduleRetrieveParams{customerId=$customerId, scheduleName=$scheduleName, coveringDate=$coveringDate, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

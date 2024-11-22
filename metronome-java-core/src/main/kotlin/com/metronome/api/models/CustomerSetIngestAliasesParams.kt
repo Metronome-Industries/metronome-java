@@ -28,6 +28,12 @@ constructor(
 
     fun ingestAliases(): List<String> = ingestAliases
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomerSetIngestAliasesBody {
         return CustomerSetIngestAliasesBody(ingestAliases, additionalBodyProperties)
@@ -121,25 +127,6 @@ constructor(
             "CustomerSetIngestAliasesBody{ingestAliases=$ingestAliases, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerSetIngestAliasesParams && customerId == other.customerId && ingestAliases == other.ingestAliases && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, ingestAliases, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerSetIngestAliasesParams{customerId=$customerId, ingestAliases=$ingestAliases, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -158,11 +145,12 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerSetIngestAliasesParams: CustomerSetIngestAliasesParams) = apply {
-            this.customerId = customerSetIngestAliasesParams.customerId
-            this.ingestAliases(customerSetIngestAliasesParams.ingestAliases)
-            additionalHeaders(customerSetIngestAliasesParams.additionalHeaders)
-            additionalQueryParams(customerSetIngestAliasesParams.additionalQueryParams)
-            additionalBodyProperties(customerSetIngestAliasesParams.additionalBodyProperties)
+            customerId = customerSetIngestAliasesParams.customerId
+            ingestAliases = customerSetIngestAliasesParams.ingestAliases.toMutableList()
+            additionalHeaders = customerSetIngestAliasesParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerSetIngestAliasesParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                customerSetIngestAliasesParams.additionalBodyProperties.toMutableMap()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -297,11 +285,23 @@ constructor(
         fun build(): CustomerSetIngestAliasesParams =
             CustomerSetIngestAliasesParams(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(ingestAliases) { "`ingestAliases` is required but was not set" }
-                    .toImmutable(),
+                ingestAliases.toImmutable(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerSetIngestAliasesParams && customerId == other.customerId && ingestAliases == other.ingestAliases && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, ingestAliases, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerSetIngestAliasesParams{customerId=$customerId, ingestAliases=$ingestAliases, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

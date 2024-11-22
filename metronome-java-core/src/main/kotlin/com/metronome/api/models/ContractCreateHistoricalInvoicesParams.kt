@@ -33,6 +33,12 @@ constructor(
 
     fun preview(): Boolean = preview
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractCreateHistoricalInvoicesBody {
         return ContractCreateHistoricalInvoicesBody(
@@ -132,25 +138,6 @@ constructor(
             "ContractCreateHistoricalInvoicesBody{invoices=$invoices, preview=$preview, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractCreateHistoricalInvoicesParams && invoices == other.invoices && preview == other.preview && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(invoices, preview, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractCreateHistoricalInvoicesParams{invoices=$invoices, preview=$preview, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -171,13 +158,13 @@ constructor(
         internal fun from(
             contractCreateHistoricalInvoicesParams: ContractCreateHistoricalInvoicesParams
         ) = apply {
-            this.invoices(contractCreateHistoricalInvoicesParams.invoices)
-            this.preview = contractCreateHistoricalInvoicesParams.preview
-            additionalHeaders(contractCreateHistoricalInvoicesParams.additionalHeaders)
-            additionalQueryParams(contractCreateHistoricalInvoicesParams.additionalQueryParams)
-            additionalBodyProperties(
-                contractCreateHistoricalInvoicesParams.additionalBodyProperties
-            )
+            invoices = contractCreateHistoricalInvoicesParams.invoices.toMutableList()
+            preview = contractCreateHistoricalInvoicesParams.preview
+            additionalHeaders = contractCreateHistoricalInvoicesParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                contractCreateHistoricalInvoicesParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractCreateHistoricalInvoicesParams.additionalBodyProperties.toMutableMap()
         }
 
         fun invoices(invoices: List<Invoice>) = apply {
@@ -311,7 +298,7 @@ constructor(
 
         fun build(): ContractCreateHistoricalInvoicesParams =
             ContractCreateHistoricalInvoicesParams(
-                checkNotNull(invoices) { "`invoices` is required but was not set" }.toImmutable(),
+                invoices.toImmutable(),
                 checkNotNull(preview) { "`preview` is required but was not set" },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -1054,4 +1041,17 @@ constructor(
         override fun toString() =
             "Invoice{customerId=$customerId, contractId=$contractId, creditTypeId=$creditTypeId, inclusiveStartDate=$inclusiveStartDate, exclusiveEndDate=$exclusiveEndDate, issueDate=$issueDate, breakdownGranularity=$breakdownGranularity, usageLineItems=$usageLineItems, billableStatus=$billableStatus, customFields=$customFields, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractCreateHistoricalInvoicesParams && invoices == other.invoices && preview == other.preview && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(invoices, preview, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractCreateHistoricalInvoicesParams{invoices=$invoices, preview=$preview, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

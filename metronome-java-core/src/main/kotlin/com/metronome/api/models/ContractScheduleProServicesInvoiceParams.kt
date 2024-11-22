@@ -44,6 +44,12 @@ constructor(
     fun netsuiteInvoiceHeaderStart(): Optional<OffsetDateTime> =
         Optional.ofNullable(netsuiteInvoiceHeaderStart)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractScheduleProServicesInvoiceBody {
         return ContractScheduleProServicesInvoiceBody(
@@ -199,25 +205,6 @@ constructor(
             "ContractScheduleProServicesInvoiceBody{contractId=$contractId, customerId=$customerId, issuedAt=$issuedAt, lineItems=$lineItems, netsuiteInvoiceHeaderEnd=$netsuiteInvoiceHeaderEnd, netsuiteInvoiceHeaderStart=$netsuiteInvoiceHeaderStart, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractScheduleProServicesInvoiceParams && contractId == other.contractId && customerId == other.customerId && issuedAt == other.issuedAt && lineItems == other.lineItems && netsuiteInvoiceHeaderEnd == other.netsuiteInvoiceHeaderEnd && netsuiteInvoiceHeaderStart == other.netsuiteInvoiceHeaderStart && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, issuedAt, lineItems, netsuiteInvoiceHeaderEnd, netsuiteInvoiceHeaderStart, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractScheduleProServicesInvoiceParams{contractId=$contractId, customerId=$customerId, issuedAt=$issuedAt, lineItems=$lineItems, netsuiteInvoiceHeaderEnd=$netsuiteInvoiceHeaderEnd, netsuiteInvoiceHeaderStart=$netsuiteInvoiceHeaderStart, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -242,19 +229,20 @@ constructor(
         internal fun from(
             contractScheduleProServicesInvoiceParams: ContractScheduleProServicesInvoiceParams
         ) = apply {
-            this.contractId = contractScheduleProServicesInvoiceParams.contractId
-            this.customerId = contractScheduleProServicesInvoiceParams.customerId
-            this.issuedAt = contractScheduleProServicesInvoiceParams.issuedAt
-            this.lineItems(contractScheduleProServicesInvoiceParams.lineItems)
-            this.netsuiteInvoiceHeaderEnd =
+            contractId = contractScheduleProServicesInvoiceParams.contractId
+            customerId = contractScheduleProServicesInvoiceParams.customerId
+            issuedAt = contractScheduleProServicesInvoiceParams.issuedAt
+            lineItems = contractScheduleProServicesInvoiceParams.lineItems.toMutableList()
+            netsuiteInvoiceHeaderEnd =
                 contractScheduleProServicesInvoiceParams.netsuiteInvoiceHeaderEnd
-            this.netsuiteInvoiceHeaderStart =
+            netsuiteInvoiceHeaderStart =
                 contractScheduleProServicesInvoiceParams.netsuiteInvoiceHeaderStart
-            additionalHeaders(contractScheduleProServicesInvoiceParams.additionalHeaders)
-            additionalQueryParams(contractScheduleProServicesInvoiceParams.additionalQueryParams)
-            additionalBodyProperties(
-                contractScheduleProServicesInvoiceParams.additionalBodyProperties
-            )
+            additionalHeaders =
+                contractScheduleProServicesInvoiceParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                contractScheduleProServicesInvoiceParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractScheduleProServicesInvoiceParams.additionalBodyProperties.toMutableMap()
         }
 
         fun contractId(contractId: String) = apply { this.contractId = contractId }
@@ -408,7 +396,7 @@ constructor(
                 checkNotNull(contractId) { "`contractId` is required but was not set" },
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
                 checkNotNull(issuedAt) { "`issuedAt` is required but was not set" },
-                checkNotNull(lineItems) { "`lineItems` is required but was not set" }.toImmutable(),
+                lineItems.toImmutable(),
                 netsuiteInvoiceHeaderEnd,
                 netsuiteInvoiceHeaderStart,
                 additionalHeaders.build(),
@@ -586,4 +574,17 @@ constructor(
         override fun toString() =
             "LineItem{professionalServiceId=$professionalServiceId, amendmentId=$amendmentId, unitPrice=$unitPrice, quantity=$quantity, amount=$amount, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, metadata=$metadata, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractScheduleProServicesInvoiceParams && contractId == other.contractId && customerId == other.customerId && issuedAt == other.issuedAt && lineItems == other.lineItems && netsuiteInvoiceHeaderEnd == other.netsuiteInvoiceHeaderEnd && netsuiteInvoiceHeaderStart == other.netsuiteInvoiceHeaderStart && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, issuedAt, lineItems, netsuiteInvoiceHeaderEnd, netsuiteInvoiceHeaderStart, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractScheduleProServicesInvoiceParams{contractId=$contractId, customerId=$customerId, issuedAt=$issuedAt, lineItems=$lineItems, netsuiteInvoiceHeaderEnd=$netsuiteInvoiceHeaderEnd, netsuiteInvoiceHeaderStart=$netsuiteInvoiceHeaderStart, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

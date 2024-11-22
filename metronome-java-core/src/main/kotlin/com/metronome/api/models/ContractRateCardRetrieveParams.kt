@@ -25,6 +25,12 @@ constructor(
 
     fun id(): String = id
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractRateCardRetrieveBody {
         return ContractRateCardRetrieveBody(id, additionalBodyProperties)
@@ -107,25 +113,6 @@ constructor(
             "ContractRateCardRetrieveBody{id=$id, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractRateCardRetrieveParams && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractRateCardRetrieveParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -143,10 +130,11 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractRateCardRetrieveParams: ContractRateCardRetrieveParams) = apply {
-            this.id = contractRateCardRetrieveParams.id
-            additionalHeaders(contractRateCardRetrieveParams.additionalHeaders)
-            additionalQueryParams(contractRateCardRetrieveParams.additionalQueryParams)
-            additionalBodyProperties(contractRateCardRetrieveParams.additionalBodyProperties)
+            id = contractRateCardRetrieveParams.id
+            additionalHeaders = contractRateCardRetrieveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractRateCardRetrieveParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractRateCardRetrieveParams.additionalBodyProperties.toMutableMap()
         }
 
         fun id(id: String) = apply { this.id = id }
@@ -279,4 +267,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractRateCardRetrieveParams && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractRateCardRetrieveParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

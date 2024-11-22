@@ -25,6 +25,12 @@ constructor(
 
     fun productId(): String = productId
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractProductArchiveBody {
         return ContractProductArchiveBody(productId, additionalBodyProperties)
@@ -110,25 +116,6 @@ constructor(
             "ContractProductArchiveBody{productId=$productId, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractProductArchiveParams && productId == other.productId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(productId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractProductArchiveParams{productId=$productId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -146,10 +133,11 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractProductArchiveParams: ContractProductArchiveParams) = apply {
-            this.productId = contractProductArchiveParams.productId
-            additionalHeaders(contractProductArchiveParams.additionalHeaders)
-            additionalQueryParams(contractProductArchiveParams.additionalQueryParams)
-            additionalBodyProperties(contractProductArchiveParams.additionalBodyProperties)
+            productId = contractProductArchiveParams.productId
+            additionalHeaders = contractProductArchiveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractProductArchiveParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractProductArchiveParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the product to be archived */
@@ -283,4 +271,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractProductArchiveParams && productId == other.productId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(productId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractProductArchiveParams{productId=$productId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

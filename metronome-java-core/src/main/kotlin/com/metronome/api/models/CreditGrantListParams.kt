@@ -45,6 +45,12 @@ constructor(
 
     fun notExpiringBefore(): Optional<OffsetDateTime> = Optional.ofNullable(notExpiringBefore)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CreditGrantListBody {
         return CreditGrantListBody(
@@ -214,25 +220,6 @@ constructor(
             "CreditGrantListBody{creditGrantIds=$creditGrantIds, creditTypeIds=$creditTypeIds, customerIds=$customerIds, effectiveBefore=$effectiveBefore, notExpiringBefore=$notExpiringBefore, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CreditGrantListParams && creditGrantIds == other.creditGrantIds && creditTypeIds == other.creditTypeIds && customerIds == other.customerIds && effectiveBefore == other.effectiveBefore && notExpiringBefore == other.notExpiringBefore && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(creditGrantIds, creditTypeIds, customerIds, effectiveBefore, notExpiringBefore, limit, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CreditGrantListParams{creditGrantIds=$creditGrantIds, creditTypeIds=$creditTypeIds, customerIds=$customerIds, effectiveBefore=$effectiveBefore, notExpiringBefore=$notExpiringBefore, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -256,16 +243,17 @@ constructor(
 
         @JvmSynthetic
         internal fun from(creditGrantListParams: CreditGrantListParams) = apply {
-            this.limit = creditGrantListParams.limit
-            this.nextPage = creditGrantListParams.nextPage
-            this.creditGrantIds(creditGrantListParams.creditGrantIds ?: listOf())
-            this.creditTypeIds(creditGrantListParams.creditTypeIds ?: listOf())
-            this.customerIds(creditGrantListParams.customerIds ?: listOf())
-            this.effectiveBefore = creditGrantListParams.effectiveBefore
-            this.notExpiringBefore = creditGrantListParams.notExpiringBefore
-            additionalHeaders(creditGrantListParams.additionalHeaders)
-            additionalQueryParams(creditGrantListParams.additionalQueryParams)
-            additionalBodyProperties(creditGrantListParams.additionalBodyProperties)
+            limit = creditGrantListParams.limit
+            nextPage = creditGrantListParams.nextPage
+            creditGrantIds =
+                creditGrantListParams.creditGrantIds?.toMutableList() ?: mutableListOf()
+            creditTypeIds = creditGrantListParams.creditTypeIds?.toMutableList() ?: mutableListOf()
+            customerIds = creditGrantListParams.customerIds?.toMutableList() ?: mutableListOf()
+            effectiveBefore = creditGrantListParams.effectiveBefore
+            notExpiringBefore = creditGrantListParams.notExpiringBefore
+            additionalHeaders = creditGrantListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = creditGrantListParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = creditGrantListParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Max number of results that should be returned */
@@ -453,9 +441,9 @@ constructor(
             CreditGrantListParams(
                 limit,
                 nextPage,
-                if (creditGrantIds.size == 0) null else creditGrantIds.toImmutable(),
-                if (creditTypeIds.size == 0) null else creditTypeIds.toImmutable(),
-                if (customerIds.size == 0) null else customerIds.toImmutable(),
+                creditGrantIds.toImmutable().ifEmpty { null },
+                creditTypeIds.toImmutable().ifEmpty { null },
+                customerIds.toImmutable().ifEmpty { null },
                 effectiveBefore,
                 notExpiringBefore,
                 additionalHeaders.build(),
@@ -463,4 +451,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CreditGrantListParams && limit == other.limit && nextPage == other.nextPage && creditGrantIds == other.creditGrantIds && creditTypeIds == other.creditTypeIds && customerIds == other.customerIds && effectiveBefore == other.effectiveBefore && notExpiringBefore == other.notExpiringBefore && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(limit, nextPage, creditGrantIds, creditTypeIds, customerIds, effectiveBefore, notExpiringBefore, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CreditGrantListParams{limit=$limit, nextPage=$nextPage, creditGrantIds=$creditGrantIds, creditTypeIds=$creditTypeIds, customerIds=$customerIds, effectiveBefore=$effectiveBefore, notExpiringBefore=$notExpiringBefore, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

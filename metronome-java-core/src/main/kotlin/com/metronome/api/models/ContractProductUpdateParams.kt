@@ -69,6 +69,12 @@ constructor(
 
     fun tags(): Optional<List<String>> = Optional.ofNullable(tags)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractProductUpdateBody {
         return ContractProductUpdateBody(
@@ -440,25 +446,6 @@ constructor(
             "ContractProductUpdateBody{productId=$productId, startingAt=$startingAt, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, name=$name, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, tags=$tags, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractProductUpdateParams && productId == other.productId && startingAt == other.startingAt && billableMetricId == other.billableMetricId && compositeProductIds == other.compositeProductIds && compositeTags == other.compositeTags && excludeFreeUsage == other.excludeFreeUsage && isRefundable == other.isRefundable && name == other.name && netsuiteInternalItemId == other.netsuiteInternalItemId && netsuiteOverageItemId == other.netsuiteOverageItemId && presentationGroupKey == other.presentationGroupKey && pricingGroupKey == other.pricingGroupKey && quantityConversion == other.quantityConversion && quantityRounding == other.quantityRounding && tags == other.tags && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(productId, startingAt, billableMetricId, compositeProductIds, compositeTags, excludeFreeUsage, isRefundable, name, netsuiteInternalItemId, netsuiteOverageItemId, presentationGroupKey, pricingGroupKey, quantityConversion, quantityRounding, tags, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractProductUpdateParams{productId=$productId, startingAt=$startingAt, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, name=$name, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, tags=$tags, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -490,24 +477,29 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractProductUpdateParams: ContractProductUpdateParams) = apply {
-            this.productId = contractProductUpdateParams.productId
-            this.startingAt = contractProductUpdateParams.startingAt
-            this.billableMetricId = contractProductUpdateParams.billableMetricId
-            this.compositeProductIds(contractProductUpdateParams.compositeProductIds ?: listOf())
-            this.compositeTags(contractProductUpdateParams.compositeTags ?: listOf())
-            this.excludeFreeUsage = contractProductUpdateParams.excludeFreeUsage
-            this.isRefundable = contractProductUpdateParams.isRefundable
-            this.name = contractProductUpdateParams.name
-            this.netsuiteInternalItemId = contractProductUpdateParams.netsuiteInternalItemId
-            this.netsuiteOverageItemId = contractProductUpdateParams.netsuiteOverageItemId
-            this.presentationGroupKey(contractProductUpdateParams.presentationGroupKey ?: listOf())
-            this.pricingGroupKey(contractProductUpdateParams.pricingGroupKey ?: listOf())
-            this.quantityConversion = contractProductUpdateParams.quantityConversion
-            this.quantityRounding = contractProductUpdateParams.quantityRounding
-            this.tags(contractProductUpdateParams.tags ?: listOf())
-            additionalHeaders(contractProductUpdateParams.additionalHeaders)
-            additionalQueryParams(contractProductUpdateParams.additionalQueryParams)
-            additionalBodyProperties(contractProductUpdateParams.additionalBodyProperties)
+            productId = contractProductUpdateParams.productId
+            startingAt = contractProductUpdateParams.startingAt
+            billableMetricId = contractProductUpdateParams.billableMetricId
+            compositeProductIds =
+                contractProductUpdateParams.compositeProductIds?.toMutableList() ?: mutableListOf()
+            compositeTags =
+                contractProductUpdateParams.compositeTags?.toMutableList() ?: mutableListOf()
+            excludeFreeUsage = contractProductUpdateParams.excludeFreeUsage
+            isRefundable = contractProductUpdateParams.isRefundable
+            name = contractProductUpdateParams.name
+            netsuiteInternalItemId = contractProductUpdateParams.netsuiteInternalItemId
+            netsuiteOverageItemId = contractProductUpdateParams.netsuiteOverageItemId
+            presentationGroupKey =
+                contractProductUpdateParams.presentationGroupKey?.toMutableList() ?: mutableListOf()
+            pricingGroupKey =
+                contractProductUpdateParams.pricingGroupKey?.toMutableList() ?: mutableListOf()
+            quantityConversion = contractProductUpdateParams.quantityConversion
+            quantityRounding = contractProductUpdateParams.quantityRounding
+            tags = contractProductUpdateParams.tags?.toMutableList() ?: mutableListOf()
+            additionalHeaders = contractProductUpdateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractProductUpdateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractProductUpdateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the product to update */
@@ -788,21 +780,34 @@ constructor(
                 checkNotNull(productId) { "`productId` is required but was not set" },
                 checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                 billableMetricId,
-                if (compositeProductIds.size == 0) null else compositeProductIds.toImmutable(),
-                if (compositeTags.size == 0) null else compositeTags.toImmutable(),
+                compositeProductIds.toImmutable().ifEmpty { null },
+                compositeTags.toImmutable().ifEmpty { null },
                 excludeFreeUsage,
                 isRefundable,
                 name,
                 netsuiteInternalItemId,
                 netsuiteOverageItemId,
-                if (presentationGroupKey.size == 0) null else presentationGroupKey.toImmutable(),
-                if (pricingGroupKey.size == 0) null else pricingGroupKey.toImmutable(),
+                presentationGroupKey.toImmutable().ifEmpty { null },
+                pricingGroupKey.toImmutable().ifEmpty { null },
                 quantityConversion,
                 quantityRounding,
-                if (tags.size == 0) null else tags.toImmutable(),
+                tags.toImmutable().ifEmpty { null },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractProductUpdateParams && productId == other.productId && startingAt == other.startingAt && billableMetricId == other.billableMetricId && compositeProductIds == other.compositeProductIds && compositeTags == other.compositeTags && excludeFreeUsage == other.excludeFreeUsage && isRefundable == other.isRefundable && name == other.name && netsuiteInternalItemId == other.netsuiteInternalItemId && netsuiteOverageItemId == other.netsuiteOverageItemId && presentationGroupKey == other.presentationGroupKey && pricingGroupKey == other.pricingGroupKey && quantityConversion == other.quantityConversion && quantityRounding == other.quantityRounding && tags == other.tags && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(productId, startingAt, billableMetricId, compositeProductIds, compositeTags, excludeFreeUsage, isRefundable, name, netsuiteInternalItemId, netsuiteOverageItemId, presentationGroupKey, pricingGroupKey, quantityConversion, quantityRounding, tags, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractProductUpdateParams{productId=$productId, startingAt=$startingAt, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, name=$name, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, tags=$tags, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

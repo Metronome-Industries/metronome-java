@@ -28,6 +28,12 @@ constructor(
 
     fun billingProviderType(): BillingProviderType = billingProviderType
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): Optional<Map<String, JsonValue>> {
         return Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
@@ -44,25 +50,6 @@ constructor(
             else -> ""
         }
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerBillingConfigDeleteParams && customerId == other.customerId && billingProviderType == other.billingProviderType && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, billingProviderType, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerBillingConfigDeleteParams{customerId=$customerId, billingProviderType=$billingProviderType, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -83,11 +70,13 @@ constructor(
         @JvmSynthetic
         internal fun from(customerBillingConfigDeleteParams: CustomerBillingConfigDeleteParams) =
             apply {
-                this.customerId = customerBillingConfigDeleteParams.customerId
-                this.billingProviderType = customerBillingConfigDeleteParams.billingProviderType
-                additionalHeaders(customerBillingConfigDeleteParams.additionalHeaders)
-                additionalQueryParams(customerBillingConfigDeleteParams.additionalQueryParams)
-                additionalBodyProperties(customerBillingConfigDeleteParams.additionalBodyProperties)
+                customerId = customerBillingConfigDeleteParams.customerId
+                billingProviderType = customerBillingConfigDeleteParams.billingProviderType
+                additionalHeaders = customerBillingConfigDeleteParams.additionalHeaders.toBuilder()
+                additionalQueryParams =
+                    customerBillingConfigDeleteParams.additionalQueryParams.toBuilder()
+                additionalBodyProperties =
+                    customerBillingConfigDeleteParams.additionalBodyProperties.toMutableMap()
             }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -320,4 +309,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerBillingConfigDeleteParams && customerId == other.customerId && billingProviderType == other.billingProviderType && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, billingProviderType, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerBillingConfigDeleteParams{customerId=$customerId, billingProviderType=$billingProviderType, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

@@ -31,6 +31,10 @@ constructor(
 
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic
     internal fun getBody(): JsonValue {
         return body
@@ -120,23 +124,6 @@ constructor(
             "ContractRateCardListBody{body=$body, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractRateCardListParams && body == other.body && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "ContractRateCardListParams{body=$body, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -155,11 +142,11 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractRateCardListParams: ContractRateCardListParams) = apply {
-            this.body = contractRateCardListParams.body
-            this.limit = contractRateCardListParams.limit
-            this.nextPage = contractRateCardListParams.nextPage
-            additionalHeaders(contractRateCardListParams.additionalHeaders)
-            additionalQueryParams(contractRateCardListParams.additionalQueryParams)
+            body = contractRateCardListParams.body
+            limit = contractRateCardListParams.limit
+            nextPage = contractRateCardListParams.nextPage
+            additionalHeaders = contractRateCardListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractRateCardListParams.additionalQueryParams.toBuilder()
         }
 
         fun body(body: JsonValue) = apply { this.body = body }
@@ -277,4 +264,17 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractRateCardListParams && body == other.body && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "ContractRateCardListParams{body=$body, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -49,6 +49,10 @@ constructor(
 
     fun status(): Optional<String> = Optional.ofNullable(status)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic
@@ -85,23 +89,6 @@ constructor(
         }
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerInvoiceListParams && customerId == other.customerId && creditTypeId == other.creditTypeId && endingBefore == other.endingBefore && limit == other.limit && nextPage == other.nextPage && skipZeroQtyLineItems == other.skipZeroQtyLineItems && sort == other.sort && startingOn == other.startingOn && status == other.status && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, creditTypeId, endingBefore, limit, nextPage, skipZeroQtyLineItems, sort, startingOn, status, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CustomerInvoiceListParams{customerId=$customerId, creditTypeId=$creditTypeId, endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, startingOn=$startingOn, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -126,17 +113,17 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerInvoiceListParams: CustomerInvoiceListParams) = apply {
-            this.customerId = customerInvoiceListParams.customerId
-            this.creditTypeId = customerInvoiceListParams.creditTypeId
-            this.endingBefore = customerInvoiceListParams.endingBefore
-            this.limit = customerInvoiceListParams.limit
-            this.nextPage = customerInvoiceListParams.nextPage
-            this.skipZeroQtyLineItems = customerInvoiceListParams.skipZeroQtyLineItems
-            this.sort = customerInvoiceListParams.sort
-            this.startingOn = customerInvoiceListParams.startingOn
-            this.status = customerInvoiceListParams.status
-            additionalHeaders(customerInvoiceListParams.additionalHeaders)
-            additionalQueryParams(customerInvoiceListParams.additionalQueryParams)
+            customerId = customerInvoiceListParams.customerId
+            creditTypeId = customerInvoiceListParams.creditTypeId
+            endingBefore = customerInvoiceListParams.endingBefore
+            limit = customerInvoiceListParams.limit
+            nextPage = customerInvoiceListParams.nextPage
+            skipZeroQtyLineItems = customerInvoiceListParams.skipZeroQtyLineItems
+            sort = customerInvoiceListParams.sort
+            startingOn = customerInvoiceListParams.startingOn
+            status = customerInvoiceListParams.status
+            additionalHeaders = customerInvoiceListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerInvoiceListParams.additionalQueryParams.toBuilder()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -343,4 +330,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerInvoiceListParams && customerId == other.customerId && creditTypeId == other.creditTypeId && endingBefore == other.endingBefore && limit == other.limit && nextPage == other.nextPage && skipZeroQtyLineItems == other.skipZeroQtyLineItems && sort == other.sort && startingOn == other.startingOn && status == other.status && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, creditTypeId, endingBefore, limit, nextPage, skipZeroQtyLineItems, sort, startingOn, status, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CustomerInvoiceListParams{customerId=$customerId, creditTypeId=$creditTypeId, endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, startingOn=$startingOn, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

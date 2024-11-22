@@ -32,6 +32,12 @@ constructor(
 
     fun includeLedgers(): Optional<Boolean> = Optional.ofNullable(includeLedgers)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractRetrieveBody {
         return ContractRetrieveBody(
@@ -148,25 +154,6 @@ constructor(
             "ContractRetrieveBody{contractId=$contractId, customerId=$customerId, includeLedgers=$includeLedgers, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractRetrieveParams && contractId == other.contractId && customerId == other.customerId && includeLedgers == other.includeLedgers && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, includeLedgers, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractRetrieveParams{contractId=$contractId, customerId=$customerId, includeLedgers=$includeLedgers, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -186,12 +173,13 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractRetrieveParams: ContractRetrieveParams) = apply {
-            this.contractId = contractRetrieveParams.contractId
-            this.customerId = contractRetrieveParams.customerId
-            this.includeLedgers = contractRetrieveParams.includeLedgers
-            additionalHeaders(contractRetrieveParams.additionalHeaders)
-            additionalQueryParams(contractRetrieveParams.additionalQueryParams)
-            additionalBodyProperties(contractRetrieveParams.additionalBodyProperties)
+            contractId = contractRetrieveParams.contractId
+            customerId = contractRetrieveParams.customerId
+            includeLedgers = contractRetrieveParams.includeLedgers
+            additionalHeaders = contractRetrieveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractRetrieveParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractRetrieveParams.additionalBodyProperties.toMutableMap()
         }
 
         fun contractId(contractId: String) = apply { this.contractId = contractId }
@@ -334,4 +322,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractRetrieveParams && contractId == other.contractId && customerId == other.customerId && includeLedgers == other.includeLedgers && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, includeLedgers, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractRetrieveParams{contractId=$contractId, customerId=$customerId, includeLedgers=$includeLedgers, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

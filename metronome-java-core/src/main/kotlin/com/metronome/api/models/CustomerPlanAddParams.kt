@@ -53,6 +53,12 @@ constructor(
 
     fun trialSpec(): Optional<TrialSpec> = Optional.ofNullable(trialSpec)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomerPlanAddBody {
         return CustomerPlanAddBody(
@@ -269,25 +275,6 @@ constructor(
             "CustomerPlanAddBody{planId=$planId, startingOn=$startingOn, endingBefore=$endingBefore, netPaymentTermsDays=$netPaymentTermsDays, overageRateAdjustments=$overageRateAdjustments, priceAdjustments=$priceAdjustments, trialSpec=$trialSpec, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerPlanAddParams && customerId == other.customerId && planId == other.planId && startingOn == other.startingOn && endingBefore == other.endingBefore && netPaymentTermsDays == other.netPaymentTermsDays && overageRateAdjustments == other.overageRateAdjustments && priceAdjustments == other.priceAdjustments && trialSpec == other.trialSpec && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, planId, startingOn, endingBefore, netPaymentTermsDays, overageRateAdjustments, priceAdjustments, trialSpec, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerPlanAddParams{customerId=$customerId, planId=$planId, startingOn=$startingOn, endingBefore=$endingBefore, netPaymentTermsDays=$netPaymentTermsDays, overageRateAdjustments=$overageRateAdjustments, priceAdjustments=$priceAdjustments, trialSpec=$trialSpec, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -312,17 +299,19 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerPlanAddParams: CustomerPlanAddParams) = apply {
-            this.customerId = customerPlanAddParams.customerId
-            this.planId = customerPlanAddParams.planId
-            this.startingOn = customerPlanAddParams.startingOn
-            this.endingBefore = customerPlanAddParams.endingBefore
-            this.netPaymentTermsDays = customerPlanAddParams.netPaymentTermsDays
-            this.overageRateAdjustments(customerPlanAddParams.overageRateAdjustments ?: listOf())
-            this.priceAdjustments(customerPlanAddParams.priceAdjustments ?: listOf())
-            this.trialSpec = customerPlanAddParams.trialSpec
-            additionalHeaders(customerPlanAddParams.additionalHeaders)
-            additionalQueryParams(customerPlanAddParams.additionalQueryParams)
-            additionalBodyProperties(customerPlanAddParams.additionalBodyProperties)
+            customerId = customerPlanAddParams.customerId
+            planId = customerPlanAddParams.planId
+            startingOn = customerPlanAddParams.startingOn
+            endingBefore = customerPlanAddParams.endingBefore
+            netPaymentTermsDays = customerPlanAddParams.netPaymentTermsDays
+            overageRateAdjustments =
+                customerPlanAddParams.overageRateAdjustments?.toMutableList() ?: mutableListOf()
+            priceAdjustments =
+                customerPlanAddParams.priceAdjustments?.toMutableList() ?: mutableListOf()
+            trialSpec = customerPlanAddParams.trialSpec
+            additionalHeaders = customerPlanAddParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerPlanAddParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = customerPlanAddParams.additionalBodyProperties.toMutableMap()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -518,9 +507,8 @@ constructor(
                 checkNotNull(startingOn) { "`startingOn` is required but was not set" },
                 endingBefore,
                 netPaymentTermsDays,
-                if (overageRateAdjustments.size == 0) null
-                else overageRateAdjustments.toImmutable(),
-                if (priceAdjustments.size == 0) null else priceAdjustments.toImmutable(),
+                overageRateAdjustments.toImmutable().ifEmpty { null },
+                priceAdjustments.toImmutable().ifEmpty { null },
                 trialSpec,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -1026,4 +1014,17 @@ constructor(
         override fun toString() =
             "TrialSpec{lengthInDays=$lengthInDays, spendingCap=$spendingCap, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerPlanAddParams && customerId == other.customerId && planId == other.planId && startingOn == other.startingOn && endingBefore == other.endingBefore && netPaymentTermsDays == other.netPaymentTermsDays && overageRateAdjustments == other.overageRateAdjustments && priceAdjustments == other.priceAdjustments && trialSpec == other.trialSpec && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, planId, startingOn, endingBefore, netPaymentTermsDays, overageRateAdjustments, priceAdjustments, trialSpec, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerPlanAddParams{customerId=$customerId, planId=$planId, startingOn=$startingOn, endingBefore=$endingBefore, netPaymentTermsDays=$netPaymentTermsDays, overageRateAdjustments=$overageRateAdjustments, priceAdjustments=$priceAdjustments, trialSpec=$trialSpec, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

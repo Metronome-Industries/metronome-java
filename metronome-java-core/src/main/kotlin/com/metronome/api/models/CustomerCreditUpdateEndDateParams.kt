@@ -32,6 +32,12 @@ constructor(
 
     fun customerId(): String = customerId
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomerCreditUpdateEndDateBody {
         return CustomerCreditUpdateEndDateBody(
@@ -156,25 +162,6 @@ constructor(
             "CustomerCreditUpdateEndDateBody{accessEndingBefore=$accessEndingBefore, creditId=$creditId, customerId=$customerId, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerCreditUpdateEndDateParams && accessEndingBefore == other.accessEndingBefore && creditId == other.creditId && customerId == other.customerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(accessEndingBefore, creditId, customerId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerCreditUpdateEndDateParams{accessEndingBefore=$accessEndingBefore, creditId=$creditId, customerId=$customerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -195,12 +182,14 @@ constructor(
         @JvmSynthetic
         internal fun from(customerCreditUpdateEndDateParams: CustomerCreditUpdateEndDateParams) =
             apply {
-                this.accessEndingBefore = customerCreditUpdateEndDateParams.accessEndingBefore
-                this.creditId = customerCreditUpdateEndDateParams.creditId
-                this.customerId = customerCreditUpdateEndDateParams.customerId
-                additionalHeaders(customerCreditUpdateEndDateParams.additionalHeaders)
-                additionalQueryParams(customerCreditUpdateEndDateParams.additionalQueryParams)
-                additionalBodyProperties(customerCreditUpdateEndDateParams.additionalBodyProperties)
+                accessEndingBefore = customerCreditUpdateEndDateParams.accessEndingBefore
+                creditId = customerCreditUpdateEndDateParams.creditId
+                customerId = customerCreditUpdateEndDateParams.customerId
+                additionalHeaders = customerCreditUpdateEndDateParams.additionalHeaders.toBuilder()
+                additionalQueryParams =
+                    customerCreditUpdateEndDateParams.additionalQueryParams.toBuilder()
+                additionalBodyProperties =
+                    customerCreditUpdateEndDateParams.additionalBodyProperties.toMutableMap()
             }
 
         /**
@@ -349,4 +338,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerCreditUpdateEndDateParams && accessEndingBefore == other.accessEndingBefore && creditId == other.creditId && customerId == other.customerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(accessEndingBefore, creditId, customerId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerCreditUpdateEndDateParams{accessEndingBefore=$accessEndingBefore, creditId=$creditId, customerId=$customerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

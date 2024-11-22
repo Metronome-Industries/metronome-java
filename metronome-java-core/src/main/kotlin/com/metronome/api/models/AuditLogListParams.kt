@@ -43,6 +43,10 @@ constructor(
 
     fun startingOn(): Optional<OffsetDateTime> = Optional.ofNullable(startingOn)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic
@@ -69,23 +73,6 @@ constructor(
         return queryParams.build()
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is AuditLogListParams && endingBefore == other.endingBefore && limit == other.limit && nextPage == other.nextPage && resourceId == other.resourceId && resourceType == other.resourceType && sort == other.sort && startingOn == other.startingOn && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(endingBefore, limit, nextPage, resourceId, resourceType, sort, startingOn, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "AuditLogListParams{endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, resourceId=$resourceId, resourceType=$resourceType, sort=$sort, startingOn=$startingOn, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -108,15 +95,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(auditLogListParams: AuditLogListParams) = apply {
-            this.endingBefore = auditLogListParams.endingBefore
-            this.limit = auditLogListParams.limit
-            this.nextPage = auditLogListParams.nextPage
-            this.resourceId = auditLogListParams.resourceId
-            this.resourceType = auditLogListParams.resourceType
-            this.sort = auditLogListParams.sort
-            this.startingOn = auditLogListParams.startingOn
-            additionalHeaders(auditLogListParams.additionalHeaders)
-            additionalQueryParams(auditLogListParams.additionalQueryParams)
+            endingBefore = auditLogListParams.endingBefore
+            limit = auditLogListParams.limit
+            nextPage = auditLogListParams.nextPage
+            resourceId = auditLogListParams.resourceId
+            resourceType = auditLogListParams.resourceType
+            sort = auditLogListParams.sort
+            startingOn = auditLogListParams.startingOn
+            additionalHeaders = auditLogListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = auditLogListParams.additionalQueryParams.toBuilder()
         }
 
         /** RFC 3339 timestamp (exclusive). Cannot be used with 'next_page'. */
@@ -316,4 +303,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is AuditLogListParams && endingBefore == other.endingBefore && limit == other.limit && nextPage == other.nextPage && resourceId == other.resourceId && resourceType == other.resourceType && sort == other.sort && startingOn == other.startingOn && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(endingBefore, limit, nextPage, resourceId, resourceType, sort, startingOn, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "AuditLogListParams{endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, resourceId=$resourceId, resourceType=$resourceType, sort=$sort, startingOn=$startingOn, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

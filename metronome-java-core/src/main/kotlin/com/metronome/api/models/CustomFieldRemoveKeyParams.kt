@@ -32,6 +32,12 @@ constructor(
 
     fun key(): String = key
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomFieldRemoveKeyBody {
         return CustomFieldRemoveKeyBody(
@@ -126,25 +132,6 @@ constructor(
             "CustomFieldRemoveKeyBody{entity=$entity, key=$key, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomFieldRemoveKeyParams && entity == other.entity && key == other.key && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(entity, key, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomFieldRemoveKeyParams{entity=$entity, key=$key, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -163,11 +150,12 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customFieldRemoveKeyParams: CustomFieldRemoveKeyParams) = apply {
-            this.entity = customFieldRemoveKeyParams.entity
-            this.key = customFieldRemoveKeyParams.key
-            additionalHeaders(customFieldRemoveKeyParams.additionalHeaders)
-            additionalQueryParams(customFieldRemoveKeyParams.additionalQueryParams)
-            additionalBodyProperties(customFieldRemoveKeyParams.additionalBodyProperties)
+            entity = customFieldRemoveKeyParams.entity
+            key = customFieldRemoveKeyParams.key
+            additionalHeaders = customFieldRemoveKeyParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customFieldRemoveKeyParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                customFieldRemoveKeyParams.additionalBodyProperties.toMutableMap()
         }
 
         fun entity(entity: Entity) = apply { this.entity = entity }
@@ -444,4 +432,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomFieldRemoveKeyParams && entity == other.entity && key == other.key && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(entity, key, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomFieldRemoveKeyParams{entity=$entity, key=$key, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

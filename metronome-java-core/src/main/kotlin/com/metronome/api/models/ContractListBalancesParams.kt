@@ -51,6 +51,12 @@ constructor(
 
     fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractListBalancesBody {
         return ContractListBalancesBody(
@@ -243,25 +249,6 @@ constructor(
             "ContractListBalancesBody{customerId=$customerId, id=$id, coveringDate=$coveringDate, effectiveBefore=$effectiveBefore, includeArchived=$includeArchived, includeContractBalances=$includeContractBalances, includeLedgers=$includeLedgers, nextPage=$nextPage, startingAt=$startingAt, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractListBalancesParams && customerId == other.customerId && id == other.id && coveringDate == other.coveringDate && effectiveBefore == other.effectiveBefore && includeArchived == other.includeArchived && includeContractBalances == other.includeContractBalances && includeLedgers == other.includeLedgers && nextPage == other.nextPage && startingAt == other.startingAt && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, id, coveringDate, effectiveBefore, includeArchived, includeContractBalances, includeLedgers, nextPage, startingAt, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractListBalancesParams{customerId=$customerId, id=$id, coveringDate=$coveringDate, effectiveBefore=$effectiveBefore, includeArchived=$includeArchived, includeContractBalances=$includeContractBalances, includeLedgers=$includeLedgers, nextPage=$nextPage, startingAt=$startingAt, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -287,18 +274,19 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractListBalancesParams: ContractListBalancesParams) = apply {
-            this.customerId = contractListBalancesParams.customerId
-            this.id = contractListBalancesParams.id
-            this.coveringDate = contractListBalancesParams.coveringDate
-            this.effectiveBefore = contractListBalancesParams.effectiveBefore
-            this.includeArchived = contractListBalancesParams.includeArchived
-            this.includeContractBalances = contractListBalancesParams.includeContractBalances
-            this.includeLedgers = contractListBalancesParams.includeLedgers
-            this.nextPage = contractListBalancesParams.nextPage
-            this.startingAt = contractListBalancesParams.startingAt
-            additionalHeaders(contractListBalancesParams.additionalHeaders)
-            additionalQueryParams(contractListBalancesParams.additionalQueryParams)
-            additionalBodyProperties(contractListBalancesParams.additionalBodyProperties)
+            customerId = contractListBalancesParams.customerId
+            id = contractListBalancesParams.id
+            coveringDate = contractListBalancesParams.coveringDate
+            effectiveBefore = contractListBalancesParams.effectiveBefore
+            includeArchived = contractListBalancesParams.includeArchived
+            includeContractBalances = contractListBalancesParams.includeContractBalances
+            includeLedgers = contractListBalancesParams.includeLedgers
+            nextPage = contractListBalancesParams.nextPage
+            startingAt = contractListBalancesParams.startingAt
+            additionalHeaders = contractListBalancesParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractListBalancesParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractListBalancesParams.additionalBodyProperties.toMutableMap()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -468,4 +456,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractListBalancesParams && customerId == other.customerId && id == other.id && coveringDate == other.coveringDate && effectiveBefore == other.effectiveBefore && includeArchived == other.includeArchived && includeContractBalances == other.includeContractBalances && includeLedgers == other.includeLedgers && nextPage == other.nextPage && startingAt == other.startingAt && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, id, coveringDate, effectiveBefore, includeArchived, includeContractBalances, includeLedgers, nextPage, startingAt, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractListBalancesParams{customerId=$customerId, id=$id, coveringDate=$coveringDate, effectiveBefore=$effectiveBefore, includeArchived=$includeArchived, includeContractBalances=$includeContractBalances, includeLedgers=$includeLedgers, nextPage=$nextPage, startingAt=$startingAt, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

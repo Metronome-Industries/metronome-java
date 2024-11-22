@@ -43,6 +43,12 @@ constructor(
 
     fun dashboardOptions(): Optional<List<DashboardOption>> = Optional.ofNullable(dashboardOptions)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): DashboardGetEmbeddableUrlBody {
         return DashboardGetEmbeddableUrlBody(
@@ -186,25 +192,6 @@ constructor(
             "DashboardGetEmbeddableUrlBody{customerId=$customerId, dashboard=$dashboard, bmGroupKeyOverrides=$bmGroupKeyOverrides, colorOverrides=$colorOverrides, dashboardOptions=$dashboardOptions, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is DashboardGetEmbeddableUrlParams && customerId == other.customerId && dashboard == other.dashboard && bmGroupKeyOverrides == other.bmGroupKeyOverrides && colorOverrides == other.colorOverrides && dashboardOptions == other.dashboardOptions && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, dashboard, bmGroupKeyOverrides, colorOverrides, dashboardOptions, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "DashboardGetEmbeddableUrlParams{customerId=$customerId, dashboard=$dashboard, bmGroupKeyOverrides=$bmGroupKeyOverrides, colorOverrides=$colorOverrides, dashboardOptions=$dashboardOptions, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -227,16 +214,22 @@ constructor(
         @JvmSynthetic
         internal fun from(dashboardGetEmbeddableUrlParams: DashboardGetEmbeddableUrlParams) =
             apply {
-                this.customerId = dashboardGetEmbeddableUrlParams.customerId
-                this.dashboard = dashboardGetEmbeddableUrlParams.dashboard
-                this.bmGroupKeyOverrides(
-                    dashboardGetEmbeddableUrlParams.bmGroupKeyOverrides ?: listOf()
-                )
-                this.colorOverrides(dashboardGetEmbeddableUrlParams.colorOverrides ?: listOf())
-                this.dashboardOptions(dashboardGetEmbeddableUrlParams.dashboardOptions ?: listOf())
-                additionalHeaders(dashboardGetEmbeddableUrlParams.additionalHeaders)
-                additionalQueryParams(dashboardGetEmbeddableUrlParams.additionalQueryParams)
-                additionalBodyProperties(dashboardGetEmbeddableUrlParams.additionalBodyProperties)
+                customerId = dashboardGetEmbeddableUrlParams.customerId
+                dashboard = dashboardGetEmbeddableUrlParams.dashboard
+                bmGroupKeyOverrides =
+                    dashboardGetEmbeddableUrlParams.bmGroupKeyOverrides?.toMutableList()
+                        ?: mutableListOf()
+                colorOverrides =
+                    dashboardGetEmbeddableUrlParams.colorOverrides?.toMutableList()
+                        ?: mutableListOf()
+                dashboardOptions =
+                    dashboardGetEmbeddableUrlParams.dashboardOptions?.toMutableList()
+                        ?: mutableListOf()
+                additionalHeaders = dashboardGetEmbeddableUrlParams.additionalHeaders.toBuilder()
+                additionalQueryParams =
+                    dashboardGetEmbeddableUrlParams.additionalQueryParams.toBuilder()
+                additionalBodyProperties =
+                    dashboardGetEmbeddableUrlParams.additionalBodyProperties.toMutableMap()
             }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -401,9 +394,9 @@ constructor(
             DashboardGetEmbeddableUrlParams(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
                 checkNotNull(dashboard) { "`dashboard` is required but was not set" },
-                if (bmGroupKeyOverrides.size == 0) null else bmGroupKeyOverrides.toImmutable(),
-                if (colorOverrides.size == 0) null else colorOverrides.toImmutable(),
-                if (dashboardOptions.size == 0) null else dashboardOptions.toImmutable(),
+                bmGroupKeyOverrides.toImmutable().ifEmpty { null },
+                colorOverrides.toImmutable().ifEmpty { null },
+                dashboardOptions.toImmutable().ifEmpty { null },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -976,4 +969,17 @@ constructor(
         override fun toString() =
             "DashboardOption{key=$key, value=$value, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is DashboardGetEmbeddableUrlParams && customerId == other.customerId && dashboard == other.dashboard && bmGroupKeyOverrides == other.bmGroupKeyOverrides && colorOverrides == other.colorOverrides && dashboardOptions == other.dashboardOptions && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, dashboard, bmGroupKeyOverrides, colorOverrides, dashboardOptions, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "DashboardGetEmbeddableUrlParams{customerId=$customerId, dashboard=$dashboard, bmGroupKeyOverrides=$bmGroupKeyOverrides, colorOverrides=$colorOverrides, dashboardOptions=$dashboardOptions, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

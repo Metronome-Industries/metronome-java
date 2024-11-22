@@ -24,6 +24,10 @@ constructor(
 
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic
@@ -35,23 +39,6 @@ constructor(
         queryParams.putAll(additionalQueryParams)
         return queryParams.build()
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is BillableMetricListParams && includeArchived == other.includeArchived && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(includeArchived, limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "BillableMetricListParams{includeArchived=$includeArchived, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -71,11 +58,11 @@ constructor(
 
         @JvmSynthetic
         internal fun from(billableMetricListParams: BillableMetricListParams) = apply {
-            this.includeArchived = billableMetricListParams.includeArchived
-            this.limit = billableMetricListParams.limit
-            this.nextPage = billableMetricListParams.nextPage
-            additionalHeaders(billableMetricListParams.additionalHeaders)
-            additionalQueryParams(billableMetricListParams.additionalQueryParams)
+            includeArchived = billableMetricListParams.includeArchived
+            limit = billableMetricListParams.limit
+            nextPage = billableMetricListParams.nextPage
+            additionalHeaders = billableMetricListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = billableMetricListParams.additionalQueryParams.toBuilder()
         }
 
         /** If true, the list of returned metrics will include archived metrics */
@@ -196,4 +183,17 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is BillableMetricListParams && includeArchived == other.includeArchived && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(includeArchived, limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "BillableMetricListParams{includeArchived=$includeArchived, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

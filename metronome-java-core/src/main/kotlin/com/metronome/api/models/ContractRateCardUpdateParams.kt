@@ -39,6 +39,12 @@ constructor(
 
     fun name(): Optional<String> = Optional.ofNullable(name)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractRateCardUpdateBody {
         return ContractRateCardUpdateBody(
@@ -180,25 +186,6 @@ constructor(
             "ContractRateCardUpdateBody{rateCardId=$rateCardId, aliases=$aliases, customFields=$customFields, description=$description, name=$name, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractRateCardUpdateParams && rateCardId == other.rateCardId && aliases == other.aliases && customFields == other.customFields && description == other.description && name == other.name && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(rateCardId, aliases, customFields, description, name, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractRateCardUpdateParams{rateCardId=$rateCardId, aliases=$aliases, customFields=$customFields, description=$description, name=$name, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -220,14 +207,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractRateCardUpdateParams: ContractRateCardUpdateParams) = apply {
-            this.rateCardId = contractRateCardUpdateParams.rateCardId
-            this.aliases(contractRateCardUpdateParams.aliases ?: listOf())
-            this.customFields = contractRateCardUpdateParams.customFields
-            this.description = contractRateCardUpdateParams.description
-            this.name = contractRateCardUpdateParams.name
-            additionalHeaders(contractRateCardUpdateParams.additionalHeaders)
-            additionalQueryParams(contractRateCardUpdateParams.additionalQueryParams)
-            additionalBodyProperties(contractRateCardUpdateParams.additionalBodyProperties)
+            rateCardId = contractRateCardUpdateParams.rateCardId
+            aliases = contractRateCardUpdateParams.aliases?.toMutableList() ?: mutableListOf()
+            customFields = contractRateCardUpdateParams.customFields
+            description = contractRateCardUpdateParams.description
+            name = contractRateCardUpdateParams.name
+            additionalHeaders = contractRateCardUpdateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractRateCardUpdateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractRateCardUpdateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the rate card to update */
@@ -380,7 +368,7 @@ constructor(
         fun build(): ContractRateCardUpdateParams =
             ContractRateCardUpdateParams(
                 checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
-                if (aliases.size == 0) null else aliases.toImmutable(),
+                aliases.toImmutable().ifEmpty { null },
                 customFields,
                 description,
                 name,
@@ -543,4 +531,17 @@ constructor(
 
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractRateCardUpdateParams && rateCardId == other.rateCardId && aliases == other.aliases && customFields == other.customFields && description == other.description && name == other.name && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(rateCardId, aliases, customFields, description, name, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractRateCardUpdateParams{rateCardId=$rateCardId, aliases=$aliases, customFields=$customFields, description=$description, name=$name, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

@@ -69,6 +69,12 @@ constructor(
 
     fun tags(): Optional<List<String>> = Optional.ofNullable(tags)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractProductCreateBody {
         return ContractProductCreateBody(
@@ -384,25 +390,6 @@ constructor(
             "ContractProductCreateBody{name=$name, type=$type, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, tags=$tags, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractProductCreateParams && name == other.name && type == other.type && billableMetricId == other.billableMetricId && compositeProductIds == other.compositeProductIds && compositeTags == other.compositeTags && excludeFreeUsage == other.excludeFreeUsage && isRefundable == other.isRefundable && netsuiteInternalItemId == other.netsuiteInternalItemId && netsuiteOverageItemId == other.netsuiteOverageItemId && presentationGroupKey == other.presentationGroupKey && pricingGroupKey == other.pricingGroupKey && quantityConversion == other.quantityConversion && quantityRounding == other.quantityRounding && tags == other.tags && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(name, type, billableMetricId, compositeProductIds, compositeTags, excludeFreeUsage, isRefundable, netsuiteInternalItemId, netsuiteOverageItemId, presentationGroupKey, pricingGroupKey, quantityConversion, quantityRounding, tags, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractProductCreateParams{name=$name, type=$type, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, tags=$tags, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -433,23 +420,28 @@ constructor(
 
         @JvmSynthetic
         internal fun from(contractProductCreateParams: ContractProductCreateParams) = apply {
-            this.name = contractProductCreateParams.name
-            this.type = contractProductCreateParams.type
-            this.billableMetricId = contractProductCreateParams.billableMetricId
-            this.compositeProductIds(contractProductCreateParams.compositeProductIds ?: listOf())
-            this.compositeTags(contractProductCreateParams.compositeTags ?: listOf())
-            this.excludeFreeUsage = contractProductCreateParams.excludeFreeUsage
-            this.isRefundable = contractProductCreateParams.isRefundable
-            this.netsuiteInternalItemId = contractProductCreateParams.netsuiteInternalItemId
-            this.netsuiteOverageItemId = contractProductCreateParams.netsuiteOverageItemId
-            this.presentationGroupKey(contractProductCreateParams.presentationGroupKey ?: listOf())
-            this.pricingGroupKey(contractProductCreateParams.pricingGroupKey ?: listOf())
-            this.quantityConversion = contractProductCreateParams.quantityConversion
-            this.quantityRounding = contractProductCreateParams.quantityRounding
-            this.tags(contractProductCreateParams.tags ?: listOf())
-            additionalHeaders(contractProductCreateParams.additionalHeaders)
-            additionalQueryParams(contractProductCreateParams.additionalQueryParams)
-            additionalBodyProperties(contractProductCreateParams.additionalBodyProperties)
+            name = contractProductCreateParams.name
+            type = contractProductCreateParams.type
+            billableMetricId = contractProductCreateParams.billableMetricId
+            compositeProductIds =
+                contractProductCreateParams.compositeProductIds?.toMutableList() ?: mutableListOf()
+            compositeTags =
+                contractProductCreateParams.compositeTags?.toMutableList() ?: mutableListOf()
+            excludeFreeUsage = contractProductCreateParams.excludeFreeUsage
+            isRefundable = contractProductCreateParams.isRefundable
+            netsuiteInternalItemId = contractProductCreateParams.netsuiteInternalItemId
+            netsuiteOverageItemId = contractProductCreateParams.netsuiteOverageItemId
+            presentationGroupKey =
+                contractProductCreateParams.presentationGroupKey?.toMutableList() ?: mutableListOf()
+            pricingGroupKey =
+                contractProductCreateParams.pricingGroupKey?.toMutableList() ?: mutableListOf()
+            quantityConversion = contractProductCreateParams.quantityConversion
+            quantityRounding = contractProductCreateParams.quantityRounding
+            tags = contractProductCreateParams.tags?.toMutableList() ?: mutableListOf()
+            additionalHeaders = contractProductCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractProductCreateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractProductCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** displayed on invoices */
@@ -698,17 +690,17 @@ constructor(
                 checkNotNull(name) { "`name` is required but was not set" },
                 checkNotNull(type) { "`type` is required but was not set" },
                 billableMetricId,
-                if (compositeProductIds.size == 0) null else compositeProductIds.toImmutable(),
-                if (compositeTags.size == 0) null else compositeTags.toImmutable(),
+                compositeProductIds.toImmutable().ifEmpty { null },
+                compositeTags.toImmutable().ifEmpty { null },
                 excludeFreeUsage,
                 isRefundable,
                 netsuiteInternalItemId,
                 netsuiteOverageItemId,
-                if (presentationGroupKey.size == 0) null else presentationGroupKey.toImmutable(),
-                if (pricingGroupKey.size == 0) null else pricingGroupKey.toImmutable(),
+                presentationGroupKey.toImmutable().ifEmpty { null },
+                pricingGroupKey.toImmutable().ifEmpty { null },
                 quantityConversion,
                 quantityRounding,
-                if (tags.size == 0) null else tags.toImmutable(),
+                tags.toImmutable().ifEmpty { null },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -795,4 +787,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractProductCreateParams && name == other.name && type == other.type && billableMetricId == other.billableMetricId && compositeProductIds == other.compositeProductIds && compositeTags == other.compositeTags && excludeFreeUsage == other.excludeFreeUsage && isRefundable == other.isRefundable && netsuiteInternalItemId == other.netsuiteInternalItemId && netsuiteOverageItemId == other.netsuiteOverageItemId && presentationGroupKey == other.presentationGroupKey && pricingGroupKey == other.pricingGroupKey && quantityConversion == other.quantityConversion && quantityRounding == other.quantityRounding && tags == other.tags && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(name, type, billableMetricId, compositeProductIds, compositeTags, excludeFreeUsage, isRefundable, netsuiteInternalItemId, netsuiteOverageItemId, presentationGroupKey, pricingGroupKey, quantityConversion, quantityRounding, tags, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractProductCreateParams{name=$name, type=$type, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, tags=$tags, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

@@ -25,6 +25,12 @@ constructor(
 
     fun id(): String = id
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): InvoiceRegenerateBody {
         return InvoiceRegenerateBody(id, additionalBodyProperties)
@@ -109,25 +115,6 @@ constructor(
             "InvoiceRegenerateBody{id=$id, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is InvoiceRegenerateParams && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "InvoiceRegenerateParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -145,10 +132,11 @@ constructor(
 
         @JvmSynthetic
         internal fun from(invoiceRegenerateParams: InvoiceRegenerateParams) = apply {
-            this.id = invoiceRegenerateParams.id
-            additionalHeaders(invoiceRegenerateParams.additionalHeaders)
-            additionalQueryParams(invoiceRegenerateParams.additionalQueryParams)
-            additionalBodyProperties(invoiceRegenerateParams.additionalBodyProperties)
+            id = invoiceRegenerateParams.id
+            additionalHeaders = invoiceRegenerateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = invoiceRegenerateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                invoiceRegenerateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** The invoice id to regenerate */
@@ -282,4 +270,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is InvoiceRegenerateParams && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "InvoiceRegenerateParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

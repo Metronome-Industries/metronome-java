@@ -35,6 +35,12 @@ constructor(
 
     fun keys(): List<String> = keys
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomFieldDeleteValuesBody {
         return CustomFieldDeleteValuesBody(
@@ -139,25 +145,6 @@ constructor(
             "CustomFieldDeleteValuesBody{entity=$entity, entityId=$entityId, keys=$keys, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomFieldDeleteValuesParams && entity == other.entity && entityId == other.entityId && keys == other.keys && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(entity, entityId, keys, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomFieldDeleteValuesParams{entity=$entity, entityId=$entityId, keys=$keys, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -177,12 +164,13 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customFieldDeleteValuesParams: CustomFieldDeleteValuesParams) = apply {
-            this.entity = customFieldDeleteValuesParams.entity
-            this.entityId = customFieldDeleteValuesParams.entityId
-            this.keys(customFieldDeleteValuesParams.keys)
-            additionalHeaders(customFieldDeleteValuesParams.additionalHeaders)
-            additionalQueryParams(customFieldDeleteValuesParams.additionalQueryParams)
-            additionalBodyProperties(customFieldDeleteValuesParams.additionalBodyProperties)
+            entity = customFieldDeleteValuesParams.entity
+            entityId = customFieldDeleteValuesParams.entityId
+            keys = customFieldDeleteValuesParams.keys.toMutableList()
+            additionalHeaders = customFieldDeleteValuesParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customFieldDeleteValuesParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                customFieldDeleteValuesParams.additionalBodyProperties.toMutableMap()
         }
 
         fun entity(entity: Entity) = apply { this.entity = entity }
@@ -320,7 +308,7 @@ constructor(
             CustomFieldDeleteValuesParams(
                 checkNotNull(entity) { "`entity` is required but was not set" },
                 checkNotNull(entityId) { "`entityId` is required but was not set" },
-                checkNotNull(keys) { "`keys` is required but was not set" }.toImmutable(),
+                keys.toImmutable(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -467,4 +455,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomFieldDeleteValuesParams && entity == other.entity && entityId == other.entityId && keys == other.keys && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(entity, entityId, keys, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomFieldDeleteValuesParams{entity=$entity, entityId=$entityId, keys=$keys, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

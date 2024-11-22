@@ -24,6 +24,10 @@ constructor(
 
     fun skipZeroQtyLineItems(): Optional<Boolean> = Optional.ofNullable(skipZeroQtyLineItems)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic
@@ -44,23 +48,6 @@ constructor(
         }
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerInvoiceRetrieveParams && customerId == other.customerId && invoiceId == other.invoiceId && skipZeroQtyLineItems == other.skipZeroQtyLineItems && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, invoiceId, skipZeroQtyLineItems, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CustomerInvoiceRetrieveParams{customerId=$customerId, invoiceId=$invoiceId, skipZeroQtyLineItems=$skipZeroQtyLineItems, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -79,11 +66,11 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerInvoiceRetrieveParams: CustomerInvoiceRetrieveParams) = apply {
-            this.customerId = customerInvoiceRetrieveParams.customerId
-            this.invoiceId = customerInvoiceRetrieveParams.invoiceId
-            this.skipZeroQtyLineItems = customerInvoiceRetrieveParams.skipZeroQtyLineItems
-            additionalHeaders(customerInvoiceRetrieveParams.additionalHeaders)
-            additionalQueryParams(customerInvoiceRetrieveParams.additionalQueryParams)
+            customerId = customerInvoiceRetrieveParams.customerId
+            invoiceId = customerInvoiceRetrieveParams.invoiceId
+            skipZeroQtyLineItems = customerInvoiceRetrieveParams.skipZeroQtyLineItems
+            additionalHeaders = customerInvoiceRetrieveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerInvoiceRetrieveParams.additionalQueryParams.toBuilder()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -202,4 +189,17 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerInvoiceRetrieveParams && customerId == other.customerId && invoiceId == other.invoiceId && skipZeroQtyLineItems == other.skipZeroQtyLineItems && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, invoiceId, skipZeroQtyLineItems, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CustomerInvoiceRetrieveParams{customerId=$customerId, invoiceId=$invoiceId, skipZeroQtyLineItems=$skipZeroQtyLineItems, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

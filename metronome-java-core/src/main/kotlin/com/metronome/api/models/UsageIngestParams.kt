@@ -24,6 +24,10 @@ constructor(
 
     fun usage(): List<Usage> = usage
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic
     internal fun getBody(): List<Usage> {
         return usage
@@ -78,23 +82,6 @@ constructor(
         override fun toString() = "UsageIngestBody{usage=$usage}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is UsageIngestParams && usage == other.usage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(usage, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "UsageIngestParams{usage=$usage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -111,9 +98,9 @@ constructor(
 
         @JvmSynthetic
         internal fun from(usageIngestParams: UsageIngestParams) = apply {
-            this.usage(usageIngestParams.usage)
-            additionalHeaders(usageIngestParams.additionalHeaders)
-            additionalQueryParams(usageIngestParams.additionalQueryParams)
+            usage = usageIngestParams.usage.toMutableList()
+            additionalHeaders = usageIngestParams.additionalHeaders.toBuilder()
+            additionalQueryParams = usageIngestParams.additionalQueryParams.toBuilder()
         }
 
         fun usage(usage: List<Usage>) = apply {
@@ -223,7 +210,7 @@ constructor(
 
         fun build(): UsageIngestParams =
             UsageIngestParams(
-                checkNotNull(usage) { "`usage` is required but was not set" }.toImmutable(),
+                usage.toImmutable(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -402,4 +389,17 @@ constructor(
         override fun toString() =
             "Usage{transactionId=$transactionId, customerId=$customerId, eventType=$eventType, timestamp=$timestamp, properties=$properties, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is UsageIngestParams && usage == other.usage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(usage, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "UsageIngestParams{usage=$usage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

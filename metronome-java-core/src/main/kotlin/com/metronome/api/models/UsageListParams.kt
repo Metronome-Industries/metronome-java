@@ -46,6 +46,12 @@ constructor(
 
     fun customerIds(): Optional<List<String>> = Optional.ofNullable(customerIds)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): UsageListBody {
         return UsageListBody(
@@ -209,25 +215,6 @@ constructor(
             "UsageListBody{endingBefore=$endingBefore, startingOn=$startingOn, windowSize=$windowSize, billableMetrics=$billableMetrics, customerIds=$customerIds, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is UsageListParams && endingBefore == other.endingBefore && startingOn == other.startingOn && windowSize == other.windowSize && billableMetrics == other.billableMetrics && customerIds == other.customerIds && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(endingBefore, startingOn, windowSize, billableMetrics, customerIds, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "UsageListParams{endingBefore=$endingBefore, startingOn=$startingOn, windowSize=$windowSize, billableMetrics=$billableMetrics, customerIds=$customerIds, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -250,15 +237,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(usageListParams: UsageListParams) = apply {
-            this.endingBefore = usageListParams.endingBefore
-            this.startingOn = usageListParams.startingOn
-            this.windowSize = usageListParams.windowSize
-            this.nextPage = usageListParams.nextPage
-            this.billableMetrics(usageListParams.billableMetrics ?: listOf())
-            this.customerIds(usageListParams.customerIds ?: listOf())
-            additionalHeaders(usageListParams.additionalHeaders)
-            additionalQueryParams(usageListParams.additionalQueryParams)
-            additionalBodyProperties(usageListParams.additionalBodyProperties)
+            endingBefore = usageListParams.endingBefore
+            startingOn = usageListParams.startingOn
+            windowSize = usageListParams.windowSize
+            nextPage = usageListParams.nextPage
+            billableMetrics = usageListParams.billableMetrics?.toMutableList() ?: mutableListOf()
+            customerIds = usageListParams.customerIds?.toMutableList() ?: mutableListOf()
+            additionalHeaders = usageListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = usageListParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = usageListParams.additionalBodyProperties.toMutableMap()
         }
 
         fun endingBefore(endingBefore: OffsetDateTime) = apply { this.endingBefore = endingBefore }
@@ -433,8 +420,8 @@ constructor(
                 checkNotNull(startingOn) { "`startingOn` is required but was not set" },
                 checkNotNull(windowSize) { "`windowSize` is required but was not set" },
                 nextPage,
-                if (billableMetrics.size == 0) null else billableMetrics.toImmutable(),
-                if (customerIds.size == 0) null else customerIds.toImmutable(),
+                billableMetrics.toImmutable().ifEmpty { null },
+                customerIds.toImmutable().ifEmpty { null },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -678,4 +665,17 @@ constructor(
         override fun toString() =
             "BillableMetric{id=$id, groupBy=$groupBy, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is UsageListParams && endingBefore == other.endingBefore && startingOn == other.startingOn && windowSize == other.windowSize && nextPage == other.nextPage && billableMetrics == other.billableMetrics && customerIds == other.customerIds && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(endingBefore, startingOn, windowSize, nextPage, billableMetrics, customerIds, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "UsageListParams{endingBefore=$endingBefore, startingOn=$startingOn, windowSize=$windowSize, nextPage=$nextPage, billableMetrics=$billableMetrics, customerIds=$customerIds, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

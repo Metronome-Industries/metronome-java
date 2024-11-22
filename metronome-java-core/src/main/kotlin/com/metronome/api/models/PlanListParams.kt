@@ -21,6 +21,10 @@ constructor(
 
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic
@@ -31,23 +35,6 @@ constructor(
         queryParams.putAll(additionalQueryParams)
         return queryParams.build()
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is PlanListParams && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "PlanListParams{limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -66,10 +53,10 @@ constructor(
 
         @JvmSynthetic
         internal fun from(planListParams: PlanListParams) = apply {
-            this.limit = planListParams.limit
-            this.nextPage = planListParams.nextPage
-            additionalHeaders(planListParams.additionalHeaders)
-            additionalQueryParams(planListParams.additionalQueryParams)
+            limit = planListParams.limit
+            nextPage = planListParams.nextPage
+            additionalHeaders = planListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = planListParams.additionalQueryParams.toBuilder()
         }
 
         /** Max number of results that should be returned */
@@ -184,4 +171,17 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is PlanListParams && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "PlanListParams{limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

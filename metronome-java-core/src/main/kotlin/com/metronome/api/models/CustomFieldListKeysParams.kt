@@ -33,6 +33,12 @@ constructor(
 
     fun entities(): Optional<List<Entity>> = Optional.ofNullable(entities)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomFieldListKeysBody {
         return CustomFieldListKeysBody(entities, additionalBodyProperties)
@@ -121,25 +127,6 @@ constructor(
             "CustomFieldListKeysBody{entities=$entities, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomFieldListKeysParams && entities == other.entities && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(entities, nextPage, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomFieldListKeysParams{entities=$entities, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -158,11 +145,12 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customFieldListKeysParams: CustomFieldListKeysParams) = apply {
-            this.nextPage = customFieldListKeysParams.nextPage
-            this.entities(customFieldListKeysParams.entities ?: listOf())
-            additionalHeaders(customFieldListKeysParams.additionalHeaders)
-            additionalQueryParams(customFieldListKeysParams.additionalQueryParams)
-            additionalBodyProperties(customFieldListKeysParams.additionalBodyProperties)
+            nextPage = customFieldListKeysParams.nextPage
+            entities = customFieldListKeysParams.entities?.toMutableList() ?: mutableListOf()
+            additionalHeaders = customFieldListKeysParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customFieldListKeysParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                customFieldListKeysParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Cursor that indicates where the next page of results should start. */
@@ -300,7 +288,7 @@ constructor(
         fun build(): CustomFieldListKeysParams =
             CustomFieldListKeysParams(
                 nextPage,
-                if (entities.size == 0) null else entities.toImmutable(),
+                entities.toImmutable().ifEmpty { null },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -447,4 +435,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomFieldListKeysParams && nextPage == other.nextPage && entities == other.entities && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(nextPage, entities, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomFieldListKeysParams{nextPage=$nextPage, entities=$entities, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

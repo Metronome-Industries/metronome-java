@@ -33,6 +33,12 @@ constructor(
 
     fun salesforceAccountId(): Optional<String> = Optional.ofNullable(salesforceAccountId)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomerUpdateConfigBody {
         return CustomerUpdateConfigBody(
@@ -153,25 +159,6 @@ constructor(
             "CustomerUpdateConfigBody{leaveStripeInvoicesInDraft=$leaveStripeInvoicesInDraft, salesforceAccountId=$salesforceAccountId, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerUpdateConfigParams && customerId == other.customerId && leaveStripeInvoicesInDraft == other.leaveStripeInvoicesInDraft && salesforceAccountId == other.salesforceAccountId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, leaveStripeInvoicesInDraft, salesforceAccountId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerUpdateConfigParams{customerId=$customerId, leaveStripeInvoicesInDraft=$leaveStripeInvoicesInDraft, salesforceAccountId=$salesforceAccountId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -191,12 +178,13 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerUpdateConfigParams: CustomerUpdateConfigParams) = apply {
-            this.customerId = customerUpdateConfigParams.customerId
-            this.leaveStripeInvoicesInDraft = customerUpdateConfigParams.leaveStripeInvoicesInDraft
-            this.salesforceAccountId = customerUpdateConfigParams.salesforceAccountId
-            additionalHeaders(customerUpdateConfigParams.additionalHeaders)
-            additionalQueryParams(customerUpdateConfigParams.additionalQueryParams)
-            additionalBodyProperties(customerUpdateConfigParams.additionalBodyProperties)
+            customerId = customerUpdateConfigParams.customerId
+            leaveStripeInvoicesInDraft = customerUpdateConfigParams.leaveStripeInvoicesInDraft
+            salesforceAccountId = customerUpdateConfigParams.salesforceAccountId
+            additionalHeaders = customerUpdateConfigParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerUpdateConfigParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                customerUpdateConfigParams.additionalBodyProperties.toMutableMap()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -344,4 +332,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerUpdateConfigParams && customerId == other.customerId && leaveStripeInvoicesInDraft == other.leaveStripeInvoicesInDraft && salesforceAccountId == other.salesforceAccountId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, leaveStripeInvoicesInDraft, salesforceAccountId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerUpdateConfigParams{customerId=$customerId, leaveStripeInvoicesInDraft=$leaveStripeInvoicesInDraft, salesforceAccountId=$salesforceAccountId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

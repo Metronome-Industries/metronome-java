@@ -51,6 +51,12 @@ constructor(
 
     fun sql(): Optional<String> = Optional.ofNullable(sql)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): BillableMetricCreateBody {
         return BillableMetricCreateBody(
@@ -258,25 +264,6 @@ constructor(
             "BillableMetricCreateBody{name=$name, aggregationKey=$aggregationKey, aggregationType=$aggregationType, customFields=$customFields, eventTypeFilter=$eventTypeFilter, groupKeys=$groupKeys, propertyFilters=$propertyFilters, sql=$sql, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is BillableMetricCreateParams && name == other.name && aggregationKey == other.aggregationKey && aggregationType == other.aggregationType && customFields == other.customFields && eventTypeFilter == other.eventTypeFilter && groupKeys == other.groupKeys && propertyFilters == other.propertyFilters && sql == other.sql && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(name, aggregationKey, aggregationType, customFields, eventTypeFilter, groupKeys, propertyFilters, sql, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "BillableMetricCreateParams{name=$name, aggregationKey=$aggregationKey, aggregationType=$aggregationType, customFields=$customFields, eventTypeFilter=$eventTypeFilter, groupKeys=$groupKeys, propertyFilters=$propertyFilters, sql=$sql, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -301,17 +288,19 @@ constructor(
 
         @JvmSynthetic
         internal fun from(billableMetricCreateParams: BillableMetricCreateParams) = apply {
-            this.name = billableMetricCreateParams.name
-            this.aggregationKey = billableMetricCreateParams.aggregationKey
-            this.aggregationType = billableMetricCreateParams.aggregationType
-            this.customFields = billableMetricCreateParams.customFields
-            this.eventTypeFilter = billableMetricCreateParams.eventTypeFilter
-            this.groupKeys(billableMetricCreateParams.groupKeys ?: listOf())
-            this.propertyFilters(billableMetricCreateParams.propertyFilters ?: listOf())
-            this.sql = billableMetricCreateParams.sql
-            additionalHeaders(billableMetricCreateParams.additionalHeaders)
-            additionalQueryParams(billableMetricCreateParams.additionalQueryParams)
-            additionalBodyProperties(billableMetricCreateParams.additionalBodyProperties)
+            name = billableMetricCreateParams.name
+            aggregationKey = billableMetricCreateParams.aggregationKey
+            aggregationType = billableMetricCreateParams.aggregationType
+            customFields = billableMetricCreateParams.customFields
+            eventTypeFilter = billableMetricCreateParams.eventTypeFilter
+            groupKeys = billableMetricCreateParams.groupKeys?.toMutableList() ?: mutableListOf()
+            propertyFilters =
+                billableMetricCreateParams.propertyFilters?.toMutableList() ?: mutableListOf()
+            sql = billableMetricCreateParams.sql
+            additionalHeaders = billableMetricCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = billableMetricCreateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                billableMetricCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** The display name of the billable metric. */
@@ -502,8 +491,8 @@ constructor(
                 aggregationType,
                 customFields,
                 eventTypeFilter,
-                if (groupKeys.size == 0) null else groupKeys.toImmutable(),
-                if (propertyFilters.size == 0) null else propertyFilters.toImmutable(),
+                groupKeys.toImmutable().ifEmpty { null },
+                propertyFilters.toImmutable().ifEmpty { null },
                 sql,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -647,4 +636,17 @@ constructor(
 
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is BillableMetricCreateParams && name == other.name && aggregationKey == other.aggregationKey && aggregationType == other.aggregationType && customFields == other.customFields && eventTypeFilter == other.eventTypeFilter && groupKeys == other.groupKeys && propertyFilters == other.propertyFilters && sql == other.sql && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(name, aggregationKey, aggregationType, customFields, eventTypeFilter, groupKeys, propertyFilters, sql, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "BillableMetricCreateParams{name=$name, aggregationKey=$aggregationKey, aggregationType=$aggregationType, customFields=$customFields, eventTypeFilter=$eventTypeFilter, groupKeys=$groupKeys, propertyFilters=$propertyFilters, sql=$sql, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

@@ -44,6 +44,12 @@ constructor(
 
     fun quantity(): Double = quantity
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomerInvoiceAddChargeBody {
         return CustomerInvoiceAddChargeBody(
@@ -214,25 +220,6 @@ constructor(
             "CustomerInvoiceAddChargeBody{chargeId=$chargeId, customerPlanId=$customerPlanId, description=$description, invoiceStartTimestamp=$invoiceStartTimestamp, price=$price, quantity=$quantity, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerInvoiceAddChargeParams && customerId == other.customerId && chargeId == other.chargeId && customerPlanId == other.customerPlanId && description == other.description && invoiceStartTimestamp == other.invoiceStartTimestamp && price == other.price && quantity == other.quantity && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, chargeId, customerPlanId, description, invoiceStartTimestamp, price, quantity, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerInvoiceAddChargeParams{customerId=$customerId, chargeId=$chargeId, customerPlanId=$customerPlanId, description=$description, invoiceStartTimestamp=$invoiceStartTimestamp, price=$price, quantity=$quantity, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -256,16 +243,17 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerInvoiceAddChargeParams: CustomerInvoiceAddChargeParams) = apply {
-            this.customerId = customerInvoiceAddChargeParams.customerId
-            this.chargeId = customerInvoiceAddChargeParams.chargeId
-            this.customerPlanId = customerInvoiceAddChargeParams.customerPlanId
-            this.description = customerInvoiceAddChargeParams.description
-            this.invoiceStartTimestamp = customerInvoiceAddChargeParams.invoiceStartTimestamp
-            this.price = customerInvoiceAddChargeParams.price
-            this.quantity = customerInvoiceAddChargeParams.quantity
-            additionalHeaders(customerInvoiceAddChargeParams.additionalHeaders)
-            additionalQueryParams(customerInvoiceAddChargeParams.additionalQueryParams)
-            additionalBodyProperties(customerInvoiceAddChargeParams.additionalBodyProperties)
+            customerId = customerInvoiceAddChargeParams.customerId
+            chargeId = customerInvoiceAddChargeParams.chargeId
+            customerPlanId = customerInvoiceAddChargeParams.customerPlanId
+            description = customerInvoiceAddChargeParams.description
+            invoiceStartTimestamp = customerInvoiceAddChargeParams.invoiceStartTimestamp
+            price = customerInvoiceAddChargeParams.price
+            quantity = customerInvoiceAddChargeParams.quantity
+            additionalHeaders = customerInvoiceAddChargeParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerInvoiceAddChargeParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                customerInvoiceAddChargeParams.additionalBodyProperties.toMutableMap()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -430,4 +418,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerInvoiceAddChargeParams && customerId == other.customerId && chargeId == other.chargeId && customerPlanId == other.customerPlanId && description == other.description && invoiceStartTimestamp == other.invoiceStartTimestamp && price == other.price && quantity == other.quantity && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, chargeId, customerPlanId, description, invoiceStartTimestamp, price, quantity, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerInvoiceAddChargeParams{customerId=$customerId, chargeId=$chargeId, customerPlanId=$customerPlanId, description=$description, invoiceStartTimestamp=$invoiceStartTimestamp, price=$price, quantity=$quantity, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

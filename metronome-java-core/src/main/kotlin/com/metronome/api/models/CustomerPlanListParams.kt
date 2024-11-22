@@ -24,6 +24,10 @@ constructor(
 
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic
@@ -41,23 +45,6 @@ constructor(
             else -> ""
         }
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerPlanListParams && customerId == other.customerId && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CustomerPlanListParams{customerId=$customerId, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -77,11 +64,11 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerPlanListParams: CustomerPlanListParams) = apply {
-            this.customerId = customerPlanListParams.customerId
-            this.limit = customerPlanListParams.limit
-            this.nextPage = customerPlanListParams.nextPage
-            additionalHeaders(customerPlanListParams.additionalHeaders)
-            additionalQueryParams(customerPlanListParams.additionalQueryParams)
+            customerId = customerPlanListParams.customerId
+            limit = customerPlanListParams.limit
+            nextPage = customerPlanListParams.nextPage
+            additionalHeaders = customerPlanListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerPlanListParams.additionalQueryParams.toBuilder()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -199,4 +186,17 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerPlanListParams && customerId == other.customerId && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CustomerPlanListParams{customerId=$customerId, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

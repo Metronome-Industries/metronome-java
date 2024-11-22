@@ -45,6 +45,12 @@ constructor(
 
     fun timestamp(): Optional<OffsetDateTime> = Optional.ofNullable(timestamp)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ContractAddManualBalanceEntryBody {
         return ContractAddManualBalanceEntryBody(
@@ -210,25 +216,6 @@ constructor(
             "ContractAddManualBalanceEntryBody{id=$id, amount=$amount, customerId=$customerId, reason=$reason, segmentId=$segmentId, contractId=$contractId, timestamp=$timestamp, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ContractAddManualBalanceEntryParams && id == other.id && amount == other.amount && customerId == other.customerId && reason == other.reason && segmentId == other.segmentId && contractId == other.contractId && timestamp == other.timestamp && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, amount, customerId, reason, segmentId, contractId, timestamp, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ContractAddManualBalanceEntryParams{id=$id, amount=$amount, customerId=$customerId, reason=$reason, segmentId=$segmentId, contractId=$contractId, timestamp=$timestamp, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -254,16 +241,18 @@ constructor(
         internal fun from(
             contractAddManualBalanceEntryParams: ContractAddManualBalanceEntryParams
         ) = apply {
-            this.id = contractAddManualBalanceEntryParams.id
-            this.amount = contractAddManualBalanceEntryParams.amount
-            this.customerId = contractAddManualBalanceEntryParams.customerId
-            this.reason = contractAddManualBalanceEntryParams.reason
-            this.segmentId = contractAddManualBalanceEntryParams.segmentId
-            this.contractId = contractAddManualBalanceEntryParams.contractId
-            this.timestamp = contractAddManualBalanceEntryParams.timestamp
-            additionalHeaders(contractAddManualBalanceEntryParams.additionalHeaders)
-            additionalQueryParams(contractAddManualBalanceEntryParams.additionalQueryParams)
-            additionalBodyProperties(contractAddManualBalanceEntryParams.additionalBodyProperties)
+            id = contractAddManualBalanceEntryParams.id
+            amount = contractAddManualBalanceEntryParams.amount
+            customerId = contractAddManualBalanceEntryParams.customerId
+            reason = contractAddManualBalanceEntryParams.reason
+            segmentId = contractAddManualBalanceEntryParams.segmentId
+            contractId = contractAddManualBalanceEntryParams.contractId
+            timestamp = contractAddManualBalanceEntryParams.timestamp
+            additionalHeaders = contractAddManualBalanceEntryParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                contractAddManualBalanceEntryParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                contractAddManualBalanceEntryParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the balance (commit or credit) to update. */
@@ -424,4 +413,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ContractAddManualBalanceEntryParams && id == other.id && amount == other.amount && customerId == other.customerId && reason == other.reason && segmentId == other.segmentId && contractId == other.contractId && timestamp == other.timestamp && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, amount, customerId, reason, segmentId, contractId, timestamp, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ContractAddManualBalanceEntryParams{id=$id, amount=$amount, customerId=$customerId, reason=$reason, segmentId=$segmentId, contractId=$contractId, timestamp=$timestamp, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

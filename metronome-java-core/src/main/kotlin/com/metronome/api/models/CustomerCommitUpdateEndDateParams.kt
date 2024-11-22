@@ -36,6 +36,12 @@ constructor(
 
     fun invoicesEndingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(invoicesEndingBefore)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CustomerCommitUpdateEndDateBody {
         return CustomerCommitUpdateEndDateBody(
@@ -180,25 +186,6 @@ constructor(
             "CustomerCommitUpdateEndDateBody{commitId=$commitId, customerId=$customerId, accessEndingBefore=$accessEndingBefore, invoicesEndingBefore=$invoicesEndingBefore, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerCommitUpdateEndDateParams && commitId == other.commitId && customerId == other.customerId && accessEndingBefore == other.accessEndingBefore && invoicesEndingBefore == other.invoicesEndingBefore && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(commitId, customerId, accessEndingBefore, invoicesEndingBefore, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerCommitUpdateEndDateParams{commitId=$commitId, customerId=$customerId, accessEndingBefore=$accessEndingBefore, invoicesEndingBefore=$invoicesEndingBefore, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -220,13 +207,15 @@ constructor(
         @JvmSynthetic
         internal fun from(customerCommitUpdateEndDateParams: CustomerCommitUpdateEndDateParams) =
             apply {
-                this.commitId = customerCommitUpdateEndDateParams.commitId
-                this.customerId = customerCommitUpdateEndDateParams.customerId
-                this.accessEndingBefore = customerCommitUpdateEndDateParams.accessEndingBefore
-                this.invoicesEndingBefore = customerCommitUpdateEndDateParams.invoicesEndingBefore
-                additionalHeaders(customerCommitUpdateEndDateParams.additionalHeaders)
-                additionalQueryParams(customerCommitUpdateEndDateParams.additionalQueryParams)
-                additionalBodyProperties(customerCommitUpdateEndDateParams.additionalBodyProperties)
+                commitId = customerCommitUpdateEndDateParams.commitId
+                customerId = customerCommitUpdateEndDateParams.customerId
+                accessEndingBefore = customerCommitUpdateEndDateParams.accessEndingBefore
+                invoicesEndingBefore = customerCommitUpdateEndDateParams.invoicesEndingBefore
+                additionalHeaders = customerCommitUpdateEndDateParams.additionalHeaders.toBuilder()
+                additionalQueryParams =
+                    customerCommitUpdateEndDateParams.additionalQueryParams.toBuilder()
+                additionalBodyProperties =
+                    customerCommitUpdateEndDateParams.additionalBodyProperties.toMutableMap()
             }
 
         /** ID of the commit to update. Only supports "PREPAID" commits. */
@@ -382,4 +371,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerCommitUpdateEndDateParams && commitId == other.commitId && customerId == other.customerId && accessEndingBefore == other.accessEndingBefore && invoicesEndingBefore == other.invoicesEndingBefore && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(commitId, customerId, accessEndingBefore, invoicesEndingBefore, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerCommitUpdateEndDateParams{commitId=$commitId, customerId=$customerId, accessEndingBefore=$accessEndingBefore, invoicesEndingBefore=$invoicesEndingBefore, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

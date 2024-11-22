@@ -33,6 +33,12 @@ constructor(
     fun voidCreditPurchaseInvoice(): Optional<Boolean> =
         Optional.ofNullable(voidCreditPurchaseInvoice)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CreditGrantVoidBody {
         return CreditGrantVoidBody(
@@ -148,25 +154,6 @@ constructor(
             "CreditGrantVoidBody{id=$id, releaseUniquenessKey=$releaseUniquenessKey, voidCreditPurchaseInvoice=$voidCreditPurchaseInvoice, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CreditGrantVoidParams && id == other.id && releaseUniquenessKey == other.releaseUniquenessKey && voidCreditPurchaseInvoice == other.voidCreditPurchaseInvoice && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, releaseUniquenessKey, voidCreditPurchaseInvoice, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CreditGrantVoidParams{id=$id, releaseUniquenessKey=$releaseUniquenessKey, voidCreditPurchaseInvoice=$voidCreditPurchaseInvoice, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -186,12 +173,12 @@ constructor(
 
         @JvmSynthetic
         internal fun from(creditGrantVoidParams: CreditGrantVoidParams) = apply {
-            this.id = creditGrantVoidParams.id
-            this.releaseUniquenessKey = creditGrantVoidParams.releaseUniquenessKey
-            this.voidCreditPurchaseInvoice = creditGrantVoidParams.voidCreditPurchaseInvoice
-            additionalHeaders(creditGrantVoidParams.additionalHeaders)
-            additionalQueryParams(creditGrantVoidParams.additionalQueryParams)
-            additionalBodyProperties(creditGrantVoidParams.additionalBodyProperties)
+            id = creditGrantVoidParams.id
+            releaseUniquenessKey = creditGrantVoidParams.releaseUniquenessKey
+            voidCreditPurchaseInvoice = creditGrantVoidParams.voidCreditPurchaseInvoice
+            additionalHeaders = creditGrantVoidParams.additionalHeaders.toBuilder()
+            additionalQueryParams = creditGrantVoidParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = creditGrantVoidParams.additionalBodyProperties.toMutableMap()
         }
 
         fun id(id: String) = apply { this.id = id }
@@ -336,4 +323,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CreditGrantVoidParams && id == other.id && releaseUniquenessKey == other.releaseUniquenessKey && voidCreditPurchaseInvoice == other.voidCreditPurchaseInvoice && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, releaseUniquenessKey, voidCreditPurchaseInvoice, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CreditGrantVoidParams{id=$id, releaseUniquenessKey=$releaseUniquenessKey, voidCreditPurchaseInvoice=$voidCreditPurchaseInvoice, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

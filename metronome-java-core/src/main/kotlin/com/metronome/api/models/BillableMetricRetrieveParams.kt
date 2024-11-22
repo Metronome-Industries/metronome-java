@@ -17,6 +17,10 @@ constructor(
 
     fun billableMetricId(): String = billableMetricId
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
@@ -27,23 +31,6 @@ constructor(
             else -> ""
         }
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is BillableMetricRetrieveParams && billableMetricId == other.billableMetricId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(billableMetricId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "BillableMetricRetrieveParams{billableMetricId=$billableMetricId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -61,9 +48,9 @@ constructor(
 
         @JvmSynthetic
         internal fun from(billableMetricRetrieveParams: BillableMetricRetrieveParams) = apply {
-            this.billableMetricId = billableMetricRetrieveParams.billableMetricId
-            additionalHeaders(billableMetricRetrieveParams.additionalHeaders)
-            additionalQueryParams(billableMetricRetrieveParams.additionalQueryParams)
+            billableMetricId = billableMetricRetrieveParams.billableMetricId
+            additionalHeaders = billableMetricRetrieveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = billableMetricRetrieveParams.additionalQueryParams.toBuilder()
         }
 
         fun billableMetricId(billableMetricId: String) = apply {
@@ -175,4 +162,17 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is BillableMetricRetrieveParams && billableMetricId == other.billableMetricId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(billableMetricId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "BillableMetricRetrieveParams{billableMetricId=$billableMetricId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
