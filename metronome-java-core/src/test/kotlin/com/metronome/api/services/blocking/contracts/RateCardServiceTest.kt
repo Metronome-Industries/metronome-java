@@ -39,7 +39,7 @@ class RateCardServiceTest {
                         listOf(
                             ContractRateCardCreateParams.CreditTypeConversion.builder()
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .fiatPerCustomCredit(42.23)
+                                .fiatPerCustomCredit(0.0)
                                 .build()
                         )
                     )
@@ -151,7 +151,7 @@ class RateCardServiceTest {
                                 .build()
                         )
                     )
-                    .limit(100L)
+                    .limit(1L)
                     .nextPage("next_page")
                     .build()
             )

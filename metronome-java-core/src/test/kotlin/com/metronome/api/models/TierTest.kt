@@ -9,9 +9,9 @@ class TierTest {
 
     @Test
     fun createTier() {
-        val tier = Tier.builder().price(42.23).size(42.23).build()
+        val tier = Tier.builder().price(0.0).size(0.0).build()
         assertThat(tier).isNotNull
-        assertThat(tier.price()).isEqualTo(42.23)
-        assertThat(tier.size()).contains(42.23)
+        assertThat(tier.price()).isEqualTo(0.0)
+        assertThat(tier.size()).contains(0.0)
     }
 }

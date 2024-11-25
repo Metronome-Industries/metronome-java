@@ -44,7 +44,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                                             .builder()
                                             .build()
                                     )
-                                    .quantity(42.23)
+                                    .quantity(0.0)
                                     .subtotalsWithQuantity(
                                         listOf(
                                             ContractCreateHistoricalInvoicesParams.Invoice
@@ -57,7 +57,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                                                 .inclusiveStartDate(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
-                                                .quantity(42.23)
+                                                .quantity(0.0)
                                                 .build()
                                         )
                                     )
@@ -119,7 +119,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                                                 .builder()
                                                 .build()
                                         )
-                                        .quantity(42.23)
+                                        .quantity(0.0)
                                         .subtotalsWithQuantity(
                                             listOf(
                                                 ContractCreateHistoricalInvoicesParams.Invoice
@@ -136,7 +136,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                                                             "2019-12-27T18:11:19.117Z"
                                                         )
                                                     )
-                                                    .quantity(42.23)
+                                                    .quantity(0.0)
                                                     .build()
                                             )
                                         )
@@ -196,7 +196,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                                             .builder()
                                             .build()
                                     )
-                                    .quantity(42.23)
+                                    .quantity(0.0)
                                     .subtotalsWithQuantity(
                                         listOf(
                                             ContractCreateHistoricalInvoicesParams.Invoice
@@ -209,7 +209,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                                                 .inclusiveStartDate(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
-                                                .quantity(42.23)
+                                                .quantity(0.0)
                                                 .build()
                                         )
                                     )

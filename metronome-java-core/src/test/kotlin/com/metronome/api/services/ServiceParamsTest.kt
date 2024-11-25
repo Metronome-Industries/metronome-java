@@ -84,7 +84,7 @@ class ServiceParamsTest {
                                         listOf(
                                             ContractCreateParams.Commit.AccessSchedule.ScheduleItem
                                                 .builder()
-                                                .amount(42.23)
+                                                .amount(0.0)
                                                 .endingBefore(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
@@ -97,7 +97,7 @@ class ServiceParamsTest {
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
                             )
-                            .amount(42.23)
+                            .amount(0.0)
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
@@ -129,9 +129,9 @@ class ServiceParamsTest {
                                             .startingAt(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
-                                            .amount(42.23)
-                                            .quantity(42.23)
-                                            .unitPrice(42.23)
+                                            .amount(0.0)
+                                            .quantity(0.0)
+                                            .unitPrice(0.0)
                                             .build()
                                     )
                                     .scheduleItems(
@@ -141,9 +141,9 @@ class ServiceParamsTest {
                                                 .timestamp(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
-                                                .amount(42.23)
-                                                .quantity(42.23)
-                                                .unitPrice(42.23)
+                                                .amount(0.0)
+                                                .quantity(0.0)
+                                                .unitPrice(0.0)
                                                 .build()
                                         )
                                     )
@@ -151,9 +151,9 @@ class ServiceParamsTest {
                             )
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
-                            .priority(42.23)
+                            .priority(0.0)
                             .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
-                            .rolloverFraction(42.23)
+                            .rolloverFraction(0.0)
                             .temporaryId("temporary_id")
                             .build()
                     )
@@ -167,7 +167,7 @@ class ServiceParamsTest {
                                         listOf(
                                             ContractCreateParams.Credit.AccessSchedule.ScheduleItem
                                                 .builder()
-                                                .amount(42.23)
+                                                .amount(0.0)
                                                 .endingBefore(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
@@ -189,7 +189,7 @@ class ServiceParamsTest {
                             .description("description")
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
-                            .priority(42.23)
+                            .priority(0.0)
                             .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
                             .build()
                     )
@@ -223,9 +223,9 @@ class ServiceParamsTest {
                                             .startingAt(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
-                                            .amount(42.23)
-                                            .quantity(42.23)
-                                            .unitPrice(42.23)
+                                            .amount(0.0)
+                                            .quantity(0.0)
+                                            .unitPrice(0.0)
                                             .build()
                                     )
                                     .scheduleItems(
@@ -235,9 +235,9 @@ class ServiceParamsTest {
                                                 .timestamp(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
-                                                .amount(42.23)
-                                                .quantity(42.23)
-                                                .unitPrice(42.23)
+                                                .amount(0.0)
+                                                .quantity(0.0)
+                                                .unitPrice(0.0)
                                                 .build()
                                         )
                                     )
@@ -253,7 +253,7 @@ class ServiceParamsTest {
                     ContractCreateParams.MultiplierOverridePrioritization.LOWEST_MULTIPLIER
                 )
                 .name("name")
-                .netPaymentTermsDays(42.23)
+                .netPaymentTermsDays(0.0)
                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                 .overrides(
                     listOf(
@@ -263,7 +263,7 @@ class ServiceParamsTest {
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .entitled(true)
                             .isCommitSpecific(true)
-                            .multiplier(42.23)
+                            .multiplier(0.0)
                             .overrideSpecifiers(
                                 listOf(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
@@ -297,19 +297,19 @@ class ServiceParamsTest {
                                             .build()
                                     )
                                     .isProrated(true)
-                                    .price(42.23)
-                                    .quantity(42.23)
-                                    .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
+                                    .price(0.0)
+                                    .quantity(0.0)
+                                    .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                                     .build()
                             )
-                            .priority(42.23)
+                            .priority(0.0)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .target(ContractCreateParams.Override.Target.COMMIT_RATE)
                             .tiers(
                                 listOf(
                                     ContractCreateParams.Override.Tier.builder()
-                                        .multiplier(42.23)
-                                        .size(42.23)
+                                        .multiplier(0.0)
+                                        .size(0.0)
                                         .build()
                                 )
                             )
@@ -320,10 +320,10 @@ class ServiceParamsTest {
                 .professionalServices(
                     listOf(
                         ContractCreateParams.ProfessionalService.builder()
-                            .maxAmount(42.23)
+                            .maxAmount(0.0)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .quantity(42.23)
-                            .unitPrice(42.23)
+                            .quantity(0.0)
+                            .unitPrice(0.0)
                             .customFields(
                                 ContractCreateParams.ProfessionalService.CustomFields.builder()
                                     .build()
@@ -338,7 +338,7 @@ class ServiceParamsTest {
                 .resellerRoyalties(
                     listOf(
                         ContractCreateParams.ResellerRoyalty.builder()
-                            .fraction(42.23)
+                            .fraction(0.0)
                             .netsuiteResellerId("netsuite_reseller_id")
                             .resellerType(ContractCreateParams.ResellerRoyalty.ResellerType.AWS)
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -358,7 +358,7 @@ class ServiceParamsTest {
                                     .gcpOfferId("gcp_offer_id")
                                     .build()
                             )
-                            .resellerContractValue(42.23)
+                            .resellerContractValue(0.0)
                             .build()
                     )
                 )
@@ -392,9 +392,9 @@ class ServiceParamsTest {
                                             .startingAt(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
-                                            .amount(42.23)
-                                            .quantity(42.23)
-                                            .unitPrice(42.23)
+                                            .amount(0.0)
+                                            .quantity(0.0)
+                                            .unitPrice(0.0)
                                             .build()
                                     )
                                     .scheduleItems(
@@ -405,9 +405,9 @@ class ServiceParamsTest {
                                                 .timestamp(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
-                                                .amount(42.23)
-                                                .quantity(42.23)
-                                                .unitPrice(42.23)
+                                                .amount(0.0)
+                                                .quantity(0.0)
+                                                .unitPrice(0.0)
                                                 .build()
                                         )
                                     )
@@ -418,7 +418,7 @@ class ServiceParamsTest {
                             .build()
                     )
                 )
-                .totalContractValue(42.23)
+                .totalContractValue(0.0)
                 .transition(
                     ContractCreateParams.Transition.builder()
                         .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

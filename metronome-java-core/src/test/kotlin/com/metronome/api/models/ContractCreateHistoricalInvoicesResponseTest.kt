@@ -33,7 +33,7 @@ class ContractCreateHistoricalInvoicesResponseTest {
                                                 .build()
                                         )
                                         .name("name")
-                                        .total(42.23)
+                                        .total(0.0)
                                         .appliedCommitOrCredit(
                                             Invoice.LineItem.AppliedCommitOrCredit.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -73,17 +73,14 @@ class ContractCreateHistoricalInvoicesResponseTest {
                                                 )
                                                 .customRate(Rate.CustomRate.builder().build())
                                                 .isProrated(true)
-                                                .price(42.23)
+                                                .price(0.0)
                                                 .pricingGroupValues(
                                                     Rate.PricingGroupValues.builder().build()
                                                 )
-                                                .quantity(42.23)
+                                                .quantity(0.0)
                                                 .tiers(
                                                     listOf(
-                                                        Tier.builder()
-                                                            .price(42.23)
-                                                            .size(42.23)
-                                                            .build()
+                                                        Tier.builder().price(0.0).size(0.0).build()
                                                     )
                                                 )
                                                 .useListPrices(true)
@@ -122,7 +119,7 @@ class ContractCreateHistoricalInvoicesResponseTest {
                                         .professionalServiceId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
-                                        .quantity(42.23)
+                                        .quantity(0.0)
                                         .resellerType(Invoice.LineItem.ResellerType.AWS)
                                         .scheduledChargeCustomFields(
                                             Invoice.LineItem.ScheduledChargeCustomFields.builder()
@@ -141,8 +138,8 @@ class ContractCreateHistoricalInvoicesResponseTest {
                                                             .build()
                                                     )
                                                     .name("name")
-                                                    .quantity(42.23)
-                                                    .subtotal(42.23)
+                                                    .quantity(0.0)
+                                                    .subtotal(0.0)
                                                     .chargeId(
                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                     )
@@ -154,7 +151,7 @@ class ContractCreateHistoricalInvoicesResponseTest {
                                                             "2019-12-27T18:11:19.117Z"
                                                         )
                                                     )
-                                                    .price(42.23)
+                                                    .price(0.0)
                                                     .startDate(
                                                         OffsetDateTime.parse(
                                                             "2019-12-27T18:11:19.117Z"
@@ -179,22 +176,22 @@ class ContractCreateHistoricalInvoicesResponseTest {
                                                         listOf(
                                                             Invoice.LineItem.SubLineItem.Tier
                                                                 .builder()
-                                                                .price(42.23)
-                                                                .quantity(42.23)
-                                                                .startingAt(42.23)
-                                                                .subtotal(42.23)
+                                                                .price(0.0)
+                                                                .quantity(0.0)
+                                                                .startingAt(0.0)
+                                                                .subtotal(0.0)
                                                                 .build()
                                                         )
                                                     )
                                                     .build()
                                             )
                                         )
-                                        .unitPrice(42.23)
+                                        .unitPrice(0.0)
                                         .build()
                                 )
                             )
                             .status("DRAFT, VOID, or FINALIZED")
-                            .total(42.23)
+                            .total(0.0)
                             .type(
                                 "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
                             )
@@ -253,7 +250,7 @@ class ContractCreateHistoricalInvoicesResponseTest {
                                                 .build()
                                         )
                                         .name("Monthly minimum (\$1,000)")
-                                        .total(42.23)
+                                        .total(0.0)
                                         .creditGrantCustomFields(
                                             Invoice.InvoiceAdjustment.CreditGrantCustomFields
                                                 .builder()
@@ -264,7 +261,7 @@ class ContractCreateHistoricalInvoicesResponseTest {
                                 )
                             )
                             .issuedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .netPaymentTermsDays(42.23)
+                            .netPaymentTermsDays(0.0)
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .planCustomFields(Invoice.PlanCustomFields.builder().build())
                             .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -291,7 +288,7 @@ class ContractCreateHistoricalInvoicesResponseTest {
                             )
                             .salesforceOpportunityId("salesforce_opportunity_id")
                             .startTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .subtotal(42.23)
+                            .subtotal(0.0)
                             .build()
                     )
                 )
@@ -318,7 +315,7 @@ class ContractCreateHistoricalInvoicesResponseTest {
                                         .build()
                                 )
                                 .name("name")
-                                .total(42.23)
+                                .total(0.0)
                                 .appliedCommitOrCredit(
                                     Invoice.LineItem.AppliedCommitOrCredit.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -349,14 +346,12 @@ class ContractCreateHistoricalInvoicesResponseTest {
                                         )
                                         .customRate(Rate.CustomRate.builder().build())
                                         .isProrated(true)
-                                        .price(42.23)
+                                        .price(0.0)
                                         .pricingGroupValues(
                                             Rate.PricingGroupValues.builder().build()
                                         )
-                                        .quantity(42.23)
-                                        .tiers(
-                                            listOf(Tier.builder().price(42.23).size(42.23).build())
-                                        )
+                                        .quantity(0.0)
+                                        .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                                         .useListPrices(true)
                                         .build()
                                 )
@@ -389,7 +384,7 @@ class ContractCreateHistoricalInvoicesResponseTest {
                                         .build()
                                 )
                                 .professionalServiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .quantity(42.23)
+                                .quantity(0.0)
                                 .resellerType(Invoice.LineItem.ResellerType.AWS)
                                 .scheduledChargeCustomFields(
                                     Invoice.LineItem.ScheduledChargeCustomFields.builder().build()
@@ -404,14 +399,14 @@ class ContractCreateHistoricalInvoicesResponseTest {
                                                     .build()
                                             )
                                             .name("name")
-                                            .quantity(42.23)
-                                            .subtotal(42.23)
+                                            .quantity(0.0)
+                                            .subtotal(0.0)
                                             .chargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .endDate(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
-                                            .price(42.23)
+                                            .price(0.0)
                                             .startDate(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
@@ -432,22 +427,22 @@ class ContractCreateHistoricalInvoicesResponseTest {
                                             .tiers(
                                                 listOf(
                                                     Invoice.LineItem.SubLineItem.Tier.builder()
-                                                        .price(42.23)
-                                                        .quantity(42.23)
-                                                        .startingAt(42.23)
-                                                        .subtotal(42.23)
+                                                        .price(0.0)
+                                                        .quantity(0.0)
+                                                        .startingAt(0.0)
+                                                        .subtotal(0.0)
                                                         .build()
                                                 )
                                             )
                                             .build()
                                     )
                                 )
-                                .unitPrice(42.23)
+                                .unitPrice(0.0)
                                 .build()
                         )
                     )
                     .status("DRAFT, VOID, or FINALIZED")
-                    .total(42.23)
+                    .total(0.0)
                     .type(
                         "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
                     )
@@ -504,7 +499,7 @@ class ContractCreateHistoricalInvoicesResponseTest {
                                         .build()
                                 )
                                 .name("Monthly minimum (\$1,000)")
-                                .total(42.23)
+                                .total(0.0)
                                 .creditGrantCustomFields(
                                     Invoice.InvoiceAdjustment.CreditGrantCustomFields.builder()
                                         .build()
@@ -514,7 +509,7 @@ class ContractCreateHistoricalInvoicesResponseTest {
                         )
                     )
                     .issuedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .netPaymentTermsDays(42.23)
+                    .netPaymentTermsDays(0.0)
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                     .planCustomFields(Invoice.PlanCustomFields.builder().build())
                     .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -541,7 +536,7 @@ class ContractCreateHistoricalInvoicesResponseTest {
                     )
                     .salesforceOpportunityId("salesforce_opportunity_id")
                     .startTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .subtotal(42.23)
+                    .subtotal(0.0)
                     .build()
             )
     }

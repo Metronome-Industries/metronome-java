@@ -14,7 +14,7 @@ class AuditLogListParamsTest {
     fun createAuditLogListParams() {
         AuditLogListParams.builder()
             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-            .limit(100L)
+            .limit(1L)
             .nextPage("next_page")
             .resourceId("resource_id")
             .resourceType("resource_type")
@@ -28,7 +28,7 @@ class AuditLogListParamsTest {
         val params =
             AuditLogListParams.builder()
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .limit(100L)
+                .limit(1L)
                 .nextPage("next_page")
                 .resourceId("resource_id")
                 .resourceType("resource_type")
@@ -37,7 +37,7 @@ class AuditLogListParamsTest {
                 .build()
         val expected = QueryParams.builder()
         expected.put("ending_before", "2019-12-27T18:11:19.117Z")
-        expected.put("limit", "100")
+        expected.put("limit", "1")
         expected.put("next_page", "next_page")
         expected.put("resource_id", "resource_id")
         expected.put("resource_type", "resource_type")

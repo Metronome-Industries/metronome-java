@@ -28,7 +28,7 @@ class CreditServiceTest {
                             .scheduleItems(
                                 listOf(
                                     CustomerCreditCreateParams.AccessSchedule.ScheduleItem.builder()
-                                        .amount(42.23)
+                                        .amount(0.0)
                                         .endingBefore(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
@@ -42,7 +42,7 @@ class CreditServiceTest {
                             .build()
                     )
                     .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .priority(42.23)
+                    .priority(0.0)
                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .applicableContractIds(listOf("string"))
                     .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))

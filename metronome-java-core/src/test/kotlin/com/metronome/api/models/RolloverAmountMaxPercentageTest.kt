@@ -12,11 +12,11 @@ class RolloverAmountMaxPercentageTest {
         val rolloverAmountMaxPercentage =
             RolloverAmountMaxPercentage.builder()
                 .type(RolloverAmountMaxPercentage.Type.MAX_PERCENTAGE)
-                .value(1.0)
+                .value(0.0)
                 .build()
         assertThat(rolloverAmountMaxPercentage).isNotNull
         assertThat(rolloverAmountMaxPercentage.type())
             .isEqualTo(RolloverAmountMaxPercentage.Type.MAX_PERCENTAGE)
-        assertThat(rolloverAmountMaxPercentage.value()).isEqualTo(1.0)
+        assertThat(rolloverAmountMaxPercentage.value()).isEqualTo(0.0)
     }
 }

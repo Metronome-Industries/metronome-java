@@ -26,14 +26,14 @@ class ContractProductUpdateParamsTest {
             .pricingGroupKey(listOf("string"))
             .quantityConversion(
                 QuantityConversion.builder()
-                    .conversionFactor(42.23)
+                    .conversionFactor(0.0)
                     .operation(QuantityConversion.Operation.MULTIPLY)
                     .name("name")
                     .build()
             )
             .quantityRounding(
                 QuantityRounding.builder()
-                    .decimalPlaces(42.23)
+                    .decimalPlaces(0.0)
                     .roundingMethod(QuantityRounding.RoundingMethod.ROUND_UP)
                     .build()
             )
@@ -59,14 +59,14 @@ class ContractProductUpdateParamsTest {
                 .pricingGroupKey(listOf("string"))
                 .quantityConversion(
                     QuantityConversion.builder()
-                        .conversionFactor(42.23)
+                        .conversionFactor(0.0)
                         .operation(QuantityConversion.Operation.MULTIPLY)
                         .name("name")
                         .build()
                 )
                 .quantityRounding(
                     QuantityRounding.builder()
-                        .decimalPlaces(42.23)
+                        .decimalPlaces(0.0)
                         .roundingMethod(QuantityRounding.RoundingMethod.ROUND_UP)
                         .build()
                 )
@@ -90,7 +90,7 @@ class ContractProductUpdateParamsTest {
         assertThat(body.quantityConversion())
             .isEqualTo(
                 QuantityConversion.builder()
-                    .conversionFactor(42.23)
+                    .conversionFactor(0.0)
                     .operation(QuantityConversion.Operation.MULTIPLY)
                     .name("name")
                     .build()
@@ -98,7 +98,7 @@ class ContractProductUpdateParamsTest {
         assertThat(body.quantityRounding())
             .isEqualTo(
                 QuantityRounding.builder()
-                    .decimalPlaces(42.23)
+                    .decimalPlaces(0.0)
                     .roundingMethod(QuantityRounding.RoundingMethod.ROUND_UP)
                     .build()
             )

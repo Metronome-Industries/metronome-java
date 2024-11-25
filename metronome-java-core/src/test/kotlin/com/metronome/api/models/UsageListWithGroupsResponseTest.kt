@@ -16,7 +16,7 @@ class UsageListWithGroupsResponseTest {
                 .groupKey("group_key")
                 .groupValue("group_value")
                 .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .value(42.23)
+                .value(0.0)
                 .build()
         assertThat(usageListWithGroupsResponse).isNotNull
         assertThat(usageListWithGroupsResponse.endingBefore())
@@ -25,6 +25,6 @@ class UsageListWithGroupsResponseTest {
         assertThat(usageListWithGroupsResponse.groupValue()).contains("group_value")
         assertThat(usageListWithGroupsResponse.startingOn())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(usageListWithGroupsResponse.value()).contains(42.23)
+        assertThat(usageListWithGroupsResponse.value()).contains(0.0)
     }
 }

@@ -14,7 +14,7 @@ class ContractRateCardListParamsTest {
     fun createContractRateCardListParams() {
         ContractRateCardListParams.builder()
             .body(JsonValue.from(mapOf<String, Any>()))
-            .limit(100L)
+            .limit(1L)
             .nextPage("next_page")
             .build()
     }
@@ -24,11 +24,11 @@ class ContractRateCardListParamsTest {
         val params =
             ContractRateCardListParams.builder()
                 .body(JsonValue.from(mapOf<String, Any>()))
-                .limit(100L)
+                .limit(1L)
                 .nextPage("next_page")
                 .build()
         val expected = QueryParams.builder()
-        expected.put("limit", "100")
+        expected.put("limit", "1")
         expected.put("next_page", "next_page")
         assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }
@@ -46,7 +46,7 @@ class ContractRateCardListParamsTest {
         val params =
             ContractRateCardListParams.builder()
                 .body(JsonValue.from(mapOf<String, Any>()))
-                .limit(100L)
+                .limit(1L)
                 .nextPage("next_page")
                 .build()
         val body = params.getBody()

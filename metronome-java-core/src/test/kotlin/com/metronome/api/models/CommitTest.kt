@@ -26,7 +26,7 @@ class CommitTest {
                             listOf(
                                 ScheduleDuration.ScheduleItem.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .amount(42.23)
+                                    .amount(0.0)
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
@@ -40,7 +40,7 @@ class CommitTest {
                         )
                         .build()
                 )
-                .amount(42.23)
+                .amount(0.0)
                 .applicableContractIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                 .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                 .applicableProductTags(listOf("string"))
@@ -66,11 +66,11 @@ class CommitTest {
                             listOf(
                                 SchedulePointInTime.ScheduleItem.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .amount(42.23)
+                                    .amount(0.0)
                                     .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .quantity(42.23)
+                                    .quantity(0.0)
                                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .unitPrice(42.23)
+                                    .unitPrice(0.0)
                                     .build()
                             )
                         )
@@ -80,7 +80,7 @@ class CommitTest {
                     listOf(
                         Commit.Ledger.ofPrepaidCommitSegmentStartLedgerEntry(
                             Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry.builder()
-                                .amount(42.23)
+                                .amount(0.0)
                                 .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .type(
@@ -93,7 +93,7 @@ class CommitTest {
                 )
                 .name("name")
                 .netsuiteSalesOrderId("netsuite_sales_order_id")
-                .priority(42.23)
+                .priority(0.0)
                 .rateType(Commit.RateType.COMMIT_RATE)
                 .rolledOverFrom(
                     Commit.RolledOverFrom.builder()
@@ -101,7 +101,7 @@ class CommitTest {
                         .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
-                .rolloverFraction(42.23)
+                .rolloverFraction(0.0)
                 .salesforceOpportunityId("salesforce_opportunity_id")
                 .build()
         assertThat(commit).isNotNull
@@ -121,7 +121,7 @@ class CommitTest {
                         listOf(
                             ScheduleDuration.ScheduleItem.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .amount(42.23)
+                                .amount(0.0)
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()
@@ -135,7 +135,7 @@ class CommitTest {
                     )
                     .build()
             )
-        assertThat(commit.amount()).contains(42.23)
+        assertThat(commit.amount()).contains(0.0)
         assertThat(commit.applicableContractIds().get())
             .containsExactly("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(commit.applicableProductIds().get())
@@ -162,11 +162,11 @@ class CommitTest {
                         listOf(
                             SchedulePointInTime.ScheduleItem.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .amount(42.23)
+                                .amount(0.0)
                                 .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .quantity(42.23)
+                                .quantity(0.0)
                                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .unitPrice(42.23)
+                                .unitPrice(0.0)
                                 .build()
                         )
                     )
@@ -176,7 +176,7 @@ class CommitTest {
             .containsExactly(
                 Commit.Ledger.ofPrepaidCommitSegmentStartLedgerEntry(
                     Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry.builder()
-                        .amount(42.23)
+                        .amount(0.0)
                         .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .type(
@@ -188,7 +188,7 @@ class CommitTest {
             )
         assertThat(commit.name()).contains("name")
         assertThat(commit.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
-        assertThat(commit.priority()).contains(42.23)
+        assertThat(commit.priority()).contains(0.0)
         assertThat(commit.rateType()).contains(Commit.RateType.COMMIT_RATE)
         assertThat(commit.rolledOverFrom())
             .contains(
@@ -197,7 +197,7 @@ class CommitTest {
                     .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .build()
             )
-        assertThat(commit.rolloverFraction()).contains(42.23)
+        assertThat(commit.rolloverFraction()).contains(0.0)
         assertThat(commit.salesforceOpportunityId()).contains("salesforce_opportunity_id")
     }
 }

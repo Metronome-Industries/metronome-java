@@ -17,7 +17,7 @@ class CustomerCommitCreateParamsTest {
                     .scheduleItems(
                         listOf(
                             CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
-                                .amount(42.23)
+                                .amount(0.0)
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()
@@ -27,7 +27,7 @@ class CustomerCommitCreateParamsTest {
                     .build()
             )
             .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .priority(42.23)
+            .priority(0.0)
             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .type(CustomerCommitCreateParams.Type.PREPAID)
             .applicableContractIds(listOf("string"))
@@ -53,18 +53,18 @@ class CustomerCommitCreateParamsTest {
                                     .MONTHLY
                             )
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .amount(42.23)
-                            .quantity(42.23)
-                            .unitPrice(42.23)
+                            .amount(0.0)
+                            .quantity(0.0)
+                            .unitPrice(0.0)
                             .build()
                     )
                     .scheduleItems(
                         listOf(
                             CustomerCommitCreateParams.InvoiceSchedule.ScheduleItem.builder()
                                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .amount(42.23)
-                                .quantity(42.23)
-                                .unitPrice(42.23)
+                                .amount(0.0)
+                                .quantity(0.0)
+                                .unitPrice(0.0)
                                 .build()
                         )
                     )
@@ -86,7 +86,7 @@ class CustomerCommitCreateParamsTest {
                         .scheduleItems(
                             listOf(
                                 CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
-                                    .amount(42.23)
+                                    .amount(0.0)
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
@@ -96,7 +96,7 @@ class CustomerCommitCreateParamsTest {
                         .build()
                 )
                 .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .priority(42.23)
+                .priority(0.0)
                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .type(CustomerCommitCreateParams.Type.PREPAID)
                 .applicableContractIds(listOf("string"))
@@ -122,18 +122,18 @@ class CustomerCommitCreateParamsTest {
                                         .MONTHLY
                                 )
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .amount(42.23)
-                                .quantity(42.23)
-                                .unitPrice(42.23)
+                                .amount(0.0)
+                                .quantity(0.0)
+                                .unitPrice(0.0)
                                 .build()
                         )
                         .scheduleItems(
                             listOf(
                                 CustomerCommitCreateParams.InvoiceSchedule.ScheduleItem.builder()
                                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .amount(42.23)
-                                    .quantity(42.23)
-                                    .unitPrice(42.23)
+                                    .amount(0.0)
+                                    .quantity(0.0)
+                                    .unitPrice(0.0)
                                     .build()
                             )
                         )
@@ -152,7 +152,7 @@ class CustomerCommitCreateParamsTest {
                     .scheduleItems(
                         listOf(
                             CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
-                                .amount(42.23)
+                                .amount(0.0)
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()
@@ -162,7 +162,7 @@ class CustomerCommitCreateParamsTest {
                     .build()
             )
         assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.priority()).isEqualTo(42.23)
+        assertThat(body.priority()).isEqualTo(0.0)
         assertThat(body.productId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(body.type()).isEqualTo(CustomerCommitCreateParams.Type.PREPAID)
         assertThat(body.applicableContractIds()).isEqualTo(listOf("string"))
@@ -191,18 +191,18 @@ class CustomerCommitCreateParamsTest {
                                     .MONTHLY
                             )
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .amount(42.23)
-                            .quantity(42.23)
-                            .unitPrice(42.23)
+                            .amount(0.0)
+                            .quantity(0.0)
+                            .unitPrice(0.0)
                             .build()
                     )
                     .scheduleItems(
                         listOf(
                             CustomerCommitCreateParams.InvoiceSchedule.ScheduleItem.builder()
                                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .amount(42.23)
-                                .quantity(42.23)
-                                .unitPrice(42.23)
+                                .amount(0.0)
+                                .quantity(0.0)
+                                .unitPrice(0.0)
                                 .build()
                         )
                     )
@@ -223,7 +223,7 @@ class CustomerCommitCreateParamsTest {
                         .scheduleItems(
                             listOf(
                                 CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
-                                    .amount(42.23)
+                                    .amount(0.0)
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
@@ -232,7 +232,7 @@ class CustomerCommitCreateParamsTest {
                         .build()
                 )
                 .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .priority(42.23)
+                .priority(0.0)
                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .type(CustomerCommitCreateParams.Type.PREPAID)
                 .build()
@@ -244,7 +244,7 @@ class CustomerCommitCreateParamsTest {
                     .scheduleItems(
                         listOf(
                             CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
-                                .amount(42.23)
+                                .amount(0.0)
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()
@@ -253,7 +253,7 @@ class CustomerCommitCreateParamsTest {
                     .build()
             )
         assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.priority()).isEqualTo(42.23)
+        assertThat(body.priority()).isEqualTo(0.0)
         assertThat(body.productId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(body.type()).isEqualTo(CustomerCommitCreateParams.Type.PREPAID)
     }

@@ -20,10 +20,10 @@ class RateTest {
                 )
                 .customRate(Rate.CustomRate.builder().build())
                 .isProrated(true)
-                .price(42.23)
+                .price(0.0)
                 .pricingGroupValues(Rate.PricingGroupValues.builder().build())
-                .quantity(42.23)
-                .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
+                .quantity(0.0)
+                .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                 .useListPrices(true)
                 .build()
         assertThat(rate).isNotNull
@@ -37,11 +37,10 @@ class RateTest {
             )
         assertThat(rate.customRate()).contains(Rate.CustomRate.builder().build())
         assertThat(rate.isProrated()).contains(true)
-        assertThat(rate.price()).contains(42.23)
+        assertThat(rate.price()).contains(0.0)
         assertThat(rate.pricingGroupValues()).contains(Rate.PricingGroupValues.builder().build())
-        assertThat(rate.quantity()).contains(42.23)
-        assertThat(rate.tiers().get())
-            .containsExactly(Tier.builder().price(42.23).size(42.23).build())
+        assertThat(rate.quantity()).contains(0.0)
+        assertThat(rate.tiers().get()).containsExactly(Tier.builder().price(0.0).size(0.0).build())
         assertThat(rate.useListPrices()).contains(true)
     }
 }

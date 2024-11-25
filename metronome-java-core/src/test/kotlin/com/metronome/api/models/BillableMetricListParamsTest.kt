@@ -13,7 +13,7 @@ class BillableMetricListParamsTest {
     fun createBillableMetricListParams() {
         BillableMetricListParams.builder()
             .includeArchived(true)
-            .limit(100L)
+            .limit(1L)
             .nextPage("next_page")
             .build()
     }
@@ -23,12 +23,12 @@ class BillableMetricListParamsTest {
         val params =
             BillableMetricListParams.builder()
                 .includeArchived(true)
-                .limit(100L)
+                .limit(1L)
                 .nextPage("next_page")
                 .build()
         val expected = QueryParams.builder()
         expected.put("include_archived", "true")
-        expected.put("limit", "100")
+        expected.put("limit", "1")
         expected.put("next_page", "next_page")
         assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }

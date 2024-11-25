@@ -11,12 +11,12 @@ class QuantityConversionTest {
     fun createQuantityConversion() {
         val quantityConversion =
             QuantityConversion.builder()
-                .conversionFactor(42.23)
+                .conversionFactor(0.0)
                 .operation(QuantityConversion.Operation.MULTIPLY)
                 .name("name")
                 .build()
         assertThat(quantityConversion).isNotNull
-        assertThat(quantityConversion.conversionFactor()).isEqualTo(42.23)
+        assertThat(quantityConversion.conversionFactor()).isEqualTo(0.0)
         assertThat(quantityConversion.operation()).isEqualTo(QuantityConversion.Operation.MULTIPLY)
         assertThat(quantityConversion.name()).contains("name")
     }

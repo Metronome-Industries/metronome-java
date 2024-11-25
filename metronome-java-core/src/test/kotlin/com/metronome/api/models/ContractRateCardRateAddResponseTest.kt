@@ -19,8 +19,8 @@ class ContractRateCardRateAddResponseTest {
                                 .rateType(
                                     ContractRateCardRateAddResponse.Data.CommitRate.RateType.FLAT
                                 )
-                                .price(42.23)
-                                .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
+                                .price(0.0)
+                                .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                                 .build()
                         )
                         .creditType(
@@ -33,13 +33,13 @@ class ContractRateCardRateAddResponseTest {
                             ContractRateCardRateAddResponse.Data.CustomRate.builder().build()
                         )
                         .isProrated(true)
-                        .price(42.23)
+                        .price(0.0)
                         .pricingGroupValues(
                             ContractRateCardRateAddResponse.Data.PricingGroupValues.builder()
                                 .build()
                         )
-                        .quantity(42.23)
-                        .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
+                        .quantity(0.0)
+                        .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                         .useListPrices(true)
                         .build()
                 )
@@ -52,8 +52,8 @@ class ContractRateCardRateAddResponseTest {
                     .commitRate(
                         ContractRateCardRateAddResponse.Data.CommitRate.builder()
                             .rateType(ContractRateCardRateAddResponse.Data.CommitRate.RateType.FLAT)
-                            .price(42.23)
-                            .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
+                            .price(0.0)
+                            .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                             .build()
                     )
                     .creditType(
@@ -64,12 +64,12 @@ class ContractRateCardRateAddResponseTest {
                     )
                     .customRate(ContractRateCardRateAddResponse.Data.CustomRate.builder().build())
                     .isProrated(true)
-                    .price(42.23)
+                    .price(0.0)
                     .pricingGroupValues(
                         ContractRateCardRateAddResponse.Data.PricingGroupValues.builder().build()
                     )
-                    .quantity(42.23)
-                    .tiers(listOf(Tier.builder().price(42.23).size(42.23).build()))
+                    .quantity(0.0)
+                    .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                     .useListPrices(true)
                     .build()
             )

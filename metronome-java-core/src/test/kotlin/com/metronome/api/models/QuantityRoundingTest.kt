@@ -11,11 +11,11 @@ class QuantityRoundingTest {
     fun createQuantityRounding() {
         val quantityRounding =
             QuantityRounding.builder()
-                .decimalPlaces(42.23)
+                .decimalPlaces(0.0)
                 .roundingMethod(QuantityRounding.RoundingMethod.ROUND_UP)
                 .build()
         assertThat(quantityRounding).isNotNull
-        assertThat(quantityRounding.decimalPlaces()).isEqualTo(42.23)
+        assertThat(quantityRounding.decimalPlaces()).isEqualTo(0.0)
         assertThat(quantityRounding.roundingMethod())
             .isEqualTo(QuantityRounding.RoundingMethod.ROUND_UP)
     }

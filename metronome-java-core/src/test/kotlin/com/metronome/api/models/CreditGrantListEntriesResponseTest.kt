@@ -31,14 +31,14 @@ class CreditGrantListEntriesResponseTest {
                                                 .effectiveAt(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
-                                                .excludingPending(42.23)
-                                                .includingPending(42.23)
+                                                .excludingPending(0.0)
+                                                .includingPending(0.0)
                                                 .build()
                                         )
                                         .entries(
                                             listOf(
                                                 CreditLedgerEntry.builder()
-                                                    .amount(42.23)
+                                                    .amount(0.0)
                                                     .createdBy("created_by")
                                                     .creditGrantId(
                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
@@ -49,7 +49,7 @@ class CreditGrantListEntriesResponseTest {
                                                         )
                                                     )
                                                     .reason("Automated invoice deduction")
-                                                    .runningBalance(42.23)
+                                                    .runningBalance(0.0)
                                                     .invoiceId(
                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                     )
@@ -59,7 +59,7 @@ class CreditGrantListEntriesResponseTest {
                                         .pendingEntries(
                                             listOf(
                                                 CreditLedgerEntry.builder()
-                                                    .amount(42.23)
+                                                    .amount(0.0)
                                                     .createdBy("created_by")
                                                     .creditGrantId(
                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
@@ -70,7 +70,7 @@ class CreditGrantListEntriesResponseTest {
                                                         )
                                                     )
                                                     .reason("Automated invoice deduction")
-                                                    .runningBalance(42.23)
+                                                    .runningBalance(0.0)
                                                     .invoiceId(
                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                     )
@@ -84,8 +84,8 @@ class CreditGrantListEntriesResponseTest {
                                                 .effectiveAt(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
-                                                .excludingPending(42.23)
-                                                .includingPending(42.23)
+                                                .excludingPending(0.0)
+                                                .includingPending(0.0)
                                                 .build()
                                         )
                                         .build()
@@ -116,21 +116,21 @@ class CreditGrantListEntriesResponseTest {
                                         .effectiveAt(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
-                                        .excludingPending(42.23)
-                                        .includingPending(42.23)
+                                        .excludingPending(0.0)
+                                        .includingPending(0.0)
                                         .build()
                                 )
                                 .entries(
                                     listOf(
                                         CreditLedgerEntry.builder()
-                                            .amount(42.23)
+                                            .amount(0.0)
                                             .createdBy("created_by")
                                             .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .effectiveAt(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
                                             .reason("Automated invoice deduction")
-                                            .runningBalance(42.23)
+                                            .runningBalance(0.0)
                                             .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
@@ -138,14 +138,14 @@ class CreditGrantListEntriesResponseTest {
                                 .pendingEntries(
                                     listOf(
                                         CreditLedgerEntry.builder()
-                                            .amount(42.23)
+                                            .amount(0.0)
                                             .createdBy("created_by")
                                             .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .effectiveAt(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
                                             .reason("Automated invoice deduction")
-                                            .runningBalance(42.23)
+                                            .runningBalance(0.0)
                                             .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
@@ -156,8 +156,8 @@ class CreditGrantListEntriesResponseTest {
                                         .effectiveAt(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
-                                        .excludingPending(42.23)
-                                        .includingPending(42.23)
+                                        .excludingPending(0.0)
+                                        .includingPending(0.0)
                                         .build()
                                 )
                                 .build()

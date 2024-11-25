@@ -19,15 +19,15 @@ class CustomerPlanListResponseTest {
                 .planName("plan_name")
                 .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .netPaymentTermsDays(42.23)
+                .netPaymentTermsDays(0.0)
                 .trialInfo(
                     CustomerPlanListResponse.TrialInfo.builder()
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .spendingCaps(
                             listOf(
                                 CustomerPlanListResponse.TrialInfo.SpendingCap.builder()
-                                    .amount(42.23)
-                                    .amountRemaining(42.23)
+                                    .amount(123.45)
+                                    .amountRemaining(123.0)
                                     .creditType(
                                         CreditTypeData.builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -52,7 +52,7 @@ class CustomerPlanListResponseTest {
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(customerPlanListResponse.endingBefore())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(customerPlanListResponse.netPaymentTermsDays()).contains(42.23)
+        assertThat(customerPlanListResponse.netPaymentTermsDays()).contains(0.0)
         assertThat(customerPlanListResponse.trialInfo())
             .contains(
                 CustomerPlanListResponse.TrialInfo.builder()
@@ -60,8 +60,8 @@ class CustomerPlanListResponseTest {
                     .spendingCaps(
                         listOf(
                             CustomerPlanListResponse.TrialInfo.SpendingCap.builder()
-                                .amount(42.23)
-                                .amountRemaining(42.23)
+                                .amount(123.45)
+                                .amountRemaining(123.0)
                                 .creditType(
                                     CreditTypeData.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

@@ -13,7 +13,7 @@ class CustomerPlanListParamsTest {
     fun createCustomerPlanListParams() {
         CustomerPlanListParams.builder()
             .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .limit(100L)
+            .limit(1L)
             .nextPage("next_page")
             .build()
     }
@@ -23,11 +23,11 @@ class CustomerPlanListParamsTest {
         val params =
             CustomerPlanListParams.builder()
                 .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .limit(100L)
+                .limit(1L)
                 .nextPage("next_page")
                 .build()
         val expected = QueryParams.builder()
-        expected.put("limit", "100")
+        expected.put("limit", "1")
         expected.put("next_page", "next_page")
         assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }

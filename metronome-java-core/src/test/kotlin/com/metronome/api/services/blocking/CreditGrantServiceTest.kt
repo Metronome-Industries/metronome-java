@@ -29,18 +29,18 @@ class CreditGrantServiceTest {
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .grantAmount(
                         CreditGrantCreateParams.GrantAmount.builder()
-                            .amount(42.23)
+                            .amount(0.0)
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
                     .name("name")
                     .paidAmount(
                         CreditGrantCreateParams.PaidAmount.builder()
-                            .amount(42.23)
+                            .amount(0.0)
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
-                    .priority(42.23)
+                    .priority(0.0)
                     .creditGrantType("credit_grant_type")
                     .customFields(CreditGrantCreateParams.CustomFields.builder().build())
                     .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -50,13 +50,13 @@ class CreditGrantServiceTest {
                     .rolloverSettings(
                         CreditGrantCreateParams.RolloverSettings.builder()
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .priority(42.23)
+                            .priority(0.0)
                             .rolloverAmount(
                                 CreditGrantCreateParams.RolloverSettings.RolloverAmount
                                     .ofRolloverAmountMaxPercentage(
                                         RolloverAmountMaxPercentage.builder()
                                             .type(RolloverAmountMaxPercentage.Type.MAX_PERCENTAGE)
-                                            .value(1.0)
+                                            .value(0.0)
                                             .build()
                                     )
                             )

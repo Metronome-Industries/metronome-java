@@ -25,7 +25,7 @@ class ProductOrderServiceTest {
                     .productMoves(
                         listOf(
                             ContractRateCardProductOrderUpdateParams.ProductMove.builder()
-                                .position(42.23)
+                                .position(0.0)
                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )

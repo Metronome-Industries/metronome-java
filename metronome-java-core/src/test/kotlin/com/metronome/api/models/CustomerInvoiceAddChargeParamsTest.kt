@@ -17,8 +17,8 @@ class CustomerInvoiceAddChargeParamsTest {
             .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .description("description")
             .invoiceStartTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-            .price(42.23)
-            .quantity(42.23)
+            .price(0.0)
+            .quantity(0.0)
             .build()
     }
 
@@ -31,8 +31,8 @@ class CustomerInvoiceAddChargeParamsTest {
                 .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .description("description")
                 .invoiceStartTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .price(42.23)
-                .quantity(42.23)
+                .price(0.0)
+                .quantity(0.0)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -41,8 +41,8 @@ class CustomerInvoiceAddChargeParamsTest {
         assertThat(body.description()).isEqualTo("description")
         assertThat(body.invoiceStartTimestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.price()).isEqualTo(42.23)
-        assertThat(body.quantity()).isEqualTo(42.23)
+        assertThat(body.price()).isEqualTo(0.0)
+        assertThat(body.quantity()).isEqualTo(0.0)
     }
 
     @Test
@@ -54,8 +54,8 @@ class CustomerInvoiceAddChargeParamsTest {
                 .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .description("description")
                 .invoiceStartTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .price(42.23)
-                .quantity(42.23)
+                .price(0.0)
+                .quantity(0.0)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -64,8 +64,8 @@ class CustomerInvoiceAddChargeParamsTest {
         assertThat(body.description()).isEqualTo("description")
         assertThat(body.invoiceStartTimestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.price()).isEqualTo(42.23)
-        assertThat(body.quantity()).isEqualTo(42.23)
+        assertThat(body.price()).isEqualTo(0.0)
+        assertThat(body.quantity()).isEqualTo(0.0)
     }
 
     @Test
@@ -77,8 +77,8 @@ class CustomerInvoiceAddChargeParamsTest {
                 .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .description("description")
                 .invoiceStartTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .price(42.23)
-                .quantity(42.23)
+                .price(0.0)
+                .quantity(0.0)
                 .build()
         assertThat(params).isNotNull
         // path param "customerId"

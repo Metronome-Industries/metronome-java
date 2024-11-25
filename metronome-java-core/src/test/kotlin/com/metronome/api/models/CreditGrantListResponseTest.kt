@@ -16,8 +16,8 @@ class CreditGrantListResponseTest {
                 .balance(
                     CreditGrantListResponse.Balance.builder()
                         .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .excludingPending(42.23)
-                        .includingPending(42.23)
+                        .excludingPending(0.0)
+                        .includingPending(0.0)
                         .build()
                 )
                 .customFields(CreditGrantListResponse.CustomFields.builder().build())
@@ -25,12 +25,12 @@ class CreditGrantListResponseTest {
                 .deductions(
                     listOf(
                         CreditLedgerEntry.builder()
-                            .amount(42.23)
+                            .amount(0.0)
                             .createdBy("created_by")
                             .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .reason("Automated invoice deduction")
-                            .runningBalance(42.23)
+                            .runningBalance(0.0)
                             .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
@@ -39,7 +39,7 @@ class CreditGrantListResponseTest {
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .grantAmount(
                     CreditGrantListResponse.GrantAmount.builder()
-                        .amount(42.23)
+                        .amount(0.0)
                         .creditType(
                             CreditTypeData.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -51,7 +51,7 @@ class CreditGrantListResponseTest {
                 .name("name")
                 .paidAmount(
                     CreditGrantListResponse.PaidAmount.builder()
-                        .amount(42.23)
+                        .amount(0.0)
                         .creditType(
                             CreditTypeData.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -63,17 +63,17 @@ class CreditGrantListResponseTest {
                 .pendingDeductions(
                     listOf(
                         CreditLedgerEntry.builder()
-                            .amount(42.23)
+                            .amount(0.0)
                             .createdBy("created_by")
                             .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .reason("Automated invoice deduction")
-                            .runningBalance(42.23)
+                            .runningBalance(0.0)
                             .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
                 )
-                .priority(42.23)
+                .priority(0.0)
                 .creditGrantType("credit_grant_type")
                 .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .products(
@@ -88,8 +88,8 @@ class CreditGrantListResponseTest {
             .isEqualTo(
                 CreditGrantListResponse.Balance.builder()
                     .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .excludingPending(42.23)
-                    .includingPending(42.23)
+                    .excludingPending(0.0)
+                    .includingPending(0.0)
                     .build()
             )
         assertThat(creditGrantListResponse.customFields())
@@ -99,12 +99,12 @@ class CreditGrantListResponseTest {
         assertThat(creditGrantListResponse.deductions())
             .containsExactly(
                 CreditLedgerEntry.builder()
-                    .amount(42.23)
+                    .amount(0.0)
                     .createdBy("created_by")
                     .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .reason("Automated invoice deduction")
-                    .runningBalance(42.23)
+                    .runningBalance(0.0)
                     .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .build()
             )
@@ -115,7 +115,7 @@ class CreditGrantListResponseTest {
         assertThat(creditGrantListResponse.grantAmount())
             .isEqualTo(
                 CreditGrantListResponse.GrantAmount.builder()
-                    .amount(42.23)
+                    .amount(0.0)
                     .creditType(
                         CreditTypeData.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -128,7 +128,7 @@ class CreditGrantListResponseTest {
         assertThat(creditGrantListResponse.paidAmount())
             .isEqualTo(
                 CreditGrantListResponse.PaidAmount.builder()
-                    .amount(42.23)
+                    .amount(0.0)
                     .creditType(
                         CreditTypeData.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -140,16 +140,16 @@ class CreditGrantListResponseTest {
         assertThat(creditGrantListResponse.pendingDeductions())
             .containsExactly(
                 CreditLedgerEntry.builder()
-                    .amount(42.23)
+                    .amount(0.0)
                     .createdBy("created_by")
                     .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .reason("Automated invoice deduction")
-                    .runningBalance(42.23)
+                    .runningBalance(0.0)
                     .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .build()
             )
-        assertThat(creditGrantListResponse.priority()).isEqualTo(42.23)
+        assertThat(creditGrantListResponse.priority()).isEqualTo(0.0)
         assertThat(creditGrantListResponse.creditGrantType()).contains("credit_grant_type")
         assertThat(creditGrantListResponse.invoiceId())
             .contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

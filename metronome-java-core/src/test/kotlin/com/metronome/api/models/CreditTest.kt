@@ -26,7 +26,7 @@ class CreditTest {
                             listOf(
                                 ScheduleDuration.ScheduleItem.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .amount(42.23)
+                                    .amount(0.0)
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
@@ -52,7 +52,7 @@ class CreditTest {
                     listOf(
                         Credit.Ledger.ofCreditSegmentStartLedgerEntry(
                             Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
-                                .amount(42.23)
+                                .amount(0.0)
                                 .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .type(
@@ -65,7 +65,7 @@ class CreditTest {
                 )
                 .name("name")
                 .netsuiteSalesOrderId("netsuite_sales_order_id")
-                .priority(42.23)
+                .priority(0.0)
                 .rateType(Credit.RateType.COMMIT_RATE)
                 .salesforceOpportunityId("salesforce_opportunity_id")
                 .build()
@@ -86,7 +86,7 @@ class CreditTest {
                         listOf(
                             ScheduleDuration.ScheduleItem.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .amount(42.23)
+                                .amount(0.0)
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()
@@ -113,7 +113,7 @@ class CreditTest {
             .containsExactly(
                 Credit.Ledger.ofCreditSegmentStartLedgerEntry(
                     Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
-                        .amount(42.23)
+                        .amount(0.0)
                         .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .type(Credit.Ledger.CreditSegmentStartLedgerEntry.Type.CREDIT_SEGMENT_START)
@@ -122,7 +122,7 @@ class CreditTest {
             )
         assertThat(credit.name()).contains("name")
         assertThat(credit.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
-        assertThat(credit.priority()).contains(42.23)
+        assertThat(credit.priority()).contains(0.0)
         assertThat(credit.rateType()).contains(Credit.RateType.COMMIT_RATE)
         assertThat(credit.salesforceOpportunityId()).contains("salesforce_opportunity_id")
     }

@@ -11,14 +11,14 @@ class PlanListParamsTest {
 
     @Test
     fun createPlanListParams() {
-        PlanListParams.builder().limit(100L).nextPage("next_page").build()
+        PlanListParams.builder().limit(1L).nextPage("next_page").build()
     }
 
     @Test
     fun getQueryParams() {
-        val params = PlanListParams.builder().limit(100L).nextPage("next_page").build()
+        val params = PlanListParams.builder().limit(1L).nextPage("next_page").build()
         val expected = QueryParams.builder()
-        expected.put("limit", "100")
+        expected.put("limit", "1")
         expected.put("next_page", "next_page")
         assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }

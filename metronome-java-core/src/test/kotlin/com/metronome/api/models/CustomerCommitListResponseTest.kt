@@ -29,7 +29,7 @@ class CustomerCommitListResponseTest {
                                         listOf(
                                             ScheduleDuration.ScheduleItem.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                .amount(42.23)
+                                                .amount(0.0)
                                                 .endingBefore(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
@@ -47,7 +47,7 @@ class CustomerCommitListResponseTest {
                                     )
                                     .build()
                             )
-                            .amount(42.23)
+                            .amount(0.0)
                             .applicableContractIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
@@ -75,13 +75,13 @@ class CustomerCommitListResponseTest {
                                         listOf(
                                             SchedulePointInTime.ScheduleItem.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                .amount(42.23)
+                                                .amount(0.0)
                                                 .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                .quantity(42.23)
+                                                .quantity(0.0)
                                                 .timestamp(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
-                                                .unitPrice(42.23)
+                                                .unitPrice(0.0)
                                                 .build()
                                         )
                                     )
@@ -91,7 +91,7 @@ class CustomerCommitListResponseTest {
                                 listOf(
                                     Commit.Ledger.ofPrepaidCommitSegmentStartLedgerEntry(
                                         Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry.builder()
-                                            .amount(42.23)
+                                            .amount(0.0)
                                             .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .timestamp(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -107,7 +107,7 @@ class CustomerCommitListResponseTest {
                             )
                             .name("name")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
-                            .priority(42.23)
+                            .priority(0.0)
                             .rateType(Commit.RateType.COMMIT_RATE)
                             .rolledOverFrom(
                                 Commit.RolledOverFrom.builder()
@@ -115,7 +115,7 @@ class CustomerCommitListResponseTest {
                                     .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
                             )
-                            .rolloverFraction(42.23)
+                            .rolloverFraction(0.0)
                             .salesforceOpportunityId("salesforce_opportunity_id")
                             .build()
                     )
@@ -140,7 +140,7 @@ class CustomerCommitListResponseTest {
                                 listOf(
                                     ScheduleDuration.ScheduleItem.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .amount(42.23)
+                                        .amount(0.0)
                                         .endingBefore(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
@@ -158,7 +158,7 @@ class CustomerCommitListResponseTest {
                             )
                             .build()
                     )
-                    .amount(42.23)
+                    .amount(0.0)
                     .applicableContractIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                     .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                     .applicableProductTags(listOf("string"))
@@ -184,11 +184,11 @@ class CustomerCommitListResponseTest {
                                 listOf(
                                     SchedulePointInTime.ScheduleItem.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .amount(42.23)
+                                        .amount(0.0)
                                         .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .quantity(42.23)
+                                        .quantity(0.0)
                                         .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                        .unitPrice(42.23)
+                                        .unitPrice(0.0)
                                         .build()
                                 )
                             )
@@ -198,7 +198,7 @@ class CustomerCommitListResponseTest {
                         listOf(
                             Commit.Ledger.ofPrepaidCommitSegmentStartLedgerEntry(
                                 Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry.builder()
-                                    .amount(42.23)
+                                    .amount(0.0)
                                     .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .type(
@@ -211,7 +211,7 @@ class CustomerCommitListResponseTest {
                     )
                     .name("name")
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
-                    .priority(42.23)
+                    .priority(0.0)
                     .rateType(Commit.RateType.COMMIT_RATE)
                     .rolledOverFrom(
                         Commit.RolledOverFrom.builder()
@@ -219,7 +219,7 @@ class CustomerCommitListResponseTest {
                             .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
-                    .rolloverFraction(42.23)
+                    .rolloverFraction(0.0)
                     .salesforceOpportunityId("salesforce_opportunity_id")
                     .build()
             )

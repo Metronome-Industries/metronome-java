@@ -19,13 +19,13 @@ class CustomerPlanListPriceAdjustmentsResponseTest {
                             .adjustmentType(
                                 CustomerPlanListPriceAdjustmentsResponse.Price.AdjustmentType.FIXED
                             )
-                            .tier(42.23)
-                            .value(42.23)
+                            .tier(0.0)
+                            .value(0.0)
                             .build()
                     )
                 )
-                .startPeriod(42.23)
-                .quantity(42.23)
+                .startPeriod(0.0)
+                .quantity(0.0)
                 .build()
         assertThat(customerPlanListPriceAdjustmentsResponse).isNotNull
         assertThat(customerPlanListPriceAdjustmentsResponse.chargeId())
@@ -38,11 +38,11 @@ class CustomerPlanListPriceAdjustmentsResponseTest {
                     .adjustmentType(
                         CustomerPlanListPriceAdjustmentsResponse.Price.AdjustmentType.FIXED
                     )
-                    .tier(42.23)
-                    .value(42.23)
+                    .tier(0.0)
+                    .value(0.0)
                     .build()
             )
-        assertThat(customerPlanListPriceAdjustmentsResponse.startPeriod()).isEqualTo(42.23)
-        assertThat(customerPlanListPriceAdjustmentsResponse.quantity()).contains(42.23)
+        assertThat(customerPlanListPriceAdjustmentsResponse.startPeriod()).isEqualTo(0.0)
+        assertThat(customerPlanListPriceAdjustmentsResponse.quantity()).contains(0.0)
     }
 }

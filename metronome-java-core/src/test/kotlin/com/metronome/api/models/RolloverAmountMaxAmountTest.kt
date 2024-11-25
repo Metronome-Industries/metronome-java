@@ -12,11 +12,11 @@ class RolloverAmountMaxAmountTest {
         val rolloverAmountMaxAmount =
             RolloverAmountMaxAmount.builder()
                 .type(RolloverAmountMaxAmount.Type.MAX_AMOUNT)
-                .value(42.23)
+                .value(0.0)
                 .build()
         assertThat(rolloverAmountMaxAmount).isNotNull
         assertThat(rolloverAmountMaxAmount.type())
             .isEqualTo(RolloverAmountMaxAmount.Type.MAX_AMOUNT)
-        assertThat(rolloverAmountMaxAmount.value()).isEqualTo(42.23)
+        assertThat(rolloverAmountMaxAmount.value()).isEqualTo(0.0)
     }
 }

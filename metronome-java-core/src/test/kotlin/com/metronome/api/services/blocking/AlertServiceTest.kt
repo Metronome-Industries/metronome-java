@@ -24,7 +24,7 @@ class AlertServiceTest {
                 AlertCreateParams.builder()
                     .alertType(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
                     .name("name")
-                    .threshold(42.23)
+                    .threshold(0.0)
                     .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .creditGrantTypeFilters(listOf("string"))
                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

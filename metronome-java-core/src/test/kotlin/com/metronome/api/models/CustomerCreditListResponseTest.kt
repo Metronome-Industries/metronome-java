@@ -29,7 +29,7 @@ class CustomerCreditListResponseTest {
                                         listOf(
                                             ScheduleDuration.ScheduleItem.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                .amount(42.23)
+                                                .amount(0.0)
                                                 .endingBefore(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
@@ -61,7 +61,7 @@ class CustomerCreditListResponseTest {
                                 listOf(
                                     Credit.Ledger.ofCreditSegmentStartLedgerEntry(
                                         Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
-                                            .amount(42.23)
+                                            .amount(0.0)
                                             .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .timestamp(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -76,7 +76,7 @@ class CustomerCreditListResponseTest {
                             )
                             .name("name")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
-                            .priority(42.23)
+                            .priority(0.0)
                             .rateType(Credit.RateType.COMMIT_RATE)
                             .salesforceOpportunityId("salesforce_opportunity_id")
                             .build()
@@ -102,7 +102,7 @@ class CustomerCreditListResponseTest {
                                 listOf(
                                     ScheduleDuration.ScheduleItem.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .amount(42.23)
+                                        .amount(0.0)
                                         .endingBefore(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
@@ -132,7 +132,7 @@ class CustomerCreditListResponseTest {
                         listOf(
                             Credit.Ledger.ofCreditSegmentStartLedgerEntry(
                                 Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
-                                    .amount(42.23)
+                                    .amount(0.0)
                                     .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .type(
@@ -145,7 +145,7 @@ class CustomerCreditListResponseTest {
                     )
                     .name("name")
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
-                    .priority(42.23)
+                    .priority(0.0)
                     .rateType(Credit.RateType.COMMIT_RATE)
                     .salesforceOpportunityId("salesforce_opportunity_id")
                     .build()

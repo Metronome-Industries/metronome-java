@@ -42,7 +42,7 @@ class ContractListResponseTest {
                                                                         .id(
                                                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                         )
-                                                                        .amount(42.23)
+                                                                        .amount(0.0)
                                                                         .endingBefore(
                                                                             OffsetDateTime.parse(
                                                                                 "2019-12-27T18:11:19.117Z"
@@ -66,7 +66,7 @@ class ContractListResponseTest {
                                                             )
                                                             .build()
                                                     )
-                                                    .amount(42.23)
+                                                    .amount(0.0)
                                                     .applicableContractIds(
                                                         listOf(
                                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
@@ -113,17 +113,17 @@ class ContractListResponseTest {
                                                                         .id(
                                                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                         )
-                                                                        .amount(42.23)
+                                                                        .amount(0.0)
                                                                         .invoiceId(
                                                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                         )
-                                                                        .quantity(42.23)
+                                                                        .quantity(0.0)
                                                                         .timestamp(
                                                                             OffsetDateTime.parse(
                                                                                 "2019-12-27T18:11:19.117Z"
                                                                             )
                                                                         )
-                                                                        .unitPrice(42.23)
+                                                                        .unitPrice(0.0)
                                                                         .build()
                                                                 )
                                                             )
@@ -136,7 +136,7 @@ class ContractListResponseTest {
                                                                     Commit.Ledger
                                                                         .PrepaidCommitSegmentStartLedgerEntry
                                                                         .builder()
-                                                                        .amount(42.23)
+                                                                        .amount(0.0)
                                                                         .segmentId(
                                                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                         )
@@ -157,7 +157,7 @@ class ContractListResponseTest {
                                                     )
                                                     .name("name")
                                                     .netsuiteSalesOrderId("netsuite_sales_order_id")
-                                                    .priority(42.23)
+                                                    .priority(0.0)
                                                     .rateType(Commit.RateType.COMMIT_RATE)
                                                     .rolledOverFrom(
                                                         Commit.RolledOverFrom.builder()
@@ -169,7 +169,7 @@ class ContractListResponseTest {
                                                             )
                                                             .build()
                                                     )
-                                                    .rolloverFraction(42.23)
+                                                    .rolloverFraction(0.0)
                                                     .salesforceOpportunityId(
                                                         "salesforce_opportunity_id"
                                                     )
@@ -204,7 +204,7 @@ class ContractListResponseTest {
                                                     .entitled(true)
                                                     .isCommitSpecific(true)
                                                     .isProrated(true)
-                                                    .multiplier(42.23)
+                                                    .multiplier(0.0)
                                                     .overrideSpecifiers(
                                                         listOf(
                                                             Override.OverrideSpecifier.builder()
@@ -231,8 +231,8 @@ class ContractListResponseTest {
                                                     .overrideTiers(
                                                         listOf(
                                                             Override.OverrideTier.builder()
-                                                                .multiplier(42.23)
-                                                                .size(42.23)
+                                                                .multiplier(0.0)
+                                                                .size(0.0)
                                                                 .build()
                                                         )
                                                     )
@@ -255,20 +255,20 @@ class ContractListResponseTest {
                                                                     .build()
                                                             )
                                                             .isProrated(true)
-                                                            .price(42.23)
-                                                            .quantity(42.23)
+                                                            .price(0.0)
+                                                            .quantity(0.0)
                                                             .tiers(
                                                                 listOf(
                                                                     Tier.builder()
-                                                                        .price(42.23)
-                                                                        .size(42.23)
+                                                                        .price(0.0)
+                                                                        .size(0.0)
                                                                         .build()
                                                                 )
                                                             )
                                                             .build()
                                                     )
-                                                    .price(42.23)
-                                                    .priority(42.23)
+                                                    .price(0.0)
+                                                    .priority(0.0)
                                                     .product(
                                                         Override.Product.builder()
                                                             .id(
@@ -277,14 +277,14 @@ class ContractListResponseTest {
                                                             .name("name")
                                                             .build()
                                                     )
-                                                    .quantity(42.23)
+                                                    .quantity(0.0)
                                                     .rateType(Override.RateType.FLAT)
                                                     .target(Override.Target.COMMIT_RATE)
                                                     .tiers(
                                                         listOf(
                                                             Tier.builder()
-                                                                .price(42.23)
-                                                                .size(42.23)
+                                                                .price(0.0)
+                                                                .size(0.0)
                                                                 .build()
                                                         )
                                                     )
@@ -322,17 +322,17 @@ class ContractListResponseTest {
                                                                         .id(
                                                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                         )
-                                                                        .amount(42.23)
+                                                                        .amount(0.0)
                                                                         .invoiceId(
                                                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                         )
-                                                                        .quantity(42.23)
+                                                                        .quantity(0.0)
                                                                         .timestamp(
                                                                             OffsetDateTime.parse(
                                                                                 "2019-12-27T18:11:19.117Z"
                                                                             )
                                                                         )
-                                                                        .unitPrice(42.23)
+                                                                        .unitPrice(0.0)
                                                                         .build()
                                                                 )
                                                             )
@@ -372,7 +372,7 @@ class ContractListResponseTest {
                                                                         .id(
                                                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                         )
-                                                                        .amount(42.23)
+                                                                        .amount(0.0)
                                                                         .endingBefore(
                                                                             OffsetDateTime.parse(
                                                                                 "2019-12-27T18:11:19.117Z"
@@ -425,7 +425,7 @@ class ContractListResponseTest {
                                                                     Credit.Ledger
                                                                         .CreditSegmentStartLedgerEntry
                                                                         .builder()
-                                                                        .amount(42.23)
+                                                                        .amount(0.0)
                                                                         .segmentId(
                                                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                         )
@@ -446,7 +446,7 @@ class ContractListResponseTest {
                                                     )
                                                     .name("name")
                                                     .netsuiteSalesOrderId("netsuite_sales_order_id")
-                                                    .priority(42.23)
+                                                    .priority(0.0)
                                                     .rateType(Credit.RateType.COMMIT_RATE)
                                                     .salesforceOpportunityId(
                                                         "salesforce_opportunity_id"
@@ -483,17 +483,17 @@ class ContractListResponseTest {
                                                                         .id(
                                                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                         )
-                                                                        .amount(42.23)
+                                                                        .amount(0.0)
                                                                         .invoiceId(
                                                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                         )
-                                                                        .quantity(42.23)
+                                                                        .quantity(0.0)
                                                                         .timestamp(
                                                                             OffsetDateTime.parse(
                                                                                 "2019-12-27T18:11:19.117Z"
                                                                             )
                                                                         )
-                                                                        .unitPrice(42.23)
+                                                                        .unitPrice(0.0)
                                                                         .build()
                                                                 )
                                                             )
@@ -509,12 +509,12 @@ class ContractListResponseTest {
                                             listOf(
                                                 ProService.builder()
                                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                    .maxAmount(42.23)
+                                                    .maxAmount(0.0)
                                                     .productId(
                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                     )
-                                                    .quantity(42.23)
-                                                    .unitPrice(42.23)
+                                                    .quantity(0.0)
+                                                    .unitPrice(0.0)
                                                     .customFields(
                                                         ProService.CustomFields.builder().build()
                                                     )
@@ -541,11 +541,11 @@ class ContractListResponseTest {
                                                             "2019-12-27T18:11:19.117Z"
                                                         )
                                                     )
-                                                    .fraction(42.23)
+                                                    .fraction(0.0)
                                                     .gcpAccountId("gcp_account_id")
                                                     .gcpOfferId("gcp_offer_id")
                                                     .netsuiteResellerId("netsuite_reseller_id")
-                                                    .resellerContractValue(42.23)
+                                                    .resellerContractValue(0.0)
                                                     .startingAt(
                                                         OffsetDateTime.parse(
                                                             "2019-12-27T18:11:19.117Z"
@@ -580,7 +580,7 @@ class ContractListResponseTest {
                                                                     .id(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .amount(42.23)
+                                                                    .amount(0.0)
                                                                     .endingBefore(
                                                                         OffsetDateTime.parse(
                                                                             "2019-12-27T18:11:19.117Z"
@@ -604,7 +604,7 @@ class ContractListResponseTest {
                                                         )
                                                         .build()
                                                 )
-                                                .amount(42.23)
+                                                .amount(0.0)
                                                 .applicableContractIds(
                                                     listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 )
@@ -641,17 +641,17 @@ class ContractListResponseTest {
                                                                     .id(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .amount(42.23)
+                                                                    .amount(0.0)
                                                                     .invoiceId(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .quantity(42.23)
+                                                                    .quantity(0.0)
                                                                     .timestamp(
                                                                         OffsetDateTime.parse(
                                                                             "2019-12-27T18:11:19.117Z"
                                                                         )
                                                                     )
-                                                                    .unitPrice(42.23)
+                                                                    .unitPrice(0.0)
                                                                     .build()
                                                             )
                                                         )
@@ -664,7 +664,7 @@ class ContractListResponseTest {
                                                                 Commit.Ledger
                                                                     .PrepaidCommitSegmentStartLedgerEntry
                                                                     .builder()
-                                                                    .amount(42.23)
+                                                                    .amount(0.0)
                                                                     .segmentId(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
@@ -685,7 +685,7 @@ class ContractListResponseTest {
                                                 )
                                                 .name("name")
                                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
-                                                .priority(42.23)
+                                                .priority(0.0)
                                                 .rateType(Commit.RateType.COMMIT_RATE)
                                                 .rolledOverFrom(
                                                     Commit.RolledOverFrom.builder()
@@ -697,7 +697,7 @@ class ContractListResponseTest {
                                                         )
                                                         .build()
                                                 )
-                                                .rolloverFraction(42.23)
+                                                .rolloverFraction(0.0)
                                                 .salesforceOpportunityId(
                                                     "salesforce_opportunity_id"
                                                 )
@@ -726,7 +726,7 @@ class ContractListResponseTest {
                                                 .entitled(true)
                                                 .isCommitSpecific(true)
                                                 .isProrated(true)
-                                                .multiplier(42.23)
+                                                .multiplier(0.0)
                                                 .overrideSpecifiers(
                                                     listOf(
                                                         Override.OverrideSpecifier.builder()
@@ -753,8 +753,8 @@ class ContractListResponseTest {
                                                 .overrideTiers(
                                                     listOf(
                                                         Override.OverrideTier.builder()
-                                                            .multiplier(42.23)
-                                                            .size(42.23)
+                                                            .multiplier(0.0)
+                                                            .size(0.0)
                                                             .build()
                                                     )
                                                 )
@@ -777,35 +777,32 @@ class ContractListResponseTest {
                                                                 .build()
                                                         )
                                                         .isProrated(true)
-                                                        .price(42.23)
-                                                        .quantity(42.23)
+                                                        .price(0.0)
+                                                        .quantity(0.0)
                                                         .tiers(
                                                             listOf(
                                                                 Tier.builder()
-                                                                    .price(42.23)
-                                                                    .size(42.23)
+                                                                    .price(0.0)
+                                                                    .size(0.0)
                                                                     .build()
                                                             )
                                                         )
                                                         .build()
                                                 )
-                                                .price(42.23)
-                                                .priority(42.23)
+                                                .price(0.0)
+                                                .priority(0.0)
                                                 .product(
                                                     Override.Product.builder()
                                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                         .name("name")
                                                         .build()
                                                 )
-                                                .quantity(42.23)
+                                                .quantity(0.0)
                                                 .rateType(Override.RateType.FLAT)
                                                 .target(Override.Target.COMMIT_RATE)
                                                 .tiers(
                                                     listOf(
-                                                        Tier.builder()
-                                                            .price(42.23)
-                                                            .size(42.23)
-                                                            .build()
+                                                        Tier.builder().price(0.0).size(0.0).build()
                                                     )
                                                 )
                                                 .type(Override.Type.OVERWRITE)
@@ -840,17 +837,17 @@ class ContractListResponseTest {
                                                                     .id(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .amount(42.23)
+                                                                    .amount(0.0)
                                                                     .invoiceId(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .quantity(42.23)
+                                                                    .quantity(0.0)
                                                                     .timestamp(
                                                                         OffsetDateTime.parse(
                                                                             "2019-12-27T18:11:19.117Z"
                                                                         )
                                                                     )
-                                                                    .unitPrice(42.23)
+                                                                    .unitPrice(0.0)
                                                                     .build()
                                                             )
                                                         )
@@ -913,7 +910,7 @@ class ContractListResponseTest {
                                                                     .id(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .amount(42.23)
+                                                                    .amount(0.0)
                                                                     .endingBefore(
                                                                         OffsetDateTime.parse(
                                                                             "2019-12-27T18:11:19.117Z"
@@ -958,7 +955,7 @@ class ContractListResponseTest {
                                                                 Credit.Ledger
                                                                     .CreditSegmentStartLedgerEntry
                                                                     .builder()
-                                                                    .amount(42.23)
+                                                                    .amount(0.0)
                                                                     .segmentId(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
@@ -979,7 +976,7 @@ class ContractListResponseTest {
                                                 )
                                                 .name("name")
                                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
-                                                .priority(42.23)
+                                                .priority(0.0)
                                                 .rateType(Credit.RateType.COMMIT_RATE)
                                                 .salesforceOpportunityId(
                                                     "salesforce_opportunity_id"
@@ -1014,17 +1011,17 @@ class ContractListResponseTest {
                                                                     .id(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .amount(42.23)
+                                                                    .amount(0.0)
                                                                     .invoiceId(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .quantity(42.23)
+                                                                    .quantity(0.0)
                                                                     .timestamp(
                                                                         OffsetDateTime.parse(
                                                                             "2019-12-27T18:11:19.117Z"
                                                                         )
                                                                     )
-                                                                    .unitPrice(42.23)
+                                                                    .unitPrice(0.0)
                                                                     .build()
                                                             )
                                                         )
@@ -1037,16 +1034,16 @@ class ContractListResponseTest {
                                     )
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .name("name")
-                                    .netPaymentTermsDays(42.23)
+                                    .netPaymentTermsDays(0.0)
                                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                                     .professionalServices(
                                         listOf(
                                             ProService.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                .maxAmount(42.23)
+                                                .maxAmount(0.0)
                                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                .quantity(42.23)
-                                                .unitPrice(42.23)
+                                                .quantity(0.0)
+                                                .unitPrice(0.0)
                                                 .customFields(
                                                     ProService.CustomFields.builder().build()
                                                 )
@@ -1059,7 +1056,7 @@ class ContractListResponseTest {
                                     .resellerRoyalties(
                                         listOf(
                                             ContractWithoutAmendments.ResellerRoyalty.builder()
-                                                .fraction(42.23)
+                                                .fraction(0.0)
                                                 .netsuiteResellerId("netsuite_reseller_id")
                                                 .resellerType(
                                                     ContractWithoutAmendments.ResellerRoyalty
@@ -1079,12 +1076,12 @@ class ContractListResponseTest {
                                                 )
                                                 .gcpAccountId("gcp_account_id")
                                                 .gcpOfferId("gcp_offer_id")
-                                                .resellerContractValue(42.23)
+                                                .resellerContractValue(0.0)
                                                 .build()
                                         )
                                     )
                                     .salesforceOpportunityId("salesforce_opportunity_id")
-                                    .totalContractValue(42.23)
+                                    .totalContractValue(0.0)
                                     .usageFilter(
                                         ContractWithoutAmendments.UsageFilter.builder()
                                             .current(
@@ -1150,7 +1147,7 @@ class ContractListResponseTest {
                                                                     .id(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .amount(42.23)
+                                                                    .amount(0.0)
                                                                     .endingBefore(
                                                                         OffsetDateTime.parse(
                                                                             "2019-12-27T18:11:19.117Z"
@@ -1174,7 +1171,7 @@ class ContractListResponseTest {
                                                         )
                                                         .build()
                                                 )
-                                                .amount(42.23)
+                                                .amount(0.0)
                                                 .applicableContractIds(
                                                     listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 )
@@ -1211,17 +1208,17 @@ class ContractListResponseTest {
                                                                     .id(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .amount(42.23)
+                                                                    .amount(0.0)
                                                                     .invoiceId(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .quantity(42.23)
+                                                                    .quantity(0.0)
                                                                     .timestamp(
                                                                         OffsetDateTime.parse(
                                                                             "2019-12-27T18:11:19.117Z"
                                                                         )
                                                                     )
-                                                                    .unitPrice(42.23)
+                                                                    .unitPrice(0.0)
                                                                     .build()
                                                             )
                                                         )
@@ -1234,7 +1231,7 @@ class ContractListResponseTest {
                                                                 Commit.Ledger
                                                                     .PrepaidCommitSegmentStartLedgerEntry
                                                                     .builder()
-                                                                    .amount(42.23)
+                                                                    .amount(0.0)
                                                                     .segmentId(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
@@ -1255,7 +1252,7 @@ class ContractListResponseTest {
                                                 )
                                                 .name("name")
                                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
-                                                .priority(42.23)
+                                                .priority(0.0)
                                                 .rateType(Commit.RateType.COMMIT_RATE)
                                                 .rolledOverFrom(
                                                     Commit.RolledOverFrom.builder()
@@ -1267,7 +1264,7 @@ class ContractListResponseTest {
                                                         )
                                                         .build()
                                                 )
-                                                .rolloverFraction(42.23)
+                                                .rolloverFraction(0.0)
                                                 .salesforceOpportunityId(
                                                     "salesforce_opportunity_id"
                                                 )
@@ -1296,7 +1293,7 @@ class ContractListResponseTest {
                                                 .entitled(true)
                                                 .isCommitSpecific(true)
                                                 .isProrated(true)
-                                                .multiplier(42.23)
+                                                .multiplier(0.0)
                                                 .overrideSpecifiers(
                                                     listOf(
                                                         Override.OverrideSpecifier.builder()
@@ -1323,8 +1320,8 @@ class ContractListResponseTest {
                                                 .overrideTiers(
                                                     listOf(
                                                         Override.OverrideTier.builder()
-                                                            .multiplier(42.23)
-                                                            .size(42.23)
+                                                            .multiplier(0.0)
+                                                            .size(0.0)
                                                             .build()
                                                     )
                                                 )
@@ -1347,35 +1344,32 @@ class ContractListResponseTest {
                                                                 .build()
                                                         )
                                                         .isProrated(true)
-                                                        .price(42.23)
-                                                        .quantity(42.23)
+                                                        .price(0.0)
+                                                        .quantity(0.0)
                                                         .tiers(
                                                             listOf(
                                                                 Tier.builder()
-                                                                    .price(42.23)
-                                                                    .size(42.23)
+                                                                    .price(0.0)
+                                                                    .size(0.0)
                                                                     .build()
                                                             )
                                                         )
                                                         .build()
                                                 )
-                                                .price(42.23)
-                                                .priority(42.23)
+                                                .price(0.0)
+                                                .priority(0.0)
                                                 .product(
                                                     Override.Product.builder()
                                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                         .name("name")
                                                         .build()
                                                 )
-                                                .quantity(42.23)
+                                                .quantity(0.0)
                                                 .rateType(Override.RateType.FLAT)
                                                 .target(Override.Target.COMMIT_RATE)
                                                 .tiers(
                                                     listOf(
-                                                        Tier.builder()
-                                                            .price(42.23)
-                                                            .size(42.23)
-                                                            .build()
+                                                        Tier.builder().price(0.0).size(0.0).build()
                                                     )
                                                 )
                                                 .type(Override.Type.OVERWRITE)
@@ -1410,17 +1404,17 @@ class ContractListResponseTest {
                                                                     .id(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .amount(42.23)
+                                                                    .amount(0.0)
                                                                     .invoiceId(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .quantity(42.23)
+                                                                    .quantity(0.0)
                                                                     .timestamp(
                                                                         OffsetDateTime.parse(
                                                                             "2019-12-27T18:11:19.117Z"
                                                                         )
                                                                     )
-                                                                    .unitPrice(42.23)
+                                                                    .unitPrice(0.0)
                                                                     .build()
                                                             )
                                                         )
@@ -1483,7 +1477,7 @@ class ContractListResponseTest {
                                                                     .id(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .amount(42.23)
+                                                                    .amount(0.0)
                                                                     .endingBefore(
                                                                         OffsetDateTime.parse(
                                                                             "2019-12-27T18:11:19.117Z"
@@ -1528,7 +1522,7 @@ class ContractListResponseTest {
                                                                 Credit.Ledger
                                                                     .CreditSegmentStartLedgerEntry
                                                                     .builder()
-                                                                    .amount(42.23)
+                                                                    .amount(0.0)
                                                                     .segmentId(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
@@ -1549,7 +1543,7 @@ class ContractListResponseTest {
                                                 )
                                                 .name("name")
                                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
-                                                .priority(42.23)
+                                                .priority(0.0)
                                                 .rateType(Credit.RateType.COMMIT_RATE)
                                                 .salesforceOpportunityId(
                                                     "salesforce_opportunity_id"
@@ -1584,17 +1578,17 @@ class ContractListResponseTest {
                                                                     .id(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .amount(42.23)
+                                                                    .amount(0.0)
                                                                     .invoiceId(
                                                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                     )
-                                                                    .quantity(42.23)
+                                                                    .quantity(0.0)
                                                                     .timestamp(
                                                                         OffsetDateTime.parse(
                                                                             "2019-12-27T18:11:19.117Z"
                                                                         )
                                                                     )
-                                                                    .unitPrice(42.23)
+                                                                    .unitPrice(0.0)
                                                                     .build()
                                                             )
                                                         )
@@ -1607,16 +1601,16 @@ class ContractListResponseTest {
                                     )
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .name("name")
-                                    .netPaymentTermsDays(42.23)
+                                    .netPaymentTermsDays(0.0)
                                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                                     .professionalServices(
                                         listOf(
                                             ProService.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                .maxAmount(42.23)
+                                                .maxAmount(0.0)
                                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                .quantity(42.23)
-                                                .unitPrice(42.23)
+                                                .quantity(0.0)
+                                                .unitPrice(0.0)
                                                 .customFields(
                                                     ProService.CustomFields.builder().build()
                                                 )
@@ -1629,7 +1623,7 @@ class ContractListResponseTest {
                                     .resellerRoyalties(
                                         listOf(
                                             ContractWithoutAmendments.ResellerRoyalty.builder()
-                                                .fraction(42.23)
+                                                .fraction(0.0)
                                                 .netsuiteResellerId("netsuite_reseller_id")
                                                 .resellerType(
                                                     ContractWithoutAmendments.ResellerRoyalty
@@ -1649,12 +1643,12 @@ class ContractListResponseTest {
                                                 )
                                                 .gcpAccountId("gcp_account_id")
                                                 .gcpOfferId("gcp_offer_id")
-                                                .resellerContractValue(42.23)
+                                                .resellerContractValue(0.0)
                                                 .build()
                                         )
                                     )
                                     .salesforceOpportunityId("salesforce_opportunity_id")
-                                    .totalContractValue(42.23)
+                                    .totalContractValue(0.0)
                                     .usageFilter(
                                         ContractWithoutAmendments.UsageFilter.builder()
                                             .current(
@@ -1748,7 +1742,7 @@ class ContractListResponseTest {
                                                                 .id(
                                                                     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                 )
-                                                                .amount(42.23)
+                                                                .amount(0.0)
                                                                 .endingBefore(
                                                                     OffsetDateTime.parse(
                                                                         "2019-12-27T18:11:19.117Z"
@@ -1772,7 +1766,7 @@ class ContractListResponseTest {
                                                     )
                                                     .build()
                                             )
-                                            .amount(42.23)
+                                            .amount(0.0)
                                             .applicableContractIds(
                                                 listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             )
@@ -1809,17 +1803,17 @@ class ContractListResponseTest {
                                                                 .id(
                                                                     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                 )
-                                                                .amount(42.23)
+                                                                .amount(0.0)
                                                                 .invoiceId(
                                                                     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                 )
-                                                                .quantity(42.23)
+                                                                .quantity(0.0)
                                                                 .timestamp(
                                                                     OffsetDateTime.parse(
                                                                         "2019-12-27T18:11:19.117Z"
                                                                     )
                                                                 )
-                                                                .unitPrice(42.23)
+                                                                .unitPrice(0.0)
                                                                 .build()
                                                         )
                                                     )
@@ -1832,7 +1826,7 @@ class ContractListResponseTest {
                                                             Commit.Ledger
                                                                 .PrepaidCommitSegmentStartLedgerEntry
                                                                 .builder()
-                                                                .amount(42.23)
+                                                                .amount(0.0)
                                                                 .segmentId(
                                                                     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                 )
@@ -1853,7 +1847,7 @@ class ContractListResponseTest {
                                             )
                                             .name("name")
                                             .netsuiteSalesOrderId("netsuite_sales_order_id")
-                                            .priority(42.23)
+                                            .priority(0.0)
                                             .rateType(Commit.RateType.COMMIT_RATE)
                                             .rolledOverFrom(
                                                 Commit.RolledOverFrom.builder()
@@ -1865,7 +1859,7 @@ class ContractListResponseTest {
                                                     )
                                                     .build()
                                             )
-                                            .rolloverFraction(42.23)
+                                            .rolloverFraction(0.0)
                                             .salesforceOpportunityId("salesforce_opportunity_id")
                                             .build()
                                     )
@@ -1892,7 +1886,7 @@ class ContractListResponseTest {
                                             .entitled(true)
                                             .isCommitSpecific(true)
                                             .isProrated(true)
-                                            .multiplier(42.23)
+                                            .multiplier(0.0)
                                             .overrideSpecifiers(
                                                 listOf(
                                                     Override.OverrideSpecifier.builder()
@@ -1919,8 +1913,8 @@ class ContractListResponseTest {
                                             .overrideTiers(
                                                 listOf(
                                                     Override.OverrideTier.builder()
-                                                        .multiplier(42.23)
-                                                        .size(42.23)
+                                                        .multiplier(0.0)
+                                                        .size(0.0)
                                                         .build()
                                                 )
                                             )
@@ -1940,33 +1934,31 @@ class ContractListResponseTest {
                                                             .build()
                                                     )
                                                     .isProrated(true)
-                                                    .price(42.23)
-                                                    .quantity(42.23)
+                                                    .price(0.0)
+                                                    .quantity(0.0)
                                                     .tiers(
                                                         listOf(
                                                             Tier.builder()
-                                                                .price(42.23)
-                                                                .size(42.23)
+                                                                .price(0.0)
+                                                                .size(0.0)
                                                                 .build()
                                                         )
                                                     )
                                                     .build()
                                             )
-                                            .price(42.23)
-                                            .priority(42.23)
+                                            .price(0.0)
+                                            .priority(0.0)
                                             .product(
                                                 Override.Product.builder()
                                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                     .name("name")
                                                     .build()
                                             )
-                                            .quantity(42.23)
+                                            .quantity(0.0)
                                             .rateType(Override.RateType.FLAT)
                                             .target(Override.Target.COMMIT_RATE)
                                             .tiers(
-                                                listOf(
-                                                    Tier.builder().price(42.23).size(42.23).build()
-                                                )
+                                                listOf(Tier.builder().price(0.0).size(0.0).build())
                                             )
                                             .type(Override.Type.OVERWRITE)
                                             .value(Override.Value.builder().build())
@@ -2000,17 +1992,17 @@ class ContractListResponseTest {
                                                                 .id(
                                                                     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                 )
-                                                                .amount(42.23)
+                                                                .amount(0.0)
                                                                 .invoiceId(
                                                                     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                 )
-                                                                .quantity(42.23)
+                                                                .quantity(0.0)
                                                                 .timestamp(
                                                                     OffsetDateTime.parse(
                                                                         "2019-12-27T18:11:19.117Z"
                                                                     )
                                                                 )
-                                                                .unitPrice(42.23)
+                                                                .unitPrice(0.0)
                                                                 .build()
                                                         )
                                                     )
@@ -2044,7 +2036,7 @@ class ContractListResponseTest {
                                                                 .id(
                                                                     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                 )
-                                                                .amount(42.23)
+                                                                .amount(0.0)
                                                                 .endingBefore(
                                                                     OffsetDateTime.parse(
                                                                         "2019-12-27T18:11:19.117Z"
@@ -2087,7 +2079,7 @@ class ContractListResponseTest {
                                                     Credit.Ledger.ofCreditSegmentStartLedgerEntry(
                                                         Credit.Ledger.CreditSegmentStartLedgerEntry
                                                             .builder()
-                                                            .amount(42.23)
+                                                            .amount(0.0)
                                                             .segmentId(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
@@ -2108,7 +2100,7 @@ class ContractListResponseTest {
                                             )
                                             .name("name")
                                             .netsuiteSalesOrderId("netsuite_sales_order_id")
-                                            .priority(42.23)
+                                            .priority(0.0)
                                             .rateType(Credit.RateType.COMMIT_RATE)
                                             .salesforceOpportunityId("salesforce_opportunity_id")
                                             .build()
@@ -2141,17 +2133,17 @@ class ContractListResponseTest {
                                                                 .id(
                                                                     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                 )
-                                                                .amount(42.23)
+                                                                .amount(0.0)
                                                                 .invoiceId(
                                                                     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                                 )
-                                                                .quantity(42.23)
+                                                                .quantity(0.0)
                                                                 .timestamp(
                                                                     OffsetDateTime.parse(
                                                                         "2019-12-27T18:11:19.117Z"
                                                                     )
                                                                 )
-                                                                .unitPrice(42.23)
+                                                                .unitPrice(0.0)
                                                                 .build()
                                                         )
                                                     )
@@ -2167,10 +2159,10 @@ class ContractListResponseTest {
                                     listOf(
                                         ProService.builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .maxAmount(42.23)
+                                            .maxAmount(0.0)
                                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .quantity(42.23)
-                                            .unitPrice(42.23)
+                                            .quantity(0.0)
+                                            .unitPrice(0.0)
                                             .customFields(ProService.CustomFields.builder().build())
                                             .description("description")
                                             .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -2192,11 +2184,11 @@ class ContractListResponseTest {
                                             .endingBefore(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
-                                            .fraction(42.23)
+                                            .fraction(0.0)
                                             .gcpAccountId("gcp_account_id")
                                             .gcpOfferId("gcp_offer_id")
                                             .netsuiteResellerId("netsuite_reseller_id")
-                                            .resellerContractValue(42.23)
+                                            .resellerContractValue(0.0)
                                             .startingAt(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
@@ -2228,7 +2220,7 @@ class ContractListResponseTest {
                                                             .id(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .amount(42.23)
+                                                            .amount(0.0)
                                                             .endingBefore(
                                                                 OffsetDateTime.parse(
                                                                     "2019-12-27T18:11:19.117Z"
@@ -2250,7 +2242,7 @@ class ContractListResponseTest {
                                                 )
                                                 .build()
                                         )
-                                        .amount(42.23)
+                                        .amount(0.0)
                                         .applicableContractIds(
                                             listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         )
@@ -2284,17 +2276,17 @@ class ContractListResponseTest {
                                                             .id(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .amount(42.23)
+                                                            .amount(0.0)
                                                             .invoiceId(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .quantity(42.23)
+                                                            .quantity(0.0)
                                                             .timestamp(
                                                                 OffsetDateTime.parse(
                                                                     "2019-12-27T18:11:19.117Z"
                                                                 )
                                                             )
-                                                            .unitPrice(42.23)
+                                                            .unitPrice(0.0)
                                                             .build()
                                                     )
                                                 )
@@ -2307,7 +2299,7 @@ class ContractListResponseTest {
                                                         Commit.Ledger
                                                             .PrepaidCommitSegmentStartLedgerEntry
                                                             .builder()
-                                                            .amount(42.23)
+                                                            .amount(0.0)
                                                             .segmentId(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
@@ -2328,7 +2320,7 @@ class ContractListResponseTest {
                                         )
                                         .name("name")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
-                                        .priority(42.23)
+                                        .priority(0.0)
                                         .rateType(Commit.RateType.COMMIT_RATE)
                                         .rolledOverFrom(
                                             Commit.RolledOverFrom.builder()
@@ -2336,7 +2328,7 @@ class ContractListResponseTest {
                                                 .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
-                                        .rolloverFraction(42.23)
+                                        .rolloverFraction(0.0)
                                         .salesforceOpportunityId("salesforce_opportunity_id")
                                         .build()
                                 )
@@ -2363,7 +2355,7 @@ class ContractListResponseTest {
                                         .entitled(true)
                                         .isCommitSpecific(true)
                                         .isProrated(true)
-                                        .multiplier(42.23)
+                                        .multiplier(0.0)
                                         .overrideSpecifiers(
                                             listOf(
                                                 Override.OverrideSpecifier.builder()
@@ -2390,8 +2382,8 @@ class ContractListResponseTest {
                                         .overrideTiers(
                                             listOf(
                                                 Override.OverrideTier.builder()
-                                                    .multiplier(42.23)
-                                                    .size(42.23)
+                                                    .multiplier(0.0)
+                                                    .size(0.0)
                                                     .build()
                                             )
                                         )
@@ -2409,32 +2401,27 @@ class ContractListResponseTest {
                                                         .build()
                                                 )
                                                 .isProrated(true)
-                                                .price(42.23)
-                                                .quantity(42.23)
+                                                .price(0.0)
+                                                .quantity(0.0)
                                                 .tiers(
                                                     listOf(
-                                                        Tier.builder()
-                                                            .price(42.23)
-                                                            .size(42.23)
-                                                            .build()
+                                                        Tier.builder().price(0.0).size(0.0).build()
                                                     )
                                                 )
                                                 .build()
                                         )
-                                        .price(42.23)
-                                        .priority(42.23)
+                                        .price(0.0)
+                                        .priority(0.0)
                                         .product(
                                             Override.Product.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .name("name")
                                                 .build()
                                         )
-                                        .quantity(42.23)
+                                        .quantity(0.0)
                                         .rateType(Override.RateType.FLAT)
                                         .target(Override.Target.COMMIT_RATE)
-                                        .tiers(
-                                            listOf(Tier.builder().price(42.23).size(42.23).build())
-                                        )
+                                        .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                                         .type(Override.Type.OVERWRITE)
                                         .value(Override.Value.builder().build())
                                         .build()
@@ -2464,17 +2451,17 @@ class ContractListResponseTest {
                                                             .id(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .amount(42.23)
+                                                            .amount(0.0)
                                                             .invoiceId(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .quantity(42.23)
+                                                            .quantity(0.0)
                                                             .timestamp(
                                                                 OffsetDateTime.parse(
                                                                     "2019-12-27T18:11:19.117Z"
                                                                 )
                                                             )
-                                                            .unitPrice(42.23)
+                                                            .unitPrice(0.0)
                                                             .build()
                                                     )
                                                 )
@@ -2528,7 +2515,7 @@ class ContractListResponseTest {
                                                             .id(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .amount(42.23)
+                                                            .amount(0.0)
                                                             .endingBefore(
                                                                 OffsetDateTime.parse(
                                                                     "2019-12-27T18:11:19.117Z"
@@ -2569,7 +2556,7 @@ class ContractListResponseTest {
                                                 Credit.Ledger.ofCreditSegmentStartLedgerEntry(
                                                     Credit.Ledger.CreditSegmentStartLedgerEntry
                                                         .builder()
-                                                        .amount(42.23)
+                                                        .amount(0.0)
                                                         .segmentId(
                                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                         )
@@ -2590,7 +2577,7 @@ class ContractListResponseTest {
                                         )
                                         .name("name")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
-                                        .priority(42.23)
+                                        .priority(0.0)
                                         .rateType(Credit.RateType.COMMIT_RATE)
                                         .salesforceOpportunityId("salesforce_opportunity_id")
                                         .build()
@@ -2620,17 +2607,17 @@ class ContractListResponseTest {
                                                             .id(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .amount(42.23)
+                                                            .amount(0.0)
                                                             .invoiceId(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .quantity(42.23)
+                                                            .quantity(0.0)
                                                             .timestamp(
                                                                 OffsetDateTime.parse(
                                                                     "2019-12-27T18:11:19.117Z"
                                                                 )
                                                             )
-                                                            .unitPrice(42.23)
+                                                            .unitPrice(0.0)
                                                             .build()
                                                     )
                                                 )
@@ -2643,16 +2630,16 @@ class ContractListResponseTest {
                             )
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .name("name")
-                            .netPaymentTermsDays(42.23)
+                            .netPaymentTermsDays(0.0)
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .professionalServices(
                                 listOf(
                                     ProService.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .maxAmount(42.23)
+                                        .maxAmount(0.0)
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .quantity(42.23)
-                                        .unitPrice(42.23)
+                                        .quantity(0.0)
+                                        .unitPrice(0.0)
                                         .customFields(ProService.CustomFields.builder().build())
                                         .description("description")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -2663,7 +2650,7 @@ class ContractListResponseTest {
                             .resellerRoyalties(
                                 listOf(
                                     ContractWithoutAmendments.ResellerRoyalty.builder()
-                                        .fraction(42.23)
+                                        .fraction(0.0)
                                         .netsuiteResellerId("netsuite_reseller_id")
                                         .resellerType(
                                             ContractWithoutAmendments.ResellerRoyalty.ResellerType
@@ -2682,12 +2669,12 @@ class ContractListResponseTest {
                                         )
                                         .gcpAccountId("gcp_account_id")
                                         .gcpOfferId("gcp_offer_id")
-                                        .resellerContractValue(42.23)
+                                        .resellerContractValue(0.0)
                                         .build()
                                 )
                             )
                             .salesforceOpportunityId("salesforce_opportunity_id")
-                            .totalContractValue(42.23)
+                            .totalContractValue(0.0)
                             .usageFilter(
                                 ContractWithoutAmendments.UsageFilter.builder()
                                     .current(
@@ -2745,7 +2732,7 @@ class ContractListResponseTest {
                                                             .id(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .amount(42.23)
+                                                            .amount(0.0)
                                                             .endingBefore(
                                                                 OffsetDateTime.parse(
                                                                     "2019-12-27T18:11:19.117Z"
@@ -2767,7 +2754,7 @@ class ContractListResponseTest {
                                                 )
                                                 .build()
                                         )
-                                        .amount(42.23)
+                                        .amount(0.0)
                                         .applicableContractIds(
                                             listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         )
@@ -2801,17 +2788,17 @@ class ContractListResponseTest {
                                                             .id(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .amount(42.23)
+                                                            .amount(0.0)
                                                             .invoiceId(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .quantity(42.23)
+                                                            .quantity(0.0)
                                                             .timestamp(
                                                                 OffsetDateTime.parse(
                                                                     "2019-12-27T18:11:19.117Z"
                                                                 )
                                                             )
-                                                            .unitPrice(42.23)
+                                                            .unitPrice(0.0)
                                                             .build()
                                                     )
                                                 )
@@ -2824,7 +2811,7 @@ class ContractListResponseTest {
                                                         Commit.Ledger
                                                             .PrepaidCommitSegmentStartLedgerEntry
                                                             .builder()
-                                                            .amount(42.23)
+                                                            .amount(0.0)
                                                             .segmentId(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
@@ -2845,7 +2832,7 @@ class ContractListResponseTest {
                                         )
                                         .name("name")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
-                                        .priority(42.23)
+                                        .priority(0.0)
                                         .rateType(Commit.RateType.COMMIT_RATE)
                                         .rolledOverFrom(
                                             Commit.RolledOverFrom.builder()
@@ -2853,7 +2840,7 @@ class ContractListResponseTest {
                                                 .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
-                                        .rolloverFraction(42.23)
+                                        .rolloverFraction(0.0)
                                         .salesforceOpportunityId("salesforce_opportunity_id")
                                         .build()
                                 )
@@ -2880,7 +2867,7 @@ class ContractListResponseTest {
                                         .entitled(true)
                                         .isCommitSpecific(true)
                                         .isProrated(true)
-                                        .multiplier(42.23)
+                                        .multiplier(0.0)
                                         .overrideSpecifiers(
                                             listOf(
                                                 Override.OverrideSpecifier.builder()
@@ -2907,8 +2894,8 @@ class ContractListResponseTest {
                                         .overrideTiers(
                                             listOf(
                                                 Override.OverrideTier.builder()
-                                                    .multiplier(42.23)
-                                                    .size(42.23)
+                                                    .multiplier(0.0)
+                                                    .size(0.0)
                                                     .build()
                                             )
                                         )
@@ -2926,32 +2913,27 @@ class ContractListResponseTest {
                                                         .build()
                                                 )
                                                 .isProrated(true)
-                                                .price(42.23)
-                                                .quantity(42.23)
+                                                .price(0.0)
+                                                .quantity(0.0)
                                                 .tiers(
                                                     listOf(
-                                                        Tier.builder()
-                                                            .price(42.23)
-                                                            .size(42.23)
-                                                            .build()
+                                                        Tier.builder().price(0.0).size(0.0).build()
                                                     )
                                                 )
                                                 .build()
                                         )
-                                        .price(42.23)
-                                        .priority(42.23)
+                                        .price(0.0)
+                                        .priority(0.0)
                                         .product(
                                             Override.Product.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .name("name")
                                                 .build()
                                         )
-                                        .quantity(42.23)
+                                        .quantity(0.0)
                                         .rateType(Override.RateType.FLAT)
                                         .target(Override.Target.COMMIT_RATE)
-                                        .tiers(
-                                            listOf(Tier.builder().price(42.23).size(42.23).build())
-                                        )
+                                        .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                                         .type(Override.Type.OVERWRITE)
                                         .value(Override.Value.builder().build())
                                         .build()
@@ -2981,17 +2963,17 @@ class ContractListResponseTest {
                                                             .id(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .amount(42.23)
+                                                            .amount(0.0)
                                                             .invoiceId(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .quantity(42.23)
+                                                            .quantity(0.0)
                                                             .timestamp(
                                                                 OffsetDateTime.parse(
                                                                     "2019-12-27T18:11:19.117Z"
                                                                 )
                                                             )
-                                                            .unitPrice(42.23)
+                                                            .unitPrice(0.0)
                                                             .build()
                                                     )
                                                 )
@@ -3045,7 +3027,7 @@ class ContractListResponseTest {
                                                             .id(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .amount(42.23)
+                                                            .amount(0.0)
                                                             .endingBefore(
                                                                 OffsetDateTime.parse(
                                                                     "2019-12-27T18:11:19.117Z"
@@ -3086,7 +3068,7 @@ class ContractListResponseTest {
                                                 Credit.Ledger.ofCreditSegmentStartLedgerEntry(
                                                     Credit.Ledger.CreditSegmentStartLedgerEntry
                                                         .builder()
-                                                        .amount(42.23)
+                                                        .amount(0.0)
                                                         .segmentId(
                                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                         )
@@ -3107,7 +3089,7 @@ class ContractListResponseTest {
                                         )
                                         .name("name")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
-                                        .priority(42.23)
+                                        .priority(0.0)
                                         .rateType(Credit.RateType.COMMIT_RATE)
                                         .salesforceOpportunityId("salesforce_opportunity_id")
                                         .build()
@@ -3137,17 +3119,17 @@ class ContractListResponseTest {
                                                             .id(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .amount(42.23)
+                                                            .amount(0.0)
                                                             .invoiceId(
                                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                             )
-                                                            .quantity(42.23)
+                                                            .quantity(0.0)
                                                             .timestamp(
                                                                 OffsetDateTime.parse(
                                                                     "2019-12-27T18:11:19.117Z"
                                                                 )
                                                             )
-                                                            .unitPrice(42.23)
+                                                            .unitPrice(0.0)
                                                             .build()
                                                     )
                                                 )
@@ -3160,16 +3142,16 @@ class ContractListResponseTest {
                             )
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .name("name")
-                            .netPaymentTermsDays(42.23)
+                            .netPaymentTermsDays(0.0)
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .professionalServices(
                                 listOf(
                                     ProService.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .maxAmount(42.23)
+                                        .maxAmount(0.0)
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .quantity(42.23)
-                                        .unitPrice(42.23)
+                                        .quantity(0.0)
+                                        .unitPrice(0.0)
                                         .customFields(ProService.CustomFields.builder().build())
                                         .description("description")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -3180,7 +3162,7 @@ class ContractListResponseTest {
                             .resellerRoyalties(
                                 listOf(
                                     ContractWithoutAmendments.ResellerRoyalty.builder()
-                                        .fraction(42.23)
+                                        .fraction(0.0)
                                         .netsuiteResellerId("netsuite_reseller_id")
                                         .resellerType(
                                             ContractWithoutAmendments.ResellerRoyalty.ResellerType
@@ -3199,12 +3181,12 @@ class ContractListResponseTest {
                                         )
                                         .gcpAccountId("gcp_account_id")
                                         .gcpOfferId("gcp_offer_id")
-                                        .resellerContractValue(42.23)
+                                        .resellerContractValue(0.0)
                                         .build()
                                 )
                             )
                             .salesforceOpportunityId("salesforce_opportunity_id")
-                            .totalContractValue(42.23)
+                            .totalContractValue(0.0)
                             .usageFilter(
                                 ContractWithoutAmendments.UsageFilter.builder()
                                     .current(

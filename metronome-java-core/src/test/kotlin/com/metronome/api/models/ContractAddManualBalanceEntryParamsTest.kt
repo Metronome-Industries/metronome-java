@@ -13,7 +13,7 @@ class ContractAddManualBalanceEntryParamsTest {
     fun createContractAddManualBalanceEntryParams() {
         ContractAddManualBalanceEntryParams.builder()
             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .amount(42.23)
+            .amount(0.0)
             .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .reason("reason")
             .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -27,7 +27,7 @@ class ContractAddManualBalanceEntryParamsTest {
         val params =
             ContractAddManualBalanceEntryParams.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .amount(42.23)
+                .amount(0.0)
                 .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .reason("reason")
                 .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -37,7 +37,7 @@ class ContractAddManualBalanceEntryParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.amount()).isEqualTo(42.23)
+        assertThat(body.amount()).isEqualTo(0.0)
         assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(body.reason()).isEqualTo("reason")
         assertThat(body.segmentId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -50,7 +50,7 @@ class ContractAddManualBalanceEntryParamsTest {
         val params =
             ContractAddManualBalanceEntryParams.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .amount(42.23)
+                .amount(0.0)
                 .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .reason("reason")
                 .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -58,7 +58,7 @@ class ContractAddManualBalanceEntryParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.amount()).isEqualTo(42.23)
+        assertThat(body.amount()).isEqualTo(0.0)
         assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(body.reason()).isEqualTo("reason")
         assertThat(body.segmentId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
