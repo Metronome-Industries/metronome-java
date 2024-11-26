@@ -91,6 +91,7 @@ private constructor(
     class Data
     private constructor(
         private val id: JsonField<String>,
+        private val archivedAt: JsonField<OffsetDateTime>,
         private val customerId: JsonField<String>,
         private val uniquenessKey: JsonField<String>,
         private val initial: JsonField<ContractWithoutAmendments>,
@@ -105,6 +106,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun id(): String = id.getRequired("id")
+
+        /**
+         * RFC 3339 timestamp indicating when the contract was archived. If not returned, the
+         * contract is not archived.
+         */
+        fun archivedAt(): Optional<OffsetDateTime> =
+            Optional.ofNullable(archivedAt.getNullable("archived_at"))
 
         fun customerId(): String = customerId.getRequired("customer_id")
 
@@ -135,6 +143,12 @@ private constructor(
 
         @JsonProperty("id") @ExcludeMissing fun _id() = id
 
+        /**
+         * RFC 3339 timestamp indicating when the contract was archived. If not returned, the
+         * contract is not archived.
+         */
+        @JsonProperty("archived_at") @ExcludeMissing fun _archivedAt() = archivedAt
+
         @JsonProperty("customer_id") @ExcludeMissing fun _customerId() = customerId
 
         /**
@@ -164,6 +178,7 @@ private constructor(
         fun validate(): Data = apply {
             if (!validated) {
                 id()
+                archivedAt()
                 customerId()
                 uniquenessKey()
                 initial().validate()
@@ -185,6 +200,7 @@ private constructor(
         class Builder {
 
             private var id: JsonField<String> = JsonMissing.of()
+            private var archivedAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var customerId: JsonField<String> = JsonMissing.of()
             private var uniquenessKey: JsonField<String> = JsonMissing.of()
             private var initial: JsonField<ContractWithoutAmendments> = JsonMissing.of()
@@ -199,6 +215,7 @@ private constructor(
             @JvmSynthetic
             internal fun from(data: Data) = apply {
                 this.id = data.id
+                this.archivedAt = data.archivedAt
                 this.customerId = data.customerId
                 this.uniquenessKey = data.uniquenessKey
                 this.initial = data.initial
@@ -215,6 +232,22 @@ private constructor(
             @JsonProperty("id")
             @ExcludeMissing
             fun id(id: JsonField<String>) = apply { this.id = id }
+
+            /**
+             * RFC 3339 timestamp indicating when the contract was archived. If not returned, the
+             * contract is not archived.
+             */
+            fun archivedAt(archivedAt: OffsetDateTime) = archivedAt(JsonField.of(archivedAt))
+
+            /**
+             * RFC 3339 timestamp indicating when the contract was archived. If not returned, the
+             * contract is not archived.
+             */
+            @JsonProperty("archived_at")
+            @ExcludeMissing
+            fun archivedAt(archivedAt: JsonField<OffsetDateTime>) = apply {
+                this.archivedAt = archivedAt
+            }
 
             fun customerId(customerId: String) = customerId(JsonField.of(customerId))
 
@@ -307,6 +340,7 @@ private constructor(
             fun build(): Data =
                 Data(
                     id,
+                    archivedAt,
                     customerId,
                     uniquenessKey,
                     initial,
@@ -1368,17 +1402,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && id == other.id && customerId == other.customerId && uniquenessKey == other.uniquenessKey && initial == other.initial && current == other.current && amendments == other.amendments && customFields == other.customFields && customerBillingProviderConfiguration == other.customerBillingProviderConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && id == other.id && archivedAt == other.archivedAt && customerId == other.customerId && uniquenessKey == other.uniquenessKey && initial == other.initial && current == other.current && amendments == other.amendments && customFields == other.customFields && customerBillingProviderConfiguration == other.customerBillingProviderConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, customerId, uniquenessKey, initial, current, amendments, customFields, customerBillingProviderConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, archivedAt, customerId, uniquenessKey, initial, current, amendments, customFields, customerBillingProviderConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Data{id=$id, customerId=$customerId, uniquenessKey=$uniquenessKey, initial=$initial, current=$current, amendments=$amendments, customFields=$customFields, customerBillingProviderConfiguration=$customerBillingProviderConfiguration, additionalProperties=$additionalProperties}"
+            "Data{id=$id, archivedAt=$archivedAt, customerId=$customerId, uniquenessKey=$uniquenessKey, initial=$initial, current=$current, amendments=$amendments, customFields=$customFields, customerBillingProviderConfiguration=$customerBillingProviderConfiguration, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

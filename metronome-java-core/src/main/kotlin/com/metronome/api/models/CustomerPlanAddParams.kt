@@ -127,7 +127,7 @@ constructor(
 
         /**
          * A list of price adjustments can be applied on top of the pricing in the plans. See the
-         * [price adjustments documentation](https://docs.metronome.com/pricing/managing-plans/#price-adjustments)
+         * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
          * for details.
          */
         @JsonProperty("price_adjustments")
@@ -214,7 +214,7 @@ constructor(
             /**
              * A list of price adjustments can be applied on top of the pricing in the plans. See
              * the
-             * [price adjustments documentation](https://docs.metronome.com/pricing/managing-plans/#price-adjustments)
+             * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
              * for details.
              */
             @JsonProperty("price_adjustments")
@@ -356,7 +356,7 @@ constructor(
 
         /**
          * A list of price adjustments can be applied on top of the pricing in the plans. See the
-         * [price adjustments documentation](https://docs.metronome.com/pricing/managing-plans/#price-adjustments)
+         * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
          * for details.
          */
         fun priceAdjustments(priceAdjustments: List<PriceAdjustment>) = apply {
@@ -366,7 +366,7 @@ constructor(
 
         /**
          * A list of price adjustments can be applied on top of the pricing in the plans. See the
-         * [price adjustments documentation](https://docs.metronome.com/pricing/managing-plans/#price-adjustments)
+         * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
          * for details.
          */
         fun addPriceAdjustment(priceAdjustment: PriceAdjustment) = apply {

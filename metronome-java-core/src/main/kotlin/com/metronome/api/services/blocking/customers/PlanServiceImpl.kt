@@ -64,7 +64,7 @@ constructor(
 
     /**
      * Associate an existing customer with a plan for a specified date range. See the
-     * [price adjustments documentation](https://docs.metronome.com/pricing/managing-plans/#price-adjustments)
+     * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
      * for details on the price adjustments.
      */
     override fun add(
@@ -135,7 +135,7 @@ constructor(
 
     /**
      * Lists a customer plans adjustments. See the
-     * [price adjustments documentation](https://docs.metronome.com/pricing/managing-plans/#price-adjustments)
+     * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
      * for details.
      */
     override fun listPriceAdjustments(

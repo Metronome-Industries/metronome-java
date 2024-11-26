@@ -1596,6 +1596,7 @@ class ContractRetrieveResponseTest {
                                 )
                                 .build()
                         )
+                        .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customFields(ContractRetrieveResponse.Data.CustomFields.builder().build())
                         .customerBillingProviderConfiguration(
                             ContractRetrieveResponse.Data.CustomerBillingProviderConfiguration
@@ -3127,6 +3128,7 @@ class ContractRetrieveResponseTest {
                             )
                             .build()
                     )
+                    .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .customFields(ContractRetrieveResponse.Data.CustomFields.builder().build())
                     .customerBillingProviderConfiguration(
                         ContractRetrieveResponse.Data.CustomerBillingProviderConfiguration.builder()
