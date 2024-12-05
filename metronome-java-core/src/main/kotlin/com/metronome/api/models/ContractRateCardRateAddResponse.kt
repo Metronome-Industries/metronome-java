@@ -143,8 +143,7 @@ private constructor(
 
         /**
          * A distinct rate on the rate card. You can choose to use this rate rather than list rate
-         * when consuming a credit or commit. This feature requires opt-in before it can be used.
-         * Please contact Metronome support to enable this feature.
+         * when consuming a credit or commit.
          */
         fun commitRate(): Optional<CommitRate> =
             Optional.ofNullable(commitRate.getNullable("commit_rate"))
@@ -184,8 +183,7 @@ private constructor(
 
         /**
          * A distinct rate on the rate card. You can choose to use this rate rather than list rate
-         * when consuming a credit or commit. This feature requires opt-in before it can be used.
-         * Please contact Metronome support to enable this feature.
+         * when consuming a credit or commit.
          */
         @JsonProperty("commit_rate") @ExcludeMissing fun _commitRate() = commitRate
 
@@ -344,15 +342,13 @@ private constructor(
 
             /**
              * A distinct rate on the rate card. You can choose to use this rate rather than list
-             * rate when consuming a credit or commit. This feature requires opt-in before it can be
-             * used. Please contact Metronome support to enable this feature.
+             * rate when consuming a credit or commit.
              */
             fun commitRate(commitRate: CommitRate) = commitRate(JsonField.of(commitRate))
 
             /**
              * A distinct rate on the rate card. You can choose to use this rate rather than list
-             * rate when consuming a credit or commit. This feature requires opt-in before it can be
-             * used. Please contact Metronome support to enable this feature.
+             * rate when consuming a credit or commit.
              */
             @JsonProperty("commit_rate")
             @ExcludeMissing
@@ -497,8 +493,7 @@ private constructor(
 
         /**
          * A distinct rate on the rate card. You can choose to use this rate rather than list rate
-         * when consuming a credit or commit. This feature requires opt-in before it can be used.
-         * Please contact Metronome support to enable this feature.
+         * when consuming a credit or commit.
          */
         @JsonDeserialize(builder = CommitRate.Builder::class)
         @NoAutoDetect
