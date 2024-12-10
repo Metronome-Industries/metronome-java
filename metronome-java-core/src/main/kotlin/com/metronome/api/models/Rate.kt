@@ -58,7 +58,9 @@ private constructor(
     /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
     fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
 
-    /** Default proration configuration. Only valid for SUBSCRIPTION rate_type. */
+    /**
+     * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to true.
+     */
     fun isProrated(): Optional<Boolean> = Optional.ofNullable(isProrated.getNullable("is_prorated"))
 
     /** Only set for TIERED rate_type. */
@@ -91,7 +93,9 @@ private constructor(
     /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
     @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
 
-    /** Default proration configuration. Only valid for SUBSCRIPTION rate_type. */
+    /**
+     * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to true.
+     */
     @JsonProperty("is_prorated") @ExcludeMissing fun _isProrated() = isProrated
 
     /** Only set for TIERED rate_type. */
@@ -209,10 +213,16 @@ private constructor(
         @ExcludeMissing
         fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
-        /** Default proration configuration. Only valid for SUBSCRIPTION rate_type. */
+        /**
+         * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
+         * true.
+         */
         fun isProrated(isProrated: Boolean) = isProrated(JsonField.of(isProrated))
 
-        /** Default proration configuration. Only valid for SUBSCRIPTION rate_type. */
+        /**
+         * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
+         * true.
+         */
         @JsonProperty("is_prorated")
         @ExcludeMissing
         fun isProrated(isProrated: JsonField<Boolean>) = apply { this.isProrated = isProrated }

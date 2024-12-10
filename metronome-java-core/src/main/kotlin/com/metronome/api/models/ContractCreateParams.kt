@@ -4202,7 +4202,10 @@ constructor(
             /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
             @JsonProperty("quantity") fun quantity(): Double? = quantity
 
-            /** Default proration configuration. Only valid for SUBSCRIPTION rate_type. */
+            /**
+             * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
+             * to true.
+             */
             @JsonProperty("is_prorated") fun isProrated(): Boolean? = isProrated
 
             /** Only set for TIERED rate_type. */
@@ -4262,7 +4265,10 @@ constructor(
                 @JsonProperty("quantity")
                 fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
-                /** Default proration configuration. Only valid for SUBSCRIPTION rate_type. */
+                /**
+                 * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be
+                 * set to true.
+                 */
                 @JsonProperty("is_prorated")
                 fun isProrated(isProrated: Boolean) = apply { this.isProrated = isProrated }
 

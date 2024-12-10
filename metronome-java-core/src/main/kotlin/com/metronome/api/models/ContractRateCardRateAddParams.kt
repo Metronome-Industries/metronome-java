@@ -159,7 +159,10 @@ constructor(
         /** exclusive end date */
         @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
 
-        /** Default proration configuration. Only valid for SUBSCRIPTION rate_type. */
+        /**
+         * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
+         * true.
+         */
         @JsonProperty("is_prorated") fun isProrated(): Boolean? = isProrated
 
         /**
@@ -282,7 +285,10 @@ constructor(
                 this.endingBefore = endingBefore
             }
 
-            /** Default proration configuration. Only valid for SUBSCRIPTION rate_type. */
+            /**
+             * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
+             * to true.
+             */
             @JsonProperty("is_prorated")
             fun isProrated(isProrated: Boolean) = apply { this.isProrated = isProrated }
 
@@ -453,7 +459,10 @@ constructor(
         /** exclusive end date */
         fun endingBefore(endingBefore: OffsetDateTime) = apply { this.endingBefore = endingBefore }
 
-        /** Default proration configuration. Only valid for SUBSCRIPTION rate_type. */
+        /**
+         * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
+         * true.
+         */
         fun isProrated(isProrated: Boolean) = apply { this.isProrated = isProrated }
 
         /**
