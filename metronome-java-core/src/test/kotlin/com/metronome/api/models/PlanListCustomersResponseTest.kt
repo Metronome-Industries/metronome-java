@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -15,7 +16,11 @@ class PlanListCustomersResponseTest {
                 .customerDetails(
                     CustomerDetail.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .customFields(CustomerDetail.CustomFields.builder().build())
+                        .customFields(
+                            CustomerDetail.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .customerConfig(
                             CustomerDetail.CustomerConfig.builder()
                                 .salesforceAccountId("salesforce_account_id")
@@ -36,7 +41,9 @@ class PlanListCustomersResponseTest {
                     PlanListCustomersResponse.PlanDetails.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .customFields(
-                            PlanListCustomersResponse.PlanDetails.CustomFields.builder().build()
+                            PlanListCustomersResponse.PlanDetails.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
                         )
                         .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .name("name")
@@ -50,7 +57,11 @@ class PlanListCustomersResponseTest {
             .isEqualTo(
                 CustomerDetail.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .customFields(CustomerDetail.CustomFields.builder().build())
+                    .customFields(
+                        CustomerDetail.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .customerConfig(
                         CustomerDetail.CustomerConfig.builder()
                             .salesforceAccountId("salesforce_account_id")
@@ -72,7 +83,9 @@ class PlanListCustomersResponseTest {
                 PlanListCustomersResponse.PlanDetails.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .customFields(
-                        PlanListCustomersResponse.PlanDetails.CustomFields.builder().build()
+                        PlanListCustomersResponse.PlanDetails.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
                     )
                     .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .name("name")

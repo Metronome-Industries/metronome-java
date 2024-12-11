@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -21,6 +22,7 @@ class DashboardGetEmbeddableUrlParamsTest {
                         .valueDisplayNames(
                             DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.ValueDisplayNames
                                 .builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
                         .build()
@@ -59,6 +61,7 @@ class DashboardGetEmbeddableUrlParamsTest {
                             .valueDisplayNames(
                                 DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.ValueDisplayNames
                                     .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
                             .build()
@@ -94,6 +97,7 @@ class DashboardGetEmbeddableUrlParamsTest {
                         .valueDisplayNames(
                             DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.ValueDisplayNames
                                 .builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
                         .build()

@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -110,7 +111,11 @@ class ContractProductListResponseTest {
                     )
                 )
                 .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .customFields(ContractProductListResponse.CustomFields.builder().build())
+                .customFields(
+                    ContractProductListResponse.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .build()
         assertThat(contractProductListResponse).isNotNull
         assertThat(contractProductListResponse.id())
@@ -216,6 +221,10 @@ class ContractProductListResponseTest {
         assertThat(contractProductListResponse.archivedAt())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(contractProductListResponse.customFields())
-            .contains(ContractProductListResponse.CustomFields.builder().build())
+            .contains(
+                ContractProductListResponse.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
     }
 }

@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -42,7 +43,11 @@ class ContractAmendParamsTest {
                         .amount(0.0)
                         .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                         .applicableProductTags(listOf("string"))
-                        .customFields(ContractAmendParams.Commit.CustomFields.builder().build())
+                        .customFields(
+                            ContractAmendParams.Commit.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .description("description")
                         .invoiceSchedule(
                             ContractAmendParams.Commit.InvoiceSchedule.builder()
@@ -122,7 +127,11 @@ class ContractAmendParamsTest {
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                         .applicableProductTags(listOf("string"))
-                        .customFields(ContractAmendParams.Credit.CustomFields.builder().build())
+                        .customFields(
+                            ContractAmendParams.Credit.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .description("description")
                         .name("x")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -131,7 +140,11 @@ class ContractAmendParamsTest {
                         .build()
                 )
             )
-            .customFields(ContractAmendParams.CustomFields.builder().build())
+            .customFields(
+                ContractAmendParams.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
             .discounts(
                 listOf(
                     ContractAmendParams.Discount.builder()
@@ -200,12 +213,14 @@ class ContractAmendParamsTest {
                                         ContractAmendParams.Override.OverrideSpecifier
                                             .PresentationGroupValues
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
                                     .pricingGroupValues(
                                         ContractAmendParams.Override.OverrideSpecifier
                                             .PricingGroupValues
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
                                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -219,6 +234,7 @@ class ContractAmendParamsTest {
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .customRate(
                                     ContractAmendParams.Override.OverwriteRate.CustomRate.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .isProrated(true)
@@ -250,7 +266,9 @@ class ContractAmendParamsTest {
                         .quantity(0.0)
                         .unitPrice(0.0)
                         .customFields(
-                            ContractAmendParams.ProfessionalService.CustomFields.builder().build()
+                            ContractAmendParams.ProfessionalService.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
                         )
                         .description("description")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -376,7 +394,11 @@ class ContractAmendParamsTest {
                             .amount(0.0)
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
-                            .customFields(ContractAmendParams.Commit.CustomFields.builder().build())
+                            .customFields(
+                                ContractAmendParams.Commit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .description("description")
                             .invoiceSchedule(
                                 ContractAmendParams.Commit.InvoiceSchedule.builder()
@@ -456,7 +478,11 @@ class ContractAmendParamsTest {
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
-                            .customFields(ContractAmendParams.Credit.CustomFields.builder().build())
+                            .customFields(
+                                ContractAmendParams.Credit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .description("description")
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -465,7 +491,11 @@ class ContractAmendParamsTest {
                             .build()
                     )
                 )
-                .customFields(ContractAmendParams.CustomFields.builder().build())
+                .customFields(
+                    ContractAmendParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .discounts(
                     listOf(
                         ContractAmendParams.Discount.builder()
@@ -537,12 +567,20 @@ class ContractAmendParamsTest {
                                             ContractAmendParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
                                             ContractAmendParams.Override.OverrideSpecifier
                                                 .PricingGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -559,6 +597,7 @@ class ContractAmendParamsTest {
                                     .customRate(
                                         ContractAmendParams.Override.OverwriteRate.CustomRate
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
                                     .isProrated(true)
@@ -591,6 +630,7 @@ class ContractAmendParamsTest {
                             .unitPrice(0.0)
                             .customFields(
                                 ContractAmendParams.ProfessionalService.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .description("description")
@@ -716,7 +756,11 @@ class ContractAmendParamsTest {
                         .amount(0.0)
                         .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                         .applicableProductTags(listOf("string"))
-                        .customFields(ContractAmendParams.Commit.CustomFields.builder().build())
+                        .customFields(
+                            ContractAmendParams.Commit.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .description("description")
                         .invoiceSchedule(
                             ContractAmendParams.Commit.InvoiceSchedule.builder()
@@ -797,7 +841,11 @@ class ContractAmendParamsTest {
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                         .applicableProductTags(listOf("string"))
-                        .customFields(ContractAmendParams.Credit.CustomFields.builder().build())
+                        .customFields(
+                            ContractAmendParams.Credit.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .description("description")
                         .name("x")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -807,7 +855,11 @@ class ContractAmendParamsTest {
                 )
             )
         assertThat(body.customFields())
-            .isEqualTo(ContractAmendParams.CustomFields.builder().build())
+            .isEqualTo(
+                ContractAmendParams.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(body.discounts())
             .isEqualTo(
                 listOf(
@@ -878,12 +930,14 @@ class ContractAmendParamsTest {
                                         ContractAmendParams.Override.OverrideSpecifier
                                             .PresentationGroupValues
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
                                     .pricingGroupValues(
                                         ContractAmendParams.Override.OverrideSpecifier
                                             .PricingGroupValues
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
                                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -897,6 +951,7 @@ class ContractAmendParamsTest {
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .customRate(
                                     ContractAmendParams.Override.OverwriteRate.CustomRate.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .isProrated(true)
@@ -929,7 +984,9 @@ class ContractAmendParamsTest {
                         .quantity(0.0)
                         .unitPrice(0.0)
                         .customFields(
-                            ContractAmendParams.ProfessionalService.CustomFields.builder().build()
+                            ContractAmendParams.ProfessionalService.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
                         )
                         .description("description")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")

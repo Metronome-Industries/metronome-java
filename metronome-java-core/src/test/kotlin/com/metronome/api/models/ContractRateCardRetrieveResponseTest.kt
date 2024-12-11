@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -41,7 +42,9 @@ class ContractRateCardRetrieveResponseTest {
                             )
                         )
                         .customFields(
-                            ContractRateCardRetrieveResponse.Data.CustomFields.builder().build()
+                            ContractRateCardRetrieveResponse.Data.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
                         )
                         .description("description")
                         .fiatCreditType(
@@ -84,7 +87,9 @@ class ContractRateCardRetrieveResponseTest {
                         )
                     )
                     .customFields(
-                        ContractRateCardRetrieveResponse.Data.CustomFields.builder().build()
+                        ContractRateCardRetrieveResponse.Data.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
                     )
                     .description("description")
                     .fiatCreditType(

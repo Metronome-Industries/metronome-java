@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +17,11 @@ class ProServiceTest {
                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .quantity(0.0)
                 .unitPrice(0.0)
-                .customFields(ProService.CustomFields.builder().build())
+                .customFields(
+                    ProService.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .description("description")
                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                 .build()
@@ -26,7 +31,12 @@ class ProServiceTest {
         assertThat(proService.productId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(proService.quantity()).isEqualTo(0.0)
         assertThat(proService.unitPrice()).isEqualTo(0.0)
-        assertThat(proService.customFields()).contains(ProService.CustomFields.builder().build())
+        assertThat(proService.customFields())
+            .contains(
+                ProService.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(proService.description()).contains("description")
         assertThat(proService.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
     }

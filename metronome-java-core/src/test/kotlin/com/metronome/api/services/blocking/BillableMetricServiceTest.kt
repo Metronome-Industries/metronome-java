@@ -4,6 +4,7 @@ package com.metronome.api.services.blocking
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import com.metronome.api.models.BillableMetricListParams
 import org.junit.jupiter.api.Test
@@ -26,7 +27,11 @@ class BillableMetricServiceTest {
                     .name("name")
                     .aggregationKey("aggregation_key")
                     .aggregationType(BillableMetricCreateParams.AggregationType.COUNT)
-                    .customFields(BillableMetricCreateParams.CustomFields.builder().build())
+                    .customFields(
+                        BillableMetricCreateParams.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .eventTypeFilter(
                         EventTypeFilter.builder()
                             .inValues(listOf("string"))

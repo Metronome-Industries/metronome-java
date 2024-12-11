@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -44,7 +45,12 @@ class ContractScheduleProServicesInvoiceResponseTest {
                                                 .build()
                                         )
                                         .commitCustomFields(
-                                            Invoice.LineItem.CommitCustomFields.builder().build()
+                                            Invoice.LineItem.CommitCustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
+                                                .build()
                                         )
                                         .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .commitNetsuiteItemId("commit_netsuite_item_id")
@@ -54,7 +60,12 @@ class ContractScheduleProServicesInvoiceResponseTest {
                                         .commitSegmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .commitType("commit_type")
                                         .customFields(
-                                            Invoice.LineItem.CustomFields.builder().build()
+                                            Invoice.LineItem.CustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
+                                                .build()
                                         )
                                         .endingBefore(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -71,11 +82,23 @@ class ContractScheduleProServicesInvoiceResponseTest {
                                                         .name("name")
                                                         .build()
                                                 )
-                                                .customRate(Rate.CustomRate.builder().build())
+                                                .customRate(
+                                                    Rate.CustomRate.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("bar")
+                                                        )
+                                                        .build()
+                                                )
                                                 .isProrated(true)
                                                 .price(0.0)
                                                 .pricingGroupValues(
-                                                    Rate.PricingGroupValues.builder().build()
+                                                    Rate.PricingGroupValues.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("string")
+                                                        )
+                                                        .build()
                                                 )
                                                 .quantity(0.0)
                                                 .tiers(
@@ -101,19 +124,37 @@ class ContractScheduleProServicesInvoiceResponseTest {
                                         )
                                         .presentationGroupValues(
                                             Invoice.LineItem.PresentationGroupValues.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
-                                            Invoice.LineItem.PricingGroupValues.builder().build()
+                                            Invoice.LineItem.PricingGroupValues.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
+                                                .build()
                                         )
                                         .productCustomFields(
-                                            Invoice.LineItem.ProductCustomFields.builder().build()
+                                            Invoice.LineItem.ProductCustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
+                                                .build()
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .productType("product_type")
                                         .professionalServiceCustomFields(
                                             Invoice.LineItem.ProfessionalServiceCustomFields
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .professionalServiceId(
@@ -123,6 +164,10 @@ class ContractScheduleProServicesInvoiceResponseTest {
                                         .resellerType(Invoice.LineItem.ResellerType.AWS)
                                         .scheduledChargeCustomFields(
                                             Invoice.LineItem.ScheduledChargeCustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .scheduledChargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -135,6 +180,10 @@ class ContractScheduleProServicesInvoiceResponseTest {
                                                     .customFields(
                                                         Invoice.LineItem.SubLineItem.CustomFields
                                                             .builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from("string")
+                                                            )
                                                             .build()
                                                     )
                                                     .name("name")
@@ -197,7 +246,11 @@ class ContractScheduleProServicesInvoiceResponseTest {
                             )
                             .amendmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .billableStatus(Invoice.BillableStatus.BILLABLE)
-                            .contractCustomFields(Invoice.ContractCustomFields.builder().build())
+                            .contractCustomFields(
+                                Invoice.ContractCustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .correctionRecord(
                                 Invoice.CorrectionRecord.builder()
@@ -225,8 +278,16 @@ class ContractScheduleProServicesInvoiceResponseTest {
                                     .build()
                             )
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .customFields(Invoice.CustomFields.builder().build())
-                            .customerCustomFields(Invoice.CustomerCustomFields.builder().build())
+                            .customFields(
+                                Invoice.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .customerCustomFields(
+                                Invoice.CustomerCustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .endTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .externalInvoice(
                                 Invoice.ExternalInvoice.builder()
@@ -254,6 +315,10 @@ class ContractScheduleProServicesInvoiceResponseTest {
                                         .creditGrantCustomFields(
                                             Invoice.InvoiceAdjustment.CreditGrantCustomFields
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .creditGrantId("credit_grant_id")
@@ -263,7 +328,11 @@ class ContractScheduleProServicesInvoiceResponseTest {
                             .issuedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .netPaymentTermsDays(0.0)
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
-                            .planCustomFields(Invoice.PlanCustomFields.builder().build())
+                            .planCustomFields(
+                                Invoice.PlanCustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .planName("plan_name")
                             .resellerRoyalty(
@@ -323,14 +392,20 @@ class ContractScheduleProServicesInvoiceResponseTest {
                                         .build()
                                 )
                                 .commitCustomFields(
-                                    Invoice.LineItem.CommitCustomFields.builder().build()
+                                    Invoice.LineItem.CommitCustomFields.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
                                 )
                                 .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .commitNetsuiteItemId("commit_netsuite_item_id")
                                 .commitNetsuiteSalesOrderId("commit_netsuite_sales_order_id")
                                 .commitSegmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .commitType("commit_type")
-                                .customFields(Invoice.LineItem.CustomFields.builder().build())
+                                .customFields(
+                                    Invoice.LineItem.CustomFields.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .groupKey("group_key")
                                 .groupValue("group_value")
@@ -344,11 +419,20 @@ class ContractScheduleProServicesInvoiceResponseTest {
                                                 .name("name")
                                                 .build()
                                         )
-                                        .customRate(Rate.CustomRate.builder().build())
+                                        .customRate(
+                                            Rate.CustomRate.builder()
+                                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                                .build()
+                                        )
                                         .isProrated(true)
                                         .price(0.0)
                                         .pricingGroupValues(
-                                            Rate.PricingGroupValues.builder().build()
+                                            Rate.PricingGroupValues.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
+                                                .build()
                                         )
                                         .quantity(0.0)
                                         .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
@@ -369,25 +453,34 @@ class ContractScheduleProServicesInvoiceResponseTest {
                                         .build()
                                 )
                                 .presentationGroupValues(
-                                    Invoice.LineItem.PresentationGroupValues.builder().build()
+                                    Invoice.LineItem.PresentationGroupValues.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
                                 )
                                 .pricingGroupValues(
-                                    Invoice.LineItem.PricingGroupValues.builder().build()
+                                    Invoice.LineItem.PricingGroupValues.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
                                 )
                                 .productCustomFields(
-                                    Invoice.LineItem.ProductCustomFields.builder().build()
+                                    Invoice.LineItem.ProductCustomFields.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
                                 )
                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .productType("product_type")
                                 .professionalServiceCustomFields(
                                     Invoice.LineItem.ProfessionalServiceCustomFields.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
                                 .professionalServiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .quantity(0.0)
                                 .resellerType(Invoice.LineItem.ResellerType.AWS)
                                 .scheduledChargeCustomFields(
-                                    Invoice.LineItem.ScheduledChargeCustomFields.builder().build()
+                                    Invoice.LineItem.ScheduledChargeCustomFields.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
                                 )
                                 .scheduledChargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -396,6 +489,10 @@ class ContractScheduleProServicesInvoiceResponseTest {
                                         Invoice.LineItem.SubLineItem.builder()
                                             .customFields(
                                                 Invoice.LineItem.SubLineItem.CustomFields.builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("string")
+                                                    )
                                                     .build()
                                             )
                                             .name("name")
@@ -448,7 +545,11 @@ class ContractScheduleProServicesInvoiceResponseTest {
                     )
                     .amendmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .billableStatus(Invoice.BillableStatus.BILLABLE)
-                    .contractCustomFields(Invoice.ContractCustomFields.builder().build())
+                    .contractCustomFields(
+                        Invoice.ContractCustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .correctionRecord(
                         Invoice.CorrectionRecord.builder()
@@ -476,8 +577,16 @@ class ContractScheduleProServicesInvoiceResponseTest {
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .customFields(Invoice.CustomFields.builder().build())
-                    .customerCustomFields(Invoice.CustomerCustomFields.builder().build())
+                    .customFields(
+                        Invoice.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .customerCustomFields(
+                        Invoice.CustomerCustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .endTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .externalInvoice(
                         Invoice.ExternalInvoice.builder()
@@ -502,6 +611,7 @@ class ContractScheduleProServicesInvoiceResponseTest {
                                 .total(0.0)
                                 .creditGrantCustomFields(
                                     Invoice.InvoiceAdjustment.CreditGrantCustomFields.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
                                 .creditGrantId("credit_grant_id")
@@ -511,7 +621,11 @@ class ContractScheduleProServicesInvoiceResponseTest {
                     .issuedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .netPaymentTermsDays(0.0)
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
-                    .planCustomFields(Invoice.PlanCustomFields.builder().build())
+                    .planCustomFields(
+                        Invoice.PlanCustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .planName("plan_name")
                     .resellerRoyalty(

@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -22,7 +23,11 @@ class ContractRateCardUpdateParamsTest {
                         .build()
                 )
             )
-            .customFields(ContractRateCardUpdateParams.CustomFields.builder().build())
+            .customFields(
+                ContractRateCardUpdateParams.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
             .description("description")
             .name("name")
             .build()
@@ -42,7 +47,11 @@ class ContractRateCardUpdateParamsTest {
                             .build()
                     )
                 )
-                .customFields(ContractRateCardUpdateParams.CustomFields.builder().build())
+                .customFields(
+                    ContractRateCardUpdateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .description("description")
                 .name("name")
                 .build()
@@ -60,7 +69,11 @@ class ContractRateCardUpdateParamsTest {
                 )
             )
         assertThat(body.customFields())
-            .isEqualTo(ContractRateCardUpdateParams.CustomFields.builder().build())
+            .isEqualTo(
+                ContractRateCardUpdateParams.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(body.description()).isEqualTo("description")
         assertThat(body.name()).isEqualTo("name")
     }

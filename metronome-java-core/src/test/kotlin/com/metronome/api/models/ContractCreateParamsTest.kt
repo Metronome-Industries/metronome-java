@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -54,7 +55,11 @@ class ContractCreateParamsTest {
                         .amount(0.0)
                         .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                         .applicableProductTags(listOf("string"))
-                        .customFields(ContractCreateParams.Commit.CustomFields.builder().build())
+                        .customFields(
+                            ContractCreateParams.Commit.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .description("description")
                         .invoiceSchedule(
                             ContractCreateParams.Commit.InvoiceSchedule.builder()
@@ -134,7 +139,11 @@ class ContractCreateParamsTest {
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                         .applicableProductTags(listOf("string"))
-                        .customFields(ContractCreateParams.Credit.CustomFields.builder().build())
+                        .customFields(
+                            ContractCreateParams.Credit.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .description("description")
                         .name("x")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -143,7 +152,11 @@ class ContractCreateParamsTest {
                         .build()
                 )
             )
-            .customFields(ContractCreateParams.CustomFields.builder().build())
+            .customFields(
+                ContractCreateParams.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
             .discounts(
                 listOf(
                     ContractCreateParams.Discount.builder()
@@ -219,12 +232,14 @@ class ContractCreateParamsTest {
                                         ContractCreateParams.Override.OverrideSpecifier
                                             .PresentationGroupValues
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
                                     .pricingGroupValues(
                                         ContractCreateParams.Override.OverrideSpecifier
                                             .PricingGroupValues
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
                                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -238,6 +253,7 @@ class ContractCreateParamsTest {
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .customRate(
                                     ContractCreateParams.Override.OverwriteRate.CustomRate.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .isProrated(true)
@@ -269,7 +285,9 @@ class ContractCreateParamsTest {
                         .quantity(0.0)
                         .unitPrice(0.0)
                         .customFields(
-                            ContractCreateParams.ProfessionalService.CustomFields.builder().build()
+                            ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
                         )
                         .description("description")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -439,7 +457,9 @@ class ContractCreateParamsTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Commit.CustomFields.builder().build()
+                                ContractCreateParams.Commit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .invoiceSchedule(
@@ -522,7 +542,9 @@ class ContractCreateParamsTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Credit.CustomFields.builder().build()
+                                ContractCreateParams.Credit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .name("x")
@@ -532,7 +554,11 @@ class ContractCreateParamsTest {
                             .build()
                     )
                 )
-                .customFields(ContractCreateParams.CustomFields.builder().build())
+                .customFields(
+                    ContractCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .discounts(
                     listOf(
                         ContractCreateParams.Discount.builder()
@@ -610,12 +636,20 @@ class ContractCreateParamsTest {
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PricingGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -632,6 +666,7 @@ class ContractCreateParamsTest {
                                     .customRate(
                                         ContractCreateParams.Override.OverwriteRate.CustomRate
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
                                     .isProrated(true)
@@ -664,6 +699,7 @@ class ContractCreateParamsTest {
                             .unitPrice(0.0)
                             .customFields(
                                 ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .description("description")
@@ -836,7 +872,11 @@ class ContractCreateParamsTest {
                         .amount(0.0)
                         .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                         .applicableProductTags(listOf("string"))
-                        .customFields(ContractCreateParams.Commit.CustomFields.builder().build())
+                        .customFields(
+                            ContractCreateParams.Commit.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .description("description")
                         .invoiceSchedule(
                             ContractCreateParams.Commit.InvoiceSchedule.builder()
@@ -917,7 +957,11 @@ class ContractCreateParamsTest {
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                         .applicableProductTags(listOf("string"))
-                        .customFields(ContractCreateParams.Credit.CustomFields.builder().build())
+                        .customFields(
+                            ContractCreateParams.Credit.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .description("description")
                         .name("x")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -927,7 +971,11 @@ class ContractCreateParamsTest {
                 )
             )
         assertThat(body.customFields())
-            .isEqualTo(ContractCreateParams.CustomFields.builder().build())
+            .isEqualTo(
+                ContractCreateParams.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(body.discounts())
             .isEqualTo(
                 listOf(
@@ -1004,12 +1052,14 @@ class ContractCreateParamsTest {
                                         ContractCreateParams.Override.OverrideSpecifier
                                             .PresentationGroupValues
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
                                     .pricingGroupValues(
                                         ContractCreateParams.Override.OverrideSpecifier
                                             .PricingGroupValues
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
                                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1023,6 +1073,7 @@ class ContractCreateParamsTest {
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .customRate(
                                     ContractCreateParams.Override.OverwriteRate.CustomRate.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .isProrated(true)
@@ -1055,7 +1106,9 @@ class ContractCreateParamsTest {
                         .quantity(0.0)
                         .unitPrice(0.0)
                         .customFields(
-                            ContractCreateParams.ProfessionalService.CustomFields.builder().build()
+                            ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
                         )
                         .description("description")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")

@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -13,7 +14,11 @@ class CustomerPlanListResponseTest {
         val customerPlanListResponse =
             CustomerPlanListResponse.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customFields(CustomerPlanListResponse.CustomFields.builder().build())
+                .customFields(
+                    CustomerPlanListResponse.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .planDescription("plan_description")
                 .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .planName("plan_name")
@@ -43,7 +48,11 @@ class CustomerPlanListResponseTest {
         assertThat(customerPlanListResponse).isNotNull
         assertThat(customerPlanListResponse.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(customerPlanListResponse.customFields())
-            .isEqualTo(CustomerPlanListResponse.CustomFields.builder().build())
+            .isEqualTo(
+                CustomerPlanListResponse.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(customerPlanListResponse.planDescription()).isEqualTo("plan_description")
         assertThat(customerPlanListResponse.planId())
             .isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

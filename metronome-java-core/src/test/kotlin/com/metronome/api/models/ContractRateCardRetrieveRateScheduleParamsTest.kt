@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
@@ -23,11 +24,13 @@ class ContractRateCardRetrieveRateScheduleParamsTest {
                             ContractRateCardRetrieveRateScheduleParams.Selector
                                 .PartialPricingGroupValues
                                 .builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
                         .pricingGroupValues(
                             ContractRateCardRetrieveRateScheduleParams.Selector.PricingGroupValues
                                 .builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -53,12 +56,14 @@ class ContractRateCardRetrieveRateScheduleParamsTest {
                                 ContractRateCardRetrieveRateScheduleParams.Selector
                                     .PartialPricingGroupValues
                                     .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .pricingGroupValues(
                                 ContractRateCardRetrieveRateScheduleParams.Selector
                                     .PricingGroupValues
                                     .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -99,12 +104,14 @@ class ContractRateCardRetrieveRateScheduleParamsTest {
                                 ContractRateCardRetrieveRateScheduleParams.Selector
                                     .PartialPricingGroupValues
                                     .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .pricingGroupValues(
                                 ContractRateCardRetrieveRateScheduleParams.Selector
                                     .PricingGroupValues
                                     .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -127,11 +134,13 @@ class ContractRateCardRetrieveRateScheduleParamsTest {
                             ContractRateCardRetrieveRateScheduleParams.Selector
                                 .PartialPricingGroupValues
                                 .builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
                         .pricingGroupValues(
                             ContractRateCardRetrieveRateScheduleParams.Selector.PricingGroupValues
                                 .builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

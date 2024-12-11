@@ -101,7 +101,9 @@ class ServiceParamsTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Commit.CustomFields.builder().build()
+                                ContractCreateParams.Commit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .invoiceSchedule(
@@ -184,7 +186,9 @@ class ServiceParamsTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Credit.CustomFields.builder().build()
+                                ContractCreateParams.Credit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .name("x")
@@ -194,7 +198,11 @@ class ServiceParamsTest {
                             .build()
                     )
                 )
-                .customFields(ContractCreateParams.CustomFields.builder().build())
+                .customFields(
+                    ContractCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .discounts(
                     listOf(
                         ContractCreateParams.Discount.builder()
@@ -272,12 +280,20 @@ class ServiceParamsTest {
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PricingGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -294,6 +310,7 @@ class ServiceParamsTest {
                                     .customRate(
                                         ContractCreateParams.Override.OverwriteRate.CustomRate
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
                                     .isProrated(true)
@@ -326,6 +343,7 @@ class ServiceParamsTest {
                             .unitPrice(0.0)
                             .customFields(
                                 ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .description("description")
@@ -489,11 +507,17 @@ class ServiceParamsTest {
                 .usage(
                     listOf(
                         UsageIngestParams.Usage.builder()
-                            .customerId("x")
-                            .eventType("x")
-                            .timestamp("timestamp")
-                            .transactionId("x")
-                            .properties(UsageIngestParams.Usage.Properties.builder().build())
+                            .customerId("team@example.com")
+                            .eventType("heartbeat")
+                            .timestamp("2021-01-01T00:00:00Z")
+                            .transactionId("2021-01-01T00:00:00Z_cluster42")
+                            .properties(
+                                UsageIngestParams.Usage.Properties.builder()
+                                    .putAdditionalProperty("cluster_id", JsonValue.from("bar"))
+                                    .putAdditionalProperty("cpu_seconds", JsonValue.from("bar"))
+                                    .putAdditionalProperty("region", JsonValue.from("bar"))
+                                    .build()
+                            )
                             .build()
                     )
                 )

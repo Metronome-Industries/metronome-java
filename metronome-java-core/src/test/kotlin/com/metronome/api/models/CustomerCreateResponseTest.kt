@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +18,11 @@ class CustomerCreateResponseTest {
                         .externalId("external_id")
                         .ingestAliases(listOf("string"))
                         .name("name")
-                        .customFields(Customer.CustomFields.builder().build())
+                        .customFields(
+                            Customer.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .build()
                 )
                 .build()
@@ -29,7 +34,11 @@ class CustomerCreateResponseTest {
                     .externalId("external_id")
                     .ingestAliases(listOf("string"))
                     .name("name")
-                    .customFields(Customer.CustomFields.builder().build())
+                    .customFields(
+                        Customer.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .build()
             )
     }

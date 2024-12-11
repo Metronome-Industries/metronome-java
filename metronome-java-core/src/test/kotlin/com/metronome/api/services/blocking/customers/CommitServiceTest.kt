@@ -4,6 +4,7 @@ package com.metronome.api.services.blocking.customers
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
@@ -48,7 +49,11 @@ class CommitServiceTest {
                     .applicableContractIds(listOf("string"))
                     .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                     .applicableProductTags(listOf("string"))
-                    .customFields(CustomerCommitCreateParams.CustomFields.builder().build())
+                    .customFields(
+                        CustomerCommitCreateParams.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .description("description")
                     .invoiceContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .invoiceSchedule(

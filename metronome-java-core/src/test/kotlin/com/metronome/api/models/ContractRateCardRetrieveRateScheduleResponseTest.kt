@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -28,10 +29,18 @@ class ContractRateCardRetrieveRateScheduleResponseTest {
                                             .name("name")
                                             .build()
                                     )
-                                    .customRate(Rate.CustomRate.builder().build())
+                                    .customRate(
+                                        Rate.CustomRate.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                            .build()
+                                    )
                                     .isProrated(true)
                                     .price(0.0)
-                                    .pricingGroupValues(Rate.PricingGroupValues.builder().build())
+                                    .pricingGroupValues(
+                                        Rate.PricingGroupValues.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .quantity(0.0)
                                     .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                                     .useListPrices(true)
@@ -54,6 +63,7 @@ class ContractRateCardRetrieveRateScheduleResponseTest {
                             .pricingGroupValues(
                                 ContractRateCardRetrieveRateScheduleResponse.Data.PricingGroupValues
                                     .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .build()
@@ -78,10 +88,18 @@ class ContractRateCardRetrieveRateScheduleResponseTest {
                                     .name("name")
                                     .build()
                             )
-                            .customRate(Rate.CustomRate.builder().build())
+                            .customRate(
+                                Rate.CustomRate.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
                             .isProrated(true)
                             .price(0.0)
-                            .pricingGroupValues(Rate.PricingGroupValues.builder().build())
+                            .pricingGroupValues(
+                                Rate.PricingGroupValues.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .quantity(0.0)
                             .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                             .useListPrices(true)
@@ -103,6 +121,7 @@ class ContractRateCardRetrieveRateScheduleResponseTest {
                     .pricingGroupValues(
                         ContractRateCardRetrieveRateScheduleResponse.Data.PricingGroupValues
                             .builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
                     .build()

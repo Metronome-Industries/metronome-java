@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
@@ -22,10 +23,12 @@ class ContractRetrieveRateScheduleParamsTest {
                         .partialPricingGroupValues(
                             ContractRetrieveRateScheduleParams.Selector.PartialPricingGroupValues
                                 .builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
                         .pricingGroupValues(
                             ContractRetrieveRateScheduleParams.Selector.PricingGroupValues.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -52,11 +55,13 @@ class ContractRetrieveRateScheduleParamsTest {
                                 ContractRetrieveRateScheduleParams.Selector
                                     .PartialPricingGroupValues
                                     .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .pricingGroupValues(
                                 ContractRetrieveRateScheduleParams.Selector.PricingGroupValues
                                     .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -98,11 +103,13 @@ class ContractRetrieveRateScheduleParamsTest {
                                 ContractRetrieveRateScheduleParams.Selector
                                     .PartialPricingGroupValues
                                     .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .pricingGroupValues(
                                 ContractRetrieveRateScheduleParams.Selector.PricingGroupValues
                                     .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -125,10 +132,12 @@ class ContractRetrieveRateScheduleParamsTest {
                         .partialPricingGroupValues(
                             ContractRetrieveRateScheduleParams.Selector.PartialPricingGroupValues
                                 .builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
                         .pricingGroupValues(
                             ContractRetrieveRateScheduleParams.Selector.PricingGroupValues.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

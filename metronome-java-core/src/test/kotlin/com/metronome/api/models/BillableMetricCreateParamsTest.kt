@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -14,7 +15,11 @@ class BillableMetricCreateParamsTest {
             .name("name")
             .aggregationKey("aggregation_key")
             .aggregationType(BillableMetricCreateParams.AggregationType.COUNT)
-            .customFields(BillableMetricCreateParams.CustomFields.builder().build())
+            .customFields(
+                BillableMetricCreateParams.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
             .eventTypeFilter(
                 EventTypeFilter.builder()
                     .inValues(listOf("string"))
@@ -43,7 +48,11 @@ class BillableMetricCreateParamsTest {
                 .name("name")
                 .aggregationKey("aggregation_key")
                 .aggregationType(BillableMetricCreateParams.AggregationType.COUNT)
-                .customFields(BillableMetricCreateParams.CustomFields.builder().build())
+                .customFields(
+                    BillableMetricCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .eventTypeFilter(
                     EventTypeFilter.builder()
                         .inValues(listOf("string"))
@@ -70,7 +79,11 @@ class BillableMetricCreateParamsTest {
         assertThat(body.aggregationType())
             .isEqualTo(BillableMetricCreateParams.AggregationType.COUNT)
         assertThat(body.customFields())
-            .isEqualTo(BillableMetricCreateParams.CustomFields.builder().build())
+            .isEqualTo(
+                BillableMetricCreateParams.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(body.eventTypeFilter())
             .isEqualTo(
                 EventTypeFilter.builder()

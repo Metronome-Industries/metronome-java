@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -41,7 +42,11 @@ class ScheduledChargeTest {
                         )
                         .build()
                 )
-                .customFields(ScheduledCharge.CustomFields.builder().build())
+                .customFields(
+                    ScheduledCharge.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .name("x")
                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                 .build()
@@ -78,7 +83,11 @@ class ScheduledChargeTest {
                     .build()
             )
         assertThat(scheduledCharge.customFields())
-            .contains(ScheduledCharge.CustomFields.builder().build())
+            .contains(
+                ScheduledCharge.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(scheduledCharge.name()).contains("x")
         assertThat(scheduledCharge.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
     }

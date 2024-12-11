@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -30,7 +31,11 @@ class ContractRateCardCreateParamsTest {
                         .build()
                 )
             )
-            .customFields(ContractRateCardCreateParams.CustomFields.builder().build())
+            .customFields(
+                ContractRateCardCreateParams.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
             .description("description")
             .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
             .build()
@@ -58,7 +63,11 @@ class ContractRateCardCreateParamsTest {
                             .build()
                     )
                 )
-                .customFields(ContractRateCardCreateParams.CustomFields.builder().build())
+                .customFields(
+                    ContractRateCardCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .description("description")
                 .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                 .build()
@@ -85,7 +94,11 @@ class ContractRateCardCreateParamsTest {
                 )
             )
         assertThat(body.customFields())
-            .isEqualTo(ContractRateCardCreateParams.CustomFields.builder().build())
+            .isEqualTo(
+                ContractRateCardCreateParams.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(body.description()).isEqualTo("description")
         assertThat(body.fiatCreditTypeId()).isEqualTo("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
     }

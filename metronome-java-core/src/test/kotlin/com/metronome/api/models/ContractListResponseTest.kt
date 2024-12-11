@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -86,7 +87,12 @@ class ContractListResponseTest {
                                                             .build()
                                                     )
                                                     .customFields(
-                                                        Commit.CustomFields.builder().build()
+                                                        Commit.CustomFields.builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from("string")
+                                                            )
+                                                            .build()
                                                     )
                                                     .description("description")
                                                     .invoiceContract(
@@ -213,12 +219,20 @@ class ContractListResponseTest {
                                                                     Override.OverrideSpecifier
                                                                         .PresentationGroupValues
                                                                         .builder()
+                                                                        .putAdditionalProperty(
+                                                                            "foo",
+                                                                            JsonValue.from("string")
+                                                                        )
                                                                         .build()
                                                                 )
                                                                 .pricingGroupValues(
                                                                     Override.OverrideSpecifier
                                                                         .PricingGroupValues
                                                                         .builder()
+                                                                        .putAdditionalProperty(
+                                                                            "foo",
+                                                                            JsonValue.from("string")
+                                                                        )
                                                                         .build()
                                                                 )
                                                                 .productId(
@@ -252,6 +266,10 @@ class ContractListResponseTest {
                                                             .customRate(
                                                                 Override.OverwriteRate.CustomRate
                                                                     .builder()
+                                                                    .putAdditionalProperty(
+                                                                        "foo",
+                                                                        JsonValue.from("bar")
+                                                                    )
                                                                     .build()
                                                             )
                                                             .isProrated(true)
@@ -289,7 +307,14 @@ class ContractListResponseTest {
                                                         )
                                                     )
                                                     .type(Override.Type.OVERWRITE)
-                                                    .value(Override.Value.builder().build())
+                                                    .value(
+                                                        Override.Value.builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from("bar")
+                                                            )
+                                                            .build()
+                                                    )
                                                     .build()
                                             )
                                         )
@@ -340,6 +365,10 @@ class ContractListResponseTest {
                                                     )
                                                     .customFields(
                                                         ScheduledCharge.CustomFields.builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from("string")
+                                                            )
                                                             .build()
                                                     )
                                                     .name("x")
@@ -415,7 +444,12 @@ class ContractListResponseTest {
                                                             .build()
                                                     )
                                                     .customFields(
-                                                        Credit.CustomFields.builder().build()
+                                                        Credit.CustomFields.builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from("string")
+                                                            )
+                                                            .build()
                                                     )
                                                     .description("description")
                                                     .ledger(
@@ -516,7 +550,12 @@ class ContractListResponseTest {
                                                     .quantity(0.0)
                                                     .unitPrice(0.0)
                                                     .customFields(
-                                                        ProService.CustomFields.builder().build()
+                                                        ProService.CustomFields.builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from("string")
+                                                            )
+                                                            .build()
                                                     )
                                                     .description("description")
                                                     .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -617,7 +656,14 @@ class ContractListResponseTest {
                                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                         .build()
                                                 )
-                                                .customFields(Commit.CustomFields.builder().build())
+                                                .customFields(
+                                                    Commit.CustomFields.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("string")
+                                                        )
+                                                        .build()
+                                                )
                                                 .description("description")
                                                 .invoiceContract(
                                                     Commit.InvoiceContract.builder()
@@ -735,12 +781,20 @@ class ContractListResponseTest {
                                                                 Override.OverrideSpecifier
                                                                     .PresentationGroupValues
                                                                     .builder()
+                                                                    .putAdditionalProperty(
+                                                                        "foo",
+                                                                        JsonValue.from("string")
+                                                                    )
                                                                     .build()
                                                             )
                                                             .pricingGroupValues(
                                                                 Override.OverrideSpecifier
                                                                     .PricingGroupValues
                                                                     .builder()
+                                                                    .putAdditionalProperty(
+                                                                        "foo",
+                                                                        JsonValue.from("string")
+                                                                    )
                                                                     .build()
                                                             )
                                                             .productId(
@@ -774,6 +828,10 @@ class ContractListResponseTest {
                                                         .customRate(
                                                             Override.OverwriteRate.CustomRate
                                                                 .builder()
+                                                                .putAdditionalProperty(
+                                                                    "foo",
+                                                                    JsonValue.from("bar")
+                                                                )
                                                                 .build()
                                                         )
                                                         .isProrated(true)
@@ -806,7 +864,14 @@ class ContractListResponseTest {
                                                     )
                                                 )
                                                 .type(Override.Type.OVERWRITE)
-                                                .value(Override.Value.builder().build())
+                                                .value(
+                                                    Override.Value.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("bar")
+                                                        )
+                                                        .build()
+                                                )
                                                 .build()
                                         )
                                     )
@@ -854,7 +919,12 @@ class ContractListResponseTest {
                                                         .build()
                                                 )
                                                 .customFields(
-                                                    ScheduledCharge.CustomFields.builder().build()
+                                                    ScheduledCharge.CustomFields.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("string")
+                                                        )
+                                                        .build()
                                                 )
                                                 .name("x")
                                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -946,7 +1016,14 @@ class ContractListResponseTest {
                                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                         .build()
                                                 )
-                                                .customFields(Credit.CustomFields.builder().build())
+                                                .customFields(
+                                                    Credit.CustomFields.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("string")
+                                                        )
+                                                        .build()
+                                                )
                                                 .description("description")
                                                 .ledger(
                                                     listOf(
@@ -1045,7 +1122,12 @@ class ContractListResponseTest {
                                                 .quantity(0.0)
                                                 .unitPrice(0.0)
                                                 .customFields(
-                                                    ProService.CustomFields.builder().build()
+                                                    ProService.CustomFields.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("string")
+                                                        )
+                                                        .build()
                                                 )
                                                 .description("description")
                                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -1184,7 +1266,14 @@ class ContractListResponseTest {
                                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                         .build()
                                                 )
-                                                .customFields(Commit.CustomFields.builder().build())
+                                                .customFields(
+                                                    Commit.CustomFields.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("string")
+                                                        )
+                                                        .build()
+                                                )
                                                 .description("description")
                                                 .invoiceContract(
                                                     Commit.InvoiceContract.builder()
@@ -1302,12 +1391,20 @@ class ContractListResponseTest {
                                                                 Override.OverrideSpecifier
                                                                     .PresentationGroupValues
                                                                     .builder()
+                                                                    .putAdditionalProperty(
+                                                                        "foo",
+                                                                        JsonValue.from("string")
+                                                                    )
                                                                     .build()
                                                             )
                                                             .pricingGroupValues(
                                                                 Override.OverrideSpecifier
                                                                     .PricingGroupValues
                                                                     .builder()
+                                                                    .putAdditionalProperty(
+                                                                        "foo",
+                                                                        JsonValue.from("string")
+                                                                    )
                                                                     .build()
                                                             )
                                                             .productId(
@@ -1341,6 +1438,10 @@ class ContractListResponseTest {
                                                         .customRate(
                                                             Override.OverwriteRate.CustomRate
                                                                 .builder()
+                                                                .putAdditionalProperty(
+                                                                    "foo",
+                                                                    JsonValue.from("bar")
+                                                                )
                                                                 .build()
                                                         )
                                                         .isProrated(true)
@@ -1373,7 +1474,14 @@ class ContractListResponseTest {
                                                     )
                                                 )
                                                 .type(Override.Type.OVERWRITE)
-                                                .value(Override.Value.builder().build())
+                                                .value(
+                                                    Override.Value.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("bar")
+                                                        )
+                                                        .build()
+                                                )
                                                 .build()
                                         )
                                     )
@@ -1421,7 +1529,12 @@ class ContractListResponseTest {
                                                         .build()
                                                 )
                                                 .customFields(
-                                                    ScheduledCharge.CustomFields.builder().build()
+                                                    ScheduledCharge.CustomFields.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("string")
+                                                        )
+                                                        .build()
                                                 )
                                                 .name("x")
                                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -1513,7 +1626,14 @@ class ContractListResponseTest {
                                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                         .build()
                                                 )
-                                                .customFields(Credit.CustomFields.builder().build())
+                                                .customFields(
+                                                    Credit.CustomFields.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("string")
+                                                        )
+                                                        .build()
+                                                )
                                                 .description("description")
                                                 .ledger(
                                                     listOf(
@@ -1612,7 +1732,12 @@ class ContractListResponseTest {
                                                 .quantity(0.0)
                                                 .unitPrice(0.0)
                                                 .customFields(
-                                                    ProService.CustomFields.builder().build()
+                                                    ProService.CustomFields.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("string")
+                                                        )
+                                                        .build()
                                                 )
                                                 .description("description")
                                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -1692,7 +1817,11 @@ class ContractListResponseTest {
                                     .build()
                             )
                             .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .customFields(ContractListResponse.Data.CustomFields.builder().build())
+                            .customFields(
+                                ContractListResponse.Data.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .customerBillingProviderConfiguration(
                                 ContractListResponse.Data.CustomerBillingProviderConfiguration
                                     .builder()
@@ -1780,7 +1909,14 @@ class ContractListResponseTest {
                                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                     .build()
                                             )
-                                            .customFields(Commit.CustomFields.builder().build())
+                                            .customFields(
+                                                Commit.CustomFields.builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("string")
+                                                    )
+                                                    .build()
+                                            )
                                             .description("description")
                                             .invoiceContract(
                                                 Commit.InvoiceContract.builder()
@@ -1896,12 +2032,20 @@ class ContractListResponseTest {
                                                             Override.OverrideSpecifier
                                                                 .PresentationGroupValues
                                                                 .builder()
+                                                                .putAdditionalProperty(
+                                                                    "foo",
+                                                                    JsonValue.from("string")
+                                                                )
                                                                 .build()
                                                         )
                                                         .pricingGroupValues(
                                                             Override.OverrideSpecifier
                                                                 .PricingGroupValues
                                                                 .builder()
+                                                                .putAdditionalProperty(
+                                                                    "foo",
+                                                                    JsonValue.from("string")
+                                                                )
                                                                 .build()
                                                         )
                                                         .productId(
@@ -1932,6 +2076,10 @@ class ContractListResponseTest {
                                                     )
                                                     .customRate(
                                                         Override.OverwriteRate.CustomRate.builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from("bar")
+                                                            )
                                                             .build()
                                                     )
                                                     .isProrated(true)
@@ -1962,7 +2110,14 @@ class ContractListResponseTest {
                                                 listOf(Tier.builder().price(0.0).size(0.0).build())
                                             )
                                             .type(Override.Type.OVERWRITE)
-                                            .value(Override.Value.builder().build())
+                                            .value(
+                                                Override.Value.builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("bar")
+                                                    )
+                                                    .build()
+                                            )
                                             .build()
                                     )
                                 )
@@ -2010,7 +2165,12 @@ class ContractListResponseTest {
                                                     .build()
                                             )
                                             .customFields(
-                                                ScheduledCharge.CustomFields.builder().build()
+                                                ScheduledCharge.CustomFields.builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("string")
+                                                    )
+                                                    .build()
                                             )
                                             .name("x")
                                             .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -2073,7 +2233,14 @@ class ContractListResponseTest {
                                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                     .build()
                                             )
-                                            .customFields(Credit.CustomFields.builder().build())
+                                            .customFields(
+                                                Credit.CustomFields.builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("string")
+                                                    )
+                                                    .build()
+                                            )
                                             .description("description")
                                             .ledger(
                                                 listOf(
@@ -2164,7 +2331,14 @@ class ContractListResponseTest {
                                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .quantity(0.0)
                                             .unitPrice(0.0)
-                                            .customFields(ProService.CustomFields.builder().build())
+                                            .customFields(
+                                                ProService.CustomFields.builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("string")
+                                                    )
+                                                    .build()
+                                            )
                                             .description("description")
                                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                                             .build()
@@ -2256,7 +2430,14 @@ class ContractListResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
-                                        .customFields(Commit.CustomFields.builder().build())
+                                        .customFields(
+                                            Commit.CustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
+                                                .build()
+                                        )
                                         .description("description")
                                         .invoiceContract(
                                             Commit.InvoiceContract.builder()
@@ -2365,12 +2546,20 @@ class ContractListResponseTest {
                                                         Override.OverrideSpecifier
                                                             .PresentationGroupValues
                                                             .builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from("string")
+                                                            )
                                                             .build()
                                                     )
                                                     .pricingGroupValues(
                                                         Override.OverrideSpecifier
                                                             .PricingGroupValues
                                                             .builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from("string")
+                                                            )
                                                             .build()
                                                     )
                                                     .productId(
@@ -2399,6 +2588,10 @@ class ContractListResponseTest {
                                                 )
                                                 .customRate(
                                                     Override.OverwriteRate.CustomRate.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("bar")
+                                                        )
                                                         .build()
                                                 )
                                                 .isProrated(true)
@@ -2424,7 +2617,11 @@ class ContractListResponseTest {
                                         .target(Override.Target.COMMIT_RATE)
                                         .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                                         .type(Override.Type.OVERWRITE)
-                                        .value(Override.Value.builder().build())
+                                        .value(
+                                            Override.Value.builder()
+                                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                                .build()
+                                        )
                                         .build()
                                 )
                             )
@@ -2469,7 +2666,12 @@ class ContractListResponseTest {
                                                 .build()
                                         )
                                         .customFields(
-                                            ScheduledCharge.CustomFields.builder().build()
+                                            ScheduledCharge.CustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
+                                                .build()
                                         )
                                         .name("x")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -2550,7 +2752,14 @@ class ContractListResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
-                                        .customFields(Credit.CustomFields.builder().build())
+                                        .customFields(
+                                            Credit.CustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
+                                                .build()
+                                        )
                                         .description("description")
                                         .ledger(
                                             listOf(
@@ -2641,7 +2850,14 @@ class ContractListResponseTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .quantity(0.0)
                                         .unitPrice(0.0)
-                                        .customFields(ProService.CustomFields.builder().build())
+                                        .customFields(
+                                            ProService.CustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
+                                                .build()
+                                        )
                                         .description("description")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                                         .build()
@@ -2768,7 +2984,14 @@ class ContractListResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
-                                        .customFields(Commit.CustomFields.builder().build())
+                                        .customFields(
+                                            Commit.CustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
+                                                .build()
+                                        )
                                         .description("description")
                                         .invoiceContract(
                                             Commit.InvoiceContract.builder()
@@ -2877,12 +3100,20 @@ class ContractListResponseTest {
                                                         Override.OverrideSpecifier
                                                             .PresentationGroupValues
                                                             .builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from("string")
+                                                            )
                                                             .build()
                                                     )
                                                     .pricingGroupValues(
                                                         Override.OverrideSpecifier
                                                             .PricingGroupValues
                                                             .builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from("string")
+                                                            )
                                                             .build()
                                                     )
                                                     .productId(
@@ -2911,6 +3142,10 @@ class ContractListResponseTest {
                                                 )
                                                 .customRate(
                                                     Override.OverwriteRate.CustomRate.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("bar")
+                                                        )
                                                         .build()
                                                 )
                                                 .isProrated(true)
@@ -2936,7 +3171,11 @@ class ContractListResponseTest {
                                         .target(Override.Target.COMMIT_RATE)
                                         .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                                         .type(Override.Type.OVERWRITE)
-                                        .value(Override.Value.builder().build())
+                                        .value(
+                                            Override.Value.builder()
+                                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                                .build()
+                                        )
                                         .build()
                                 )
                             )
@@ -2981,7 +3220,12 @@ class ContractListResponseTest {
                                                 .build()
                                         )
                                         .customFields(
-                                            ScheduledCharge.CustomFields.builder().build()
+                                            ScheduledCharge.CustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
+                                                .build()
                                         )
                                         .name("x")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -3062,7 +3306,14 @@ class ContractListResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
-                                        .customFields(Credit.CustomFields.builder().build())
+                                        .customFields(
+                                            Credit.CustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
+                                                .build()
+                                        )
                                         .description("description")
                                         .ledger(
                                             listOf(
@@ -3153,7 +3404,14 @@ class ContractListResponseTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .quantity(0.0)
                                         .unitPrice(0.0)
-                                        .customFields(ProService.CustomFields.builder().build())
+                                        .customFields(
+                                            ProService.CustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
+                                                .build()
+                                        )
                                         .description("description")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                                         .build()
@@ -3224,7 +3482,11 @@ class ContractListResponseTest {
                             .build()
                     )
                     .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .customFields(ContractListResponse.Data.CustomFields.builder().build())
+                    .customFields(
+                        ContractListResponse.Data.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .customerBillingProviderConfiguration(
                         ContractListResponse.Data.CustomerBillingProviderConfiguration.builder()
                             .billingProvider(

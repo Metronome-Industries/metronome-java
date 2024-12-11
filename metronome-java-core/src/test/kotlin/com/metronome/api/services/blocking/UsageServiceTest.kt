@@ -4,6 +4,7 @@ package com.metronome.api.services.blocking
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import com.metronome.api.models.UsageListWithGroupsParams
 import java.time.OffsetDateTime
@@ -61,11 +62,17 @@ class UsageServiceTest {
                 .usage(
                     listOf(
                         UsageIngestParams.Usage.builder()
-                            .customerId("x")
-                            .eventType("x")
-                            .timestamp("timestamp")
-                            .transactionId("x")
-                            .properties(UsageIngestParams.Usage.Properties.builder().build())
+                            .customerId("team@example.com")
+                            .eventType("heartbeat")
+                            .timestamp("2021-01-01T00:00:00Z")
+                            .transactionId("2021-01-01T00:00:00Z_cluster42")
+                            .properties(
+                                UsageIngestParams.Usage.Properties.builder()
+                                    .putAdditionalProperty("cluster_id", JsonValue.from("bar"))
+                                    .putAdditionalProperty("cpu_seconds", JsonValue.from("bar"))
+                                    .putAdditionalProperty("region", JsonValue.from("bar"))
+                                    .build()
+                            )
                             .build()
                     )
                 )

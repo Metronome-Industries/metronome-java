@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -31,10 +32,14 @@ class OverrideTest {
                         Override.OverrideSpecifier.builder()
                             .commitIds(listOf("string"))
                             .presentationGroupValues(
-                                Override.OverrideSpecifier.PresentationGroupValues.builder().build()
+                                Override.OverrideSpecifier.PresentationGroupValues.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .pricingGroupValues(
-                                Override.OverrideSpecifier.PricingGroupValues.builder().build()
+                                Override.OverrideSpecifier.PricingGroupValues.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .productTags(listOf("string"))
@@ -53,7 +58,11 @@ class OverrideTest {
                                 .name("name")
                                 .build()
                         )
-                        .customRate(Override.OverwriteRate.CustomRate.builder().build())
+                        .customRate(
+                            Override.OverwriteRate.CustomRate.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .isProrated(true)
                         .price(0.0)
                         .quantity(0.0)
@@ -73,7 +82,11 @@ class OverrideTest {
                 .target(Override.Target.COMMIT_RATE)
                 .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                 .type(Override.Type.OVERWRITE)
-                .value(Override.Value.builder().build())
+                .value(
+                    Override.Value.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .build()
         assertThat(override).isNotNull
         assertThat(override.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -98,10 +111,14 @@ class OverrideTest {
                 Override.OverrideSpecifier.builder()
                     .commitIds(listOf("string"))
                     .presentationGroupValues(
-                        Override.OverrideSpecifier.PresentationGroupValues.builder().build()
+                        Override.OverrideSpecifier.PresentationGroupValues.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
                     )
                     .pricingGroupValues(
-                        Override.OverrideSpecifier.PricingGroupValues.builder().build()
+                        Override.OverrideSpecifier.PricingGroupValues.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
                     )
                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .productTags(listOf("string"))
@@ -119,7 +136,11 @@ class OverrideTest {
                             .name("name")
                             .build()
                     )
-                    .customRate(Override.OverwriteRate.CustomRate.builder().build())
+                    .customRate(
+                        Override.OverwriteRate.CustomRate.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .isProrated(true)
                     .price(0.0)
                     .quantity(0.0)
@@ -141,6 +162,9 @@ class OverrideTest {
         assertThat(override.tiers().get())
             .containsExactly(Tier.builder().price(0.0).size(0.0).build())
         assertThat(override.type()).contains(Override.Type.OVERWRITE)
-        assertThat(override.value()).contains(Override.Value.builder().build())
+        assertThat(override.value())
+            .contains(
+                Override.Value.builder().putAdditionalProperty("foo", JsonValue.from("bar")).build()
+            )
     }
 }

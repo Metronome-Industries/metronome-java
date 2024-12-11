@@ -4,6 +4,7 @@ package com.metronome.api.services.blocking.contracts.rateCards
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import com.metronome.api.models.ContractRateCardRateListParams
 import java.time.OffsetDateTime
@@ -56,12 +57,18 @@ class RateServiceTest {
                             .build()
                     )
                     .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
-                    .customRate(ContractRateCardRateAddParams.CustomRate.builder().build())
+                    .customRate(
+                        ContractRateCardRateAddParams.CustomRate.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .isProrated(true)
                     .price(0.0)
                     .pricingGroupValues(
-                        ContractRateCardRateAddParams.PricingGroupValues.builder().build()
+                        ContractRateCardRateAddParams.PricingGroupValues.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
                     )
                     .quantity(0.0)
                     .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
@@ -105,6 +112,7 @@ class RateServiceTest {
                                 .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                                 .customRate(
                                     ContractRateCardRateAddManyParams.Rate.CustomRate.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -113,6 +121,7 @@ class RateServiceTest {
                                 .pricingGroupValues(
                                     ContractRateCardRateAddManyParams.Rate.PricingGroupValues
                                         .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
                                 .quantity(0.0)

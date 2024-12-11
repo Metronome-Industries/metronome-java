@@ -4,6 +4,7 @@ package com.metronome.api.services.blocking
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import com.metronome.api.models.CreditGrantListCreditTypesParams
 import com.metronome.api.models.CreditGrantListParams
@@ -42,7 +43,11 @@ class CreditGrantServiceTest {
                     )
                     .priority(0.0)
                     .creditGrantType("credit_grant_type")
-                    .customFields(CreditGrantCreateParams.CustomFields.builder().build())
+                    .customFields(
+                        CreditGrantCreateParams.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .invoiceDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .productIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))

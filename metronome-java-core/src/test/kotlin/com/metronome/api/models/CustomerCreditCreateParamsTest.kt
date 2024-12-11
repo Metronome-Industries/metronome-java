@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -32,7 +33,11 @@ class CustomerCreditCreateParamsTest {
             .applicableContractIds(listOf("string"))
             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
             .applicableProductTags(listOf("string"))
-            .customFields(CustomerCreditCreateParams.CustomFields.builder().build())
+            .customFields(
+                CustomerCreditCreateParams.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
             .description("description")
             .name("x")
             .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -65,7 +70,11 @@ class CustomerCreditCreateParamsTest {
                 .applicableContractIds(listOf("string"))
                 .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                 .applicableProductTags(listOf("string"))
-                .customFields(CustomerCreditCreateParams.CustomFields.builder().build())
+                .customFields(
+                    CustomerCreditCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .description("description")
                 .name("x")
                 .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -97,7 +106,11 @@ class CustomerCreditCreateParamsTest {
             .isEqualTo(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
         assertThat(body.applicableProductTags()).isEqualTo(listOf("string"))
         assertThat(body.customFields())
-            .isEqualTo(CustomerCreditCreateParams.CustomFields.builder().build())
+            .isEqualTo(
+                CustomerCreditCreateParams.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(body.description()).isEqualTo("description")
         assertThat(body.name()).isEqualTo("x")
         assertThat(body.netsuiteSalesOrderId()).isEqualTo("netsuite_sales_order_id")

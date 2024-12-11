@@ -15,6 +15,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import com.metronome.api.client.MetronomeClient
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonString
+import com.metronome.api.core.JsonValue
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.jsonMapper
 import com.metronome.api.errors.BadRequestException
@@ -102,7 +103,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Commit.CustomFields.builder().build()
+                                ContractCreateParams.Commit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .invoiceSchedule(
@@ -185,7 +188,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Credit.CustomFields.builder().build()
+                                ContractCreateParams.Credit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .name("x")
@@ -195,7 +200,11 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
-                .customFields(ContractCreateParams.CustomFields.builder().build())
+                .customFields(
+                    ContractCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .discounts(
                     listOf(
                         ContractCreateParams.Discount.builder()
@@ -273,12 +282,20 @@ class ErrorHandlingTest {
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PricingGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -295,6 +312,7 @@ class ErrorHandlingTest {
                                     .customRate(
                                         ContractCreateParams.Override.OverwriteRate.CustomRate
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
                                     .isProrated(true)
@@ -327,6 +345,7 @@ class ErrorHandlingTest {
                             .unitPrice(0.0)
                             .customFields(
                                 ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .description("description")
@@ -511,7 +530,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Commit.CustomFields.builder().build()
+                                ContractCreateParams.Commit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .invoiceSchedule(
@@ -594,7 +615,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Credit.CustomFields.builder().build()
+                                ContractCreateParams.Credit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .name("x")
@@ -604,7 +627,11 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
-                .customFields(ContractCreateParams.CustomFields.builder().build())
+                .customFields(
+                    ContractCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .discounts(
                     listOf(
                         ContractCreateParams.Discount.builder()
@@ -682,12 +709,20 @@ class ErrorHandlingTest {
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PricingGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -704,6 +739,7 @@ class ErrorHandlingTest {
                                     .customRate(
                                         ContractCreateParams.Override.OverwriteRate.CustomRate
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
                                     .isProrated(true)
@@ -736,6 +772,7 @@ class ErrorHandlingTest {
                             .unitPrice(0.0)
                             .customFields(
                                 ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .description("description")
@@ -921,7 +958,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Commit.CustomFields.builder().build()
+                                ContractCreateParams.Commit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .invoiceSchedule(
@@ -1004,7 +1043,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Credit.CustomFields.builder().build()
+                                ContractCreateParams.Credit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .name("x")
@@ -1014,7 +1055,11 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
-                .customFields(ContractCreateParams.CustomFields.builder().build())
+                .customFields(
+                    ContractCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .discounts(
                     listOf(
                         ContractCreateParams.Discount.builder()
@@ -1092,12 +1137,20 @@ class ErrorHandlingTest {
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PricingGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1114,6 +1167,7 @@ class ErrorHandlingTest {
                                     .customRate(
                                         ContractCreateParams.Override.OverwriteRate.CustomRate
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
                                     .isProrated(true)
@@ -1146,6 +1200,7 @@ class ErrorHandlingTest {
                             .unitPrice(0.0)
                             .customFields(
                                 ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .description("description")
@@ -1331,7 +1386,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Commit.CustomFields.builder().build()
+                                ContractCreateParams.Commit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .invoiceSchedule(
@@ -1414,7 +1471,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Credit.CustomFields.builder().build()
+                                ContractCreateParams.Credit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .name("x")
@@ -1424,7 +1483,11 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
-                .customFields(ContractCreateParams.CustomFields.builder().build())
+                .customFields(
+                    ContractCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .discounts(
                     listOf(
                         ContractCreateParams.Discount.builder()
@@ -1502,12 +1565,20 @@ class ErrorHandlingTest {
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PricingGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1524,6 +1595,7 @@ class ErrorHandlingTest {
                                     .customRate(
                                         ContractCreateParams.Override.OverwriteRate.CustomRate
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
                                     .isProrated(true)
@@ -1556,6 +1628,7 @@ class ErrorHandlingTest {
                             .unitPrice(0.0)
                             .customFields(
                                 ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .description("description")
@@ -1745,7 +1818,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Commit.CustomFields.builder().build()
+                                ContractCreateParams.Commit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .invoiceSchedule(
@@ -1828,7 +1903,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Credit.CustomFields.builder().build()
+                                ContractCreateParams.Credit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .name("x")
@@ -1838,7 +1915,11 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
-                .customFields(ContractCreateParams.CustomFields.builder().build())
+                .customFields(
+                    ContractCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .discounts(
                     listOf(
                         ContractCreateParams.Discount.builder()
@@ -1916,12 +1997,20 @@ class ErrorHandlingTest {
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PricingGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1938,6 +2027,7 @@ class ErrorHandlingTest {
                                     .customRate(
                                         ContractCreateParams.Override.OverwriteRate.CustomRate
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
                                     .isProrated(true)
@@ -1970,6 +2060,7 @@ class ErrorHandlingTest {
                             .unitPrice(0.0)
                             .customFields(
                                 ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .description("description")
@@ -2155,7 +2246,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Commit.CustomFields.builder().build()
+                                ContractCreateParams.Commit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .invoiceSchedule(
@@ -2238,7 +2331,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Credit.CustomFields.builder().build()
+                                ContractCreateParams.Credit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .name("x")
@@ -2248,7 +2343,11 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
-                .customFields(ContractCreateParams.CustomFields.builder().build())
+                .customFields(
+                    ContractCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .discounts(
                     listOf(
                         ContractCreateParams.Discount.builder()
@@ -2326,12 +2425,20 @@ class ErrorHandlingTest {
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PricingGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2348,6 +2455,7 @@ class ErrorHandlingTest {
                                     .customRate(
                                         ContractCreateParams.Override.OverwriteRate.CustomRate
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
                                     .isProrated(true)
@@ -2380,6 +2488,7 @@ class ErrorHandlingTest {
                             .unitPrice(0.0)
                             .customFields(
                                 ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .description("description")
@@ -2569,7 +2678,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Commit.CustomFields.builder().build()
+                                ContractCreateParams.Commit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .invoiceSchedule(
@@ -2652,7 +2763,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Credit.CustomFields.builder().build()
+                                ContractCreateParams.Credit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .name("x")
@@ -2662,7 +2775,11 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
-                .customFields(ContractCreateParams.CustomFields.builder().build())
+                .customFields(
+                    ContractCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .discounts(
                     listOf(
                         ContractCreateParams.Discount.builder()
@@ -2740,12 +2857,20 @@ class ErrorHandlingTest {
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PricingGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2762,6 +2887,7 @@ class ErrorHandlingTest {
                                     .customRate(
                                         ContractCreateParams.Override.OverwriteRate.CustomRate
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
                                     .isProrated(true)
@@ -2794,6 +2920,7 @@ class ErrorHandlingTest {
                             .unitPrice(0.0)
                             .customFields(
                                 ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .description("description")
@@ -2979,7 +3106,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Commit.CustomFields.builder().build()
+                                ContractCreateParams.Commit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .invoiceSchedule(
@@ -3062,7 +3191,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Credit.CustomFields.builder().build()
+                                ContractCreateParams.Credit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .name("x")
@@ -3072,7 +3203,11 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
-                .customFields(ContractCreateParams.CustomFields.builder().build())
+                .customFields(
+                    ContractCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .discounts(
                     listOf(
                         ContractCreateParams.Discount.builder()
@@ -3150,12 +3285,20 @@ class ErrorHandlingTest {
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PricingGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -3172,6 +3315,7 @@ class ErrorHandlingTest {
                                     .customRate(
                                         ContractCreateParams.Override.OverwriteRate.CustomRate
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
                                     .isProrated(true)
@@ -3204,6 +3348,7 @@ class ErrorHandlingTest {
                             .unitPrice(0.0)
                             .customFields(
                                 ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .description("description")
@@ -3393,7 +3538,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Commit.CustomFields.builder().build()
+                                ContractCreateParams.Commit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .invoiceSchedule(
@@ -3476,7 +3623,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Credit.CustomFields.builder().build()
+                                ContractCreateParams.Credit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .name("x")
@@ -3486,7 +3635,11 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
-                .customFields(ContractCreateParams.CustomFields.builder().build())
+                .customFields(
+                    ContractCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .discounts(
                     listOf(
                         ContractCreateParams.Discount.builder()
@@ -3564,12 +3717,20 @@ class ErrorHandlingTest {
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PricingGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -3586,6 +3747,7 @@ class ErrorHandlingTest {
                                     .customRate(
                                         ContractCreateParams.Override.OverwriteRate.CustomRate
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
                                     .isProrated(true)
@@ -3618,6 +3780,7 @@ class ErrorHandlingTest {
                             .unitPrice(0.0)
                             .customFields(
                                 ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .description("description")
@@ -3808,7 +3971,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Commit.CustomFields.builder().build()
+                                ContractCreateParams.Commit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .invoiceSchedule(
@@ -3891,7 +4056,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Credit.CustomFields.builder().build()
+                                ContractCreateParams.Credit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .name("x")
@@ -3901,7 +4068,11 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
-                .customFields(ContractCreateParams.CustomFields.builder().build())
+                .customFields(
+                    ContractCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .discounts(
                     listOf(
                         ContractCreateParams.Discount.builder()
@@ -3979,12 +4150,20 @@ class ErrorHandlingTest {
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PricingGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -4001,6 +4180,7 @@ class ErrorHandlingTest {
                                     .customRate(
                                         ContractCreateParams.Override.OverwriteRate.CustomRate
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
                                     .isProrated(true)
@@ -4033,6 +4213,7 @@ class ErrorHandlingTest {
                             .unitPrice(0.0)
                             .customFields(
                                 ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .description("description")
@@ -4217,7 +4398,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Commit.CustomFields.builder().build()
+                                ContractCreateParams.Commit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .invoiceSchedule(
@@ -4300,7 +4483,9 @@ class ErrorHandlingTest {
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
                             .customFields(
-                                ContractCreateParams.Credit.CustomFields.builder().build()
+                                ContractCreateParams.Credit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
                             )
                             .description("description")
                             .name("x")
@@ -4310,7 +4495,11 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
-                .customFields(ContractCreateParams.CustomFields.builder().build())
+                .customFields(
+                    ContractCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .discounts(
                     listOf(
                         ContractCreateParams.Discount.builder()
@@ -4388,12 +4577,20 @@ class ErrorHandlingTest {
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PresentationGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .PricingGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -4410,6 +4607,7 @@ class ErrorHandlingTest {
                                     .customRate(
                                         ContractCreateParams.Override.OverwriteRate.CustomRate
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
                                     .isProrated(true)
@@ -4442,6 +4640,7 @@ class ErrorHandlingTest {
                             .unitPrice(0.0)
                             .customFields(
                                 ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .description("description")

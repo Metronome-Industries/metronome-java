@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -19,7 +20,11 @@ class PlanListChargesResponseTest {
                         .name("name")
                         .build()
                 )
-                .customFields(PlanListChargesResponse.CustomFields.builder().build())
+                .customFields(
+                    PlanListChargesResponse.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .name("name")
                 .prices(
                     listOf(
@@ -58,7 +63,11 @@ class PlanListChargesResponseTest {
                     .build()
             )
         assertThat(planListChargesResponse.customFields())
-            .isEqualTo(PlanListChargesResponse.CustomFields.builder().build())
+            .isEqualTo(
+                PlanListChargesResponse.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(planListChargesResponse.name()).isEqualTo("name")
         assertThat(planListChargesResponse.prices())
             .containsExactly(

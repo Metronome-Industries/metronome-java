@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -31,13 +32,16 @@ class ContractRateCardRateAddManyParamsTest {
                         )
                         .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                         .customRate(
-                            ContractRateCardRateAddManyParams.Rate.CustomRate.builder().build()
+                            ContractRateCardRateAddManyParams.Rate.CustomRate.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
                         )
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .isProrated(true)
                         .price(0.0)
                         .pricingGroupValues(
                             ContractRateCardRateAddManyParams.Rate.PricingGroupValues.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
                         .quantity(0.0)
@@ -73,13 +77,16 @@ class ContractRateCardRateAddManyParamsTest {
                             )
                             .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                             .customRate(
-                                ContractRateCardRateAddManyParams.Rate.CustomRate.builder().build()
+                                ContractRateCardRateAddManyParams.Rate.CustomRate.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
                             )
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .isProrated(true)
                             .price(0.0)
                             .pricingGroupValues(
                                 ContractRateCardRateAddManyParams.Rate.PricingGroupValues.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .quantity(0.0)
@@ -111,13 +118,16 @@ class ContractRateCardRateAddManyParamsTest {
                         )
                         .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                         .customRate(
-                            ContractRateCardRateAddManyParams.Rate.CustomRate.builder().build()
+                            ContractRateCardRateAddManyParams.Rate.CustomRate.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
                         )
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .isProrated(true)
                         .price(0.0)
                         .pricingGroupValues(
                             ContractRateCardRateAddManyParams.Rate.PricingGroupValues.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
                         .quantity(0.0)

@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -13,7 +14,11 @@ class CustomerDetailTest {
         val customerDetail =
             CustomerDetail.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customFields(CustomerDetail.CustomFields.builder().build())
+                .customFields(
+                    CustomerDetail.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .customerConfig(
                     CustomerDetail.CustomerConfig.builder()
                         .salesforceAccountId("salesforce_account_id")
@@ -32,7 +37,11 @@ class CustomerDetailTest {
         assertThat(customerDetail).isNotNull
         assertThat(customerDetail.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(customerDetail.customFields())
-            .isEqualTo(CustomerDetail.CustomFields.builder().build())
+            .isEqualTo(
+                CustomerDetail.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(customerDetail.customerConfig())
             .isEqualTo(
                 CustomerDetail.CustomerConfig.builder()

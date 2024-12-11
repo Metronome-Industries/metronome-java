@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -25,10 +26,18 @@ class ContractRateCardRateListResponseTest {
                                 .name("name")
                                 .build()
                         )
-                        .customRate(Rate.CustomRate.builder().build())
+                        .customRate(
+                            Rate.CustomRate.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .isProrated(true)
                         .price(0.0)
-                        .pricingGroupValues(Rate.PricingGroupValues.builder().build())
+                        .pricingGroupValues(
+                            Rate.PricingGroupValues.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .quantity(0.0)
                         .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                         .useListPrices(true)
@@ -44,7 +53,9 @@ class ContractRateCardRateListResponseTest {
                 )
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .pricingGroupValues(
-                    ContractRateCardRateListResponse.PricingGroupValues.builder().build()
+                    ContractRateCardRateListResponse.PricingGroupValues.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
                 )
                 .build()
         assertThat(contractRateCardRateListResponse).isNotNull
@@ -63,10 +74,18 @@ class ContractRateCardRateListResponseTest {
                             .name("name")
                             .build()
                     )
-                    .customRate(Rate.CustomRate.builder().build())
+                    .customRate(
+                        Rate.CustomRate.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .isProrated(true)
                     .price(0.0)
-                    .pricingGroupValues(Rate.PricingGroupValues.builder().build())
+                    .pricingGroupValues(
+                        Rate.PricingGroupValues.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .quantity(0.0)
                     .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                     .useListPrices(true)
@@ -85,6 +104,10 @@ class ContractRateCardRateListResponseTest {
         assertThat(contractRateCardRateListResponse.endingBefore())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(contractRateCardRateListResponse.pricingGroupValues())
-            .contains(ContractRateCardRateListResponse.PricingGroupValues.builder().build())
+            .contains(
+                ContractRateCardRateListResponse.PricingGroupValues.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
     }
 }

@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -14,11 +15,17 @@ class UsageIngestParamsTest {
             .usage(
                 listOf(
                     UsageIngestParams.Usage.builder()
-                        .customerId("x")
-                        .eventType("x")
-                        .timestamp("timestamp")
-                        .transactionId("x")
-                        .properties(UsageIngestParams.Usage.Properties.builder().build())
+                        .customerId("team@example.com")
+                        .eventType("heartbeat")
+                        .timestamp("2021-01-01T00:00:00Z")
+                        .transactionId("2021-01-01T00:00:00Z_cluster42")
+                        .properties(
+                            UsageIngestParams.Usage.Properties.builder()
+                                .putAdditionalProperty("cluster_id", JsonValue.from("bar"))
+                                .putAdditionalProperty("cpu_seconds", JsonValue.from("bar"))
+                                .putAdditionalProperty("region", JsonValue.from("bar"))
+                                .build()
+                        )
                         .build()
                 )
             )
@@ -32,11 +39,17 @@ class UsageIngestParamsTest {
                 .usage(
                     listOf(
                         UsageIngestParams.Usage.builder()
-                            .customerId("x")
-                            .eventType("x")
-                            .timestamp("timestamp")
-                            .transactionId("x")
-                            .properties(UsageIngestParams.Usage.Properties.builder().build())
+                            .customerId("team@example.com")
+                            .eventType("heartbeat")
+                            .timestamp("2021-01-01T00:00:00Z")
+                            .transactionId("2021-01-01T00:00:00Z_cluster42")
+                            .properties(
+                                UsageIngestParams.Usage.Properties.builder()
+                                    .putAdditionalProperty("cluster_id", JsonValue.from("bar"))
+                                    .putAdditionalProperty("cpu_seconds", JsonValue.from("bar"))
+                                    .putAdditionalProperty("region", JsonValue.from("bar"))
+                                    .build()
+                            )
                             .build()
                     )
                 )
@@ -47,11 +60,17 @@ class UsageIngestParamsTest {
             .isEqualTo(
                 listOf(
                     UsageIngestParams.Usage.builder()
-                        .customerId("x")
-                        .eventType("x")
-                        .timestamp("timestamp")
-                        .transactionId("x")
-                        .properties(UsageIngestParams.Usage.Properties.builder().build())
+                        .customerId("team@example.com")
+                        .eventType("heartbeat")
+                        .timestamp("2021-01-01T00:00:00Z")
+                        .transactionId("2021-01-01T00:00:00Z_cluster42")
+                        .properties(
+                            UsageIngestParams.Usage.Properties.builder()
+                                .putAdditionalProperty("cluster_id", JsonValue.from("bar"))
+                                .putAdditionalProperty("cpu_seconds", JsonValue.from("bar"))
+                                .putAdditionalProperty("region", JsonValue.from("bar"))
+                                .build()
+                        )
                         .build()
                 )
             )
@@ -64,10 +83,10 @@ class UsageIngestParamsTest {
                 .usage(
                     listOf(
                         UsageIngestParams.Usage.builder()
-                            .customerId("x")
-                            .eventType("x")
-                            .timestamp("timestamp")
-                            .transactionId("x")
+                            .customerId("team@example.com")
+                            .eventType("heartbeat")
+                            .timestamp("2021-01-01T00:00:00Z")
+                            .transactionId("2021-01-01T00:00:00Z_cluster42")
                             .build()
                     )
                 )
@@ -78,10 +97,10 @@ class UsageIngestParamsTest {
             .isEqualTo(
                 listOf(
                     UsageIngestParams.Usage.builder()
-                        .customerId("x")
-                        .eventType("x")
-                        .timestamp("timestamp")
-                        .transactionId("x")
+                        .customerId("team@example.com")
+                        .eventType("heartbeat")
+                        .timestamp("2021-01-01T00:00:00Z")
+                        .transactionId("2021-01-01T00:00:00Z_cluster42")
                         .build()
                 )
             )

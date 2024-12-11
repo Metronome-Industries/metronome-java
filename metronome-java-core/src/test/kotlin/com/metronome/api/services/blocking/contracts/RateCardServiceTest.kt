@@ -43,7 +43,11 @@ class RateCardServiceTest {
                                 .build()
                         )
                     )
-                    .customFields(ContractRateCardCreateParams.CustomFields.builder().build())
+                    .customFields(
+                        ContractRateCardCreateParams.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .description("description")
                     .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                     .build()
@@ -91,7 +95,11 @@ class RateCardServiceTest {
                                 .build()
                         )
                     )
-                    .customFields(ContractRateCardUpdateParams.CustomFields.builder().build())
+                    .customFields(
+                        ContractRateCardUpdateParams.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .description("description")
                     .name("name")
                     .build()
@@ -139,12 +147,14 @@ class RateCardServiceTest {
                                     ContractRateCardRetrieveRateScheduleParams.Selector
                                         .PartialPricingGroupValues
                                         .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
                                 .pricingGroupValues(
                                     ContractRateCardRetrieveRateScheduleParams.Selector
                                         .PricingGroupValues
                                         .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

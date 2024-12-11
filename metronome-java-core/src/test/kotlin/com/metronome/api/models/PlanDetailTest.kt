@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,7 +13,11 @@ class PlanDetailTest {
         val planDetail =
             PlanDetail.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customFields(PlanDetail.CustomFields.builder().build())
+                .customFields(
+                    PlanDetail.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .name("name")
                 .creditGrants(
                     listOf(
@@ -80,7 +85,12 @@ class PlanDetailTest {
                 .build()
         assertThat(planDetail).isNotNull
         assertThat(planDetail.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(planDetail.customFields()).isEqualTo(PlanDetail.CustomFields.builder().build())
+        assertThat(planDetail.customFields())
+            .isEqualTo(
+                PlanDetail.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(planDetail.name()).isEqualTo("name")
         assertThat(planDetail.creditGrants().get())
             .containsExactly(

@@ -4,6 +4,7 @@ package com.metronome.api.services.blocking
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -90,7 +91,11 @@ class CustomFieldServiceTest {
         val customFieldService = client.customFields()
         customFieldService.setValues(
             CustomFieldSetValuesParams.builder()
-                .customFields(CustomFieldSetValuesParams.CustomFields.builder().build())
+                .customFields(
+                    CustomFieldSetValuesParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .entity(CustomFieldSetValuesParams.Entity.ALERT)
                 .entityId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .build()

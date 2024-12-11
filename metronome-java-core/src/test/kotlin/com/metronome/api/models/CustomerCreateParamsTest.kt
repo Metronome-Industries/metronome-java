@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -26,7 +27,11 @@ class CustomerCreateParamsTest {
                     )
                     .build()
             )
-            .customFields(CustomerCreateParams.CustomFields.builder().build())
+            .customFields(
+                CustomerCreateParams.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
             .externalId("x")
             .ingestAliases(listOf("x"))
             .build()
@@ -51,7 +56,11 @@ class CustomerCreateParamsTest {
                         )
                         .build()
                 )
-                .customFields(CustomerCreateParams.CustomFields.builder().build())
+                .customFields(
+                    CustomerCreateParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .externalId("x")
                 .ingestAliases(listOf("x"))
                 .build()
@@ -74,7 +83,11 @@ class CustomerCreateParamsTest {
                     .build()
             )
         assertThat(body.customFields())
-            .isEqualTo(CustomerCreateParams.CustomFields.builder().build())
+            .isEqualTo(
+                CustomerCreateParams.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(body.externalId()).isEqualTo("x")
         assertThat(body.ingestAliases()).isEqualTo(listOf("x"))
     }

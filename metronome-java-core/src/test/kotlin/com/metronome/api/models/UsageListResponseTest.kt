@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -21,7 +22,11 @@ class UsageListResponseTest {
                             .endTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .startTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .value(0.0)
-                            .groups(UsageListResponse.Data.Groups.builder().build())
+                            .groups(
+                                UsageListResponse.Data.Groups.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from(0))
+                                    .build()
+                            )
                             .build()
                     )
                 )
@@ -37,7 +42,11 @@ class UsageListResponseTest {
                     .endTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .startTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .value(0.0)
-                    .groups(UsageListResponse.Data.Groups.builder().build())
+                    .groups(
+                        UsageListResponse.Data.Groups.builder()
+                            .putAdditionalProperty("foo", JsonValue.from(0))
+                            .build()
+                    )
                     .build()
             )
         assertThat(usageListResponse.nextPage()).contains("next_page")

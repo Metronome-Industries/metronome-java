@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -36,12 +37,14 @@ class ContractCreateHistoricalInvoicesParamsTest {
                                         ContractCreateHistoricalInvoicesParams.Invoice.UsageLineItem
                                             .PresentationGroupValues
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
                                     .pricingGroupValues(
                                         ContractCreateHistoricalInvoicesParams.Invoice.UsageLineItem
                                             .PricingGroupValues
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
                                     .quantity(0.0)
@@ -72,6 +75,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                         )
                         .customFields(
                             ContractCreateHistoricalInvoicesParams.Invoice.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
                         .build()
@@ -110,6 +114,10 @@ class ContractCreateHistoricalInvoicesParamsTest {
                                                 .UsageLineItem
                                                 .PresentationGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .pricingGroupValues(
@@ -117,6 +125,10 @@ class ContractCreateHistoricalInvoicesParamsTest {
                                                 .UsageLineItem
                                                 .PricingGroupValues
                                                 .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
                                                 .build()
                                         )
                                         .quantity(0.0)
@@ -154,6 +166,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                             .customFields(
                                 ContractCreateHistoricalInvoicesParams.Invoice.CustomFields
                                     .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .build()
@@ -188,12 +201,14 @@ class ContractCreateHistoricalInvoicesParamsTest {
                                         ContractCreateHistoricalInvoicesParams.Invoice.UsageLineItem
                                             .PresentationGroupValues
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
                                     .pricingGroupValues(
                                         ContractCreateHistoricalInvoicesParams.Invoice.UsageLineItem
                                             .PricingGroupValues
                                             .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
                                     .quantity(0.0)
@@ -224,6 +239,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                         )
                         .customFields(
                             ContractCreateHistoricalInvoicesParams.Invoice.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
                         .build()

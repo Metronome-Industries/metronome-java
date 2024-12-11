@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -19,14 +20,22 @@ class CustomerListBillableMetricsResponseTest {
                 .aggregationKey("aggregation_key")
                 .aggregationType(CustomerListBillableMetricsResponse.AggregationType.COUNT)
                 .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .customFields(CustomerListBillableMetricsResponse.CustomFields.builder().build())
+                .customFields(
+                    CustomerListBillableMetricsResponse.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .eventTypeFilter(
                     EventTypeFilter.builder()
                         .inValues(listOf("string"))
                         .notInValues(listOf("string"))
                         .build()
                 )
-                .filter(CustomerListBillableMetricsResponse.Filter.builder().build())
+                .filter(
+                    CustomerListBillableMetricsResponse.Filter.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .groupBy(listOf("string"))
                 .groupKeys(listOf(listOf("string")))
                 .propertyFilters(
@@ -54,7 +63,11 @@ class CustomerListBillableMetricsResponseTest {
         assertThat(customerListBillableMetricsResponse.archivedAt())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(customerListBillableMetricsResponse.customFields())
-            .contains(CustomerListBillableMetricsResponse.CustomFields.builder().build())
+            .contains(
+                CustomerListBillableMetricsResponse.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(customerListBillableMetricsResponse.eventTypeFilter())
             .contains(
                 EventTypeFilter.builder()
@@ -63,7 +76,11 @@ class CustomerListBillableMetricsResponseTest {
                     .build()
             )
         assertThat(customerListBillableMetricsResponse.filter())
-            .contains(CustomerListBillableMetricsResponse.Filter.builder().build())
+            .contains(
+                CustomerListBillableMetricsResponse.Filter.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .build()
+            )
         assertThat(customerListBillableMetricsResponse.groupBy().get()).containsExactly("string")
         assertThat(customerListBillableMetricsResponse.groupKeys().get())
             .containsExactly(listOf("string"))

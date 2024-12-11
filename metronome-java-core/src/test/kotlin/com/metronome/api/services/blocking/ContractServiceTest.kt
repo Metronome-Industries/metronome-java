@@ -4,6 +4,7 @@ package com.metronome.api.services.blocking
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.core.JsonValue
 import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
@@ -73,7 +74,9 @@ class ContractServiceTest {
                                 )
                                 .applicableProductTags(listOf("string"))
                                 .customFields(
-                                    ContractCreateParams.Commit.CustomFields.builder().build()
+                                    ContractCreateParams.Commit.CustomFields.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
                                 )
                                 .description("description")
                                 .invoiceSchedule(
@@ -166,7 +169,9 @@ class ContractServiceTest {
                                 )
                                 .applicableProductTags(listOf("string"))
                                 .customFields(
-                                    ContractCreateParams.Credit.CustomFields.builder().build()
+                                    ContractCreateParams.Credit.CustomFields.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
                                 )
                                 .description("description")
                                 .name("x")
@@ -176,7 +181,11 @@ class ContractServiceTest {
                                 .build()
                         )
                     )
-                    .customFields(ContractCreateParams.CustomFields.builder().build())
+                    .customFields(
+                        ContractCreateParams.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .discounts(
                         listOf(
                             ContractCreateParams.Discount.builder()
@@ -256,12 +265,20 @@ class ContractServiceTest {
                                                 ContractCreateParams.Override.OverrideSpecifier
                                                     .PresentationGroupValues
                                                     .builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("string")
+                                                    )
                                                     .build()
                                             )
                                             .pricingGroupValues(
                                                 ContractCreateParams.Override.OverrideSpecifier
                                                     .PricingGroupValues
                                                     .builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("string")
+                                                    )
                                                     .build()
                                             )
                                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -279,6 +296,7 @@ class ContractServiceTest {
                                         .customRate(
                                             ContractCreateParams.Override.OverwriteRate.CustomRate
                                                 .builder()
+                                                .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .isProrated(true)
@@ -311,6 +329,7 @@ class ContractServiceTest {
                                 .unitPrice(0.0)
                                 .customFields(
                                     ContractCreateParams.ProfessionalService.CustomFields.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
                                 .description("description")
@@ -560,7 +579,9 @@ class ContractServiceTest {
                                 )
                                 .applicableProductTags(listOf("string"))
                                 .customFields(
-                                    ContractAmendParams.Commit.CustomFields.builder().build()
+                                    ContractAmendParams.Commit.CustomFields.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
                                 )
                                 .description("description")
                                 .invoiceSchedule(
@@ -653,7 +674,9 @@ class ContractServiceTest {
                                 )
                                 .applicableProductTags(listOf("string"))
                                 .customFields(
-                                    ContractAmendParams.Credit.CustomFields.builder().build()
+                                    ContractAmendParams.Credit.CustomFields.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
                                 )
                                 .description("description")
                                 .name("x")
@@ -663,7 +686,11 @@ class ContractServiceTest {
                                 .build()
                         )
                     )
-                    .customFields(ContractAmendParams.CustomFields.builder().build())
+                    .customFields(
+                        ContractAmendParams.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .discounts(
                         listOf(
                             ContractAmendParams.Discount.builder()
@@ -737,12 +764,20 @@ class ContractServiceTest {
                                                 ContractAmendParams.Override.OverrideSpecifier
                                                     .PresentationGroupValues
                                                     .builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("string")
+                                                    )
                                                     .build()
                                             )
                                             .pricingGroupValues(
                                                 ContractAmendParams.Override.OverrideSpecifier
                                                     .PricingGroupValues
                                                     .builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("string")
+                                                    )
                                                     .build()
                                             )
                                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -759,6 +794,7 @@ class ContractServiceTest {
                                         .customRate(
                                             ContractAmendParams.Override.OverwriteRate.CustomRate
                                                 .builder()
+                                                .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .isProrated(true)
@@ -791,6 +827,7 @@ class ContractServiceTest {
                                 .unitPrice(0.0)
                                 .customFields(
                                     ContractAmendParams.ProfessionalService.CustomFields.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
                                 .description("description")
@@ -950,6 +987,10 @@ class ContractServiceTest {
                                                     .UsageLineItem
                                                     .PresentationGroupValues
                                                     .builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("string")
+                                                    )
                                                     .build()
                                             )
                                             .pricingGroupValues(
@@ -957,6 +998,10 @@ class ContractServiceTest {
                                                     .UsageLineItem
                                                     .PricingGroupValues
                                                     .builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("string")
+                                                    )
                                                     .build()
                                             )
                                             .quantity(0.0)
@@ -995,6 +1040,7 @@ class ContractServiceTest {
                                 .customFields(
                                     ContractCreateHistoricalInvoicesParams.Invoice.CustomFields
                                         .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
                                 .build()
@@ -1054,11 +1100,13 @@ class ContractServiceTest {
                                     ContractRetrieveRateScheduleParams.Selector
                                         .PartialPricingGroupValues
                                         .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
                                 .pricingGroupValues(
                                     ContractRetrieveRateScheduleParams.Selector.PricingGroupValues
                                         .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
