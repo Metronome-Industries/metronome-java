@@ -729,17 +729,17 @@ constructor(
 
         companion object {
 
-            @JvmField val FIXED = Type(JsonField.of("FIXED"))
+            @JvmField val FIXED = of("FIXED")
 
-            @JvmField val USAGE = Type(JsonField.of("USAGE"))
+            @JvmField val USAGE = of("USAGE")
 
-            @JvmField val COMPOSITE = Type(JsonField.of("COMPOSITE"))
+            @JvmField val COMPOSITE = of("COMPOSITE")
 
-            @JvmField val SUBSCRIPTION = Type(JsonField.of("SUBSCRIPTION"))
+            @JvmField val SUBSCRIPTION = of("SUBSCRIPTION")
 
-            @JvmField val PROFESSIONAL_SERVICE = Type(JsonField.of("PROFESSIONAL_SERVICE"))
+            @JvmField val PROFESSIONAL_SERVICE = of("PROFESSIONAL_SERVICE")
 
-            @JvmField val PRO_SERVICE = Type(JsonField.of("PRO_SERVICE"))
+            @JvmField val PRO_SERVICE = of("PRO_SERVICE")
 
             @JvmStatic fun of(value: String) = Type(JsonField.of(value))
         }

@@ -316,15 +316,15 @@ private constructor(
 
         companion object {
 
-            @JvmField val USAGE = ChargeType(JsonField.of("usage"))
+            @JvmField val USAGE = of("usage")
 
-            @JvmField val FIXED = ChargeType(JsonField.of("fixed"))
+            @JvmField val FIXED = of("fixed")
 
-            @JvmField val COMPOSITE = ChargeType(JsonField.of("composite"))
+            @JvmField val COMPOSITE = of("composite")
 
-            @JvmField val MINIMUM = ChargeType(JsonField.of("minimum"))
+            @JvmField val MINIMUM = of("minimum")
 
-            @JvmField val SEAT = ChargeType(JsonField.of("seat"))
+            @JvmField val SEAT = of("seat")
 
             @JvmStatic fun of(value: String) = ChargeType(JsonField.of(value))
         }
@@ -739,9 +739,9 @@ private constructor(
 
             companion object {
 
-                @JvmField val FLOOR = RoundingBehavior(JsonField.of("floor"))
+                @JvmField val FLOOR = of("floor")
 
-                @JvmField val CEILING = RoundingBehavior(JsonField.of("ceiling"))
+                @JvmField val CEILING = of("ceiling")
 
                 @JvmStatic fun of(value: String) = RoundingBehavior(JsonField.of(value))
             }

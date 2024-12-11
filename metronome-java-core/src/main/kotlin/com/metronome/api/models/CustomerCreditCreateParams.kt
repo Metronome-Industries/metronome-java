@@ -885,13 +885,13 @@ constructor(
 
         companion object {
 
-            @JvmField val COMMIT_RATE = RateType(JsonField.of("COMMIT_RATE"))
+            @JvmField val COMMIT_RATE = of("COMMIT_RATE")
 
-            @JvmField val COMMIT_RATE = RateType(JsonField.of("commit_rate"))
+            @JvmField val COMMIT_RATE = of("commit_rate")
 
-            @JvmField val LIST_RATE = RateType(JsonField.of("LIST_RATE"))
+            @JvmField val LIST_RATE = of("LIST_RATE")
 
-            @JvmField val LIST_RATE = RateType(JsonField.of("list_rate"))
+            @JvmField val LIST_RATE = of("list_rate")
 
             @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
         }

@@ -425,11 +425,11 @@ constructor(
 
         companion object {
 
-            @JvmField val INVOICES = Dashboard(JsonField.of("invoices"))
+            @JvmField val INVOICES = of("invoices")
 
-            @JvmField val USAGE = Dashboard(JsonField.of("usage"))
+            @JvmField val USAGE = of("usage")
 
-            @JvmField val CREDITS = Dashboard(JsonField.of("credits"))
+            @JvmField val CREDITS = of("credits")
 
             @JvmStatic fun of(value: String) = Dashboard(JsonField.of(value))
         }
@@ -730,43 +730,43 @@ constructor(
 
             companion object {
 
-                @JvmField val GRAY_DARK = Name(JsonField.of("Gray_dark"))
+                @JvmField val GRAY_DARK = of("Gray_dark")
 
-                @JvmField val GRAY_MEDIUM = Name(JsonField.of("Gray_medium"))
+                @JvmField val GRAY_MEDIUM = of("Gray_medium")
 
-                @JvmField val GRAY_LIGHT = Name(JsonField.of("Gray_light"))
+                @JvmField val GRAY_LIGHT = of("Gray_light")
 
-                @JvmField val GRAY_EXTRALIGHT = Name(JsonField.of("Gray_extralight"))
+                @JvmField val GRAY_EXTRALIGHT = of("Gray_extralight")
 
-                @JvmField val WHITE = Name(JsonField.of("White"))
+                @JvmField val WHITE = of("White")
 
-                @JvmField val PRIMARY_MEDIUM = Name(JsonField.of("Primary_medium"))
+                @JvmField val PRIMARY_MEDIUM = of("Primary_medium")
 
-                @JvmField val PRIMARY_LIGHT = Name(JsonField.of("Primary_light"))
+                @JvmField val PRIMARY_LIGHT = of("Primary_light")
 
-                @JvmField val USAGE_LINE_0 = Name(JsonField.of("UsageLine_0"))
+                @JvmField val USAGE_LINE_0 = of("UsageLine_0")
 
-                @JvmField val USAGE_LINE_1 = Name(JsonField.of("UsageLine_1"))
+                @JvmField val USAGE_LINE_1 = of("UsageLine_1")
 
-                @JvmField val USAGE_LINE_2 = Name(JsonField.of("UsageLine_2"))
+                @JvmField val USAGE_LINE_2 = of("UsageLine_2")
 
-                @JvmField val USAGE_LINE_3 = Name(JsonField.of("UsageLine_3"))
+                @JvmField val USAGE_LINE_3 = of("UsageLine_3")
 
-                @JvmField val USAGE_LINE_4 = Name(JsonField.of("UsageLine_4"))
+                @JvmField val USAGE_LINE_4 = of("UsageLine_4")
 
-                @JvmField val USAGE_LINE_5 = Name(JsonField.of("UsageLine_5"))
+                @JvmField val USAGE_LINE_5 = of("UsageLine_5")
 
-                @JvmField val USAGE_LINE_6 = Name(JsonField.of("UsageLine_6"))
+                @JvmField val USAGE_LINE_6 = of("UsageLine_6")
 
-                @JvmField val USAGE_LINE_7 = Name(JsonField.of("UsageLine_7"))
+                @JvmField val USAGE_LINE_7 = of("UsageLine_7")
 
-                @JvmField val USAGE_LINE_8 = Name(JsonField.of("UsageLine_8"))
+                @JvmField val USAGE_LINE_8 = of("UsageLine_8")
 
-                @JvmField val USAGE_LINE_9 = Name(JsonField.of("UsageLine_9"))
+                @JvmField val USAGE_LINE_9 = of("UsageLine_9")
 
-                @JvmField val PRIMARY_GREEN = Name(JsonField.of("Primary_green"))
+                @JvmField val PRIMARY_GREEN = of("Primary_green")
 
-                @JvmField val PRIMARY_RED = Name(JsonField.of("Primary_red"))
+                @JvmField val PRIMARY_RED = of("Primary_red")
 
                 @JvmStatic fun of(value: String) = Name(JsonField.of(value))
             }

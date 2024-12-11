@@ -313,9 +313,9 @@ constructor(
 
         companion object {
 
-            @JvmField val DATE_ASC = Sort(JsonField.of("date_asc"))
+            @JvmField val DATE_ASC = of("date_asc")
 
-            @JvmField val DATE_DESC = Sort(JsonField.of("date_desc"))
+            @JvmField val DATE_DESC = of("date_desc")
 
             @JvmStatic fun of(value: String) = Sort(JsonField.of(value))
         }
@@ -370,9 +370,9 @@ constructor(
 
         companion object {
 
-            @JvmField val HOUR = WindowSize(JsonField.of("HOUR"))
+            @JvmField val HOUR = of("HOUR")
 
-            @JvmField val DAY = WindowSize(JsonField.of("DAY"))
+            @JvmField val DAY = of("DAY")
 
             @JvmStatic fun of(value: String) = WindowSize(JsonField.of(value))
         }

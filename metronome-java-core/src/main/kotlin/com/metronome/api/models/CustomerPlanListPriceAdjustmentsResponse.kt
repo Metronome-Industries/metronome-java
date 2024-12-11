@@ -172,15 +172,15 @@ private constructor(
 
         companion object {
 
-            @JvmField val USAGE = ChargeType(JsonField.of("usage"))
+            @JvmField val USAGE = of("usage")
 
-            @JvmField val FIXED = ChargeType(JsonField.of("fixed"))
+            @JvmField val FIXED = of("fixed")
 
-            @JvmField val COMPOSITE = ChargeType(JsonField.of("composite"))
+            @JvmField val COMPOSITE = of("composite")
 
-            @JvmField val MINIMUM = ChargeType(JsonField.of("minimum"))
+            @JvmField val MINIMUM = of("minimum")
 
-            @JvmField val SEAT = ChargeType(JsonField.of("seat"))
+            @JvmField val SEAT = of("seat")
 
             @JvmStatic fun of(value: String) = ChargeType(JsonField.of(value))
         }
@@ -358,13 +358,13 @@ private constructor(
 
             companion object {
 
-                @JvmField val FIXED = AdjustmentType(JsonField.of("fixed"))
+                @JvmField val FIXED = of("fixed")
 
-                @JvmField val QUANTITY = AdjustmentType(JsonField.of("quantity"))
+                @JvmField val QUANTITY = of("quantity")
 
-                @JvmField val PERCENTAGE = AdjustmentType(JsonField.of("percentage"))
+                @JvmField val PERCENTAGE = of("percentage")
 
-                @JvmField val OVERRIDE = AdjustmentType(JsonField.of("override"))
+                @JvmField val OVERRIDE = of("override")
 
                 @JvmStatic fun of(value: String) = AdjustmentType(JsonField.of(value))
             }

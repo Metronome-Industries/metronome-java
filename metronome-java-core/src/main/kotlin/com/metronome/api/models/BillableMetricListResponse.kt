@@ -354,15 +354,15 @@ private constructor(
 
         companion object {
 
-            @JvmField val COUNT = AggregationType(JsonField.of("COUNT"))
+            @JvmField val COUNT = of("COUNT")
 
-            @JvmField val LATEST = AggregationType(JsonField.of("LATEST"))
+            @JvmField val LATEST = of("LATEST")
 
-            @JvmField val MAX = AggregationType(JsonField.of("MAX"))
+            @JvmField val MAX = of("MAX")
 
-            @JvmField val SUM = AggregationType(JsonField.of("SUM"))
+            @JvmField val SUM = of("SUM")
 
-            @JvmField val UNIQUE = AggregationType(JsonField.of("UNIQUE"))
+            @JvmField val UNIQUE = of("UNIQUE")
 
             @JvmStatic fun of(value: String) = AggregationType(JsonField.of(value))
         }

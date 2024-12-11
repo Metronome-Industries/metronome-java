@@ -134,11 +134,11 @@ private constructor(
 
         companion object {
 
-            @JvmField val ROUND_UP = RoundingMethod(JsonField.of("ROUND_UP"))
+            @JvmField val ROUND_UP = of("ROUND_UP")
 
-            @JvmField val ROUND_DOWN = RoundingMethod(JsonField.of("ROUND_DOWN"))
+            @JvmField val ROUND_DOWN = of("ROUND_DOWN")
 
-            @JvmField val ROUND_HALF_UP = RoundingMethod(JsonField.of("ROUND_HALF_UP"))
+            @JvmField val ROUND_HALF_UP = of("ROUND_HALF_UP")
 
             @JvmStatic fun of(value: String) = RoundingMethod(JsonField.of(value))
         }

@@ -64,21 +64,21 @@ interface BillingConfigServiceAsync {
 
         companion object {
 
-            @JvmField val AWS_MARKETPLACE = BillingProviderType(JsonField.of("aws_marketplace"))
+            @JvmField val AWS_MARKETPLACE = of("aws_marketplace")
 
-            @JvmField val STRIPE = BillingProviderType(JsonField.of("stripe"))
+            @JvmField val STRIPE = of("stripe")
 
-            @JvmField val NETSUITE = BillingProviderType(JsonField.of("netsuite"))
+            @JvmField val NETSUITE = of("netsuite")
 
-            @JvmField val CUSTOM = BillingProviderType(JsonField.of("custom"))
+            @JvmField val CUSTOM = of("custom")
 
-            @JvmField val AZURE_MARKETPLACE = BillingProviderType(JsonField.of("azure_marketplace"))
+            @JvmField val AZURE_MARKETPLACE = of("azure_marketplace")
 
-            @JvmField val QUICKBOOKS_ONLINE = BillingProviderType(JsonField.of("quickbooks_online"))
+            @JvmField val QUICKBOOKS_ONLINE = of("quickbooks_online")
 
-            @JvmField val WORKDAY = BillingProviderType(JsonField.of("workday"))
+            @JvmField val WORKDAY = of("workday")
 
-            @JvmField val GCP_MARKETPLACE = BillingProviderType(JsonField.of("gcp_marketplace"))
+            @JvmField val GCP_MARKETPLACE = of("gcp_marketplace")
 
             @JvmStatic fun of(value: String) = BillingProviderType(JsonField.of(value))
         }

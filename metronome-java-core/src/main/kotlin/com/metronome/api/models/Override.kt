@@ -1109,15 +1109,15 @@ private constructor(
 
             companion object {
 
-                @JvmField val FLAT = RateType(JsonField.of("FLAT"))
+                @JvmField val FLAT = of("FLAT")
 
-                @JvmField val PERCENTAGE = RateType(JsonField.of("PERCENTAGE"))
+                @JvmField val PERCENTAGE = of("PERCENTAGE")
 
-                @JvmField val SUBSCRIPTION = RateType(JsonField.of("SUBSCRIPTION"))
+                @JvmField val SUBSCRIPTION = of("SUBSCRIPTION")
 
-                @JvmField val TIERED = RateType(JsonField.of("TIERED"))
+                @JvmField val TIERED = of("TIERED")
 
-                @JvmField val CUSTOM = RateType(JsonField.of("CUSTOM"))
+                @JvmField val CUSTOM = of("CUSTOM")
 
                 @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
             }
@@ -1376,15 +1376,15 @@ private constructor(
 
         companion object {
 
-            @JvmField val FLAT = RateType(JsonField.of("FLAT"))
+            @JvmField val FLAT = of("FLAT")
 
-            @JvmField val PERCENTAGE = RateType(JsonField.of("PERCENTAGE"))
+            @JvmField val PERCENTAGE = of("PERCENTAGE")
 
-            @JvmField val SUBSCRIPTION = RateType(JsonField.of("SUBSCRIPTION"))
+            @JvmField val SUBSCRIPTION = of("SUBSCRIPTION")
 
-            @JvmField val TIERED = RateType(JsonField.of("TIERED"))
+            @JvmField val TIERED = of("TIERED")
 
-            @JvmField val CUSTOM = RateType(JsonField.of("CUSTOM"))
+            @JvmField val CUSTOM = of("CUSTOM")
 
             @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
         }
@@ -1451,9 +1451,9 @@ private constructor(
 
         companion object {
 
-            @JvmField val COMMIT_RATE = Target(JsonField.of("COMMIT_RATE"))
+            @JvmField val COMMIT_RATE = of("COMMIT_RATE")
 
-            @JvmField val LIST_RATE = Target(JsonField.of("LIST_RATE"))
+            @JvmField val LIST_RATE = of("LIST_RATE")
 
             @JvmStatic fun of(value: String) = Target(JsonField.of(value))
         }
@@ -1508,11 +1508,11 @@ private constructor(
 
         companion object {
 
-            @JvmField val OVERWRITE = Type(JsonField.of("OVERWRITE"))
+            @JvmField val OVERWRITE = of("OVERWRITE")
 
-            @JvmField val MULTIPLIER = Type(JsonField.of("MULTIPLIER"))
+            @JvmField val MULTIPLIER = of("MULTIPLIER")
 
-            @JvmField val TIERED = Type(JsonField.of("TIERED"))
+            @JvmField val TIERED = of("TIERED")
 
             @JvmStatic fun of(value: String) = Type(JsonField.of(value))
         }

@@ -508,23 +508,21 @@ constructor(
 
             companion object {
 
-                @JvmField val AWS_MARKETPLACE = BillingProviderType(JsonField.of("aws_marketplace"))
+                @JvmField val AWS_MARKETPLACE = of("aws_marketplace")
 
-                @JvmField val STRIPE = BillingProviderType(JsonField.of("stripe"))
+                @JvmField val STRIPE = of("stripe")
 
-                @JvmField val NETSUITE = BillingProviderType(JsonField.of("netsuite"))
+                @JvmField val NETSUITE = of("netsuite")
 
-                @JvmField val CUSTOM = BillingProviderType(JsonField.of("custom"))
+                @JvmField val CUSTOM = of("custom")
 
-                @JvmField
-                val AZURE_MARKETPLACE = BillingProviderType(JsonField.of("azure_marketplace"))
+                @JvmField val AZURE_MARKETPLACE = of("azure_marketplace")
 
-                @JvmField
-                val QUICKBOOKS_ONLINE = BillingProviderType(JsonField.of("quickbooks_online"))
+                @JvmField val QUICKBOOKS_ONLINE = of("quickbooks_online")
 
-                @JvmField val WORKDAY = BillingProviderType(JsonField.of("workday"))
+                @JvmField val WORKDAY = of("workday")
 
-                @JvmField val GCP_MARKETPLACE = BillingProviderType(JsonField.of("gcp_marketplace"))
+                @JvmField val GCP_MARKETPLACE = of("gcp_marketplace")
 
                 @JvmStatic fun of(value: String) = BillingProviderType(JsonField.of(value))
             }
@@ -604,55 +602,55 @@ constructor(
 
             companion object {
 
-                @JvmField val AF_SOUTH_1 = AwsRegion(JsonField.of("af-south-1"))
+                @JvmField val AF_SOUTH_1 = of("af-south-1")
 
-                @JvmField val AP_EAST_1 = AwsRegion(JsonField.of("ap-east-1"))
+                @JvmField val AP_EAST_1 = of("ap-east-1")
 
-                @JvmField val AP_NORTHEAST_1 = AwsRegion(JsonField.of("ap-northeast-1"))
+                @JvmField val AP_NORTHEAST_1 = of("ap-northeast-1")
 
-                @JvmField val AP_NORTHEAST_2 = AwsRegion(JsonField.of("ap-northeast-2"))
+                @JvmField val AP_NORTHEAST_2 = of("ap-northeast-2")
 
-                @JvmField val AP_NORTHEAST_3 = AwsRegion(JsonField.of("ap-northeast-3"))
+                @JvmField val AP_NORTHEAST_3 = of("ap-northeast-3")
 
-                @JvmField val AP_SOUTH_1 = AwsRegion(JsonField.of("ap-south-1"))
+                @JvmField val AP_SOUTH_1 = of("ap-south-1")
 
-                @JvmField val AP_SOUTHEAST_1 = AwsRegion(JsonField.of("ap-southeast-1"))
+                @JvmField val AP_SOUTHEAST_1 = of("ap-southeast-1")
 
-                @JvmField val AP_SOUTHEAST_2 = AwsRegion(JsonField.of("ap-southeast-2"))
+                @JvmField val AP_SOUTHEAST_2 = of("ap-southeast-2")
 
-                @JvmField val CA_CENTRAL_1 = AwsRegion(JsonField.of("ca-central-1"))
+                @JvmField val CA_CENTRAL_1 = of("ca-central-1")
 
-                @JvmField val CN_NORTH_1 = AwsRegion(JsonField.of("cn-north-1"))
+                @JvmField val CN_NORTH_1 = of("cn-north-1")
 
-                @JvmField val CN_NORTHWEST_1 = AwsRegion(JsonField.of("cn-northwest-1"))
+                @JvmField val CN_NORTHWEST_1 = of("cn-northwest-1")
 
-                @JvmField val EU_CENTRAL_1 = AwsRegion(JsonField.of("eu-central-1"))
+                @JvmField val EU_CENTRAL_1 = of("eu-central-1")
 
-                @JvmField val EU_NORTH_1 = AwsRegion(JsonField.of("eu-north-1"))
+                @JvmField val EU_NORTH_1 = of("eu-north-1")
 
-                @JvmField val EU_SOUTH_1 = AwsRegion(JsonField.of("eu-south-1"))
+                @JvmField val EU_SOUTH_1 = of("eu-south-1")
 
-                @JvmField val EU_WEST_1 = AwsRegion(JsonField.of("eu-west-1"))
+                @JvmField val EU_WEST_1 = of("eu-west-1")
 
-                @JvmField val EU_WEST_2 = AwsRegion(JsonField.of("eu-west-2"))
+                @JvmField val EU_WEST_2 = of("eu-west-2")
 
-                @JvmField val EU_WEST_3 = AwsRegion(JsonField.of("eu-west-3"))
+                @JvmField val EU_WEST_3 = of("eu-west-3")
 
-                @JvmField val ME_SOUTH_1 = AwsRegion(JsonField.of("me-south-1"))
+                @JvmField val ME_SOUTH_1 = of("me-south-1")
 
-                @JvmField val SA_EAST_1 = AwsRegion(JsonField.of("sa-east-1"))
+                @JvmField val SA_EAST_1 = of("sa-east-1")
 
-                @JvmField val US_EAST_1 = AwsRegion(JsonField.of("us-east-1"))
+                @JvmField val US_EAST_1 = of("us-east-1")
 
-                @JvmField val US_EAST_2 = AwsRegion(JsonField.of("us-east-2"))
+                @JvmField val US_EAST_2 = of("us-east-2")
 
-                @JvmField val US_GOV_EAST_1 = AwsRegion(JsonField.of("us-gov-east-1"))
+                @JvmField val US_GOV_EAST_1 = of("us-gov-east-1")
 
-                @JvmField val US_GOV_WEST_1 = AwsRegion(JsonField.of("us-gov-west-1"))
+                @JvmField val US_GOV_WEST_1 = of("us-gov-west-1")
 
-                @JvmField val US_WEST_1 = AwsRegion(JsonField.of("us-west-1"))
+                @JvmField val US_WEST_1 = of("us-west-1")
 
-                @JvmField val US_WEST_2 = AwsRegion(JsonField.of("us-west-2"))
+                @JvmField val US_WEST_2 = of("us-west-2")
 
                 @JvmStatic fun of(value: String) = AwsRegion(JsonField.of(value))
             }
@@ -799,11 +797,9 @@ constructor(
 
             companion object {
 
-                @JvmField
-                val CHARGE_AUTOMATICALLY =
-                    StripeCollectionMethod(JsonField.of("charge_automatically"))
+                @JvmField val CHARGE_AUTOMATICALLY = of("charge_automatically")
 
-                @JvmField val SEND_INVOICE = StripeCollectionMethod(JsonField.of("send_invoice"))
+                @JvmField val SEND_INVOICE = of("send_invoice")
 
                 @JvmStatic fun of(value: String) = StripeCollectionMethod(JsonField.of(value))
             }

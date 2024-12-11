@@ -505,9 +505,9 @@ private constructor(
 
             companion object {
 
-                @JvmField val BILLABLE = Value(JsonField.of("billable"))
+                @JvmField val BILLABLE = of("billable")
 
-                @JvmField val UNBILLABLE = Value(JsonField.of("unbillable"))
+                @JvmField val UNBILLABLE = of("unbillable")
 
                 @JvmStatic fun of(value: String) = Value(JsonField.of(value))
             }

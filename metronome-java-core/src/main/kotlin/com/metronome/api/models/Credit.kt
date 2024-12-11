@@ -528,7 +528,7 @@ private constructor(
 
         companion object {
 
-            @JvmField val CREDIT = Type(JsonField.of("CREDIT"))
+            @JvmField val CREDIT = of("CREDIT")
 
             @JvmStatic fun of(value: String) = Type(JsonField.of(value))
         }
@@ -1123,7 +1123,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val CREDIT_SEGMENT_START = Type(JsonField.of("CREDIT_SEGMENT_START"))
+                    @JvmField val CREDIT_SEGMENT_START = of("CREDIT_SEGMENT_START")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -1332,7 +1332,7 @@ private constructor(
 
                     @JvmField
                     val CREDIT_AUTOMATED_INVOICE_DEDUCTION =
-                        Type(JsonField.of("CREDIT_AUTOMATED_INVOICE_DEDUCTION"))
+                        of("CREDIT_AUTOMATED_INVOICE_DEDUCTION")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -1522,7 +1522,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val CREDIT_EXPIRATION = Type(JsonField.of("CREDIT_EXPIRATION"))
+                    @JvmField val CREDIT_EXPIRATION = of("CREDIT_EXPIRATION")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -1724,7 +1724,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val CREDIT_CANCELED = Type(JsonField.of("CREDIT_CANCELED"))
+                    @JvmField val CREDIT_CANCELED = of("CREDIT_CANCELED")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -1926,7 +1926,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val CREDIT_CREDITED = Type(JsonField.of("CREDIT_CREDITED"))
+                    @JvmField val CREDIT_CREDITED = of("CREDIT_CREDITED")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -2113,7 +2113,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val CREDIT_MANUAL = Type(JsonField.of("CREDIT_MANUAL"))
+                    @JvmField val CREDIT_MANUAL = of("CREDIT_MANUAL")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -2183,9 +2183,9 @@ private constructor(
 
         companion object {
 
-            @JvmField val COMMIT_RATE = RateType(JsonField.of("COMMIT_RATE"))
+            @JvmField val COMMIT_RATE = of("COMMIT_RATE")
 
-            @JvmField val LIST_RATE = RateType(JsonField.of("LIST_RATE"))
+            @JvmField val LIST_RATE = of("LIST_RATE")
 
             @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
         }

@@ -869,9 +869,9 @@ constructor(
 
             companion object {
 
-                @JvmField val BILLABLE = BillableStatus(JsonField.of("billable"))
+                @JvmField val BILLABLE = of("billable")
 
-                @JvmField val UNBILLABLE = BillableStatus(JsonField.of("unbillable"))
+                @JvmField val UNBILLABLE = of("unbillable")
 
                 @JvmStatic fun of(value: String) = BillableStatus(JsonField.of(value))
             }
@@ -926,9 +926,9 @@ constructor(
 
             companion object {
 
-                @JvmField val HOUR = BreakdownGranularity(JsonField.of("HOUR"))
+                @JvmField val HOUR = of("HOUR")
 
-                @JvmField val DAY = BreakdownGranularity(JsonField.of("DAY"))
+                @JvmField val DAY = of("DAY")
 
                 @JvmStatic fun of(value: String) = BreakdownGranularity(JsonField.of(value))
             }

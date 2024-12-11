@@ -230,37 +230,37 @@ private constructor(
 
             companion object {
 
-                @JvmField val ALERT = Entity(JsonField.of("alert"))
+                @JvmField val ALERT = of("alert")
 
-                @JvmField val BILLABLE_METRIC = Entity(JsonField.of("billable_metric"))
+                @JvmField val BILLABLE_METRIC = of("billable_metric")
 
-                @JvmField val CHARGE = Entity(JsonField.of("charge"))
+                @JvmField val CHARGE = of("charge")
 
-                @JvmField val COMMIT = Entity(JsonField.of("commit"))
+                @JvmField val COMMIT = of("commit")
 
-                @JvmField val CONTRACT_CREDIT = Entity(JsonField.of("contract_credit"))
+                @JvmField val CONTRACT_CREDIT = of("contract_credit")
 
-                @JvmField val CONTRACT_PRODUCT = Entity(JsonField.of("contract_product"))
+                @JvmField val CONTRACT_PRODUCT = of("contract_product")
 
-                @JvmField val CONTRACT = Entity(JsonField.of("contract"))
+                @JvmField val CONTRACT = of("contract")
 
-                @JvmField val CREDIT_GRANT = Entity(JsonField.of("credit_grant"))
+                @JvmField val CREDIT_GRANT = of("credit_grant")
 
-                @JvmField val CUSTOMER_PLAN = Entity(JsonField.of("customer_plan"))
+                @JvmField val CUSTOMER_PLAN = of("customer_plan")
 
-                @JvmField val CUSTOMER = Entity(JsonField.of("customer"))
+                @JvmField val CUSTOMER = of("customer")
 
-                @JvmField val INVOICE = Entity(JsonField.of("invoice"))
+                @JvmField val INVOICE = of("invoice")
 
-                @JvmField val PLAN = Entity(JsonField.of("plan"))
+                @JvmField val PLAN = of("plan")
 
-                @JvmField val PROFESSIONAL_SERVICE = Entity(JsonField.of("professional_service"))
+                @JvmField val PROFESSIONAL_SERVICE = of("professional_service")
 
-                @JvmField val PRODUCT = Entity(JsonField.of("product"))
+                @JvmField val PRODUCT = of("product")
 
-                @JvmField val RATE_CARD = Entity(JsonField.of("rate_card"))
+                @JvmField val RATE_CARD = of("rate_card")
 
-                @JvmField val SCHEDULED_CHARGE = Entity(JsonField.of("scheduled_charge"))
+                @JvmField val SCHEDULED_CHARGE = of("scheduled_charge")
 
                 @JvmStatic fun of(value: String) = Entity(JsonField.of(value))
             }

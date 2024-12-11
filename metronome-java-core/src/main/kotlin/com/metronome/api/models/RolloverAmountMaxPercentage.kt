@@ -132,7 +132,7 @@ private constructor(
 
         companion object {
 
-            @JvmField val MAX_PERCENTAGE = Type(JsonField.of("MAX_PERCENTAGE"))
+            @JvmField val MAX_PERCENTAGE = of("MAX_PERCENTAGE")
 
             @JvmStatic fun of(value: String) = Type(JsonField.of(value))
         }

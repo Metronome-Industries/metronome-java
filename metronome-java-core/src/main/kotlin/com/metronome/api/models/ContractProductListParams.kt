@@ -325,11 +325,11 @@ constructor(
 
         companion object {
 
-            @JvmField val ARCHIVED = ArchiveFilter(JsonField.of("ARCHIVED"))
+            @JvmField val ARCHIVED = of("ARCHIVED")
 
-            @JvmField val NOT_ARCHIVED = ArchiveFilter(JsonField.of("NOT_ARCHIVED"))
+            @JvmField val NOT_ARCHIVED = of("NOT_ARCHIVED")
 
-            @JvmField val ALL = ArchiveFilter(JsonField.of("ALL"))
+            @JvmField val ALL = of("ALL")
 
             @JvmStatic fun of(value: String) = ArchiveFilter(JsonField.of(value))
         }

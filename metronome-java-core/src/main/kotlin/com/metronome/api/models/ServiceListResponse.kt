@@ -209,9 +209,9 @@ private constructor(
 
             companion object {
 
-                @JvmField val MAKES_CONNECTIONS_FROM = Usage(JsonField.of("makes_connections_from"))
+                @JvmField val MAKES_CONNECTIONS_FROM = of("makes_connections_from")
 
-                @JvmField val ACCEPTS_CONNECTIONS_AT = Usage(JsonField.of("accepts_connections_at"))
+                @JvmField val ACCEPTS_CONNECTIONS_AT = of("accepts_connections_at")
 
                 @JvmStatic fun of(value: String) = Usage(JsonField.of(value))
             }

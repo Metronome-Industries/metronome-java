@@ -305,15 +305,15 @@ private constructor(
 
         companion object {
 
-            @JvmField val FLAT = RateType(JsonField.of("FLAT"))
+            @JvmField val FLAT = of("FLAT")
 
-            @JvmField val PERCENTAGE = RateType(JsonField.of("PERCENTAGE"))
+            @JvmField val PERCENTAGE = of("PERCENTAGE")
 
-            @JvmField val SUBSCRIPTION = RateType(JsonField.of("SUBSCRIPTION"))
+            @JvmField val SUBSCRIPTION = of("SUBSCRIPTION")
 
-            @JvmField val CUSTOM = RateType(JsonField.of("CUSTOM"))
+            @JvmField val CUSTOM = of("CUSTOM")
 
-            @JvmField val TIERED = RateType(JsonField.of("TIERED"))
+            @JvmField val TIERED = of("TIERED")
 
             @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
         }

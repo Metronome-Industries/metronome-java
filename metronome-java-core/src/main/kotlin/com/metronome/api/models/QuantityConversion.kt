@@ -163,9 +163,9 @@ private constructor(
 
         companion object {
 
-            @JvmField val MULTIPLY = Operation(JsonField.of("MULTIPLY"))
+            @JvmField val MULTIPLY = of("MULTIPLY")
 
-            @JvmField val DIVIDE = Operation(JsonField.of("DIVIDE"))
+            @JvmField val DIVIDE = of("DIVIDE")
 
             @JvmStatic fun of(value: String) = Operation(JsonField.of(value))
         }

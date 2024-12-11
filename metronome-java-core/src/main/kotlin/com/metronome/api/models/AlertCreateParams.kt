@@ -701,56 +701,51 @@ constructor(
 
         companion object {
 
-            @JvmField
-            val LOW_CREDIT_BALANCE_REACHED = AlertType(JsonField.of("low_credit_balance_reached"))
+            @JvmField val LOW_CREDIT_BALANCE_REACHED = of("low_credit_balance_reached")
 
-            @JvmField
-            val SPEND_THRESHOLD_REACHED = AlertType(JsonField.of("spend_threshold_reached"))
+            @JvmField val SPEND_THRESHOLD_REACHED = of("spend_threshold_reached")
 
             @JvmField
             val MONTHLY_INVOICE_TOTAL_SPEND_THRESHOLD_REACHED =
-                AlertType(JsonField.of("monthly_invoice_total_spend_threshold_reached"))
+                of("monthly_invoice_total_spend_threshold_reached")
 
             @JvmField
-            val LOW_REMAINING_DAYS_IN_PLAN_REACHED =
-                AlertType(JsonField.of("low_remaining_days_in_plan_reached"))
+            val LOW_REMAINING_DAYS_IN_PLAN_REACHED = of("low_remaining_days_in_plan_reached")
 
             @JvmField
             val LOW_REMAINING_CREDIT_PERCENTAGE_REACHED =
-                AlertType(JsonField.of("low_remaining_credit_percentage_reached"))
+                of("low_remaining_credit_percentage_reached")
 
-            @JvmField
-            val USAGE_THRESHOLD_REACHED = AlertType(JsonField.of("usage_threshold_reached"))
+            @JvmField val USAGE_THRESHOLD_REACHED = of("usage_threshold_reached")
 
             @JvmField
             val LOW_REMAINING_DAYS_FOR_COMMIT_SEGMENT_REACHED =
-                AlertType(JsonField.of("low_remaining_days_for_commit_segment_reached"))
+                of("low_remaining_days_for_commit_segment_reached")
 
             @JvmField
-            val LOW_REMAINING_COMMIT_BALANCE_REACHED =
-                AlertType(JsonField.of("low_remaining_commit_balance_reached"))
+            val LOW_REMAINING_COMMIT_BALANCE_REACHED = of("low_remaining_commit_balance_reached")
 
             @JvmField
             val LOW_REMAINING_COMMIT_PERCENTAGE_REACHED =
-                AlertType(JsonField.of("low_remaining_commit_percentage_reached"))
+                of("low_remaining_commit_percentage_reached")
 
             @JvmField
             val LOW_REMAINING_DAYS_FOR_CONTRACT_CREDIT_SEGMENT_REACHED =
-                AlertType(JsonField.of("low_remaining_days_for_contract_credit_segment_reached"))
+                of("low_remaining_days_for_contract_credit_segment_reached")
 
             @JvmField
             val LOW_REMAINING_CONTRACT_CREDIT_BALANCE_REACHED =
-                AlertType(JsonField.of("low_remaining_contract_credit_balance_reached"))
+                of("low_remaining_contract_credit_balance_reached")
 
             @JvmField
             val LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED =
-                AlertType(JsonField.of("low_remaining_contract_credit_percentage_reached"))
+                of("low_remaining_contract_credit_percentage_reached")
 
             @JvmField
             val LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED =
-                AlertType(JsonField.of("low_remaining_contract_credit_and_commit_balance_reached"))
+                of("low_remaining_contract_credit_and_commit_balance_reached")
 
-            @JvmField val INVOICE_TOTAL_REACHED = AlertType(JsonField.of("invoice_total_reached"))
+            @JvmField val INVOICE_TOTAL_REACHED = of("invoice_total_reached")
 
             @JvmStatic fun of(value: String) = AlertType(JsonField.of(value))
         }
@@ -940,11 +935,11 @@ constructor(
 
             companion object {
 
-                @JvmField val CONTRACT = Entity(JsonField.of("Contract"))
+                @JvmField val CONTRACT = of("Contract")
 
-                @JvmField val COMMIT = Entity(JsonField.of("Commit"))
+                @JvmField val COMMIT = of("Commit")
 
-                @JvmField val CONTRACT_CREDIT = Entity(JsonField.of("ContractCredit"))
+                @JvmField val CONTRACT_CREDIT = of("ContractCredit")
 
                 @JvmStatic fun of(value: String) = Entity(JsonField.of(value))
             }

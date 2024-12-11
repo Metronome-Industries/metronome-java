@@ -581,9 +581,9 @@ private constructor(
 
             companion object {
 
-                @JvmField val SUPERSEDE = Type(JsonField.of("SUPERSEDE"))
+                @JvmField val SUPERSEDE = of("SUPERSEDE")
 
-                @JvmField val RENEWAL = Type(JsonField.of("RENEWAL"))
+                @JvmField val RENEWAL = of("RENEWAL")
 
                 @JvmStatic fun of(value: String) = Type(JsonField.of(value))
             }
@@ -751,11 +751,11 @@ private constructor(
 
             companion object {
 
-                @JvmField val MONTHLY = Frequency(JsonField.of("MONTHLY"))
+                @JvmField val MONTHLY = of("MONTHLY")
 
-                @JvmField val QUARTERLY = Frequency(JsonField.of("QUARTERLY"))
+                @JvmField val QUARTERLY = of("QUARTERLY")
 
-                @JvmField val ANNUAL = Frequency(JsonField.of("ANNUAL"))
+                @JvmField val ANNUAL = of("ANNUAL")
 
                 @JvmStatic fun of(value: String) = Frequency(JsonField.of(value))
             }
@@ -1130,13 +1130,13 @@ private constructor(
 
             companion object {
 
-                @JvmField val AWS = ResellerType(JsonField.of("AWS"))
+                @JvmField val AWS = of("AWS")
 
-                @JvmField val AWS_PRO_SERVICE = ResellerType(JsonField.of("AWS_PRO_SERVICE"))
+                @JvmField val AWS_PRO_SERVICE = of("AWS_PRO_SERVICE")
 
-                @JvmField val GCP = ResellerType(JsonField.of("GCP"))
+                @JvmField val GCP = of("GCP")
 
-                @JvmField val GCP_PRO_SERVICE = ResellerType(JsonField.of("GCP_PRO_SERVICE"))
+                @JvmField val GCP_PRO_SERVICE = of("GCP_PRO_SERVICE")
 
                 @JvmStatic fun of(value: String) = ResellerType(JsonField.of(value))
             }

@@ -889,9 +889,9 @@ constructor(
 
             companion object {
 
-                @JvmField val PREPAID = Type(JsonField.of("PREPAID"))
+                @JvmField val PREPAID = of("PREPAID")
 
-                @JvmField val POSTPAID = Type(JsonField.of("POSTPAID"))
+                @JvmField val POSTPAID = of("POSTPAID")
 
                 @JvmStatic fun of(value: String) = Type(JsonField.of(value))
             }
@@ -1464,12 +1464,11 @@ constructor(
 
                     companion object {
 
-                        @JvmField val DIVIDED = AmountDistribution(JsonField.of("DIVIDED"))
+                        @JvmField val DIVIDED = of("DIVIDED")
 
-                        @JvmField
-                        val DIVIDED_ROUNDED = AmountDistribution(JsonField.of("DIVIDED_ROUNDED"))
+                        @JvmField val DIVIDED_ROUNDED = of("DIVIDED_ROUNDED")
 
-                        @JvmField val EACH = AmountDistribution(JsonField.of("EACH"))
+                        @JvmField val EACH = of("EACH")
 
                         @JvmStatic fun of(value: String) = AmountDistribution(JsonField.of(value))
                     }
@@ -1532,13 +1531,13 @@ constructor(
 
                     companion object {
 
-                        @JvmField val MONTHLY = Frequency(JsonField.of("MONTHLY"))
+                        @JvmField val MONTHLY = of("MONTHLY")
 
-                        @JvmField val QUARTERLY = Frequency(JsonField.of("QUARTERLY"))
+                        @JvmField val QUARTERLY = of("QUARTERLY")
 
-                        @JvmField val SEMI_ANNUAL = Frequency(JsonField.of("SEMI_ANNUAL"))
+                        @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
 
-                        @JvmField val ANNUAL = Frequency(JsonField.of("ANNUAL"))
+                        @JvmField val ANNUAL = of("ANNUAL")
 
                         @JvmStatic fun of(value: String) = Frequency(JsonField.of(value))
                     }
@@ -1769,13 +1768,13 @@ constructor(
 
             companion object {
 
-                @JvmField val COMMIT_RATE = RateType(JsonField.of("COMMIT_RATE"))
+                @JvmField val COMMIT_RATE = of("COMMIT_RATE")
 
-                @JvmField val COMMIT_RATE = RateType(JsonField.of("commit_rate"))
+                @JvmField val COMMIT_RATE = of("commit_rate")
 
-                @JvmField val LIST_RATE = RateType(JsonField.of("LIST_RATE"))
+                @JvmField val LIST_RATE = of("LIST_RATE")
 
-                @JvmField val LIST_RATE = RateType(JsonField.of("list_rate"))
+                @JvmField val LIST_RATE = of("list_rate")
 
                 @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
             }
@@ -2288,13 +2287,13 @@ constructor(
 
             companion object {
 
-                @JvmField val COMMIT_RATE = RateType(JsonField.of("COMMIT_RATE"))
+                @JvmField val COMMIT_RATE = of("COMMIT_RATE")
 
-                @JvmField val COMMIT_RATE = RateType(JsonField.of("commit_rate"))
+                @JvmField val COMMIT_RATE = of("commit_rate")
 
-                @JvmField val LIST_RATE = RateType(JsonField.of("LIST_RATE"))
+                @JvmField val LIST_RATE = of("LIST_RATE")
 
-                @JvmField val LIST_RATE = RateType(JsonField.of("list_rate"))
+                @JvmField val LIST_RATE = of("list_rate")
 
                 @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
             }
@@ -2782,12 +2781,11 @@ constructor(
 
                     companion object {
 
-                        @JvmField val DIVIDED = AmountDistribution(JsonField.of("DIVIDED"))
+                        @JvmField val DIVIDED = of("DIVIDED")
 
-                        @JvmField
-                        val DIVIDED_ROUNDED = AmountDistribution(JsonField.of("DIVIDED_ROUNDED"))
+                        @JvmField val DIVIDED_ROUNDED = of("DIVIDED_ROUNDED")
 
-                        @JvmField val EACH = AmountDistribution(JsonField.of("EACH"))
+                        @JvmField val EACH = of("EACH")
 
                         @JvmStatic fun of(value: String) = AmountDistribution(JsonField.of(value))
                     }
@@ -2850,13 +2848,13 @@ constructor(
 
                     companion object {
 
-                        @JvmField val MONTHLY = Frequency(JsonField.of("MONTHLY"))
+                        @JvmField val MONTHLY = of("MONTHLY")
 
-                        @JvmField val QUARTERLY = Frequency(JsonField.of("QUARTERLY"))
+                        @JvmField val QUARTERLY = of("QUARTERLY")
 
-                        @JvmField val SEMI_ANNUAL = Frequency(JsonField.of("SEMI_ANNUAL"))
+                        @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
 
-                        @JvmField val ANNUAL = Frequency(JsonField.of("ANNUAL"))
+                        @JvmField val ANNUAL = of("ANNUAL")
 
                         @JvmStatic fun of(value: String) = Frequency(JsonField.of(value))
                     }
@@ -3779,15 +3777,15 @@ constructor(
 
                 companion object {
 
-                    @JvmField val FLAT = RateType(JsonField.of("FLAT"))
+                    @JvmField val FLAT = of("FLAT")
 
-                    @JvmField val PERCENTAGE = RateType(JsonField.of("PERCENTAGE"))
+                    @JvmField val PERCENTAGE = of("PERCENTAGE")
 
-                    @JvmField val SUBSCRIPTION = RateType(JsonField.of("SUBSCRIPTION"))
+                    @JvmField val SUBSCRIPTION = of("SUBSCRIPTION")
 
-                    @JvmField val TIERED = RateType(JsonField.of("TIERED"))
+                    @JvmField val TIERED = of("TIERED")
 
-                    @JvmField val CUSTOM = RateType(JsonField.of("CUSTOM"))
+                    @JvmField val CUSTOM = of("CUSTOM")
 
                     @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
                 }
@@ -3937,13 +3935,13 @@ constructor(
 
             companion object {
 
-                @JvmField val COMMIT_RATE = Target(JsonField.of("COMMIT_RATE"))
+                @JvmField val COMMIT_RATE = of("COMMIT_RATE")
 
-                @JvmField val COMMIT_RATE = Target(JsonField.of("commit_rate"))
+                @JvmField val COMMIT_RATE = of("commit_rate")
 
-                @JvmField val LIST_RATE = Target(JsonField.of("LIST_RATE"))
+                @JvmField val LIST_RATE = of("LIST_RATE")
 
-                @JvmField val LIST_RATE = Target(JsonField.of("list_rate"))
+                @JvmField val LIST_RATE = of("list_rate")
 
                 @JvmStatic fun of(value: String) = Target(JsonField.of(value))
             }
@@ -4089,11 +4087,11 @@ constructor(
 
             companion object {
 
-                @JvmField val OVERWRITE = Type(JsonField.of("OVERWRITE"))
+                @JvmField val OVERWRITE = of("OVERWRITE")
 
-                @JvmField val MULTIPLIER = Type(JsonField.of("MULTIPLIER"))
+                @JvmField val MULTIPLIER = of("MULTIPLIER")
 
-                @JvmField val TIERED = Type(JsonField.of("TIERED"))
+                @JvmField val TIERED = of("TIERED")
 
                 @JvmStatic fun of(value: String) = Type(JsonField.of(value))
             }
@@ -4539,13 +4537,13 @@ constructor(
 
             companion object {
 
-                @JvmField val AWS = ResellerType(JsonField.of("AWS"))
+                @JvmField val AWS = of("AWS")
 
-                @JvmField val AWS_PRO_SERVICE = ResellerType(JsonField.of("AWS_PRO_SERVICE"))
+                @JvmField val AWS_PRO_SERVICE = of("AWS_PRO_SERVICE")
 
-                @JvmField val GCP = ResellerType(JsonField.of("GCP"))
+                @JvmField val GCP = of("GCP")
 
-                @JvmField val GCP_PRO_SERVICE = ResellerType(JsonField.of("GCP_PRO_SERVICE"))
+                @JvmField val GCP_PRO_SERVICE = of("GCP_PRO_SERVICE")
 
                 @JvmStatic fun of(value: String) = ResellerType(JsonField.of(value))
             }
@@ -5154,12 +5152,11 @@ constructor(
 
                     companion object {
 
-                        @JvmField val DIVIDED = AmountDistribution(JsonField.of("DIVIDED"))
+                        @JvmField val DIVIDED = of("DIVIDED")
 
-                        @JvmField
-                        val DIVIDED_ROUNDED = AmountDistribution(JsonField.of("DIVIDED_ROUNDED"))
+                        @JvmField val DIVIDED_ROUNDED = of("DIVIDED_ROUNDED")
 
-                        @JvmField val EACH = AmountDistribution(JsonField.of("EACH"))
+                        @JvmField val EACH = of("EACH")
 
                         @JvmStatic fun of(value: String) = AmountDistribution(JsonField.of(value))
                     }
@@ -5222,13 +5219,13 @@ constructor(
 
                     companion object {
 
-                        @JvmField val MONTHLY = Frequency(JsonField.of("MONTHLY"))
+                        @JvmField val MONTHLY = of("MONTHLY")
 
-                        @JvmField val QUARTERLY = Frequency(JsonField.of("QUARTERLY"))
+                        @JvmField val QUARTERLY = of("QUARTERLY")
 
-                        @JvmField val SEMI_ANNUAL = Frequency(JsonField.of("SEMI_ANNUAL"))
+                        @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
 
-                        @JvmField val ANNUAL = Frequency(JsonField.of("ANNUAL"))
+                        @JvmField val ANNUAL = of("ANNUAL")
 
                         @JvmStatic fun of(value: String) = Frequency(JsonField.of(value))
                     }

@@ -635,9 +635,9 @@ private constructor(
 
         companion object {
 
-            @JvmField val PREPAID = Type(JsonField.of("PREPAID"))
+            @JvmField val PREPAID = of("PREPAID")
 
-            @JvmField val POSTPAID = Type(JsonField.of("POSTPAID"))
+            @JvmField val POSTPAID = of("POSTPAID")
 
             @JvmStatic fun of(value: String) = Type(JsonField.of(value))
         }
@@ -1614,9 +1614,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField
-                    val PREPAID_COMMIT_SEGMENT_START =
-                        Type(JsonField.of("PREPAID_COMMIT_SEGMENT_START"))
+                    @JvmField val PREPAID_COMMIT_SEGMENT_START = of("PREPAID_COMMIT_SEGMENT_START")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -1825,7 +1823,7 @@ private constructor(
 
                     @JvmField
                     val PREPAID_COMMIT_AUTOMATED_INVOICE_DEDUCTION =
-                        Type(JsonField.of("PREPAID_COMMIT_AUTOMATED_INVOICE_DEDUCTION"))
+                        of("PREPAID_COMMIT_AUTOMATED_INVOICE_DEDUCTION")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -2034,8 +2032,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField
-                    val PREPAID_COMMIT_ROLLOVER = Type(JsonField.of("PREPAID_COMMIT_ROLLOVER"))
+                    @JvmField val PREPAID_COMMIT_ROLLOVER = of("PREPAID_COMMIT_ROLLOVER")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -2224,8 +2221,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField
-                    val PREPAID_COMMIT_EXPIRATION = Type(JsonField.of("PREPAID_COMMIT_EXPIRATION"))
+                    @JvmField val PREPAID_COMMIT_EXPIRATION = of("PREPAID_COMMIT_EXPIRATION")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -2429,8 +2425,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField
-                    val PREPAID_COMMIT_CANCELED = Type(JsonField.of("PREPAID_COMMIT_CANCELED"))
+                    @JvmField val PREPAID_COMMIT_CANCELED = of("PREPAID_COMMIT_CANCELED")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -2634,8 +2629,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField
-                    val PREPAID_COMMIT_CREDITED = Type(JsonField.of("PREPAID_COMMIT_CREDITED"))
+                    @JvmField val PREPAID_COMMIT_CREDITED = of("PREPAID_COMMIT_CREDITED")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -2812,8 +2806,7 @@ private constructor(
                 companion object {
 
                     @JvmField
-                    val POSTPAID_COMMIT_INITIAL_BALANCE =
-                        Type(JsonField.of("POSTPAID_COMMIT_INITIAL_BALANCE"))
+                    val POSTPAID_COMMIT_INITIAL_BALANCE = of("POSTPAID_COMMIT_INITIAL_BALANCE")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -3024,7 +3017,7 @@ private constructor(
 
                     @JvmField
                     val POSTPAID_COMMIT_AUTOMATED_INVOICE_DEDUCTION =
-                        Type(JsonField.of("POSTPAID_COMMIT_AUTOMATED_INVOICE_DEDUCTION"))
+                        of("POSTPAID_COMMIT_AUTOMATED_INVOICE_DEDUCTION")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -3233,8 +3226,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField
-                    val POSTPAID_COMMIT_ROLLOVER = Type(JsonField.of("POSTPAID_COMMIT_ROLLOVER"))
+                    @JvmField val POSTPAID_COMMIT_ROLLOVER = of("POSTPAID_COMMIT_ROLLOVER")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -3423,8 +3415,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField
-                    val POSTPAID_COMMIT_TRUEUP = Type(JsonField.of("POSTPAID_COMMIT_TRUEUP"))
+                    @JvmField val POSTPAID_COMMIT_TRUEUP = of("POSTPAID_COMMIT_TRUEUP")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -3612,8 +3603,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField
-                    val PREPAID_COMMIT_MANUAL = Type(JsonField.of("PREPAID_COMMIT_MANUAL"))
+                    @JvmField val PREPAID_COMMIT_MANUAL = of("PREPAID_COMMIT_MANUAL")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -3802,8 +3792,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField
-                    val POSTPAID_COMMIT_MANUAL = Type(JsonField.of("POSTPAID_COMMIT_MANUAL"))
+                    @JvmField val POSTPAID_COMMIT_MANUAL = of("POSTPAID_COMMIT_MANUAL")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -3977,9 +3966,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField
-                    val POSTPAID_COMMIT_EXPIRATION =
-                        Type(JsonField.of("POSTPAID_COMMIT_EXPIRATION"))
+                    @JvmField val POSTPAID_COMMIT_EXPIRATION = of("POSTPAID_COMMIT_EXPIRATION")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -4049,9 +4036,9 @@ private constructor(
 
         companion object {
 
-            @JvmField val COMMIT_RATE = RateType(JsonField.of("COMMIT_RATE"))
+            @JvmField val COMMIT_RATE = of("COMMIT_RATE")
 
-            @JvmField val LIST_RATE = RateType(JsonField.of("LIST_RATE"))
+            @JvmField val LIST_RATE = of("LIST_RATE")
 
             @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
         }

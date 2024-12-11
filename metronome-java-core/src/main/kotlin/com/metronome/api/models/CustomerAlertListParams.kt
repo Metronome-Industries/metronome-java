@@ -349,11 +349,11 @@ constructor(
 
         companion object {
 
-            @JvmField val ENABLED = AlertStatus(JsonField.of("ENABLED"))
+            @JvmField val ENABLED = of("ENABLED")
 
-            @JvmField val DISABLED = AlertStatus(JsonField.of("DISABLED"))
+            @JvmField val DISABLED = of("DISABLED")
 
-            @JvmField val ARCHIVED = AlertStatus(JsonField.of("ARCHIVED"))
+            @JvmField val ARCHIVED = of("ARCHIVED")
 
             @JvmStatic fun of(value: String) = AlertStatus(JsonField.of(value))
         }

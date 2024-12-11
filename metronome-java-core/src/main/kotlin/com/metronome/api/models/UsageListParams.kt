@@ -450,11 +450,11 @@ constructor(
 
         companion object {
 
-            @JvmField val HOUR = WindowSize(JsonField.of("HOUR"))
+            @JvmField val HOUR = of("HOUR")
 
-            @JvmField val DAY = WindowSize(JsonField.of("DAY"))
+            @JvmField val DAY = of("DAY")
 
-            @JvmField val NONE = WindowSize(JsonField.of("NONE"))
+            @JvmField val NONE = of("NONE")
 
             @JvmStatic fun of(value: String) = WindowSize(JsonField.of(value))
         }

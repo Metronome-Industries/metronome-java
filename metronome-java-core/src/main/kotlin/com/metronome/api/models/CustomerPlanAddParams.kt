@@ -768,13 +768,13 @@ constructor(
 
             companion object {
 
-                @JvmField val PERCENTAGE = AdjustmentType(JsonField.of("percentage"))
+                @JvmField val PERCENTAGE = of("percentage")
 
-                @JvmField val FIXED = AdjustmentType(JsonField.of("fixed"))
+                @JvmField val FIXED = of("fixed")
 
-                @JvmField val OVERRIDE = AdjustmentType(JsonField.of("override"))
+                @JvmField val OVERRIDE = of("override")
 
-                @JvmField val QUANTITY = AdjustmentType(JsonField.of("quantity"))
+                @JvmField val QUANTITY = of("quantity")
 
                 @JvmStatic fun of(value: String) = AdjustmentType(JsonField.of(value))
             }

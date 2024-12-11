@@ -958,15 +958,13 @@ private constructor(
 
                     companion object {
 
-                        @JvmField val AWS = ResellerType(JsonField.of("AWS"))
+                        @JvmField val AWS = of("AWS")
 
-                        @JvmField
-                        val AWS_PRO_SERVICE = ResellerType(JsonField.of("AWS_PRO_SERVICE"))
+                        @JvmField val AWS_PRO_SERVICE = of("AWS_PRO_SERVICE")
 
-                        @JvmField val GCP = ResellerType(JsonField.of("GCP"))
+                        @JvmField val GCP = of("GCP")
 
-                        @JvmField
-                        val GCP_PRO_SERVICE = ResellerType(JsonField.of("GCP_PRO_SERVICE"))
+                        @JvmField val GCP_PRO_SERVICE = of("GCP_PRO_SERVICE")
 
                         @JvmStatic fun of(value: String) = ResellerType(JsonField.of(value))
                     }
@@ -1233,23 +1231,21 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val AWS_MARKETPLACE = BillingProvider(JsonField.of("aws_marketplace"))
+                    @JvmField val AWS_MARKETPLACE = of("aws_marketplace")
 
-                    @JvmField val STRIPE = BillingProvider(JsonField.of("stripe"))
+                    @JvmField val STRIPE = of("stripe")
 
-                    @JvmField val NETSUITE = BillingProvider(JsonField.of("netsuite"))
+                    @JvmField val NETSUITE = of("netsuite")
 
-                    @JvmField val CUSTOM = BillingProvider(JsonField.of("custom"))
+                    @JvmField val CUSTOM = of("custom")
 
-                    @JvmField
-                    val AZURE_MARKETPLACE = BillingProvider(JsonField.of("azure_marketplace"))
+                    @JvmField val AZURE_MARKETPLACE = of("azure_marketplace")
 
-                    @JvmField
-                    val QUICKBOOKS_ONLINE = BillingProvider(JsonField.of("quickbooks_online"))
+                    @JvmField val QUICKBOOKS_ONLINE = of("quickbooks_online")
 
-                    @JvmField val WORKDAY = BillingProvider(JsonField.of("workday"))
+                    @JvmField val WORKDAY = of("workday")
 
-                    @JvmField val GCP_MARKETPLACE = BillingProvider(JsonField.of("gcp_marketplace"))
+                    @JvmField val GCP_MARKETPLACE = of("gcp_marketplace")
 
                     @JvmStatic fun of(value: String) = BillingProvider(JsonField.of(value))
                 }
@@ -1329,15 +1325,13 @@ private constructor(
 
                 companion object {
 
-                    @JvmField
-                    val DIRECT_TO_BILLING_PROVIDER =
-                        DeliveryMethod(JsonField.of("direct_to_billing_provider"))
+                    @JvmField val DIRECT_TO_BILLING_PROVIDER = of("direct_to_billing_provider")
 
-                    @JvmField val AWS_SQS = DeliveryMethod(JsonField.of("aws_sqs"))
+                    @JvmField val AWS_SQS = of("aws_sqs")
 
-                    @JvmField val TACKLE = DeliveryMethod(JsonField.of("tackle"))
+                    @JvmField val TACKLE = of("tackle")
 
-                    @JvmField val AWS_SNS = DeliveryMethod(JsonField.of("aws_sns"))
+                    @JvmField val AWS_SNS = of("aws_sns")
 
                     @JvmStatic fun of(value: String) = DeliveryMethod(JsonField.of(value))
                 }

@@ -1573,11 +1573,11 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val PREPAID = Type(JsonField.of("PREPAID"))
+                    @JvmField val PREPAID = of("PREPAID")
 
-                    @JvmField val POSTPAID = Type(JsonField.of("POSTPAID"))
+                    @JvmField val POSTPAID = of("POSTPAID")
 
-                    @JvmField val CREDIT = Type(JsonField.of("CREDIT"))
+                    @JvmField val CREDIT = of("CREDIT")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -2179,13 +2179,13 @@ private constructor(
 
             companion object {
 
-                @JvmField val AWS = ResellerType(JsonField.of("AWS"))
+                @JvmField val AWS = of("AWS")
 
-                @JvmField val AWS_PRO_SERVICE = ResellerType(JsonField.of("AWS_PRO_SERVICE"))
+                @JvmField val AWS_PRO_SERVICE = of("AWS_PRO_SERVICE")
 
-                @JvmField val GCP = ResellerType(JsonField.of("GCP"))
+                @JvmField val GCP = of("GCP")
 
-                @JvmField val GCP_PRO_SERVICE = ResellerType(JsonField.of("GCP_PRO_SERVICE"))
+                @JvmField val GCP_PRO_SERVICE = of("GCP_PRO_SERVICE")
 
                 @JvmStatic fun of(value: String) = ResellerType(JsonField.of(value))
             }
@@ -2943,9 +2943,9 @@ private constructor(
 
         companion object {
 
-            @JvmField val BILLABLE = BillableStatus(JsonField.of("billable"))
+            @JvmField val BILLABLE = of("billable")
 
-            @JvmField val UNBILLABLE = BillableStatus(JsonField.of("unbillable"))
+            @JvmField val UNBILLABLE = of("unbillable")
 
             @JvmStatic fun of(value: String) = BillableStatus(JsonField.of(value))
         }
@@ -3331,25 +3331,21 @@ private constructor(
 
                 companion object {
 
-                    @JvmField
-                    val AWS_MARKETPLACE = BillingProviderType(JsonField.of("aws_marketplace"))
+                    @JvmField val AWS_MARKETPLACE = of("aws_marketplace")
 
-                    @JvmField val STRIPE = BillingProviderType(JsonField.of("stripe"))
+                    @JvmField val STRIPE = of("stripe")
 
-                    @JvmField val NETSUITE = BillingProviderType(JsonField.of("netsuite"))
+                    @JvmField val NETSUITE = of("netsuite")
 
-                    @JvmField val CUSTOM = BillingProviderType(JsonField.of("custom"))
+                    @JvmField val CUSTOM = of("custom")
 
-                    @JvmField
-                    val AZURE_MARKETPLACE = BillingProviderType(JsonField.of("azure_marketplace"))
+                    @JvmField val AZURE_MARKETPLACE = of("azure_marketplace")
 
-                    @JvmField
-                    val QUICKBOOKS_ONLINE = BillingProviderType(JsonField.of("quickbooks_online"))
+                    @JvmField val QUICKBOOKS_ONLINE = of("quickbooks_online")
 
-                    @JvmField val WORKDAY = BillingProviderType(JsonField.of("workday"))
+                    @JvmField val WORKDAY = of("workday")
 
-                    @JvmField
-                    val GCP_MARKETPLACE = BillingProviderType(JsonField.of("gcp_marketplace"))
+                    @JvmField val GCP_MARKETPLACE = of("gcp_marketplace")
 
                     @JvmStatic fun of(value: String) = BillingProviderType(JsonField.of(value))
                 }
@@ -3431,29 +3427,27 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val DRAFT = ExternalStatus(JsonField.of("DRAFT"))
+                    @JvmField val DRAFT = of("DRAFT")
 
-                    @JvmField val FINALIZED = ExternalStatus(JsonField.of("FINALIZED"))
+                    @JvmField val FINALIZED = of("FINALIZED")
 
-                    @JvmField val PAID = ExternalStatus(JsonField.of("PAID"))
+                    @JvmField val PAID = of("PAID")
 
-                    @JvmField val UNCOLLECTIBLE = ExternalStatus(JsonField.of("UNCOLLECTIBLE"))
+                    @JvmField val UNCOLLECTIBLE = of("UNCOLLECTIBLE")
 
-                    @JvmField val VOID = ExternalStatus(JsonField.of("VOID"))
+                    @JvmField val VOID = of("VOID")
 
-                    @JvmField val DELETED = ExternalStatus(JsonField.of("DELETED"))
+                    @JvmField val DELETED = of("DELETED")
 
-                    @JvmField val PAYMENT_FAILED = ExternalStatus(JsonField.of("PAYMENT_FAILED"))
+                    @JvmField val PAYMENT_FAILED = of("PAYMENT_FAILED")
 
-                    @JvmField
-                    val INVALID_REQUEST_ERROR =
-                        ExternalStatus(JsonField.of("INVALID_REQUEST_ERROR"))
+                    @JvmField val INVALID_REQUEST_ERROR = of("INVALID_REQUEST_ERROR")
 
-                    @JvmField val SKIPPED = ExternalStatus(JsonField.of("SKIPPED"))
+                    @JvmField val SKIPPED = of("SKIPPED")
 
-                    @JvmField val SENT = ExternalStatus(JsonField.of("SENT"))
+                    @JvmField val SENT = of("SENT")
 
-                    @JvmField val QUEUED = ExternalStatus(JsonField.of("QUEUED"))
+                    @JvmField val QUEUED = of("QUEUED")
 
                     @JvmStatic fun of(value: String) = ExternalStatus(JsonField.of(value))
                 }
@@ -3851,23 +3845,21 @@ private constructor(
 
             companion object {
 
-                @JvmField val AWS_MARKETPLACE = BillingProviderType(JsonField.of("aws_marketplace"))
+                @JvmField val AWS_MARKETPLACE = of("aws_marketplace")
 
-                @JvmField val STRIPE = BillingProviderType(JsonField.of("stripe"))
+                @JvmField val STRIPE = of("stripe")
 
-                @JvmField val NETSUITE = BillingProviderType(JsonField.of("netsuite"))
+                @JvmField val NETSUITE = of("netsuite")
 
-                @JvmField val CUSTOM = BillingProviderType(JsonField.of("custom"))
+                @JvmField val CUSTOM = of("custom")
 
-                @JvmField
-                val AZURE_MARKETPLACE = BillingProviderType(JsonField.of("azure_marketplace"))
+                @JvmField val AZURE_MARKETPLACE = of("azure_marketplace")
 
-                @JvmField
-                val QUICKBOOKS_ONLINE = BillingProviderType(JsonField.of("quickbooks_online"))
+                @JvmField val QUICKBOOKS_ONLINE = of("quickbooks_online")
 
-                @JvmField val WORKDAY = BillingProviderType(JsonField.of("workday"))
+                @JvmField val WORKDAY = of("workday")
 
-                @JvmField val GCP_MARKETPLACE = BillingProviderType(JsonField.of("gcp_marketplace"))
+                @JvmField val GCP_MARKETPLACE = of("gcp_marketplace")
 
                 @JvmStatic fun of(value: String) = BillingProviderType(JsonField.of(value))
             }
@@ -3947,28 +3939,27 @@ private constructor(
 
             companion object {
 
-                @JvmField val DRAFT = ExternalStatus(JsonField.of("DRAFT"))
+                @JvmField val DRAFT = of("DRAFT")
 
-                @JvmField val FINALIZED = ExternalStatus(JsonField.of("FINALIZED"))
+                @JvmField val FINALIZED = of("FINALIZED")
 
-                @JvmField val PAID = ExternalStatus(JsonField.of("PAID"))
+                @JvmField val PAID = of("PAID")
 
-                @JvmField val UNCOLLECTIBLE = ExternalStatus(JsonField.of("UNCOLLECTIBLE"))
+                @JvmField val UNCOLLECTIBLE = of("UNCOLLECTIBLE")
 
-                @JvmField val VOID = ExternalStatus(JsonField.of("VOID"))
+                @JvmField val VOID = of("VOID")
 
-                @JvmField val DELETED = ExternalStatus(JsonField.of("DELETED"))
+                @JvmField val DELETED = of("DELETED")
 
-                @JvmField val PAYMENT_FAILED = ExternalStatus(JsonField.of("PAYMENT_FAILED"))
+                @JvmField val PAYMENT_FAILED = of("PAYMENT_FAILED")
 
-                @JvmField
-                val INVALID_REQUEST_ERROR = ExternalStatus(JsonField.of("INVALID_REQUEST_ERROR"))
+                @JvmField val INVALID_REQUEST_ERROR = of("INVALID_REQUEST_ERROR")
 
-                @JvmField val SKIPPED = ExternalStatus(JsonField.of("SKIPPED"))
+                @JvmField val SKIPPED = of("SKIPPED")
 
-                @JvmField val SENT = ExternalStatus(JsonField.of("SENT"))
+                @JvmField val SENT = of("SENT")
 
-                @JvmField val QUEUED = ExternalStatus(JsonField.of("QUEUED"))
+                @JvmField val QUEUED = of("QUEUED")
 
                 @JvmStatic fun of(value: String) = ExternalStatus(JsonField.of(value))
             }
@@ -4522,13 +4513,13 @@ private constructor(
 
             companion object {
 
-                @JvmField val AWS = ResellerType(JsonField.of("AWS"))
+                @JvmField val AWS = of("AWS")
 
-                @JvmField val AWS_PRO_SERVICE = ResellerType(JsonField.of("AWS_PRO_SERVICE"))
+                @JvmField val AWS_PRO_SERVICE = of("AWS_PRO_SERVICE")
 
-                @JvmField val GCP = ResellerType(JsonField.of("GCP"))
+                @JvmField val GCP = of("GCP")
 
-                @JvmField val GCP_PRO_SERVICE = ResellerType(JsonField.of("GCP_PRO_SERVICE"))
+                @JvmField val GCP_PRO_SERVICE = of("GCP_PRO_SERVICE")
 
                 @JvmStatic fun of(value: String) = ResellerType(JsonField.of(value))
             }
