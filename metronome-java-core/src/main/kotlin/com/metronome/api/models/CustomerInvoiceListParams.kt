@@ -5,7 +5,6 @@ package com.metronome.api.models
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.metronome.api.core.Enum
 import com.metronome.api.core.JsonField
-import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams

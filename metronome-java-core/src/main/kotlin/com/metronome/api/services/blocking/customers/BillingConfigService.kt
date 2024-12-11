@@ -7,7 +7,6 @@ package com.metronome.api.services.blocking.customers
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.metronome.api.core.Enum
 import com.metronome.api.core.JsonField
-import com.metronome.api.core.JsonValue
 import com.metronome.api.core.RequestOptions
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.CustomerBillingConfigCreateParams
