@@ -3,7 +3,6 @@
 package com.metronome.api.models
 
 import com.metronome.api.core.http.QueryParams
-import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

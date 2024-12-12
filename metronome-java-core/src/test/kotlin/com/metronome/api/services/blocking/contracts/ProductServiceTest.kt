@@ -4,8 +4,13 @@ package com.metronome.api.services.blocking.contracts
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
-import com.metronome.api.models.*
+import com.metronome.api.models.ContractProductArchiveParams
+import com.metronome.api.models.ContractProductCreateParams
 import com.metronome.api.models.ContractProductListParams
+import com.metronome.api.models.ContractProductRetrieveParams
+import com.metronome.api.models.ContractProductUpdateParams
+import com.metronome.api.models.QuantityConversion
+import com.metronome.api.models.QuantityRounding
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

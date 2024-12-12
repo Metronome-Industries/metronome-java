@@ -5,7 +5,6 @@ package com.metronome.api.models
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
-import com.metronome.api.models.*
 import java.util.Objects
 
 class PlanGetDetailsParams

@@ -4,7 +4,6 @@ package com.metronome.api.models
 
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.http.QueryParams
-import com.metronome.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

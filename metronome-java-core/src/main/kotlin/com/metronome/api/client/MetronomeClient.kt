@@ -2,7 +2,6 @@
 
 package com.metronome.api.client
 
-import com.metronome.api.models.*
 import com.metronome.api.services.blocking.*
 
 interface MetronomeClient {

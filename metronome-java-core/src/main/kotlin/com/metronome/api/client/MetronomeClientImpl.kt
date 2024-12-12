@@ -4,7 +4,6 @@ package com.metronome.api.client
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.getPackageVersion
-import com.metronome.api.models.*
 import com.metronome.api.services.blocking.*
 
 class MetronomeClientImpl

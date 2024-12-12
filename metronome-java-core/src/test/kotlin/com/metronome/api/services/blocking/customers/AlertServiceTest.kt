@@ -4,7 +4,9 @@ package com.metronome.api.services.blocking.customers
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
-import com.metronome.api.models.*
+import com.metronome.api.models.CustomerAlertListParams
+import com.metronome.api.models.CustomerAlertResetParams
+import com.metronome.api.models.CustomerAlertRetrieveParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 

@@ -4,7 +4,8 @@ package com.metronome.api.services.blocking.customers
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
-import com.metronome.api.models.*
+import com.metronome.api.models.CustomerPlanAddParams
+import com.metronome.api.models.CustomerPlanEndParams
 import com.metronome.api.models.CustomerPlanListParams
 import com.metronome.api.models.CustomerPlanListPriceAdjustmentsParams
 import java.time.OffsetDateTime

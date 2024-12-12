@@ -16,7 +16,6 @@ import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
-import com.metronome.api.models.*
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional

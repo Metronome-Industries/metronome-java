@@ -5,7 +5,11 @@ package com.metronome.api.services.blocking
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
-import com.metronome.api.models.*
+import com.metronome.api.models.CustomFieldAddKeyParams
+import com.metronome.api.models.CustomFieldDeleteValuesParams
+import com.metronome.api.models.CustomFieldListKeysParams
+import com.metronome.api.models.CustomFieldRemoveKeyParams
+import com.metronome.api.models.CustomFieldSetValuesParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 

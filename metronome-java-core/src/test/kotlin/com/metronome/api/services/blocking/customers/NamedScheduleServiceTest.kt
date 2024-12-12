@@ -5,7 +5,8 @@ package com.metronome.api.services.blocking.customers
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
-import com.metronome.api.models.*
+import com.metronome.api.models.CustomerNamedScheduleRetrieveParams
+import com.metronome.api.models.CustomerNamedScheduleUpdateParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

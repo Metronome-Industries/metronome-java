@@ -4,7 +4,7 @@ package com.metronome.api.services.blocking
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
-import com.metronome.api.models.*
+import com.metronome.api.models.PlanGetDetailsParams
 import com.metronome.api.models.PlanListChargesParams
 import com.metronome.api.models.PlanListCustomersParams
 import com.metronome.api.models.PlanListParams

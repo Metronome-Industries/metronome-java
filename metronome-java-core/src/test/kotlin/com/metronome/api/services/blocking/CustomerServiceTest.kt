@@ -5,10 +5,15 @@ package com.metronome.api.services.blocking
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
-import com.metronome.api.models.*
+import com.metronome.api.models.CustomerArchiveParams
+import com.metronome.api.models.CustomerCreateParams
 import com.metronome.api.models.CustomerListBillableMetricsParams
 import com.metronome.api.models.CustomerListCostsParams
 import com.metronome.api.models.CustomerListParams
+import com.metronome.api.models.CustomerRetrieveParams
+import com.metronome.api.models.CustomerSetIngestAliasesParams
+import com.metronome.api.models.CustomerSetNameParams
+import com.metronome.api.models.CustomerUpdateConfigParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

@@ -4,9 +4,10 @@ package com.metronome.api.services.blocking.customers
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
-import com.metronome.api.models.*
+import com.metronome.api.models.CustomerInvoiceAddChargeParams
 import com.metronome.api.models.CustomerInvoiceListBreakdownsParams
 import com.metronome.api.models.CustomerInvoiceListParams
+import com.metronome.api.models.CustomerInvoiceRetrieveParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
