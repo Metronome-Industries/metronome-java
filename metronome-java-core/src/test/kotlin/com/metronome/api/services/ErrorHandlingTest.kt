@@ -12,7 +12,6 @@ import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import com.metronome.api.client.MetronomeClient
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
-import com.metronome.api.core.JsonString
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.jsonMapper
@@ -40,7 +39,7 @@ class ErrorHandlingTest {
     private val JSON_MAPPER: JsonMapper = jsonMapper()
 
     private val METRONOME_ERROR: MetronomeError =
-        MetronomeError.builder().putAdditionalProperty("key", JsonString.of("value")).build()
+        MetronomeError.builder().putAdditionalProperty("key", JsonValue.from("value")).build()
 
     private lateinit var client: MetronomeClient
 

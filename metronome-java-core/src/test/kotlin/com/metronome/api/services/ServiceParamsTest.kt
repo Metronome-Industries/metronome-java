@@ -15,7 +15,6 @@ import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import com.metronome.api.client.MetronomeClient
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
-import com.metronome.api.core.JsonString
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.jsonMapper
 import com.metronome.api.models.*
@@ -52,7 +51,7 @@ class ServiceParamsTest {
 
         val additionalBodyProperties = mutableMapOf<String, JsonValue>()
 
-        additionalBodyProperties.put("testBodyProperty", JsonString.of("ghi890"))
+        additionalBodyProperties.put("testBodyProperty", JsonValue.from("ghi890"))
 
         val params =
             ContractCreateParams.builder()
