@@ -936,6 +936,7 @@ constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
+            /** Defaults to USD (cents) if not passed */
             @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
 
             @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem>? = scheduleItems
@@ -964,6 +965,7 @@ constructor(
                     additionalProperties(accessSchedule.additionalProperties)
                 }
 
+                /** Defaults to USD (cents) if not passed */
                 @JsonProperty("credit_type_id")
                 fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
@@ -1197,7 +1199,7 @@ constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            /** Defaults to USD if not passed. Only USD is supported at this time. */
+            /** Defaults to USD (cents) if not passed. */
             @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
 
             /** Either provide amount or provide both unit_price and quantity. */
@@ -1237,7 +1239,7 @@ constructor(
                     additionalProperties(invoiceSchedule.additionalProperties)
                 }
 
-                /** Defaults to USD if not passed. Only USD is supported at this time. */
+                /** Defaults to USD (cents) if not passed. */
                 @JsonProperty("credit_type_id")
                 fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
@@ -2019,6 +2021,7 @@ constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
+            /** Defaults to USD (cents) if not passed */
             @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
 
             @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem>? = scheduleItems
@@ -2047,6 +2050,7 @@ constructor(
                     additionalProperties(accessSchedule.additionalProperties)
                 }
 
+                /** Defaults to USD (cents) if not passed */
                 @JsonProperty("credit_type_id")
                 fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
@@ -2514,7 +2518,7 @@ constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            /** Defaults to USD if not passed. Only USD is supported at this time. */
+            /** Defaults to USD (cents) if not passed. */
             @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
 
             /** Either provide amount or provide both unit_price and quantity. */
@@ -2554,7 +2558,7 @@ constructor(
                     additionalProperties(schedule.additionalProperties)
                 }
 
-                /** Defaults to USD if not passed. Only USD is supported at this time. */
+                /** Defaults to USD (cents) if not passed. */
                 @JsonProperty("credit_type_id")
                 fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
@@ -4885,7 +4889,7 @@ constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            /** Defaults to USD if not passed. Only USD is supported at this time. */
+            /** Defaults to USD (cents) if not passed. */
             @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
 
             /** Either provide amount or provide both unit_price and quantity. */
@@ -4925,7 +4929,7 @@ constructor(
                     additionalProperties(schedule.additionalProperties)
                 }
 
-                /** Defaults to USD if not passed. Only USD is supported at this time. */
+                /** Defaults to USD (cents) if not passed. */
                 @JsonProperty("credit_type_id")
                 fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 

@@ -619,7 +619,7 @@ constructor(
 
         @JsonProperty("amount") fun amount(): Double? = amount
 
-        /** the ID of the pricing unit to be used */
+        /** the ID of the pricing unit to be used. Defaults to USD (cents) if not passed. */
         @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
 
         @JsonAnyGetter
@@ -648,7 +648,7 @@ constructor(
 
             @JsonProperty("amount") fun amount(amount: Double) = apply { this.amount = amount }
 
-            /** the ID of the pricing unit to be used */
+            /** the ID of the pricing unit to be used. Defaults to USD (cents) if not passed. */
             @JsonProperty("credit_type_id")
             fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
@@ -704,7 +704,7 @@ constructor(
 
         @JsonProperty("amount") fun amount(): Double? = amount
 
-        /** the ID of the pricing unit to be used */
+        /** the ID of the pricing unit to be used. Defaults to USD (cents) if not passed. */
         @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
 
         @JsonAnyGetter
@@ -733,7 +733,7 @@ constructor(
 
             @JsonProperty("amount") fun amount(amount: Double) = apply { this.amount = amount }
 
-            /** the ID of the pricing unit to be used */
+            /** the ID of the pricing unit to be used. Defaults to USD (cents) if not passed. */
             @JsonProperty("credit_type_id")
             fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
