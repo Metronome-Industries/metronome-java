@@ -14,6 +14,11 @@ class ContractRateCardRateListResponseTest {
         val contractRateCardRateListResponse =
             ContractRateCardRateListResponse.builder()
                 .entitled(true)
+                .productCustomFields(
+                    ContractRateCardRateListResponse.ProductCustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .productName("product_name")
                 .productTags(listOf("string"))
@@ -60,6 +65,12 @@ class ContractRateCardRateListResponseTest {
                 .build()
         assertThat(contractRateCardRateListResponse).isNotNull
         assertThat(contractRateCardRateListResponse.entitled()).isEqualTo(true)
+        assertThat(contractRateCardRateListResponse.productCustomFields())
+            .isEqualTo(
+                ContractRateCardRateListResponse.ProductCustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(contractRateCardRateListResponse.productId())
             .isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(contractRateCardRateListResponse.productName()).isEqualTo("product_name")

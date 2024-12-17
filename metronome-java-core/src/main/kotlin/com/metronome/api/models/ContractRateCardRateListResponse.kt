@@ -26,6 +26,7 @@ private constructor(
     private val productId: JsonField<String>,
     private val productName: JsonField<String>,
     private val productTags: JsonField<List<String>>,
+    private val productCustomFields: JsonField<ProductCustomFields>,
     private val pricingGroupValues: JsonField<PricingGroupValues>,
     private val startingAt: JsonField<OffsetDateTime>,
     private val endingBefore: JsonField<OffsetDateTime>,
@@ -42,6 +43,9 @@ private constructor(
     fun productName(): String = productName.getRequired("product_name")
 
     fun productTags(): List<String> = productTags.getRequired("product_tags")
+
+    fun productCustomFields(): ProductCustomFields =
+        productCustomFields.getRequired("product_custom_fields")
 
     fun pricingGroupValues(): Optional<PricingGroupValues> =
         Optional.ofNullable(pricingGroupValues.getNullable("pricing_group_values"))
@@ -67,6 +71,10 @@ private constructor(
     @JsonProperty("product_name") @ExcludeMissing fun _productName() = productName
 
     @JsonProperty("product_tags") @ExcludeMissing fun _productTags() = productTags
+
+    @JsonProperty("product_custom_fields")
+    @ExcludeMissing
+    fun _productCustomFields() = productCustomFields
 
     @JsonProperty("pricing_group_values")
     @ExcludeMissing
@@ -95,6 +103,7 @@ private constructor(
             productId()
             productName()
             productTags()
+            productCustomFields().validate()
             pricingGroupValues().map { it.validate() }
             startingAt()
             endingBefore()
@@ -117,6 +126,7 @@ private constructor(
         private var productId: JsonField<String> = JsonMissing.of()
         private var productName: JsonField<String> = JsonMissing.of()
         private var productTags: JsonField<List<String>> = JsonMissing.of()
+        private var productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of()
         private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
         private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -131,6 +141,7 @@ private constructor(
                 this.productId = contractRateCardRateListResponse.productId
                 this.productName = contractRateCardRateListResponse.productName
                 this.productTags = contractRateCardRateListResponse.productTags
+                this.productCustomFields = contractRateCardRateListResponse.productCustomFields
                 this.pricingGroupValues = contractRateCardRateListResponse.pricingGroupValues
                 this.startingAt = contractRateCardRateListResponse.startingAt
                 this.endingBefore = contractRateCardRateListResponse.endingBefore
@@ -158,6 +169,15 @@ private constructor(
         @ExcludeMissing
         fun productTags(productTags: JsonField<List<String>>) = apply {
             this.productTags = productTags
+        }
+
+        fun productCustomFields(productCustomFields: ProductCustomFields) =
+            productCustomFields(JsonField.of(productCustomFields))
+
+        @JsonProperty("product_custom_fields")
+        @ExcludeMissing
+        fun productCustomFields(productCustomFields: JsonField<ProductCustomFields>) = apply {
+            this.productCustomFields = productCustomFields
         }
 
         fun pricingGroupValues(pricingGroupValues: PricingGroupValues) =
@@ -230,6 +250,7 @@ private constructor(
                 productId,
                 productName,
                 productTags.map { it.toImmutable() },
+                productCustomFields,
                 pricingGroupValues,
                 startingAt,
                 endingBefore,
@@ -238,6 +259,76 @@ private constructor(
                 commitRate,
                 additionalProperties.toImmutable(),
             )
+    }
+
+    @JsonDeserialize(builder = ProductCustomFields.Builder::class)
+    @NoAutoDetect
+    class ProductCustomFields
+    private constructor(
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        private var validated: Boolean = false
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun validate(): ProductCustomFields = apply {
+            if (!validated) {
+                validated = true
+            }
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(productCustomFields: ProductCustomFields) = apply {
+                additionalProperties(productCustomFields.additionalProperties)
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): ProductCustomFields =
+                ProductCustomFields(additionalProperties.toImmutable())
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is ProductCustomFields && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "ProductCustomFields{additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -549,15 +640,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardRateListResponse && productId == other.productId && productName == other.productName && productTags == other.productTags && pricingGroupValues == other.pricingGroupValues && startingAt == other.startingAt && endingBefore == other.endingBefore && entitled == other.entitled && rate == other.rate && commitRate == other.commitRate && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardRateListResponse && productId == other.productId && productName == other.productName && productTags == other.productTags && productCustomFields == other.productCustomFields && pricingGroupValues == other.pricingGroupValues && startingAt == other.startingAt && endingBefore == other.endingBefore && entitled == other.entitled && rate == other.rate && commitRate == other.commitRate && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(productId, productName, productTags, pricingGroupValues, startingAt, endingBefore, entitled, rate, commitRate, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(productId, productName, productTags, productCustomFields, pricingGroupValues, startingAt, endingBefore, entitled, rate, commitRate, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ContractRateCardRateListResponse{productId=$productId, productName=$productName, productTags=$productTags, pricingGroupValues=$pricingGroupValues, startingAt=$startingAt, endingBefore=$endingBefore, entitled=$entitled, rate=$rate, commitRate=$commitRate, additionalProperties=$additionalProperties}"
+        "ContractRateCardRateListResponse{productId=$productId, productName=$productName, productTags=$productTags, productCustomFields=$productCustomFields, pricingGroupValues=$pricingGroupValues, startingAt=$startingAt, endingBefore=$endingBefore, entitled=$entitled, rate=$rate, commitRate=$commitRate, additionalProperties=$additionalProperties}"
 }

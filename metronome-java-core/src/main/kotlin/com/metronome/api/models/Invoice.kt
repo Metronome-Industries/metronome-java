@@ -638,6 +638,7 @@ private constructor(
         private val professionalServiceCustomFields: JsonField<ProfessionalServiceCustomFields>,
         private val scheduledChargeId: JsonField<String>,
         private val scheduledChargeCustomFields: JsonField<ScheduledChargeCustomFields>,
+        private val tier: JsonField<Tier>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
@@ -785,6 +786,8 @@ private constructor(
                 scheduledChargeCustomFields.getNullable("scheduled_charge_custom_fields")
             )
 
+        fun tier(): Optional<Tier> = Optional.ofNullable(tier.getNullable("tier"))
+
         @JsonProperty("name") @ExcludeMissing fun _name() = name
 
         @JsonProperty("group_key") @ExcludeMissing fun _groupKey() = groupKey
@@ -918,6 +921,8 @@ private constructor(
         @ExcludeMissing
         fun _scheduledChargeCustomFields() = scheduledChargeCustomFields
 
+        @JsonProperty("tier") @ExcludeMissing fun _tier() = tier
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -959,6 +964,7 @@ private constructor(
                 professionalServiceCustomFields().map { it.validate() }
                 scheduledChargeId()
                 scheduledChargeCustomFields().map { it.validate() }
+                tier().map { it.validate() }
                 validated = true
             }
         }
@@ -1011,6 +1017,7 @@ private constructor(
             private var scheduledChargeId: JsonField<String> = JsonMissing.of()
             private var scheduledChargeCustomFields: JsonField<ScheduledChargeCustomFields> =
                 JsonMissing.of()
+            private var tier: JsonField<Tier> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -1050,6 +1057,7 @@ private constructor(
                 this.professionalServiceCustomFields = lineItem.professionalServiceCustomFields
                 this.scheduledChargeId = lineItem.scheduledChargeId
                 this.scheduledChargeCustomFields = lineItem.scheduledChargeCustomFields
+                this.tier = lineItem.tier
                 additionalProperties(lineItem.additionalProperties)
             }
 
@@ -1409,6 +1417,12 @@ private constructor(
                 scheduledChargeCustomFields: JsonField<ScheduledChargeCustomFields>
             ) = apply { this.scheduledChargeCustomFields = scheduledChargeCustomFields }
 
+            fun tier(tier: Tier) = tier(JsonField.of(tier))
+
+            @JsonProperty("tier")
+            @ExcludeMissing
+            fun tier(tier: JsonField<Tier>) = apply { this.tier = tier }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 this.additionalProperties.putAll(additionalProperties)
@@ -1460,6 +1474,7 @@ private constructor(
                     professionalServiceCustomFields,
                     scheduledChargeId,
                     scheduledChargeCustomFields,
+                    tier,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -2903,22 +2918,143 @@ private constructor(
                 "SubLineItem{name=$name, price=$price, quantity=$quantity, subtotal=$subtotal, chargeId=$chargeId, creditGrantId=$creditGrantId, tierPeriod=$tierPeriod, tiers=$tiers, customFields=$customFields, startDate=$startDate, endDate=$endDate, additionalProperties=$additionalProperties}"
         }
 
+        @JsonDeserialize(builder = Tier.Builder::class)
+        @NoAutoDetect
+        class Tier
+        private constructor(
+            private val size: JsonField<String>,
+            private val level: JsonField<Double>,
+            private val startingAt: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            fun size(): Optional<String> = Optional.ofNullable(size.getNullable("size"))
+
+            fun level(): Double = level.getRequired("level")
+
+            fun startingAt(): String = startingAt.getRequired("starting_at")
+
+            @JsonProperty("size") @ExcludeMissing fun _size() = size
+
+            @JsonProperty("level") @ExcludeMissing fun _level() = level
+
+            @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): Tier = apply {
+                if (!validated) {
+                    size()
+                    level()
+                    startingAt()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var size: JsonField<String> = JsonMissing.of()
+                private var level: JsonField<Double> = JsonMissing.of()
+                private var startingAt: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(tier: Tier) = apply {
+                    this.size = tier.size
+                    this.level = tier.level
+                    this.startingAt = tier.startingAt
+                    additionalProperties(tier.additionalProperties)
+                }
+
+                fun size(size: String) = size(JsonField.of(size))
+
+                @JsonProperty("size")
+                @ExcludeMissing
+                fun size(size: JsonField<String>) = apply { this.size = size }
+
+                fun level(level: Double) = level(JsonField.of(level))
+
+                @JsonProperty("level")
+                @ExcludeMissing
+                fun level(level: JsonField<Double>) = apply { this.level = level }
+
+                fun startingAt(startingAt: String) = startingAt(JsonField.of(startingAt))
+
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                fun startingAt(startingAt: JsonField<String>) = apply {
+                    this.startingAt = startingAt
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): Tier =
+                    Tier(
+                        size,
+                        level,
+                        startingAt,
+                        additionalProperties.toImmutable(),
+                    )
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Tier && size == other.size && level == other.level && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(size, level, startingAt, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Tier{size=$size, level=$level, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+        }
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is LineItem && name == other.name && groupKey == other.groupKey && groupValue == other.groupValue && quantity == other.quantity && total == other.total && unitPrice == other.unitPrice && listPrice == other.listPrice && productId == other.productId && productCustomFields == other.productCustomFields && productType == other.productType && netsuiteItemId == other.netsuiteItemId && isProrated == other.isProrated && creditType == other.creditType && startingAt == other.startingAt && endingBefore == other.endingBefore && commitId == other.commitId && appliedCommitOrCredit == other.appliedCommitOrCredit && commitCustomFields == other.commitCustomFields && commitSegmentId == other.commitSegmentId && commitType == other.commitType && commitNetsuiteSalesOrderId == other.commitNetsuiteSalesOrderId && commitNetsuiteItemId == other.commitNetsuiteItemId && postpaidCommit == other.postpaidCommit && resellerType == other.resellerType && subLineItems == other.subLineItems && customFields == other.customFields && pricingGroupValues == other.pricingGroupValues && presentationGroupValues == other.presentationGroupValues && metadata == other.metadata && netsuiteInvoiceBillingStart == other.netsuiteInvoiceBillingStart && netsuiteInvoiceBillingEnd == other.netsuiteInvoiceBillingEnd && professionalServiceId == other.professionalServiceId && professionalServiceCustomFields == other.professionalServiceCustomFields && scheduledChargeId == other.scheduledChargeId && scheduledChargeCustomFields == other.scheduledChargeCustomFields && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is LineItem && name == other.name && groupKey == other.groupKey && groupValue == other.groupValue && quantity == other.quantity && total == other.total && unitPrice == other.unitPrice && listPrice == other.listPrice && productId == other.productId && productCustomFields == other.productCustomFields && productType == other.productType && netsuiteItemId == other.netsuiteItemId && isProrated == other.isProrated && creditType == other.creditType && startingAt == other.startingAt && endingBefore == other.endingBefore && commitId == other.commitId && appliedCommitOrCredit == other.appliedCommitOrCredit && commitCustomFields == other.commitCustomFields && commitSegmentId == other.commitSegmentId && commitType == other.commitType && commitNetsuiteSalesOrderId == other.commitNetsuiteSalesOrderId && commitNetsuiteItemId == other.commitNetsuiteItemId && postpaidCommit == other.postpaidCommit && resellerType == other.resellerType && subLineItems == other.subLineItems && customFields == other.customFields && pricingGroupValues == other.pricingGroupValues && presentationGroupValues == other.presentationGroupValues && metadata == other.metadata && netsuiteInvoiceBillingStart == other.netsuiteInvoiceBillingStart && netsuiteInvoiceBillingEnd == other.netsuiteInvoiceBillingEnd && professionalServiceId == other.professionalServiceId && professionalServiceCustomFields == other.professionalServiceCustomFields && scheduledChargeId == other.scheduledChargeId && scheduledChargeCustomFields == other.scheduledChargeCustomFields && tier == other.tier && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(name, groupKey, groupValue, quantity, total, unitPrice, listPrice, productId, productCustomFields, productType, netsuiteItemId, isProrated, creditType, startingAt, endingBefore, commitId, appliedCommitOrCredit, commitCustomFields, commitSegmentId, commitType, commitNetsuiteSalesOrderId, commitNetsuiteItemId, postpaidCommit, resellerType, subLineItems, customFields, pricingGroupValues, presentationGroupValues, metadata, netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd, professionalServiceId, professionalServiceCustomFields, scheduledChargeId, scheduledChargeCustomFields, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(name, groupKey, groupValue, quantity, total, unitPrice, listPrice, productId, productCustomFields, productType, netsuiteItemId, isProrated, creditType, startingAt, endingBefore, commitId, appliedCommitOrCredit, commitCustomFields, commitSegmentId, commitType, commitNetsuiteSalesOrderId, commitNetsuiteItemId, postpaidCommit, resellerType, subLineItems, customFields, pricingGroupValues, presentationGroupValues, metadata, netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd, professionalServiceId, professionalServiceCustomFields, scheduledChargeId, scheduledChargeCustomFields, tier, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "LineItem{name=$name, groupKey=$groupKey, groupValue=$groupValue, quantity=$quantity, total=$total, unitPrice=$unitPrice, listPrice=$listPrice, productId=$productId, productCustomFields=$productCustomFields, productType=$productType, netsuiteItemId=$netsuiteItemId, isProrated=$isProrated, creditType=$creditType, startingAt=$startingAt, endingBefore=$endingBefore, commitId=$commitId, appliedCommitOrCredit=$appliedCommitOrCredit, commitCustomFields=$commitCustomFields, commitSegmentId=$commitSegmentId, commitType=$commitType, commitNetsuiteSalesOrderId=$commitNetsuiteSalesOrderId, commitNetsuiteItemId=$commitNetsuiteItemId, postpaidCommit=$postpaidCommit, resellerType=$resellerType, subLineItems=$subLineItems, customFields=$customFields, pricingGroupValues=$pricingGroupValues, presentationGroupValues=$presentationGroupValues, metadata=$metadata, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, professionalServiceId=$professionalServiceId, professionalServiceCustomFields=$professionalServiceCustomFields, scheduledChargeId=$scheduledChargeId, scheduledChargeCustomFields=$scheduledChargeCustomFields, additionalProperties=$additionalProperties}"
+            "LineItem{name=$name, groupKey=$groupKey, groupValue=$groupValue, quantity=$quantity, total=$total, unitPrice=$unitPrice, listPrice=$listPrice, productId=$productId, productCustomFields=$productCustomFields, productType=$productType, netsuiteItemId=$netsuiteItemId, isProrated=$isProrated, creditType=$creditType, startingAt=$startingAt, endingBefore=$endingBefore, commitId=$commitId, appliedCommitOrCredit=$appliedCommitOrCredit, commitCustomFields=$commitCustomFields, commitSegmentId=$commitSegmentId, commitType=$commitType, commitNetsuiteSalesOrderId=$commitNetsuiteSalesOrderId, commitNetsuiteItemId=$commitNetsuiteItemId, postpaidCommit=$postpaidCommit, resellerType=$resellerType, subLineItems=$subLineItems, customFields=$customFields, pricingGroupValues=$pricingGroupValues, presentationGroupValues=$presentationGroupValues, metadata=$metadata, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, professionalServiceId=$professionalServiceId, professionalServiceCustomFields=$professionalServiceCustomFields, scheduledChargeId=$scheduledChargeId, scheduledChargeCustomFields=$scheduledChargeCustomFields, tier=$tier, additionalProperties=$additionalProperties}"
     }
 
     class BillableStatus

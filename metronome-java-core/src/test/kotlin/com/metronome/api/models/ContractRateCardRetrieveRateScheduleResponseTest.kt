@@ -17,6 +17,13 @@ class ContractRateCardRetrieveRateScheduleResponseTest {
                     listOf(
                         ContractRateCardRetrieveRateScheduleResponse.Data.builder()
                             .entitled(true)
+                            .productCustomFields(
+                                ContractRateCardRetrieveRateScheduleResponse.Data
+                                    .ProductCustomFields
+                                    .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .productName("product_name")
                             .productTags(listOf("string"))
@@ -76,6 +83,12 @@ class ContractRateCardRetrieveRateScheduleResponseTest {
             .containsExactly(
                 ContractRateCardRetrieveRateScheduleResponse.Data.builder()
                     .entitled(true)
+                    .productCustomFields(
+                        ContractRateCardRetrieveRateScheduleResponse.Data.ProductCustomFields
+                            .builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .productName("product_name")
                     .productTags(listOf("string"))
