@@ -11,8 +11,8 @@ class CustomerInvoiceRetrieveParamsTest {
     @Test
     fun createCustomerInvoiceRetrieveParams() {
         CustomerInvoiceRetrieveParams.builder()
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+            .invoiceId("6a37bb88-8538-48c5-b37b-a41c836328bd")
             .skipZeroQtyLineItems(true)
             .build()
     }
@@ -21,8 +21,8 @@ class CustomerInvoiceRetrieveParamsTest {
     fun getQueryParams() {
         val params =
             CustomerInvoiceRetrieveParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .invoiceId("6a37bb88-8538-48c5-b37b-a41c836328bd")
                 .skipZeroQtyLineItems(true)
                 .build()
         val expected = QueryParams.builder()
@@ -34,8 +34,8 @@ class CustomerInvoiceRetrieveParamsTest {
     fun getQueryParamsWithoutOptionalFields() {
         val params =
             CustomerInvoiceRetrieveParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .invoiceId("6a37bb88-8538-48c5-b37b-a41c836328bd")
                 .build()
         val expected = QueryParams.builder()
         assertThat(params.getQueryParams()).isEqualTo(expected.build())
@@ -45,14 +45,14 @@ class CustomerInvoiceRetrieveParamsTest {
     fun getPathParam() {
         val params =
             CustomerInvoiceRetrieveParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .invoiceId("6a37bb88-8538-48c5-b37b-a41c836328bd")
                 .build()
         assertThat(params).isNotNull
         // path param "customerId"
-        assertThat(params.getPathParam(0)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(params.getPathParam(0)).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         // path param "invoiceId"
-        assertThat(params.getPathParam(1)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(params.getPathParam(1)).isEqualTo("6a37bb88-8538-48c5-b37b-a41c836328bd")
         // out-of-bound path param
         assertThat(params.getPathParam(2)).isEqualTo("")
     }

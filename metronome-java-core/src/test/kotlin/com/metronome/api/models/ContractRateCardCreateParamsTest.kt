@@ -12,11 +12,11 @@ class ContractRateCardCreateParamsTest {
     @Test
     fun createContractRateCardCreateParams() {
         ContractRateCardCreateParams.builder()
-            .name("name")
+            .name("My Rate Card")
             .aliases(
                 listOf(
                     ContractRateCardCreateParams.Alias.builder()
-                        .name("name")
+                        .name("my-rate-card")
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
@@ -25,8 +25,8 @@ class ContractRateCardCreateParamsTest {
             .creditTypeConversions(
                 listOf(
                     ContractRateCardCreateParams.CreditTypeConversion.builder()
-                        .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .fiatPerCustomCredit(0.0)
+                        .customCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                        .fiatPerCustomCredit(2.0)
                         .build()
                 )
             )
@@ -35,7 +35,7 @@ class ContractRateCardCreateParamsTest {
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-            .description("description")
+            .description("My Rate Card Description")
             .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
             .build()
     }
@@ -44,11 +44,11 @@ class ContractRateCardCreateParamsTest {
     fun getBody() {
         val params =
             ContractRateCardCreateParams.builder()
-                .name("name")
+                .name("My Rate Card")
                 .aliases(
                     listOf(
                         ContractRateCardCreateParams.Alias.builder()
-                            .name("name")
+                            .name("my-rate-card")
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .build()
@@ -57,8 +57,8 @@ class ContractRateCardCreateParamsTest {
                 .creditTypeConversions(
                     listOf(
                         ContractRateCardCreateParams.CreditTypeConversion.builder()
-                            .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .fiatPerCustomCredit(0.0)
+                            .customCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                            .fiatPerCustomCredit(2.0)
                             .build()
                     )
                 )
@@ -67,17 +67,17 @@ class ContractRateCardCreateParamsTest {
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
-                .description("description")
+                .description("My Rate Card Description")
                 .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.name()).isEqualTo("My Rate Card")
         assertThat(body.aliases())
             .isEqualTo(
                 listOf(
                     ContractRateCardCreateParams.Alias.builder()
-                        .name("name")
+                        .name("my-rate-card")
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
@@ -87,8 +87,8 @@ class ContractRateCardCreateParamsTest {
             .isEqualTo(
                 listOf(
                     ContractRateCardCreateParams.CreditTypeConversion.builder()
-                        .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .fiatPerCustomCredit(0.0)
+                        .customCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                        .fiatPerCustomCredit(2.0)
                         .build()
                 )
             )
@@ -98,15 +98,15 @@ class ContractRateCardCreateParamsTest {
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(body.description()).isEqualTo("description")
+        assertThat(body.description()).isEqualTo("My Rate Card Description")
         assertThat(body.fiatCreditTypeId()).isEqualTo("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
-        val params = ContractRateCardCreateParams.builder().name("name").build()
+        val params = ContractRateCardCreateParams.builder().name("My Rate Card").build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.name()).isEqualTo("My Rate Card")
     }
 }

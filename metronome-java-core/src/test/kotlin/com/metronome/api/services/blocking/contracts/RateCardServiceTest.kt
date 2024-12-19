@@ -28,11 +28,11 @@ class RateCardServiceTest {
         val contractRateCardCreateResponse =
             rateCardService.create(
                 ContractRateCardCreateParams.builder()
-                    .name("name")
+                    .name("My Rate Card")
                     .aliases(
                         listOf(
                             ContractRateCardCreateParams.Alias.builder()
-                                .name("name")
+                                .name("my-rate-card")
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()
@@ -41,8 +41,8 @@ class RateCardServiceTest {
                     .creditTypeConversions(
                         listOf(
                             ContractRateCardCreateParams.CreditTypeConversion.builder()
-                                .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .fiatPerCustomCredit(0.0)
+                                .customCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .fiatPerCustomCredit(2.0)
                                 .build()
                         )
                     )
@@ -51,7 +51,7 @@ class RateCardServiceTest {
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
-                    .description("description")
+                    .description("My Rate Card Description")
                     .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                     .build()
             )
@@ -70,7 +70,7 @@ class RateCardServiceTest {
         val contractRateCardRetrieveResponse =
             rateCardService.retrieve(
                 ContractRateCardRetrieveParams.builder()
-                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .id("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                     .build()
             )
         println(contractRateCardRetrieveResponse)
@@ -88,7 +88,7 @@ class RateCardServiceTest {
         val contractRateCardUpdateResponse =
             rateCardService.update(
                 ContractRateCardUpdateParams.builder()
-                    .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .aliases(
                         listOf(
                             ContractRateCardUpdateParams.Alias.builder()
@@ -103,8 +103,8 @@ class RateCardServiceTest {
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
-                    .description("description")
-                    .name("name")
+                    .description("My Updated Rate Card Description")
+                    .name("My Updated Rate Card")
                     .build()
             )
         println(contractRateCardUpdateResponse)
@@ -140,8 +140,10 @@ class RateCardServiceTest {
         val contractRateCardRetrieveRateScheduleResponse =
             rateCardService.retrieveRateSchedule(
                 ContractRateCardRetrieveRateScheduleParams.builder()
-                    .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
+                    .startingAt(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
+                    .limit(1L)
+                    .nextPage("next_page")
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .selectors(
                         listOf(
@@ -150,7 +152,11 @@ class RateCardServiceTest {
                                     ContractRateCardRetrieveRateScheduleParams.Selector
                                         .PartialPricingGroupValues
                                         .builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .putAdditionalProperty(
+                                            "region",
+                                            JsonValue.from("us-west-2")
+                                        )
+                                        .putAdditionalProperty("cloud", JsonValue.from("aws"))
                                         .build()
                                 )
                                 .pricingGroupValues(
@@ -160,12 +166,10 @@ class RateCardServiceTest {
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
-                                .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
                                 .build()
                         )
                     )
-                    .limit(1L)
-                    .nextPage("next_page")
                     .build()
             )
         println(contractRateCardRetrieveRateScheduleResponse)

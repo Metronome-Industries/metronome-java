@@ -11,9 +11,9 @@ class CustomerAlertListParamsTest {
     @Test
     fun createCustomerAlertListParams() {
         CustomerAlertListParams.builder()
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .alertStatuses(listOf(CustomerAlertListParams.AlertStatus.ENABLED))
+            .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
             .nextPage("next_page")
+            .alertStatuses(listOf(CustomerAlertListParams.AlertStatus.ENABLED))
             .build()
     }
 
@@ -21,9 +21,9 @@ class CustomerAlertListParamsTest {
     fun getQueryParams() {
         val params =
             CustomerAlertListParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .alertStatuses(listOf(CustomerAlertListParams.AlertStatus.ENABLED))
+                .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .nextPage("next_page")
+                .alertStatuses(listOf(CustomerAlertListParams.AlertStatus.ENABLED))
                 .build()
         val expected = QueryParams.builder()
         expected.put("next_page", "next_page")
@@ -34,7 +34,7 @@ class CustomerAlertListParamsTest {
     fun getQueryParamsWithoutOptionalFields() {
         val params =
             CustomerAlertListParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .build()
         val expected = QueryParams.builder()
         assertThat(params.getQueryParams()).isEqualTo(expected.build())
@@ -44,13 +44,13 @@ class CustomerAlertListParamsTest {
     fun getBody() {
         val params =
             CustomerAlertListParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .alertStatuses(listOf(CustomerAlertListParams.AlertStatus.ENABLED))
+                .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .nextPage("next_page")
+                .alertStatuses(listOf(CustomerAlertListParams.AlertStatus.ENABLED))
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.alertStatuses())
             .isEqualTo(listOf(CustomerAlertListParams.AlertStatus.ENABLED))
     }
@@ -59,10 +59,10 @@ class CustomerAlertListParamsTest {
     fun getBodyWithoutOptionalFields() {
         val params =
             CustomerAlertListParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
     }
 }

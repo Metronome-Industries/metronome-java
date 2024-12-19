@@ -12,13 +12,18 @@ class CreditGrantListParamsTest {
     @Test
     fun createCreditGrantListParams() {
         CreditGrantListParams.builder()
-            .creditGrantIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-            .creditTypeIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-            .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-            .effectiveBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
-            .notExpiringBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
             .limit(1L)
             .nextPage("next_page")
+            .creditGrantIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+            .creditTypeIds(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
+            .customerIds(
+                listOf(
+                    "d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc",
+                    "0e5b8609-d901-4992-b394-c3c2e3f37b1c"
+                )
+            )
+            .effectiveBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
+            .notExpiringBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
             .build()
     }
 
@@ -26,13 +31,18 @@ class CreditGrantListParamsTest {
     fun getQueryParams() {
         val params =
             CreditGrantListParams.builder()
-                .creditGrantIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .creditTypeIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .effectiveBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
-                .notExpiringBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .limit(1L)
                 .nextPage("next_page")
+                .creditGrantIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+                .creditTypeIds(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
+                .customerIds(
+                    listOf(
+                        "d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc",
+                        "0e5b8609-d901-4992-b394-c3c2e3f37b1c"
+                    )
+                )
+                .effectiveBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
+                .notExpiringBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .build()
         val expected = QueryParams.builder()
         expected.put("limit", "1")
@@ -51,19 +61,30 @@ class CreditGrantListParamsTest {
     fun getBody() {
         val params =
             CreditGrantListParams.builder()
-                .creditGrantIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .creditTypeIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .effectiveBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
-                .notExpiringBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .limit(1L)
                 .nextPage("next_page")
+                .creditGrantIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+                .creditTypeIds(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
+                .customerIds(
+                    listOf(
+                        "d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc",
+                        "0e5b8609-d901-4992-b394-c3c2e3f37b1c"
+                    )
+                )
+                .effectiveBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
+                .notExpiringBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.creditGrantIds()).isEqualTo(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-        assertThat(body.creditTypeIds()).isEqualTo(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-        assertThat(body.customerIds()).isEqualTo(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+        assertThat(body.creditTypeIds()).isEqualTo(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
+        assertThat(body.customerIds())
+            .isEqualTo(
+                listOf(
+                    "d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc",
+                    "0e5b8609-d901-4992-b394-c3c2e3f37b1c"
+                )
+            )
         assertThat(body.effectiveBefore()).isEqualTo(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
         assertThat(body.notExpiringBefore()).isEqualTo(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
     }

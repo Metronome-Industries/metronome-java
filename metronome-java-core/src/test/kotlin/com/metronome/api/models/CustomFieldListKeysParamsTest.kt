@@ -11,8 +11,8 @@ class CustomFieldListKeysParamsTest {
     @Test
     fun createCustomFieldListKeysParams() {
         CustomFieldListKeysParams.builder()
-            .entities(listOf(CustomFieldListKeysParams.Entity.ALERT))
             .nextPage("next_page")
+            .entities(listOf(CustomFieldListKeysParams.Entity.ALERT))
             .build()
     }
 
@@ -20,8 +20,8 @@ class CustomFieldListKeysParamsTest {
     fun getQueryParams() {
         val params =
             CustomFieldListKeysParams.builder()
-                .entities(listOf(CustomFieldListKeysParams.Entity.ALERT))
                 .nextPage("next_page")
+                .entities(listOf(CustomFieldListKeysParams.Entity.ALERT))
                 .build()
         val expected = QueryParams.builder()
         expected.put("next_page", "next_page")
@@ -39,8 +39,8 @@ class CustomFieldListKeysParamsTest {
     fun getBody() {
         val params =
             CustomFieldListKeysParams.builder()
-                .entities(listOf(CustomFieldListKeysParams.Entity.ALERT))
                 .nextPage("next_page")
+                .entities(listOf(CustomFieldListKeysParams.Entity.ALERT))
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull

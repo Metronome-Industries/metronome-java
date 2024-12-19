@@ -10,7 +10,7 @@ class AlertArchiveParamsTest {
     @Test
     fun createAlertArchiveParams() {
         AlertArchiveParams.builder()
-            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .id("8deed800-1b7a-495d-a207-6c52bac54dc9")
             .releaseUniquenessKey(true)
             .build()
     }
@@ -19,20 +19,20 @@ class AlertArchiveParamsTest {
     fun getBody() {
         val params =
             AlertArchiveParams.builder()
-                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .id("8deed800-1b7a-495d-a207-6c52bac54dc9")
                 .releaseUniquenessKey(true)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.id()).isEqualTo("8deed800-1b7a-495d-a207-6c52bac54dc9")
         assertThat(body.releaseUniquenessKey()).isEqualTo(true)
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
-        val params = AlertArchiveParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+        val params = AlertArchiveParams.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.id()).isEqualTo("8deed800-1b7a-495d-a207-6c52bac54dc9")
     }
 }

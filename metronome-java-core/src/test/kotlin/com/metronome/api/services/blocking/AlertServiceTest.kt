@@ -24,11 +24,11 @@ class AlertServiceTest {
             alertService.create(
                 AlertCreateParams.builder()
                     .alertType(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
-                    .name("name")
-                    .threshold(0.0)
+                    .name("\$100 spend threshold reached")
+                    .threshold(10000.0)
                     .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .creditGrantTypeFilters(listOf("string"))
-                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .creditGrantTypeFilters(listOf("enterprise"))
+                    .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                     .customFieldFilters(
                         listOf(
                             AlertCreateParams.CustomFieldFilter.builder()
@@ -38,7 +38,7 @@ class AlertServiceTest {
                                 .build()
                         )
                     )
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .evaluateOnCreate(true)
                     .groupKeyFilter(
                         AlertCreateParams.GroupKeyFilter.builder().key("key").value("value").build()
@@ -67,7 +67,7 @@ class AlertServiceTest {
         val alertArchiveResponse =
             alertService.archive(
                 AlertArchiveParams.builder()
-                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .id("8deed800-1b7a-495d-a207-6c52bac54dc9")
                     .releaseUniquenessKey(true)
                     .build()
             )

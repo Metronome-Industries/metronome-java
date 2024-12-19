@@ -29,9 +29,9 @@ class ProductServiceTest {
         val contractProductCreateResponse =
             productService.create(
                 ContractProductCreateParams.builder()
-                    .name("name")
+                    .name("My Product")
                     .type(ContractProductCreateParams.Type.FIXED)
-                    .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .billableMetricId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .compositeProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                     .compositeTags(listOf("string"))
                     .excludeFreeUsage(true)
@@ -71,7 +71,7 @@ class ProductServiceTest {
         val contractProductRetrieveResponse =
             productService.retrieve(
                 ContractProductRetrieveParams.builder()
-                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .id("d84e7f4e-7a70-4fe4-be02-7a5027beffcc")
                     .build()
             )
         println(contractProductRetrieveResponse)
@@ -89,14 +89,14 @@ class ProductServiceTest {
         val contractProductUpdateResponse =
             productService.update(
                 ContractProductUpdateParams.builder()
-                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                     .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .compositeProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                     .compositeTags(listOf("string"))
                     .excludeFreeUsage(true)
                     .isRefundable(true)
-                    .name("name")
+                    .name("My Updated Product")
                     .netsuiteInternalItemId("netsuite_internal_item_id")
                     .netsuiteOverageItemId("netsuite_overage_item_id")
                     .presentationGroupKey(listOf("string"))
@@ -145,7 +145,7 @@ class ProductServiceTest {
         val contractProductArchiveResponse =
             productService.archive(
                 ContractProductArchiveParams.builder()
-                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )
         println(contractProductArchiveResponse)

@@ -31,22 +31,22 @@ class CommitServiceTest {
                             .scheduleItems(
                                 listOf(
                                     CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
-                                        .amount(0.0)
+                                        .amount(1000.0)
                                         .endingBefore(
-                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            OffsetDateTime.parse("2020-02-01T00:00:00.000Z")
                                         )
                                         .startingAt(
-                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            OffsetDateTime.parse("2020-01-01T00:00:00.000Z")
                                         )
                                         .build()
                                 )
                             )
-                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                             .build()
                     )
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .priority(0.0)
-                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .priority(100.0)
+                    .productId("f14d6729-6a44-4b13-9908-9387f1918790")
                     .type(CustomerCommitCreateParams.Type.PREPAID)
                     .applicableContractIds(listOf("string"))
                     .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
@@ -60,7 +60,7 @@ class CommitServiceTest {
                     .invoiceContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .invoiceSchedule(
                         CustomerCommitCreateParams.InvoiceSchedule.builder()
-                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                             .recurringSchedule(
                                 CustomerCommitCreateParams.InvoiceSchedule.RecurringSchedule
                                     .builder()
@@ -85,16 +85,16 @@ class CommitServiceTest {
                                 listOf(
                                     CustomerCommitCreateParams.InvoiceSchedule.ScheduleItem
                                         .builder()
-                                        .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                        .timestamp(OffsetDateTime.parse("2020-03-01T00:00:00.000Z"))
                                         .amount(0.0)
-                                        .quantity(0.0)
-                                        .unitPrice(0.0)
+                                        .quantity(1.0)
+                                        .unitPrice(10000000.0)
                                         .build()
                                 )
                             )
                             .build()
                     )
-                    .name("x")
+                    .name("My Commit")
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                     .rateType(CustomerCommitCreateParams.RateType.COMMIT_RATE)
                     .salesforceOpportunityId("salesforce_opportunity_id")
@@ -115,8 +115,8 @@ class CommitServiceTest {
         val customerCommitListResponse =
             commitService.list(
                 CustomerCommitListParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .commitId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
                     .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .effectiveBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .includeArchived(true)
@@ -141,10 +141,10 @@ class CommitServiceTest {
         val customerCommitUpdateEndDateResponse =
             commitService.updateEndDate(
                 CustomerCommitUpdateEndDateParams.builder()
-                    .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .accessEndingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .invoicesEndingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .commitId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .accessEndingBefore(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                    .invoicesEndingBefore(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                     .build()
             )
         println(customerCommitUpdateEndDateResponse)

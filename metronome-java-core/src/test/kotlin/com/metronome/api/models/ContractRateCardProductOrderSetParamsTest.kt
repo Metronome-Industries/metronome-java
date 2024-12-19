@@ -10,8 +10,13 @@ class ContractRateCardProductOrderSetParamsTest {
     @Test
     fun createContractRateCardProductOrderSetParams() {
         ContractRateCardProductOrderSetParams.builder()
-            .productOrder(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-            .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .productOrder(
+                listOf(
+                    "13117714-3f05-48e5-a6e9-a66093f13b4d",
+                    "b086f2f4-9851-4466-9ca0-30d53e6a42ac"
+                )
+            )
+            .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .build()
     }
 
@@ -19,25 +24,47 @@ class ContractRateCardProductOrderSetParamsTest {
     fun getBody() {
         val params =
             ContractRateCardProductOrderSetParams.builder()
-                .productOrder(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .productOrder(
+                    listOf(
+                        "13117714-3f05-48e5-a6e9-a66093f13b4d",
+                        "b086f2f4-9851-4466-9ca0-30d53e6a42ac"
+                    )
+                )
+                .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.productOrder()).isEqualTo(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-        assertThat(body.rateCardId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.productOrder())
+            .isEqualTo(
+                listOf(
+                    "13117714-3f05-48e5-a6e9-a66093f13b4d",
+                    "b086f2f4-9851-4466-9ca0-30d53e6a42ac"
+                )
+            )
+        assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
         val params =
             ContractRateCardProductOrderSetParams.builder()
-                .productOrder(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .productOrder(
+                    listOf(
+                        "13117714-3f05-48e5-a6e9-a66093f13b4d",
+                        "b086f2f4-9851-4466-9ca0-30d53e6a42ac"
+                    )
+                )
+                .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.productOrder()).isEqualTo(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-        assertThat(body.rateCardId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.productOrder())
+            .isEqualTo(
+                listOf(
+                    "13117714-3f05-48e5-a6e9-a66093f13b4d",
+                    "b086f2f4-9851-4466-9ca0-30d53e6a42ac"
+                )
+            )
+        assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
     }
 }

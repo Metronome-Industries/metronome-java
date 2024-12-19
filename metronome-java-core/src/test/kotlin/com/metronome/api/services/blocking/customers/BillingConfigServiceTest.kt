@@ -23,11 +23,11 @@ class BillingConfigServiceTest {
         val billingConfigService = client.customers().billingConfig()
         billingConfigService.create(
             CustomerBillingConfigCreateParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .billingProviderType(
                     CustomerBillingConfigCreateParams.BillingProviderType.AWS_MARKETPLACE
                 )
-                .billingProviderCustomerId("billing_provider_customer_id")
+                .billingProviderCustomerId("cus_AJ6y20bjkOOayM")
                 .awsProductCode("aws_product_code")
                 .awsRegion(CustomerBillingConfigCreateParams.AwsRegion.AF_SOUTH_1)
                 .stripeCollectionMethod(
@@ -48,7 +48,7 @@ class BillingConfigServiceTest {
         val customerBillingConfigRetrieveResponse =
             billingConfigService.retrieve(
                 CustomerBillingConfigRetrieveParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .billingProviderType(
                         CustomerBillingConfigRetrieveParams.BillingProviderType.AWS_MARKETPLACE
                     )
@@ -68,7 +68,7 @@ class BillingConfigServiceTest {
         val billingConfigService = client.customers().billingConfig()
         billingConfigService.delete(
             CustomerBillingConfigDeleteParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .billingProviderType(
                     CustomerBillingConfigDeleteParams.BillingProviderType.AWS_MARKETPLACE
                 )

@@ -15,23 +15,23 @@ class ContractCreateHistoricalInvoicesParamsTest {
             .invoices(
                 listOf(
                     ContractCreateHistoricalInvoicesParams.Invoice.builder()
-                        .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .exclusiveEndDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .inclusiveStartDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .issueDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                        .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                        .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                        .exclusiveEndDate(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
+                        .inclusiveStartDate(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                        .issueDate(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
                         .usageLineItems(
                             listOf(
                                 ContractCreateHistoricalInvoicesParams.Invoice.UsageLineItem
                                     .builder()
                                     .exclusiveEndDate(
-                                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        OffsetDateTime.parse("2020-02-01T00:00:00.000Z")
                                     )
                                     .inclusiveStartDate(
-                                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        OffsetDateTime.parse("2020-01-01T00:00:00.000Z")
                                     )
-                                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .productId("f14d6729-6a44-4b13-9908-9387f1918790")
                                     .presentationGroupValues(
                                         ContractCreateHistoricalInvoicesParams.Invoice.UsageLineItem
                                             .PresentationGroupValues
@@ -46,7 +46,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                                             .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
-                                    .quantity(0.0)
+                                    .quantity(100.0)
                                     .subtotalsWithQuantity(
                                         listOf(
                                             ContractCreateHistoricalInvoicesParams.Invoice
@@ -80,7 +80,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                         .build()
                 )
             )
-            .preview(true)
+            .preview(false)
             .build()
     }
 
@@ -91,23 +91,23 @@ class ContractCreateHistoricalInvoicesParamsTest {
                 .invoices(
                     listOf(
                         ContractCreateHistoricalInvoicesParams.Invoice.builder()
-                            .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .exclusiveEndDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .inclusiveStartDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .issueDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                            .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                            .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                            .exclusiveEndDate(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
+                            .inclusiveStartDate(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                            .issueDate(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
                             .usageLineItems(
                                 listOf(
                                     ContractCreateHistoricalInvoicesParams.Invoice.UsageLineItem
                                         .builder()
                                         .exclusiveEndDate(
-                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            OffsetDateTime.parse("2020-02-01T00:00:00.000Z")
                                         )
                                         .inclusiveStartDate(
-                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            OffsetDateTime.parse("2020-01-01T00:00:00.000Z")
                                         )
-                                        .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .productId("f14d6729-6a44-4b13-9908-9387f1918790")
                                         .presentationGroupValues(
                                             ContractCreateHistoricalInvoicesParams.Invoice
                                                 .UsageLineItem
@@ -130,7 +130,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                                                 )
                                                 .build()
                                         )
-                                        .quantity(0.0)
+                                        .quantity(100.0)
                                         .subtotalsWithQuantity(
                                             listOf(
                                                 ContractCreateHistoricalInvoicesParams.Invoice
@@ -171,7 +171,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                             .build()
                     )
                 )
-                .preview(true)
+                .preview(false)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -179,23 +179,23 @@ class ContractCreateHistoricalInvoicesParamsTest {
             .isEqualTo(
                 listOf(
                     ContractCreateHistoricalInvoicesParams.Invoice.builder()
-                        .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .exclusiveEndDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .inclusiveStartDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .issueDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                        .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                        .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                        .exclusiveEndDate(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
+                        .inclusiveStartDate(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                        .issueDate(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
                         .usageLineItems(
                             listOf(
                                 ContractCreateHistoricalInvoicesParams.Invoice.UsageLineItem
                                     .builder()
                                     .exclusiveEndDate(
-                                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        OffsetDateTime.parse("2020-02-01T00:00:00.000Z")
                                     )
                                     .inclusiveStartDate(
-                                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        OffsetDateTime.parse("2020-01-01T00:00:00.000Z")
                                     )
-                                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .productId("f14d6729-6a44-4b13-9908-9387f1918790")
                                     .presentationGroupValues(
                                         ContractCreateHistoricalInvoicesParams.Invoice.UsageLineItem
                                             .PresentationGroupValues
@@ -210,7 +210,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                                             .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
-                                    .quantity(0.0)
+                                    .quantity(100.0)
                                     .subtotalsWithQuantity(
                                         listOf(
                                             ContractCreateHistoricalInvoicesParams.Invoice
@@ -244,7 +244,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                         .build()
                 )
             )
-        assertThat(body.preview()).isEqualTo(true)
+        assertThat(body.preview()).isEqualTo(false)
     }
 
     @Test
@@ -254,30 +254,30 @@ class ContractCreateHistoricalInvoicesParamsTest {
                 .invoices(
                     listOf(
                         ContractCreateHistoricalInvoicesParams.Invoice.builder()
-                            .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .exclusiveEndDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .inclusiveStartDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .issueDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                            .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                            .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                            .exclusiveEndDate(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
+                            .inclusiveStartDate(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                            .issueDate(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
                             .usageLineItems(
                                 listOf(
                                     ContractCreateHistoricalInvoicesParams.Invoice.UsageLineItem
                                         .builder()
                                         .exclusiveEndDate(
-                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            OffsetDateTime.parse("2020-02-01T00:00:00.000Z")
                                         )
                                         .inclusiveStartDate(
-                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            OffsetDateTime.parse("2020-01-01T00:00:00.000Z")
                                         )
-                                        .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .productId("f14d6729-6a44-4b13-9908-9387f1918790")
                                         .build()
                                 )
                             )
                             .build()
                     )
                 )
-                .preview(true)
+                .preview(false)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -285,29 +285,29 @@ class ContractCreateHistoricalInvoicesParamsTest {
             .isEqualTo(
                 listOf(
                     ContractCreateHistoricalInvoicesParams.Invoice.builder()
-                        .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .exclusiveEndDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .inclusiveStartDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .issueDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                        .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                        .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                        .exclusiveEndDate(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
+                        .inclusiveStartDate(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                        .issueDate(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
                         .usageLineItems(
                             listOf(
                                 ContractCreateHistoricalInvoicesParams.Invoice.UsageLineItem
                                     .builder()
                                     .exclusiveEndDate(
-                                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        OffsetDateTime.parse("2020-02-01T00:00:00.000Z")
                                     )
                                     .inclusiveStartDate(
-                                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        OffsetDateTime.parse("2020-01-01T00:00:00.000Z")
                                     )
-                                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .productId("f14d6729-6a44-4b13-9908-9387f1918790")
                                     .build()
                             )
                         )
                         .build()
                 )
             )
-        assertThat(body.preview()).isEqualTo(true)
+        assertThat(body.preview()).isEqualTo(false)
     }
 }

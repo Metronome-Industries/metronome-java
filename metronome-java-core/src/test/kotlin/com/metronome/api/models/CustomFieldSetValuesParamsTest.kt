@@ -13,11 +13,11 @@ class CustomFieldSetValuesParamsTest {
         CustomFieldSetValuesParams.builder()
             .customFields(
                 CustomFieldSetValuesParams.CustomFields.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .putAdditionalProperty("x_account_id", JsonValue.from("KyVnHhSBWl7eY2bl"))
                     .build()
             )
             .entity(CustomFieldSetValuesParams.Entity.ALERT)
-            .entityId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
             .build()
     }
 
@@ -27,22 +27,22 @@ class CustomFieldSetValuesParamsTest {
             CustomFieldSetValuesParams.builder()
                 .customFields(
                     CustomFieldSetValuesParams.CustomFields.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .putAdditionalProperty("x_account_id", JsonValue.from("KyVnHhSBWl7eY2bl"))
                         .build()
                 )
                 .entity(CustomFieldSetValuesParams.Entity.ALERT)
-                .entityId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.customFields())
             .isEqualTo(
                 CustomFieldSetValuesParams.CustomFields.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .putAdditionalProperty("x_account_id", JsonValue.from("KyVnHhSBWl7eY2bl"))
                     .build()
             )
         assertThat(body.entity()).isEqualTo(CustomFieldSetValuesParams.Entity.ALERT)
-        assertThat(body.entityId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.entityId()).isEqualTo("99594816-e8a5-4bca-be21-8d1de0f45120")
     }
 
     @Test
@@ -51,21 +51,21 @@ class CustomFieldSetValuesParamsTest {
             CustomFieldSetValuesParams.builder()
                 .customFields(
                     CustomFieldSetValuesParams.CustomFields.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .putAdditionalProperty("x_account_id", JsonValue.from("KyVnHhSBWl7eY2bl"))
                         .build()
                 )
                 .entity(CustomFieldSetValuesParams.Entity.ALERT)
-                .entityId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.customFields())
             .isEqualTo(
                 CustomFieldSetValuesParams.CustomFields.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .putAdditionalProperty("x_account_id", JsonValue.from("KyVnHhSBWl7eY2bl"))
                     .build()
             )
         assertThat(body.entity()).isEqualTo(CustomFieldSetValuesParams.Entity.ALERT)
-        assertThat(body.entityId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.entityId()).isEqualTo("99594816-e8a5-4bca-be21-8d1de0f45120")
     }
 }

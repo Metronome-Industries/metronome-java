@@ -14,11 +14,15 @@ class ContractRateCardProductOrderUpdateParamsTest {
                 listOf(
                     ContractRateCardProductOrderUpdateParams.ProductMove.builder()
                         .position(0.0)
-                        .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .productId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                        .build(),
+                    ContractRateCardProductOrderUpdateParams.ProductMove.builder()
+                        .position(1.0)
+                        .productId("b086f2f4-9851-4466-9ca0-30d53e6a42ac")
                         .build()
                 )
             )
-            .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .build()
     }
 
@@ -30,11 +34,15 @@ class ContractRateCardProductOrderUpdateParamsTest {
                     listOf(
                         ContractRateCardProductOrderUpdateParams.ProductMove.builder()
                             .position(0.0)
-                            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .productId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                            .build(),
+                        ContractRateCardProductOrderUpdateParams.ProductMove.builder()
+                            .position(1.0)
+                            .productId("b086f2f4-9851-4466-9ca0-30d53e6a42ac")
                             .build()
                     )
                 )
-                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -43,11 +51,15 @@ class ContractRateCardProductOrderUpdateParamsTest {
                 listOf(
                     ContractRateCardProductOrderUpdateParams.ProductMove.builder()
                         .position(0.0)
-                        .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .productId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                        .build(),
+                    ContractRateCardProductOrderUpdateParams.ProductMove.builder()
+                        .position(1.0)
+                        .productId("b086f2f4-9851-4466-9ca0-30d53e6a42ac")
                         .build()
                 )
             )
-        assertThat(body.rateCardId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
     }
 
     @Test
@@ -58,11 +70,15 @@ class ContractRateCardProductOrderUpdateParamsTest {
                     listOf(
                         ContractRateCardProductOrderUpdateParams.ProductMove.builder()
                             .position(0.0)
-                            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .productId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                            .build(),
+                        ContractRateCardProductOrderUpdateParams.ProductMove.builder()
+                            .position(1.0)
+                            .productId("b086f2f4-9851-4466-9ca0-30d53e6a42ac")
                             .build()
                     )
                 )
-                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -71,10 +87,14 @@ class ContractRateCardProductOrderUpdateParamsTest {
                 listOf(
                     ContractRateCardProductOrderUpdateParams.ProductMove.builder()
                         .position(0.0)
-                        .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .productId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                        .build(),
+                    ContractRateCardProductOrderUpdateParams.ProductMove.builder()
+                        .position(1.0)
+                        .productId("b086f2f4-9851-4466-9ca0-30d53e6a42ac")
                         .build()
                 )
             )
-        assertThat(body.rateCardId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
     }
 }

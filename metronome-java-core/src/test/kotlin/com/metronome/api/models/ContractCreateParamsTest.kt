@@ -12,8 +12,8 @@ class ContractCreateParamsTest {
     @Test
     fun createContractCreateParams() {
         ContractCreateParams.builder()
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+            .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
             .billingProviderConfiguration(
                 ContractCreateParams.BillingProviderConfiguration.builder()
                     .billingProvider(
@@ -294,7 +294,7 @@ class ContractCreateParamsTest {
                 )
             )
             .rateCardAlias("rate_card_alias")
-            .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .resellerRoyalties(
                 listOf(
                     ContractCreateParams.ResellerRoyalty.builder()
@@ -413,8 +413,8 @@ class ContractCreateParamsTest {
     fun getBody() {
         val params =
             ContractCreateParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                 .billingProviderConfiguration(
                     ContractCreateParams.BillingProviderConfiguration.builder()
                         .billingProvider(
@@ -707,7 +707,7 @@ class ContractCreateParamsTest {
                     )
                 )
                 .rateCardAlias("rate_card_alias")
-                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .resellerRoyalties(
                     listOf(
                         ContractCreateParams.ResellerRoyalty.builder()
@@ -827,8 +827,8 @@ class ContractCreateParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
+        assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
         assertThat(body.billingProviderConfiguration())
             .isEqualTo(
                 ContractCreateParams.BillingProviderConfiguration.builder()
@@ -1115,7 +1115,7 @@ class ContractCreateParamsTest {
                 )
             )
         assertThat(body.rateCardAlias()).isEqualTo("rate_card_alias")
-        assertThat(body.rateCardId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.resellerRoyalties())
             .isEqualTo(
                 listOf(
@@ -1238,12 +1238,12 @@ class ContractCreateParamsTest {
     fun getBodyWithoutOptionalFields() {
         val params =
             ContractCreateParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
+        assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
     }
 }

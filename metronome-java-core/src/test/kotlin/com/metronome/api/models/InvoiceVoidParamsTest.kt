@@ -9,22 +9,22 @@ class InvoiceVoidParamsTest {
 
     @Test
     fun createInvoiceVoidParams() {
-        InvoiceVoidParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+        InvoiceVoidParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
     }
 
     @Test
     fun getBody() {
-        val params = InvoiceVoidParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+        val params = InvoiceVoidParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.id()).isEqualTo("6a37bb88-8538-48c5-b37b-a41c836328bd")
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
-        val params = InvoiceVoidParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+        val params = InvoiceVoidParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.id()).isEqualTo("6a37bb88-8538-48c5-b37b-a41c836328bd")
     }
 }

@@ -12,9 +12,10 @@ class UsageListParamsTest {
     @Test
     fun createUsageListParams() {
         UsageListParams.builder()
-            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-            .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .endingBefore(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
+            .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
             .windowSize(UsageListParams.WindowSize.HOUR)
+            .nextPage("next_page")
             .billableMetrics(
                 listOf(
                     UsageListParams.BillableMetric.builder()
@@ -29,7 +30,6 @@ class UsageListParamsTest {
                 )
             )
             .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-            .nextPage("next_page")
             .build()
     }
 
@@ -37,9 +37,10 @@ class UsageListParamsTest {
     fun getQueryParams() {
         val params =
             UsageListParams.builder()
-                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .endingBefore(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
+                .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .windowSize(UsageListParams.WindowSize.HOUR)
+                .nextPage("next_page")
                 .billableMetrics(
                     listOf(
                         UsageListParams.BillableMetric.builder()
@@ -54,7 +55,6 @@ class UsageListParamsTest {
                     )
                 )
                 .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .nextPage("next_page")
                 .build()
         val expected = QueryParams.builder()
         expected.put("next_page", "next_page")
@@ -65,8 +65,8 @@ class UsageListParamsTest {
     fun getQueryParamsWithoutOptionalFields() {
         val params =
             UsageListParams.builder()
-                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .endingBefore(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
+                .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .windowSize(UsageListParams.WindowSize.HOUR)
                 .build()
         val expected = QueryParams.builder()
@@ -77,9 +77,10 @@ class UsageListParamsTest {
     fun getBody() {
         val params =
             UsageListParams.builder()
-                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .endingBefore(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
+                .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .windowSize(UsageListParams.WindowSize.HOUR)
+                .nextPage("next_page")
                 .billableMetrics(
                     listOf(
                         UsageListParams.BillableMetric.builder()
@@ -94,12 +95,11 @@ class UsageListParamsTest {
                     )
                 )
                 .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .nextPage("next_page")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
+        assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
         assertThat(body.windowSize()).isEqualTo(UsageListParams.WindowSize.HOUR)
         assertThat(body.billableMetrics())
             .isEqualTo(
@@ -122,14 +122,14 @@ class UsageListParamsTest {
     fun getBodyWithoutOptionalFields() {
         val params =
             UsageListParams.builder()
-                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .endingBefore(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
+                .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .windowSize(UsageListParams.WindowSize.HOUR)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
+        assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
         assertThat(body.windowSize()).isEqualTo(UsageListParams.WindowSize.HOUR)
     }
 }

@@ -9,18 +9,18 @@ class CustomerRetrieveParamsTest {
 
     @Test
     fun createCustomerRetrieveParams() {
-        CustomerRetrieveParams.builder().customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+        CustomerRetrieveParams.builder().customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc").build()
     }
 
     @Test
     fun getPathParam() {
         val params =
             CustomerRetrieveParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
         assertThat(params).isNotNull
         // path param "customerId"
-        assertThat(params.getPathParam(0)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(params.getPathParam(0)).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         // out-of-bound path param
         assertThat(params.getPathParam(1)).isEqualTo("")
     }

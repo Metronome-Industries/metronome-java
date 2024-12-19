@@ -11,10 +11,10 @@ class CreditGrantEditParamsTest {
     @Test
     fun createCreditGrantEditParams() {
         CreditGrantEditParams.builder()
-            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .id("9b85c1c1-5238-4f2a-a409-61412905e1e1")
             .creditGrantType("credit_grant_type")
-            .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-            .name("name")
+            .expiresAt(OffsetDateTime.parse("2022-04-01T00:00:00Z"))
+            .name("Acme Corp Promotional Credit Grant")
             .build()
     }
 
@@ -22,25 +22,25 @@ class CreditGrantEditParamsTest {
     fun getBody() {
         val params =
             CreditGrantEditParams.builder()
-                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .id("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .creditGrantType("credit_grant_type")
-                .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .name("name")
+                .expiresAt(OffsetDateTime.parse("2022-04-01T00:00:00Z"))
+                .name("Acme Corp Promotional Credit Grant")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.id()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.creditGrantType()).isEqualTo("credit_grant_type")
-        assertThat(body.expiresAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.expiresAt()).isEqualTo(OffsetDateTime.parse("2022-04-01T00:00:00Z"))
+        assertThat(body.name()).isEqualTo("Acme Corp Promotional Credit Grant")
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
         val params =
-            CreditGrantEditParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+            CreditGrantEditParams.builder().id("9b85c1c1-5238-4f2a-a409-61412905e1e1").build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.id()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
     }
 }

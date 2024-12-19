@@ -10,8 +10,8 @@ class CustomerAlertResetParamsTest {
     @Test
     fun createCustomerAlertResetParams() {
         CustomerAlertResetParams.builder()
-            .alertId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .alertId("5e8691bf-b22a-4672-922d-f80eee940f01")
+            .customerId("4c83caf3-8af4-44e2-9aeb-e290531726d9")
             .build()
     }
 
@@ -19,25 +19,25 @@ class CustomerAlertResetParamsTest {
     fun getBody() {
         val params =
             CustomerAlertResetParams.builder()
-                .alertId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .alertId("5e8691bf-b22a-4672-922d-f80eee940f01")
+                .customerId("4c83caf3-8af4-44e2-9aeb-e290531726d9")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.alertId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.alertId()).isEqualTo("5e8691bf-b22a-4672-922d-f80eee940f01")
+        assertThat(body.customerId()).isEqualTo("4c83caf3-8af4-44e2-9aeb-e290531726d9")
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
         val params =
             CustomerAlertResetParams.builder()
-                .alertId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .alertId("5e8691bf-b22a-4672-922d-f80eee940f01")
+                .customerId("4c83caf3-8af4-44e2-9aeb-e290531726d9")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.alertId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.alertId()).isEqualTo("5e8691bf-b22a-4672-922d-f80eee940f01")
+        assertThat(body.customerId()).isEqualTo("4c83caf3-8af4-44e2-9aeb-e290531726d9")
     }
 }

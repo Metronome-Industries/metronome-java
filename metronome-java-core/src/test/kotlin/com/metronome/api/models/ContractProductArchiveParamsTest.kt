@@ -10,7 +10,7 @@ class ContractProductArchiveParamsTest {
     @Test
     fun createContractProductArchiveParams() {
         ContractProductArchiveParams.builder()
-            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .build()
     }
 
@@ -18,21 +18,21 @@ class ContractProductArchiveParamsTest {
     fun getBody() {
         val params =
             ContractProductArchiveParams.builder()
-                .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.productId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.productId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
         val params =
             ContractProductArchiveParams.builder()
-                .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.productId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.productId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
     }
 }

@@ -26,8 +26,8 @@ class InvoiceServiceTest {
         val customerInvoiceRetrieveResponse =
             invoiceService.retrieve(
                 CustomerInvoiceRetrieveParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .invoiceId("6a37bb88-8538-48c5-b37b-a41c836328bd")
                     .skipZeroQtyLineItems(true)
                     .build()
             )
@@ -46,7 +46,7 @@ class InvoiceServiceTest {
         val response =
             invoiceService.list(
                 CustomerInvoiceListParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )
         println(response)
@@ -64,13 +64,13 @@ class InvoiceServiceTest {
         val customerInvoiceAddChargeResponse =
             invoiceService.addCharge(
                 CustomerInvoiceAddChargeParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .chargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .description("description")
-                    .invoiceStartTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .price(0.0)
-                    .quantity(0.0)
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .chargeId("5ae4b726-1ebe-439c-9190-9831760ba195")
+                    .customerPlanId("a23b3cf4-47fb-4c3f-bb3d-9e64f7704015")
+                    .description("One time charge")
+                    .invoiceStartTimestamp(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
+                    .price(250.0)
+                    .quantity(1.0)
                     .build()
             )
         println(customerInvoiceAddChargeResponse)
@@ -88,7 +88,7 @@ class InvoiceServiceTest {
         val response =
             invoiceService.listBreakdowns(
                 CustomerInvoiceListBreakdownsParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .build()

@@ -28,7 +28,7 @@ class CustomFieldServiceTest {
             CustomFieldAddKeyParams.builder()
                 .enforceUniqueness(true)
                 .entity(CustomFieldAddKeyParams.Entity.ALERT)
-                .key("key")
+                .key("x_account_id")
                 .build()
         )
     }
@@ -44,8 +44,8 @@ class CustomFieldServiceTest {
         customFieldService.deleteValues(
             CustomFieldDeleteValuesParams.builder()
                 .entity(CustomFieldDeleteValuesParams.Entity.ALERT)
-                .entityId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .keys(listOf("string"))
+                .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
+                .keys(listOf("x_account_id"))
                 .build()
         )
     }
@@ -61,8 +61,8 @@ class CustomFieldServiceTest {
         val customFieldListKeysResponse =
             customFieldService.listKeys(
                 CustomFieldListKeysParams.builder()
-                    .entities(listOf(CustomFieldListKeysParams.Entity.ALERT))
                     .nextPage("next_page")
+                    .entities(listOf(CustomFieldListKeysParams.Entity.ALERT))
                     .build()
             )
         println(customFieldListKeysResponse)
@@ -80,7 +80,7 @@ class CustomFieldServiceTest {
         customFieldService.removeKey(
             CustomFieldRemoveKeyParams.builder()
                 .entity(CustomFieldRemoveKeyParams.Entity.ALERT)
-                .key("key")
+                .key("x_account_id")
                 .build()
         )
     }
@@ -97,11 +97,11 @@ class CustomFieldServiceTest {
             CustomFieldSetValuesParams.builder()
                 .customFields(
                     CustomFieldSetValuesParams.CustomFields.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .putAdditionalProperty("x_account_id", JsonValue.from("KyVnHhSBWl7eY2bl"))
                         .build()
                 )
                 .entity(CustomFieldSetValuesParams.Entity.ALERT)
-                .entityId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
                 .build()
         )
     }

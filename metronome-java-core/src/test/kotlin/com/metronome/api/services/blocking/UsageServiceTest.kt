@@ -26,9 +26,10 @@ class UsageServiceTest {
         val usageListResponse =
             usageService.list(
                 UsageListParams.builder()
-                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .endingBefore(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
+                    .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                     .windowSize(UsageListParams.WindowSize.HOUR)
+                    .nextPage("next_page")
                     .billableMetrics(
                         listOf(
                             UsageListParams.BillableMetric.builder()
@@ -43,7 +44,6 @@ class UsageServiceTest {
                         )
                     )
                     .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                    .nextPage("next_page")
                     .build()
             )
         println(usageListResponse)
@@ -92,8 +92,8 @@ class UsageServiceTest {
         val response =
             usageService.listWithGroups(
                 UsageListWithGroupsParams.builder()
-                    .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .billableMetricId("222796fd-d29c-429e-89b2-549fabda4ed6")
+                    .customerId("04ca7e72-4229-4a6e-ab11-9f7376fccbcb")
                     .windowSize(UsageListWithGroupsParams.WindowSize.HOUR)
                     .build()
             )

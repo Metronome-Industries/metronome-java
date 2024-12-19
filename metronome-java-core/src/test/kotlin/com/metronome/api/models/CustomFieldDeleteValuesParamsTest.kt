@@ -11,8 +11,8 @@ class CustomFieldDeleteValuesParamsTest {
     fun createCustomFieldDeleteValuesParams() {
         CustomFieldDeleteValuesParams.builder()
             .entity(CustomFieldDeleteValuesParams.Entity.ALERT)
-            .entityId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .keys(listOf("string"))
+            .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
+            .keys(listOf("x_account_id"))
             .build()
     }
 
@@ -21,14 +21,14 @@ class CustomFieldDeleteValuesParamsTest {
         val params =
             CustomFieldDeleteValuesParams.builder()
                 .entity(CustomFieldDeleteValuesParams.Entity.ALERT)
-                .entityId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .keys(listOf("string"))
+                .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
+                .keys(listOf("x_account_id"))
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.entity()).isEqualTo(CustomFieldDeleteValuesParams.Entity.ALERT)
-        assertThat(body.entityId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.keys()).isEqualTo(listOf("string"))
+        assertThat(body.entityId()).isEqualTo("99594816-e8a5-4bca-be21-8d1de0f45120")
+        assertThat(body.keys()).isEqualTo(listOf("x_account_id"))
     }
 
     @Test
@@ -36,13 +36,13 @@ class CustomFieldDeleteValuesParamsTest {
         val params =
             CustomFieldDeleteValuesParams.builder()
                 .entity(CustomFieldDeleteValuesParams.Entity.ALERT)
-                .entityId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .keys(listOf("string"))
+                .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
+                .keys(listOf("x_account_id"))
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.entity()).isEqualTo(CustomFieldDeleteValuesParams.Entity.ALERT)
-        assertThat(body.entityId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.keys()).isEqualTo(listOf("string"))
+        assertThat(body.entityId()).isEqualTo("99594816-e8a5-4bca-be21-8d1de0f45120")
+        assertThat(body.keys()).isEqualTo(listOf("x_account_id"))
     }
 }

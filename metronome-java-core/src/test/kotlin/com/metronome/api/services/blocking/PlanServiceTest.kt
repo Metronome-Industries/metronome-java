@@ -38,7 +38,7 @@ class PlanServiceTest {
         val planGetDetailsResponse =
             planService.getDetails(
                 PlanGetDetailsParams.builder()
-                    .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .planId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )
         println(planGetDetailsResponse)
@@ -56,7 +56,7 @@ class PlanServiceTest {
         val response =
             planService.listCharges(
                 PlanListChargesParams.builder()
-                    .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .planId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )
         println(response)
@@ -74,7 +74,7 @@ class PlanServiceTest {
         val response =
             planService.listCustomers(
                 PlanListCustomersParams.builder()
-                    .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .planId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )
         println(response)

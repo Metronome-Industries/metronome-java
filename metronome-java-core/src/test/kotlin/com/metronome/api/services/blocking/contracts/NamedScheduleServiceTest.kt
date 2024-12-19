@@ -25,9 +25,9 @@ class NamedScheduleServiceTest {
         val contractNamedScheduleRetrieveResponse =
             namedScheduleService.retrieve(
                 ContractNamedScheduleRetrieveParams.builder()
-                    .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .scheduleName("schedule_name")
-                    .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .scheduleName("my-schedule")
+                    .coveringDate(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
                     .build()
             )
         println(contractNamedScheduleRetrieveResponse)
@@ -44,11 +44,11 @@ class NamedScheduleServiceTest {
         val namedScheduleService = client.contracts().namedSchedules()
         namedScheduleService.update(
             ContractNamedScheduleUpdateParams.builder()
-                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .scheduleName("schedule_name")
-                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .value(JsonValue.from(mapOf<String, Any>()))
-                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .scheduleName("my-schedule")
+                .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
+                .value(JsonValue.from(mapOf("my_key" to "my_value")))
+                .endingBefore(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
                 .build()
         )
     }

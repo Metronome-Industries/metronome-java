@@ -22,7 +22,7 @@ class InvoiceServiceTest {
         val invoiceService = client.invoices()
         val invoiceRegenerateResponse =
             invoiceService.regenerate(
-                InvoiceRegenerateParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+                InvoiceRegenerateParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
             )
         println(invoiceRegenerateResponse)
         invoiceRegenerateResponse.validate()
@@ -38,7 +38,7 @@ class InvoiceServiceTest {
         val invoiceService = client.invoices()
         val invoiceVoidResponse =
             invoiceService.void_(
-                InvoiceVoidParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+                InvoiceVoidParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
             )
         println(invoiceVoidResponse)
         invoiceVoidResponse.validate()

@@ -9,28 +9,28 @@ class ContractProductRetrieveParamsTest {
 
     @Test
     fun createContractProductRetrieveParams() {
-        ContractProductRetrieveParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+        ContractProductRetrieveParams.builder().id("d84e7f4e-7a70-4fe4-be02-7a5027beffcc").build()
     }
 
     @Test
     fun getBody() {
         val params =
             ContractProductRetrieveParams.builder()
-                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .id("d84e7f4e-7a70-4fe4-be02-7a5027beffcc")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.id()).isEqualTo("d84e7f4e-7a70-4fe4-be02-7a5027beffcc")
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
         val params =
             ContractProductRetrieveParams.builder()
-                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .id("d84e7f4e-7a70-4fe4-be02-7a5027beffcc")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.id()).isEqualTo("d84e7f4e-7a70-4fe4-be02-7a5027beffcc")
     }
 }

@@ -110,6 +110,26 @@ for (ContractProductListResponse product : page.data()) {
 }
 ```
 
+Use the `ContractProductListParams` builder to set parameters:
+
+```java
+ContractProductListParams params = ContractProductListParams.builder()
+    .limit(1L)
+    .nextPage("next_page")
+    .archiveFilter(ContractProductListParams.ArchiveFilter.ARCHIVED)
+    .build();
+ContractProductListPage page1 = client.contracts().products().list(params);
+
+// Using the `from` method of the builder you can reuse previous params values:
+ContractProductListPage page2 = client.contracts().products().list(ContractProductListParams.builder()
+    .from(params)
+    .nextPage("abc123...")
+    .build());
+
+// Or easily get params for the next page by using the helper `getNextPageParams`:
+ContractProductListPage page3 = client.contracts().products().list(params.getNextPageParams(page2));
+```
+
 See [Pagination](#pagination) below for more information on transparently working with lists of objects without worrying about fetching each page.
 
 ---

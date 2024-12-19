@@ -12,17 +12,26 @@ class UsageListWithGroupsParamsTest {
     @Test
     fun createUsageListWithGroupsParams() {
         UsageListWithGroupsParams.builder()
-            .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .billableMetricId("222796fd-d29c-429e-89b2-549fabda4ed6")
+            .customerId("04ca7e72-4229-4a6e-ab11-9f7376fccbcb")
             .windowSize(UsageListWithGroupsParams.WindowSize.HOUR)
-            .currentPeriod(true)
-            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-            .groupBy(
-                UsageListWithGroupsParams.GroupBy.builder().key("key").values(listOf("x")).build()
-            )
-            .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .limit(1L)
             .nextPage("next_page")
+            .currentPeriod(true)
+            .endingBefore(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
+            .groupBy(
+                UsageListWithGroupsParams.GroupBy.builder()
+                    .key("region")
+                    .values(
+                        listOf(
+                            "US-East",
+                            "US-West",
+                            "EU-Central",
+                        )
+                    )
+                    .build()
+            )
+            .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
             .build()
     }
 
@@ -30,20 +39,26 @@ class UsageListWithGroupsParamsTest {
     fun getQueryParams() {
         val params =
             UsageListWithGroupsParams.builder()
-                .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .billableMetricId("222796fd-d29c-429e-89b2-549fabda4ed6")
+                .customerId("04ca7e72-4229-4a6e-ab11-9f7376fccbcb")
                 .windowSize(UsageListWithGroupsParams.WindowSize.HOUR)
-                .currentPeriod(true)
-                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .groupBy(
-                    UsageListWithGroupsParams.GroupBy.builder()
-                        .key("key")
-                        .values(listOf("x"))
-                        .build()
-                )
-                .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .limit(1L)
                 .nextPage("next_page")
+                .currentPeriod(true)
+                .endingBefore(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
+                .groupBy(
+                    UsageListWithGroupsParams.GroupBy.builder()
+                        .key("region")
+                        .values(
+                            listOf(
+                                "US-East",
+                                "US-West",
+                                "EU-Central",
+                            )
+                        )
+                        .build()
+                )
+                .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .build()
         val expected = QueryParams.builder()
         expected.put("limit", "1")
@@ -55,8 +70,8 @@ class UsageListWithGroupsParamsTest {
     fun getQueryParamsWithoutOptionalFields() {
         val params =
             UsageListWithGroupsParams.builder()
-                .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .billableMetricId("222796fd-d29c-429e-89b2-549fabda4ed6")
+                .customerId("04ca7e72-4229-4a6e-ab11-9f7376fccbcb")
                 .windowSize(UsageListWithGroupsParams.WindowSize.HOUR)
                 .build()
         val expected = QueryParams.builder()
@@ -67,47 +82,62 @@ class UsageListWithGroupsParamsTest {
     fun getBody() {
         val params =
             UsageListWithGroupsParams.builder()
-                .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .billableMetricId("222796fd-d29c-429e-89b2-549fabda4ed6")
+                .customerId("04ca7e72-4229-4a6e-ab11-9f7376fccbcb")
                 .windowSize(UsageListWithGroupsParams.WindowSize.HOUR)
-                .currentPeriod(true)
-                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .groupBy(
-                    UsageListWithGroupsParams.GroupBy.builder()
-                        .key("key")
-                        .values(listOf("x"))
-                        .build()
-                )
-                .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .limit(1L)
                 .nextPage("next_page")
+                .currentPeriod(true)
+                .endingBefore(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
+                .groupBy(
+                    UsageListWithGroupsParams.GroupBy.builder()
+                        .key("region")
+                        .values(
+                            listOf(
+                                "US-East",
+                                "US-West",
+                                "EU-Central",
+                            )
+                        )
+                        .build()
+                )
+                .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.billableMetricId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.billableMetricId()).isEqualTo("222796fd-d29c-429e-89b2-549fabda4ed6")
+        assertThat(body.customerId()).isEqualTo("04ca7e72-4229-4a6e-ab11-9f7376fccbcb")
         assertThat(body.windowSize()).isEqualTo(UsageListWithGroupsParams.WindowSize.HOUR)
         assertThat(body.currentPeriod()).isEqualTo(true)
-        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
         assertThat(body.groupBy())
             .isEqualTo(
-                UsageListWithGroupsParams.GroupBy.builder().key("key").values(listOf("x")).build()
+                UsageListWithGroupsParams.GroupBy.builder()
+                    .key("region")
+                    .values(
+                        listOf(
+                            "US-East",
+                            "US-West",
+                            "EU-Central",
+                        )
+                    )
+                    .build()
             )
-        assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
         val params =
             UsageListWithGroupsParams.builder()
-                .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .billableMetricId("222796fd-d29c-429e-89b2-549fabda4ed6")
+                .customerId("04ca7e72-4229-4a6e-ab11-9f7376fccbcb")
                 .windowSize(UsageListWithGroupsParams.WindowSize.HOUR)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.billableMetricId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.billableMetricId()).isEqualTo("222796fd-d29c-429e-89b2-549fabda4ed6")
+        assertThat(body.customerId()).isEqualTo("04ca7e72-4229-4a6e-ab11-9f7376fccbcb")
         assertThat(body.windowSize()).isEqualTo(UsageListWithGroupsParams.WindowSize.HOUR)
     }
 }

@@ -24,8 +24,8 @@ class AlertServiceTest {
         val customerAlertRetrieveResponse =
             alertService.retrieve(
                 CustomerAlertRetrieveParams.builder()
-                    .alertId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .alertId("8deed800-1b7a-495d-a207-6c52bac54dc9")
+                    .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                     .build()
             )
         println(customerAlertRetrieveResponse)
@@ -43,9 +43,9 @@ class AlertServiceTest {
         val customerAlertListResponse =
             alertService.list(
                 CustomerAlertListParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .alertStatuses(listOf(CustomerAlertListParams.AlertStatus.ENABLED))
+                    .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                     .nextPage("next_page")
+                    .alertStatuses(listOf(CustomerAlertListParams.AlertStatus.ENABLED))
                     .build()
             )
         println(customerAlertListResponse)
@@ -62,8 +62,8 @@ class AlertServiceTest {
         val alertService = client.customers().alerts()
         alertService.reset(
             CustomerAlertResetParams.builder()
-                .alertId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .alertId("5e8691bf-b22a-4672-922d-f80eee940f01")
+                .customerId("4c83caf3-8af4-44e2-9aeb-e290531726d9")
                 .build()
         )
     }

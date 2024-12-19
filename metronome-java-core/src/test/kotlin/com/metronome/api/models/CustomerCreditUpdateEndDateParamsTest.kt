@@ -11,9 +11,9 @@ class CustomerCreditUpdateEndDateParamsTest {
     @Test
     fun createCustomerCreditUpdateEndDateParams() {
         CustomerCreditUpdateEndDateParams.builder()
-            .accessEndingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-            .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .accessEndingBefore(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+            .creditId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
+            .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
             .build()
     }
 
@@ -21,31 +21,31 @@ class CustomerCreditUpdateEndDateParamsTest {
     fun getBody() {
         val params =
             CustomerCreditUpdateEndDateParams.builder()
-                .accessEndingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .accessEndingBefore(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                .creditId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.accessEndingBefore())
-            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.creditId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .isEqualTo(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+        assertThat(body.creditId()).isEqualTo("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
+        assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
         val params =
             CustomerCreditUpdateEndDateParams.builder()
-                .accessEndingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .accessEndingBefore(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                .creditId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.accessEndingBefore())
-            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.creditId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .isEqualTo(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+        assertThat(body.creditId()).isEqualTo("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
+        assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
     }
 }

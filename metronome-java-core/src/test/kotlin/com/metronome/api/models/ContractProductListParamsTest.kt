@@ -11,9 +11,9 @@ class ContractProductListParamsTest {
     @Test
     fun createContractProductListParams() {
         ContractProductListParams.builder()
-            .archiveFilter(ContractProductListParams.ArchiveFilter.ARCHIVED)
             .limit(1L)
             .nextPage("next_page")
+            .archiveFilter(ContractProductListParams.ArchiveFilter.ARCHIVED)
             .build()
     }
 
@@ -21,9 +21,9 @@ class ContractProductListParamsTest {
     fun getQueryParams() {
         val params =
             ContractProductListParams.builder()
-                .archiveFilter(ContractProductListParams.ArchiveFilter.ARCHIVED)
                 .limit(1L)
                 .nextPage("next_page")
+                .archiveFilter(ContractProductListParams.ArchiveFilter.ARCHIVED)
                 .build()
         val expected = QueryParams.builder()
         expected.put("limit", "1")
@@ -42,9 +42,9 @@ class ContractProductListParamsTest {
     fun getBody() {
         val params =
             ContractProductListParams.builder()
-                .archiveFilter(ContractProductListParams.ArchiveFilter.ARCHIVED)
                 .limit(1L)
                 .nextPage("next_page")
+                .archiveFilter(ContractProductListParams.ArchiveFilter.ARCHIVED)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull

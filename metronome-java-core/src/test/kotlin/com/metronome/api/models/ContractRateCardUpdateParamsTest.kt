@@ -12,7 +12,7 @@ class ContractRateCardUpdateParamsTest {
     @Test
     fun createContractRateCardUpdateParams() {
         ContractRateCardUpdateParams.builder()
-            .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .aliases(
                 listOf(
                     ContractRateCardUpdateParams.Alias.builder()
@@ -27,8 +27,8 @@ class ContractRateCardUpdateParamsTest {
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-            .description("description")
-            .name("name")
+            .description("My Updated Rate Card Description")
+            .name("My Updated Rate Card")
             .build()
     }
 
@@ -36,7 +36,7 @@ class ContractRateCardUpdateParamsTest {
     fun getBody() {
         val params =
             ContractRateCardUpdateParams.builder()
-                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .aliases(
                     listOf(
                         ContractRateCardUpdateParams.Alias.builder()
@@ -51,12 +51,12 @@ class ContractRateCardUpdateParamsTest {
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
-                .description("description")
-                .name("name")
+                .description("My Updated Rate Card Description")
+                .name("My Updated Rate Card")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.rateCardId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.aliases())
             .isEqualTo(
                 listOf(
@@ -73,18 +73,18 @@ class ContractRateCardUpdateParamsTest {
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(body.description()).isEqualTo("description")
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.description()).isEqualTo("My Updated Rate Card Description")
+        assertThat(body.name()).isEqualTo("My Updated Rate Card")
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
         val params =
             ContractRateCardUpdateParams.builder()
-                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.rateCardId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
     }
 }

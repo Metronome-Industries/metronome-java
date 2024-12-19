@@ -32,7 +32,7 @@ class CustomerServiceTest {
         val customerCreateResponse =
             customerService.create(
                 CustomerCreateParams.builder()
-                    .name("name")
+                    .name("Example, Inc.")
                     .billingConfig(
                         CustomerCreateParams.BillingConfig.builder()
                             .billingProviderCustomerId("billing_provider_customer_id")
@@ -54,7 +54,7 @@ class CustomerServiceTest {
                             .build()
                     )
                     .externalId("x")
-                    .ingestAliases(listOf("x"))
+                    .ingestAliases(listOf("team@example.com"))
                     .build()
             )
         println(customerCreateResponse)
@@ -72,7 +72,7 @@ class CustomerServiceTest {
         val customerRetrieveResponse =
             customerService.retrieve(
                 CustomerRetrieveParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )
         println(customerRetrieveResponse)
@@ -102,7 +102,7 @@ class CustomerServiceTest {
         val customerService = client.customers()
         val customerArchiveResponse =
             customerService.archive(
-                CustomerArchiveParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+                CustomerArchiveParams.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build()
             )
         println(customerArchiveResponse)
         customerArchiveResponse.validate()
@@ -119,7 +119,7 @@ class CustomerServiceTest {
         val response =
             customerService.listBillableMetrics(
                 CustomerListBillableMetricsParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )
         println(response)
@@ -137,7 +137,7 @@ class CustomerServiceTest {
         val response =
             customerService.listCosts(
                 CustomerListCostsParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .build()
@@ -156,8 +156,8 @@ class CustomerServiceTest {
         val customerService = client.customers()
         customerService.setIngestAliases(
             CustomerSetIngestAliasesParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .ingestAliases(listOf("x"))
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .ingestAliases(listOf("team@example.com"))
                 .build()
         )
     }
@@ -173,8 +173,8 @@ class CustomerServiceTest {
         val customerSetNameResponse =
             customerService.setName(
                 CustomerSetNameParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .name("name")
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .name("Example, Inc.")
                     .build()
             )
         println(customerSetNameResponse)
@@ -191,9 +191,9 @@ class CustomerServiceTest {
         val customerService = client.customers()
         customerService.updateConfig(
             CustomerUpdateConfigParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .leaveStripeInvoicesInDraft(true)
-                .salesforceAccountId("salesforce_account_id")
+                .salesforceAccountId("0015500001WO1ZiABL")
                 .build()
         )
     }

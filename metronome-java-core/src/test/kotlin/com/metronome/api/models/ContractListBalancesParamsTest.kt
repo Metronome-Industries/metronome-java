@@ -11,8 +11,8 @@ class ContractListBalancesParamsTest {
     @Test
     fun createContractListBalancesParams() {
         ContractListBalancesParams.builder()
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+            .id("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
             .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .effectiveBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .includeArchived(true)
@@ -27,8 +27,8 @@ class ContractListBalancesParamsTest {
     fun getBody() {
         val params =
             ContractListBalancesParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                .id("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
                 .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .effectiveBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .includeArchived(true)
@@ -39,8 +39,8 @@ class ContractListBalancesParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
+        assertThat(body.id()).isEqualTo("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
         assertThat(body.coveringDate()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(body.effectiveBefore())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -55,10 +55,10 @@ class ContractListBalancesParamsTest {
     fun getBodyWithoutOptionalFields() {
         val params =
             ContractListBalancesParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
     }
 }

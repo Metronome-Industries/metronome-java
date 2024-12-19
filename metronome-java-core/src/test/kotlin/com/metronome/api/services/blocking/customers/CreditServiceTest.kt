@@ -31,22 +31,22 @@ class CreditServiceTest {
                             .scheduleItems(
                                 listOf(
                                     CustomerCreditCreateParams.AccessSchedule.ScheduleItem.builder()
-                                        .amount(0.0)
+                                        .amount(1000.0)
                                         .endingBefore(
-                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            OffsetDateTime.parse("2020-02-01T00:00:00.000Z")
                                         )
                                         .startingAt(
-                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            OffsetDateTime.parse("2020-01-01T00:00:00.000Z")
                                         )
                                         .build()
                                 )
                             )
-                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                             .build()
                     )
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .priority(0.0)
-                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .priority(100.0)
+                    .productId("f14d6729-6a44-4b13-9908-9387f1918790")
                     .applicableContractIds(listOf("string"))
                     .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                     .applicableProductTags(listOf("string"))
@@ -56,7 +56,7 @@ class CreditServiceTest {
                             .build()
                     )
                     .description("description")
-                    .name("x")
+                    .name("My Credit")
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                     .rateType(CustomerCreditCreateParams.RateType.COMMIT_RATE)
                     .salesforceOpportunityId("salesforce_opportunity_id")
@@ -77,9 +77,9 @@ class CreditServiceTest {
         val customerCreditListResponse =
             creditService.list(
                 CustomerCreditListParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .creditId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
                     .effectiveBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .includeArchived(true)
                     .includeContractCredits(true)
@@ -103,9 +103,9 @@ class CreditServiceTest {
         val customerCreditUpdateEndDateResponse =
             creditService.updateEndDate(
                 CustomerCreditUpdateEndDateParams.builder()
-                    .accessEndingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .accessEndingBefore(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                    .creditId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .build()
             )
         println(customerCreditUpdateEndDateResponse)

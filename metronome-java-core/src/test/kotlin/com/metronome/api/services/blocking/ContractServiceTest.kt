@@ -37,8 +37,8 @@ class ContractServiceTest {
         val contractCreateResponse =
             contractService.create(
                 ContractCreateParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                     .billingProviderConfiguration(
                         ContractCreateParams.BillingProviderConfiguration.builder()
                             .billingProvider(
@@ -351,7 +351,7 @@ class ContractServiceTest {
                         )
                     )
                     .rateCardAlias("rate_card_alias")
-                    .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .resellerRoyalties(
                         listOf(
                             ContractCreateParams.ResellerRoyalty.builder()
@@ -491,8 +491,8 @@ class ContractServiceTest {
         val contractRetrieveResponse =
             contractService.retrieve(
                 ContractRetrieveParams.builder()
-                    .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .includeLedgers(true)
                     .build()
             )
@@ -511,7 +511,7 @@ class ContractServiceTest {
         val contractListResponse =
             contractService.list(
                 ContractListParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                     .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .includeArchived(true)
                     .includeLedgers(true)
@@ -532,12 +532,12 @@ class ContractServiceTest {
         val contractService = client.contracts()
         contractService.addManualBalanceEntry(
             ContractAddManualBalanceEntryParams.builder()
-                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .amount(0.0)
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .reason("reason")
-                .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .id("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
+                .amount(-1000.0)
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                .reason("Reason for entry")
+                .segmentId("66368e29-3f97-4d15-a6e9-120897f0070a")
+                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
         )
@@ -554,9 +554,9 @@ class ContractServiceTest {
         val contractAmendResponse =
             contractService.amend(
                 ContractAmendParams.builder()
-                    .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                     .commits(
                         listOf(
                             ContractAmendParams.Commit.builder()
@@ -953,8 +953,8 @@ class ContractServiceTest {
         val contractArchiveResponse =
             contractService.archive(
                 ContractArchiveParams.builder()
-                    .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .voidInvoices(true)
                     .build()
             )
@@ -976,25 +976,25 @@ class ContractServiceTest {
                     .invoices(
                         listOf(
                             ContractCreateHistoricalInvoicesParams.Invoice.builder()
-                                .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .exclusiveEndDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                                .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                                .exclusiveEndDate(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
                                 .inclusiveStartDate(
-                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                    OffsetDateTime.parse("2020-01-01T00:00:00.000Z")
                                 )
-                                .issueDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .issueDate(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
                                 .usageLineItems(
                                     listOf(
                                         ContractCreateHistoricalInvoicesParams.Invoice.UsageLineItem
                                             .builder()
                                             .exclusiveEndDate(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                                OffsetDateTime.parse("2020-02-01T00:00:00.000Z")
                                             )
                                             .inclusiveStartDate(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                                OffsetDateTime.parse("2020-01-01T00:00:00.000Z")
                                             )
-                                            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .productId("f14d6729-6a44-4b13-9908-9387f1918790")
                                             .presentationGroupValues(
                                                 ContractCreateHistoricalInvoicesParams.Invoice
                                                     .UsageLineItem
@@ -1017,7 +1017,7 @@ class ContractServiceTest {
                                                     )
                                                     .build()
                                             )
-                                            .quantity(0.0)
+                                            .quantity(100.0)
                                             .subtotalsWithQuantity(
                                                 listOf(
                                                     ContractCreateHistoricalInvoicesParams.Invoice
@@ -1059,7 +1059,7 @@ class ContractServiceTest {
                                 .build()
                         )
                     )
-                    .preview(true)
+                    .preview(false)
                     .build()
             )
         println(contractCreateHistoricalInvoicesResponse)
@@ -1077,8 +1077,8 @@ class ContractServiceTest {
         val contractListBalancesResponse =
             contractService.listBalances(
                 ContractListBalancesParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .id("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
                     .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .effectiveBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .includeArchived(true)
@@ -1103,9 +1103,11 @@ class ContractServiceTest {
         val contractRetrieveRateScheduleResponse =
             contractService.retrieveRateSchedule(
                 ContractRetrieveRateScheduleParams.builder()
-                    .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .at(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .limit(1L)
+                    .nextPage("next_page")
+                    .at(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                     .selectors(
                         listOf(
                             ContractRetrieveRateScheduleParams.Selector.builder()
@@ -1113,7 +1115,11 @@ class ContractServiceTest {
                                     ContractRetrieveRateScheduleParams.Selector
                                         .PartialPricingGroupValues
                                         .builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .putAdditionalProperty(
+                                            "region",
+                                            JsonValue.from("us-west-2")
+                                        )
+                                        .putAdditionalProperty("cloud", JsonValue.from("aws"))
                                         .build()
                                 )
                                 .pricingGroupValues(
@@ -1122,13 +1128,11 @@ class ContractServiceTest {
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
-                                .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
                                 .productTags(listOf("string"))
                                 .build()
                         )
                     )
-                    .limit(1L)
-                    .nextPage("next_page")
                     .build()
             )
         println(contractRetrieveRateScheduleResponse)
@@ -1185,11 +1189,11 @@ class ContractServiceTest {
         val contractService = client.contracts()
         contractService.setUsageFilter(
             ContractSetUsageFilterParams.builder()
-                .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .groupKey("group_key")
-                .groupValues(listOf("string"))
-                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                .groupKey("business_subscription_id")
+                .groupValues(listOf("ID-1", "ID-2"))
+                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                 .build()
         )
     }
@@ -1205,9 +1209,9 @@ class ContractServiceTest {
         val contractUpdateEndDateResponse =
             contractService.updateEndDate(
                 ContractUpdateEndDateParams.builder()
-                    .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .endingBefore(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                     .build()
             )
         println(contractUpdateEndDateResponse)

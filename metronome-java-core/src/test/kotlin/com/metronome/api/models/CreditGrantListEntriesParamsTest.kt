@@ -12,11 +12,11 @@ class CreditGrantListEntriesParamsTest {
     @Test
     fun createCreditGrantListEntriesParams() {
         CreditGrantListEntriesParams.builder()
-            .creditTypeIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-            .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-            .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .nextPage("next_page")
+            .creditTypeIds(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
+            .customerIds(listOf("6a37bb88-8538-48c5-b37b-a41c836328bd"))
+            .endingBefore(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
+            .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
             .build()
     }
 
@@ -24,11 +24,11 @@ class CreditGrantListEntriesParamsTest {
     fun getQueryParams() {
         val params =
             CreditGrantListEntriesParams.builder()
-                .creditTypeIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .nextPage("next_page")
+                .creditTypeIds(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
+                .customerIds(listOf("6a37bb88-8538-48c5-b37b-a41c836328bd"))
+                .endingBefore(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
+                .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .build()
         val expected = QueryParams.builder()
         expected.put("next_page", "next_page")
@@ -46,18 +46,18 @@ class CreditGrantListEntriesParamsTest {
     fun getBody() {
         val params =
             CreditGrantListEntriesParams.builder()
-                .creditTypeIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .nextPage("next_page")
+                .creditTypeIds(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
+                .customerIds(listOf("6a37bb88-8538-48c5-b37b-a41c836328bd"))
+                .endingBefore(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
+                .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.creditTypeIds()).isEqualTo(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-        assertThat(body.customerIds()).isEqualTo(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.creditTypeIds()).isEqualTo(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
+        assertThat(body.customerIds()).isEqualTo(listOf("6a37bb88-8538-48c5-b37b-a41c836328bd"))
+        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
+        assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
     }
 
     @Test

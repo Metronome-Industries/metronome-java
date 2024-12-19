@@ -13,15 +13,18 @@ class ContractRateCardRateListParamsTest {
     @Test
     fun createContractRateCardRateListParams() {
         ContractRateCardRateListParams.builder()
-            .at(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-            .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
+            .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
+            .limit(1L)
+            .nextPage("next_page")
             .selectors(
                 listOf(
                     ContractRateCardRateListParams.Selector.builder()
                         .partialPricingGroupValues(
                             ContractRateCardRateListParams.Selector.PartialPricingGroupValues
                                 .builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .putAdditionalProperty("region", JsonValue.from("us-west-2"))
+                                .putAdditionalProperty("cloud", JsonValue.from("aws"))
                                 .build()
                         )
                         .pricingGroupValues(
@@ -29,13 +32,11 @@ class ContractRateCardRateListParamsTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
-                        .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
                         .productTags(listOf("string"))
                         .build()
                 )
             )
-            .limit(1L)
-            .nextPage("next_page")
             .build()
     }
 
@@ -43,15 +44,18 @@ class ContractRateCardRateListParamsTest {
     fun getQueryParams() {
         val params =
             ContractRateCardRateListParams.builder()
-                .at(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
+                .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
+                .limit(1L)
+                .nextPage("next_page")
                 .selectors(
                     listOf(
                         ContractRateCardRateListParams.Selector.builder()
                             .partialPricingGroupValues(
                                 ContractRateCardRateListParams.Selector.PartialPricingGroupValues
                                     .builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .putAdditionalProperty("region", JsonValue.from("us-west-2"))
+                                    .putAdditionalProperty("cloud", JsonValue.from("aws"))
                                     .build()
                             )
                             .pricingGroupValues(
@@ -59,13 +63,11 @@ class ContractRateCardRateListParamsTest {
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
-                            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
                             .productTags(listOf("string"))
                             .build()
                     )
                 )
-                .limit(1L)
-                .nextPage("next_page")
                 .build()
         val expected = QueryParams.builder()
         expected.put("limit", "1")
@@ -77,8 +79,8 @@ class ContractRateCardRateListParamsTest {
     fun getQueryParamsWithoutOptionalFields() {
         val params =
             ContractRateCardRateListParams.builder()
-                .at(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
+                .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                 .build()
         val expected = QueryParams.builder()
         assertThat(params.getQueryParams()).isEqualTo(expected.build())
@@ -88,15 +90,18 @@ class ContractRateCardRateListParamsTest {
     fun getBody() {
         val params =
             ContractRateCardRateListParams.builder()
-                .at(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
+                .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
+                .limit(1L)
+                .nextPage("next_page")
                 .selectors(
                     listOf(
                         ContractRateCardRateListParams.Selector.builder()
                             .partialPricingGroupValues(
                                 ContractRateCardRateListParams.Selector.PartialPricingGroupValues
                                     .builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .putAdditionalProperty("region", JsonValue.from("us-west-2"))
+                                    .putAdditionalProperty("cloud", JsonValue.from("aws"))
                                     .build()
                             )
                             .pricingGroupValues(
@@ -104,18 +109,16 @@ class ContractRateCardRateListParamsTest {
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
-                            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
                             .productTags(listOf("string"))
                             .build()
                     )
                 )
-                .limit(1L)
-                .nextPage("next_page")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.at()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.rateCardId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.at()).isEqualTo(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
+        assertThat(body.rateCardId()).isEqualTo("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
         assertThat(body.selectors())
             .isEqualTo(
                 listOf(
@@ -123,7 +126,8 @@ class ContractRateCardRateListParamsTest {
                         .partialPricingGroupValues(
                             ContractRateCardRateListParams.Selector.PartialPricingGroupValues
                                 .builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .putAdditionalProperty("region", JsonValue.from("us-west-2"))
+                                .putAdditionalProperty("cloud", JsonValue.from("aws"))
                                 .build()
                         )
                         .pricingGroupValues(
@@ -131,7 +135,7 @@ class ContractRateCardRateListParamsTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
-                        .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
                         .productTags(listOf("string"))
                         .build()
                 )
@@ -142,12 +146,12 @@ class ContractRateCardRateListParamsTest {
     fun getBodyWithoutOptionalFields() {
         val params =
             ContractRateCardRateListParams.builder()
-                .at(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
+                .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.at()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.rateCardId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.at()).isEqualTo(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
+        assertThat(body.rateCardId()).isEqualTo("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
     }
 }

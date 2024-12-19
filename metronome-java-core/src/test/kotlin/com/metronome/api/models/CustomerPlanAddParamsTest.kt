@@ -11,10 +11,10 @@ class CustomerPlanAddParamsTest {
     @Test
     fun createCustomerPlanAddParams() {
         CustomerPlanAddParams.builder()
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+            .planId("d2c06dae-9549-4d7d-bc04-b78dd3d241b8")
+            .startingOn(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
+            .endingBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
             .netPaymentTermsDays(0.0)
             .overageRateAdjustments(
                 listOf(
@@ -57,10 +57,10 @@ class CustomerPlanAddParamsTest {
     fun getBody() {
         val params =
             CustomerPlanAddParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .planId("d2c06dae-9549-4d7d-bc04-b78dd3d241b8")
+                .startingOn(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
+                .endingBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .netPaymentTermsDays(0.0)
                 .overageRateAdjustments(
                     listOf(
@@ -99,9 +99,9 @@ class CustomerPlanAddParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.planId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.planId()).isEqualTo("d2c06dae-9549-4d7d-bc04-b78dd3d241b8")
+        assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
+        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
         assertThat(body.netPaymentTermsDays()).isEqualTo(0.0)
         assertThat(body.overageRateAdjustments())
             .isEqualTo(
@@ -146,27 +146,27 @@ class CustomerPlanAddParamsTest {
     fun getBodyWithoutOptionalFields() {
         val params =
             CustomerPlanAddParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .planId("d2c06dae-9549-4d7d-bc04-b78dd3d241b8")
+                .startingOn(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.planId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.planId()).isEqualTo("d2c06dae-9549-4d7d-bc04-b78dd3d241b8")
+        assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
     }
 
     @Test
     fun getPathParam() {
         val params =
             CustomerPlanAddParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .planId("d2c06dae-9549-4d7d-bc04-b78dd3d241b8")
+                .startingOn(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
                 .build()
         assertThat(params).isNotNull
         // path param "customerId"
-        assertThat(params.getPathParam(0)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(params.getPathParam(0)).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         // out-of-bound path param
         assertThat(params.getPathParam(1)).isEqualTo("")
     }

@@ -11,8 +11,8 @@ class BillableMetricCreateParamsTest {
     @Test
     fun createBillableMetricCreateParams() {
         BillableMetricCreateParams.builder()
-            .name("name")
-            .aggregationKey("aggregation_key")
+            .name("CPU Hours")
+            .aggregationKey("cpu_hours")
             .aggregationType(BillableMetricCreateParams.AggregationType.COUNT)
             .customFields(
                 BillableMetricCreateParams.CustomFields.builder()
@@ -21,19 +21,31 @@ class BillableMetricCreateParamsTest {
             )
             .eventTypeFilter(
                 EventTypeFilter.builder()
-                    .inValues(listOf("string"))
+                    .inValues(listOf("cpu_usage"))
                     .notInValues(listOf("string"))
                     .build()
             )
-            .groupKeys(listOf(listOf("string")))
+            .groupKeys(listOf(listOf("region"), listOf("machine_type")))
             .propertyFilters(
                 listOf(
                     PropertyFilter.builder()
-                        .name("name")
+                        .name("cpu_hours")
                         .exists(true)
                         .inValues(listOf("string"))
                         .notInValues(listOf("string"))
-                        .build()
+                        .build(),
+                    PropertyFilter.builder()
+                        .name("region")
+                        .exists(true)
+                        .inValues(listOf("EU", "NA"))
+                        .notInValues(listOf("string"))
+                        .build(),
+                    PropertyFilter.builder()
+                        .name("machine_type")
+                        .exists(true)
+                        .inValues(listOf("slow", "fast"))
+                        .notInValues(listOf("string"))
+                        .build(),
                 )
             )
             .sql("sql")
@@ -44,8 +56,8 @@ class BillableMetricCreateParamsTest {
     fun getBody() {
         val params =
             BillableMetricCreateParams.builder()
-                .name("name")
-                .aggregationKey("aggregation_key")
+                .name("CPU Hours")
+                .aggregationKey("cpu_hours")
                 .aggregationType(BillableMetricCreateParams.AggregationType.COUNT)
                 .customFields(
                     BillableMetricCreateParams.CustomFields.builder()
@@ -54,27 +66,39 @@ class BillableMetricCreateParamsTest {
                 )
                 .eventTypeFilter(
                     EventTypeFilter.builder()
-                        .inValues(listOf("string"))
+                        .inValues(listOf("cpu_usage"))
                         .notInValues(listOf("string"))
                         .build()
                 )
-                .groupKeys(listOf(listOf("string")))
+                .groupKeys(listOf(listOf("region"), listOf("machine_type")))
                 .propertyFilters(
                     listOf(
                         PropertyFilter.builder()
-                            .name("name")
+                            .name("cpu_hours")
                             .exists(true)
                             .inValues(listOf("string"))
                             .notInValues(listOf("string"))
-                            .build()
+                            .build(),
+                        PropertyFilter.builder()
+                            .name("region")
+                            .exists(true)
+                            .inValues(listOf("EU", "NA"))
+                            .notInValues(listOf("string"))
+                            .build(),
+                        PropertyFilter.builder()
+                            .name("machine_type")
+                            .exists(true)
+                            .inValues(listOf("slow", "fast"))
+                            .notInValues(listOf("string"))
+                            .build(),
                     )
                 )
                 .sql("sql")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.name()).isEqualTo("name")
-        assertThat(body.aggregationKey()).isEqualTo("aggregation_key")
+        assertThat(body.name()).isEqualTo("CPU Hours")
+        assertThat(body.aggregationKey()).isEqualTo("cpu_hours")
         assertThat(body.aggregationType())
             .isEqualTo(BillableMetricCreateParams.AggregationType.COUNT)
         assertThat(body.customFields())
@@ -86,20 +110,32 @@ class BillableMetricCreateParamsTest {
         assertThat(body.eventTypeFilter())
             .isEqualTo(
                 EventTypeFilter.builder()
-                    .inValues(listOf("string"))
+                    .inValues(listOf("cpu_usage"))
                     .notInValues(listOf("string"))
                     .build()
             )
-        assertThat(body.groupKeys()).isEqualTo(listOf(listOf("string")))
+        assertThat(body.groupKeys()).isEqualTo(listOf(listOf("region"), listOf("machine_type")))
         assertThat(body.propertyFilters())
             .isEqualTo(
                 listOf(
                     PropertyFilter.builder()
-                        .name("name")
+                        .name("cpu_hours")
                         .exists(true)
                         .inValues(listOf("string"))
                         .notInValues(listOf("string"))
-                        .build()
+                        .build(),
+                    PropertyFilter.builder()
+                        .name("region")
+                        .exists(true)
+                        .inValues(listOf("EU", "NA"))
+                        .notInValues(listOf("string"))
+                        .build(),
+                    PropertyFilter.builder()
+                        .name("machine_type")
+                        .exists(true)
+                        .inValues(listOf("slow", "fast"))
+                        .notInValues(listOf("string"))
+                        .build(),
                 )
             )
         assertThat(body.sql()).isEqualTo("sql")
@@ -107,9 +143,9 @@ class BillableMetricCreateParamsTest {
 
     @Test
     fun getBodyWithoutOptionalFields() {
-        val params = BillableMetricCreateParams.builder().name("name").build()
+        val params = BillableMetricCreateParams.builder().name("CPU Hours").build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.name()).isEqualTo("CPU Hours")
     }
 }

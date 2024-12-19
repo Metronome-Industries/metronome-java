@@ -11,11 +11,11 @@ class AlertCreateParamsTest {
     fun createAlertCreateParams() {
         AlertCreateParams.builder()
             .alertType(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
-            .name("name")
-            .threshold(0.0)
+            .name("\$100 spend threshold reached")
+            .threshold(10000.0)
             .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .creditGrantTypeFilters(listOf("string"))
-            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .creditGrantTypeFilters(listOf("enterprise"))
+            .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
             .customFieldFilters(
                 listOf(
                     AlertCreateParams.CustomFieldFilter.builder()
@@ -25,7 +25,7 @@ class AlertCreateParamsTest {
                         .build()
                 )
             )
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
             .evaluateOnCreate(true)
             .groupKeyFilter(
                 AlertCreateParams.GroupKeyFilter.builder().key("key").value("value").build()
@@ -45,11 +45,11 @@ class AlertCreateParamsTest {
         val params =
             AlertCreateParams.builder()
                 .alertType(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
-                .name("name")
-                .threshold(0.0)
+                .name("\$100 spend threshold reached")
+                .threshold(10000.0)
                 .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .creditGrantTypeFilters(listOf("string"))
-                .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .creditGrantTypeFilters(listOf("enterprise"))
+                .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                 .customFieldFilters(
                     listOf(
                         AlertCreateParams.CustomFieldFilter.builder()
@@ -59,7 +59,7 @@ class AlertCreateParamsTest {
                             .build()
                     )
                 )
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                 .evaluateOnCreate(true)
                 .groupKeyFilter(
                     AlertCreateParams.GroupKeyFilter.builder().key("key").value("value").build()
@@ -76,11 +76,11 @@ class AlertCreateParamsTest {
         assertThat(body).isNotNull
         assertThat(body.alertType())
             .isEqualTo(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
-        assertThat(body.name()).isEqualTo("name")
-        assertThat(body.threshold()).isEqualTo(0.0)
+        assertThat(body.name()).isEqualTo("\$100 spend threshold reached")
+        assertThat(body.threshold()).isEqualTo(10000.0)
         assertThat(body.billableMetricId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.creditGrantTypeFilters()).isEqualTo(listOf("string"))
-        assertThat(body.creditTypeId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.creditGrantTypeFilters()).isEqualTo(listOf("enterprise"))
+        assertThat(body.creditTypeId()).isEqualTo("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
         assertThat(body.customFieldFilters())
             .isEqualTo(
                 listOf(
@@ -91,7 +91,7 @@ class AlertCreateParamsTest {
                         .build()
                 )
             )
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.customerId()).isEqualTo("4db51251-61de-4bfe-b9ce-495e244f3491")
         assertThat(body.evaluateOnCreate()).isEqualTo(true)
         assertThat(body.groupKeyFilter())
             .isEqualTo(AlertCreateParams.GroupKeyFilter.builder().key("key").value("value").build())
@@ -110,14 +110,14 @@ class AlertCreateParamsTest {
         val params =
             AlertCreateParams.builder()
                 .alertType(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
-                .name("name")
-                .threshold(0.0)
+                .name("\$100 spend threshold reached")
+                .threshold(10000.0)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.alertType())
             .isEqualTo(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
-        assertThat(body.name()).isEqualTo("name")
-        assertThat(body.threshold()).isEqualTo(0.0)
+        assertThat(body.name()).isEqualTo("\$100 spend threshold reached")
+        assertThat(body.threshold()).isEqualTo(10000.0)
     }
 }

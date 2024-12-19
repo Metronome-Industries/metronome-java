@@ -9,28 +9,28 @@ class ContractRateCardRetrieveParamsTest {
 
     @Test
     fun createContractRateCardRetrieveParams() {
-        ContractRateCardRetrieveParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+        ContractRateCardRetrieveParams.builder().id("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe").build()
     }
 
     @Test
     fun getBody() {
         val params =
             ContractRateCardRetrieveParams.builder()
-                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .id("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.id()).isEqualTo("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
         val params =
             ContractRateCardRetrieveParams.builder()
-                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .id("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.id()).isEqualTo("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
     }
 }

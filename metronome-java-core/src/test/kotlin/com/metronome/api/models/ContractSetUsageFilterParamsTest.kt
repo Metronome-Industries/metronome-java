@@ -11,11 +11,11 @@ class ContractSetUsageFilterParamsTest {
     @Test
     fun createContractSetUsageFilterParams() {
         ContractSetUsageFilterParams.builder()
-            .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .groupKey("group_key")
-            .groupValues(listOf("string"))
-            .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+            .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+            .groupKey("business_subscription_id")
+            .groupValues(listOf("ID-1", "ID-2"))
+            .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
             .build()
     }
 
@@ -23,37 +23,37 @@ class ContractSetUsageFilterParamsTest {
     fun getBody() {
         val params =
             ContractSetUsageFilterParams.builder()
-                .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .groupKey("group_key")
-                .groupValues(listOf("string"))
-                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                .groupKey("business_subscription_id")
+                .groupValues(listOf("ID-1", "ID-2"))
+                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.contractId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.groupKey()).isEqualTo("group_key")
-        assertThat(body.groupValues()).isEqualTo(listOf("string"))
-        assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+        assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
+        assertThat(body.groupKey()).isEqualTo("business_subscription_id")
+        assertThat(body.groupValues()).isEqualTo(listOf("ID-1", "ID-2"))
+        assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
         val params =
             ContractSetUsageFilterParams.builder()
-                .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .groupKey("group_key")
-                .groupValues(listOf("string"))
-                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                .groupKey("business_subscription_id")
+                .groupValues(listOf("ID-1", "ID-2"))
+                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.contractId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.groupKey()).isEqualTo("group_key")
-        assertThat(body.groupValues()).isEqualTo(listOf("string"))
-        assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+        assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
+        assertThat(body.groupKey()).isEqualTo("business_subscription_id")
+        assertThat(body.groupValues()).isEqualTo(listOf("ID-1", "ID-2"))
+        assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
     }
 }

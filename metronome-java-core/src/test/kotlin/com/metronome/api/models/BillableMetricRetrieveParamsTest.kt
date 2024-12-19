@@ -10,7 +10,7 @@ class BillableMetricRetrieveParamsTest {
     @Test
     fun createBillableMetricRetrieveParams() {
         BillableMetricRetrieveParams.builder()
-            .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .billableMetricId("13117714-3f05-48e5-a6e9-a66093f13b4d")
             .build()
     }
 
@@ -18,11 +18,11 @@ class BillableMetricRetrieveParamsTest {
     fun getPathParam() {
         val params =
             BillableMetricRetrieveParams.builder()
-                .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .billableMetricId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .build()
         assertThat(params).isNotNull
         // path param "billableMetricId"
-        assertThat(params.getPathParam(0)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(params.getPathParam(0)).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
         // out-of-bound path param
         assertThat(params.getPathParam(1)).isEqualTo("")
     }

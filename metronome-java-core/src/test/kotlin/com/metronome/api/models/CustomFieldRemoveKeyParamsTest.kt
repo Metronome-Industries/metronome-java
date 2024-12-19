@@ -11,7 +11,7 @@ class CustomFieldRemoveKeyParamsTest {
     fun createCustomFieldRemoveKeyParams() {
         CustomFieldRemoveKeyParams.builder()
             .entity(CustomFieldRemoveKeyParams.Entity.ALERT)
-            .key("key")
+            .key("x_account_id")
             .build()
     }
 
@@ -20,12 +20,12 @@ class CustomFieldRemoveKeyParamsTest {
         val params =
             CustomFieldRemoveKeyParams.builder()
                 .entity(CustomFieldRemoveKeyParams.Entity.ALERT)
-                .key("key")
+                .key("x_account_id")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.entity()).isEqualTo(CustomFieldRemoveKeyParams.Entity.ALERT)
-        assertThat(body.key()).isEqualTo("key")
+        assertThat(body.key()).isEqualTo("x_account_id")
     }
 
     @Test
@@ -33,11 +33,11 @@ class CustomFieldRemoveKeyParamsTest {
         val params =
             CustomFieldRemoveKeyParams.builder()
                 .entity(CustomFieldRemoveKeyParams.Entity.ALERT)
-                .key("key")
+                .key("x_account_id")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.entity()).isEqualTo(CustomFieldRemoveKeyParams.Entity.ALERT)
-        assertThat(body.key()).isEqualTo("key")
+        assertThat(body.key()).isEqualTo("x_account_id")
     }
 }

@@ -60,8 +60,8 @@ class ServiceParamsTest {
 
         val params =
             ContractCreateParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                 .billingProviderConfiguration(
                     ContractCreateParams.BillingProviderConfiguration.builder()
                         .billingProvider(
@@ -354,7 +354,7 @@ class ServiceParamsTest {
                     )
                 )
                 .rateCardAlias("rate_card_alias")
-                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .resellerRoyalties(
                     listOf(
                         ContractCreateParams.ResellerRoyalty.builder()

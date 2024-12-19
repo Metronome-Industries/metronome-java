@@ -23,18 +23,25 @@ class DashboardServiceTest {
         val dashboardGetEmbeddableUrlResponse =
             dashboardService.getEmbeddableUrl(
                 DashboardGetEmbeddableUrlParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
                     .bmGroupKeyOverrides(
                         listOf(
                             DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
-                                .groupKeyName("group_key_name")
-                                .displayName("display_name")
+                                .groupKeyName("tenant_id")
+                                .displayName("Org ID")
                                 .valueDisplayNames(
                                     DashboardGetEmbeddableUrlParams.BmGroupKeyOverride
                                         .ValueDisplayNames
                                         .builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty(
+                                            "48ecb18f358f",
+                                            JsonValue.from("bar")
+                                        )
+                                        .putAdditionalProperty(
+                                            "e358f3ce242d",
+                                            JsonValue.from("bar")
+                                        )
                                         .build()
                                 )
                                 .build()
@@ -44,15 +51,19 @@ class DashboardServiceTest {
                         listOf(
                             DashboardGetEmbeddableUrlParams.ColorOverride.builder()
                                 .name(DashboardGetEmbeddableUrlParams.ColorOverride.Name.GRAY_DARK)
-                                .value("value")
+                                .value("#ff0000")
                                 .build()
                         )
                     )
                     .dashboardOptions(
                         listOf(
                             DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-                                .key("key")
-                                .value("value")
+                                .key("show_zero_usage_line_items")
+                                .value("false")
+                                .build(),
+                            DashboardGetEmbeddableUrlParams.DashboardOption.builder()
+                                .key("hide_voided_invoices")
+                                .value("true")
                                 .build()
                         )
                     )

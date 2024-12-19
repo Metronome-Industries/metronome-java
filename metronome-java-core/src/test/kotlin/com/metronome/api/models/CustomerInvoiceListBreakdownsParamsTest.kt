@@ -12,7 +12,7 @@ class CustomerInvoiceListBreakdownsParamsTest {
     @Test
     fun createCustomerInvoiceListBreakdownsParams() {
         CustomerInvoiceListBreakdownsParams.builder()
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .creditTypeId("credit_type_id")
@@ -29,7 +29,7 @@ class CustomerInvoiceListBreakdownsParamsTest {
     fun getQueryParams() {
         val params =
             CustomerInvoiceListBreakdownsParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .creditTypeId("credit_type_id")
@@ -57,7 +57,7 @@ class CustomerInvoiceListBreakdownsParamsTest {
     fun getQueryParamsWithoutOptionalFields() {
         val params =
             CustomerInvoiceListBreakdownsParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
@@ -71,13 +71,13 @@ class CustomerInvoiceListBreakdownsParamsTest {
     fun getPathParam() {
         val params =
             CustomerInvoiceListBreakdownsParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
         assertThat(params).isNotNull
         // path param "customerId"
-        assertThat(params.getPathParam(0)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(params.getPathParam(0)).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         // out-of-bound path param
         assertThat(params.getPathParam(1)).isEqualTo("")
     }

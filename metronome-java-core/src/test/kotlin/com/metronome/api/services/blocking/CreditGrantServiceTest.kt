@@ -30,32 +30,32 @@ class CreditGrantServiceTest {
         val creditGrantCreateResponse =
             creditGrantService.create(
                 CreditGrantCreateParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
+                    .expiresAt(OffsetDateTime.parse("2022-04-01T00:00:00Z"))
                     .grantAmount(
                         CreditGrantCreateParams.GrantAmount.builder()
-                            .amount(0.0)
-                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .amount(1000.0)
+                            .creditTypeId("5ae401dc-a648-4b49-9ac3-391bb5bc4d7b")
                             .build()
                     )
-                    .name("name")
+                    .name("Acme Corp Promotional Credit Grant")
                     .paidAmount(
                         CreditGrantCreateParams.PaidAmount.builder()
-                            .amount(0.0)
-                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .amount(5000.0)
+                            .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                             .build()
                     )
-                    .priority(0.0)
-                    .creditGrantType("credit_grant_type")
+                    .priority(0.5)
+                    .creditGrantType("trial")
                     .customFields(
                         CreditGrantCreateParams.CustomFields.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
-                    .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .effectiveAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                     .invoiceDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .productIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                    .reason("reason")
+                    .reason("Incentivize new customer")
                     .rolloverSettings(
                         CreditGrantCreateParams.RolloverSettings.builder()
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -102,10 +102,10 @@ class CreditGrantServiceTest {
         val creditGrantEditResponse =
             creditGrantService.edit(
                 CreditGrantEditParams.builder()
-                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .id("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                     .creditGrantType("credit_grant_type")
-                    .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .name("name")
+                    .expiresAt(OffsetDateTime.parse("2022-04-01T00:00:00Z"))
+                    .name("Acme Corp Promotional Credit Grant")
                     .build()
             )
         println(creditGrantEditResponse)
@@ -137,11 +137,11 @@ class CreditGrantServiceTest {
         val creditGrantListEntriesResponse =
             creditGrantService.listEntries(
                 CreditGrantListEntriesParams.builder()
-                    .creditTypeIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                    .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .nextPage("next_page")
+                    .creditTypeIds(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
+                    .customerIds(listOf("6a37bb88-8538-48c5-b37b-a41c836328bd"))
+                    .endingBefore(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
+                    .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                     .build()
             )
         println(creditGrantListEntriesResponse)
@@ -159,7 +159,7 @@ class CreditGrantServiceTest {
         val creditGrantVoidResponse =
             creditGrantService.void_(
                 CreditGrantVoidParams.builder()
-                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .id("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                     .releaseUniquenessKey(true)
                     .voidCreditPurchaseInvoice(true)
                     .build()

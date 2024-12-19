@@ -11,8 +11,8 @@ class CustomerPlanListPriceAdjustmentsParamsTest {
     @Test
     fun createCustomerPlanListPriceAdjustmentsParams() {
         CustomerPlanListPriceAdjustmentsParams.builder()
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+            .customerPlanId("7aa11640-0703-4600-8eb9-293f535a6b74")
             .limit(1L)
             .nextPage("next_page")
             .build()
@@ -22,8 +22,8 @@ class CustomerPlanListPriceAdjustmentsParamsTest {
     fun getQueryParams() {
         val params =
             CustomerPlanListPriceAdjustmentsParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerPlanId("7aa11640-0703-4600-8eb9-293f535a6b74")
                 .limit(1L)
                 .nextPage("next_page")
                 .build()
@@ -37,8 +37,8 @@ class CustomerPlanListPriceAdjustmentsParamsTest {
     fun getQueryParamsWithoutOptionalFields() {
         val params =
             CustomerPlanListPriceAdjustmentsParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerPlanId("7aa11640-0703-4600-8eb9-293f535a6b74")
                 .build()
         val expected = QueryParams.builder()
         assertThat(params.getQueryParams()).isEqualTo(expected.build())
@@ -48,14 +48,14 @@ class CustomerPlanListPriceAdjustmentsParamsTest {
     fun getPathParam() {
         val params =
             CustomerPlanListPriceAdjustmentsParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerPlanId("7aa11640-0703-4600-8eb9-293f535a6b74")
                 .build()
         assertThat(params).isNotNull
         // path param "customerId"
-        assertThat(params.getPathParam(0)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(params.getPathParam(0)).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         // path param "customerPlanId"
-        assertThat(params.getPathParam(1)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(params.getPathParam(1)).isEqualTo("7aa11640-0703-4600-8eb9-293f535a6b74")
         // out-of-bound path param
         assertThat(params.getPathParam(2)).isEqualTo("")
     }

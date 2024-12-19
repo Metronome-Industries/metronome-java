@@ -11,7 +11,7 @@ class CustomerCreateParamsTest {
     @Test
     fun createCustomerCreateParams() {
         CustomerCreateParams.builder()
-            .name("name")
+            .name("Example, Inc.")
             .billingConfig(
                 CustomerCreateParams.BillingConfig.builder()
                     .billingProviderCustomerId("billing_provider_customer_id")
@@ -32,7 +32,7 @@ class CustomerCreateParamsTest {
                     .build()
             )
             .externalId("x")
-            .ingestAliases(listOf("x"))
+            .ingestAliases(listOf("team@example.com"))
             .build()
     }
 
@@ -40,7 +40,7 @@ class CustomerCreateParamsTest {
     fun getBody() {
         val params =
             CustomerCreateParams.builder()
-                .name("name")
+                .name("Example, Inc.")
                 .billingConfig(
                     CustomerCreateParams.BillingConfig.builder()
                         .billingProviderCustomerId("billing_provider_customer_id")
@@ -61,11 +61,11 @@ class CustomerCreateParamsTest {
                         .build()
                 )
                 .externalId("x")
-                .ingestAliases(listOf("x"))
+                .ingestAliases(listOf("team@example.com"))
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.name()).isEqualTo("Example, Inc.")
         assertThat(body.billingConfig())
             .isEqualTo(
                 CustomerCreateParams.BillingConfig.builder()
@@ -88,14 +88,14 @@ class CustomerCreateParamsTest {
                     .build()
             )
         assertThat(body.externalId()).isEqualTo("x")
-        assertThat(body.ingestAliases()).isEqualTo(listOf("x"))
+        assertThat(body.ingestAliases()).isEqualTo(listOf("team@example.com"))
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
-        val params = CustomerCreateParams.builder().name("name").build()
+        val params = CustomerCreateParams.builder().name("Example, Inc.").build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.name()).isEqualTo("Example, Inc.")
     }
 }

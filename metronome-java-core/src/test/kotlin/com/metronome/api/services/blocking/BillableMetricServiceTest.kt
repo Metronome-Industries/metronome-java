@@ -28,8 +28,8 @@ class BillableMetricServiceTest {
         val billableMetricCreateResponse =
             billableMetricService.create(
                 BillableMetricCreateParams.builder()
-                    .name("name")
-                    .aggregationKey("aggregation_key")
+                    .name("CPU Hours")
+                    .aggregationKey("cpu_hours")
                     .aggregationType(BillableMetricCreateParams.AggregationType.COUNT)
                     .customFields(
                         BillableMetricCreateParams.CustomFields.builder()
@@ -38,19 +38,31 @@ class BillableMetricServiceTest {
                     )
                     .eventTypeFilter(
                         EventTypeFilter.builder()
-                            .inValues(listOf("string"))
+                            .inValues(listOf("cpu_usage"))
                             .notInValues(listOf("string"))
                             .build()
                     )
-                    .groupKeys(listOf(listOf("string")))
+                    .groupKeys(listOf(listOf("region"), listOf("machine_type")))
                     .propertyFilters(
                         listOf(
                             PropertyFilter.builder()
-                                .name("name")
+                                .name("cpu_hours")
                                 .exists(true)
                                 .inValues(listOf("string"))
                                 .notInValues(listOf("string"))
-                                .build()
+                                .build(),
+                            PropertyFilter.builder()
+                                .name("region")
+                                .exists(true)
+                                .inValues(listOf("EU", "NA"))
+                                .notInValues(listOf("string"))
+                                .build(),
+                            PropertyFilter.builder()
+                                .name("machine_type")
+                                .exists(true)
+                                .inValues(listOf("slow", "fast"))
+                                .notInValues(listOf("string"))
+                                .build(),
                         )
                     )
                     .sql("sql")
@@ -71,7 +83,7 @@ class BillableMetricServiceTest {
         val billableMetricRetrieveResponse =
             billableMetricService.retrieve(
                 BillableMetricRetrieveParams.builder()
-                    .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .billableMetricId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .build()
             )
         println(billableMetricRetrieveResponse)
@@ -102,7 +114,7 @@ class BillableMetricServiceTest {
         val billableMetricArchiveResponse =
             billableMetricService.archive(
                 BillableMetricArchiveParams.builder()
-                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .id("8deed800-1b7a-495d-a207-6c52bac54dc9")
                     .build()
             )
         println(billableMetricArchiveResponse)

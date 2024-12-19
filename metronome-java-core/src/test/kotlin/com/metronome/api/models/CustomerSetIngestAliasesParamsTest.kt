@@ -10,8 +10,8 @@ class CustomerSetIngestAliasesParamsTest {
     @Test
     fun createCustomerSetIngestAliasesParams() {
         CustomerSetIngestAliasesParams.builder()
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .ingestAliases(listOf("x"))
+            .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+            .ingestAliases(listOf("team@example.com"))
             .build()
     }
 
@@ -19,36 +19,36 @@ class CustomerSetIngestAliasesParamsTest {
     fun getBody() {
         val params =
             CustomerSetIngestAliasesParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .ingestAliases(listOf("x"))
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .ingestAliases(listOf("team@example.com"))
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.ingestAliases()).isEqualTo(listOf("x"))
+        assertThat(body.ingestAliases()).isEqualTo(listOf("team@example.com"))
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
         val params =
             CustomerSetIngestAliasesParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .ingestAliases(listOf("x"))
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .ingestAliases(listOf("team@example.com"))
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.ingestAliases()).isEqualTo(listOf("x"))
+        assertThat(body.ingestAliases()).isEqualTo(listOf("team@example.com"))
     }
 
     @Test
     fun getPathParam() {
         val params =
             CustomerSetIngestAliasesParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .ingestAliases(listOf("x"))
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .ingestAliases(listOf("team@example.com"))
                 .build()
         assertThat(params).isNotNull
         // path param "customerId"
-        assertThat(params.getPathParam(0)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(params.getPathParam(0)).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         // out-of-bound path param
         assertThat(params.getPathParam(1)).isEqualTo("")
     }

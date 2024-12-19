@@ -25,9 +25,9 @@ class NamedScheduleServiceTest {
         val customerNamedScheduleRetrieveResponse =
             namedScheduleService.retrieve(
                 CustomerNamedScheduleRetrieveParams.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .scheduleName("schedule_name")
-                    .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
+                    .scheduleName("my-schedule")
+                    .coveringDate(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
                     .build()
             )
         println(customerNamedScheduleRetrieveResponse)
@@ -44,11 +44,11 @@ class NamedScheduleServiceTest {
         val namedScheduleService = client.customers().namedSchedules()
         namedScheduleService.update(
             CustomerNamedScheduleUpdateParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .scheduleName("schedule_name")
-                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .value(JsonValue.from(mapOf<String, Any>()))
-                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
+                .scheduleName("my-schedule")
+                .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
+                .value(JsonValue.from(mapOf("my_key" to "my_value")))
+                .endingBefore(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
                 .build()
         )
     }

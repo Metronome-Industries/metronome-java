@@ -10,8 +10,8 @@ class ContractArchiveParamsTest {
     @Test
     fun createContractArchiveParams() {
         ContractArchiveParams.builder()
-            .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+            .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
             .voidInvoices(true)
             .build()
     }
@@ -20,14 +20,14 @@ class ContractArchiveParamsTest {
     fun getBody() {
         val params =
             ContractArchiveParams.builder()
-                .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .voidInvoices(true)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.contractId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+        assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
         assertThat(body.voidInvoices()).isEqualTo(true)
     }
 
@@ -35,14 +35,14 @@ class ContractArchiveParamsTest {
     fun getBodyWithoutOptionalFields() {
         val params =
             ContractArchiveParams.builder()
-                .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .voidInvoices(true)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.contractId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+        assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
         assertThat(body.voidInvoices()).isEqualTo(true)
     }
 }

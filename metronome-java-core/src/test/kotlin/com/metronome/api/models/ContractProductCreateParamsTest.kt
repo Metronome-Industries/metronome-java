@@ -10,9 +10,9 @@ class ContractProductCreateParamsTest {
     @Test
     fun createContractProductCreateParams() {
         ContractProductCreateParams.builder()
-            .name("name")
+            .name("My Product")
             .type(ContractProductCreateParams.Type.FIXED)
-            .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .billableMetricId("13117714-3f05-48e5-a6e9-a66093f13b4d")
             .compositeProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
             .compositeTags(listOf("string"))
             .excludeFreeUsage(true)
@@ -42,9 +42,9 @@ class ContractProductCreateParamsTest {
     fun getBody() {
         val params =
             ContractProductCreateParams.builder()
-                .name("name")
+                .name("My Product")
                 .type(ContractProductCreateParams.Type.FIXED)
-                .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .billableMetricId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .compositeProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                 .compositeTags(listOf("string"))
                 .excludeFreeUsage(true)
@@ -70,9 +70,9 @@ class ContractProductCreateParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.name()).isEqualTo("My Product")
         assertThat(body.type()).isEqualTo(ContractProductCreateParams.Type.FIXED)
-        assertThat(body.billableMetricId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.billableMetricId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
         assertThat(body.compositeProductIds())
             .isEqualTo(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
         assertThat(body.compositeTags()).isEqualTo(listOf("string"))
@@ -104,12 +104,12 @@ class ContractProductCreateParamsTest {
     fun getBodyWithoutOptionalFields() {
         val params =
             ContractProductCreateParams.builder()
-                .name("name")
+                .name("My Product")
                 .type(ContractProductCreateParams.Type.FIXED)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.name()).isEqualTo("My Product")
         assertThat(body.type()).isEqualTo(ContractProductCreateParams.Type.FIXED)
     }
 }

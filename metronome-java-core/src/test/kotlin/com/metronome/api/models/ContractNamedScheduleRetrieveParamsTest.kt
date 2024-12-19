@@ -11,9 +11,9 @@ class ContractNamedScheduleRetrieveParamsTest {
     @Test
     fun createContractNamedScheduleRetrieveParams() {
         ContractNamedScheduleRetrieveParams.builder()
-            .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .scheduleName("schedule_name")
-            .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+            .scheduleName("my-schedule")
+            .coveringDate(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
             .build()
     }
 
@@ -21,27 +21,27 @@ class ContractNamedScheduleRetrieveParamsTest {
     fun getBody() {
         val params =
             ContractNamedScheduleRetrieveParams.builder()
-                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .scheduleName("schedule_name")
-                .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .scheduleName("my-schedule")
+                .coveringDate(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.rateCardId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.scheduleName()).isEqualTo("schedule_name")
-        assertThat(body.coveringDate()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+        assertThat(body.scheduleName()).isEqualTo("my-schedule")
+        assertThat(body.coveringDate()).isEqualTo(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
         val params =
             ContractNamedScheduleRetrieveParams.builder()
-                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .scheduleName("schedule_name")
+                .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .scheduleName("my-schedule")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.rateCardId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.scheduleName()).isEqualTo("schedule_name")
+        assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+        assertThat(body.scheduleName()).isEqualTo("my-schedule")
     }
 }

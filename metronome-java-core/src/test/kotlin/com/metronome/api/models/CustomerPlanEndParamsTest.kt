@@ -11,9 +11,9 @@ class CustomerPlanEndParamsTest {
     @Test
     fun createCustomerPlanEndParams() {
         CustomerPlanEndParams.builder()
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+            .customerPlanId("7aa11640-0703-4600-8eb9-293f535a6b74")
+            .endingBefore(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
             .voidInvoices(true)
             .voidStripeInvoices(true)
             .build()
@@ -23,15 +23,15 @@ class CustomerPlanEndParamsTest {
     fun getBody() {
         val params =
             CustomerPlanEndParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerPlanId("7aa11640-0703-4600-8eb9-293f535a6b74")
+                .endingBefore(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
                 .voidInvoices(true)
                 .voidStripeInvoices(true)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
         assertThat(body.voidInvoices()).isEqualTo(true)
         assertThat(body.voidStripeInvoices()).isEqualTo(true)
     }
@@ -40,8 +40,8 @@ class CustomerPlanEndParamsTest {
     fun getBodyWithoutOptionalFields() {
         val params =
             CustomerPlanEndParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerPlanId("7aa11640-0703-4600-8eb9-293f535a6b74")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -51,14 +51,14 @@ class CustomerPlanEndParamsTest {
     fun getPathParam() {
         val params =
             CustomerPlanEndParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerPlanId("7aa11640-0703-4600-8eb9-293f535a6b74")
                 .build()
         assertThat(params).isNotNull
         // path param "customerId"
-        assertThat(params.getPathParam(0)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(params.getPathParam(0)).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         // path param "customerPlanId"
-        assertThat(params.getPathParam(1)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(params.getPathParam(1)).isEqualTo("7aa11640-0703-4600-8eb9-293f535a6b74")
         // out-of-bound path param
         assertThat(params.getPathParam(2)).isEqualTo("")
     }

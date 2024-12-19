@@ -10,8 +10,8 @@ class CustomerAlertRetrieveParamsTest {
     @Test
     fun createCustomerAlertRetrieveParams() {
         CustomerAlertRetrieveParams.builder()
-            .alertId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .alertId("8deed800-1b7a-495d-a207-6c52bac54dc9")
+            .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
             .build()
     }
 
@@ -19,25 +19,25 @@ class CustomerAlertRetrieveParamsTest {
     fun getBody() {
         val params =
             CustomerAlertRetrieveParams.builder()
-                .alertId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .alertId("8deed800-1b7a-495d-a207-6c52bac54dc9")
+                .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.alertId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.alertId()).isEqualTo("8deed800-1b7a-495d-a207-6c52bac54dc9")
+        assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
         val params =
             CustomerAlertRetrieveParams.builder()
-                .alertId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .alertId("8deed800-1b7a-495d-a207-6c52bac54dc9")
+                .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.alertId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.alertId()).isEqualTo("8deed800-1b7a-495d-a207-6c52bac54dc9")
+        assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
     }
 }

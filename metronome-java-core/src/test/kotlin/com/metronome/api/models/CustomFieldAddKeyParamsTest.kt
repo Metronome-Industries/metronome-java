@@ -12,7 +12,7 @@ class CustomFieldAddKeyParamsTest {
         CustomFieldAddKeyParams.builder()
             .enforceUniqueness(true)
             .entity(CustomFieldAddKeyParams.Entity.ALERT)
-            .key("key")
+            .key("x_account_id")
             .build()
     }
 
@@ -22,13 +22,13 @@ class CustomFieldAddKeyParamsTest {
             CustomFieldAddKeyParams.builder()
                 .enforceUniqueness(true)
                 .entity(CustomFieldAddKeyParams.Entity.ALERT)
-                .key("key")
+                .key("x_account_id")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.enforceUniqueness()).isEqualTo(true)
         assertThat(body.entity()).isEqualTo(CustomFieldAddKeyParams.Entity.ALERT)
-        assertThat(body.key()).isEqualTo("key")
+        assertThat(body.key()).isEqualTo("x_account_id")
     }
 
     @Test
@@ -37,12 +37,12 @@ class CustomFieldAddKeyParamsTest {
             CustomFieldAddKeyParams.builder()
                 .enforceUniqueness(true)
                 .entity(CustomFieldAddKeyParams.Entity.ALERT)
-                .key("key")
+                .key("x_account_id")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.enforceUniqueness()).isEqualTo(true)
         assertThat(body.entity()).isEqualTo(CustomFieldAddKeyParams.Entity.ALERT)
-        assertThat(body.key()).isEqualTo("key")
+        assertThat(body.key()).isEqualTo("x_account_id")
     }
 }

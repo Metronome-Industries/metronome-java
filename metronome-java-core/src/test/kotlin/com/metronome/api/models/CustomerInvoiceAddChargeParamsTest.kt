@@ -11,13 +11,13 @@ class CustomerInvoiceAddChargeParamsTest {
     @Test
     fun createCustomerInvoiceAddChargeParams() {
         CustomerInvoiceAddChargeParams.builder()
-            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .chargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .description("description")
-            .invoiceStartTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-            .price(0.0)
-            .quantity(0.0)
+            .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+            .chargeId("5ae4b726-1ebe-439c-9190-9831760ba195")
+            .customerPlanId("a23b3cf4-47fb-4c3f-bb3d-9e64f7704015")
+            .description("One time charge")
+            .invoiceStartTimestamp(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
+            .price(250.0)
+            .quantity(1.0)
             .build()
     }
 
@@ -25,63 +25,63 @@ class CustomerInvoiceAddChargeParamsTest {
     fun getBody() {
         val params =
             CustomerInvoiceAddChargeParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .chargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .description("description")
-                .invoiceStartTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .price(0.0)
-                .quantity(0.0)
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .chargeId("5ae4b726-1ebe-439c-9190-9831760ba195")
+                .customerPlanId("a23b3cf4-47fb-4c3f-bb3d-9e64f7704015")
+                .description("One time charge")
+                .invoiceStartTimestamp(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
+                .price(250.0)
+                .quantity(1.0)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.chargeId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.customerPlanId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.description()).isEqualTo("description")
+        assertThat(body.chargeId()).isEqualTo("5ae4b726-1ebe-439c-9190-9831760ba195")
+        assertThat(body.customerPlanId()).isEqualTo("a23b3cf4-47fb-4c3f-bb3d-9e64f7704015")
+        assertThat(body.description()).isEqualTo("One time charge")
         assertThat(body.invoiceStartTimestamp())
-            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.price()).isEqualTo(0.0)
-        assertThat(body.quantity()).isEqualTo(0.0)
+            .isEqualTo(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
+        assertThat(body.price()).isEqualTo(250.0)
+        assertThat(body.quantity()).isEqualTo(1.0)
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
         val params =
             CustomerInvoiceAddChargeParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .chargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .description("description")
-                .invoiceStartTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .price(0.0)
-                .quantity(0.0)
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .chargeId("5ae4b726-1ebe-439c-9190-9831760ba195")
+                .customerPlanId("a23b3cf4-47fb-4c3f-bb3d-9e64f7704015")
+                .description("One time charge")
+                .invoiceStartTimestamp(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
+                .price(250.0)
+                .quantity(1.0)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.chargeId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.customerPlanId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.description()).isEqualTo("description")
+        assertThat(body.chargeId()).isEqualTo("5ae4b726-1ebe-439c-9190-9831760ba195")
+        assertThat(body.customerPlanId()).isEqualTo("a23b3cf4-47fb-4c3f-bb3d-9e64f7704015")
+        assertThat(body.description()).isEqualTo("One time charge")
         assertThat(body.invoiceStartTimestamp())
-            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.price()).isEqualTo(0.0)
-        assertThat(body.quantity()).isEqualTo(0.0)
+            .isEqualTo(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
+        assertThat(body.price()).isEqualTo(250.0)
+        assertThat(body.quantity()).isEqualTo(1.0)
     }
 
     @Test
     fun getPathParam() {
         val params =
             CustomerInvoiceAddChargeParams.builder()
-                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .chargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .customerPlanId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .description("description")
-                .invoiceStartTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .price(0.0)
-                .quantity(0.0)
+                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .chargeId("5ae4b726-1ebe-439c-9190-9831760ba195")
+                .customerPlanId("a23b3cf4-47fb-4c3f-bb3d-9e64f7704015")
+                .description("One time charge")
+                .invoiceStartTimestamp(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
+                .price(250.0)
+                .quantity(1.0)
                 .build()
         assertThat(params).isNotNull
         // path param "customerId"
-        assertThat(params.getPathParam(0)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(params.getPathParam(0)).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         // out-of-bound path param
         assertThat(params.getPathParam(1)).isEqualTo("")
     }
