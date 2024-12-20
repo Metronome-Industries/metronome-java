@@ -58,7 +58,7 @@ class ContractRateCardUpdateParamsTest {
         assertThat(body).isNotNull
         assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.aliases())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractRateCardUpdateParams.Alias.builder()
                         .name("name")
@@ -68,13 +68,13 @@ class ContractRateCardUpdateParamsTest {
                 )
             )
         assertThat(body.customFields())
-            .isEqualTo(
+            .contains(
                 ContractRateCardUpdateParams.CustomFields.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(body.description()).isEqualTo("My Updated Rate Card Description")
-        assertThat(body.name()).isEqualTo("My Updated Rate Card")
+        assertThat(body.description()).contains("My Updated Rate Card Description")
+        assertThat(body.name()).contains("My Updated Rate Card")
     }
 
     @Test

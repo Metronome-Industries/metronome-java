@@ -53,8 +53,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun id(): String = id.getRequired("id")
 
     fun customerId(): String = customerId.getRequired("customer_id")
@@ -141,38 +139,6 @@ private constructor(
 
     fun breakdownEndTimestamp(): OffsetDateTime =
         breakdownEndTimestamp.getRequired("breakdown_end_timestamp")
-
-    fun toInvoice(): Invoice =
-        Invoice.builder()
-            .id(id)
-            .customerId(customerId)
-            .customerCustomFields(customerCustomFields)
-            .netsuiteSalesOrderId(netsuiteSalesOrderId)
-            .salesforceOpportunityId(salesforceOpportunityId)
-            .netPaymentTermsDays(netPaymentTermsDays)
-            .creditType(creditType)
-            .invoiceAdjustments(invoiceAdjustments)
-            .lineItems(lineItems)
-            .startTimestamp(startTimestamp)
-            .endTimestamp(endTimestamp)
-            .issuedAt(issuedAt)
-            .createdAt(createdAt)
-            .status(status)
-            .subtotal(subtotal)
-            .total(total)
-            .type(type)
-            .externalInvoice(externalInvoice)
-            .planId(planId)
-            .planName(planName)
-            .planCustomFields(planCustomFields)
-            .contractId(contractId)
-            .contractCustomFields(contractCustomFields)
-            .amendmentId(amendmentId)
-            .correctionRecord(correctionRecord)
-            .resellerRoyalty(resellerRoyalty)
-            .customFields(customFields)
-            .billableStatus(billableStatus)
-            .build()
 
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
@@ -262,6 +228,40 @@ private constructor(
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    fun toInvoice(): Invoice =
+        Invoice.builder()
+            .id(id)
+            .customerId(customerId)
+            .customerCustomFields(customerCustomFields)
+            .netsuiteSalesOrderId(netsuiteSalesOrderId)
+            .salesforceOpportunityId(salesforceOpportunityId)
+            .netPaymentTermsDays(netPaymentTermsDays)
+            .creditType(creditType)
+            .invoiceAdjustments(invoiceAdjustments)
+            .lineItems(lineItems)
+            .startTimestamp(startTimestamp)
+            .endTimestamp(endTimestamp)
+            .issuedAt(issuedAt)
+            .createdAt(createdAt)
+            .status(status)
+            .subtotal(subtotal)
+            .total(total)
+            .type(type)
+            .externalInvoice(externalInvoice)
+            .planId(planId)
+            .planName(planName)
+            .planCustomFields(planCustomFields)
+            .contractId(contractId)
+            .contractCustomFields(contractCustomFields)
+            .amendmentId(amendmentId)
+            .correctionRecord(correctionRecord)
+            .resellerRoyalty(resellerRoyalty)
+            .customFields(customFields)
+            .billableStatus(billableStatus)
+            .build()
+
+    private var validated: Boolean = false
+
     fun validate(): CustomerInvoiceListBreakdownsResponse = apply {
         if (!validated) {
             id()
@@ -344,39 +344,38 @@ private constructor(
         internal fun from(
             customerInvoiceListBreakdownsResponse: CustomerInvoiceListBreakdownsResponse
         ) = apply {
-            this.id = customerInvoiceListBreakdownsResponse.id
-            this.customerId = customerInvoiceListBreakdownsResponse.customerId
-            this.customerCustomFields = customerInvoiceListBreakdownsResponse.customerCustomFields
-            this.netsuiteSalesOrderId = customerInvoiceListBreakdownsResponse.netsuiteSalesOrderId
-            this.salesforceOpportunityId =
-                customerInvoiceListBreakdownsResponse.salesforceOpportunityId
-            this.netPaymentTermsDays = customerInvoiceListBreakdownsResponse.netPaymentTermsDays
-            this.creditType = customerInvoiceListBreakdownsResponse.creditType
-            this.invoiceAdjustments = customerInvoiceListBreakdownsResponse.invoiceAdjustments
-            this.lineItems = customerInvoiceListBreakdownsResponse.lineItems
-            this.startTimestamp = customerInvoiceListBreakdownsResponse.startTimestamp
-            this.endTimestamp = customerInvoiceListBreakdownsResponse.endTimestamp
-            this.issuedAt = customerInvoiceListBreakdownsResponse.issuedAt
-            this.createdAt = customerInvoiceListBreakdownsResponse.createdAt
-            this.status = customerInvoiceListBreakdownsResponse.status
-            this.subtotal = customerInvoiceListBreakdownsResponse.subtotal
-            this.total = customerInvoiceListBreakdownsResponse.total
-            this.type = customerInvoiceListBreakdownsResponse.type
-            this.externalInvoice = customerInvoiceListBreakdownsResponse.externalInvoice
-            this.planId = customerInvoiceListBreakdownsResponse.planId
-            this.planName = customerInvoiceListBreakdownsResponse.planName
-            this.planCustomFields = customerInvoiceListBreakdownsResponse.planCustomFields
-            this.contractId = customerInvoiceListBreakdownsResponse.contractId
-            this.contractCustomFields = customerInvoiceListBreakdownsResponse.contractCustomFields
-            this.amendmentId = customerInvoiceListBreakdownsResponse.amendmentId
-            this.correctionRecord = customerInvoiceListBreakdownsResponse.correctionRecord
-            this.resellerRoyalty = customerInvoiceListBreakdownsResponse.resellerRoyalty
-            this.customFields = customerInvoiceListBreakdownsResponse.customFields
-            this.billableStatus = customerInvoiceListBreakdownsResponse.billableStatus
-            this.breakdownStartTimestamp =
-                customerInvoiceListBreakdownsResponse.breakdownStartTimestamp
-            this.breakdownEndTimestamp = customerInvoiceListBreakdownsResponse.breakdownEndTimestamp
-            additionalProperties(customerInvoiceListBreakdownsResponse.additionalProperties)
+            id = customerInvoiceListBreakdownsResponse.id
+            customerId = customerInvoiceListBreakdownsResponse.customerId
+            customerCustomFields = customerInvoiceListBreakdownsResponse.customerCustomFields
+            netsuiteSalesOrderId = customerInvoiceListBreakdownsResponse.netsuiteSalesOrderId
+            salesforceOpportunityId = customerInvoiceListBreakdownsResponse.salesforceOpportunityId
+            netPaymentTermsDays = customerInvoiceListBreakdownsResponse.netPaymentTermsDays
+            creditType = customerInvoiceListBreakdownsResponse.creditType
+            invoiceAdjustments = customerInvoiceListBreakdownsResponse.invoiceAdjustments
+            lineItems = customerInvoiceListBreakdownsResponse.lineItems
+            startTimestamp = customerInvoiceListBreakdownsResponse.startTimestamp
+            endTimestamp = customerInvoiceListBreakdownsResponse.endTimestamp
+            issuedAt = customerInvoiceListBreakdownsResponse.issuedAt
+            createdAt = customerInvoiceListBreakdownsResponse.createdAt
+            status = customerInvoiceListBreakdownsResponse.status
+            subtotal = customerInvoiceListBreakdownsResponse.subtotal
+            total = customerInvoiceListBreakdownsResponse.total
+            type = customerInvoiceListBreakdownsResponse.type
+            externalInvoice = customerInvoiceListBreakdownsResponse.externalInvoice
+            planId = customerInvoiceListBreakdownsResponse.planId
+            planName = customerInvoiceListBreakdownsResponse.planName
+            planCustomFields = customerInvoiceListBreakdownsResponse.planCustomFields
+            contractId = customerInvoiceListBreakdownsResponse.contractId
+            contractCustomFields = customerInvoiceListBreakdownsResponse.contractCustomFields
+            amendmentId = customerInvoiceListBreakdownsResponse.amendmentId
+            correctionRecord = customerInvoiceListBreakdownsResponse.correctionRecord
+            resellerRoyalty = customerInvoiceListBreakdownsResponse.resellerRoyalty
+            customFields = customerInvoiceListBreakdownsResponse.customFields
+            billableStatus = customerInvoiceListBreakdownsResponse.billableStatus
+            breakdownStartTimestamp = customerInvoiceListBreakdownsResponse.breakdownStartTimestamp
+            breakdownEndTimestamp = customerInvoiceListBreakdownsResponse.breakdownEndTimestamp
+            additionalProperties =
+                customerInvoiceListBreakdownsResponse.additionalProperties.toMutableMap()
         }
 
         fun id(id: String) = id(JsonField.of(id))
@@ -633,16 +632,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): CustomerInvoiceListBreakdownsResponse =

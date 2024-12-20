@@ -29,7 +29,7 @@ class ContractNamedScheduleRetrieveParamsTest {
         assertThat(body).isNotNull
         assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.scheduleName()).isEqualTo("my-schedule")
-        assertThat(body.coveringDate()).isEqualTo(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+        assertThat(body.coveringDate()).contains(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
     }
 
     @Test

@@ -34,8 +34,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun id(): String = id.getRequired("id")
 
     fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
@@ -74,6 +72,8 @@ private constructor(
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): AuditLogListResponse = apply {
         if (!validated) {
             id()
@@ -109,15 +109,15 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(auditLogListResponse: AuditLogListResponse) = apply {
-            this.id = auditLogListResponse.id
-            this.timestamp = auditLogListResponse.timestamp
-            this.actor = auditLogListResponse.actor
-            this.resourceType = auditLogListResponse.resourceType
-            this.resourceId = auditLogListResponse.resourceId
-            this.action = auditLogListResponse.action
-            this.status = auditLogListResponse.status
-            this.description = auditLogListResponse.description
-            additionalProperties(auditLogListResponse.additionalProperties)
+            id = auditLogListResponse.id
+            timestamp = auditLogListResponse.timestamp
+            actor = auditLogListResponse.actor
+            resourceType = auditLogListResponse.resourceType
+            resourceId = auditLogListResponse.resourceId
+            action = auditLogListResponse.action
+            status = auditLogListResponse.status
+            description = auditLogListResponse.description
+            additionalProperties = auditLogListResponse.additionalProperties.toMutableMap()
         }
 
         fun id(id: String) = id(JsonField.of(id))
@@ -170,16 +170,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): AuditLogListResponse =
@@ -206,8 +212,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         fun id(): String = id.getRequired("id")
 
         fun email(): Optional<String> = Optional.ofNullable(email.getNullable("email"))
@@ -223,6 +227,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): Actor = apply {
             if (!validated) {
@@ -249,10 +255,10 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(actor: Actor) = apply {
-                this.id = actor.id
-                this.email = actor.email
-                this.name = actor.name
-                additionalProperties(actor.additionalProperties)
+                id = actor.id
+                email = actor.email
+                name = actor.name
+                additionalProperties = actor.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
@@ -275,16 +281,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Actor =

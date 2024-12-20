@@ -80,7 +80,7 @@ constructor(
     @NoAutoDetect
     class CustomerCommitListBody
     internal constructor(
-        private val customerId: String?,
+        private val customerId: String,
         private val commitId: String?,
         private val coveringDate: OffsetDateTime?,
         private val effectiveBefore: OffsetDateTime?,
@@ -92,34 +92,40 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
-        @JsonProperty("commit_id") fun commitId(): String? = commitId
+        @JsonProperty("commit_id") fun commitId(): Optional<String> = Optional.ofNullable(commitId)
 
         /** Include only commits that have access schedules that "cover" the provided date */
-        @JsonProperty("covering_date") fun coveringDate(): OffsetDateTime? = coveringDate
+        @JsonProperty("covering_date")
+        fun coveringDate(): Optional<OffsetDateTime> = Optional.ofNullable(coveringDate)
 
         /** Include only commits that have any access before the provided date (exclusive) */
-        @JsonProperty("effective_before") fun effectiveBefore(): OffsetDateTime? = effectiveBefore
+        @JsonProperty("effective_before")
+        fun effectiveBefore(): Optional<OffsetDateTime> = Optional.ofNullable(effectiveBefore)
 
         /** Include commits from archived contracts. */
-        @JsonProperty("include_archived") fun includeArchived(): Boolean? = includeArchived
+        @JsonProperty("include_archived")
+        fun includeArchived(): Optional<Boolean> = Optional.ofNullable(includeArchived)
 
         /** Include commits on the contract level. */
         @JsonProperty("include_contract_commits")
-        fun includeContractCommits(): Boolean? = includeContractCommits
+        fun includeContractCommits(): Optional<Boolean> =
+            Optional.ofNullable(includeContractCommits)
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        @JsonProperty("include_ledgers") fun includeLedgers(): Boolean? = includeLedgers
+        @JsonProperty("include_ledgers")
+        fun includeLedgers(): Optional<Boolean> = Optional.ofNullable(includeLedgers)
 
         /** The next page token from a previous response. */
-        @JsonProperty("next_page") fun nextPage(): String? = nextPage
+        @JsonProperty("next_page") fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
         /** Include only commits that have any access on or after the provided date */
-        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+        @JsonProperty("starting_at")
+        fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -147,16 +153,16 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customerCommitListBody: CustomerCommitListBody) = apply {
-                this.customerId = customerCommitListBody.customerId
-                this.commitId = customerCommitListBody.commitId
-                this.coveringDate = customerCommitListBody.coveringDate
-                this.effectiveBefore = customerCommitListBody.effectiveBefore
-                this.includeArchived = customerCommitListBody.includeArchived
-                this.includeContractCommits = customerCommitListBody.includeContractCommits
-                this.includeLedgers = customerCommitListBody.includeLedgers
-                this.nextPage = customerCommitListBody.nextPage
-                this.startingAt = customerCommitListBody.startingAt
-                additionalProperties(customerCommitListBody.additionalProperties)
+                customerId = customerCommitListBody.customerId
+                commitId = customerCommitListBody.commitId
+                coveringDate = customerCommitListBody.coveringDate
+                effectiveBefore = customerCommitListBody.effectiveBefore
+                includeArchived = customerCommitListBody.includeArchived
+                includeContractCommits = customerCommitListBody.includeContractCommits
+                includeLedgers = customerCommitListBody.includeLedgers
+                nextPage = customerCommitListBody.nextPage
+                startingAt = customerCommitListBody.startingAt
+                additionalProperties = customerCommitListBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("customer_id")
@@ -208,16 +214,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerCommitListBody =

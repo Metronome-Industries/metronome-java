@@ -77,12 +77,12 @@ constructor(
     @NoAutoDetect
     class CustomerInvoiceAddChargeBody
     internal constructor(
-        private val chargeId: String?,
-        private val customerPlanId: String?,
-        private val description: String?,
-        private val invoiceStartTimestamp: OffsetDateTime?,
-        private val price: Double?,
-        private val quantity: Double?,
+        private val chargeId: String,
+        private val customerPlanId: String,
+        private val description: String,
+        private val invoiceStartTimestamp: OffsetDateTime,
+        private val price: Double,
+        private val quantity: Double,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
@@ -90,24 +90,24 @@ constructor(
          * The Metronome ID of the charge to add to the invoice. Note that the charge must be on a
          * product that is not on the current plan, and the product must have only fixed charges.
          */
-        @JsonProperty("charge_id") fun chargeId(): String? = chargeId
+        @JsonProperty("charge_id") fun chargeId(): String = chargeId
 
         /** The Metronome ID of the customer plan to add the charge to. */
-        @JsonProperty("customer_plan_id") fun customerPlanId(): String? = customerPlanId
+        @JsonProperty("customer_plan_id") fun customerPlanId(): String = customerPlanId
 
-        @JsonProperty("description") fun description(): String? = description
+        @JsonProperty("description") fun description(): String = description
 
         /** The start_timestamp of the invoice to add the charge to. */
         @JsonProperty("invoice_start_timestamp")
-        fun invoiceStartTimestamp(): OffsetDateTime? = invoiceStartTimestamp
+        fun invoiceStartTimestamp(): OffsetDateTime = invoiceStartTimestamp
 
         /**
          * The price of the charge. This price will match the currency on the invoice, e.g. USD
          * cents.
          */
-        @JsonProperty("price") fun price(): Double? = price
+        @JsonProperty("price") fun price(): Double = price
 
-        @JsonProperty("quantity") fun quantity(): Double? = quantity
+        @JsonProperty("quantity") fun quantity(): Double = quantity
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -132,13 +132,14 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customerInvoiceAddChargeBody: CustomerInvoiceAddChargeBody) = apply {
-                this.chargeId = customerInvoiceAddChargeBody.chargeId
-                this.customerPlanId = customerInvoiceAddChargeBody.customerPlanId
-                this.description = customerInvoiceAddChargeBody.description
-                this.invoiceStartTimestamp = customerInvoiceAddChargeBody.invoiceStartTimestamp
-                this.price = customerInvoiceAddChargeBody.price
-                this.quantity = customerInvoiceAddChargeBody.quantity
-                additionalProperties(customerInvoiceAddChargeBody.additionalProperties)
+                chargeId = customerInvoiceAddChargeBody.chargeId
+                customerPlanId = customerInvoiceAddChargeBody.customerPlanId
+                description = customerInvoiceAddChargeBody.description
+                invoiceStartTimestamp = customerInvoiceAddChargeBody.invoiceStartTimestamp
+                price = customerInvoiceAddChargeBody.price
+                quantity = customerInvoiceAddChargeBody.quantity
+                additionalProperties =
+                    customerInvoiceAddChargeBody.additionalProperties.toMutableMap()
             }
 
             /**
@@ -175,16 +176,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerInvoiceAddChargeBody =

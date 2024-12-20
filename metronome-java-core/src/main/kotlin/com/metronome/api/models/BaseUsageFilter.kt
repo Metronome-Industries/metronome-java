@@ -26,8 +26,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun groupKey(): String = groupKey.getRequired("group_key")
 
     fun groupValues(): List<String> = groupValues.getRequired("group_values")
@@ -44,6 +42,8 @@ private constructor(
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    private var validated: Boolean = false
 
     fun validate(): BaseUsageFilter = apply {
         if (!validated) {
@@ -70,10 +70,10 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(baseUsageFilter: BaseUsageFilter) = apply {
-            this.groupKey = baseUsageFilter.groupKey
-            this.groupValues = baseUsageFilter.groupValues
-            this.startingAt = baseUsageFilter.startingAt
-            additionalProperties(baseUsageFilter.additionalProperties)
+            groupKey = baseUsageFilter.groupKey
+            groupValues = baseUsageFilter.groupValues
+            startingAt = baseUsageFilter.startingAt
+            additionalProperties = baseUsageFilter.additionalProperties.toMutableMap()
         }
 
         fun groupKey(groupKey: String) = groupKey(JsonField.of(groupKey))
@@ -100,16 +100,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): BaseUsageFilter =

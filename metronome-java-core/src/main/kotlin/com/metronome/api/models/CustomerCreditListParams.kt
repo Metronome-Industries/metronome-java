@@ -80,7 +80,7 @@ constructor(
     @NoAutoDetect
     class CustomerCreditListBody
     internal constructor(
-        private val customerId: String?,
+        private val customerId: String,
         private val coveringDate: OffsetDateTime?,
         private val creditId: String?,
         private val effectiveBefore: OffsetDateTime?,
@@ -92,34 +92,40 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         /** Return only credits that have access schedules that "cover" the provided date */
-        @JsonProperty("covering_date") fun coveringDate(): OffsetDateTime? = coveringDate
+        @JsonProperty("covering_date")
+        fun coveringDate(): Optional<OffsetDateTime> = Optional.ofNullable(coveringDate)
 
-        @JsonProperty("credit_id") fun creditId(): String? = creditId
+        @JsonProperty("credit_id") fun creditId(): Optional<String> = Optional.ofNullable(creditId)
 
         /** Include only credits that have any access before the provided date (exclusive) */
-        @JsonProperty("effective_before") fun effectiveBefore(): OffsetDateTime? = effectiveBefore
+        @JsonProperty("effective_before")
+        fun effectiveBefore(): Optional<OffsetDateTime> = Optional.ofNullable(effectiveBefore)
 
         /** Include credits from archived contracts. */
-        @JsonProperty("include_archived") fun includeArchived(): Boolean? = includeArchived
+        @JsonProperty("include_archived")
+        fun includeArchived(): Optional<Boolean> = Optional.ofNullable(includeArchived)
 
         /** Include credits on the contract level. */
         @JsonProperty("include_contract_credits")
-        fun includeContractCredits(): Boolean? = includeContractCredits
+        fun includeContractCredits(): Optional<Boolean> =
+            Optional.ofNullable(includeContractCredits)
 
         /**
          * Include credit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        @JsonProperty("include_ledgers") fun includeLedgers(): Boolean? = includeLedgers
+        @JsonProperty("include_ledgers")
+        fun includeLedgers(): Optional<Boolean> = Optional.ofNullable(includeLedgers)
 
         /** The next page token from a previous response. */
-        @JsonProperty("next_page") fun nextPage(): String? = nextPage
+        @JsonProperty("next_page") fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
         /** Include only credits that have any access on or after the provided date */
-        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+        @JsonProperty("starting_at")
+        fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -147,16 +153,16 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customerCreditListBody: CustomerCreditListBody) = apply {
-                this.customerId = customerCreditListBody.customerId
-                this.coveringDate = customerCreditListBody.coveringDate
-                this.creditId = customerCreditListBody.creditId
-                this.effectiveBefore = customerCreditListBody.effectiveBefore
-                this.includeArchived = customerCreditListBody.includeArchived
-                this.includeContractCredits = customerCreditListBody.includeContractCredits
-                this.includeLedgers = customerCreditListBody.includeLedgers
-                this.nextPage = customerCreditListBody.nextPage
-                this.startingAt = customerCreditListBody.startingAt
-                additionalProperties(customerCreditListBody.additionalProperties)
+                customerId = customerCreditListBody.customerId
+                coveringDate = customerCreditListBody.coveringDate
+                creditId = customerCreditListBody.creditId
+                effectiveBefore = customerCreditListBody.effectiveBefore
+                includeArchived = customerCreditListBody.includeArchived
+                includeContractCredits = customerCreditListBody.includeContractCredits
+                includeLedgers = customerCreditListBody.includeLedgers
+                nextPage = customerCreditListBody.nextPage
+                startingAt = customerCreditListBody.startingAt
+                additionalProperties = customerCreditListBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("customer_id")
@@ -208,16 +214,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerCreditListBody =

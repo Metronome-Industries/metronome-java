@@ -159,7 +159,7 @@ private constructor(
 
         fun bearerToken(bearerToken: String) = apply { this.bearerToken = bearerToken }
 
-        fun webhookSecret(webhookSecret: String?) = apply { this.webhookSecret = webhookSecret }
+        fun webhookSecret(webhookSecret: String) = apply { this.webhookSecret = webhookSecret }
 
         fun fromEnv() = apply {
             System.getenv("METRONOME_BEARER_TOKEN")?.let { bearerToken(it) }

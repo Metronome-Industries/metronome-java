@@ -74,7 +74,7 @@ class ContractRateCardCreateParamsTest {
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("My Rate Card")
         assertThat(body.aliases())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractRateCardCreateParams.Alias.builder()
                         .name("my-rate-card")
@@ -84,7 +84,7 @@ class ContractRateCardCreateParamsTest {
                 )
             )
         assertThat(body.creditTypeConversions())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractRateCardCreateParams.CreditTypeConversion.builder()
                         .customCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
@@ -93,13 +93,13 @@ class ContractRateCardCreateParamsTest {
                 )
             )
         assertThat(body.customFields())
-            .isEqualTo(
+            .contains(
                 ContractRateCardCreateParams.CustomFields.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(body.description()).isEqualTo("My Rate Card Description")
-        assertThat(body.fiatCreditTypeId()).isEqualTo("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+        assertThat(body.description()).contains("My Rate Card Description")
+        assertThat(body.fiatCreditTypeId()).contains("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
     }
 
     @Test

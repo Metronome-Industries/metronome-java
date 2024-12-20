@@ -54,10 +54,10 @@ class CreditGrantListEntriesParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.creditTypeIds()).isEqualTo(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
-        assertThat(body.customerIds()).isEqualTo(listOf("6a37bb88-8538-48c5-b37b-a41c836328bd"))
-        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
-        assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+        assertThat(body.creditTypeIds()).contains(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
+        assertThat(body.customerIds()).contains(listOf("6a37bb88-8538-48c5-b37b-a41c836328bd"))
+        assertThat(body.endingBefore()).contains(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
+        assertThat(body.startingOn()).contains(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
     }
 
     @Test

@@ -72,39 +72,41 @@ constructor(
     @NoAutoDetect
     class ContractAddManualBalanceEntryBody
     internal constructor(
-        private val id: String?,
-        private val amount: Double?,
-        private val customerId: String?,
-        private val reason: String?,
-        private val segmentId: String?,
+        private val id: String,
+        private val amount: Double,
+        private val customerId: String,
+        private val reason: String,
+        private val segmentId: String,
         private val contractId: String?,
         private val timestamp: OffsetDateTime?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** ID of the balance (commit or credit) to update. */
-        @JsonProperty("id") fun id(): String? = id
+        @JsonProperty("id") fun id(): String = id
 
         /** Amount to add to the segment. A negative number will draw down from the balance. */
-        @JsonProperty("amount") fun amount(): Double? = amount
+        @JsonProperty("amount") fun amount(): Double = amount
 
         /** ID of the customer whose balance is to be updated. */
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         /** Reason for the manual adjustment. This will be displayed in the ledger. */
-        @JsonProperty("reason") fun reason(): String? = reason
+        @JsonProperty("reason") fun reason(): String = reason
 
         /** ID of the segment to update. */
-        @JsonProperty("segment_id") fun segmentId(): String? = segmentId
+        @JsonProperty("segment_id") fun segmentId(): String = segmentId
 
         /** ID of the contract to update. Leave blank to update a customer level balance. */
-        @JsonProperty("contract_id") fun contractId(): String? = contractId
+        @JsonProperty("contract_id")
+        fun contractId(): Optional<String> = Optional.ofNullable(contractId)
 
         /**
          * RFC 3339 timestamp indicating when the manual adjustment takes place. If not provided, it
          * will default to the start of the segment.
          */
-        @JsonProperty("timestamp") fun timestamp(): OffsetDateTime? = timestamp
+        @JsonProperty("timestamp")
+        fun timestamp(): Optional<OffsetDateTime> = Optional.ofNullable(timestamp)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -132,14 +134,15 @@ constructor(
             internal fun from(
                 contractAddManualBalanceEntryBody: ContractAddManualBalanceEntryBody
             ) = apply {
-                this.id = contractAddManualBalanceEntryBody.id
-                this.amount = contractAddManualBalanceEntryBody.amount
-                this.customerId = contractAddManualBalanceEntryBody.customerId
-                this.reason = contractAddManualBalanceEntryBody.reason
-                this.segmentId = contractAddManualBalanceEntryBody.segmentId
-                this.contractId = contractAddManualBalanceEntryBody.contractId
-                this.timestamp = contractAddManualBalanceEntryBody.timestamp
-                additionalProperties(contractAddManualBalanceEntryBody.additionalProperties)
+                id = contractAddManualBalanceEntryBody.id
+                amount = contractAddManualBalanceEntryBody.amount
+                customerId = contractAddManualBalanceEntryBody.customerId
+                reason = contractAddManualBalanceEntryBody.reason
+                segmentId = contractAddManualBalanceEntryBody.segmentId
+                contractId = contractAddManualBalanceEntryBody.contractId
+                timestamp = contractAddManualBalanceEntryBody.timestamp
+                additionalProperties =
+                    contractAddManualBalanceEntryBody.additionalProperties.toMutableMap()
             }
 
             /** ID of the balance (commit or credit) to update. */
@@ -172,16 +175,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractAddManualBalanceEntryBody =

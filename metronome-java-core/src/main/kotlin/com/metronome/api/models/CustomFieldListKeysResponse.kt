@@ -27,8 +27,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun data(): List<Data> = data.getRequired("data")
 
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage.getNullable("next_page"))
@@ -40,6 +38,8 @@ private constructor(
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    private var validated: Boolean = false
 
     fun validate(): CustomFieldListKeysResponse = apply {
         if (!validated) {
@@ -64,9 +64,9 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(customFieldListKeysResponse: CustomFieldListKeysResponse) = apply {
-            this.data = customFieldListKeysResponse.data
-            this.nextPage = customFieldListKeysResponse.nextPage
-            additionalProperties(customFieldListKeysResponse.additionalProperties)
+            data = customFieldListKeysResponse.data
+            nextPage = customFieldListKeysResponse.nextPage
+            additionalProperties = customFieldListKeysResponse.additionalProperties.toMutableMap()
         }
 
         fun data(data: List<Data>) = data(JsonField.of(data))
@@ -83,16 +83,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): CustomFieldListKeysResponse =
@@ -113,8 +119,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         fun entity(): Entity = entity.getRequired("entity")
 
         fun key(): String = key.getRequired("key")
@@ -132,6 +136,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): Data = apply {
             if (!validated) {
@@ -158,10 +164,10 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(data: Data) = apply {
-                this.entity = data.entity
-                this.key = data.key
-                this.enforceUniqueness = data.enforceUniqueness
-                additionalProperties(data.additionalProperties)
+                entity = data.entity
+                key = data.key
+                enforceUniqueness = data.enforceUniqueness
+                additionalProperties = data.additionalProperties.toMutableMap()
             }
 
             fun entity(entity: Entity) = entity(JsonField.of(entity))
@@ -187,16 +193,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Data =

@@ -29,7 +29,7 @@ class ContractUpdateEndDateParamsTest {
         assertThat(body).isNotNull
         assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
-        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+        assertThat(body.endingBefore()).contains(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
     }
 
     @Test

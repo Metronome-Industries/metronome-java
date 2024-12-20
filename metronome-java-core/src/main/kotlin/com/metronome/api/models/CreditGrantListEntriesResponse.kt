@@ -25,8 +25,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun data(): List<Data> = data.getRequired("data")
 
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage.getNullable("next_page"))
@@ -38,6 +36,8 @@ private constructor(
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    private var validated: Boolean = false
 
     fun validate(): CreditGrantListEntriesResponse = apply {
         if (!validated) {
@@ -62,9 +62,10 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(creditGrantListEntriesResponse: CreditGrantListEntriesResponse) = apply {
-            this.data = creditGrantListEntriesResponse.data
-            this.nextPage = creditGrantListEntriesResponse.nextPage
-            additionalProperties(creditGrantListEntriesResponse.additionalProperties)
+            data = creditGrantListEntriesResponse.data
+            nextPage = creditGrantListEntriesResponse.nextPage
+            additionalProperties =
+                creditGrantListEntriesResponse.additionalProperties.toMutableMap()
         }
 
         fun data(data: List<Data>) = data(JsonField.of(data))
@@ -81,16 +82,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): CreditGrantListEntriesResponse =
@@ -110,8 +117,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         fun customerId(): String = customerId.getRequired("customer_id")
 
         fun ledgers(): List<Ledger> = ledgers.getRequired("ledgers")
@@ -123,6 +128,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): Data = apply {
             if (!validated) {
@@ -147,9 +154,9 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(data: Data) = apply {
-                this.customerId = data.customerId
-                this.ledgers = data.ledgers
-                additionalProperties(data.additionalProperties)
+                customerId = data.customerId
+                ledgers = data.ledgers
+                additionalProperties = data.additionalProperties.toMutableMap()
             }
 
             fun customerId(customerId: String) = customerId(JsonField.of(customerId))
@@ -166,16 +173,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Data =
@@ -197,8 +210,6 @@ private constructor(
             private val pendingEntries: JsonField<List<CreditLedgerEntry>>,
             private val additionalProperties: Map<String, JsonValue>,
         ) {
-
-            private var validated: Boolean = false
 
             fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
@@ -229,6 +240,8 @@ private constructor(
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+            private var validated: Boolean = false
+
             fun validate(): Ledger = apply {
                 if (!validated) {
                     creditType().validate()
@@ -258,12 +271,12 @@ private constructor(
 
                 @JvmSynthetic
                 internal fun from(ledger: Ledger) = apply {
-                    this.creditType = ledger.creditType
-                    this.startingBalance = ledger.startingBalance
-                    this.endingBalance = ledger.endingBalance
-                    this.entries = ledger.entries
-                    this.pendingEntries = ledger.pendingEntries
-                    additionalProperties(ledger.additionalProperties)
+                    creditType = ledger.creditType
+                    startingBalance = ledger.startingBalance
+                    endingBalance = ledger.endingBalance
+                    entries = ledger.entries
+                    pendingEntries = ledger.pendingEntries
+                    additionalProperties = ledger.additionalProperties.toMutableMap()
                 }
 
                 fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
@@ -313,18 +326,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): Ledger =
                     Ledger(
@@ -347,8 +368,6 @@ private constructor(
                 private val effectiveAt: JsonField<OffsetDateTime>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
-
-                private var validated: Boolean = false
 
                 /**
                  * the ending balance, including the balance of all grants that have not expired
@@ -396,6 +415,8 @@ private constructor(
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+                private var validated: Boolean = false
+
                 fun validate(): EndingBalance = apply {
                     if (!validated) {
                         excludingPending()
@@ -421,10 +442,10 @@ private constructor(
 
                     @JvmSynthetic
                     internal fun from(endingBalance: EndingBalance) = apply {
-                        this.excludingPending = endingBalance.excludingPending
-                        this.includingPending = endingBalance.includingPending
-                        this.effectiveAt = endingBalance.effectiveAt
-                        additionalProperties(endingBalance.additionalProperties)
+                        excludingPending = endingBalance.excludingPending
+                        includingPending = endingBalance.includingPending
+                        effectiveAt = endingBalance.effectiveAt
+                        additionalProperties = endingBalance.additionalProperties.toMutableMap()
                     }
 
                     /**
@@ -482,18 +503,26 @@ private constructor(
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
-                        this.additionalProperties.putAll(additionalProperties)
+                        putAllAdditionalProperties(additionalProperties)
                     }
 
                     @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        this.additionalProperties.put(key, value)
+                        additionalProperties.put(key, value)
                     }
 
                     fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                         apply {
                             this.additionalProperties.putAll(additionalProperties)
                         }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                     fun build(): EndingBalance =
                         EndingBalance(
@@ -532,8 +561,6 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
-                private var validated: Boolean = false
-
                 /**
                  * the starting balance, including all posted grants, deductions, and expirations
                  * that happened at or before the effective_at timestamp
@@ -578,6 +605,8 @@ private constructor(
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+                private var validated: Boolean = false
+
                 fun validate(): StartingBalance = apply {
                     if (!validated) {
                         excludingPending()
@@ -603,10 +632,10 @@ private constructor(
 
                     @JvmSynthetic
                     internal fun from(startingBalance: StartingBalance) = apply {
-                        this.excludingPending = startingBalance.excludingPending
-                        this.includingPending = startingBalance.includingPending
-                        this.effectiveAt = startingBalance.effectiveAt
-                        additionalProperties(startingBalance.additionalProperties)
+                        excludingPending = startingBalance.excludingPending
+                        includingPending = startingBalance.includingPending
+                        effectiveAt = startingBalance.effectiveAt
+                        additionalProperties = startingBalance.additionalProperties.toMutableMap()
                     }
 
                     /**
@@ -662,18 +691,26 @@ private constructor(
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
-                        this.additionalProperties.putAll(additionalProperties)
+                        putAllAdditionalProperties(additionalProperties)
                     }
 
                     @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        this.additionalProperties.put(key, value)
+                        additionalProperties.put(key, value)
                     }
 
                     fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                         apply {
                             this.additionalProperties.putAll(additionalProperties)
                         }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                     fun build(): StartingBalance =
                         StartingBalance(

@@ -63,23 +63,23 @@ constructor(
     @NoAutoDetect
     class ContractSetUsageFilterBody
     internal constructor(
-        private val contractId: String?,
-        private val customerId: String?,
-        private val groupKey: String?,
-        private val groupValues: List<String>?,
-        private val startingAt: OffsetDateTime?,
+        private val contractId: String,
+        private val customerId: String,
+        private val groupKey: String,
+        private val groupValues: List<String>,
+        private val startingAt: OffsetDateTime,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("contract_id") fun contractId(): String? = contractId
+        @JsonProperty("contract_id") fun contractId(): String = contractId
 
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
-        @JsonProperty("group_key") fun groupKey(): String? = groupKey
+        @JsonProperty("group_key") fun groupKey(): String = groupKey
 
-        @JsonProperty("group_values") fun groupValues(): List<String>? = groupValues
+        @JsonProperty("group_values") fun groupValues(): List<String> = groupValues
 
-        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -103,12 +103,13 @@ constructor(
 
             @JvmSynthetic
             internal fun from(contractSetUsageFilterBody: ContractSetUsageFilterBody) = apply {
-                this.contractId = contractSetUsageFilterBody.contractId
-                this.customerId = contractSetUsageFilterBody.customerId
-                this.groupKey = contractSetUsageFilterBody.groupKey
-                this.groupValues = contractSetUsageFilterBody.groupValues
-                this.startingAt = contractSetUsageFilterBody.startingAt
-                additionalProperties(contractSetUsageFilterBody.additionalProperties)
+                contractId = contractSetUsageFilterBody.contractId
+                customerId = contractSetUsageFilterBody.customerId
+                groupKey = contractSetUsageFilterBody.groupKey
+                groupValues = contractSetUsageFilterBody.groupValues.toMutableList()
+                startingAt = contractSetUsageFilterBody.startingAt
+                additionalProperties =
+                    contractSetUsageFilterBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("contract_id")
@@ -128,16 +129,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractSetUsageFilterBody =

@@ -830,7 +830,7 @@ class ContractCreateParamsTest {
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
         assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
         assertThat(body.billingProviderConfiguration())
-            .isEqualTo(
+            .contains(
                 ContractCreateParams.BillingProviderConfiguration.builder()
                     .billingProvider(
                         ContractCreateParams.BillingProviderConfiguration.BillingProvider
@@ -844,7 +844,7 @@ class ContractCreateParamsTest {
                     .build()
             )
         assertThat(body.commits())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractCreateParams.Commit.builder()
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -931,7 +931,7 @@ class ContractCreateParamsTest {
                 )
             )
         assertThat(body.credits())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractCreateParams.Credit.builder()
                         .accessSchedule(
@@ -970,13 +970,13 @@ class ContractCreateParamsTest {
                 )
             )
         assertThat(body.customFields())
-            .isEqualTo(
+            .contains(
                 ContractCreateParams.CustomFields.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
         assertThat(body.discounts())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractCreateParams.Discount.builder()
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1027,14 +1027,14 @@ class ContractCreateParamsTest {
                         .build()
                 )
             )
-        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.endingBefore()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(body.multiplierOverridePrioritization())
-            .isEqualTo(ContractCreateParams.MultiplierOverridePrioritization.LOWEST_MULTIPLIER)
-        assertThat(body.name()).isEqualTo("name")
-        assertThat(body.netPaymentTermsDays()).isEqualTo(0.0)
-        assertThat(body.netsuiteSalesOrderId()).isEqualTo("netsuite_sales_order_id")
+            .contains(ContractCreateParams.MultiplierOverridePrioritization.LOWEST_MULTIPLIER)
+        assertThat(body.name()).contains("name")
+        assertThat(body.netPaymentTermsDays()).contains(0.0)
+        assertThat(body.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
         assertThat(body.overrides())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractCreateParams.Override.builder()
                         .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1097,7 +1097,7 @@ class ContractCreateParamsTest {
                 )
             )
         assertThat(body.professionalServices())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractCreateParams.ProfessionalService.builder()
                         .maxAmount(0.0)
@@ -1114,10 +1114,10 @@ class ContractCreateParamsTest {
                         .build()
                 )
             )
-        assertThat(body.rateCardAlias()).isEqualTo("rate_card_alias")
-        assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+        assertThat(body.rateCardAlias()).contains("rate_card_alias")
+        assertThat(body.rateCardId()).contains("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.resellerRoyalties())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractCreateParams.ResellerRoyalty.builder()
                         .fraction(0.0)
@@ -1144,9 +1144,9 @@ class ContractCreateParamsTest {
                         .build()
                 )
             )
-        assertThat(body.salesforceOpportunityId()).isEqualTo("salesforce_opportunity_id")
+        assertThat(body.salesforceOpportunityId()).contains("salesforce_opportunity_id")
         assertThat(body.scheduledCharges())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractCreateParams.ScheduledCharge.builder()
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1199,9 +1199,9 @@ class ContractCreateParamsTest {
                         .build()
                 )
             )
-        assertThat(body.totalContractValue()).isEqualTo(0.0)
+        assertThat(body.totalContractValue()).contains(0.0)
         assertThat(body.transition())
-            .isEqualTo(
+            .contains(
                 ContractCreateParams.Transition.builder()
                     .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .type(ContractCreateParams.Transition.Type.SUPERSEDE)
@@ -1214,9 +1214,9 @@ class ContractCreateParamsTest {
                     )
                     .build()
             )
-        assertThat(body.uniquenessKey()).isEqualTo("x")
+        assertThat(body.uniquenessKey()).contains("x")
         assertThat(body.usageFilter())
-            .isEqualTo(
+            .contains(
                 BaseUsageFilter.builder()
                     .groupKey("group_key")
                     .groupValues(listOf("string"))
@@ -1224,7 +1224,7 @@ class ContractCreateParamsTest {
                     .build()
             )
         assertThat(body.usageStatementSchedule())
-            .isEqualTo(
+            .contains(
                 ContractCreateParams.UsageStatementSchedule.builder()
                     .frequency(ContractCreateParams.UsageStatementSchedule.Frequency.MONTHLY)
                     .billingAnchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

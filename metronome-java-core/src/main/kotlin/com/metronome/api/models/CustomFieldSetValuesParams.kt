@@ -58,17 +58,17 @@ constructor(
     @NoAutoDetect
     class CustomFieldSetValuesBody
     internal constructor(
-        private val customFields: CustomFields?,
-        private val entity: Entity?,
-        private val entityId: String?,
+        private val customFields: CustomFields,
+        private val entity: Entity,
+        private val entityId: String,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("custom_fields") fun customFields(): CustomFields? = customFields
+        @JsonProperty("custom_fields") fun customFields(): CustomFields = customFields
 
-        @JsonProperty("entity") fun entity(): Entity? = entity
+        @JsonProperty("entity") fun entity(): Entity = entity
 
-        @JsonProperty("entity_id") fun entityId(): String? = entityId
+        @JsonProperty("entity_id") fun entityId(): String = entityId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -90,10 +90,10 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customFieldSetValuesBody: CustomFieldSetValuesBody) = apply {
-                this.customFields = customFieldSetValuesBody.customFields
-                this.entity = customFieldSetValuesBody.entity
-                this.entityId = customFieldSetValuesBody.entityId
-                additionalProperties(customFieldSetValuesBody.additionalProperties)
+                customFields = customFieldSetValuesBody.customFields
+                entity = customFieldSetValuesBody.entity
+                entityId = customFieldSetValuesBody.entityId
+                additionalProperties = customFieldSetValuesBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("custom_fields")
@@ -108,16 +108,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomFieldSetValuesBody =
@@ -336,21 +342,27 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customFields: CustomFields) = apply {
-                additionalProperties(customFields.additionalProperties)
+                additionalProperties = customFields.additionalProperties.toMutableMap()
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())

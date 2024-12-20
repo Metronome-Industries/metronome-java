@@ -70,32 +70,34 @@ constructor(
     @NoAutoDetect
     class ContractScheduleProServicesInvoiceBody
     internal constructor(
-        private val contractId: String?,
-        private val customerId: String?,
-        private val issuedAt: OffsetDateTime?,
-        private val lineItems: List<LineItem>?,
+        private val contractId: String,
+        private val customerId: String,
+        private val issuedAt: OffsetDateTime,
+        private val lineItems: List<LineItem>,
         private val netsuiteInvoiceHeaderEnd: OffsetDateTime?,
         private val netsuiteInvoiceHeaderStart: OffsetDateTime?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("contract_id") fun contractId(): String? = contractId
+        @JsonProperty("contract_id") fun contractId(): String = contractId
 
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         /** The date the invoice is issued */
-        @JsonProperty("issued_at") fun issuedAt(): OffsetDateTime? = issuedAt
+        @JsonProperty("issued_at") fun issuedAt(): OffsetDateTime = issuedAt
 
         /** Each line requires an amount or both unit_price and quantity. */
-        @JsonProperty("line_items") fun lineItems(): List<LineItem>? = lineItems
+        @JsonProperty("line_items") fun lineItems(): List<LineItem> = lineItems
 
         /** The end date of the invoice header in Netsuite */
         @JsonProperty("netsuite_invoice_header_end")
-        fun netsuiteInvoiceHeaderEnd(): OffsetDateTime? = netsuiteInvoiceHeaderEnd
+        fun netsuiteInvoiceHeaderEnd(): Optional<OffsetDateTime> =
+            Optional.ofNullable(netsuiteInvoiceHeaderEnd)
 
         /** The start date of the invoice header in Netsuite */
         @JsonProperty("netsuite_invoice_header_start")
-        fun netsuiteInvoiceHeaderStart(): OffsetDateTime? = netsuiteInvoiceHeaderStart
+        fun netsuiteInvoiceHeaderStart(): Optional<OffsetDateTime> =
+            Optional.ofNullable(netsuiteInvoiceHeaderStart)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -122,15 +124,16 @@ constructor(
             internal fun from(
                 contractScheduleProServicesInvoiceBody: ContractScheduleProServicesInvoiceBody
             ) = apply {
-                this.contractId = contractScheduleProServicesInvoiceBody.contractId
-                this.customerId = contractScheduleProServicesInvoiceBody.customerId
-                this.issuedAt = contractScheduleProServicesInvoiceBody.issuedAt
-                this.lineItems = contractScheduleProServicesInvoiceBody.lineItems
-                this.netsuiteInvoiceHeaderEnd =
+                contractId = contractScheduleProServicesInvoiceBody.contractId
+                customerId = contractScheduleProServicesInvoiceBody.customerId
+                issuedAt = contractScheduleProServicesInvoiceBody.issuedAt
+                lineItems = contractScheduleProServicesInvoiceBody.lineItems.toMutableList()
+                netsuiteInvoiceHeaderEnd =
                     contractScheduleProServicesInvoiceBody.netsuiteInvoiceHeaderEnd
-                this.netsuiteInvoiceHeaderStart =
+                netsuiteInvoiceHeaderStart =
                     contractScheduleProServicesInvoiceBody.netsuiteInvoiceHeaderStart
-                additionalProperties(contractScheduleProServicesInvoiceBody.additionalProperties)
+                additionalProperties =
+                    contractScheduleProServicesInvoiceBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("contract_id")
@@ -161,16 +164,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractScheduleProServicesInvoiceBody =
@@ -409,7 +418,7 @@ constructor(
     @NoAutoDetect
     class LineItem
     private constructor(
-        private val professionalServiceId: String?,
+        private val professionalServiceId: String,
         private val amendmentId: String?,
         private val unitPrice: Double?,
         private val quantity: Double?,
@@ -421,33 +430,37 @@ constructor(
     ) {
 
         @JsonProperty("professional_service_id")
-        fun professionalServiceId(): String? = professionalServiceId
+        fun professionalServiceId(): String = professionalServiceId
 
         /** If the professional_service_id was added on an amendment, this is required. */
-        @JsonProperty("amendment_id") fun amendmentId(): String? = amendmentId
+        @JsonProperty("amendment_id")
+        fun amendmentId(): Optional<String> = Optional.ofNullable(amendmentId)
 
         /**
          * If specified, this overrides the unit price on the pro service term. Must also provide
          * quantity (but not amount) if providing unit_price.
          */
-        @JsonProperty("unit_price") fun unitPrice(): Double? = unitPrice
+        @JsonProperty("unit_price")
+        fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
 
         /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
-        @JsonProperty("quantity") fun quantity(): Double? = quantity
+        @JsonProperty("quantity") fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
         /** Amount for the term on the new invoice. */
-        @JsonProperty("amount") fun amount(): Double? = amount
+        @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
 
         /** The start date for the billing period on the invoice. */
         @JsonProperty("netsuite_invoice_billing_start")
-        fun netsuiteInvoiceBillingStart(): OffsetDateTime? = netsuiteInvoiceBillingStart
+        fun netsuiteInvoiceBillingStart(): Optional<OffsetDateTime> =
+            Optional.ofNullable(netsuiteInvoiceBillingStart)
 
         /** The end date for the billing period on the invoice. */
         @JsonProperty("netsuite_invoice_billing_end")
-        fun netsuiteInvoiceBillingEnd(): OffsetDateTime? = netsuiteInvoiceBillingEnd
+        fun netsuiteInvoiceBillingEnd(): Optional<OffsetDateTime> =
+            Optional.ofNullable(netsuiteInvoiceBillingEnd)
 
         /** For client use. */
-        @JsonProperty("metadata") fun metadata(): String? = metadata
+        @JsonProperty("metadata") fun metadata(): Optional<String> = Optional.ofNullable(metadata)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -474,15 +487,15 @@ constructor(
 
             @JvmSynthetic
             internal fun from(lineItem: LineItem) = apply {
-                this.professionalServiceId = lineItem.professionalServiceId
-                this.amendmentId = lineItem.amendmentId
-                this.unitPrice = lineItem.unitPrice
-                this.quantity = lineItem.quantity
-                this.amount = lineItem.amount
-                this.netsuiteInvoiceBillingStart = lineItem.netsuiteInvoiceBillingStart
-                this.netsuiteInvoiceBillingEnd = lineItem.netsuiteInvoiceBillingEnd
-                this.metadata = lineItem.metadata
-                additionalProperties(lineItem.additionalProperties)
+                professionalServiceId = lineItem.professionalServiceId
+                amendmentId = lineItem.amendmentId
+                unitPrice = lineItem.unitPrice
+                quantity = lineItem.quantity
+                amount = lineItem.amount
+                netsuiteInvoiceBillingStart = lineItem.netsuiteInvoiceBillingStart
+                netsuiteInvoiceBillingEnd = lineItem.netsuiteInvoiceBillingEnd
+                metadata = lineItem.metadata
+                additionalProperties = lineItem.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("professional_service_id")
@@ -528,16 +541,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): LineItem =

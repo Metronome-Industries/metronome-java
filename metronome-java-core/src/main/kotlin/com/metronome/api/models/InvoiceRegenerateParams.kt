@@ -43,12 +43,12 @@ constructor(
     @NoAutoDetect
     class InvoiceRegenerateBody
     internal constructor(
-        private val id: String?,
+        private val id: String,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** The invoice id to regenerate */
-        @JsonProperty("id") fun id(): String? = id
+        @JsonProperty("id") fun id(): String = id
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -68,8 +68,8 @@ constructor(
 
             @JvmSynthetic
             internal fun from(invoiceRegenerateBody: InvoiceRegenerateBody) = apply {
-                this.id = invoiceRegenerateBody.id
-                additionalProperties(invoiceRegenerateBody.additionalProperties)
+                id = invoiceRegenerateBody.id
+                additionalProperties = invoiceRegenerateBody.additionalProperties.toMutableMap()
             }
 
             /** The invoice id to regenerate */
@@ -77,16 +77,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): InvoiceRegenerateBody =

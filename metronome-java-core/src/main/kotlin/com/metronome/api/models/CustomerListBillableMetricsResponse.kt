@@ -40,8 +40,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     /** (DEPRECATED) use group_keys instead */
     fun groupBy(): Optional<List<String>> = Optional.ofNullable(groupBy.getNullable("group_by"))
 
@@ -156,6 +154,8 @@ private constructor(
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): CustomerListBillableMetricsResponse = apply {
         if (!validated) {
             groupBy()
@@ -205,21 +205,22 @@ private constructor(
         internal fun from(
             customerListBillableMetricsResponse: CustomerListBillableMetricsResponse
         ) = apply {
-            this.groupBy = customerListBillableMetricsResponse.groupBy
-            this.groupKeys = customerListBillableMetricsResponse.groupKeys
-            this.name = customerListBillableMetricsResponse.name
-            this.id = customerListBillableMetricsResponse.id
-            this.aggregate = customerListBillableMetricsResponse.aggregate
-            this.aggregateKeys = customerListBillableMetricsResponse.aggregateKeys
-            this.filter = customerListBillableMetricsResponse.filter
-            this.aggregationType = customerListBillableMetricsResponse.aggregationType
-            this.aggregationKey = customerListBillableMetricsResponse.aggregationKey
-            this.eventTypeFilter = customerListBillableMetricsResponse.eventTypeFilter
-            this.propertyFilters = customerListBillableMetricsResponse.propertyFilters
-            this.customFields = customerListBillableMetricsResponse.customFields
-            this.sql = customerListBillableMetricsResponse.sql
-            this.archivedAt = customerListBillableMetricsResponse.archivedAt
-            additionalProperties(customerListBillableMetricsResponse.additionalProperties)
+            groupBy = customerListBillableMetricsResponse.groupBy
+            groupKeys = customerListBillableMetricsResponse.groupKeys
+            name = customerListBillableMetricsResponse.name
+            id = customerListBillableMetricsResponse.id
+            aggregate = customerListBillableMetricsResponse.aggregate
+            aggregateKeys = customerListBillableMetricsResponse.aggregateKeys
+            filter = customerListBillableMetricsResponse.filter
+            aggregationType = customerListBillableMetricsResponse.aggregationType
+            aggregationKey = customerListBillableMetricsResponse.aggregationKey
+            eventTypeFilter = customerListBillableMetricsResponse.eventTypeFilter
+            propertyFilters = customerListBillableMetricsResponse.propertyFilters
+            customFields = customerListBillableMetricsResponse.customFields
+            sql = customerListBillableMetricsResponse.sql
+            archivedAt = customerListBillableMetricsResponse.archivedAt
+            additionalProperties =
+                customerListBillableMetricsResponse.additionalProperties.toMutableMap()
         }
 
         /** (DEPRECATED) use group_keys instead */
@@ -373,16 +374,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): CustomerListBillableMetricsResponse =
@@ -487,11 +494,11 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
             if (!validated) {
@@ -512,21 +519,27 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(customFields: CustomFields) = apply {
-                additionalProperties(customFields.additionalProperties)
+                additionalProperties = customFields.additionalProperties.toMutableMap()
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
@@ -557,11 +570,11 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): Filter = apply {
             if (!validated) {
@@ -582,21 +595,27 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(filter: Filter) = apply {
-                additionalProperties(filter.additionalProperties)
+                additionalProperties = filter.additionalProperties.toMutableMap()
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Filter = Filter(additionalProperties.toImmutable())

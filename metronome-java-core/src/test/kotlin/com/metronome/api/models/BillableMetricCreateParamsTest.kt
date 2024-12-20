@@ -98,25 +98,25 @@ class BillableMetricCreateParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("CPU Hours")
-        assertThat(body.aggregationKey()).isEqualTo("cpu_hours")
+        assertThat(body.aggregationKey()).contains("cpu_hours")
         assertThat(body.aggregationType())
-            .isEqualTo(BillableMetricCreateParams.AggregationType.COUNT)
+            .contains(BillableMetricCreateParams.AggregationType.COUNT)
         assertThat(body.customFields())
-            .isEqualTo(
+            .contains(
                 BillableMetricCreateParams.CustomFields.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
         assertThat(body.eventTypeFilter())
-            .isEqualTo(
+            .contains(
                 EventTypeFilter.builder()
                     .inValues(listOf("cpu_usage"))
                     .notInValues(listOf("string"))
                     .build()
             )
-        assertThat(body.groupKeys()).isEqualTo(listOf(listOf("region"), listOf("machine_type")))
+        assertThat(body.groupKeys()).contains(listOf(listOf("region"), listOf("machine_type")))
         assertThat(body.propertyFilters())
-            .isEqualTo(
+            .contains(
                 listOf(
                     PropertyFilter.builder()
                         .name("cpu_hours")
@@ -138,7 +138,7 @@ class BillableMetricCreateParamsTest {
                         .build(),
                 )
             )
-        assertThat(body.sql()).isEqualTo("sql")
+        assertThat(body.sql()).contains("sql")
     }
 
     @Test

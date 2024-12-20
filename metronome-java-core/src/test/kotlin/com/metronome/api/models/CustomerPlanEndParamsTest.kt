@@ -31,9 +31,9 @@ class CustomerPlanEndParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
-        assertThat(body.voidInvoices()).isEqualTo(true)
-        assertThat(body.voidStripeInvoices()).isEqualTo(true)
+        assertThat(body.endingBefore()).contains(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
+        assertThat(body.voidInvoices()).contains(true)
+        assertThat(body.voidStripeInvoices()).contains(true)
     }
 
     @Test

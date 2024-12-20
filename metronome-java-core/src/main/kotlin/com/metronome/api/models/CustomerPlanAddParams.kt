@@ -87,8 +87,8 @@ constructor(
     @NoAutoDetect
     class CustomerPlanAddBody
     internal constructor(
-        private val planId: String?,
-        private val startingOn: OffsetDateTime?,
+        private val planId: String,
+        private val startingOn: OffsetDateTime,
         private val endingBefore: OffsetDateTime?,
         private val netPaymentTermsDays: Double?,
         private val overageRateAdjustments: List<OverageRateAdjustment>?,
@@ -97,32 +97,34 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("plan_id") fun planId(): String? = planId
+        @JsonProperty("plan_id") fun planId(): String = planId
 
         /**
          * RFC 3339 timestamp for when the plan becomes active for this customer. Must be at 0:00
          * UTC (midnight).
          */
-        @JsonProperty("starting_on") fun startingOn(): OffsetDateTime? = startingOn
+        @JsonProperty("starting_on") fun startingOn(): OffsetDateTime = startingOn
 
         /**
          * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
          * UTC (midnight).
          */
-        @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+        @JsonProperty("ending_before")
+        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
         /**
          * Number of days after issuance of invoice after which the invoice is due (e.g. Net 30).
          */
         @JsonProperty("net_payment_terms_days")
-        fun netPaymentTermsDays(): Double? = netPaymentTermsDays
+        fun netPaymentTermsDays(): Optional<Double> = Optional.ofNullable(netPaymentTermsDays)
 
         /**
          * An optional list of overage rates that override the rates of the original plan
          * configuration. These new rates will apply to all pricing ramps.
          */
         @JsonProperty("overage_rate_adjustments")
-        fun overageRateAdjustments(): List<OverageRateAdjustment>? = overageRateAdjustments
+        fun overageRateAdjustments(): Optional<List<OverageRateAdjustment>> =
+            Optional.ofNullable(overageRateAdjustments)
 
         /**
          * A list of price adjustments can be applied on top of the pricing in the plans. See the
@@ -130,14 +132,16 @@ constructor(
          * for details.
          */
         @JsonProperty("price_adjustments")
-        fun priceAdjustments(): List<PriceAdjustment>? = priceAdjustments
+        fun priceAdjustments(): Optional<List<PriceAdjustment>> =
+            Optional.ofNullable(priceAdjustments)
 
         /**
          * A custom trial can be set for the customer's plan. See the
          * [trial configuration documentation](https://docs.metronome.com/provisioning/configure-trials/)
          * for details.
          */
-        @JsonProperty("trial_spec") fun trialSpec(): TrialSpec? = trialSpec
+        @JsonProperty("trial_spec")
+        fun trialSpec(): Optional<TrialSpec> = Optional.ofNullable(trialSpec)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -163,14 +167,14 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customerPlanAddBody: CustomerPlanAddBody) = apply {
-                this.planId = customerPlanAddBody.planId
-                this.startingOn = customerPlanAddBody.startingOn
-                this.endingBefore = customerPlanAddBody.endingBefore
-                this.netPaymentTermsDays = customerPlanAddBody.netPaymentTermsDays
-                this.overageRateAdjustments = customerPlanAddBody.overageRateAdjustments
-                this.priceAdjustments = customerPlanAddBody.priceAdjustments
-                this.trialSpec = customerPlanAddBody.trialSpec
-                additionalProperties(customerPlanAddBody.additionalProperties)
+                planId = customerPlanAddBody.planId
+                startingOn = customerPlanAddBody.startingOn
+                endingBefore = customerPlanAddBody.endingBefore
+                netPaymentTermsDays = customerPlanAddBody.netPaymentTermsDays
+                overageRateAdjustments = customerPlanAddBody.overageRateAdjustments?.toMutableList()
+                priceAdjustments = customerPlanAddBody.priceAdjustments?.toMutableList()
+                trialSpec = customerPlanAddBody.trialSpec
+                additionalProperties = customerPlanAddBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("plan_id") fun planId(planId: String) = apply { this.planId = planId }
@@ -231,16 +235,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerPlanAddBody =
@@ -519,21 +529,20 @@ constructor(
     @NoAutoDetect
     class OverageRateAdjustment
     private constructor(
-        private val customCreditTypeId: String?,
-        private val fiatCurrencyCreditTypeId: String?,
-        private val toFiatConversionFactor: Double?,
+        private val customCreditTypeId: String,
+        private val fiatCurrencyCreditTypeId: String,
+        private val toFiatConversionFactor: Double,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("custom_credit_type_id")
-        fun customCreditTypeId(): String? = customCreditTypeId
+        @JsonProperty("custom_credit_type_id") fun customCreditTypeId(): String = customCreditTypeId
 
         @JsonProperty("fiat_currency_credit_type_id")
-        fun fiatCurrencyCreditTypeId(): String? = fiatCurrencyCreditTypeId
+        fun fiatCurrencyCreditTypeId(): String = fiatCurrencyCreditTypeId
 
         /** The overage cost in fiat currency for each credit of the custom credit type. */
         @JsonProperty("to_fiat_conversion_factor")
-        fun toFiatConversionFactor(): Double? = toFiatConversionFactor
+        fun toFiatConversionFactor(): Double = toFiatConversionFactor
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -555,10 +564,10 @@ constructor(
 
             @JvmSynthetic
             internal fun from(overageRateAdjustment: OverageRateAdjustment) = apply {
-                this.customCreditTypeId = overageRateAdjustment.customCreditTypeId
-                this.fiatCurrencyCreditTypeId = overageRateAdjustment.fiatCurrencyCreditTypeId
-                this.toFiatConversionFactor = overageRateAdjustment.toFiatConversionFactor
-                additionalProperties(overageRateAdjustment.additionalProperties)
+                customCreditTypeId = overageRateAdjustment.customCreditTypeId
+                fiatCurrencyCreditTypeId = overageRateAdjustment.fiatCurrencyCreditTypeId
+                toFiatConversionFactor = overageRateAdjustment.toFiatConversionFactor
+                additionalProperties = overageRateAdjustment.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("custom_credit_type_id")
@@ -579,16 +588,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): OverageRateAdjustment =
@@ -628,35 +643,35 @@ constructor(
     @NoAutoDetect
     class PriceAdjustment
     private constructor(
-        private val chargeId: String?,
-        private val adjustmentType: AdjustmentType?,
+        private val chargeId: String,
+        private val adjustmentType: AdjustmentType,
         private val value: Double?,
         private val quantity: Double?,
         private val tier: Double?,
-        private val startPeriod: Double?,
+        private val startPeriod: Double,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("charge_id") fun chargeId(): String? = chargeId
+        @JsonProperty("charge_id") fun chargeId(): String = chargeId
 
-        @JsonProperty("adjustment_type") fun adjustmentType(): AdjustmentType? = adjustmentType
+        @JsonProperty("adjustment_type") fun adjustmentType(): AdjustmentType = adjustmentType
 
         /**
          * The amount of change to a price. Percentage and fixed adjustments can be positive or
          * negative. Percentage-based adjustments should be decimals, e.g. -0.05 for a 5% discount.
          */
-        @JsonProperty("value") fun value(): Double? = value
+        @JsonProperty("value") fun value(): Optional<Double> = Optional.ofNullable(value)
 
         /** the overridden quantity for a fixed charge */
-        @JsonProperty("quantity") fun quantity(): Double? = quantity
+        @JsonProperty("quantity") fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
         /** Used in pricing tiers. Indicates at what metric value the price applies. */
-        @JsonProperty("tier") fun tier(): Double? = tier
+        @JsonProperty("tier") fun tier(): Optional<Double> = Optional.ofNullable(tier)
 
         /**
          * Used in price ramps. Indicates how many billing periods pass before the charge applies.
          */
-        @JsonProperty("start_period") fun startPeriod(): Double? = startPeriod
+        @JsonProperty("start_period") fun startPeriod(): Double = startPeriod
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -681,13 +696,13 @@ constructor(
 
             @JvmSynthetic
             internal fun from(priceAdjustment: PriceAdjustment) = apply {
-                this.chargeId = priceAdjustment.chargeId
-                this.adjustmentType = priceAdjustment.adjustmentType
-                this.value = priceAdjustment.value
-                this.quantity = priceAdjustment.quantity
-                this.tier = priceAdjustment.tier
-                this.startPeriod = priceAdjustment.startPeriod
-                additionalProperties(priceAdjustment.additionalProperties)
+                chargeId = priceAdjustment.chargeId
+                adjustmentType = priceAdjustment.adjustmentType
+                value = priceAdjustment.value
+                quantity = priceAdjustment.quantity
+                tier = priceAdjustment.tier
+                startPeriod = priceAdjustment.startPeriod
+                additionalProperties = priceAdjustment.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("charge_id")
@@ -721,16 +736,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): PriceAdjustment =
@@ -841,15 +862,16 @@ constructor(
     @NoAutoDetect
     class TrialSpec
     private constructor(
-        private val lengthInDays: Double?,
+        private val lengthInDays: Double,
         private val spendingCap: SpendingCap?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** Length of the trial period in days. */
-        @JsonProperty("length_in_days") fun lengthInDays(): Double? = lengthInDays
+        @JsonProperty("length_in_days") fun lengthInDays(): Double = lengthInDays
 
-        @JsonProperty("spending_cap") fun spendingCap(): SpendingCap? = spendingCap
+        @JsonProperty("spending_cap")
+        fun spendingCap(): Optional<SpendingCap> = Optional.ofNullable(spendingCap)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -870,9 +892,9 @@ constructor(
 
             @JvmSynthetic
             internal fun from(trialSpec: TrialSpec) = apply {
-                this.lengthInDays = trialSpec.lengthInDays
-                this.spendingCap = trialSpec.spendingCap
-                additionalProperties(trialSpec.additionalProperties)
+                lengthInDays = trialSpec.lengthInDays
+                spendingCap = trialSpec.spendingCap
+                additionalProperties = trialSpec.additionalProperties.toMutableMap()
             }
 
             /** Length of the trial period in days. */
@@ -884,16 +906,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): TrialSpec =
@@ -908,18 +936,18 @@ constructor(
         @NoAutoDetect
         class SpendingCap
         private constructor(
-            private val creditTypeId: String?,
-            private val amount: Double?,
+            private val creditTypeId: String,
+            private val amount: Double,
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             /** The credit type ID for the spending cap. */
-            @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
+            @JsonProperty("credit_type_id") fun creditTypeId(): String = creditTypeId
 
             /**
              * The credit amount in the given denomination based on the credit type, e.g. US cents.
              */
-            @JsonProperty("amount") fun amount(): Double? = amount
+            @JsonProperty("amount") fun amount(): Double = amount
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -940,9 +968,9 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(spendingCap: SpendingCap) = apply {
-                    this.creditTypeId = spendingCap.creditTypeId
-                    this.amount = spendingCap.amount
-                    additionalProperties(spendingCap.additionalProperties)
+                    creditTypeId = spendingCap.creditTypeId
+                    amount = spendingCap.amount
+                    additionalProperties = spendingCap.additionalProperties.toMutableMap()
                 }
 
                 /** The credit type ID for the spending cap. */
@@ -957,18 +985,26 @@ constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): SpendingCap =
                     SpendingCap(

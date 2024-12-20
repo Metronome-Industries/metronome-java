@@ -50,15 +50,15 @@ constructor(
     @NoAutoDetect
     class ContractRateCardProductOrderUpdateBody
     internal constructor(
-        private val productMoves: List<ProductMove>?,
-        private val rateCardId: String?,
+        private val productMoves: List<ProductMove>,
+        private val rateCardId: String,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("product_moves") fun productMoves(): List<ProductMove>? = productMoves
+        @JsonProperty("product_moves") fun productMoves(): List<ProductMove> = productMoves
 
         /** ID of the rate card to update */
-        @JsonProperty("rate_card_id") fun rateCardId(): String? = rateCardId
+        @JsonProperty("rate_card_id") fun rateCardId(): String = rateCardId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -81,9 +81,10 @@ constructor(
             internal fun from(
                 contractRateCardProductOrderUpdateBody: ContractRateCardProductOrderUpdateBody
             ) = apply {
-                this.productMoves = contractRateCardProductOrderUpdateBody.productMoves
-                this.rateCardId = contractRateCardProductOrderUpdateBody.rateCardId
-                additionalProperties(contractRateCardProductOrderUpdateBody.additionalProperties)
+                productMoves = contractRateCardProductOrderUpdateBody.productMoves.toMutableList()
+                rateCardId = contractRateCardProductOrderUpdateBody.rateCardId
+                additionalProperties =
+                    contractRateCardProductOrderUpdateBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("product_moves")
@@ -97,16 +98,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractRateCardProductOrderUpdateBody =
@@ -310,16 +317,16 @@ constructor(
     @NoAutoDetect
     class ProductMove
     private constructor(
-        private val productId: String?,
-        private val position: Double?,
+        private val productId: String,
+        private val position: Double,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** ID of the product to move */
-        @JsonProperty("product_id") fun productId(): String? = productId
+        @JsonProperty("product_id") fun productId(): String = productId
 
         /** 0-based index of the new position of the product */
-        @JsonProperty("position") fun position(): Double? = position
+        @JsonProperty("position") fun position(): Double = position
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -340,9 +347,9 @@ constructor(
 
             @JvmSynthetic
             internal fun from(productMove: ProductMove) = apply {
-                this.productId = productMove.productId
-                this.position = productMove.position
-                additionalProperties(productMove.additionalProperties)
+                productId = productMove.productId
+                position = productMove.position
+                additionalProperties = productMove.additionalProperties.toMutableMap()
             }
 
             /** ID of the product to move */
@@ -355,16 +362,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ProductMove =

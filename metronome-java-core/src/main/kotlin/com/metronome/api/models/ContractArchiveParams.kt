@@ -54,20 +54,20 @@ constructor(
     @NoAutoDetect
     class ContractArchiveBody
     internal constructor(
-        private val contractId: String?,
-        private val customerId: String?,
-        private val voidInvoices: Boolean?,
+        private val contractId: String,
+        private val customerId: String,
+        private val voidInvoices: Boolean,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** ID of the contract to archive */
-        @JsonProperty("contract_id") fun contractId(): String? = contractId
+        @JsonProperty("contract_id") fun contractId(): String = contractId
 
         /** ID of the customer whose contract is to be archived */
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         /** If false, the existing finalized invoices will remain after the contract is archived. */
-        @JsonProperty("void_invoices") fun voidInvoices(): Boolean? = voidInvoices
+        @JsonProperty("void_invoices") fun voidInvoices(): Boolean = voidInvoices
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -89,10 +89,10 @@ constructor(
 
             @JvmSynthetic
             internal fun from(contractArchiveBody: ContractArchiveBody) = apply {
-                this.contractId = contractArchiveBody.contractId
-                this.customerId = contractArchiveBody.customerId
-                this.voidInvoices = contractArchiveBody.voidInvoices
-                additionalProperties(contractArchiveBody.additionalProperties)
+                contractId = contractArchiveBody.contractId
+                customerId = contractArchiveBody.customerId
+                voidInvoices = contractArchiveBody.voidInvoices
+                additionalProperties = contractArchiveBody.additionalProperties.toMutableMap()
             }
 
             /** ID of the contract to archive */
@@ -111,16 +111,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractArchiveBody =

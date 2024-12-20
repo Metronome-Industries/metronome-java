@@ -56,21 +56,22 @@ constructor(
     @NoAutoDetect
     class CreditGrantVoidBody
     internal constructor(
-        private val id: String?,
+        private val id: String,
         private val releaseUniquenessKey: Boolean?,
         private val voidCreditPurchaseInvoice: Boolean?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("id") fun id(): String? = id
+        @JsonProperty("id") fun id(): String = id
 
         /** If true, resets the uniqueness key on this grant so it can be re-used */
         @JsonProperty("release_uniqueness_key")
-        fun releaseUniquenessKey(): Boolean? = releaseUniquenessKey
+        fun releaseUniquenessKey(): Optional<Boolean> = Optional.ofNullable(releaseUniquenessKey)
 
         /** If true, void the purchase invoice associated with the grant */
         @JsonProperty("void_credit_purchase_invoice")
-        fun voidCreditPurchaseInvoice(): Boolean? = voidCreditPurchaseInvoice
+        fun voidCreditPurchaseInvoice(): Optional<Boolean> =
+            Optional.ofNullable(voidCreditPurchaseInvoice)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -92,10 +93,10 @@ constructor(
 
             @JvmSynthetic
             internal fun from(creditGrantVoidBody: CreditGrantVoidBody) = apply {
-                this.id = creditGrantVoidBody.id
-                this.releaseUniquenessKey = creditGrantVoidBody.releaseUniquenessKey
-                this.voidCreditPurchaseInvoice = creditGrantVoidBody.voidCreditPurchaseInvoice
-                additionalProperties(creditGrantVoidBody.additionalProperties)
+                id = creditGrantVoidBody.id
+                releaseUniquenessKey = creditGrantVoidBody.releaseUniquenessKey
+                voidCreditPurchaseInvoice = creditGrantVoidBody.voidCreditPurchaseInvoice
+                additionalProperties = creditGrantVoidBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("id") fun id(id: String) = apply { this.id = id }
@@ -114,16 +115,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CreditGrantVoidBody =

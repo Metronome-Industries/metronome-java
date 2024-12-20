@@ -102,7 +102,7 @@ class UsageListParamsTest {
         assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
         assertThat(body.windowSize()).isEqualTo(UsageListParams.WindowSize.HOUR)
         assertThat(body.billableMetrics())
-            .isEqualTo(
+            .contains(
                 listOf(
                     UsageListParams.BillableMetric.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -115,7 +115,7 @@ class UsageListParamsTest {
                         .build()
                 )
             )
-        assertThat(body.customerIds()).isEqualTo(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+        assertThat(body.customerIds()).contains(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
     }
 
     @Test

@@ -36,8 +36,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun productId(): String = productId.getRequired("product_id")
 
     fun productName(): String = productName.getRequired("product_name")
@@ -98,6 +96,8 @@ private constructor(
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): ContractRateCardRateListResponse = apply {
         if (!validated) {
             productId()
@@ -138,17 +138,18 @@ private constructor(
         @JvmSynthetic
         internal fun from(contractRateCardRateListResponse: ContractRateCardRateListResponse) =
             apply {
-                this.productId = contractRateCardRateListResponse.productId
-                this.productName = contractRateCardRateListResponse.productName
-                this.productTags = contractRateCardRateListResponse.productTags
-                this.productCustomFields = contractRateCardRateListResponse.productCustomFields
-                this.pricingGroupValues = contractRateCardRateListResponse.pricingGroupValues
-                this.startingAt = contractRateCardRateListResponse.startingAt
-                this.endingBefore = contractRateCardRateListResponse.endingBefore
-                this.entitled = contractRateCardRateListResponse.entitled
-                this.rate = contractRateCardRateListResponse.rate
-                this.commitRate = contractRateCardRateListResponse.commitRate
-                additionalProperties(contractRateCardRateListResponse.additionalProperties)
+                productId = contractRateCardRateListResponse.productId
+                productName = contractRateCardRateListResponse.productName
+                productTags = contractRateCardRateListResponse.productTags
+                productCustomFields = contractRateCardRateListResponse.productCustomFields
+                pricingGroupValues = contractRateCardRateListResponse.pricingGroupValues
+                startingAt = contractRateCardRateListResponse.startingAt
+                endingBefore = contractRateCardRateListResponse.endingBefore
+                entitled = contractRateCardRateListResponse.entitled
+                rate = contractRateCardRateListResponse.rate
+                commitRate = contractRateCardRateListResponse.commitRate
+                additionalProperties =
+                    contractRateCardRateListResponse.additionalProperties.toMutableMap()
             }
 
         fun productId(productId: String) = productId(JsonField.of(productId))
@@ -233,16 +234,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): ContractRateCardRateListResponse =
@@ -268,11 +275,11 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): ProductCustomFields = apply {
             if (!validated) {
@@ -293,21 +300,27 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(productCustomFields: ProductCustomFields) = apply {
-                additionalProperties(productCustomFields.additionalProperties)
+                additionalProperties = productCustomFields.additionalProperties.toMutableMap()
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ProductCustomFields =
@@ -345,8 +358,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         fun rateType(): RateType = rateType.getRequired("rate_type")
 
         /** Commit rate price. For FLAT rate_type, this must be >=0. */
@@ -366,6 +377,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): CommitRate = apply {
             if (!validated) {
@@ -392,10 +405,10 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(commitRate: CommitRate) = apply {
-                this.rateType = commitRate.rateType
-                this.price = commitRate.price
-                this.tiers = commitRate.tiers
-                additionalProperties(commitRate.additionalProperties)
+                rateType = commitRate.rateType
+                price = commitRate.price
+                tiers = commitRate.tiers
+                additionalProperties = commitRate.additionalProperties.toMutableMap()
             }
 
             fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
@@ -422,16 +435,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CommitRate =
@@ -573,11 +592,11 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): PricingGroupValues = apply {
             if (!validated) {
@@ -598,21 +617,27 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(pricingGroupValues: PricingGroupValues) = apply {
-                additionalProperties(pricingGroupValues.additionalProperties)
+                additionalProperties = pricingGroupValues.additionalProperties.toMutableMap()
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): PricingGroupValues = PricingGroupValues(additionalProperties.toImmutable())

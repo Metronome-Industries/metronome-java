@@ -98,7 +98,7 @@ class DashboardGetEmbeddableUrlParamsTest {
         assertThat(body.customerId()).isEqualTo("4db51251-61de-4bfe-b9ce-495e244f3491")
         assertThat(body.dashboard()).isEqualTo(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
         assertThat(body.bmGroupKeyOverrides())
-            .isEqualTo(
+            .contains(
                 listOf(
                     DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
                         .groupKeyName("tenant_id")
@@ -114,7 +114,7 @@ class DashboardGetEmbeddableUrlParamsTest {
                 )
             )
         assertThat(body.colorOverrides())
-            .isEqualTo(
+            .contains(
                 listOf(
                     DashboardGetEmbeddableUrlParams.ColorOverride.builder()
                         .name(DashboardGetEmbeddableUrlParams.ColorOverride.Name.GRAY_DARK)
@@ -123,7 +123,7 @@ class DashboardGetEmbeddableUrlParamsTest {
                 )
             )
         assertThat(body.dashboardOptions())
-            .isEqualTo(
+            .contains(
                 listOf(
                     DashboardGetEmbeddableUrlParams.DashboardOption.builder()
                         .key("show_zero_usage_line_items")

@@ -18,6 +18,7 @@ import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
+import java.util.Optional
 
 class ContractCreateHistoricalInvoicesParams
 constructor(
@@ -55,14 +56,14 @@ constructor(
     @NoAutoDetect
     class ContractCreateHistoricalInvoicesBody
     internal constructor(
-        private val invoices: List<Invoice>?,
-        private val preview: Boolean?,
+        private val invoices: List<Invoice>,
+        private val preview: Boolean,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("invoices") fun invoices(): List<Invoice>? = invoices
+        @JsonProperty("invoices") fun invoices(): List<Invoice> = invoices
 
-        @JsonProperty("preview") fun preview(): Boolean? = preview
+        @JsonProperty("preview") fun preview(): Boolean = preview
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -85,9 +86,10 @@ constructor(
             internal fun from(
                 contractCreateHistoricalInvoicesBody: ContractCreateHistoricalInvoicesBody
             ) = apply {
-                this.invoices = contractCreateHistoricalInvoicesBody.invoices
-                this.preview = contractCreateHistoricalInvoicesBody.preview
-                additionalProperties(contractCreateHistoricalInvoicesBody.additionalProperties)
+                invoices = contractCreateHistoricalInvoicesBody.invoices.toMutableList()
+                preview = contractCreateHistoricalInvoicesBody.preview
+                additionalProperties =
+                    contractCreateHistoricalInvoicesBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("invoices")
@@ -98,16 +100,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractCreateHistoricalInvoicesBody =
@@ -309,43 +317,45 @@ constructor(
     @NoAutoDetect
     class Invoice
     private constructor(
-        private val customerId: String?,
-        private val contractId: String?,
-        private val creditTypeId: String?,
-        private val inclusiveStartDate: OffsetDateTime?,
-        private val exclusiveEndDate: OffsetDateTime?,
-        private val issueDate: OffsetDateTime?,
+        private val customerId: String,
+        private val contractId: String,
+        private val creditTypeId: String,
+        private val inclusiveStartDate: OffsetDateTime,
+        private val exclusiveEndDate: OffsetDateTime,
+        private val issueDate: OffsetDateTime,
         private val breakdownGranularity: BreakdownGranularity?,
-        private val usageLineItems: List<UsageLineItem>?,
+        private val usageLineItems: List<UsageLineItem>,
         private val billableStatus: BillableStatus?,
         private val customFields: CustomFields?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
-        @JsonProperty("contract_id") fun contractId(): String? = contractId
+        @JsonProperty("contract_id") fun contractId(): String = contractId
 
-        @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
+        @JsonProperty("credit_type_id") fun creditTypeId(): String = creditTypeId
 
         @JsonProperty("inclusive_start_date")
-        fun inclusiveStartDate(): OffsetDateTime? = inclusiveStartDate
+        fun inclusiveStartDate(): OffsetDateTime = inclusiveStartDate
 
         @JsonProperty("exclusive_end_date")
-        fun exclusiveEndDate(): OffsetDateTime? = exclusiveEndDate
+        fun exclusiveEndDate(): OffsetDateTime = exclusiveEndDate
 
-        @JsonProperty("issue_date") fun issueDate(): OffsetDateTime? = issueDate
+        @JsonProperty("issue_date") fun issueDate(): OffsetDateTime = issueDate
 
         @JsonProperty("breakdown_granularity")
-        fun breakdownGranularity(): BreakdownGranularity? = breakdownGranularity
+        fun breakdownGranularity(): Optional<BreakdownGranularity> =
+            Optional.ofNullable(breakdownGranularity)
 
-        @JsonProperty("usage_line_items")
-        fun usageLineItems(): List<UsageLineItem>? = usageLineItems
+        @JsonProperty("usage_line_items") fun usageLineItems(): List<UsageLineItem> = usageLineItems
 
         /** This field's availability is dependent on your client's configuration. */
-        @JsonProperty("billable_status") fun billableStatus(): BillableStatus? = billableStatus
+        @JsonProperty("billable_status")
+        fun billableStatus(): Optional<BillableStatus> = Optional.ofNullable(billableStatus)
 
-        @JsonProperty("custom_fields") fun customFields(): CustomFields? = customFields
+        @JsonProperty("custom_fields")
+        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -374,17 +384,17 @@ constructor(
 
             @JvmSynthetic
             internal fun from(invoice: Invoice) = apply {
-                this.customerId = invoice.customerId
-                this.contractId = invoice.contractId
-                this.creditTypeId = invoice.creditTypeId
-                this.inclusiveStartDate = invoice.inclusiveStartDate
-                this.exclusiveEndDate = invoice.exclusiveEndDate
-                this.issueDate = invoice.issueDate
-                this.breakdownGranularity = invoice.breakdownGranularity
-                this.usageLineItems = invoice.usageLineItems
-                this.billableStatus = invoice.billableStatus
-                this.customFields = invoice.customFields
-                additionalProperties(invoice.additionalProperties)
+                customerId = invoice.customerId
+                contractId = invoice.contractId
+                creditTypeId = invoice.creditTypeId
+                inclusiveStartDate = invoice.inclusiveStartDate
+                exclusiveEndDate = invoice.exclusiveEndDate
+                issueDate = invoice.issueDate
+                breakdownGranularity = invoice.breakdownGranularity
+                usageLineItems = invoice.usageLineItems.toMutableList()
+                billableStatus = invoice.billableStatus
+                customFields = invoice.customFields
+                additionalProperties = invoice.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("customer_id")
@@ -432,16 +442,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Invoice =
@@ -469,9 +485,9 @@ constructor(
         @NoAutoDetect
         class UsageLineItem
         private constructor(
-            private val productId: String?,
-            private val inclusiveStartDate: OffsetDateTime?,
-            private val exclusiveEndDate: OffsetDateTime?,
+            private val productId: String,
+            private val inclusiveStartDate: OffsetDateTime,
+            private val exclusiveEndDate: OffsetDateTime,
             private val quantity: Double?,
             private val pricingGroupValues: PricingGroupValues?,
             private val presentationGroupValues: PresentationGroupValues?,
@@ -479,24 +495,28 @@ constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            @JsonProperty("product_id") fun productId(): String? = productId
+            @JsonProperty("product_id") fun productId(): String = productId
 
             @JsonProperty("inclusive_start_date")
-            fun inclusiveStartDate(): OffsetDateTime? = inclusiveStartDate
+            fun inclusiveStartDate(): OffsetDateTime = inclusiveStartDate
 
             @JsonProperty("exclusive_end_date")
-            fun exclusiveEndDate(): OffsetDateTime? = exclusiveEndDate
+            fun exclusiveEndDate(): OffsetDateTime = exclusiveEndDate
 
-            @JsonProperty("quantity") fun quantity(): Double? = quantity
+            @JsonProperty("quantity")
+            fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
             @JsonProperty("pricing_group_values")
-            fun pricingGroupValues(): PricingGroupValues? = pricingGroupValues
+            fun pricingGroupValues(): Optional<PricingGroupValues> =
+                Optional.ofNullable(pricingGroupValues)
 
             @JsonProperty("presentation_group_values")
-            fun presentationGroupValues(): PresentationGroupValues? = presentationGroupValues
+            fun presentationGroupValues(): Optional<PresentationGroupValues> =
+                Optional.ofNullable(presentationGroupValues)
 
             @JsonProperty("subtotals_with_quantity")
-            fun subtotalsWithQuantity(): List<SubtotalsWithQuantity>? = subtotalsWithQuantity
+            fun subtotalsWithQuantity(): Optional<List<SubtotalsWithQuantity>> =
+                Optional.ofNullable(subtotalsWithQuantity)
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -522,14 +542,14 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(usageLineItem: UsageLineItem) = apply {
-                    this.productId = usageLineItem.productId
-                    this.inclusiveStartDate = usageLineItem.inclusiveStartDate
-                    this.exclusiveEndDate = usageLineItem.exclusiveEndDate
-                    this.quantity = usageLineItem.quantity
-                    this.pricingGroupValues = usageLineItem.pricingGroupValues
-                    this.presentationGroupValues = usageLineItem.presentationGroupValues
-                    this.subtotalsWithQuantity = usageLineItem.subtotalsWithQuantity
-                    additionalProperties(usageLineItem.additionalProperties)
+                    productId = usageLineItem.productId
+                    inclusiveStartDate = usageLineItem.inclusiveStartDate
+                    exclusiveEndDate = usageLineItem.exclusiveEndDate
+                    quantity = usageLineItem.quantity
+                    pricingGroupValues = usageLineItem.pricingGroupValues
+                    presentationGroupValues = usageLineItem.presentationGroupValues
+                    subtotalsWithQuantity = usageLineItem.subtotalsWithQuantity?.toMutableList()
+                    additionalProperties = usageLineItem.additionalProperties.toMutableMap()
                 }
 
                 @JsonProperty("product_id")
@@ -567,18 +587,26 @@ constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): UsageLineItem =
                     UsageLineItem(
@@ -621,23 +649,32 @@ constructor(
 
                     @JvmSynthetic
                     internal fun from(presentationGroupValues: PresentationGroupValues) = apply {
-                        additionalProperties(presentationGroupValues.additionalProperties)
+                        additionalProperties =
+                            presentationGroupValues.additionalProperties.toMutableMap()
                     }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
-                        this.additionalProperties.putAll(additionalProperties)
+                        putAllAdditionalProperties(additionalProperties)
                     }
 
                     @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        this.additionalProperties.put(key, value)
+                        additionalProperties.put(key, value)
                     }
 
                     fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                         apply {
                             this.additionalProperties.putAll(additionalProperties)
                         }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                     fun build(): PresentationGroupValues =
                         PresentationGroupValues(additionalProperties.toImmutable())
@@ -685,23 +722,32 @@ constructor(
 
                     @JvmSynthetic
                     internal fun from(pricingGroupValues: PricingGroupValues) = apply {
-                        additionalProperties(pricingGroupValues.additionalProperties)
+                        additionalProperties =
+                            pricingGroupValues.additionalProperties.toMutableMap()
                     }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
-                        this.additionalProperties.putAll(additionalProperties)
+                        putAllAdditionalProperties(additionalProperties)
                     }
 
                     @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        this.additionalProperties.put(key, value)
+                        additionalProperties.put(key, value)
                     }
 
                     fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                         apply {
                             this.additionalProperties.putAll(additionalProperties)
                         }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                     fun build(): PricingGroupValues =
                         PricingGroupValues(additionalProperties.toImmutable())
@@ -729,19 +775,19 @@ constructor(
             @NoAutoDetect
             class SubtotalsWithQuantity
             private constructor(
-                private val inclusiveStartDate: OffsetDateTime?,
-                private val exclusiveEndDate: OffsetDateTime?,
-                private val quantity: Double?,
+                private val inclusiveStartDate: OffsetDateTime,
+                private val exclusiveEndDate: OffsetDateTime,
+                private val quantity: Double,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 @JsonProperty("inclusive_start_date")
-                fun inclusiveStartDate(): OffsetDateTime? = inclusiveStartDate
+                fun inclusiveStartDate(): OffsetDateTime = inclusiveStartDate
 
                 @JsonProperty("exclusive_end_date")
-                fun exclusiveEndDate(): OffsetDateTime? = exclusiveEndDate
+                fun exclusiveEndDate(): OffsetDateTime = exclusiveEndDate
 
-                @JsonProperty("quantity") fun quantity(): Double? = quantity
+                @JsonProperty("quantity") fun quantity(): Double = quantity
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -763,10 +809,11 @@ constructor(
 
                     @JvmSynthetic
                     internal fun from(subtotalsWithQuantity: SubtotalsWithQuantity) = apply {
-                        this.inclusiveStartDate = subtotalsWithQuantity.inclusiveStartDate
-                        this.exclusiveEndDate = subtotalsWithQuantity.exclusiveEndDate
-                        this.quantity = subtotalsWithQuantity.quantity
-                        additionalProperties(subtotalsWithQuantity.additionalProperties)
+                        inclusiveStartDate = subtotalsWithQuantity.inclusiveStartDate
+                        exclusiveEndDate = subtotalsWithQuantity.exclusiveEndDate
+                        quantity = subtotalsWithQuantity.quantity
+                        additionalProperties =
+                            subtotalsWithQuantity.additionalProperties.toMutableMap()
                     }
 
                     @JsonProperty("inclusive_start_date")
@@ -784,18 +831,26 @@ constructor(
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
-                        this.additionalProperties.putAll(additionalProperties)
+                        putAllAdditionalProperties(additionalProperties)
                     }
 
                     @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        this.additionalProperties.put(key, value)
+                        additionalProperties.put(key, value)
                     }
 
                     fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                         apply {
                             this.additionalProperties.putAll(additionalProperties)
                         }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                     fun build(): SubtotalsWithQuantity =
                         SubtotalsWithQuantity(
@@ -985,23 +1040,31 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(customFields: CustomFields) = apply {
-                    additionalProperties(customFields.additionalProperties)
+                    additionalProperties = customFields.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
             }

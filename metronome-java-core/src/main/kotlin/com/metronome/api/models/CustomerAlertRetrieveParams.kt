@@ -50,16 +50,16 @@ constructor(
     @NoAutoDetect
     class CustomerAlertRetrieveBody
     internal constructor(
-        private val alertId: String?,
-        private val customerId: String?,
+        private val alertId: String,
+        private val customerId: String,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** The Metronome ID of the alert */
-        @JsonProperty("alert_id") fun alertId(): String? = alertId
+        @JsonProperty("alert_id") fun alertId(): String = alertId
 
         /** The Metronome ID of the customer */
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -80,9 +80,9 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customerAlertRetrieveBody: CustomerAlertRetrieveBody) = apply {
-                this.alertId = customerAlertRetrieveBody.alertId
-                this.customerId = customerAlertRetrieveBody.customerId
-                additionalProperties(customerAlertRetrieveBody.additionalProperties)
+                alertId = customerAlertRetrieveBody.alertId
+                customerId = customerAlertRetrieveBody.customerId
+                additionalProperties = customerAlertRetrieveBody.additionalProperties.toMutableMap()
             }
 
             /** The Metronome ID of the alert */
@@ -95,16 +95,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerAlertRetrieveBody =

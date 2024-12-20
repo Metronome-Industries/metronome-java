@@ -68,33 +68,34 @@ constructor(
     @NoAutoDetect
     class ContractRateCardNamedScheduleUpdateBody
     internal constructor(
-        private val contractId: String?,
-        private val customerId: String?,
-        private val scheduleName: String?,
-        private val startingAt: OffsetDateTime?,
-        private val value: JsonValue?,
+        private val contractId: String,
+        private val customerId: String,
+        private val scheduleName: String,
+        private val startingAt: OffsetDateTime,
+        private val value: JsonValue,
         private val endingBefore: OffsetDateTime?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** ID of the contract whose named schedule is to be updated */
-        @JsonProperty("contract_id") fun contractId(): String? = contractId
+        @JsonProperty("contract_id") fun contractId(): String = contractId
 
         /** ID of the customer whose named schedule is to be updated */
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         /** The identifier for the schedule to be updated */
-        @JsonProperty("schedule_name") fun scheduleName(): String? = scheduleName
+        @JsonProperty("schedule_name") fun scheduleName(): String = scheduleName
 
-        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
 
         /**
          * The value to set for the named schedule. The structure of this object is specific to the
          * named schedule.
          */
-        @JsonProperty("value") fun value(): JsonValue? = value
+        @JsonProperty("value") fun value(): JsonValue = value
 
-        @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+        @JsonProperty("ending_before")
+        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -121,13 +122,14 @@ constructor(
             internal fun from(
                 contractRateCardNamedScheduleUpdateBody: ContractRateCardNamedScheduleUpdateBody
             ) = apply {
-                this.contractId = contractRateCardNamedScheduleUpdateBody.contractId
-                this.customerId = contractRateCardNamedScheduleUpdateBody.customerId
-                this.scheduleName = contractRateCardNamedScheduleUpdateBody.scheduleName
-                this.startingAt = contractRateCardNamedScheduleUpdateBody.startingAt
-                this.value = contractRateCardNamedScheduleUpdateBody.value
-                this.endingBefore = contractRateCardNamedScheduleUpdateBody.endingBefore
-                additionalProperties(contractRateCardNamedScheduleUpdateBody.additionalProperties)
+                contractId = contractRateCardNamedScheduleUpdateBody.contractId
+                customerId = contractRateCardNamedScheduleUpdateBody.customerId
+                scheduleName = contractRateCardNamedScheduleUpdateBody.scheduleName
+                startingAt = contractRateCardNamedScheduleUpdateBody.startingAt
+                value = contractRateCardNamedScheduleUpdateBody.value
+                endingBefore = contractRateCardNamedScheduleUpdateBody.endingBefore
+                additionalProperties =
+                    contractRateCardNamedScheduleUpdateBody.additionalProperties.toMutableMap()
             }
 
             /** ID of the contract whose named schedule is to be updated */
@@ -158,16 +160,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractRateCardNamedScheduleUpdateBody =

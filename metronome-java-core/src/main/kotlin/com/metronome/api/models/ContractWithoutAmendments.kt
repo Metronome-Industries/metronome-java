@@ -46,8 +46,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
 
     /** This field's availability is dependent on your client's configuration. */
@@ -167,6 +165,8 @@ private constructor(
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): ContractWithoutAmendments = apply {
         if (!validated) {
             name()
@@ -226,27 +226,27 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(contractWithoutAmendments: ContractWithoutAmendments) = apply {
-            this.name = contractWithoutAmendments.name
-            this.salesforceOpportunityId = contractWithoutAmendments.salesforceOpportunityId
-            this.rateCardId = contractWithoutAmendments.rateCardId
-            this.startingAt = contractWithoutAmendments.startingAt
-            this.commits = contractWithoutAmendments.commits
-            this.credits = contractWithoutAmendments.credits
-            this.overrides = contractWithoutAmendments.overrides
-            this.discounts = contractWithoutAmendments.discounts
-            this.professionalServices = contractWithoutAmendments.professionalServices
-            this.scheduledCharges = contractWithoutAmendments.scheduledCharges
-            this.transitions = contractWithoutAmendments.transitions
-            this.resellerRoyalties = contractWithoutAmendments.resellerRoyalties
-            this.createdAt = contractWithoutAmendments.createdAt
-            this.createdBy = contractWithoutAmendments.createdBy
-            this.netsuiteSalesOrderId = contractWithoutAmendments.netsuiteSalesOrderId
-            this.netPaymentTermsDays = contractWithoutAmendments.netPaymentTermsDays
-            this.endingBefore = contractWithoutAmendments.endingBefore
-            this.totalContractValue = contractWithoutAmendments.totalContractValue
-            this.usageFilter = contractWithoutAmendments.usageFilter
-            this.usageStatementSchedule = contractWithoutAmendments.usageStatementSchedule
-            additionalProperties(contractWithoutAmendments.additionalProperties)
+            name = contractWithoutAmendments.name
+            salesforceOpportunityId = contractWithoutAmendments.salesforceOpportunityId
+            rateCardId = contractWithoutAmendments.rateCardId
+            startingAt = contractWithoutAmendments.startingAt
+            commits = contractWithoutAmendments.commits
+            credits = contractWithoutAmendments.credits
+            overrides = contractWithoutAmendments.overrides
+            discounts = contractWithoutAmendments.discounts
+            professionalServices = contractWithoutAmendments.professionalServices
+            scheduledCharges = contractWithoutAmendments.scheduledCharges
+            transitions = contractWithoutAmendments.transitions
+            resellerRoyalties = contractWithoutAmendments.resellerRoyalties
+            createdAt = contractWithoutAmendments.createdAt
+            createdBy = contractWithoutAmendments.createdBy
+            netsuiteSalesOrderId = contractWithoutAmendments.netsuiteSalesOrderId
+            netPaymentTermsDays = contractWithoutAmendments.netPaymentTermsDays
+            endingBefore = contractWithoutAmendments.endingBefore
+            totalContractValue = contractWithoutAmendments.totalContractValue
+            usageFilter = contractWithoutAmendments.usageFilter
+            usageStatementSchedule = contractWithoutAmendments.usageStatementSchedule
+            additionalProperties = contractWithoutAmendments.additionalProperties.toMutableMap()
         }
 
         fun name(name: String) = name(JsonField.of(name))
@@ -416,16 +416,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): ContractWithoutAmendments =
@@ -464,8 +470,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         fun type(): Type = type.getRequired("type")
 
         fun fromContractId(): String = fromContractId.getRequired("from_contract_id")
@@ -481,6 +485,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): Transition = apply {
             if (!validated) {
@@ -507,10 +513,10 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(transition: Transition) = apply {
-                this.type = transition.type
-                this.fromContractId = transition.fromContractId
-                this.toContractId = transition.toContractId
-                additionalProperties(transition.additionalProperties)
+                type = transition.type
+                fromContractId = transition.fromContractId
+                toContractId = transition.toContractId
+                additionalProperties = transition.additionalProperties.toMutableMap()
             }
 
             fun type(type: Type) = type(JsonField.of(type))
@@ -538,16 +544,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Transition =
@@ -643,8 +655,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         fun frequency(): Frequency = frequency.getRequired("frequency")
 
         /** Contract usage statements follow a selected cadence based on this date. */
@@ -661,6 +671,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): UsageStatementSchedule = apply {
             if (!validated) {
@@ -685,9 +697,9 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(usageStatementSchedule: UsageStatementSchedule) = apply {
-                this.frequency = usageStatementSchedule.frequency
-                this.billingAnchorDate = usageStatementSchedule.billingAnchorDate
-                additionalProperties(usageStatementSchedule.additionalProperties)
+                frequency = usageStatementSchedule.frequency
+                billingAnchorDate = usageStatementSchedule.billingAnchorDate
+                additionalProperties = usageStatementSchedule.additionalProperties.toMutableMap()
             }
 
             fun frequency(frequency: Frequency) = frequency(JsonField.of(frequency))
@@ -709,16 +721,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): UsageStatementSchedule =
@@ -830,8 +848,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         fun resellerType(): ResellerType = resellerType.getRequired("reseller_type")
 
         fun fraction(): Double = fraction.getRequired("fraction")
@@ -909,6 +925,8 @@ private constructor(
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+        private var validated: Boolean = false
+
         fun validate(): ResellerRoyalty = apply {
             if (!validated) {
                 resellerType()
@@ -954,20 +972,20 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(resellerRoyalty: ResellerRoyalty) = apply {
-                this.resellerType = resellerRoyalty.resellerType
-                this.fraction = resellerRoyalty.fraction
-                this.applicableProductTags = resellerRoyalty.applicableProductTags
-                this.applicableProductIds = resellerRoyalty.applicableProductIds
-                this.netsuiteResellerId = resellerRoyalty.netsuiteResellerId
-                this.startingAt = resellerRoyalty.startingAt
-                this.endingBefore = resellerRoyalty.endingBefore
-                this.resellerContractValue = resellerRoyalty.resellerContractValue
-                this.awsAccountNumber = resellerRoyalty.awsAccountNumber
-                this.awsPayerReferenceId = resellerRoyalty.awsPayerReferenceId
-                this.awsOfferId = resellerRoyalty.awsOfferId
-                this.gcpAccountId = resellerRoyalty.gcpAccountId
-                this.gcpOfferId = resellerRoyalty.gcpOfferId
-                additionalProperties(resellerRoyalty.additionalProperties)
+                resellerType = resellerRoyalty.resellerType
+                fraction = resellerRoyalty.fraction
+                applicableProductTags = resellerRoyalty.applicableProductTags
+                applicableProductIds = resellerRoyalty.applicableProductIds
+                netsuiteResellerId = resellerRoyalty.netsuiteResellerId
+                startingAt = resellerRoyalty.startingAt
+                endingBefore = resellerRoyalty.endingBefore
+                resellerContractValue = resellerRoyalty.resellerContractValue
+                awsAccountNumber = resellerRoyalty.awsAccountNumber
+                awsPayerReferenceId = resellerRoyalty.awsPayerReferenceId
+                awsOfferId = resellerRoyalty.awsOfferId
+                gcpAccountId = resellerRoyalty.gcpAccountId
+                gcpOfferId = resellerRoyalty.gcpOfferId
+                additionalProperties = resellerRoyalty.additionalProperties.toMutableMap()
             }
 
             fun resellerType(resellerType: ResellerType) = resellerType(JsonField.of(resellerType))
@@ -1077,16 +1095,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ResellerRoyalty =
@@ -1205,8 +1229,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         fun initial(): BaseUsageFilter = initial.getRequired("initial")
 
         fun current(): Optional<BaseUsageFilter> =
@@ -1223,6 +1245,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): UsageFilter = apply {
             if (!validated) {
@@ -1249,10 +1273,10 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(usageFilter: UsageFilter) = apply {
-                this.initial = usageFilter.initial
-                this.current = usageFilter.current
-                this.updates = usageFilter.updates
-                additionalProperties(usageFilter.additionalProperties)
+                initial = usageFilter.initial
+                current = usageFilter.current
+                updates = usageFilter.updates
+                additionalProperties = usageFilter.additionalProperties.toMutableMap()
             }
 
             fun initial(initial: BaseUsageFilter) = initial(JsonField.of(initial))
@@ -1275,16 +1299,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): UsageFilter =
@@ -1306,8 +1336,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun groupKey(): String = groupKey.getRequired("group_key")
 
             fun groupValues(): List<String> = groupValues.getRequired("group_values")
@@ -1323,6 +1351,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): Update = apply {
                 if (!validated) {
@@ -1349,10 +1379,10 @@ private constructor(
 
                 @JvmSynthetic
                 internal fun from(update: Update) = apply {
-                    this.groupKey = update.groupKey
-                    this.groupValues = update.groupValues
-                    this.startingAt = update.startingAt
-                    additionalProperties(update.additionalProperties)
+                    groupKey = update.groupKey
+                    groupValues = update.groupValues
+                    startingAt = update.startingAt
+                    additionalProperties = update.additionalProperties.toMutableMap()
                 }
 
                 fun groupKey(groupKey: String) = groupKey(JsonField.of(groupKey))
@@ -1379,18 +1409,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): Update =
                     Update(

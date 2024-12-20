@@ -108,10 +108,10 @@ class UsageListWithGroupsParamsTest {
         assertThat(body.billableMetricId()).isEqualTo("222796fd-d29c-429e-89b2-549fabda4ed6")
         assertThat(body.customerId()).isEqualTo("04ca7e72-4229-4a6e-ab11-9f7376fccbcb")
         assertThat(body.windowSize()).isEqualTo(UsageListWithGroupsParams.WindowSize.HOUR)
-        assertThat(body.currentPeriod()).isEqualTo(true)
-        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
+        assertThat(body.currentPeriod()).contains(true)
+        assertThat(body.endingBefore()).contains(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
         assertThat(body.groupBy())
-            .isEqualTo(
+            .contains(
                 UsageListWithGroupsParams.GroupBy.builder()
                     .key("region")
                     .values(
@@ -123,7 +123,7 @@ class UsageListWithGroupsParamsTest {
                     )
                     .build()
             )
-        assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+        assertThat(body.startingOn()).contains(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
     }
 
     @Test

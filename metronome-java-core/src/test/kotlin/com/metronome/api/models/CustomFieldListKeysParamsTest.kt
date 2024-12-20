@@ -44,7 +44,7 @@ class CustomFieldListKeysParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.entities()).isEqualTo(listOf(CustomFieldListKeysParams.Entity.ALERT))
+        assertThat(body.entities()).contains(listOf(CustomFieldListKeysParams.Entity.ALERT))
     }
 
     @Test

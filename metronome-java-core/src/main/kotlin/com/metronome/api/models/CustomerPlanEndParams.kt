@@ -80,13 +80,15 @@ constructor(
          * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
          * UTC (midnight). If not provided, the plan end date will be cleared.
          */
-        @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+        @JsonProperty("ending_before")
+        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
         /**
          * If true, plan end date can be before the last finalized invoice date. Any invoices
          * generated after the plan end date will be voided.
          */
-        @JsonProperty("void_invoices") fun voidInvoices(): Boolean? = voidInvoices
+        @JsonProperty("void_invoices")
+        fun voidInvoices(): Optional<Boolean> = Optional.ofNullable(voidInvoices)
 
         /**
          * Only applicable when void_invoices is set to true. If true, for every invoice that is
@@ -94,7 +96,7 @@ constructor(
          * will be voided if finalized or deleted if still in draft state.
          */
         @JsonProperty("void_stripe_invoices")
-        fun voidStripeInvoices(): Boolean? = voidStripeInvoices
+        fun voidStripeInvoices(): Optional<Boolean> = Optional.ofNullable(voidStripeInvoices)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -116,10 +118,10 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customerPlanEndBody: CustomerPlanEndBody) = apply {
-                this.endingBefore = customerPlanEndBody.endingBefore
-                this.voidInvoices = customerPlanEndBody.voidInvoices
-                this.voidStripeInvoices = customerPlanEndBody.voidStripeInvoices
-                additionalProperties(customerPlanEndBody.additionalProperties)
+                endingBefore = customerPlanEndBody.endingBefore
+                voidInvoices = customerPlanEndBody.voidInvoices
+                voidStripeInvoices = customerPlanEndBody.voidStripeInvoices
+                additionalProperties = customerPlanEndBody.additionalProperties.toMutableMap()
             }
 
             /**
@@ -150,16 +152,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerPlanEndBody =

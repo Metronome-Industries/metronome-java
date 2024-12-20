@@ -58,17 +58,17 @@ constructor(
     @NoAutoDetect
     class CustomFieldAddKeyBody
     internal constructor(
-        private val enforceUniqueness: Boolean?,
-        private val entity: Entity?,
-        private val key: String?,
+        private val enforceUniqueness: Boolean,
+        private val entity: Entity,
+        private val key: String,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("enforce_uniqueness") fun enforceUniqueness(): Boolean? = enforceUniqueness
+        @JsonProperty("enforce_uniqueness") fun enforceUniqueness(): Boolean = enforceUniqueness
 
-        @JsonProperty("entity") fun entity(): Entity? = entity
+        @JsonProperty("entity") fun entity(): Entity = entity
 
-        @JsonProperty("key") fun key(): String? = key
+        @JsonProperty("key") fun key(): String = key
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -90,10 +90,10 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customFieldAddKeyBody: CustomFieldAddKeyBody) = apply {
-                this.enforceUniqueness = customFieldAddKeyBody.enforceUniqueness
-                this.entity = customFieldAddKeyBody.entity
-                this.key = customFieldAddKeyBody.key
-                additionalProperties(customFieldAddKeyBody.additionalProperties)
+                enforceUniqueness = customFieldAddKeyBody.enforceUniqueness
+                entity = customFieldAddKeyBody.entity
+                key = customFieldAddKeyBody.key
+                additionalProperties = customFieldAddKeyBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("enforce_uniqueness")
@@ -107,16 +107,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomFieldAddKeyBody =

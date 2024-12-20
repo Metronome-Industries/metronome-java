@@ -54,11 +54,11 @@ constructor(
     @NoAutoDetect
     class ContractRateCardListBody
     internal constructor(
-        private val body: JsonValue?,
+        private val body: JsonValue,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("body") fun body(): JsonValue? = body
+        @JsonProperty("body") fun body(): JsonValue = body
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -78,24 +78,30 @@ constructor(
 
             @JvmSynthetic
             internal fun from(contractRateCardListBody: ContractRateCardListBody) = apply {
-                this.body = contractRateCardListBody.body
-                additionalProperties(contractRateCardListBody.additionalProperties)
+                body = contractRateCardListBody.body
+                additionalProperties = contractRateCardListBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("body") fun body(body: JsonValue) = apply { this.body = body }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractRateCardListBody =

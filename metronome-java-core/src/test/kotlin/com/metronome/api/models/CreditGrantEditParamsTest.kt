@@ -30,9 +30,9 @@ class CreditGrantEditParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
-        assertThat(body.creditGrantType()).isEqualTo("credit_grant_type")
-        assertThat(body.expiresAt()).isEqualTo(OffsetDateTime.parse("2022-04-01T00:00:00Z"))
-        assertThat(body.name()).isEqualTo("Acme Corp Promotional Credit Grant")
+        assertThat(body.creditGrantType()).contains("credit_grant_type")
+        assertThat(body.expiresAt()).contains(OffsetDateTime.parse("2022-04-01T00:00:00Z"))
+        assertThat(body.name()).contains("Acme Corp Promotional Credit Grant")
     }
 
     @Test

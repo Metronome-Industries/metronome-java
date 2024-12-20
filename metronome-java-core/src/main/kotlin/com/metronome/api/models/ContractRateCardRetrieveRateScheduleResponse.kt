@@ -28,8 +28,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage.getNullable("next_page"))
 
     fun data(): List<Data> = data.getRequired("data")
@@ -41,6 +39,8 @@ private constructor(
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    private var validated: Boolean = false
 
     fun validate(): ContractRateCardRetrieveRateScheduleResponse = apply {
         if (!validated) {
@@ -68,9 +68,10 @@ private constructor(
             contractRateCardRetrieveRateScheduleResponse:
                 ContractRateCardRetrieveRateScheduleResponse
         ) = apply {
-            this.nextPage = contractRateCardRetrieveRateScheduleResponse.nextPage
-            this.data = contractRateCardRetrieveRateScheduleResponse.data
-            additionalProperties(contractRateCardRetrieveRateScheduleResponse.additionalProperties)
+            nextPage = contractRateCardRetrieveRateScheduleResponse.nextPage
+            data = contractRateCardRetrieveRateScheduleResponse.data
+            additionalProperties =
+                contractRateCardRetrieveRateScheduleResponse.additionalProperties.toMutableMap()
         }
 
         fun nextPage(nextPage: String) = nextPage(JsonField.of(nextPage))
@@ -87,16 +88,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): ContractRateCardRetrieveRateScheduleResponse =
@@ -123,8 +130,6 @@ private constructor(
         private val commitRate: JsonField<CommitRate>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
-
-        private var validated: Boolean = false
 
         fun productId(): String = productId.getRequired("product_id")
 
@@ -186,6 +191,8 @@ private constructor(
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+        private var validated: Boolean = false
+
         fun validate(): Data = apply {
             if (!validated) {
                 productId()
@@ -225,17 +232,17 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(data: Data) = apply {
-                this.productId = data.productId
-                this.productName = data.productName
-                this.productTags = data.productTags
-                this.productCustomFields = data.productCustomFields
-                this.pricingGroupValues = data.pricingGroupValues
-                this.startingAt = data.startingAt
-                this.endingBefore = data.endingBefore
-                this.entitled = data.entitled
-                this.rate = data.rate
-                this.commitRate = data.commitRate
-                additionalProperties(data.additionalProperties)
+                productId = data.productId
+                productName = data.productName
+                productTags = data.productTags
+                productCustomFields = data.productCustomFields
+                pricingGroupValues = data.pricingGroupValues
+                startingAt = data.startingAt
+                endingBefore = data.endingBefore
+                entitled = data.entitled
+                rate = data.rate
+                commitRate = data.commitRate
+                additionalProperties = data.additionalProperties.toMutableMap()
             }
 
             fun productId(productId: String) = productId(JsonField.of(productId))
@@ -325,16 +332,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Data =
@@ -360,11 +373,11 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): ProductCustomFields = apply {
                 if (!validated) {
@@ -385,23 +398,31 @@ private constructor(
 
                 @JvmSynthetic
                 internal fun from(productCustomFields: ProductCustomFields) = apply {
-                    additionalProperties(productCustomFields.additionalProperties)
+                    additionalProperties = productCustomFields.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): ProductCustomFields =
                     ProductCustomFields(additionalProperties.toImmutable())
@@ -439,8 +460,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun rateType(): RateType = rateType.getRequired("rate_type")
 
             /** Commit rate price. For FLAT rate_type, this must be >=0. */
@@ -460,6 +479,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): CommitRate = apply {
                 if (!validated) {
@@ -486,10 +507,10 @@ private constructor(
 
                 @JvmSynthetic
                 internal fun from(commitRate: CommitRate) = apply {
-                    this.rateType = commitRate.rateType
-                    this.price = commitRate.price
-                    this.tiers = commitRate.tiers
-                    additionalProperties(commitRate.additionalProperties)
+                    rateType = commitRate.rateType
+                    price = commitRate.price
+                    tiers = commitRate.tiers
+                    additionalProperties = commitRate.additionalProperties.toMutableMap()
                 }
 
                 fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
@@ -516,18 +537,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): CommitRate =
                     CommitRate(
@@ -668,11 +697,11 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): PricingGroupValues = apply {
                 if (!validated) {
@@ -693,23 +722,31 @@ private constructor(
 
                 @JvmSynthetic
                 internal fun from(pricingGroupValues: PricingGroupValues) = apply {
-                    additionalProperties(pricingGroupValues.additionalProperties)
+                    additionalProperties = pricingGroupValues.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PricingGroupValues =
                     PricingGroupValues(additionalProperties.toImmutable())

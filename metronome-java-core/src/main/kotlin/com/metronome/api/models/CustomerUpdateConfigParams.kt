@@ -72,11 +72,12 @@ constructor(
          * client-level config if unset, which defaults to true if unset.
          */
         @JsonProperty("leave_stripe_invoices_in_draft")
-        fun leaveStripeInvoicesInDraft(): Boolean? = leaveStripeInvoicesInDraft
+        fun leaveStripeInvoicesInDraft(): Optional<Boolean> =
+            Optional.ofNullable(leaveStripeInvoicesInDraft)
 
         /** The Salesforce account ID for the customer */
         @JsonProperty("salesforce_account_id")
-        fun salesforceAccountId(): String? = salesforceAccountId
+        fun salesforceAccountId(): Optional<String> = Optional.ofNullable(salesforceAccountId)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -97,10 +98,9 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customerUpdateConfigBody: CustomerUpdateConfigBody) = apply {
-                this.leaveStripeInvoicesInDraft =
-                    customerUpdateConfigBody.leaveStripeInvoicesInDraft
-                this.salesforceAccountId = customerUpdateConfigBody.salesforceAccountId
-                additionalProperties(customerUpdateConfigBody.additionalProperties)
+                leaveStripeInvoicesInDraft = customerUpdateConfigBody.leaveStripeInvoicesInDraft
+                salesforceAccountId = customerUpdateConfigBody.salesforceAccountId
+                additionalProperties = customerUpdateConfigBody.additionalProperties.toMutableMap()
             }
 
             /**
@@ -120,16 +120,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerUpdateConfigBody =

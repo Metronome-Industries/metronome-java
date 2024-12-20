@@ -89,25 +89,29 @@ constructor(
          * An array of credit grant IDs. If this is specified, neither credit_type_ids nor
          * customer_ids may be specified.
          */
-        @JsonProperty("credit_grant_ids") fun creditGrantIds(): List<String>? = creditGrantIds
+        @JsonProperty("credit_grant_ids")
+        fun creditGrantIds(): Optional<List<String>> = Optional.ofNullable(creditGrantIds)
 
         /**
          * An array of credit type IDs. This must not be specified if credit_grant_ids is specified.
          */
-        @JsonProperty("credit_type_ids") fun creditTypeIds(): List<String>? = creditTypeIds
+        @JsonProperty("credit_type_ids")
+        fun creditTypeIds(): Optional<List<String>> = Optional.ofNullable(creditTypeIds)
 
         /**
          * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
          * specified.
          */
-        @JsonProperty("customer_ids") fun customerIds(): List<String>? = customerIds
+        @JsonProperty("customer_ids")
+        fun customerIds(): Optional<List<String>> = Optional.ofNullable(customerIds)
 
         /** Only return credit grants that are effective before this timestamp (exclusive). */
-        @JsonProperty("effective_before") fun effectiveBefore(): OffsetDateTime? = effectiveBefore
+        @JsonProperty("effective_before")
+        fun effectiveBefore(): Optional<OffsetDateTime> = Optional.ofNullable(effectiveBefore)
 
         /** Only return credit grants that expire at or after this timestamp. */
         @JsonProperty("not_expiring_before")
-        fun notExpiringBefore(): OffsetDateTime? = notExpiringBefore
+        fun notExpiringBefore(): Optional<OffsetDateTime> = Optional.ofNullable(notExpiringBefore)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -131,12 +135,12 @@ constructor(
 
             @JvmSynthetic
             internal fun from(creditGrantListBody: CreditGrantListBody) = apply {
-                this.creditGrantIds = creditGrantListBody.creditGrantIds
-                this.creditTypeIds = creditGrantListBody.creditTypeIds
-                this.customerIds = creditGrantListBody.customerIds
-                this.effectiveBefore = creditGrantListBody.effectiveBefore
-                this.notExpiringBefore = creditGrantListBody.notExpiringBefore
-                additionalProperties(creditGrantListBody.additionalProperties)
+                creditGrantIds = creditGrantListBody.creditGrantIds?.toMutableList()
+                creditTypeIds = creditGrantListBody.creditTypeIds?.toMutableList()
+                customerIds = creditGrantListBody.customerIds?.toMutableList()
+                effectiveBefore = creditGrantListBody.effectiveBefore
+                notExpiringBefore = creditGrantListBody.notExpiringBefore
+                additionalProperties = creditGrantListBody.additionalProperties.toMutableMap()
             }
 
             /**
@@ -178,16 +182,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CreditGrantListBody =

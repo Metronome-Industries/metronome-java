@@ -43,12 +43,12 @@ constructor(
     @NoAutoDetect
     class ContractProductArchiveBody
     internal constructor(
-        private val productId: String?,
+        private val productId: String,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** ID of the product to be archived */
-        @JsonProperty("product_id") fun productId(): String? = productId
+        @JsonProperty("product_id") fun productId(): String = productId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -68,8 +68,9 @@ constructor(
 
             @JvmSynthetic
             internal fun from(contractProductArchiveBody: ContractProductArchiveBody) = apply {
-                this.productId = contractProductArchiveBody.productId
-                additionalProperties(contractProductArchiveBody.additionalProperties)
+                productId = contractProductArchiveBody.productId
+                additionalProperties =
+                    contractProductArchiveBody.additionalProperties.toMutableMap()
             }
 
             /** ID of the product to be archived */
@@ -78,16 +79,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractProductArchiveBody =

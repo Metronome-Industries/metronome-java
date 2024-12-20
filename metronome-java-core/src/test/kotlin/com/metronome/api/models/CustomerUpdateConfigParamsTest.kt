@@ -26,8 +26,8 @@ class CustomerUpdateConfigParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.leaveStripeInvoicesInDraft()).isEqualTo(true)
-        assertThat(body.salesforceAccountId()).isEqualTo("0015500001WO1ZiABL")
+        assertThat(body.leaveStripeInvoicesInDraft()).contains(true)
+        assertThat(body.salesforceAccountId()).contains("0015500001WO1ZiABL")
     }
 
     @Test

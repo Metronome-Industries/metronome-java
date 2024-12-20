@@ -78,7 +78,7 @@ constructor(
     @NoAutoDetect
     class CustomerBillingConfigCreateBody
     internal constructor(
-        private val billingProviderCustomerId: String?,
+        private val billingProviderCustomerId: String,
         private val awsProductCode: String?,
         private val awsRegion: AwsRegion?,
         private val stripeCollectionMethod: StripeCollectionMethod?,
@@ -89,14 +89,17 @@ constructor(
          * The customer ID in the billing provider's system. For Azure, this is the subscription ID.
          */
         @JsonProperty("billing_provider_customer_id")
-        fun billingProviderCustomerId(): String? = billingProviderCustomerId
+        fun billingProviderCustomerId(): String = billingProviderCustomerId
 
-        @JsonProperty("aws_product_code") fun awsProductCode(): String? = awsProductCode
+        @JsonProperty("aws_product_code")
+        fun awsProductCode(): Optional<String> = Optional.ofNullable(awsProductCode)
 
-        @JsonProperty("aws_region") fun awsRegion(): AwsRegion? = awsRegion
+        @JsonProperty("aws_region")
+        fun awsRegion(): Optional<AwsRegion> = Optional.ofNullable(awsRegion)
 
         @JsonProperty("stripe_collection_method")
-        fun stripeCollectionMethod(): StripeCollectionMethod? = stripeCollectionMethod
+        fun stripeCollectionMethod(): Optional<StripeCollectionMethod> =
+            Optional.ofNullable(stripeCollectionMethod)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -120,13 +123,13 @@ constructor(
             @JvmSynthetic
             internal fun from(customerBillingConfigCreateBody: CustomerBillingConfigCreateBody) =
                 apply {
-                    this.billingProviderCustomerId =
+                    billingProviderCustomerId =
                         customerBillingConfigCreateBody.billingProviderCustomerId
-                    this.awsProductCode = customerBillingConfigCreateBody.awsProductCode
-                    this.awsRegion = customerBillingConfigCreateBody.awsRegion
-                    this.stripeCollectionMethod =
-                        customerBillingConfigCreateBody.stripeCollectionMethod
-                    additionalProperties(customerBillingConfigCreateBody.additionalProperties)
+                    awsProductCode = customerBillingConfigCreateBody.awsProductCode
+                    awsRegion = customerBillingConfigCreateBody.awsRegion
+                    stripeCollectionMethod = customerBillingConfigCreateBody.stripeCollectionMethod
+                    additionalProperties =
+                        customerBillingConfigCreateBody.additionalProperties.toMutableMap()
                 }
 
             /**
@@ -153,16 +156,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerBillingConfigCreateBody =

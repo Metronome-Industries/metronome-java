@@ -101,10 +101,10 @@ class CustomerPlanAddParamsTest {
         assertThat(body).isNotNull
         assertThat(body.planId()).isEqualTo("d2c06dae-9549-4d7d-bc04-b78dd3d241b8")
         assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
-        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
-        assertThat(body.netPaymentTermsDays()).isEqualTo(0.0)
+        assertThat(body.endingBefore()).contains(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
+        assertThat(body.netPaymentTermsDays()).contains(0.0)
         assertThat(body.overageRateAdjustments())
-            .isEqualTo(
+            .contains(
                 listOf(
                     CustomerPlanAddParams.OverageRateAdjustment.builder()
                         .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -114,7 +114,7 @@ class CustomerPlanAddParamsTest {
                 )
             )
         assertThat(body.priceAdjustments())
-            .isEqualTo(
+            .contains(
                 listOf(
                     CustomerPlanAddParams.PriceAdjustment.builder()
                         .adjustmentType(
@@ -129,7 +129,7 @@ class CustomerPlanAddParamsTest {
                 )
             )
         assertThat(body.trialSpec())
-            .isEqualTo(
+            .contains(
                 CustomerPlanAddParams.TrialSpec.builder()
                     .lengthInDays(0.0)
                     .spendingCap(

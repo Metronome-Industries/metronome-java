@@ -36,8 +36,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     /** Optional name for this conversion. */
     fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
 
@@ -59,6 +57,8 @@ private constructor(
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    private var validated: Boolean = false
 
     fun validate(): QuantityConversion = apply {
         if (!validated) {
@@ -85,10 +85,10 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(quantityConversion: QuantityConversion) = apply {
-            this.name = quantityConversion.name
-            this.conversionFactor = quantityConversion.conversionFactor
-            this.operation = quantityConversion.operation
-            additionalProperties(quantityConversion.additionalProperties)
+            name = quantityConversion.name
+            conversionFactor = quantityConversion.conversionFactor
+            operation = quantityConversion.operation
+            additionalProperties = quantityConversion.additionalProperties.toMutableMap()
         }
 
         /** Optional name for this conversion. */
@@ -120,16 +120,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): QuantityConversion =

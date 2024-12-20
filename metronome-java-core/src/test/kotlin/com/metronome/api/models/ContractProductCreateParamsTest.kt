@@ -72,18 +72,18 @@ class ContractProductCreateParamsTest {
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("My Product")
         assertThat(body.type()).isEqualTo(ContractProductCreateParams.Type.FIXED)
-        assertThat(body.billableMetricId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
+        assertThat(body.billableMetricId()).contains("13117714-3f05-48e5-a6e9-a66093f13b4d")
         assertThat(body.compositeProductIds())
-            .isEqualTo(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-        assertThat(body.compositeTags()).isEqualTo(listOf("string"))
-        assertThat(body.excludeFreeUsage()).isEqualTo(true)
-        assertThat(body.isRefundable()).isEqualTo(true)
-        assertThat(body.netsuiteInternalItemId()).isEqualTo("netsuite_internal_item_id")
-        assertThat(body.netsuiteOverageItemId()).isEqualTo("netsuite_overage_item_id")
-        assertThat(body.presentationGroupKey()).isEqualTo(listOf("string"))
-        assertThat(body.pricingGroupKey()).isEqualTo(listOf("string"))
+            .contains(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+        assertThat(body.compositeTags()).contains(listOf("string"))
+        assertThat(body.excludeFreeUsage()).contains(true)
+        assertThat(body.isRefundable()).contains(true)
+        assertThat(body.netsuiteInternalItemId()).contains("netsuite_internal_item_id")
+        assertThat(body.netsuiteOverageItemId()).contains("netsuite_overage_item_id")
+        assertThat(body.presentationGroupKey()).contains(listOf("string"))
+        assertThat(body.pricingGroupKey()).contains(listOf("string"))
         assertThat(body.quantityConversion())
-            .isEqualTo(
+            .contains(
                 QuantityConversion.builder()
                     .conversionFactor(0.0)
                     .operation(QuantityConversion.Operation.MULTIPLY)
@@ -91,13 +91,13 @@ class ContractProductCreateParamsTest {
                     .build()
             )
         assertThat(body.quantityRounding())
-            .isEqualTo(
+            .contains(
                 QuantityRounding.builder()
                     .decimalPlaces(0.0)
                     .roundingMethod(QuantityRounding.RoundingMethod.ROUND_UP)
                     .build()
             )
-        assertThat(body.tags()).isEqualTo(listOf("string"))
+        assertThat(body.tags()).contains(listOf("string"))
     }
 
     @Test

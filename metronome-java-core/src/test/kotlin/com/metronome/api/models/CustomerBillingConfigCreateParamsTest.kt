@@ -41,13 +41,11 @@ class CustomerBillingConfigCreateParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.billingProviderCustomerId()).isEqualTo("cus_AJ6y20bjkOOayM")
-        assertThat(body.awsProductCode()).isEqualTo("aws_product_code")
+        assertThat(body.awsProductCode()).contains("aws_product_code")
         assertThat(body.awsRegion())
-            .isEqualTo(CustomerBillingConfigCreateParams.AwsRegion.AF_SOUTH_1)
+            .contains(CustomerBillingConfigCreateParams.AwsRegion.AF_SOUTH_1)
         assertThat(body.stripeCollectionMethod())
-            .isEqualTo(
-                CustomerBillingConfigCreateParams.StripeCollectionMethod.CHARGE_AUTOMATICALLY
-            )
+            .contains(CustomerBillingConfigCreateParams.StripeCollectionMethod.CHARGE_AUTOMATICALLY)
     }
 
     @Test

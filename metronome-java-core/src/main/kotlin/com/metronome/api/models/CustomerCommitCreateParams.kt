@@ -112,11 +112,11 @@ constructor(
     @NoAutoDetect
     class CustomerCommitCreateBody
     internal constructor(
-        private val accessSchedule: AccessSchedule?,
-        private val customerId: String?,
-        private val priority: Double?,
-        private val productId: String?,
-        private val type: Type?,
+        private val accessSchedule: AccessSchedule,
+        private val customerId: String,
+        private val priority: Double,
+        private val productId: String,
+        private val type: Type,
         private val applicableContractIds: List<String>?,
         private val applicableProductIds: List<String>?,
         private val applicableProductTags: List<String>?,
@@ -135,52 +135,58 @@ constructor(
          * Schedule for distributing the commit to the customer. For "POSTPAID" commits only one
          * schedule item is allowed and amount must match invoice_schedule total.
          */
-        @JsonProperty("access_schedule") fun accessSchedule(): AccessSchedule? = accessSchedule
+        @JsonProperty("access_schedule") fun accessSchedule(): AccessSchedule = accessSchedule
 
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         /**
          * If multiple credits or commits are applicable, the one with the lower priority will apply
          * first.
          */
-        @JsonProperty("priority") fun priority(): Double? = priority
+        @JsonProperty("priority") fun priority(): Double = priority
 
-        @JsonProperty("product_id") fun productId(): String? = productId
+        @JsonProperty("product_id") fun productId(): String = productId
 
-        @JsonProperty("type") fun type(): Type? = type
+        @JsonProperty("type") fun type(): Type = type
 
         /**
          * Which contract the commit applies to. If not provided, the commit applies to all
          * contracts.
          */
         @JsonProperty("applicable_contract_ids")
-        fun applicableContractIds(): List<String>? = applicableContractIds
+        fun applicableContractIds(): Optional<List<String>> =
+            Optional.ofNullable(applicableContractIds)
 
         /**
          * Which products the commit applies to. If both applicable_product_ids and
          * applicable_product_tags are not provided, the commit applies to all products.
          */
         @JsonProperty("applicable_product_ids")
-        fun applicableProductIds(): List<String>? = applicableProductIds
+        fun applicableProductIds(): Optional<List<String>> =
+            Optional.ofNullable(applicableProductIds)
 
         /**
          * Which tags the commit applies to. If both applicable_product_ids and
          * applicable_product_tags are not provided, the commit applies to all products.
          */
         @JsonProperty("applicable_product_tags")
-        fun applicableProductTags(): List<String>? = applicableProductTags
+        fun applicableProductTags(): Optional<List<String>> =
+            Optional.ofNullable(applicableProductTags)
 
-        @JsonProperty("custom_fields") fun customFields(): CustomFields? = customFields
+        @JsonProperty("custom_fields")
+        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
 
         /** Used only in UI/API. It is not exposed to end customers. */
-        @JsonProperty("description") fun description(): String? = description
+        @JsonProperty("description")
+        fun description(): Optional<String> = Optional.ofNullable(description)
 
         /**
          * The contract that this commit will be billed on. This is required for "POSTPAID" commits
          * and for "PREPAID" commits unless there is no invoice schedule above (i.e., the commit is
          * 'free').
          */
-        @JsonProperty("invoice_contract_id") fun invoiceContractId(): String? = invoiceContractId
+        @JsonProperty("invoice_contract_id")
+        fun invoiceContractId(): Optional<String> = Optional.ofNullable(invoiceContractId)
 
         /**
          * Required for "POSTPAID" commits: the true up invoice will be generated at this time and
@@ -188,20 +194,23 @@ constructor(
          * for "PREPAID" commits: if not provided, this will be a "complimentary" commit with no
          * invoice.
          */
-        @JsonProperty("invoice_schedule") fun invoiceSchedule(): InvoiceSchedule? = invoiceSchedule
+        @JsonProperty("invoice_schedule")
+        fun invoiceSchedule(): Optional<InvoiceSchedule> = Optional.ofNullable(invoiceSchedule)
 
         /** displayed on invoices */
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_sales_order_id")
-        fun netsuiteSalesOrderId(): String? = netsuiteSalesOrderId
+        fun netsuiteSalesOrderId(): Optional<String> = Optional.ofNullable(netsuiteSalesOrderId)
 
-        @JsonProperty("rate_type") fun rateType(): RateType? = rateType
+        @JsonProperty("rate_type")
+        fun rateType(): Optional<RateType> = Optional.ofNullable(rateType)
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("salesforce_opportunity_id")
-        fun salesforceOpportunityId(): String? = salesforceOpportunityId
+        fun salesforceOpportunityId(): Optional<String> =
+            Optional.ofNullable(salesforceOpportunityId)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -236,23 +245,26 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customerCommitCreateBody: CustomerCommitCreateBody) = apply {
-                this.accessSchedule = customerCommitCreateBody.accessSchedule
-                this.customerId = customerCommitCreateBody.customerId
-                this.priority = customerCommitCreateBody.priority
-                this.productId = customerCommitCreateBody.productId
-                this.type = customerCommitCreateBody.type
-                this.applicableContractIds = customerCommitCreateBody.applicableContractIds
-                this.applicableProductIds = customerCommitCreateBody.applicableProductIds
-                this.applicableProductTags = customerCommitCreateBody.applicableProductTags
-                this.customFields = customerCommitCreateBody.customFields
-                this.description = customerCommitCreateBody.description
-                this.invoiceContractId = customerCommitCreateBody.invoiceContractId
-                this.invoiceSchedule = customerCommitCreateBody.invoiceSchedule
-                this.name = customerCommitCreateBody.name
-                this.netsuiteSalesOrderId = customerCommitCreateBody.netsuiteSalesOrderId
-                this.rateType = customerCommitCreateBody.rateType
-                this.salesforceOpportunityId = customerCommitCreateBody.salesforceOpportunityId
-                additionalProperties(customerCommitCreateBody.additionalProperties)
+                accessSchedule = customerCommitCreateBody.accessSchedule
+                customerId = customerCommitCreateBody.customerId
+                priority = customerCommitCreateBody.priority
+                productId = customerCommitCreateBody.productId
+                type = customerCommitCreateBody.type
+                applicableContractIds =
+                    customerCommitCreateBody.applicableContractIds?.toMutableList()
+                applicableProductIds =
+                    customerCommitCreateBody.applicableProductIds?.toMutableList()
+                applicableProductTags =
+                    customerCommitCreateBody.applicableProductTags?.toMutableList()
+                customFields = customerCommitCreateBody.customFields
+                description = customerCommitCreateBody.description
+                invoiceContractId = customerCommitCreateBody.invoiceContractId
+                invoiceSchedule = customerCommitCreateBody.invoiceSchedule
+                name = customerCommitCreateBody.name
+                netsuiteSalesOrderId = customerCommitCreateBody.netsuiteSalesOrderId
+                rateType = customerCommitCreateBody.rateType
+                salesforceOpportunityId = customerCommitCreateBody.salesforceOpportunityId
+                additionalProperties = customerCommitCreateBody.additionalProperties.toMutableMap()
             }
 
             /**
@@ -356,16 +368,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerCommitCreateBody =
@@ -728,14 +746,15 @@ constructor(
     class AccessSchedule
     private constructor(
         private val creditTypeId: String?,
-        private val scheduleItems: List<ScheduleItem>?,
+        private val scheduleItems: List<ScheduleItem>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** Defaults to USD (cents) if not passed */
-        @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
+        @JsonProperty("credit_type_id")
+        fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
 
-        @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem>? = scheduleItems
+        @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem> = scheduleItems
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -756,9 +775,9 @@ constructor(
 
             @JvmSynthetic
             internal fun from(accessSchedule: AccessSchedule) = apply {
-                this.creditTypeId = accessSchedule.creditTypeId
-                this.scheduleItems = accessSchedule.scheduleItems
-                additionalProperties(accessSchedule.additionalProperties)
+                creditTypeId = accessSchedule.creditTypeId
+                scheduleItems = accessSchedule.scheduleItems.toMutableList()
+                additionalProperties = accessSchedule.additionalProperties.toMutableMap()
             }
 
             /** Defaults to USD (cents) if not passed */
@@ -772,16 +791,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): AccessSchedule =
@@ -797,19 +822,19 @@ constructor(
         @NoAutoDetect
         class ScheduleItem
         private constructor(
-            private val amount: Double?,
-            private val startingAt: OffsetDateTime?,
-            private val endingBefore: OffsetDateTime?,
+            private val amount: Double,
+            private val startingAt: OffsetDateTime,
+            private val endingBefore: OffsetDateTime,
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            @JsonProperty("amount") fun amount(): Double? = amount
+            @JsonProperty("amount") fun amount(): Double = amount
 
             /** RFC 3339 timestamp (inclusive) */
-            @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+            @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
 
             /** RFC 3339 timestamp (exclusive) */
-            @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+            @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -831,10 +856,10 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(scheduleItem: ScheduleItem) = apply {
-                    this.amount = scheduleItem.amount
-                    this.startingAt = scheduleItem.startingAt
-                    this.endingBefore = scheduleItem.endingBefore
-                    additionalProperties(scheduleItem.additionalProperties)
+                    amount = scheduleItem.amount
+                    startingAt = scheduleItem.startingAt
+                    endingBefore = scheduleItem.endingBefore
+                    additionalProperties = scheduleItem.additionalProperties.toMutableMap()
                 }
 
                 @JsonProperty("amount") fun amount(amount: Double) = apply { this.amount = amount }
@@ -851,18 +876,26 @@ constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): ScheduleItem =
                     ScheduleItem(
@@ -990,21 +1023,27 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customFields: CustomFields) = apply {
-                additionalProperties(customFields.additionalProperties)
+                additionalProperties = customFields.additionalProperties.toMutableMap()
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
@@ -1043,10 +1082,12 @@ constructor(
     ) {
 
         /** Defaults to USD (cents) if not passed. */
-        @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
+        @JsonProperty("credit_type_id")
+        fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
 
         /** Either provide amount or provide both unit_price and quantity. */
-        @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem>? = scheduleItems
+        @JsonProperty("schedule_items")
+        fun scheduleItems(): Optional<List<ScheduleItem>> = Optional.ofNullable(scheduleItems)
 
         /**
          * Enter the unit price and quantity for the charge or instead only send the amount. If
@@ -1054,7 +1095,8 @@ constructor(
          * be 1.
          */
         @JsonProperty("recurring_schedule")
-        fun recurringSchedule(): RecurringSchedule? = recurringSchedule
+        fun recurringSchedule(): Optional<RecurringSchedule> =
+            Optional.ofNullable(recurringSchedule)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1076,10 +1118,10 @@ constructor(
 
             @JvmSynthetic
             internal fun from(invoiceSchedule: InvoiceSchedule) = apply {
-                this.creditTypeId = invoiceSchedule.creditTypeId
-                this.scheduleItems = invoiceSchedule.scheduleItems
-                this.recurringSchedule = invoiceSchedule.recurringSchedule
-                additionalProperties(invoiceSchedule.additionalProperties)
+                creditTypeId = invoiceSchedule.creditTypeId
+                scheduleItems = invoiceSchedule.scheduleItems?.toMutableList()
+                recurringSchedule = invoiceSchedule.recurringSchedule
+                additionalProperties = invoiceSchedule.additionalProperties.toMutableMap()
             }
 
             /** Defaults to USD (cents) if not passed. */
@@ -1104,16 +1146,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): InvoiceSchedule =
@@ -1134,44 +1182,46 @@ constructor(
         @NoAutoDetect
         class RecurringSchedule
         private constructor(
-            private val startingAt: OffsetDateTime?,
-            private val endingBefore: OffsetDateTime?,
-            private val frequency: Frequency?,
+            private val startingAt: OffsetDateTime,
+            private val endingBefore: OffsetDateTime,
+            private val frequency: Frequency,
             private val unitPrice: Double?,
             private val quantity: Double?,
             private val amount: Double?,
-            private val amountDistribution: AmountDistribution?,
+            private val amountDistribution: AmountDistribution,
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             /** RFC 3339 timestamp (inclusive). */
-            @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+            @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
 
             /** RFC 3339 timestamp (exclusive). */
-            @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+            @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
 
-            @JsonProperty("frequency") fun frequency(): Frequency? = frequency
+            @JsonProperty("frequency") fun frequency(): Frequency = frequency
 
             /**
              * Unit price for the charge. Will be multiplied by quantity to determine the amount and
              * must be specified with quantity. If specified amount cannot be provided.
              */
-            @JsonProperty("unit_price") fun unitPrice(): Double? = unitPrice
+            @JsonProperty("unit_price")
+            fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
 
             /**
              * Quantity for the charge. Will be multiplied by unit_price to determine the amount and
              * must be specified with unit_price. If specified amount cannot be provided.
              */
-            @JsonProperty("quantity") fun quantity(): Double? = quantity
+            @JsonProperty("quantity")
+            fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
             /**
              * Amount for the charge. Can be provided instead of unit_price and quantity. If amount
              * is sent, the unit_price is assumed to be the amount and quantity is inferred to be 1.
              */
-            @JsonProperty("amount") fun amount(): Double? = amount
+            @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
 
             @JsonProperty("amount_distribution")
-            fun amountDistribution(): AmountDistribution? = amountDistribution
+            fun amountDistribution(): AmountDistribution = amountDistribution
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1197,14 +1247,14 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(recurringSchedule: RecurringSchedule) = apply {
-                    this.startingAt = recurringSchedule.startingAt
-                    this.endingBefore = recurringSchedule.endingBefore
-                    this.frequency = recurringSchedule.frequency
-                    this.unitPrice = recurringSchedule.unitPrice
-                    this.quantity = recurringSchedule.quantity
-                    this.amount = recurringSchedule.amount
-                    this.amountDistribution = recurringSchedule.amountDistribution
-                    additionalProperties(recurringSchedule.additionalProperties)
+                    startingAt = recurringSchedule.startingAt
+                    endingBefore = recurringSchedule.endingBefore
+                    frequency = recurringSchedule.frequency
+                    unitPrice = recurringSchedule.unitPrice
+                    quantity = recurringSchedule.quantity
+                    amount = recurringSchedule.amount
+                    amountDistribution = recurringSchedule.amountDistribution
+                    additionalProperties = recurringSchedule.additionalProperties.toMutableMap()
                 }
 
                 /** RFC 3339 timestamp (inclusive). */
@@ -1248,18 +1298,26 @@ constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): RecurringSchedule =
                     RecurringSchedule(
@@ -1436,7 +1494,7 @@ constructor(
             private val unitPrice: Double?,
             private val quantity: Double?,
             private val amount: Double?,
-            private val timestamp: OffsetDateTime?,
+            private val timestamp: OffsetDateTime,
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
@@ -1444,22 +1502,24 @@ constructor(
              * Unit price for the charge. Will be multiplied by quantity to determine the amount and
              * must be specified with quantity. If specified amount cannot be provided.
              */
-            @JsonProperty("unit_price") fun unitPrice(): Double? = unitPrice
+            @JsonProperty("unit_price")
+            fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
 
             /**
              * Quantity for the charge. Will be multiplied by unit_price to determine the amount and
              * must be specified with unit_price. If specified amount cannot be provided.
              */
-            @JsonProperty("quantity") fun quantity(): Double? = quantity
+            @JsonProperty("quantity")
+            fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
             /**
              * Amount for the charge. Can be provided instead of unit_price and quantity. If amount
              * is sent, the unit_price is assumed to be the amount and quantity is inferred to be 1.
              */
-            @JsonProperty("amount") fun amount(): Double? = amount
+            @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
 
             /** timestamp of the scheduled event */
-            @JsonProperty("timestamp") fun timestamp(): OffsetDateTime? = timestamp
+            @JsonProperty("timestamp") fun timestamp(): OffsetDateTime = timestamp
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1482,11 +1542,11 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(scheduleItem: ScheduleItem) = apply {
-                    this.unitPrice = scheduleItem.unitPrice
-                    this.quantity = scheduleItem.quantity
-                    this.amount = scheduleItem.amount
-                    this.timestamp = scheduleItem.timestamp
-                    additionalProperties(scheduleItem.additionalProperties)
+                    unitPrice = scheduleItem.unitPrice
+                    quantity = scheduleItem.quantity
+                    amount = scheduleItem.amount
+                    timestamp = scheduleItem.timestamp
+                    additionalProperties = scheduleItem.additionalProperties.toMutableMap()
                 }
 
                 /**
@@ -1516,18 +1576,26 @@ constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): ScheduleItem =
                     ScheduleItem(

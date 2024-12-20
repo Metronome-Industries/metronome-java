@@ -25,7 +25,7 @@ class AlertArchiveParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("8deed800-1b7a-495d-a207-6c52bac54dc9")
-        assertThat(body.releaseUniquenessKey()).isEqualTo(true)
+        assertThat(body.releaseUniquenessKey()).contains(true)
     }
 
     @Test

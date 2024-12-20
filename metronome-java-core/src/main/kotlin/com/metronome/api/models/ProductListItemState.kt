@@ -39,8 +39,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun name(): String = name.getRequired("name")
 
     fun startingAt(): Optional<OffsetDateTime> =
@@ -185,6 +183,8 @@ private constructor(
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): ProductListItemState = apply {
         if (!validated) {
             name()
@@ -236,23 +236,23 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(productListItemState: ProductListItemState) = apply {
-            this.name = productListItemState.name
-            this.startingAt = productListItemState.startingAt
-            this.netsuiteInternalItemId = productListItemState.netsuiteInternalItemId
-            this.createdAt = productListItemState.createdAt
-            this.createdBy = productListItemState.createdBy
-            this.netsuiteOverageItemId = productListItemState.netsuiteOverageItemId
-            this.billableMetricId = productListItemState.billableMetricId
-            this.compositeProductIds = productListItemState.compositeProductIds
-            this.quantityConversion = productListItemState.quantityConversion
-            this.quantityRounding = productListItemState.quantityRounding
-            this.compositeTags = productListItemState.compositeTags
-            this.isRefundable = productListItemState.isRefundable
-            this.tags = productListItemState.tags
-            this.excludeFreeUsage = productListItemState.excludeFreeUsage
-            this.pricingGroupKey = productListItemState.pricingGroupKey
-            this.presentationGroupKey = productListItemState.presentationGroupKey
-            additionalProperties(productListItemState.additionalProperties)
+            name = productListItemState.name
+            startingAt = productListItemState.startingAt
+            netsuiteInternalItemId = productListItemState.netsuiteInternalItemId
+            createdAt = productListItemState.createdAt
+            createdBy = productListItemState.createdBy
+            netsuiteOverageItemId = productListItemState.netsuiteOverageItemId
+            billableMetricId = productListItemState.billableMetricId
+            compositeProductIds = productListItemState.compositeProductIds
+            quantityConversion = productListItemState.quantityConversion
+            quantityRounding = productListItemState.quantityRounding
+            compositeTags = productListItemState.compositeTags
+            isRefundable = productListItemState.isRefundable
+            tags = productListItemState.tags
+            excludeFreeUsage = productListItemState.excludeFreeUsage
+            pricingGroupKey = productListItemState.pricingGroupKey
+            presentationGroupKey = productListItemState.presentationGroupKey
+            additionalProperties = productListItemState.additionalProperties.toMutableMap()
         }
 
         fun name(name: String) = name(JsonField.of(name))
@@ -440,16 +440,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): ProductListItemState =

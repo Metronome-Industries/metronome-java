@@ -86,32 +86,32 @@ class ContractRateCardRateAddParamsTest {
         assertThat(body.rateType()).isEqualTo(ContractRateCardRateAddParams.RateType.FLAT)
         assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
         assertThat(body.commitRate())
-            .isEqualTo(
+            .contains(
                 ContractRateCardRateAddParams.CommitRate.builder()
                     .rateType(ContractRateCardRateAddParams.CommitRate.RateType.FLAT)
                     .price(0.0)
                     .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
                     .build()
             )
-        assertThat(body.creditTypeId()).isEqualTo("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+        assertThat(body.creditTypeId()).contains("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
         assertThat(body.customRate())
-            .isEqualTo(
+            .contains(
                 ContractRateCardRateAddParams.CustomRate.builder()
                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                     .build()
             )
-        assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.isProrated()).isEqualTo(true)
-        assertThat(body.price()).isEqualTo(100.0)
+        assertThat(body.endingBefore()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.isProrated()).contains(true)
+        assertThat(body.price()).contains(100.0)
         assertThat(body.pricingGroupValues())
-            .isEqualTo(
+            .contains(
                 ContractRateCardRateAddParams.PricingGroupValues.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(body.quantity()).isEqualTo(0.0)
-        assertThat(body.tiers()).isEqualTo(listOf(Tier.builder().price(0.0).size(0.0).build()))
-        assertThat(body.useListPrices()).isEqualTo(true)
+        assertThat(body.quantity()).contains(0.0)
+        assertThat(body.tiers()).contains(listOf(Tier.builder().price(0.0).size(0.0).build()))
+        assertThat(body.useListPrices()).contains(true)
     }
 
     @Test

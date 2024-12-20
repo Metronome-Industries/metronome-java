@@ -101,9 +101,9 @@ constructor(
     @NoAutoDetect
     class AlertCreateBody
     internal constructor(
-        private val alertType: AlertType?,
-        private val name: String?,
-        private val threshold: Double?,
+        private val alertType: AlertType,
+        private val name: String,
+        private val threshold: Double,
         private val billableMetricId: String?,
         private val creditGrantTypeFilters: List<String>?,
         private val creditTypeId: String?,
@@ -118,22 +118,23 @@ constructor(
     ) {
 
         /** Type of the alert */
-        @JsonProperty("alert_type") fun alertType(): AlertType? = alertType
+        @JsonProperty("alert_type") fun alertType(): AlertType = alertType
 
         /** Name of the alert */
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name") fun name(): String = name
 
         /**
          * Threshold value of the alert policy. Depending upon the alert type, this number may
          * represent a financial amount, the days remaining, or a percentage reached.
          */
-        @JsonProperty("threshold") fun threshold(): Double? = threshold
+        @JsonProperty("threshold") fun threshold(): Double = threshold
 
         /**
          * For alerts of type `usage_threshold_reached`, specifies which billable metric to track
          * the usage for.
          */
-        @JsonProperty("billable_metric_id") fun billableMetricId(): String? = billableMetricId
+        @JsonProperty("billable_metric_id")
+        fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
         /**
          * An array of strings, representing a way to filter the credit grant this alert applies to,
@@ -141,9 +142,11 @@ constructor(
          * for CreditPercentage and CreditBalance alerts
          */
         @JsonProperty("credit_grant_type_filters")
-        fun creditGrantTypeFilters(): List<String>? = creditGrantTypeFilters
+        fun creditGrantTypeFilters(): Optional<List<String>> =
+            Optional.ofNullable(creditGrantTypeFilters)
 
-        @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
+        @JsonProperty("credit_type_id")
+        fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
 
         /**
          * Only present for beta contract invoices. This field's availability is dependent on your
@@ -151,43 +154,48 @@ constructor(
          * advanced filtering
          */
         @JsonProperty("custom_field_filters")
-        fun customFieldFilters(): List<CustomFieldFilter>? = customFieldFilters
+        fun customFieldFilters(): Optional<List<CustomFieldFilter>> =
+            Optional.ofNullable(customFieldFilters)
 
         /**
          * If provided, will create this alert for this specific customer. To create an alert for
          * all customers, do not specify `customer_id` or `plan_id`.
          */
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id")
+        fun customerId(): Optional<String> = Optional.ofNullable(customerId)
 
         /**
          * If true, the alert will evaluate immediately on customers that already meet the alert
          * threshold. If false, it will only evaluate on future customers that trigger the alert
          * threshold. Defaults to true.
          */
-        @JsonProperty("evaluate_on_create") fun evaluateOnCreate(): Boolean? = evaluateOnCreate
+        @JsonProperty("evaluate_on_create")
+        fun evaluateOnCreate(): Optional<Boolean> = Optional.ofNullable(evaluateOnCreate)
 
         /**
          * Scopes alert evaluation to a specific presentation group key on individual line items.
          * Only present for spend alerts.
          */
-        @JsonProperty("group_key_filter") fun groupKeyFilter(): GroupKeyFilter? = groupKeyFilter
+        @JsonProperty("group_key_filter")
+        fun groupKeyFilter(): Optional<GroupKeyFilter> = Optional.ofNullable(groupKeyFilter)
 
         /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
         @JsonProperty("invoice_types_filter")
-        fun invoiceTypesFilter(): List<String>? = invoiceTypesFilter
+        fun invoiceTypesFilter(): Optional<List<String>> = Optional.ofNullable(invoiceTypesFilter)
 
         /**
          * If provided, will create this alert for this specific plan. To create an alert for all
          * customers, do not specify `customer_id` or `plan_id`.
          */
-        @JsonProperty("plan_id") fun planId(): String? = planId
+        @JsonProperty("plan_id") fun planId(): Optional<String> = Optional.ofNullable(planId)
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
          * previously used uniqueness key, a new record will not be created and the request will
          * fail with a 409 error.
          */
-        @JsonProperty("uniqueness_key") fun uniquenessKey(): String? = uniquenessKey
+        @JsonProperty("uniqueness_key")
+        fun uniquenessKey(): Optional<String> = Optional.ofNullable(uniquenessKey)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -219,20 +227,20 @@ constructor(
 
             @JvmSynthetic
             internal fun from(alertCreateBody: AlertCreateBody) = apply {
-                this.alertType = alertCreateBody.alertType
-                this.name = alertCreateBody.name
-                this.threshold = alertCreateBody.threshold
-                this.billableMetricId = alertCreateBody.billableMetricId
-                this.creditGrantTypeFilters = alertCreateBody.creditGrantTypeFilters
-                this.creditTypeId = alertCreateBody.creditTypeId
-                this.customFieldFilters = alertCreateBody.customFieldFilters
-                this.customerId = alertCreateBody.customerId
-                this.evaluateOnCreate = alertCreateBody.evaluateOnCreate
-                this.groupKeyFilter = alertCreateBody.groupKeyFilter
-                this.invoiceTypesFilter = alertCreateBody.invoiceTypesFilter
-                this.planId = alertCreateBody.planId
-                this.uniquenessKey = alertCreateBody.uniquenessKey
-                additionalProperties(alertCreateBody.additionalProperties)
+                alertType = alertCreateBody.alertType
+                name = alertCreateBody.name
+                threshold = alertCreateBody.threshold
+                billableMetricId = alertCreateBody.billableMetricId
+                creditGrantTypeFilters = alertCreateBody.creditGrantTypeFilters?.toMutableList()
+                creditTypeId = alertCreateBody.creditTypeId
+                customFieldFilters = alertCreateBody.customFieldFilters?.toMutableList()
+                customerId = alertCreateBody.customerId
+                evaluateOnCreate = alertCreateBody.evaluateOnCreate
+                groupKeyFilter = alertCreateBody.groupKeyFilter
+                invoiceTypesFilter = alertCreateBody.invoiceTypesFilter?.toMutableList()
+                planId = alertCreateBody.planId
+                uniquenessKey = alertCreateBody.uniquenessKey
+                additionalProperties = alertCreateBody.additionalProperties.toMutableMap()
             }
 
             /** Type of the alert */
@@ -331,16 +339,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): AlertCreateBody =
@@ -845,17 +859,17 @@ constructor(
     @NoAutoDetect
     class CustomFieldFilter
     private constructor(
-        private val entity: Entity?,
-        private val key: String?,
-        private val value: String?,
+        private val entity: Entity,
+        private val key: String,
+        private val value: String,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("entity") fun entity(): Entity? = entity
+        @JsonProperty("entity") fun entity(): Entity = entity
 
-        @JsonProperty("key") fun key(): String? = key
+        @JsonProperty("key") fun key(): String = key
 
-        @JsonProperty("value") fun value(): String? = value
+        @JsonProperty("value") fun value(): String = value
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -877,10 +891,10 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customFieldFilter: CustomFieldFilter) = apply {
-                this.entity = customFieldFilter.entity
-                this.key = customFieldFilter.key
-                this.value = customFieldFilter.value
-                additionalProperties(customFieldFilter.additionalProperties)
+                entity = customFieldFilter.entity
+                key = customFieldFilter.key
+                value = customFieldFilter.value
+                additionalProperties = customFieldFilter.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("entity") fun entity(entity: Entity) = apply { this.entity = entity }
@@ -891,16 +905,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomFieldFilter =
@@ -1001,14 +1021,14 @@ constructor(
     @NoAutoDetect
     class GroupKeyFilter
     private constructor(
-        private val key: String?,
-        private val value: String?,
+        private val key: String,
+        private val value: String,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("key") fun key(): String? = key
+        @JsonProperty("key") fun key(): String = key
 
-        @JsonProperty("value") fun value(): String? = value
+        @JsonProperty("value") fun value(): String = value
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1029,9 +1049,9 @@ constructor(
 
             @JvmSynthetic
             internal fun from(groupKeyFilter: GroupKeyFilter) = apply {
-                this.key = groupKeyFilter.key
-                this.value = groupKeyFilter.value
-                additionalProperties(groupKeyFilter.additionalProperties)
+                key = groupKeyFilter.key
+                value = groupKeyFilter.value
+                additionalProperties = groupKeyFilter.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("key") fun key(key: String) = apply { this.key = key }
@@ -1040,16 +1060,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): GroupKeyFilter =

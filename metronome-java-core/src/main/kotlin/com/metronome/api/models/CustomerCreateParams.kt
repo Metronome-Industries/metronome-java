@@ -67,7 +67,7 @@ constructor(
     @NoAutoDetect
     class CustomerCreateBody
     internal constructor(
-        private val name: String?,
+        private val name: String,
         private val billingConfig: BillingConfig?,
         private val customFields: CustomFields?,
         private val externalId: String?,
@@ -76,20 +76,24 @@ constructor(
     ) {
 
         /** This will be truncated to 160 characters if the provided name is longer. */
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name") fun name(): String = name
 
-        @JsonProperty("billing_config") fun billingConfig(): BillingConfig? = billingConfig
+        @JsonProperty("billing_config")
+        fun billingConfig(): Optional<BillingConfig> = Optional.ofNullable(billingConfig)
 
-        @JsonProperty("custom_fields") fun customFields(): CustomFields? = customFields
+        @JsonProperty("custom_fields")
+        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
 
         /**
          * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
          * customer in usage events
          */
-        @JsonProperty("external_id") fun externalId(): String? = externalId
+        @JsonProperty("external_id")
+        fun externalId(): Optional<String> = Optional.ofNullable(externalId)
 
         /** Aliases that can be used to refer to this customer in usage events */
-        @JsonProperty("ingest_aliases") fun ingestAliases(): List<String>? = ingestAliases
+        @JsonProperty("ingest_aliases")
+        fun ingestAliases(): Optional<List<String>> = Optional.ofNullable(ingestAliases)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -113,12 +117,12 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customerCreateBody: CustomerCreateBody) = apply {
-                this.name = customerCreateBody.name
-                this.billingConfig = customerCreateBody.billingConfig
-                this.customFields = customerCreateBody.customFields
-                this.externalId = customerCreateBody.externalId
-                this.ingestAliases = customerCreateBody.ingestAliases
-                additionalProperties(customerCreateBody.additionalProperties)
+                name = customerCreateBody.name
+                billingConfig = customerCreateBody.billingConfig
+                customFields = customerCreateBody.customFields
+                externalId = customerCreateBody.externalId
+                ingestAliases = customerCreateBody.ingestAliases?.toMutableList()
+                additionalProperties = customerCreateBody.additionalProperties.toMutableMap()
             }
 
             /** This will be truncated to 160 characters if the provided name is longer. */
@@ -149,16 +153,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerCreateBody =
@@ -382,8 +392,8 @@ constructor(
     @NoAutoDetect
     class BillingConfig
     private constructor(
-        private val billingProviderType: BillingProviderType?,
-        private val billingProviderCustomerId: String?,
+        private val billingProviderType: BillingProviderType,
+        private val billingProviderCustomerId: String,
         private val stripeCollectionMethod: StripeCollectionMethod?,
         private val awsProductCode: String?,
         private val awsRegion: AwsRegion?,
@@ -391,17 +401,20 @@ constructor(
     ) {
 
         @JsonProperty("billing_provider_type")
-        fun billingProviderType(): BillingProviderType? = billingProviderType
+        fun billingProviderType(): BillingProviderType = billingProviderType
 
         @JsonProperty("billing_provider_customer_id")
-        fun billingProviderCustomerId(): String? = billingProviderCustomerId
+        fun billingProviderCustomerId(): String = billingProviderCustomerId
 
         @JsonProperty("stripe_collection_method")
-        fun stripeCollectionMethod(): StripeCollectionMethod? = stripeCollectionMethod
+        fun stripeCollectionMethod(): Optional<StripeCollectionMethod> =
+            Optional.ofNullable(stripeCollectionMethod)
 
-        @JsonProperty("aws_product_code") fun awsProductCode(): String? = awsProductCode
+        @JsonProperty("aws_product_code")
+        fun awsProductCode(): Optional<String> = Optional.ofNullable(awsProductCode)
 
-        @JsonProperty("aws_region") fun awsRegion(): AwsRegion? = awsRegion
+        @JsonProperty("aws_region")
+        fun awsRegion(): Optional<AwsRegion> = Optional.ofNullable(awsRegion)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -425,12 +438,12 @@ constructor(
 
             @JvmSynthetic
             internal fun from(billingConfig: BillingConfig) = apply {
-                this.billingProviderType = billingConfig.billingProviderType
-                this.billingProviderCustomerId = billingConfig.billingProviderCustomerId
-                this.stripeCollectionMethod = billingConfig.stripeCollectionMethod
-                this.awsProductCode = billingConfig.awsProductCode
-                this.awsRegion = billingConfig.awsRegion
-                additionalProperties(billingConfig.additionalProperties)
+                billingProviderType = billingConfig.billingProviderType
+                billingProviderCustomerId = billingConfig.billingProviderCustomerId
+                stripeCollectionMethod = billingConfig.stripeCollectionMethod
+                awsProductCode = billingConfig.awsProductCode
+                awsRegion = billingConfig.awsRegion
+                additionalProperties = billingConfig.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("billing_provider_type")
@@ -458,16 +471,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): BillingConfig =
@@ -876,21 +895,27 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customFields: CustomFields) = apply {
-                additionalProperties(customFields.additionalProperties)
+                additionalProperties = customFields.additionalProperties.toMutableMap()
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())

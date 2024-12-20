@@ -80,23 +80,27 @@ constructor(
          * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
          * entries for all credit types will be returned.
          */
-        @JsonProperty("credit_type_ids") fun creditTypeIds(): List<String>? = creditTypeIds
+        @JsonProperty("credit_type_ids")
+        fun creditTypeIds(): Optional<List<String>> = Optional.ofNullable(creditTypeIds)
 
         /**
          * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger entries
          * for all customers will be returned.
          */
-        @JsonProperty("customer_ids") fun customerIds(): List<String>? = customerIds
+        @JsonProperty("customer_ids")
+        fun customerIds(): Optional<List<String>> = Optional.ofNullable(customerIds)
 
         /**
          * If supplied, ledger entries will only be returned with an effective_at before this time.
          * This timestamp must not be in the future. If no timestamp is supplied, all entries up to
          * the start of the customer's next billing period will be returned.
          */
-        @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+        @JsonProperty("ending_before")
+        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
         /** If supplied, only ledger entries effective at or after this time will be returned. */
-        @JsonProperty("starting_on") fun startingOn(): OffsetDateTime? = startingOn
+        @JsonProperty("starting_on")
+        fun startingOn(): Optional<OffsetDateTime> = Optional.ofNullable(startingOn)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -119,11 +123,12 @@ constructor(
 
             @JvmSynthetic
             internal fun from(creditGrantListEntriesBody: CreditGrantListEntriesBody) = apply {
-                this.creditTypeIds = creditGrantListEntriesBody.creditTypeIds
-                this.customerIds = creditGrantListEntriesBody.customerIds
-                this.endingBefore = creditGrantListEntriesBody.endingBefore
-                this.startingOn = creditGrantListEntriesBody.startingOn
-                additionalProperties(creditGrantListEntriesBody.additionalProperties)
+                creditTypeIds = creditGrantListEntriesBody.creditTypeIds?.toMutableList()
+                customerIds = creditGrantListEntriesBody.customerIds?.toMutableList()
+                endingBefore = creditGrantListEntriesBody.endingBefore
+                startingOn = creditGrantListEntriesBody.startingOn
+                additionalProperties =
+                    creditGrantListEntriesBody.additionalProperties.toMutableMap()
             }
 
             /**
@@ -160,16 +165,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CreditGrantListEntriesBody =

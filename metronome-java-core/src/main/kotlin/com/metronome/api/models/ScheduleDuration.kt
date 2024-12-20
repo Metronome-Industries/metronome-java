@@ -25,8 +25,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun creditType(): Optional<CreditTypeData> =
         Optional.ofNullable(creditType.getNullable("credit_type"))
 
@@ -39,6 +37,8 @@ private constructor(
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    private var validated: Boolean = false
 
     fun validate(): ScheduleDuration = apply {
         if (!validated) {
@@ -63,9 +63,9 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(scheduleDuration: ScheduleDuration) = apply {
-            this.creditType = scheduleDuration.creditType
-            this.scheduleItems = scheduleDuration.scheduleItems
-            additionalProperties(scheduleDuration.additionalProperties)
+            creditType = scheduleDuration.creditType
+            scheduleItems = scheduleDuration.scheduleItems
+            additionalProperties = scheduleDuration.additionalProperties.toMutableMap()
         }
 
         fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
@@ -87,16 +87,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): ScheduleDuration =
@@ -118,8 +124,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         fun id(): String = id.getRequired("id")
 
         fun amount(): Double = amount.getRequired("amount")
@@ -139,6 +143,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): ScheduleItem = apply {
             if (!validated) {
@@ -167,11 +173,11 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(scheduleItem: ScheduleItem) = apply {
-                this.id = scheduleItem.id
-                this.amount = scheduleItem.amount
-                this.startingAt = scheduleItem.startingAt
-                this.endingBefore = scheduleItem.endingBefore
-                additionalProperties(scheduleItem.additionalProperties)
+                id = scheduleItem.id
+                amount = scheduleItem.amount
+                startingAt = scheduleItem.startingAt
+                endingBefore = scheduleItem.endingBefore
+                additionalProperties = scheduleItem.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
@@ -205,16 +211,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ScheduleItem =

@@ -55,9 +55,9 @@ constructor(
     @NoAutoDetect
     class CustomerCreditUpdateEndDateBody
     internal constructor(
-        private val accessEndingBefore: OffsetDateTime?,
-        private val creditId: String?,
-        private val customerId: String?,
+        private val accessEndingBefore: OffsetDateTime,
+        private val creditId: String,
+        private val customerId: String,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
@@ -66,13 +66,13 @@ constructor(
          * possible to draw it down (exclusive).
          */
         @JsonProperty("access_ending_before")
-        fun accessEndingBefore(): OffsetDateTime? = accessEndingBefore
+        fun accessEndingBefore(): OffsetDateTime = accessEndingBefore
 
         /** ID of the commit to update */
-        @JsonProperty("credit_id") fun creditId(): String? = creditId
+        @JsonProperty("credit_id") fun creditId(): String = creditId
 
         /** ID of the customer whose credit is to be updated */
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -95,10 +95,11 @@ constructor(
             @JvmSynthetic
             internal fun from(customerCreditUpdateEndDateBody: CustomerCreditUpdateEndDateBody) =
                 apply {
-                    this.accessEndingBefore = customerCreditUpdateEndDateBody.accessEndingBefore
-                    this.creditId = customerCreditUpdateEndDateBody.creditId
-                    this.customerId = customerCreditUpdateEndDateBody.customerId
-                    additionalProperties(customerCreditUpdateEndDateBody.additionalProperties)
+                    accessEndingBefore = customerCreditUpdateEndDateBody.accessEndingBefore
+                    creditId = customerCreditUpdateEndDateBody.creditId
+                    customerId = customerCreditUpdateEndDateBody.customerId
+                    additionalProperties =
+                        customerCreditUpdateEndDateBody.additionalProperties.toMutableMap()
                 }
 
             /**
@@ -120,16 +121,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerCreditUpdateEndDateBody =

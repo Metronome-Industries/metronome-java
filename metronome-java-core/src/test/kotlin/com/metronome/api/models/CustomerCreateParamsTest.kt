@@ -67,7 +67,7 @@ class CustomerCreateParamsTest {
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("Example, Inc.")
         assertThat(body.billingConfig())
-            .isEqualTo(
+            .contains(
                 CustomerCreateParams.BillingConfig.builder()
                     .billingProviderCustomerId("billing_provider_customer_id")
                     .billingProviderType(
@@ -82,13 +82,13 @@ class CustomerCreateParamsTest {
                     .build()
             )
         assertThat(body.customFields())
-            .isEqualTo(
+            .contains(
                 CustomerCreateParams.CustomFields.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(body.externalId()).isEqualTo("x")
-        assertThat(body.ingestAliases()).isEqualTo(listOf("team@example.com"))
+        assertThat(body.externalId()).contains("x")
+        assertThat(body.ingestAliases()).contains(listOf("team@example.com"))
     }
 
     @Test

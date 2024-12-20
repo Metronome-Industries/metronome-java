@@ -18,6 +18,7 @@ import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
+import java.util.Optional
 
 class ContractRateCardRateAddManyParams
 constructor(
@@ -55,14 +56,14 @@ constructor(
     @NoAutoDetect
     class ContractRateCardRateAddManyBody
     internal constructor(
-        private val rateCardId: String?,
-        private val rates: List<Rate>?,
+        private val rateCardId: String,
+        private val rates: List<Rate>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("rate_card_id") fun rateCardId(): String? = rateCardId
+        @JsonProperty("rate_card_id") fun rateCardId(): String = rateCardId
 
-        @JsonProperty("rates") fun rates(): List<Rate>? = rates
+        @JsonProperty("rates") fun rates(): List<Rate> = rates
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -84,9 +85,10 @@ constructor(
             @JvmSynthetic
             internal fun from(contractRateCardRateAddManyBody: ContractRateCardRateAddManyBody) =
                 apply {
-                    this.rateCardId = contractRateCardRateAddManyBody.rateCardId
-                    this.rates = contractRateCardRateAddManyBody.rates
-                    additionalProperties(contractRateCardRateAddManyBody.additionalProperties)
+                    rateCardId = contractRateCardRateAddManyBody.rateCardId
+                    rates = contractRateCardRateAddManyBody.rates.toMutableList()
+                    additionalProperties =
+                        contractRateCardRateAddManyBody.additionalProperties.toMutableMap()
                 }
 
             @JsonProperty("rate_card_id")
@@ -96,16 +98,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractRateCardRateAddManyBody =
@@ -305,12 +313,12 @@ constructor(
     @NoAutoDetect
     class Rate
     private constructor(
-        private val productId: String?,
+        private val productId: String,
         private val pricingGroupValues: PricingGroupValues?,
-        private val startingAt: OffsetDateTime?,
+        private val startingAt: OffsetDateTime,
         private val endingBefore: OffsetDateTime?,
-        private val entitled: Boolean?,
-        private val rateType: RateType?,
+        private val entitled: Boolean,
+        private val rateType: RateType,
         private val price: Double?,
         private val creditTypeId: String?,
         private val quantity: Double?,
@@ -323,64 +331,71 @@ constructor(
     ) {
 
         /** ID of the product to add a rate for */
-        @JsonProperty("product_id") fun productId(): String? = productId
+        @JsonProperty("product_id") fun productId(): String = productId
 
         /**
          * Optional. List of pricing group key value pairs which will be used to calculate the
          * price.
          */
         @JsonProperty("pricing_group_values")
-        fun pricingGroupValues(): PricingGroupValues? = pricingGroupValues
+        fun pricingGroupValues(): Optional<PricingGroupValues> =
+            Optional.ofNullable(pricingGroupValues)
 
         /** inclusive effective date */
-        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
 
         /** exclusive end date */
-        @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+        @JsonProperty("ending_before")
+        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
-        @JsonProperty("entitled") fun entitled(): Boolean? = entitled
+        @JsonProperty("entitled") fun entitled(): Boolean = entitled
 
-        @JsonProperty("rate_type") fun rateType(): RateType? = rateType
+        @JsonProperty("rate_type") fun rateType(): RateType = rateType
 
         /**
          * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
          * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
          */
-        @JsonProperty("price") fun price(): Double? = price
+        @JsonProperty("price") fun price(): Optional<Double> = Optional.ofNullable(price)
 
         /**
          * "The Metronome ID of the credit type to associate with price, defaults to USD (cents) if
          * not passed. Used by all rate_types except type PERCENTAGE. PERCENTAGE rates use the
          * credit type of associated rates."
          */
-        @JsonProperty("credit_type_id") fun creditTypeId(): String? = creditTypeId
+        @JsonProperty("credit_type_id")
+        fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
 
         /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-        @JsonProperty("quantity") fun quantity(): Double? = quantity
+        @JsonProperty("quantity") fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
         /**
          * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
          * true.
          */
-        @JsonProperty("is_prorated") fun isProrated(): Boolean? = isProrated
+        @JsonProperty("is_prorated")
+        fun isProrated(): Optional<Boolean> = Optional.ofNullable(isProrated)
 
         /**
          * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
          * list prices rather than the standard rates for this product on the contract.
          */
-        @JsonProperty("use_list_prices") fun useListPrices(): Boolean? = useListPrices
+        @JsonProperty("use_list_prices")
+        fun useListPrices(): Optional<Boolean> = Optional.ofNullable(useListPrices)
 
         /** Only set for TIERED rate_type. */
-        @JsonProperty("tiers") fun tiers(): List<Tier>? = tiers
+        @JsonProperty("tiers") fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers)
 
         /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
-        @JsonProperty("custom_rate") fun customRate(): CustomRate? = customRate
+        @JsonProperty("custom_rate")
+        fun customRate(): Optional<CustomRate> = Optional.ofNullable(customRate)
 
         /**
          * A distinct rate on the rate card. You can choose to use this rate rather than list rate
          * when consuming a credit or commit.
          */
-        @JsonProperty("commit_rate") fun commitRate(): CommitRate? = commitRate
+        @JsonProperty("commit_rate")
+        fun commitRate(): Optional<CommitRate> = Optional.ofNullable(commitRate)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -413,21 +428,21 @@ constructor(
 
             @JvmSynthetic
             internal fun from(rate: Rate) = apply {
-                this.productId = rate.productId
-                this.pricingGroupValues = rate.pricingGroupValues
-                this.startingAt = rate.startingAt
-                this.endingBefore = rate.endingBefore
-                this.entitled = rate.entitled
-                this.rateType = rate.rateType
-                this.price = rate.price
-                this.creditTypeId = rate.creditTypeId
-                this.quantity = rate.quantity
-                this.isProrated = rate.isProrated
-                this.useListPrices = rate.useListPrices
-                this.tiers = rate.tiers
-                this.customRate = rate.customRate
-                this.commitRate = rate.commitRate
-                additionalProperties(rate.additionalProperties)
+                productId = rate.productId
+                pricingGroupValues = rate.pricingGroupValues
+                startingAt = rate.startingAt
+                endingBefore = rate.endingBefore
+                entitled = rate.entitled
+                rateType = rate.rateType
+                price = rate.price
+                creditTypeId = rate.creditTypeId
+                quantity = rate.quantity
+                isProrated = rate.isProrated
+                useListPrices = rate.useListPrices
+                tiers = rate.tiers?.toMutableList()
+                customRate = rate.customRate
+                commitRate = rate.commitRate
+                additionalProperties = rate.additionalProperties.toMutableMap()
             }
 
             /** ID of the product to add a rate for */
@@ -510,16 +525,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Rate =
@@ -625,19 +646,19 @@ constructor(
         @NoAutoDetect
         class CommitRate
         private constructor(
-            private val rateType: RateType?,
+            private val rateType: RateType,
             private val price: Double?,
             private val tiers: List<Tier>?,
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            @JsonProperty("rate_type") fun rateType(): RateType? = rateType
+            @JsonProperty("rate_type") fun rateType(): RateType = rateType
 
             /** Commit rate price. For FLAT rate_type, this must be >=0. */
-            @JsonProperty("price") fun price(): Double? = price
+            @JsonProperty("price") fun price(): Optional<Double> = Optional.ofNullable(price)
 
             /** Only set for TIERED rate_type. */
-            @JsonProperty("tiers") fun tiers(): List<Tier>? = tiers
+            @JsonProperty("tiers") fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers)
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -659,10 +680,10 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(commitRate: CommitRate) = apply {
-                    this.rateType = commitRate.rateType
-                    this.price = commitRate.price
-                    this.tiers = commitRate.tiers
-                    additionalProperties(commitRate.additionalProperties)
+                    rateType = commitRate.rateType
+                    price = commitRate.price
+                    tiers = commitRate.tiers?.toMutableList()
+                    additionalProperties = commitRate.additionalProperties.toMutableMap()
                 }
 
                 @JsonProperty("rate_type")
@@ -676,18 +697,26 @@ constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): CommitRate =
                     CommitRate(
@@ -846,23 +875,31 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(customRate: CustomRate) = apply {
-                    additionalProperties(customRate.additionalProperties)
+                    additionalProperties = customRate.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): CustomRate = CustomRate(additionalProperties.toImmutable())
             }
@@ -912,23 +949,31 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(pricingGroupValues: PricingGroupValues) = apply {
-                    additionalProperties(pricingGroupValues.additionalProperties)
+                    additionalProperties = pricingGroupValues.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PricingGroupValues =
                     PricingGroupValues(additionalProperties.toImmutable())

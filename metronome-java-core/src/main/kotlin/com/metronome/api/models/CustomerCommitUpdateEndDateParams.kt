@@ -60,32 +60,33 @@ constructor(
     @NoAutoDetect
     class CustomerCommitUpdateEndDateBody
     internal constructor(
-        private val commitId: String?,
-        private val customerId: String?,
+        private val commitId: String,
+        private val customerId: String,
         private val accessEndingBefore: OffsetDateTime?,
         private val invoicesEndingBefore: OffsetDateTime?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** ID of the commit to update. Only supports "PREPAID" commits. */
-        @JsonProperty("commit_id") fun commitId(): String? = commitId
+        @JsonProperty("commit_id") fun commitId(): String = commitId
 
         /** ID of the customer whose commit is to be updated */
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         /**
          * RFC 3339 timestamp indicating when access to the commit will end and it will no longer be
          * possible to draw it down (exclusive). If not provided, the access will not be updated.
          */
         @JsonProperty("access_ending_before")
-        fun accessEndingBefore(): OffsetDateTime? = accessEndingBefore
+        fun accessEndingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(accessEndingBefore)
 
         /**
          * RFC 3339 timestamp indicating when the commit will stop being invoiced (exclusive). If
          * not provided, the invoice schedule will not be updated.
          */
         @JsonProperty("invoices_ending_before")
-        fun invoicesEndingBefore(): OffsetDateTime? = invoicesEndingBefore
+        fun invoicesEndingBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(invoicesEndingBefore)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -109,11 +110,12 @@ constructor(
             @JvmSynthetic
             internal fun from(customerCommitUpdateEndDateBody: CustomerCommitUpdateEndDateBody) =
                 apply {
-                    this.commitId = customerCommitUpdateEndDateBody.commitId
-                    this.customerId = customerCommitUpdateEndDateBody.customerId
-                    this.accessEndingBefore = customerCommitUpdateEndDateBody.accessEndingBefore
-                    this.invoicesEndingBefore = customerCommitUpdateEndDateBody.invoicesEndingBefore
-                    additionalProperties(customerCommitUpdateEndDateBody.additionalProperties)
+                    commitId = customerCommitUpdateEndDateBody.commitId
+                    customerId = customerCommitUpdateEndDateBody.customerId
+                    accessEndingBefore = customerCommitUpdateEndDateBody.accessEndingBefore
+                    invoicesEndingBefore = customerCommitUpdateEndDateBody.invoicesEndingBefore
+                    additionalProperties =
+                        customerCommitUpdateEndDateBody.additionalProperties.toMutableMap()
                 }
 
             /** ID of the commit to update. Only supports "PREPAID" commits. */
@@ -145,16 +147,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerCommitUpdateEndDateBody =

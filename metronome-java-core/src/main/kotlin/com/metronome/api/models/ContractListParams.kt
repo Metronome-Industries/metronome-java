@@ -64,7 +64,7 @@ constructor(
     @NoAutoDetect
     class ContractListBody
     internal constructor(
-        private val customerId: String?,
+        private val customerId: String,
         private val coveringDate: OffsetDateTime?,
         private val includeArchived: Boolean?,
         private val includeLedgers: Boolean?,
@@ -72,30 +72,34 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         /**
          * Optional RFC 3339 timestamp. If provided, the response will include only contracts
          * effective on the provided date. This cannot be provided if the starting_at filter is
          * provided.
          */
-        @JsonProperty("covering_date") fun coveringDate(): OffsetDateTime? = coveringDate
+        @JsonProperty("covering_date")
+        fun coveringDate(): Optional<OffsetDateTime> = Optional.ofNullable(coveringDate)
 
         /** Include archived contracts in the response */
-        @JsonProperty("include_archived") fun includeArchived(): Boolean? = includeArchived
+        @JsonProperty("include_archived")
+        fun includeArchived(): Optional<Boolean> = Optional.ofNullable(includeArchived)
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        @JsonProperty("include_ledgers") fun includeLedgers(): Boolean? = includeLedgers
+        @JsonProperty("include_ledgers")
+        fun includeLedgers(): Optional<Boolean> = Optional.ofNullable(includeLedgers)
 
         /**
          * Optional RFC 3339 timestamp. If provided, the response will include only contracts where
          * effective_at is on or after the provided date. This cannot be provided if the
          * covering_date filter is provided.
          */
-        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+        @JsonProperty("starting_at")
+        fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -119,12 +123,12 @@ constructor(
 
             @JvmSynthetic
             internal fun from(contractListBody: ContractListBody) = apply {
-                this.customerId = contractListBody.customerId
-                this.coveringDate = contractListBody.coveringDate
-                this.includeArchived = contractListBody.includeArchived
-                this.includeLedgers = contractListBody.includeLedgers
-                this.startingAt = contractListBody.startingAt
-                additionalProperties(contractListBody.additionalProperties)
+                customerId = contractListBody.customerId
+                coveringDate = contractListBody.coveringDate
+                includeArchived = contractListBody.includeArchived
+                includeLedgers = contractListBody.includeLedgers
+                startingAt = contractListBody.startingAt
+                additionalProperties = contractListBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("customer_id")
@@ -165,16 +169,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractListBody =

@@ -54,14 +54,14 @@ constructor(
     @NoAutoDetect
     class CustomFieldRemoveKeyBody
     internal constructor(
-        private val entity: Entity?,
-        private val key: String?,
+        private val entity: Entity,
+        private val key: String,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("entity") fun entity(): Entity? = entity
+        @JsonProperty("entity") fun entity(): Entity = entity
 
-        @JsonProperty("key") fun key(): String? = key
+        @JsonProperty("key") fun key(): String = key
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -82,9 +82,9 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customFieldRemoveKeyBody: CustomFieldRemoveKeyBody) = apply {
-                this.entity = customFieldRemoveKeyBody.entity
-                this.key = customFieldRemoveKeyBody.key
-                additionalProperties(customFieldRemoveKeyBody.additionalProperties)
+                entity = customFieldRemoveKeyBody.entity
+                key = customFieldRemoveKeyBody.key
+                additionalProperties = customFieldRemoveKeyBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("entity") fun entity(entity: Entity) = apply { this.entity = entity }
@@ -93,16 +93,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomFieldRemoveKeyBody =

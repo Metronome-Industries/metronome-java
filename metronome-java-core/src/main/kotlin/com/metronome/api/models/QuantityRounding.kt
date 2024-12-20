@@ -31,8 +31,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun roundingMethod(): RoundingMethod = roundingMethod.getRequired("rounding_method")
 
     fun decimalPlaces(): Double = decimalPlaces.getRequired("decimal_places")
@@ -44,6 +42,8 @@ private constructor(
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    private var validated: Boolean = false
 
     fun validate(): QuantityRounding = apply {
         if (!validated) {
@@ -68,9 +68,9 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(quantityRounding: QuantityRounding) = apply {
-            this.roundingMethod = quantityRounding.roundingMethod
-            this.decimalPlaces = quantityRounding.decimalPlaces
-            additionalProperties(quantityRounding.additionalProperties)
+            roundingMethod = quantityRounding.roundingMethod
+            decimalPlaces = quantityRounding.decimalPlaces
+            additionalProperties = quantityRounding.additionalProperties.toMutableMap()
         }
 
         fun roundingMethod(roundingMethod: RoundingMethod) =
@@ -92,16 +92,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): QuantityRounding =

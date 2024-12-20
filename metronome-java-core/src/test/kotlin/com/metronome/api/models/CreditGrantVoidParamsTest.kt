@@ -27,8 +27,8 @@ class CreditGrantVoidParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
-        assertThat(body.releaseUniquenessKey()).isEqualTo(true)
-        assertThat(body.voidCreditPurchaseInvoice()).isEqualTo(true)
+        assertThat(body.releaseUniquenessKey()).contains(true)
+        assertThat(body.voidCreditPurchaseInvoice()).contains(true)
     }
 
     @Test

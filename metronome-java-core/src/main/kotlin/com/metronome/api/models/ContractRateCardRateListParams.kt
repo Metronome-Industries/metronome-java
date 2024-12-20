@@ -69,23 +69,24 @@ constructor(
     @NoAutoDetect
     class ContractRateCardRateListBody
     internal constructor(
-        private val at: OffsetDateTime?,
-        private val rateCardId: String?,
+        private val at: OffsetDateTime,
+        private val rateCardId: String,
         private val selectors: List<Selector>?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** inclusive starting point for the rates schedule */
-        @JsonProperty("at") fun at(): OffsetDateTime? = at
+        @JsonProperty("at") fun at(): OffsetDateTime = at
 
         /** ID of the rate card to get the schedule for */
-        @JsonProperty("rate_card_id") fun rateCardId(): String? = rateCardId
+        @JsonProperty("rate_card_id") fun rateCardId(): String = rateCardId
 
         /**
          * List of rate selectors, rates matching ANY of the selector will be included in the
          * response Passing no selectors will result in all rates being returned.
          */
-        @JsonProperty("selectors") fun selectors(): List<Selector>? = selectors
+        @JsonProperty("selectors")
+        fun selectors(): Optional<List<Selector>> = Optional.ofNullable(selectors)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -107,10 +108,11 @@ constructor(
 
             @JvmSynthetic
             internal fun from(contractRateCardRateListBody: ContractRateCardRateListBody) = apply {
-                this.at = contractRateCardRateListBody.at
-                this.rateCardId = contractRateCardRateListBody.rateCardId
-                this.selectors = contractRateCardRateListBody.selectors
-                additionalProperties(contractRateCardRateListBody.additionalProperties)
+                at = contractRateCardRateListBody.at
+                rateCardId = contractRateCardRateListBody.rateCardId
+                selectors = contractRateCardRateListBody.selectors?.toMutableList()
+                additionalProperties =
+                    contractRateCardRateListBody.additionalProperties.toMutableMap()
             }
 
             /** inclusive starting point for the rates schedule */
@@ -129,16 +131,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractRateCardRateListBody =
@@ -372,26 +380,30 @@ constructor(
     ) {
 
         /** Rates matching the product id will be included in the response. */
-        @JsonProperty("product_id") fun productId(): String? = productId
+        @JsonProperty("product_id")
+        fun productId(): Optional<String> = Optional.ofNullable(productId)
 
         /**
          * List of product tags, rates matching any of the tags will be included in the response.
          */
-        @JsonProperty("product_tags") fun productTags(): List<String>? = productTags
+        @JsonProperty("product_tags")
+        fun productTags(): Optional<List<String>> = Optional.ofNullable(productTags)
 
         /**
          * List of pricing group key value pairs, rates matching all of the key / value pairs will
          * be included in the response.
          */
         @JsonProperty("pricing_group_values")
-        fun pricingGroupValues(): PricingGroupValues? = pricingGroupValues
+        fun pricingGroupValues(): Optional<PricingGroupValues> =
+            Optional.ofNullable(pricingGroupValues)
 
         /**
          * List of pricing group key value pairs, rates containing the matching key / value pairs
          * will be included in the response.
          */
         @JsonProperty("partial_pricing_group_values")
-        fun partialPricingGroupValues(): PartialPricingGroupValues? = partialPricingGroupValues
+        fun partialPricingGroupValues(): Optional<PartialPricingGroupValues> =
+            Optional.ofNullable(partialPricingGroupValues)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -414,11 +426,11 @@ constructor(
 
             @JvmSynthetic
             internal fun from(selector: Selector) = apply {
-                this.productId = selector.productId
-                this.productTags = selector.productTags
-                this.pricingGroupValues = selector.pricingGroupValues
-                this.partialPricingGroupValues = selector.partialPricingGroupValues
-                additionalProperties(selector.additionalProperties)
+                productId = selector.productId
+                productTags = selector.productTags?.toMutableList()
+                pricingGroupValues = selector.pricingGroupValues
+                partialPricingGroupValues = selector.partialPricingGroupValues
+                additionalProperties = selector.additionalProperties.toMutableMap()
             }
 
             /** Rates matching the product id will be included in the response. */
@@ -453,16 +465,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Selector =
@@ -503,23 +521,32 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(partialPricingGroupValues: PartialPricingGroupValues) = apply {
-                    additionalProperties(partialPricingGroupValues.additionalProperties)
+                    additionalProperties =
+                        partialPricingGroupValues.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PartialPricingGroupValues =
                     PartialPricingGroupValues(additionalProperties.toImmutable())
@@ -571,23 +598,31 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(pricingGroupValues: PricingGroupValues) = apply {
-                    additionalProperties(pricingGroupValues.additionalProperties)
+                    additionalProperties = pricingGroupValues.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PricingGroupValues =
                     PricingGroupValues(additionalProperties.toImmutable())

@@ -68,29 +68,32 @@ constructor(
     @NoAutoDetect
     class DashboardGetEmbeddableUrlBody
     internal constructor(
-        private val customerId: String?,
-        private val dashboard: Dashboard?,
+        private val customerId: String,
+        private val dashboard: Dashboard,
         private val bmGroupKeyOverrides: List<BmGroupKeyOverride>?,
         private val colorOverrides: List<ColorOverride>?,
         private val dashboardOptions: List<DashboardOption>?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         /** The type of dashboard to retrieve. */
-        @JsonProperty("dashboard") fun dashboard(): Dashboard? = dashboard
+        @JsonProperty("dashboard") fun dashboard(): Dashboard = dashboard
 
         /** Optional list of billable metric group key overrides */
         @JsonProperty("bm_group_key_overrides")
-        fun bmGroupKeyOverrides(): List<BmGroupKeyOverride>? = bmGroupKeyOverrides
+        fun bmGroupKeyOverrides(): Optional<List<BmGroupKeyOverride>> =
+            Optional.ofNullable(bmGroupKeyOverrides)
 
         /** Optional list of colors to override */
-        @JsonProperty("color_overrides") fun colorOverrides(): List<ColorOverride>? = colorOverrides
+        @JsonProperty("color_overrides")
+        fun colorOverrides(): Optional<List<ColorOverride>> = Optional.ofNullable(colorOverrides)
 
         /** Optional dashboard specific options */
         @JsonProperty("dashboard_options")
-        fun dashboardOptions(): List<DashboardOption>? = dashboardOptions
+        fun dashboardOptions(): Optional<List<DashboardOption>> =
+            Optional.ofNullable(dashboardOptions)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -115,12 +118,15 @@ constructor(
             @JvmSynthetic
             internal fun from(dashboardGetEmbeddableUrlBody: DashboardGetEmbeddableUrlBody) =
                 apply {
-                    this.customerId = dashboardGetEmbeddableUrlBody.customerId
-                    this.dashboard = dashboardGetEmbeddableUrlBody.dashboard
-                    this.bmGroupKeyOverrides = dashboardGetEmbeddableUrlBody.bmGroupKeyOverrides
-                    this.colorOverrides = dashboardGetEmbeddableUrlBody.colorOverrides
-                    this.dashboardOptions = dashboardGetEmbeddableUrlBody.dashboardOptions
-                    additionalProperties(dashboardGetEmbeddableUrlBody.additionalProperties)
+                    customerId = dashboardGetEmbeddableUrlBody.customerId
+                    dashboard = dashboardGetEmbeddableUrlBody.dashboard
+                    bmGroupKeyOverrides =
+                        dashboardGetEmbeddableUrlBody.bmGroupKeyOverrides?.toMutableList()
+                    colorOverrides = dashboardGetEmbeddableUrlBody.colorOverrides?.toMutableList()
+                    dashboardOptions =
+                        dashboardGetEmbeddableUrlBody.dashboardOptions?.toMutableList()
+                    additionalProperties =
+                        dashboardGetEmbeddableUrlBody.additionalProperties.toMutableMap()
                 }
 
             @JsonProperty("customer_id")
@@ -150,16 +156,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): DashboardGetEmbeddableUrlBody =
@@ -469,24 +481,26 @@ constructor(
     @NoAutoDetect
     class BmGroupKeyOverride
     private constructor(
-        private val groupKeyName: String?,
+        private val groupKeyName: String,
         private val displayName: String?,
         private val valueDisplayNames: ValueDisplayNames?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** The name of the billable metric group key. */
-        @JsonProperty("group_key_name") fun groupKeyName(): String? = groupKeyName
+        @JsonProperty("group_key_name") fun groupKeyName(): String = groupKeyName
 
         /** The display name for the billable metric group key */
-        @JsonProperty("display_name") fun displayName(): String? = displayName
+        @JsonProperty("display_name")
+        fun displayName(): Optional<String> = Optional.ofNullable(displayName)
 
         /**
          * <key, value> pairs of the billable metric group key values and their display names. e.g.
          * {"a": "Asia", "b": "Euro"}
          */
         @JsonProperty("value_display_names")
-        fun valueDisplayNames(): ValueDisplayNames? = valueDisplayNames
+        fun valueDisplayNames(): Optional<ValueDisplayNames> =
+            Optional.ofNullable(valueDisplayNames)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -508,10 +522,10 @@ constructor(
 
             @JvmSynthetic
             internal fun from(bmGroupKeyOverride: BmGroupKeyOverride) = apply {
-                this.groupKeyName = bmGroupKeyOverride.groupKeyName
-                this.displayName = bmGroupKeyOverride.displayName
-                this.valueDisplayNames = bmGroupKeyOverride.valueDisplayNames
-                additionalProperties(bmGroupKeyOverride.additionalProperties)
+                groupKeyName = bmGroupKeyOverride.groupKeyName
+                displayName = bmGroupKeyOverride.displayName
+                valueDisplayNames = bmGroupKeyOverride.valueDisplayNames
+                additionalProperties = bmGroupKeyOverride.additionalProperties.toMutableMap()
             }
 
             /** The name of the billable metric group key. */
@@ -533,16 +547,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): BmGroupKeyOverride =
@@ -582,23 +602,31 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(valueDisplayNames: ValueDisplayNames) = apply {
-                    additionalProperties(valueDisplayNames.additionalProperties)
+                    additionalProperties = valueDisplayNames.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): ValueDisplayNames =
                     ValueDisplayNames(additionalProperties.toImmutable())
@@ -650,10 +678,10 @@ constructor(
     ) {
 
         /** The color to override */
-        @JsonProperty("name") fun name(): Name? = name
+        @JsonProperty("name") fun name(): Optional<Name> = Optional.ofNullable(name)
 
         /** Hex value representation of the color */
-        @JsonProperty("value") fun value(): String? = value
+        @JsonProperty("value") fun value(): Optional<String> = Optional.ofNullable(value)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -674,9 +702,9 @@ constructor(
 
             @JvmSynthetic
             internal fun from(colorOverride: ColorOverride) = apply {
-                this.name = colorOverride.name
-                this.value = colorOverride.value
-                additionalProperties(colorOverride.additionalProperties)
+                name = colorOverride.name
+                value = colorOverride.value
+                additionalProperties = colorOverride.additionalProperties.toMutableMap()
             }
 
             /** The color to override */
@@ -687,16 +715,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ColorOverride =
@@ -888,16 +922,16 @@ constructor(
     @NoAutoDetect
     class DashboardOption
     private constructor(
-        private val key: String?,
-        private val value: String?,
+        private val key: String,
+        private val value: String,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** The option key name */
-        @JsonProperty("key") fun key(): String? = key
+        @JsonProperty("key") fun key(): String = key
 
         /** The option value */
-        @JsonProperty("value") fun value(): String? = value
+        @JsonProperty("value") fun value(): String = value
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -918,9 +952,9 @@ constructor(
 
             @JvmSynthetic
             internal fun from(dashboardOption: DashboardOption) = apply {
-                this.key = dashboardOption.key
-                this.value = dashboardOption.value
-                additionalProperties(dashboardOption.additionalProperties)
+                key = dashboardOption.key
+                value = dashboardOption.value
+                additionalProperties = dashboardOption.additionalProperties.toMutableMap()
             }
 
             /** The option key name */
@@ -931,16 +965,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): DashboardOption =

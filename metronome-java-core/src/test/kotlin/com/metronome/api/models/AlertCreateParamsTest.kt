@@ -78,11 +78,11 @@ class AlertCreateParamsTest {
             .isEqualTo(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
         assertThat(body.name()).isEqualTo("\$100 spend threshold reached")
         assertThat(body.threshold()).isEqualTo(10000.0)
-        assertThat(body.billableMetricId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.creditGrantTypeFilters()).isEqualTo(listOf("enterprise"))
-        assertThat(body.creditTypeId()).isEqualTo("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+        assertThat(body.billableMetricId()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.creditGrantTypeFilters()).contains(listOf("enterprise"))
+        assertThat(body.creditTypeId()).contains("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
         assertThat(body.customFieldFilters())
-            .isEqualTo(
+            .contains(
                 listOf(
                     AlertCreateParams.CustomFieldFilter.builder()
                         .entity(AlertCreateParams.CustomFieldFilter.Entity.CONTRACT)
@@ -91,18 +91,18 @@ class AlertCreateParamsTest {
                         .build()
                 )
             )
-        assertThat(body.customerId()).isEqualTo("4db51251-61de-4bfe-b9ce-495e244f3491")
-        assertThat(body.evaluateOnCreate()).isEqualTo(true)
+        assertThat(body.customerId()).contains("4db51251-61de-4bfe-b9ce-495e244f3491")
+        assertThat(body.evaluateOnCreate()).contains(true)
         assertThat(body.groupKeyFilter())
-            .isEqualTo(AlertCreateParams.GroupKeyFilter.builder().key("key").value("value").build())
+            .contains(AlertCreateParams.GroupKeyFilter.builder().key("key").value("value").build())
         assertThat(body.invoiceTypesFilter())
-            .isEqualTo(
+            .contains(
                 listOf(
                     "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
                 )
             )
-        assertThat(body.planId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(body.uniquenessKey()).isEqualTo("x")
+        assertThat(body.planId()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.uniquenessKey()).contains("x")
     }
 
     @Test

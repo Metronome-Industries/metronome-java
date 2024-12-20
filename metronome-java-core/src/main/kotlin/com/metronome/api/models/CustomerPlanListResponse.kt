@@ -32,8 +32,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     /** the ID of the customer plan */
     fun id(): String = id.getRequired("id")
 
@@ -82,6 +80,8 @@ private constructor(
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): CustomerPlanListResponse = apply {
         if (!validated) {
             id()
@@ -119,16 +119,16 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(customerPlanListResponse: CustomerPlanListResponse) = apply {
-            this.id = customerPlanListResponse.id
-            this.planId = customerPlanListResponse.planId
-            this.planName = customerPlanListResponse.planName
-            this.planDescription = customerPlanListResponse.planDescription
-            this.startingOn = customerPlanListResponse.startingOn
-            this.endingBefore = customerPlanListResponse.endingBefore
-            this.netPaymentTermsDays = customerPlanListResponse.netPaymentTermsDays
-            this.trialInfo = customerPlanListResponse.trialInfo
-            this.customFields = customerPlanListResponse.customFields
-            additionalProperties(customerPlanListResponse.additionalProperties)
+            id = customerPlanListResponse.id
+            planId = customerPlanListResponse.planId
+            planName = customerPlanListResponse.planName
+            planDescription = customerPlanListResponse.planDescription
+            startingOn = customerPlanListResponse.startingOn
+            endingBefore = customerPlanListResponse.endingBefore
+            netPaymentTermsDays = customerPlanListResponse.netPaymentTermsDays
+            trialInfo = customerPlanListResponse.trialInfo
+            customFields = customerPlanListResponse.customFields
+            additionalProperties = customerPlanListResponse.additionalProperties.toMutableMap()
         }
 
         /** the ID of the customer plan */
@@ -201,16 +201,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): CustomerPlanListResponse =
@@ -235,11 +241,11 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
             if (!validated) {
@@ -260,21 +266,27 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(customFields: CustomFields) = apply {
-                additionalProperties(customFields.additionalProperties)
+                additionalProperties = customFields.additionalProperties.toMutableMap()
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
@@ -306,8 +318,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
 
         fun spendingCaps(): List<SpendingCap> = spendingCaps.getRequired("spending_caps")
@@ -319,6 +329,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): TrialInfo = apply {
             if (!validated) {
@@ -343,9 +355,9 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(trialInfo: TrialInfo) = apply {
-                this.endingBefore = trialInfo.endingBefore
-                this.spendingCaps = trialInfo.spendingCaps
-                additionalProperties(trialInfo.additionalProperties)
+                endingBefore = trialInfo.endingBefore
+                spendingCaps = trialInfo.spendingCaps
+                additionalProperties = trialInfo.additionalProperties.toMutableMap()
             }
 
             fun endingBefore(endingBefore: OffsetDateTime) =
@@ -368,16 +380,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): TrialInfo =
@@ -398,8 +416,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
             fun amount(): Double = amount.getRequired("amount")
@@ -417,6 +433,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): SpendingCap = apply {
                 if (!validated) {
@@ -443,10 +461,10 @@ private constructor(
 
                 @JvmSynthetic
                 internal fun from(spendingCap: SpendingCap) = apply {
-                    this.creditType = spendingCap.creditType
-                    this.amount = spendingCap.amount
-                    this.amountRemaining = spendingCap.amountRemaining
-                    additionalProperties(spendingCap.additionalProperties)
+                    creditType = spendingCap.creditType
+                    amount = spendingCap.amount
+                    amountRemaining = spendingCap.amountRemaining
+                    additionalProperties = spendingCap.additionalProperties.toMutableMap()
                 }
 
                 fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
@@ -474,18 +492,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): SpendingCap =
                     SpendingCap(

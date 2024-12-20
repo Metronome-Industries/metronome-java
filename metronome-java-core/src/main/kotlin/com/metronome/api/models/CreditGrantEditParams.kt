@@ -60,7 +60,7 @@ constructor(
     @NoAutoDetect
     class CreditGrantEditBody
     internal constructor(
-        private val id: String?,
+        private val id: String,
         private val creditGrantType: String?,
         private val expiresAt: OffsetDateTime?,
         private val name: String?,
@@ -68,16 +68,18 @@ constructor(
     ) {
 
         /** the ID of the credit grant */
-        @JsonProperty("id") fun id(): String? = id
+        @JsonProperty("id") fun id(): String = id
 
         /** the updated credit grant type */
-        @JsonProperty("credit_grant_type") fun creditGrantType(): String? = creditGrantType
+        @JsonProperty("credit_grant_type")
+        fun creditGrantType(): Optional<String> = Optional.ofNullable(creditGrantType)
 
         /** the updated expiration date for the credit grant */
-        @JsonProperty("expires_at") fun expiresAt(): OffsetDateTime? = expiresAt
+        @JsonProperty("expires_at")
+        fun expiresAt(): Optional<OffsetDateTime> = Optional.ofNullable(expiresAt)
 
         /** the updated name for the credit grant */
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -100,11 +102,11 @@ constructor(
 
             @JvmSynthetic
             internal fun from(creditGrantEditBody: CreditGrantEditBody) = apply {
-                this.id = creditGrantEditBody.id
-                this.creditGrantType = creditGrantEditBody.creditGrantType
-                this.expiresAt = creditGrantEditBody.expiresAt
-                this.name = creditGrantEditBody.name
-                additionalProperties(creditGrantEditBody.additionalProperties)
+                id = creditGrantEditBody.id
+                creditGrantType = creditGrantEditBody.creditGrantType
+                expiresAt = creditGrantEditBody.expiresAt
+                name = creditGrantEditBody.name
+                additionalProperties = creditGrantEditBody.additionalProperties.toMutableMap()
             }
 
             /** the ID of the credit grant */
@@ -125,16 +127,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CreditGrantEditBody =

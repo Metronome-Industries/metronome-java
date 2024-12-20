@@ -728,7 +728,7 @@ class ContractAmendParamsTest {
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
         assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
         assertThat(body.commits())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractAmendParams.Commit.builder()
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -815,7 +815,7 @@ class ContractAmendParamsTest {
                 )
             )
         assertThat(body.credits())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractAmendParams.Credit.builder()
                         .accessSchedule(
@@ -854,13 +854,13 @@ class ContractAmendParamsTest {
                 )
             )
         assertThat(body.customFields())
-            .isEqualTo(
+            .contains(
                 ContractAmendParams.CustomFields.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
         assertThat(body.discounts())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractAmendParams.Discount.builder()
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -910,9 +910,9 @@ class ContractAmendParamsTest {
                         .build()
                 )
             )
-        assertThat(body.netsuiteSalesOrderId()).isEqualTo("netsuite_sales_order_id")
+        assertThat(body.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
         assertThat(body.overrides())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractAmendParams.Override.builder()
                         .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -975,7 +975,7 @@ class ContractAmendParamsTest {
                 )
             )
         assertThat(body.professionalServices())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractAmendParams.ProfessionalService.builder()
                         .maxAmount(0.0)
@@ -993,7 +993,7 @@ class ContractAmendParamsTest {
                 )
             )
         assertThat(body.resellerRoyalties())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractAmendParams.ResellerRoyalty.builder()
                         .resellerType(ContractAmendParams.ResellerRoyalty.ResellerType.AWS)
@@ -1020,9 +1020,9 @@ class ContractAmendParamsTest {
                         .build()
                 )
             )
-        assertThat(body.salesforceOpportunityId()).isEqualTo("salesforce_opportunity_id")
+        assertThat(body.salesforceOpportunityId()).contains("salesforce_opportunity_id")
         assertThat(body.scheduledCharges())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ContractAmendParams.ScheduledCharge.builder()
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1075,7 +1075,7 @@ class ContractAmendParamsTest {
                         .build()
                 )
             )
-        assertThat(body.totalContractValue()).isEqualTo(0.0)
+        assertThat(body.totalContractValue()).contains(0.0)
     }
 
     @Test

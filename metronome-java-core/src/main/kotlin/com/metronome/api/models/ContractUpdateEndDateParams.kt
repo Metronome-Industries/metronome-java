@@ -56,23 +56,24 @@ constructor(
     @NoAutoDetect
     class ContractUpdateEndDateBody
     internal constructor(
-        private val contractId: String?,
-        private val customerId: String?,
+        private val contractId: String,
+        private val customerId: String,
         private val endingBefore: OffsetDateTime?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** ID of the contract to update */
-        @JsonProperty("contract_id") fun contractId(): String? = contractId
+        @JsonProperty("contract_id") fun contractId(): String = contractId
 
         /** ID of the customer whose contract is to be updated */
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         /**
          * RFC 3339 timestamp indicating when the contract will end (exclusive). If not provided,
          * the contract will be updated to be open-ended.
          */
-        @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+        @JsonProperty("ending_before")
+        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -94,10 +95,10 @@ constructor(
 
             @JvmSynthetic
             internal fun from(contractUpdateEndDateBody: ContractUpdateEndDateBody) = apply {
-                this.contractId = contractUpdateEndDateBody.contractId
-                this.customerId = contractUpdateEndDateBody.customerId
-                this.endingBefore = contractUpdateEndDateBody.endingBefore
-                additionalProperties(contractUpdateEndDateBody.additionalProperties)
+                contractId = contractUpdateEndDateBody.contractId
+                customerId = contractUpdateEndDateBody.customerId
+                endingBefore = contractUpdateEndDateBody.endingBefore
+                additionalProperties = contractUpdateEndDateBody.additionalProperties.toMutableMap()
             }
 
             /** ID of the contract to update */
@@ -119,16 +120,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractUpdateEndDateBody =

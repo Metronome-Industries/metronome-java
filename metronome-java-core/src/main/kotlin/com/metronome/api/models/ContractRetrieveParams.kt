@@ -55,21 +55,22 @@ constructor(
     @NoAutoDetect
     class ContractRetrieveBody
     internal constructor(
-        private val contractId: String?,
-        private val customerId: String?,
+        private val contractId: String,
+        private val customerId: String,
         private val includeLedgers: Boolean?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("contract_id") fun contractId(): String? = contractId
+        @JsonProperty("contract_id") fun contractId(): String = contractId
 
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        @JsonProperty("include_ledgers") fun includeLedgers(): Boolean? = includeLedgers
+        @JsonProperty("include_ledgers")
+        fun includeLedgers(): Optional<Boolean> = Optional.ofNullable(includeLedgers)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -91,10 +92,10 @@ constructor(
 
             @JvmSynthetic
             internal fun from(contractRetrieveBody: ContractRetrieveBody) = apply {
-                this.contractId = contractRetrieveBody.contractId
-                this.customerId = contractRetrieveBody.customerId
-                this.includeLedgers = contractRetrieveBody.includeLedgers
-                additionalProperties(contractRetrieveBody.additionalProperties)
+                contractId = contractRetrieveBody.contractId
+                customerId = contractRetrieveBody.customerId
+                includeLedgers = contractRetrieveBody.includeLedgers
+                additionalProperties = contractRetrieveBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("contract_id")
@@ -114,16 +115,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractRetrieveBody =

@@ -64,16 +64,17 @@ constructor(
     @NoAutoDetect
     class CustomerAlertListBody
     internal constructor(
-        private val customerId: String?,
+        private val customerId: String,
         private val alertStatuses: List<AlertStatus>?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** The Metronome ID of the customer */
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         /** Optionally filter by alert status. If absent, only enabled alerts will be returned. */
-        @JsonProperty("alert_statuses") fun alertStatuses(): List<AlertStatus>? = alertStatuses
+        @JsonProperty("alert_statuses")
+        fun alertStatuses(): Optional<List<AlertStatus>> = Optional.ofNullable(alertStatuses)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -94,9 +95,9 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customerAlertListBody: CustomerAlertListBody) = apply {
-                this.customerId = customerAlertListBody.customerId
-                this.alertStatuses = customerAlertListBody.alertStatuses
-                additionalProperties(customerAlertListBody.additionalProperties)
+                customerId = customerAlertListBody.customerId
+                alertStatuses = customerAlertListBody.alertStatuses?.toMutableList()
+                additionalProperties = customerAlertListBody.additionalProperties.toMutableMap()
             }
 
             /** The Metronome ID of the customer */
@@ -113,16 +114,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerAlertListBody =

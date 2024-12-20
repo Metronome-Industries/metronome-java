@@ -27,8 +27,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun data(): Data = data.getRequired("data")
 
     @JsonProperty("data") @ExcludeMissing fun _data() = data
@@ -36,6 +34,8 @@ private constructor(
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    private var validated: Boolean = false
 
     fun validate(): CustomerBillingConfigRetrieveResponse = apply {
         if (!validated) {
@@ -60,8 +60,9 @@ private constructor(
         internal fun from(
             customerBillingConfigRetrieveResponse: CustomerBillingConfigRetrieveResponse
         ) = apply {
-            this.data = customerBillingConfigRetrieveResponse.data
-            additionalProperties(customerBillingConfigRetrieveResponse.additionalProperties)
+            data = customerBillingConfigRetrieveResponse.data
+            additionalProperties =
+                customerBillingConfigRetrieveResponse.additionalProperties.toMutableMap()
         }
 
         fun data(data: Data) = data(JsonField.of(data))
@@ -72,16 +73,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): CustomerBillingConfigRetrieveResponse =
@@ -103,8 +110,6 @@ private constructor(
         private val azureExpirationDate: JsonField<OffsetDateTime>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
-
-        private var validated: Boolean = false
 
         fun billingProviderCustomerId(): Optional<String> =
             Optional.ofNullable(
@@ -197,6 +202,8 @@ private constructor(
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+        private var validated: Boolean = false
+
         fun validate(): Data = apply {
             if (!validated) {
                 billingProviderCustomerId()
@@ -235,16 +242,16 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(data: Data) = apply {
-                this.billingProviderCustomerId = data.billingProviderCustomerId
-                this.stripeCollectionMethod = data.stripeCollectionMethod
-                this.awsProductCode = data.awsProductCode
-                this.awsRegion = data.awsRegion
-                this.awsExpirationDate = data.awsExpirationDate
-                this.azureSubscriptionStatus = data.azureSubscriptionStatus
-                this.azurePlanId = data.azurePlanId
-                this.azureStartDate = data.azureStartDate
-                this.azureExpirationDate = data.azureExpirationDate
-                additionalProperties(data.additionalProperties)
+                billingProviderCustomerId = data.billingProviderCustomerId
+                stripeCollectionMethod = data.stripeCollectionMethod
+                awsProductCode = data.awsProductCode
+                awsRegion = data.awsRegion
+                awsExpirationDate = data.awsExpirationDate
+                azureSubscriptionStatus = data.azureSubscriptionStatus
+                azurePlanId = data.azurePlanId
+                azureStartDate = data.azureStartDate
+                azureExpirationDate = data.azureExpirationDate
+                additionalProperties = data.additionalProperties.toMutableMap()
             }
 
             fun billingProviderCustomerId(billingProviderCustomerId: String) =
@@ -357,16 +364,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Data =

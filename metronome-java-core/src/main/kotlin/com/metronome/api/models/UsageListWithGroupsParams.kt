@@ -89,9 +89,9 @@ constructor(
     @NoAutoDetect
     class UsageListWithGroupsBody
     internal constructor(
-        private val billableMetricId: String?,
-        private val customerId: String?,
-        private val windowSize: WindowSize?,
+        private val billableMetricId: String,
+        private val customerId: String,
+        private val windowSize: WindowSize,
         private val currentPeriod: Boolean?,
         private val endingBefore: OffsetDateTime?,
         private val groupBy: GroupBy?,
@@ -99,29 +99,32 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("billable_metric_id") fun billableMetricId(): String? = billableMetricId
+        @JsonProperty("billable_metric_id") fun billableMetricId(): String = billableMetricId
 
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         /**
          * A window_size of "day" or "hour" will return the usage for the specified period segmented
          * into daily or hourly aggregates. A window_size of "none" will return a single usage
          * aggregate for the entirety of the specified period.
          */
-        @JsonProperty("window_size") fun windowSize(): WindowSize? = windowSize
+        @JsonProperty("window_size") fun windowSize(): WindowSize = windowSize
 
         /**
          * If true, will return the usage for the current billing period. Will return an error if
          * the customer is currently uncontracted or starting_on and ending_before are specified
          * when this is true.
          */
-        @JsonProperty("current_period") fun currentPeriod(): Boolean? = currentPeriod
+        @JsonProperty("current_period")
+        fun currentPeriod(): Optional<Boolean> = Optional.ofNullable(currentPeriod)
 
-        @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+        @JsonProperty("ending_before")
+        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
-        @JsonProperty("group_by") fun groupBy(): GroupBy? = groupBy
+        @JsonProperty("group_by") fun groupBy(): Optional<GroupBy> = Optional.ofNullable(groupBy)
 
-        @JsonProperty("starting_on") fun startingOn(): OffsetDateTime? = startingOn
+        @JsonProperty("starting_on")
+        fun startingOn(): Optional<OffsetDateTime> = Optional.ofNullable(startingOn)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -147,14 +150,14 @@ constructor(
 
             @JvmSynthetic
             internal fun from(usageListWithGroupsBody: UsageListWithGroupsBody) = apply {
-                this.billableMetricId = usageListWithGroupsBody.billableMetricId
-                this.customerId = usageListWithGroupsBody.customerId
-                this.windowSize = usageListWithGroupsBody.windowSize
-                this.currentPeriod = usageListWithGroupsBody.currentPeriod
-                this.endingBefore = usageListWithGroupsBody.endingBefore
-                this.groupBy = usageListWithGroupsBody.groupBy
-                this.startingOn = usageListWithGroupsBody.startingOn
-                additionalProperties(usageListWithGroupsBody.additionalProperties)
+                billableMetricId = usageListWithGroupsBody.billableMetricId
+                customerId = usageListWithGroupsBody.customerId
+                windowSize = usageListWithGroupsBody.windowSize
+                currentPeriod = usageListWithGroupsBody.currentPeriod
+                endingBefore = usageListWithGroupsBody.endingBefore
+                groupBy = usageListWithGroupsBody.groupBy
+                startingOn = usageListWithGroupsBody.startingOn
+                additionalProperties = usageListWithGroupsBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("billable_metric_id")
@@ -194,16 +197,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): UsageListWithGroupsBody =
@@ -515,19 +524,19 @@ constructor(
     @NoAutoDetect
     class GroupBy
     private constructor(
-        private val key: String?,
+        private val key: String,
         private val values: List<String>?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** The name of the group_by key to use */
-        @JsonProperty("key") fun key(): String? = key
+        @JsonProperty("key") fun key(): String = key
 
         /**
          * Values of the group_by key to return in the query. Omit this if you'd like all values for
          * the key returned.
          */
-        @JsonProperty("values") fun values(): List<String>? = values
+        @JsonProperty("values") fun values(): Optional<List<String>> = Optional.ofNullable(values)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -548,9 +557,9 @@ constructor(
 
             @JvmSynthetic
             internal fun from(groupBy: GroupBy) = apply {
-                this.key = groupBy.key
-                this.values = groupBy.values
-                additionalProperties(groupBy.additionalProperties)
+                key = groupBy.key
+                values = groupBy.values?.toMutableList()
+                additionalProperties = groupBy.additionalProperties.toMutableMap()
             }
 
             /** The name of the group_by key to use */
@@ -565,16 +574,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): GroupBy =

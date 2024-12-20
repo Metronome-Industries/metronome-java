@@ -29,8 +29,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     /** The status of the customer alert. If the alert is archived, null will be returned. */
     fun customerStatus(): Optional<CustomerStatus> =
         Optional.ofNullable(customerStatus.getNullable("customer_status"))
@@ -52,6 +50,8 @@ private constructor(
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    private var validated: Boolean = false
 
     fun validate(): CustomerAlert = apply {
         if (!validated) {
@@ -78,10 +78,10 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(customerAlert: CustomerAlert) = apply {
-            this.customerStatus = customerAlert.customerStatus
-            this.triggeredBy = customerAlert.triggeredBy
-            this.alert = customerAlert.alert
-            additionalProperties(customerAlert.additionalProperties)
+            customerStatus = customerAlert.customerStatus
+            triggeredBy = customerAlert.triggeredBy
+            alert = customerAlert.alert
+            additionalProperties = customerAlert.additionalProperties.toMutableMap()
         }
 
         /** The status of the customer alert. If the alert is archived, null will be returned. */
@@ -111,16 +111,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): CustomerAlert =
@@ -150,8 +156,6 @@ private constructor(
         private val invoiceTypesFilter: JsonField<List<String>>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
-
-        private var validated: Boolean = false
 
         /** the Metronome ID of the alert */
         fun id(): String = id.getRequired("id")
@@ -261,6 +265,8 @@ private constructor(
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+        private var validated: Boolean = false
+
         fun validate(): Alert = apply {
             if (!validated) {
                 id()
@@ -304,19 +310,19 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(alert: Alert) = apply {
-                this.id = alert.id
-                this.name = alert.name
-                this.uniquenessKey = alert.uniquenessKey
-                this.type = alert.type
-                this.status = alert.status
-                this.creditType = alert.creditType
-                this.threshold = alert.threshold
-                this.updatedAt = alert.updatedAt
-                this.creditGrantTypeFilters = alert.creditGrantTypeFilters
-                this.customFieldFilters = alert.customFieldFilters
-                this.groupKeyFilter = alert.groupKeyFilter
-                this.invoiceTypesFilter = alert.invoiceTypesFilter
-                additionalProperties(alert.additionalProperties)
+                id = alert.id
+                name = alert.name
+                uniquenessKey = alert.uniquenessKey
+                type = alert.type
+                status = alert.status
+                creditType = alert.creditType
+                threshold = alert.threshold
+                updatedAt = alert.updatedAt
+                creditGrantTypeFilters = alert.creditGrantTypeFilters
+                customFieldFilters = alert.customFieldFilters
+                groupKeyFilter = alert.groupKeyFilter
+                invoiceTypesFilter = alert.invoiceTypesFilter
+                additionalProperties = alert.additionalProperties.toMutableMap()
             }
 
             /** the Metronome ID of the alert */
@@ -459,16 +465,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Alert =
@@ -728,8 +740,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun entity(): Entity = entity.getRequired("entity")
 
             fun key(): String = key.getRequired("key")
@@ -745,6 +755,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): CustomFieldFilter = apply {
                 if (!validated) {
@@ -771,10 +783,10 @@ private constructor(
 
                 @JvmSynthetic
                 internal fun from(customFieldFilter: CustomFieldFilter) = apply {
-                    this.entity = customFieldFilter.entity
-                    this.key = customFieldFilter.key
-                    this.value = customFieldFilter.value
-                    additionalProperties(customFieldFilter.additionalProperties)
+                    entity = customFieldFilter.entity
+                    key = customFieldFilter.key
+                    value = customFieldFilter.value
+                    additionalProperties = customFieldFilter.additionalProperties.toMutableMap()
                 }
 
                 fun entity(entity: Entity) = entity(JsonField.of(entity))
@@ -797,18 +809,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): CustomFieldFilter =
                     CustomFieldFilter(
@@ -913,8 +933,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun key(): String = key.getRequired("key")
 
             fun value(): String = value.getRequired("value")
@@ -926,6 +944,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): GroupKeyFilter = apply {
                 if (!validated) {
@@ -950,9 +970,9 @@ private constructor(
 
                 @JvmSynthetic
                 internal fun from(groupKeyFilter: GroupKeyFilter) = apply {
-                    this.key = groupKeyFilter.key
-                    this.value = groupKeyFilter.value
-                    additionalProperties(groupKeyFilter.additionalProperties)
+                    key = groupKeyFilter.key
+                    value = groupKeyFilter.value
+                    additionalProperties = groupKeyFilter.additionalProperties.toMutableMap()
                 }
 
                 fun key(key: String) = key(JsonField.of(key))
@@ -969,18 +989,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): GroupKeyFilter =
                     GroupKeyFilter(

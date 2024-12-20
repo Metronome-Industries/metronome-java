@@ -56,23 +56,24 @@ constructor(
     @NoAutoDetect
     class CustomerNamedScheduleRetrieveBody
     internal constructor(
-        private val customerId: String?,
-        private val scheduleName: String?,
+        private val customerId: String,
+        private val scheduleName: String,
         private val coveringDate: OffsetDateTime?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** ID of the customer whose named schedule is to be retrieved */
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         /** The identifier for the schedule to be retrieved */
-        @JsonProperty("schedule_name") fun scheduleName(): String? = scheduleName
+        @JsonProperty("schedule_name") fun scheduleName(): String = scheduleName
 
         /**
          * If provided, at most one schedule segment will be returned (the one that covers this
          * date). If not provided, all segments will be returned.
          */
-        @JsonProperty("covering_date") fun coveringDate(): OffsetDateTime? = coveringDate
+        @JsonProperty("covering_date")
+        fun coveringDate(): Optional<OffsetDateTime> = Optional.ofNullable(coveringDate)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -96,10 +97,11 @@ constructor(
             internal fun from(
                 customerNamedScheduleRetrieveBody: CustomerNamedScheduleRetrieveBody
             ) = apply {
-                this.customerId = customerNamedScheduleRetrieveBody.customerId
-                this.scheduleName = customerNamedScheduleRetrieveBody.scheduleName
-                this.coveringDate = customerNamedScheduleRetrieveBody.coveringDate
-                additionalProperties(customerNamedScheduleRetrieveBody.additionalProperties)
+                customerId = customerNamedScheduleRetrieveBody.customerId
+                scheduleName = customerNamedScheduleRetrieveBody.scheduleName
+                coveringDate = customerNamedScheduleRetrieveBody.coveringDate
+                additionalProperties =
+                    customerNamedScheduleRetrieveBody.additionalProperties.toMutableMap()
             }
 
             /** ID of the customer whose named schedule is to be retrieved */
@@ -121,16 +123,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerNamedScheduleRetrieveBody =

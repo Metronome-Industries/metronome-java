@@ -56,8 +56,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun id(): String = id.getRequired("id")
 
     fun contract(): Optional<Contract> = Optional.ofNullable(contract.getNullable("contract"))
@@ -196,6 +194,8 @@ private constructor(
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): Commit = apply {
         if (!validated) {
             id()
@@ -257,28 +257,28 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(commit: Commit) = apply {
-            this.id = commit.id
-            this.contract = commit.contract
-            this.type = commit.type
-            this.rateType = commit.rateType
-            this.name = commit.name
-            this.priority = commit.priority
-            this.product = commit.product
-            this.accessSchedule = commit.accessSchedule
-            this.invoiceSchedule = commit.invoiceSchedule
-            this.invoiceContract = commit.invoiceContract
-            this.rolledOverFrom = commit.rolledOverFrom
-            this.description = commit.description
-            this.rolloverFraction = commit.rolloverFraction
-            this.applicableProductIds = commit.applicableProductIds
-            this.applicableProductTags = commit.applicableProductTags
-            this.applicableContractIds = commit.applicableContractIds
-            this.netsuiteSalesOrderId = commit.netsuiteSalesOrderId
-            this.amount = commit.amount
-            this.salesforceOpportunityId = commit.salesforceOpportunityId
-            this.ledger = commit.ledger
-            this.customFields = commit.customFields
-            additionalProperties(commit.additionalProperties)
+            id = commit.id
+            contract = commit.contract
+            type = commit.type
+            rateType = commit.rateType
+            name = commit.name
+            priority = commit.priority
+            product = commit.product
+            accessSchedule = commit.accessSchedule
+            invoiceSchedule = commit.invoiceSchedule
+            invoiceContract = commit.invoiceContract
+            rolledOverFrom = commit.rolledOverFrom
+            description = commit.description
+            rolloverFraction = commit.rolloverFraction
+            applicableProductIds = commit.applicableProductIds
+            applicableProductTags = commit.applicableProductTags
+            applicableContractIds = commit.applicableContractIds
+            netsuiteSalesOrderId = commit.netsuiteSalesOrderId
+            amount = commit.amount
+            salesforceOpportunityId = commit.salesforceOpportunityId
+            ledger = commit.ledger
+            customFields = commit.customFields
+            additionalProperties = commit.additionalProperties.toMutableMap()
         }
 
         fun id(id: String) = id(JsonField.of(id))
@@ -471,16 +471,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): Commit =
@@ -519,8 +525,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         fun id(): String = id.getRequired("id")
 
         fun name(): String = name.getRequired("name")
@@ -532,6 +536,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): Product = apply {
             if (!validated) {
@@ -556,9 +562,9 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(product: Product) = apply {
-                this.id = product.id
-                this.name = product.name
-                additionalProperties(product.additionalProperties)
+                id = product.id
+                name = product.name
+                additionalProperties = product.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
@@ -575,16 +581,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Product =
@@ -678,8 +690,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         fun id(): String = id.getRequired("id")
 
         @JsonProperty("id") @ExcludeMissing fun _id() = id
@@ -687,6 +697,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): Contract = apply {
             if (!validated) {
@@ -709,8 +721,8 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(contract: Contract) = apply {
-                this.id = contract.id
-                additionalProperties(contract.additionalProperties)
+                id = contract.id
+                additionalProperties = contract.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
@@ -721,16 +733,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Contract = Contract(id, additionalProperties.toImmutable())
@@ -760,11 +778,11 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
             if (!validated) {
@@ -785,21 +803,27 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(customFields: CustomFields) = apply {
-                additionalProperties(customFields.additionalProperties)
+                additionalProperties = customFields.additionalProperties.toMutableMap()
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
@@ -831,8 +855,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         fun id(): String = id.getRequired("id")
 
         @JsonProperty("id") @ExcludeMissing fun _id() = id
@@ -840,6 +862,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): InvoiceContract = apply {
             if (!validated) {
@@ -862,8 +886,8 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(invoiceContract: InvoiceContract) = apply {
-                this.id = invoiceContract.id
-                additionalProperties(invoiceContract.additionalProperties)
+                id = invoiceContract.id
+                additionalProperties = invoiceContract.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
@@ -874,16 +898,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): InvoiceContract = InvoiceContract(id, additionalProperties.toImmutable())
@@ -1483,8 +1513,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun type(): Type = type.getRequired("type")
 
             fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
@@ -1504,6 +1532,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): PrepaidCommitSegmentStartLedgerEntry = apply {
                 if (!validated) {
@@ -1534,11 +1564,12 @@ private constructor(
                 internal fun from(
                     prepaidCommitSegmentStartLedgerEntry: PrepaidCommitSegmentStartLedgerEntry
                 ) = apply {
-                    this.type = prepaidCommitSegmentStartLedgerEntry.type
-                    this.timestamp = prepaidCommitSegmentStartLedgerEntry.timestamp
-                    this.amount = prepaidCommitSegmentStartLedgerEntry.amount
-                    this.segmentId = prepaidCommitSegmentStartLedgerEntry.segmentId
-                    additionalProperties(prepaidCommitSegmentStartLedgerEntry.additionalProperties)
+                    type = prepaidCommitSegmentStartLedgerEntry.type
+                    timestamp = prepaidCommitSegmentStartLedgerEntry.timestamp
+                    amount = prepaidCommitSegmentStartLedgerEntry.amount
+                    segmentId = prepaidCommitSegmentStartLedgerEntry.segmentId
+                    additionalProperties =
+                        prepaidCommitSegmentStartLedgerEntry.additionalProperties.toMutableMap()
                 }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -1569,18 +1600,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PrepaidCommitSegmentStartLedgerEntry =
                     PrepaidCommitSegmentStartLedgerEntry(
@@ -1673,8 +1712,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun type(): Type = type.getRequired("type")
 
             fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
@@ -1698,6 +1735,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): PrepaidCommitAutomatedInvoiceDeductionLedgerEntry = apply {
                 if (!validated) {
@@ -1731,14 +1770,14 @@ private constructor(
                     prepaidCommitAutomatedInvoiceDeductionLedgerEntry:
                         PrepaidCommitAutomatedInvoiceDeductionLedgerEntry
                 ) = apply {
-                    this.type = prepaidCommitAutomatedInvoiceDeductionLedgerEntry.type
-                    this.timestamp = prepaidCommitAutomatedInvoiceDeductionLedgerEntry.timestamp
-                    this.amount = prepaidCommitAutomatedInvoiceDeductionLedgerEntry.amount
-                    this.segmentId = prepaidCommitAutomatedInvoiceDeductionLedgerEntry.segmentId
-                    this.invoiceId = prepaidCommitAutomatedInvoiceDeductionLedgerEntry.invoiceId
-                    additionalProperties(
+                    type = prepaidCommitAutomatedInvoiceDeductionLedgerEntry.type
+                    timestamp = prepaidCommitAutomatedInvoiceDeductionLedgerEntry.timestamp
+                    amount = prepaidCommitAutomatedInvoiceDeductionLedgerEntry.amount
+                    segmentId = prepaidCommitAutomatedInvoiceDeductionLedgerEntry.segmentId
+                    invoiceId = prepaidCommitAutomatedInvoiceDeductionLedgerEntry.invoiceId
+                    additionalProperties =
                         prepaidCommitAutomatedInvoiceDeductionLedgerEntry.additionalProperties
-                    )
+                            .toMutableMap()
                 }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -1775,18 +1814,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PrepaidCommitAutomatedInvoiceDeductionLedgerEntry =
                     PrepaidCommitAutomatedInvoiceDeductionLedgerEntry(
@@ -1884,8 +1931,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun type(): Type = type.getRequired("type")
 
             fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
@@ -1909,6 +1954,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): PrepaidCommitRolloverLedgerEntry = apply {
                 if (!validated) {
@@ -1941,12 +1988,13 @@ private constructor(
                 internal fun from(
                     prepaidCommitRolloverLedgerEntry: PrepaidCommitRolloverLedgerEntry
                 ) = apply {
-                    this.type = prepaidCommitRolloverLedgerEntry.type
-                    this.timestamp = prepaidCommitRolloverLedgerEntry.timestamp
-                    this.amount = prepaidCommitRolloverLedgerEntry.amount
-                    this.segmentId = prepaidCommitRolloverLedgerEntry.segmentId
-                    this.newContractId = prepaidCommitRolloverLedgerEntry.newContractId
-                    additionalProperties(prepaidCommitRolloverLedgerEntry.additionalProperties)
+                    type = prepaidCommitRolloverLedgerEntry.type
+                    timestamp = prepaidCommitRolloverLedgerEntry.timestamp
+                    amount = prepaidCommitRolloverLedgerEntry.amount
+                    segmentId = prepaidCommitRolloverLedgerEntry.segmentId
+                    newContractId = prepaidCommitRolloverLedgerEntry.newContractId
+                    additionalProperties =
+                        prepaidCommitRolloverLedgerEntry.additionalProperties.toMutableMap()
                 }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -1986,18 +2034,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PrepaidCommitRolloverLedgerEntry =
                     PrepaidCommitRolloverLedgerEntry(
@@ -2090,8 +2146,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun type(): Type = type.getRequired("type")
 
             fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
@@ -2111,6 +2165,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): PrepaidCommitExpirationLedgerEntry = apply {
                 if (!validated) {
@@ -2141,11 +2197,12 @@ private constructor(
                 internal fun from(
                     prepaidCommitExpirationLedgerEntry: PrepaidCommitExpirationLedgerEntry
                 ) = apply {
-                    this.type = prepaidCommitExpirationLedgerEntry.type
-                    this.timestamp = prepaidCommitExpirationLedgerEntry.timestamp
-                    this.amount = prepaidCommitExpirationLedgerEntry.amount
-                    this.segmentId = prepaidCommitExpirationLedgerEntry.segmentId
-                    additionalProperties(prepaidCommitExpirationLedgerEntry.additionalProperties)
+                    type = prepaidCommitExpirationLedgerEntry.type
+                    timestamp = prepaidCommitExpirationLedgerEntry.timestamp
+                    amount = prepaidCommitExpirationLedgerEntry.amount
+                    segmentId = prepaidCommitExpirationLedgerEntry.segmentId
+                    additionalProperties =
+                        prepaidCommitExpirationLedgerEntry.additionalProperties.toMutableMap()
                 }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -2176,18 +2233,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PrepaidCommitExpirationLedgerEntry =
                     PrepaidCommitExpirationLedgerEntry(
@@ -2280,8 +2345,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun type(): Type = type.getRequired("type")
 
             fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
@@ -2305,6 +2368,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): PrepaidCommitCanceledLedgerEntry = apply {
                 if (!validated) {
@@ -2337,12 +2402,13 @@ private constructor(
                 internal fun from(
                     prepaidCommitCanceledLedgerEntry: PrepaidCommitCanceledLedgerEntry
                 ) = apply {
-                    this.type = prepaidCommitCanceledLedgerEntry.type
-                    this.timestamp = prepaidCommitCanceledLedgerEntry.timestamp
-                    this.amount = prepaidCommitCanceledLedgerEntry.amount
-                    this.segmentId = prepaidCommitCanceledLedgerEntry.segmentId
-                    this.invoiceId = prepaidCommitCanceledLedgerEntry.invoiceId
-                    additionalProperties(prepaidCommitCanceledLedgerEntry.additionalProperties)
+                    type = prepaidCommitCanceledLedgerEntry.type
+                    timestamp = prepaidCommitCanceledLedgerEntry.timestamp
+                    amount = prepaidCommitCanceledLedgerEntry.amount
+                    segmentId = prepaidCommitCanceledLedgerEntry.segmentId
+                    invoiceId = prepaidCommitCanceledLedgerEntry.invoiceId
+                    additionalProperties =
+                        prepaidCommitCanceledLedgerEntry.additionalProperties.toMutableMap()
                 }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -2379,18 +2445,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PrepaidCommitCanceledLedgerEntry =
                     PrepaidCommitCanceledLedgerEntry(
@@ -2484,8 +2558,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun type(): Type = type.getRequired("type")
 
             fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
@@ -2509,6 +2581,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): PrepaidCommitCreditedLedgerEntry = apply {
                 if (!validated) {
@@ -2541,12 +2615,13 @@ private constructor(
                 internal fun from(
                     prepaidCommitCreditedLedgerEntry: PrepaidCommitCreditedLedgerEntry
                 ) = apply {
-                    this.type = prepaidCommitCreditedLedgerEntry.type
-                    this.timestamp = prepaidCommitCreditedLedgerEntry.timestamp
-                    this.amount = prepaidCommitCreditedLedgerEntry.amount
-                    this.segmentId = prepaidCommitCreditedLedgerEntry.segmentId
-                    this.invoiceId = prepaidCommitCreditedLedgerEntry.invoiceId
-                    additionalProperties(prepaidCommitCreditedLedgerEntry.additionalProperties)
+                    type = prepaidCommitCreditedLedgerEntry.type
+                    timestamp = prepaidCommitCreditedLedgerEntry.timestamp
+                    amount = prepaidCommitCreditedLedgerEntry.amount
+                    segmentId = prepaidCommitCreditedLedgerEntry.segmentId
+                    invoiceId = prepaidCommitCreditedLedgerEntry.invoiceId
+                    additionalProperties =
+                        prepaidCommitCreditedLedgerEntry.additionalProperties.toMutableMap()
                 }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -2583,18 +2658,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PrepaidCommitCreditedLedgerEntry =
                     PrepaidCommitCreditedLedgerEntry(
@@ -2686,8 +2769,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun type(): Type = type.getRequired("type")
 
             fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
@@ -2703,6 +2784,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): PostpaidCommitInitialBalanceLedgerEntry = apply {
                 if (!validated) {
@@ -2731,12 +2814,11 @@ private constructor(
                 internal fun from(
                     postpaidCommitInitialBalanceLedgerEntry: PostpaidCommitInitialBalanceLedgerEntry
                 ) = apply {
-                    this.type = postpaidCommitInitialBalanceLedgerEntry.type
-                    this.timestamp = postpaidCommitInitialBalanceLedgerEntry.timestamp
-                    this.amount = postpaidCommitInitialBalanceLedgerEntry.amount
-                    additionalProperties(
-                        postpaidCommitInitialBalanceLedgerEntry.additionalProperties
-                    )
+                    type = postpaidCommitInitialBalanceLedgerEntry.type
+                    timestamp = postpaidCommitInitialBalanceLedgerEntry.timestamp
+                    amount = postpaidCommitInitialBalanceLedgerEntry.amount
+                    additionalProperties =
+                        postpaidCommitInitialBalanceLedgerEntry.additionalProperties.toMutableMap()
                 }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -2761,18 +2843,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PostpaidCommitInitialBalanceLedgerEntry =
                     PostpaidCommitInitialBalanceLedgerEntry(
@@ -2867,8 +2957,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun type(): Type = type.getRequired("type")
 
             fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
@@ -2892,6 +2980,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): PostpaidCommitAutomatedInvoiceDeductionLedgerEntry = apply {
                 if (!validated) {
@@ -2925,14 +3015,14 @@ private constructor(
                     postpaidCommitAutomatedInvoiceDeductionLedgerEntry:
                         PostpaidCommitAutomatedInvoiceDeductionLedgerEntry
                 ) = apply {
-                    this.type = postpaidCommitAutomatedInvoiceDeductionLedgerEntry.type
-                    this.timestamp = postpaidCommitAutomatedInvoiceDeductionLedgerEntry.timestamp
-                    this.amount = postpaidCommitAutomatedInvoiceDeductionLedgerEntry.amount
-                    this.segmentId = postpaidCommitAutomatedInvoiceDeductionLedgerEntry.segmentId
-                    this.invoiceId = postpaidCommitAutomatedInvoiceDeductionLedgerEntry.invoiceId
-                    additionalProperties(
+                    type = postpaidCommitAutomatedInvoiceDeductionLedgerEntry.type
+                    timestamp = postpaidCommitAutomatedInvoiceDeductionLedgerEntry.timestamp
+                    amount = postpaidCommitAutomatedInvoiceDeductionLedgerEntry.amount
+                    segmentId = postpaidCommitAutomatedInvoiceDeductionLedgerEntry.segmentId
+                    invoiceId = postpaidCommitAutomatedInvoiceDeductionLedgerEntry.invoiceId
+                    additionalProperties =
                         postpaidCommitAutomatedInvoiceDeductionLedgerEntry.additionalProperties
-                    )
+                            .toMutableMap()
                 }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -2969,18 +3059,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PostpaidCommitAutomatedInvoiceDeductionLedgerEntry =
                     PostpaidCommitAutomatedInvoiceDeductionLedgerEntry(
@@ -3078,8 +3176,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun type(): Type = type.getRequired("type")
 
             fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
@@ -3103,6 +3199,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): PostpaidCommitRolloverLedgerEntry = apply {
                 if (!validated) {
@@ -3135,12 +3233,13 @@ private constructor(
                 internal fun from(
                     postpaidCommitRolloverLedgerEntry: PostpaidCommitRolloverLedgerEntry
                 ) = apply {
-                    this.type = postpaidCommitRolloverLedgerEntry.type
-                    this.timestamp = postpaidCommitRolloverLedgerEntry.timestamp
-                    this.amount = postpaidCommitRolloverLedgerEntry.amount
-                    this.segmentId = postpaidCommitRolloverLedgerEntry.segmentId
-                    this.newContractId = postpaidCommitRolloverLedgerEntry.newContractId
-                    additionalProperties(postpaidCommitRolloverLedgerEntry.additionalProperties)
+                    type = postpaidCommitRolloverLedgerEntry.type
+                    timestamp = postpaidCommitRolloverLedgerEntry.timestamp
+                    amount = postpaidCommitRolloverLedgerEntry.amount
+                    segmentId = postpaidCommitRolloverLedgerEntry.segmentId
+                    newContractId = postpaidCommitRolloverLedgerEntry.newContractId
+                    additionalProperties =
+                        postpaidCommitRolloverLedgerEntry.additionalProperties.toMutableMap()
                 }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -3180,18 +3279,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PostpaidCommitRolloverLedgerEntry =
                     PostpaidCommitRolloverLedgerEntry(
@@ -3284,8 +3391,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun type(): Type = type.getRequired("type")
 
             fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
@@ -3305,6 +3410,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): PostpaidCommitTrueupLedgerEntry = apply {
                 if (!validated) {
@@ -3335,11 +3442,12 @@ private constructor(
                 internal fun from(
                     postpaidCommitTrueupLedgerEntry: PostpaidCommitTrueupLedgerEntry
                 ) = apply {
-                    this.type = postpaidCommitTrueupLedgerEntry.type
-                    this.timestamp = postpaidCommitTrueupLedgerEntry.timestamp
-                    this.amount = postpaidCommitTrueupLedgerEntry.amount
-                    this.invoiceId = postpaidCommitTrueupLedgerEntry.invoiceId
-                    additionalProperties(postpaidCommitTrueupLedgerEntry.additionalProperties)
+                    type = postpaidCommitTrueupLedgerEntry.type
+                    timestamp = postpaidCommitTrueupLedgerEntry.timestamp
+                    amount = postpaidCommitTrueupLedgerEntry.amount
+                    invoiceId = postpaidCommitTrueupLedgerEntry.invoiceId
+                    additionalProperties =
+                        postpaidCommitTrueupLedgerEntry.additionalProperties.toMutableMap()
                 }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -3370,18 +3478,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PostpaidCommitTrueupLedgerEntry =
                     PostpaidCommitTrueupLedgerEntry(
@@ -3473,8 +3589,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun type(): Type = type.getRequired("type")
 
             fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
@@ -3494,6 +3608,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): PrepaidCommitManualLedgerEntry = apply {
                 if (!validated) {
@@ -3523,11 +3639,12 @@ private constructor(
                 @JvmSynthetic
                 internal fun from(prepaidCommitManualLedgerEntry: PrepaidCommitManualLedgerEntry) =
                     apply {
-                        this.type = prepaidCommitManualLedgerEntry.type
-                        this.timestamp = prepaidCommitManualLedgerEntry.timestamp
-                        this.amount = prepaidCommitManualLedgerEntry.amount
-                        this.reason = prepaidCommitManualLedgerEntry.reason
-                        additionalProperties(prepaidCommitManualLedgerEntry.additionalProperties)
+                        type = prepaidCommitManualLedgerEntry.type
+                        timestamp = prepaidCommitManualLedgerEntry.timestamp
+                        amount = prepaidCommitManualLedgerEntry.amount
+                        reason = prepaidCommitManualLedgerEntry.reason
+                        additionalProperties =
+                            prepaidCommitManualLedgerEntry.additionalProperties.toMutableMap()
                     }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -3558,18 +3675,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PrepaidCommitManualLedgerEntry =
                     PrepaidCommitManualLedgerEntry(
@@ -3661,8 +3786,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun type(): Type = type.getRequired("type")
 
             fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
@@ -3682,6 +3805,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): PostpaidCommitManualLedgerEntry = apply {
                 if (!validated) {
@@ -3712,11 +3837,12 @@ private constructor(
                 internal fun from(
                     postpaidCommitManualLedgerEntry: PostpaidCommitManualLedgerEntry
                 ) = apply {
-                    this.type = postpaidCommitManualLedgerEntry.type
-                    this.timestamp = postpaidCommitManualLedgerEntry.timestamp
-                    this.amount = postpaidCommitManualLedgerEntry.amount
-                    this.reason = postpaidCommitManualLedgerEntry.reason
-                    additionalProperties(postpaidCommitManualLedgerEntry.additionalProperties)
+                    type = postpaidCommitManualLedgerEntry.type
+                    timestamp = postpaidCommitManualLedgerEntry.timestamp
+                    amount = postpaidCommitManualLedgerEntry.amount
+                    reason = postpaidCommitManualLedgerEntry.reason
+                    additionalProperties =
+                        postpaidCommitManualLedgerEntry.additionalProperties.toMutableMap()
                 }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -3747,18 +3873,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PostpaidCommitManualLedgerEntry =
                     PostpaidCommitManualLedgerEntry(
@@ -3849,8 +3983,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun type(): Type = type.getRequired("type")
 
             fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
@@ -3866,6 +3998,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): PostpaidCommitExpirationLedgerEntry = apply {
                 if (!validated) {
@@ -3894,10 +4028,11 @@ private constructor(
                 internal fun from(
                     postpaidCommitExpirationLedgerEntry: PostpaidCommitExpirationLedgerEntry
                 ) = apply {
-                    this.type = postpaidCommitExpirationLedgerEntry.type
-                    this.timestamp = postpaidCommitExpirationLedgerEntry.timestamp
-                    this.amount = postpaidCommitExpirationLedgerEntry.amount
-                    additionalProperties(postpaidCommitExpirationLedgerEntry.additionalProperties)
+                    type = postpaidCommitExpirationLedgerEntry.type
+                    timestamp = postpaidCommitExpirationLedgerEntry.timestamp
+                    amount = postpaidCommitExpirationLedgerEntry.amount
+                    additionalProperties =
+                        postpaidCommitExpirationLedgerEntry.additionalProperties.toMutableMap()
                 }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -3922,18 +4057,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PostpaidCommitExpirationLedgerEntry =
                     PostpaidCommitExpirationLedgerEntry(
@@ -4080,8 +4223,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         fun commitId(): String = commitId.getRequired("commit_id")
 
         fun contractId(): String = contractId.getRequired("contract_id")
@@ -4093,6 +4234,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): RolledOverFrom = apply {
             if (!validated) {
@@ -4117,9 +4260,9 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(rolledOverFrom: RolledOverFrom) = apply {
-                this.commitId = rolledOverFrom.commitId
-                this.contractId = rolledOverFrom.contractId
-                additionalProperties(rolledOverFrom.additionalProperties)
+                commitId = rolledOverFrom.commitId
+                contractId = rolledOverFrom.contractId
+                additionalProperties = rolledOverFrom.additionalProperties.toMutableMap()
             }
 
             fun commitId(commitId: String) = commitId(JsonField.of(commitId))
@@ -4136,16 +4279,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): RolledOverFrom =

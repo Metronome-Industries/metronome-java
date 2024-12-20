@@ -40,8 +40,8 @@ class ContractAddManualBalanceEntryParamsTest {
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
         assertThat(body.reason()).isEqualTo("Reason for entry")
         assertThat(body.segmentId()).isEqualTo("66368e29-3f97-4d15-a6e9-120897f0070a")
-        assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-        assertThat(body.timestamp()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.contractId()).contains("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+        assertThat(body.timestamp()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
     }
 
     @Test

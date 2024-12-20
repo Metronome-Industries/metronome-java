@@ -13,6 +13,7 @@ import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.toImmutable
 import java.util.Objects
+import java.util.Optional
 
 class UsageIngestParams
 constructor(
@@ -40,10 +41,10 @@ constructor(
     @NoAutoDetect
     class UsageIngestBody
     internal constructor(
-        private val usage: List<Usage>?,
+        private val usage: List<Usage>,
     ) {
 
-        @JsonProperty("usage") fun usage(): List<Usage>? = usage
+        @JsonProperty("usage") fun usage(): List<Usage> = usage
 
         fun toBuilder() = Builder().from(this)
 
@@ -58,10 +59,15 @@ constructor(
 
             @JvmSynthetic
             internal fun from(usageIngestBody: UsageIngestBody) = apply {
-                this.usage = usageIngestBody.usage
+                usage = usageIngestBody.usage.toMutableList()
             }
 
             @JsonProperty("usage") fun usage(usage: List<Usage>) = apply { this.usage = usage }
+
+            fun build(): UsageIngestBody =
+                UsageIngestBody(
+                    checkNotNull(usage) { "`usage` is required but was not set" }.toImmutable()
+                )
         }
 
         override fun equals(other: Any?): Boolean {
@@ -219,24 +225,25 @@ constructor(
     @NoAutoDetect
     class Usage
     private constructor(
-        private val transactionId: String?,
-        private val customerId: String?,
-        private val eventType: String?,
-        private val timestamp: String?,
+        private val transactionId: String,
+        private val customerId: String,
+        private val eventType: String,
+        private val timestamp: String,
         private val properties: Properties?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("transaction_id") fun transactionId(): String? = transactionId
+        @JsonProperty("transaction_id") fun transactionId(): String = transactionId
 
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
-        @JsonProperty("event_type") fun eventType(): String? = eventType
+        @JsonProperty("event_type") fun eventType(): String = eventType
 
         /** RFC 3339 formatted */
-        @JsonProperty("timestamp") fun timestamp(): String? = timestamp
+        @JsonProperty("timestamp") fun timestamp(): String = timestamp
 
-        @JsonProperty("properties") fun properties(): Properties? = properties
+        @JsonProperty("properties")
+        fun properties(): Optional<Properties> = Optional.ofNullable(properties)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -260,12 +267,12 @@ constructor(
 
             @JvmSynthetic
             internal fun from(usage: Usage) = apply {
-                this.transactionId = usage.transactionId
-                this.customerId = usage.customerId
-                this.eventType = usage.eventType
-                this.timestamp = usage.timestamp
-                this.properties = usage.properties
-                additionalProperties(usage.additionalProperties)
+                transactionId = usage.transactionId
+                customerId = usage.customerId
+                eventType = usage.eventType
+                timestamp = usage.timestamp
+                properties = usage.properties
+                additionalProperties = usage.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("transaction_id")
@@ -286,16 +293,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Usage =
@@ -333,23 +346,31 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(properties: Properties) = apply {
-                    additionalProperties(properties.additionalProperties)
+                    additionalProperties = properties.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): Properties = Properties(additionalProperties.toImmutable())
             }

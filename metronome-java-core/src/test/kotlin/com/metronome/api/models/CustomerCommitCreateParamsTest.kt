@@ -173,20 +173,20 @@ class CustomerCommitCreateParamsTest {
         assertThat(body.priority()).isEqualTo(100.0)
         assertThat(body.productId()).isEqualTo("f14d6729-6a44-4b13-9908-9387f1918790")
         assertThat(body.type()).isEqualTo(CustomerCommitCreateParams.Type.PREPAID)
-        assertThat(body.applicableContractIds()).isEqualTo(listOf("string"))
+        assertThat(body.applicableContractIds()).contains(listOf("string"))
         assertThat(body.applicableProductIds())
-            .isEqualTo(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-        assertThat(body.applicableProductTags()).isEqualTo(listOf("string"))
+            .contains(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+        assertThat(body.applicableProductTags()).contains(listOf("string"))
         assertThat(body.customFields())
-            .isEqualTo(
+            .contains(
                 CustomerCommitCreateParams.CustomFields.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(body.description()).isEqualTo("description")
-        assertThat(body.invoiceContractId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(body.description()).contains("description")
+        assertThat(body.invoiceContractId()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(body.invoiceSchedule())
-            .isEqualTo(
+            .contains(
                 CustomerCommitCreateParams.InvoiceSchedule.builder()
                     .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                     .recurringSchedule(
@@ -220,10 +220,10 @@ class CustomerCommitCreateParamsTest {
                     )
                     .build()
             )
-        assertThat(body.name()).isEqualTo("My Commit")
-        assertThat(body.netsuiteSalesOrderId()).isEqualTo("netsuite_sales_order_id")
-        assertThat(body.rateType()).isEqualTo(CustomerCommitCreateParams.RateType.COMMIT_RATE)
-        assertThat(body.salesforceOpportunityId()).isEqualTo("salesforce_opportunity_id")
+        assertThat(body.name()).contains("My Commit")
+        assertThat(body.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
+        assertThat(body.rateType()).contains(CustomerCommitCreateParams.RateType.COMMIT_RATE)
+        assertThat(body.salesforceOpportunityId()).contains("salesforce_opportunity_id")
     }
 
     @Test

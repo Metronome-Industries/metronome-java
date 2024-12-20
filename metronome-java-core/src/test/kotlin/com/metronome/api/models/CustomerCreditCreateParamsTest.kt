@@ -100,21 +100,21 @@ class CustomerCreditCreateParamsTest {
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
         assertThat(body.priority()).isEqualTo(100.0)
         assertThat(body.productId()).isEqualTo("f14d6729-6a44-4b13-9908-9387f1918790")
-        assertThat(body.applicableContractIds()).isEqualTo(listOf("string"))
+        assertThat(body.applicableContractIds()).contains(listOf("string"))
         assertThat(body.applicableProductIds())
-            .isEqualTo(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-        assertThat(body.applicableProductTags()).isEqualTo(listOf("string"))
+            .contains(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+        assertThat(body.applicableProductTags()).contains(listOf("string"))
         assertThat(body.customFields())
-            .isEqualTo(
+            .contains(
                 CustomerCreditCreateParams.CustomFields.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(body.description()).isEqualTo("description")
-        assertThat(body.name()).isEqualTo("My Credit")
-        assertThat(body.netsuiteSalesOrderId()).isEqualTo("netsuite_sales_order_id")
-        assertThat(body.rateType()).isEqualTo(CustomerCreditCreateParams.RateType.COMMIT_RATE)
-        assertThat(body.salesforceOpportunityId()).isEqualTo("salesforce_opportunity_id")
+        assertThat(body.description()).contains("description")
+        assertThat(body.name()).contains("My Credit")
+        assertThat(body.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
+        assertThat(body.rateType()).contains(CustomerCreditCreateParams.RateType.COMMIT_RATE)
+        assertThat(body.salesforceOpportunityId()).contains("salesforce_opportunity_id")
     }
 
     @Test

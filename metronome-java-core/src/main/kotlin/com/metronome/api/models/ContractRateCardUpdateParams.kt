@@ -64,7 +64,7 @@ constructor(
     @NoAutoDetect
     class ContractRateCardUpdateBody
     internal constructor(
-        private val rateCardId: String?,
+        private val rateCardId: String,
         private val aliases: List<Alias>?,
         private val customFields: CustomFields?,
         private val description: String?,
@@ -73,21 +73,23 @@ constructor(
     ) {
 
         /** ID of the rate card to update */
-        @JsonProperty("rate_card_id") fun rateCardId(): String? = rateCardId
+        @JsonProperty("rate_card_id") fun rateCardId(): String = rateCardId
 
         /**
          * Reference this alias when creating a contract. If the same alias is assigned to multiple
          * rate cards, it will reference the rate card to which it was most recently assigned. It is
          * not exposed to end customers.
          */
-        @JsonProperty("aliases") fun aliases(): List<Alias>? = aliases
+        @JsonProperty("aliases") fun aliases(): Optional<List<Alias>> = Optional.ofNullable(aliases)
 
-        @JsonProperty("custom_fields") fun customFields(): CustomFields? = customFields
+        @JsonProperty("custom_fields")
+        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
 
-        @JsonProperty("description") fun description(): String? = description
+        @JsonProperty("description")
+        fun description(): Optional<String> = Optional.ofNullable(description)
 
         /** Used only in UI/API. It is not exposed to end customers. */
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -111,12 +113,13 @@ constructor(
 
             @JvmSynthetic
             internal fun from(contractRateCardUpdateBody: ContractRateCardUpdateBody) = apply {
-                this.rateCardId = contractRateCardUpdateBody.rateCardId
-                this.aliases = contractRateCardUpdateBody.aliases
-                this.customFields = contractRateCardUpdateBody.customFields
-                this.description = contractRateCardUpdateBody.description
-                this.name = contractRateCardUpdateBody.name
-                additionalProperties(contractRateCardUpdateBody.additionalProperties)
+                rateCardId = contractRateCardUpdateBody.rateCardId
+                aliases = contractRateCardUpdateBody.aliases?.toMutableList()
+                customFields = contractRateCardUpdateBody.customFields
+                description = contractRateCardUpdateBody.description
+                name = contractRateCardUpdateBody.name
+                additionalProperties =
+                    contractRateCardUpdateBody.additionalProperties.toMutableMap()
             }
 
             /** ID of the rate card to update */
@@ -144,16 +147,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractRateCardUpdateBody =
@@ -381,17 +390,19 @@ constructor(
     @NoAutoDetect
     class Alias
     private constructor(
-        private val name: String?,
+        private val name: String,
         private val startingAt: OffsetDateTime?,
         private val endingBefore: OffsetDateTime?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name") fun name(): String = name
 
-        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+        @JsonProperty("starting_at")
+        fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
 
-        @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+        @JsonProperty("ending_before")
+        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -413,10 +424,10 @@ constructor(
 
             @JvmSynthetic
             internal fun from(alias: Alias) = apply {
-                this.name = alias.name
-                this.startingAt = alias.startingAt
-                this.endingBefore = alias.endingBefore
-                additionalProperties(alias.additionalProperties)
+                name = alias.name
+                startingAt = alias.startingAt
+                endingBefore = alias.endingBefore
+                additionalProperties = alias.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("name") fun name(name: String) = apply { this.name = name }
@@ -431,16 +442,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Alias =
@@ -494,21 +511,27 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customFields: CustomFields) = apply {
-                additionalProperties(customFields.additionalProperties)
+                additionalProperties = customFields.additionalProperties.toMutableMap()
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())

@@ -64,29 +64,30 @@ constructor(
     @NoAutoDetect
     class ContractNamedScheduleUpdateBody
     internal constructor(
-        private val rateCardId: String?,
-        private val scheduleName: String?,
-        private val startingAt: OffsetDateTime?,
-        private val value: JsonValue?,
+        private val rateCardId: String,
+        private val scheduleName: String,
+        private val startingAt: OffsetDateTime,
+        private val value: JsonValue,
         private val endingBefore: OffsetDateTime?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** ID of the rate card whose named schedule is to be updated */
-        @JsonProperty("rate_card_id") fun rateCardId(): String? = rateCardId
+        @JsonProperty("rate_card_id") fun rateCardId(): String = rateCardId
 
         /** The identifier for the schedule to be updated */
-        @JsonProperty("schedule_name") fun scheduleName(): String? = scheduleName
+        @JsonProperty("schedule_name") fun scheduleName(): String = scheduleName
 
-        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
 
         /**
          * The value to set for the named schedule. The structure of this object is specific to the
          * named schedule.
          */
-        @JsonProperty("value") fun value(): JsonValue? = value
+        @JsonProperty("value") fun value(): JsonValue = value
 
-        @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+        @JsonProperty("ending_before")
+        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -111,12 +112,13 @@ constructor(
             @JvmSynthetic
             internal fun from(contractNamedScheduleUpdateBody: ContractNamedScheduleUpdateBody) =
                 apply {
-                    this.rateCardId = contractNamedScheduleUpdateBody.rateCardId
-                    this.scheduleName = contractNamedScheduleUpdateBody.scheduleName
-                    this.startingAt = contractNamedScheduleUpdateBody.startingAt
-                    this.value = contractNamedScheduleUpdateBody.value
-                    this.endingBefore = contractNamedScheduleUpdateBody.endingBefore
-                    additionalProperties(contractNamedScheduleUpdateBody.additionalProperties)
+                    rateCardId = contractNamedScheduleUpdateBody.rateCardId
+                    scheduleName = contractNamedScheduleUpdateBody.scheduleName
+                    startingAt = contractNamedScheduleUpdateBody.startingAt
+                    value = contractNamedScheduleUpdateBody.value
+                    endingBefore = contractNamedScheduleUpdateBody.endingBefore
+                    additionalProperties =
+                        contractNamedScheduleUpdateBody.additionalProperties.toMutableMap()
                 }
 
             /** ID of the rate card whose named schedule is to be updated */
@@ -143,16 +145,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractNamedScheduleUpdateBody =

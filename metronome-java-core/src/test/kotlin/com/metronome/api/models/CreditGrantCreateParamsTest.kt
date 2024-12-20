@@ -124,19 +124,19 @@ class CreditGrantCreateParamsTest {
                     .build()
             )
         assertThat(body.priority()).isEqualTo(0.5)
-        assertThat(body.creditGrantType()).isEqualTo("trial")
+        assertThat(body.creditGrantType()).contains("trial")
         assertThat(body.customFields())
-            .isEqualTo(
+            .contains(
                 CreditGrantCreateParams.CustomFields.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(body.effectiveAt()).isEqualTo(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
-        assertThat(body.invoiceDate()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.productIds()).isEqualTo(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-        assertThat(body.reason()).isEqualTo("Incentivize new customer")
+        assertThat(body.effectiveAt()).contains(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
+        assertThat(body.invoiceDate()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.productIds()).contains(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+        assertThat(body.reason()).contains("Incentivize new customer")
         assertThat(body.rolloverSettings())
-            .isEqualTo(
+            .contains(
                 CreditGrantCreateParams.RolloverSettings.builder()
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .priority(0.0)
@@ -151,7 +151,7 @@ class CreditGrantCreateParamsTest {
                     )
                     .build()
             )
-        assertThat(body.uniquenessKey()).isEqualTo("x")
+        assertThat(body.uniquenessKey()).contains("x")
     }
 
     @Test

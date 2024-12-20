@@ -130,7 +130,7 @@ class MetronomeOkHttpClient private constructor() {
 
         fun bearerToken(bearerToken: String) = apply { clientOptions.bearerToken(bearerToken) }
 
-        fun webhookSecret(webhookSecret: String?) = apply {
+        fun webhookSecret(webhookSecret: String) = apply {
             clientOptions.webhookSecret(webhookSecret)
         }
 

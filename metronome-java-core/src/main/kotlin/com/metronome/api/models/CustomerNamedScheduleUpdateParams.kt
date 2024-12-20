@@ -64,29 +64,30 @@ constructor(
     @NoAutoDetect
     class CustomerNamedScheduleUpdateBody
     internal constructor(
-        private val customerId: String?,
-        private val scheduleName: String?,
-        private val startingAt: OffsetDateTime?,
-        private val value: JsonValue?,
+        private val customerId: String,
+        private val scheduleName: String,
+        private val startingAt: OffsetDateTime,
+        private val value: JsonValue,
         private val endingBefore: OffsetDateTime?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** ID of the customer whose named schedule is to be updated */
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         /** The identifier for the schedule to be updated */
-        @JsonProperty("schedule_name") fun scheduleName(): String? = scheduleName
+        @JsonProperty("schedule_name") fun scheduleName(): String = scheduleName
 
-        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
 
         /**
          * The value to set for the named schedule. The structure of this object is specific to the
          * named schedule.
          */
-        @JsonProperty("value") fun value(): JsonValue? = value
+        @JsonProperty("value") fun value(): JsonValue = value
 
-        @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+        @JsonProperty("ending_before")
+        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -111,12 +112,13 @@ constructor(
             @JvmSynthetic
             internal fun from(customerNamedScheduleUpdateBody: CustomerNamedScheduleUpdateBody) =
                 apply {
-                    this.customerId = customerNamedScheduleUpdateBody.customerId
-                    this.scheduleName = customerNamedScheduleUpdateBody.scheduleName
-                    this.startingAt = customerNamedScheduleUpdateBody.startingAt
-                    this.value = customerNamedScheduleUpdateBody.value
-                    this.endingBefore = customerNamedScheduleUpdateBody.endingBefore
-                    additionalProperties(customerNamedScheduleUpdateBody.additionalProperties)
+                    customerId = customerNamedScheduleUpdateBody.customerId
+                    scheduleName = customerNamedScheduleUpdateBody.scheduleName
+                    startingAt = customerNamedScheduleUpdateBody.startingAt
+                    value = customerNamedScheduleUpdateBody.value
+                    endingBefore = customerNamedScheduleUpdateBody.endingBefore
+                    additionalProperties =
+                        customerNamedScheduleUpdateBody.additionalProperties.toMutableMap()
                 }
 
             /** ID of the customer whose named schedule is to be updated */
@@ -143,16 +145,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerNamedScheduleUpdateBody =

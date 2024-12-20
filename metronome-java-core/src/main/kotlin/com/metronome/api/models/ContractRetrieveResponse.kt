@@ -27,8 +27,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun data(): Data = data.getRequired("data")
 
     @JsonProperty("data") @ExcludeMissing fun _data() = data
@@ -36,6 +34,8 @@ private constructor(
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    private var validated: Boolean = false
 
     fun validate(): ContractRetrieveResponse = apply {
         if (!validated) {
@@ -58,8 +58,8 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(contractRetrieveResponse: ContractRetrieveResponse) = apply {
-            this.data = contractRetrieveResponse.data
-            additionalProperties(contractRetrieveResponse.additionalProperties)
+            data = contractRetrieveResponse.data
+            additionalProperties = contractRetrieveResponse.additionalProperties.toMutableMap()
         }
 
         fun data(data: Data) = data(JsonField.of(data))
@@ -70,16 +70,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): ContractRetrieveResponse =
@@ -102,8 +108,6 @@ private constructor(
             JsonField<CustomerBillingProviderConfiguration>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
-
-        private var validated: Boolean = false
 
         fun id(): String = id.getRequired("id")
 
@@ -175,6 +179,8 @@ private constructor(
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+        private var validated: Boolean = false
+
         fun validate(): Data = apply {
             if (!validated) {
                 id()
@@ -214,17 +220,16 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(data: Data) = apply {
-                this.id = data.id
-                this.archivedAt = data.archivedAt
-                this.customerId = data.customerId
-                this.uniquenessKey = data.uniquenessKey
-                this.initial = data.initial
-                this.current = data.current
-                this.amendments = data.amendments
-                this.customFields = data.customFields
-                this.customerBillingProviderConfiguration =
-                    data.customerBillingProviderConfiguration
-                additionalProperties(data.additionalProperties)
+                id = data.id
+                archivedAt = data.archivedAt
+                customerId = data.customerId
+                uniquenessKey = data.uniquenessKey
+                initial = data.initial
+                current = data.current
+                amendments = data.amendments
+                customFields = data.customFields
+                customerBillingProviderConfiguration = data.customerBillingProviderConfiguration
+                additionalProperties = data.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
@@ -325,16 +330,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Data =
@@ -371,8 +382,6 @@ private constructor(
             private val netsuiteSalesOrderId: JsonField<String>,
             private val additionalProperties: Map<String, JsonValue>,
         ) {
-
-            private var validated: Boolean = false
 
             fun id(): String = id.getRequired("id")
 
@@ -459,6 +468,8 @@ private constructor(
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+            private var validated: Boolean = false
+
             fun validate(): Amendment = apply {
                 if (!validated) {
                     id()
@@ -504,20 +515,20 @@ private constructor(
 
                 @JvmSynthetic
                 internal fun from(amendment: Amendment) = apply {
-                    this.id = amendment.id
-                    this.salesforceOpportunityId = amendment.salesforceOpportunityId
-                    this.startingAt = amendment.startingAt
-                    this.commits = amendment.commits
-                    this.credits = amendment.credits
-                    this.overrides = amendment.overrides
-                    this.discounts = amendment.discounts
-                    this.professionalServices = amendment.professionalServices
-                    this.scheduledCharges = amendment.scheduledCharges
-                    this.resellerRoyalties = amendment.resellerRoyalties
-                    this.createdAt = amendment.createdAt
-                    this.createdBy = amendment.createdBy
-                    this.netsuiteSalesOrderId = amendment.netsuiteSalesOrderId
-                    additionalProperties(amendment.additionalProperties)
+                    id = amendment.id
+                    salesforceOpportunityId = amendment.salesforceOpportunityId
+                    startingAt = amendment.startingAt
+                    commits = amendment.commits
+                    credits = amendment.credits
+                    overrides = amendment.overrides
+                    discounts = amendment.discounts
+                    professionalServices = amendment.professionalServices
+                    scheduledCharges = amendment.scheduledCharges
+                    resellerRoyalties = amendment.resellerRoyalties
+                    createdAt = amendment.createdAt
+                    createdBy = amendment.createdBy
+                    netsuiteSalesOrderId = amendment.netsuiteSalesOrderId
+                    additionalProperties = amendment.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
@@ -634,18 +645,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): Amendment =
                     Amendment(
@@ -683,8 +702,6 @@ private constructor(
                 private val gcpOfferId: JsonField<String>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
-
-                private var validated: Boolean = false
 
                 fun resellerType(): ResellerType = resellerType.getRequired("reseller_type")
 
@@ -754,6 +771,8 @@ private constructor(
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+                private var validated: Boolean = false
+
                 fun validate(): ResellerRoyalty = apply {
                     if (!validated) {
                         resellerType()
@@ -795,18 +814,18 @@ private constructor(
 
                     @JvmSynthetic
                     internal fun from(resellerRoyalty: ResellerRoyalty) = apply {
-                        this.resellerType = resellerRoyalty.resellerType
-                        this.fraction = resellerRoyalty.fraction
-                        this.netsuiteResellerId = resellerRoyalty.netsuiteResellerId
-                        this.startingAt = resellerRoyalty.startingAt
-                        this.endingBefore = resellerRoyalty.endingBefore
-                        this.resellerContractValue = resellerRoyalty.resellerContractValue
-                        this.awsAccountNumber = resellerRoyalty.awsAccountNumber
-                        this.awsPayerReferenceId = resellerRoyalty.awsPayerReferenceId
-                        this.awsOfferId = resellerRoyalty.awsOfferId
-                        this.gcpAccountId = resellerRoyalty.gcpAccountId
-                        this.gcpOfferId = resellerRoyalty.gcpOfferId
-                        additionalProperties(resellerRoyalty.additionalProperties)
+                        resellerType = resellerRoyalty.resellerType
+                        fraction = resellerRoyalty.fraction
+                        netsuiteResellerId = resellerRoyalty.netsuiteResellerId
+                        startingAt = resellerRoyalty.startingAt
+                        endingBefore = resellerRoyalty.endingBefore
+                        resellerContractValue = resellerRoyalty.resellerContractValue
+                        awsAccountNumber = resellerRoyalty.awsAccountNumber
+                        awsPayerReferenceId = resellerRoyalty.awsPayerReferenceId
+                        awsOfferId = resellerRoyalty.awsOfferId
+                        gcpAccountId = resellerRoyalty.gcpAccountId
+                        gcpOfferId = resellerRoyalty.gcpOfferId
+                        additionalProperties = resellerRoyalty.additionalProperties.toMutableMap()
                     }
 
                     fun resellerType(resellerType: ResellerType) =
@@ -905,18 +924,26 @@ private constructor(
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
-                        this.additionalProperties.putAll(additionalProperties)
+                        putAllAdditionalProperties(additionalProperties)
                     }
 
                     @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        this.additionalProperties.put(key, value)
+                        additionalProperties.put(key, value)
                     }
 
                     fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                         apply {
                             this.additionalProperties.putAll(additionalProperties)
                         }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                     fun build(): ResellerRoyalty =
                         ResellerRoyalty(
@@ -1049,11 +1076,11 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): CustomFields = apply {
                 if (!validated) {
@@ -1074,23 +1101,31 @@ private constructor(
 
                 @JvmSynthetic
                 internal fun from(customFields: CustomFields) = apply {
-                    additionalProperties(customFields.additionalProperties)
+                    additionalProperties = customFields.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
             }
@@ -1122,8 +1157,6 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
             fun billingProvider(): BillingProvider = billingProvider.getRequired("billing_provider")
 
             fun deliveryMethod(): DeliveryMethod = deliveryMethod.getRequired("delivery_method")
@@ -1137,6 +1170,8 @@ private constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
 
             fun validate(): CustomerBillingProviderConfiguration = apply {
                 if (!validated) {
@@ -1163,9 +1198,10 @@ private constructor(
                 internal fun from(
                     customerBillingProviderConfiguration: CustomerBillingProviderConfiguration
                 ) = apply {
-                    this.billingProvider = customerBillingProviderConfiguration.billingProvider
-                    this.deliveryMethod = customerBillingProviderConfiguration.deliveryMethod
-                    additionalProperties(customerBillingProviderConfiguration.additionalProperties)
+                    billingProvider = customerBillingProviderConfiguration.billingProvider
+                    deliveryMethod = customerBillingProviderConfiguration.deliveryMethod
+                    additionalProperties =
+                        customerBillingProviderConfiguration.additionalProperties.toMutableMap()
                 }
 
                 fun billingProvider(billingProvider: BillingProvider) =
@@ -1188,18 +1224,26 @@ private constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): CustomerBillingProviderConfiguration =
                     CustomerBillingProviderConfiguration(

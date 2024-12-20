@@ -69,7 +69,7 @@ constructor(
     @NoAutoDetect
     class ContractRateCardCreateBody
     internal constructor(
-        private val name: String?,
+        private val name: String,
         private val aliases: List<Alias>?,
         private val creditTypeConversions: List<CreditTypeConversion>?,
         private val customFields: CustomFields?,
@@ -79,28 +79,32 @@ constructor(
     ) {
 
         /** Used only in UI/API. It is not exposed to end customers. */
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name") fun name(): String = name
 
         /**
          * Reference this alias when creating a contract. If the same alias is assigned to multiple
          * rate cards, it will reference the rate card to which it was most recently assigned. It is
          * not exposed to end customers.
          */
-        @JsonProperty("aliases") fun aliases(): List<Alias>? = aliases
+        @JsonProperty("aliases") fun aliases(): Optional<List<Alias>> = Optional.ofNullable(aliases)
 
         /** Required when using custom pricing units in rates. */
         @JsonProperty("credit_type_conversions")
-        fun creditTypeConversions(): List<CreditTypeConversion>? = creditTypeConversions
+        fun creditTypeConversions(): Optional<List<CreditTypeConversion>> =
+            Optional.ofNullable(creditTypeConversions)
 
-        @JsonProperty("custom_fields") fun customFields(): CustomFields? = customFields
+        @JsonProperty("custom_fields")
+        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
 
-        @JsonProperty("description") fun description(): String? = description
+        @JsonProperty("description")
+        fun description(): Optional<String> = Optional.ofNullable(description)
 
         /**
          * The Metronome ID of the credit type to associate with the rate card, defaults to USD
          * (cents) if not passed.
          */
-        @JsonProperty("fiat_credit_type_id") fun fiatCreditTypeId(): String? = fiatCreditTypeId
+        @JsonProperty("fiat_credit_type_id")
+        fun fiatCreditTypeId(): Optional<String> = Optional.ofNullable(fiatCreditTypeId)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -125,13 +129,15 @@ constructor(
 
             @JvmSynthetic
             internal fun from(contractRateCardCreateBody: ContractRateCardCreateBody) = apply {
-                this.name = contractRateCardCreateBody.name
-                this.aliases = contractRateCardCreateBody.aliases
-                this.creditTypeConversions = contractRateCardCreateBody.creditTypeConversions
-                this.customFields = contractRateCardCreateBody.customFields
-                this.description = contractRateCardCreateBody.description
-                this.fiatCreditTypeId = contractRateCardCreateBody.fiatCreditTypeId
-                additionalProperties(contractRateCardCreateBody.additionalProperties)
+                name = contractRateCardCreateBody.name
+                aliases = contractRateCardCreateBody.aliases?.toMutableList()
+                creditTypeConversions =
+                    contractRateCardCreateBody.creditTypeConversions?.toMutableList()
+                customFields = contractRateCardCreateBody.customFields
+                description = contractRateCardCreateBody.description
+                fiatCreditTypeId = contractRateCardCreateBody.fiatCreditTypeId
+                additionalProperties =
+                    contractRateCardCreateBody.additionalProperties.toMutableMap()
             }
 
             /** Used only in UI/API. It is not exposed to end customers. */
@@ -170,16 +176,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractRateCardCreateBody =
@@ -429,17 +441,19 @@ constructor(
     @NoAutoDetect
     class Alias
     private constructor(
-        private val name: String?,
+        private val name: String,
         private val startingAt: OffsetDateTime?,
         private val endingBefore: OffsetDateTime?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name") fun name(): String = name
 
-        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime? = startingAt
+        @JsonProperty("starting_at")
+        fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
 
-        @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+        @JsonProperty("ending_before")
+        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -461,10 +475,10 @@ constructor(
 
             @JvmSynthetic
             internal fun from(alias: Alias) = apply {
-                this.name = alias.name
-                this.startingAt = alias.startingAt
-                this.endingBefore = alias.endingBefore
-                additionalProperties(alias.additionalProperties)
+                name = alias.name
+                startingAt = alias.startingAt
+                endingBefore = alias.endingBefore
+                additionalProperties = alias.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("name") fun name(name: String) = apply { this.name = name }
@@ -479,16 +493,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Alias =
@@ -522,16 +542,15 @@ constructor(
     @NoAutoDetect
     class CreditTypeConversion
     private constructor(
-        private val customCreditTypeId: String?,
-        private val fiatPerCustomCredit: Double?,
+        private val customCreditTypeId: String,
+        private val fiatPerCustomCredit: Double,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("custom_credit_type_id")
-        fun customCreditTypeId(): String? = customCreditTypeId
+        @JsonProperty("custom_credit_type_id") fun customCreditTypeId(): String = customCreditTypeId
 
         @JsonProperty("fiat_per_custom_credit")
-        fun fiatPerCustomCredit(): Double? = fiatPerCustomCredit
+        fun fiatPerCustomCredit(): Double = fiatPerCustomCredit
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -552,9 +571,9 @@ constructor(
 
             @JvmSynthetic
             internal fun from(creditTypeConversion: CreditTypeConversion) = apply {
-                this.customCreditTypeId = creditTypeConversion.customCreditTypeId
-                this.fiatPerCustomCredit = creditTypeConversion.fiatPerCustomCredit
-                additionalProperties(creditTypeConversion.additionalProperties)
+                customCreditTypeId = creditTypeConversion.customCreditTypeId
+                fiatPerCustomCredit = creditTypeConversion.fiatPerCustomCredit
+                additionalProperties = creditTypeConversion.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("custom_credit_type_id")
@@ -569,16 +588,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CreditTypeConversion =
@@ -635,21 +660,27 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customFields: CustomFields) = apply {
-                additionalProperties(customFields.additionalProperties)
+                additionalProperties = customFields.additionalProperties.toMutableMap()
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())

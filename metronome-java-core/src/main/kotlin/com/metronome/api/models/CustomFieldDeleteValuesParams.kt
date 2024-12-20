@@ -58,17 +58,17 @@ constructor(
     @NoAutoDetect
     class CustomFieldDeleteValuesBody
     internal constructor(
-        private val entity: Entity?,
-        private val entityId: String?,
-        private val keys: List<String>?,
+        private val entity: Entity,
+        private val entityId: String,
+        private val keys: List<String>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("entity") fun entity(): Entity? = entity
+        @JsonProperty("entity") fun entity(): Entity = entity
 
-        @JsonProperty("entity_id") fun entityId(): String? = entityId
+        @JsonProperty("entity_id") fun entityId(): String = entityId
 
-        @JsonProperty("keys") fun keys(): List<String>? = keys
+        @JsonProperty("keys") fun keys(): List<String> = keys
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -90,10 +90,11 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customFieldDeleteValuesBody: CustomFieldDeleteValuesBody) = apply {
-                this.entity = customFieldDeleteValuesBody.entity
-                this.entityId = customFieldDeleteValuesBody.entityId
-                this.keys = customFieldDeleteValuesBody.keys
-                additionalProperties(customFieldDeleteValuesBody.additionalProperties)
+                entity = customFieldDeleteValuesBody.entity
+                entityId = customFieldDeleteValuesBody.entityId
+                keys = customFieldDeleteValuesBody.keys.toMutableList()
+                additionalProperties =
+                    customFieldDeleteValuesBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("entity") fun entity(entity: Entity) = apply { this.entity = entity }
@@ -105,16 +106,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomFieldDeleteValuesBody =

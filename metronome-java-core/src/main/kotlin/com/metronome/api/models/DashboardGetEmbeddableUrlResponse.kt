@@ -23,8 +23,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun data(): Data = data.getRequired("data")
 
     @JsonProperty("data") @ExcludeMissing fun _data() = data
@@ -32,6 +30,8 @@ private constructor(
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    private var validated: Boolean = false
 
     fun validate(): DashboardGetEmbeddableUrlResponse = apply {
         if (!validated) {
@@ -55,8 +55,9 @@ private constructor(
         @JvmSynthetic
         internal fun from(dashboardGetEmbeddableUrlResponse: DashboardGetEmbeddableUrlResponse) =
             apply {
-                this.data = dashboardGetEmbeddableUrlResponse.data
-                additionalProperties(dashboardGetEmbeddableUrlResponse.additionalProperties)
+                data = dashboardGetEmbeddableUrlResponse.data
+                additionalProperties =
+                    dashboardGetEmbeddableUrlResponse.additionalProperties.toMutableMap()
             }
 
         fun data(data: Data) = data(JsonField.of(data))
@@ -67,16 +68,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): DashboardGetEmbeddableUrlResponse =
@@ -91,8 +98,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
         fun url(): Optional<String> = Optional.ofNullable(url.getNullable("url"))
 
         @JsonProperty("url") @ExcludeMissing fun _url() = url
@@ -100,6 +105,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): Data = apply {
             if (!validated) {
@@ -122,8 +129,8 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(data: Data) = apply {
-                this.url = data.url
-                additionalProperties(data.additionalProperties)
+                url = data.url
+                additionalProperties = data.additionalProperties.toMutableMap()
             }
 
             fun url(url: String) = url(JsonField.of(url))
@@ -134,16 +141,22 @@ private constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Data = Data(url, additionalProperties.toImmutable())

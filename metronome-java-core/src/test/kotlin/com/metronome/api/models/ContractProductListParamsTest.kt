@@ -48,7 +48,7 @@ class ContractProductListParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.archiveFilter()).isEqualTo(ContractProductListParams.ArchiveFilter.ARCHIVED)
+        assertThat(body.archiveFilter()).contains(ContractProductListParams.ArchiveFilter.ARCHIVED)
     }
 
     @Test

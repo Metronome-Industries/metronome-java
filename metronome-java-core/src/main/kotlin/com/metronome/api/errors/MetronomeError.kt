@@ -5,6 +5,7 @@ package com.metronome.api.errors
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.toImmutable
@@ -15,6 +16,7 @@ import java.util.Objects
 class MetronomeError
 private constructor(
     @JsonAnyGetter
+    @ExcludeMissing
     @get:JvmName("additionalProperties")
     val additionalProperties: Map<String, JsonValue>,
 ) {

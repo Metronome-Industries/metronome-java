@@ -77,37 +77,38 @@ constructor(
     @NoAutoDetect
     class UsageListBody
     internal constructor(
-        private val endingBefore: OffsetDateTime?,
-        private val startingOn: OffsetDateTime?,
-        private val windowSize: WindowSize?,
+        private val endingBefore: OffsetDateTime,
+        private val startingOn: OffsetDateTime,
+        private val windowSize: WindowSize,
         private val billableMetrics: List<BillableMetric>?,
         private val customerIds: List<String>?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime? = endingBefore
+        @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
 
-        @JsonProperty("starting_on") fun startingOn(): OffsetDateTime? = startingOn
+        @JsonProperty("starting_on") fun startingOn(): OffsetDateTime = startingOn
 
         /**
          * A window_size of "day" or "hour" will return the usage for the specified period segmented
          * into daily or hourly aggregates. A window_size of "none" will return a single usage
          * aggregate for the entirety of the specified period.
          */
-        @JsonProperty("window_size") fun windowSize(): WindowSize? = windowSize
+        @JsonProperty("window_size") fun windowSize(): WindowSize = windowSize
 
         /**
          * A list of billable metrics to fetch usage for. If absent, all billable metrics will be
          * returned.
          */
         @JsonProperty("billable_metrics")
-        fun billableMetrics(): List<BillableMetric>? = billableMetrics
+        fun billableMetrics(): Optional<List<BillableMetric>> = Optional.ofNullable(billableMetrics)
 
         /**
          * A list of Metronome customer IDs to fetch usage for. If absent, usage for all customers
          * will be returned.
          */
-        @JsonProperty("customer_ids") fun customerIds(): List<String>? = customerIds
+        @JsonProperty("customer_ids")
+        fun customerIds(): Optional<List<String>> = Optional.ofNullable(customerIds)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -131,12 +132,12 @@ constructor(
 
             @JvmSynthetic
             internal fun from(usageListBody: UsageListBody) = apply {
-                this.endingBefore = usageListBody.endingBefore
-                this.startingOn = usageListBody.startingOn
-                this.windowSize = usageListBody.windowSize
-                this.billableMetrics = usageListBody.billableMetrics
-                this.customerIds = usageListBody.customerIds
-                additionalProperties(usageListBody.additionalProperties)
+                endingBefore = usageListBody.endingBefore
+                startingOn = usageListBody.startingOn
+                windowSize = usageListBody.windowSize
+                billableMetrics = usageListBody.billableMetrics?.toMutableList()
+                customerIds = usageListBody.customerIds?.toMutableList()
+                additionalProperties = usageListBody.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("ending_before")
@@ -173,16 +174,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): UsageListBody =
@@ -494,14 +501,14 @@ constructor(
     @NoAutoDetect
     class BillableMetric
     private constructor(
-        private val id: String?,
+        private val id: String,
         private val groupBy: GroupBy?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        @JsonProperty("id") fun id(): String? = id
+        @JsonProperty("id") fun id(): String = id
 
-        @JsonProperty("group_by") fun groupBy(): GroupBy? = groupBy
+        @JsonProperty("group_by") fun groupBy(): Optional<GroupBy> = Optional.ofNullable(groupBy)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -522,9 +529,9 @@ constructor(
 
             @JvmSynthetic
             internal fun from(billableMetric: BillableMetric) = apply {
-                this.id = billableMetric.id
-                this.groupBy = billableMetric.groupBy
-                additionalProperties(billableMetric.additionalProperties)
+                id = billableMetric.id
+                groupBy = billableMetric.groupBy
+                additionalProperties = billableMetric.additionalProperties.toMutableMap()
             }
 
             @JsonProperty("id") fun id(id: String) = apply { this.id = id }
@@ -534,16 +541,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): BillableMetric =
@@ -558,19 +571,20 @@ constructor(
         @NoAutoDetect
         class GroupBy
         private constructor(
-            private val key: String?,
+            private val key: String,
             private val values: List<String>?,
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             /** The name of the group_by key to use */
-            @JsonProperty("key") fun key(): String? = key
+            @JsonProperty("key") fun key(): String = key
 
             /**
              * Values of the group_by key to return in the query. If this field is omitted, all
              * available values will be returned, up to a maximum of 200.
              */
-            @JsonProperty("values") fun values(): List<String>? = values
+            @JsonProperty("values")
+            fun values(): Optional<List<String>> = Optional.ofNullable(values)
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -591,9 +605,9 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(groupBy: GroupBy) = apply {
-                    this.key = groupBy.key
-                    this.values = groupBy.values
-                    additionalProperties(groupBy.additionalProperties)
+                    key = groupBy.key
+                    values = groupBy.values?.toMutableList()
+                    additionalProperties = groupBy.additionalProperties.toMutableMap()
                 }
 
                 /** The name of the group_by key to use */
@@ -608,18 +622,26 @@ constructor(
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
                 @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): GroupBy =
                     GroupBy(

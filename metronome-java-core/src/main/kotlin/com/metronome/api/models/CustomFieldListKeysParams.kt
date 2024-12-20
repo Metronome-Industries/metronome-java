@@ -62,7 +62,8 @@ constructor(
     ) {
 
         /** Optional list of entity types to return keys for */
-        @JsonProperty("entities") fun entities(): List<Entity>? = entities
+        @JsonProperty("entities")
+        fun entities(): Optional<List<Entity>> = Optional.ofNullable(entities)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -82,8 +83,8 @@ constructor(
 
             @JvmSynthetic
             internal fun from(customFieldListKeysBody: CustomFieldListKeysBody) = apply {
-                this.entities = customFieldListKeysBody.entities
-                additionalProperties(customFieldListKeysBody.additionalProperties)
+                entities = customFieldListKeysBody.entities?.toMutableList()
+                additionalProperties = customFieldListKeysBody.additionalProperties.toMutableMap()
             }
 
             /** Optional list of entity types to return keys for */
@@ -92,16 +93,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomFieldListKeysBody =

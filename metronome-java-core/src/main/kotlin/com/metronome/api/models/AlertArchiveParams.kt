@@ -51,17 +51,17 @@ constructor(
     @NoAutoDetect
     class AlertArchiveBody
     internal constructor(
-        private val id: String?,
+        private val id: String,
         private val releaseUniquenessKey: Boolean?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         /** The Metronome ID of the alert */
-        @JsonProperty("id") fun id(): String? = id
+        @JsonProperty("id") fun id(): String = id
 
         /** If true, resets the uniqueness key on this alert so it can be re-used */
         @JsonProperty("release_uniqueness_key")
-        fun releaseUniquenessKey(): Boolean? = releaseUniquenessKey
+        fun releaseUniquenessKey(): Optional<Boolean> = Optional.ofNullable(releaseUniquenessKey)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -82,9 +82,9 @@ constructor(
 
             @JvmSynthetic
             internal fun from(alertArchiveBody: AlertArchiveBody) = apply {
-                this.id = alertArchiveBody.id
-                this.releaseUniquenessKey = alertArchiveBody.releaseUniquenessKey
-                additionalProperties(alertArchiveBody.additionalProperties)
+                id = alertArchiveBody.id
+                releaseUniquenessKey = alertArchiveBody.releaseUniquenessKey
+                additionalProperties = alertArchiveBody.additionalProperties.toMutableMap()
             }
 
             /** The Metronome ID of the alert */
@@ -98,16 +98,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): AlertArchiveBody =

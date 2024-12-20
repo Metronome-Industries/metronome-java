@@ -103,8 +103,8 @@ constructor(
     @NoAutoDetect
     class ContractProductCreateBody
     internal constructor(
-        private val name: String?,
-        private val type: Type?,
+        private val name: String,
+        private val type: Type,
         private val billableMetricId: String?,
         private val compositeProductIds: List<String>?,
         private val compositeTags: List<String>?,
@@ -121,38 +121,42 @@ constructor(
     ) {
 
         /** displayed on invoices */
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name") fun name(): String = name
 
-        @JsonProperty("type") fun type(): Type? = type
+        @JsonProperty("type") fun type(): Type = type
 
         /** Required for USAGE products */
-        @JsonProperty("billable_metric_id") fun billableMetricId(): String? = billableMetricId
+        @JsonProperty("billable_metric_id")
+        fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
         /** Required for COMPOSITE products */
         @JsonProperty("composite_product_ids")
-        fun compositeProductIds(): List<String>? = compositeProductIds
+        fun compositeProductIds(): Optional<List<String>> = Optional.ofNullable(compositeProductIds)
 
         /** Required for COMPOSITE products */
-        @JsonProperty("composite_tags") fun compositeTags(): List<String>? = compositeTags
+        @JsonProperty("composite_tags")
+        fun compositeTags(): Optional<List<String>> = Optional.ofNullable(compositeTags)
 
         /**
          * Beta feature only available for composite products. If true, products with $0 will not be
          * included when computing composite usage. Defaults to false
          */
-        @JsonProperty("exclude_free_usage") fun excludeFreeUsage(): Boolean? = excludeFreeUsage
+        @JsonProperty("exclude_free_usage")
+        fun excludeFreeUsage(): Optional<Boolean> = Optional.ofNullable(excludeFreeUsage)
 
         /**
          * This field's availability is dependent on your client's configuration. Defaults to true.
          */
-        @JsonProperty("is_refundable") fun isRefundable(): Boolean? = isRefundable
+        @JsonProperty("is_refundable")
+        fun isRefundable(): Optional<Boolean> = Optional.ofNullable(isRefundable)
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_internal_item_id")
-        fun netsuiteInternalItemId(): String? = netsuiteInternalItemId
+        fun netsuiteInternalItemId(): Optional<String> = Optional.ofNullable(netsuiteInternalItemId)
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_overage_item_id")
-        fun netsuiteOverageItemId(): String? = netsuiteOverageItemId
+        fun netsuiteOverageItemId(): Optional<String> = Optional.ofNullable(netsuiteOverageItemId)
 
         /**
          * For USAGE products only. Groups usage line items on invoices. The superset of values in
@@ -160,7 +164,8 @@ constructor(
          * the billable metric.
          */
         @JsonProperty("presentation_group_key")
-        fun presentationGroupKey(): List<String>? = presentationGroupKey
+        fun presentationGroupKey(): Optional<List<String>> =
+            Optional.ofNullable(presentationGroupKey)
 
         /**
          * For USAGE products only. If set, pricing for this product will be determined for each
@@ -168,7 +173,8 @@ constructor(
          * the pricing group key and presentation group key must be set as one compound group key on
          * the billable metric.
          */
-        @JsonProperty("pricing_group_key") fun pricingGroupKey(): List<String>? = pricingGroupKey
+        @JsonProperty("pricing_group_key")
+        fun pricingGroupKey(): Optional<List<String>> = Optional.ofNullable(pricingGroupKey)
 
         /**
          * Optional. Only valid for USAGE products. If provided, the quantity will be converted
@@ -179,7 +185,8 @@ constructor(
          * would be 1024 and the operation would be "divide".
          */
         @JsonProperty("quantity_conversion")
-        fun quantityConversion(): QuantityConversion? = quantityConversion
+        fun quantityConversion(): Optional<QuantityConversion> =
+            Optional.ofNullable(quantityConversion)
 
         /**
          * Optional. Only valid for USAGE products. If provided, the quantity will be rounded using
@@ -187,9 +194,9 @@ constructor(
          * and the decimal places is 0, then the quantity will be rounded up to the nearest integer.
          */
         @JsonProperty("quantity_rounding")
-        fun quantityRounding(): QuantityRounding? = quantityRounding
+        fun quantityRounding(): Optional<QuantityRounding> = Optional.ofNullable(quantityRounding)
 
-        @JsonProperty("tags") fun tags(): List<String>? = tags
+        @JsonProperty("tags") fun tags(): Optional<List<String>> = Optional.ofNullable(tags)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -222,21 +229,22 @@ constructor(
 
             @JvmSynthetic
             internal fun from(contractProductCreateBody: ContractProductCreateBody) = apply {
-                this.name = contractProductCreateBody.name
-                this.type = contractProductCreateBody.type
-                this.billableMetricId = contractProductCreateBody.billableMetricId
-                this.compositeProductIds = contractProductCreateBody.compositeProductIds
-                this.compositeTags = contractProductCreateBody.compositeTags
-                this.excludeFreeUsage = contractProductCreateBody.excludeFreeUsage
-                this.isRefundable = contractProductCreateBody.isRefundable
-                this.netsuiteInternalItemId = contractProductCreateBody.netsuiteInternalItemId
-                this.netsuiteOverageItemId = contractProductCreateBody.netsuiteOverageItemId
-                this.presentationGroupKey = contractProductCreateBody.presentationGroupKey
-                this.pricingGroupKey = contractProductCreateBody.pricingGroupKey
-                this.quantityConversion = contractProductCreateBody.quantityConversion
-                this.quantityRounding = contractProductCreateBody.quantityRounding
-                this.tags = contractProductCreateBody.tags
-                additionalProperties(contractProductCreateBody.additionalProperties)
+                name = contractProductCreateBody.name
+                type = contractProductCreateBody.type
+                billableMetricId = contractProductCreateBody.billableMetricId
+                compositeProductIds = contractProductCreateBody.compositeProductIds?.toMutableList()
+                compositeTags = contractProductCreateBody.compositeTags?.toMutableList()
+                excludeFreeUsage = contractProductCreateBody.excludeFreeUsage
+                isRefundable = contractProductCreateBody.isRefundable
+                netsuiteInternalItemId = contractProductCreateBody.netsuiteInternalItemId
+                netsuiteOverageItemId = contractProductCreateBody.netsuiteOverageItemId
+                presentationGroupKey =
+                    contractProductCreateBody.presentationGroupKey?.toMutableList()
+                pricingGroupKey = contractProductCreateBody.pricingGroupKey?.toMutableList()
+                quantityConversion = contractProductCreateBody.quantityConversion
+                quantityRounding = contractProductCreateBody.quantityRounding
+                tags = contractProductCreateBody.tags?.toMutableList()
+                additionalProperties = contractProductCreateBody.additionalProperties.toMutableMap()
             }
 
             /** displayed on invoices */
@@ -339,16 +347,22 @@ constructor(
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ContractProductCreateBody =
