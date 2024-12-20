@@ -90,6 +90,9 @@ private constructor(
     @JsonProperty("custom_fields")
     @ExcludeMissing
     private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+    @JsonProperty("uniqueness_key")
+    @ExcludeMissing
+    private val uniquenessKey: JsonField<String> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
@@ -161,6 +164,14 @@ private constructor(
     fun customFields(): Optional<CustomFields> =
         Optional.ofNullable(customFields.getNullable("custom_fields"))
 
+    /**
+     * Prevents the creation of duplicates. If a request to create a commit or credit is made with a
+     * uniqueness key that was previously used to create a commit or credit, a new record will not
+     * be created and the request will fail with a 409 error.
+     */
+    fun uniquenessKey(): Optional<String> =
+        Optional.ofNullable(uniquenessKey.getNullable("uniqueness_key"))
+
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
     @JsonProperty("contract") @ExcludeMissing fun _contract() = contract
@@ -227,6 +238,13 @@ private constructor(
 
     @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
 
+    /**
+     * Prevents the creation of duplicates. If a request to create a commit or credit is made with a
+     * uniqueness key that was previously used to create a commit or credit, a new record will not
+     * be created and the request will fail with a 409 error.
+     */
+    @JsonProperty("uniqueness_key") @ExcludeMissing fun _uniquenessKey() = uniquenessKey
+
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -256,6 +274,7 @@ private constructor(
             salesforceOpportunityId()
             ledger()
             customFields().map { it.validate() }
+            uniquenessKey()
             validated = true
         }
     }
@@ -290,6 +309,7 @@ private constructor(
         private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
         private var ledger: JsonField<List<Ledger>> = JsonMissing.of()
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
+        private var uniquenessKey: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -315,6 +335,7 @@ private constructor(
             salesforceOpportunityId = commit.salesforceOpportunityId
             ledger = commit.ledger
             customFields = commit.customFields
+            uniquenessKey = commit.uniquenessKey
             additionalProperties = commit.additionalProperties.toMutableMap()
         }
 
@@ -466,6 +487,22 @@ private constructor(
             this.customFields = customFields
         }
 
+        /**
+         * Prevents the creation of duplicates. If a request to create a commit or credit is made
+         * with a uniqueness key that was previously used to create a commit or credit, a new record
+         * will not be created and the request will fail with a 409 error.
+         */
+        fun uniquenessKey(uniquenessKey: String) = uniquenessKey(JsonField.of(uniquenessKey))
+
+        /**
+         * Prevents the creation of duplicates. If a request to create a commit or credit is made
+         * with a uniqueness key that was previously used to create a commit or credit, a new record
+         * will not be created and the request will fail with a 409 error.
+         */
+        fun uniquenessKey(uniquenessKey: JsonField<String>) = apply {
+            this.uniquenessKey = uniquenessKey
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -508,6 +545,7 @@ private constructor(
                 salesforceOpportunityId,
                 ledger.map { it.toImmutable() },
                 customFields,
+                uniquenessKey,
                 additionalProperties.toImmutable(),
             )
     }
@@ -4316,15 +4354,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Commit && id == other.id && contract == other.contract && type == other.type && rateType == other.rateType && name == other.name && priority == other.priority && product == other.product && accessSchedule == other.accessSchedule && invoiceSchedule == other.invoiceSchedule && invoiceContract == other.invoiceContract && rolledOverFrom == other.rolledOverFrom && description == other.description && rolloverFraction == other.rolloverFraction && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && applicableContractIds == other.applicableContractIds && netsuiteSalesOrderId == other.netsuiteSalesOrderId && amount == other.amount && salesforceOpportunityId == other.salesforceOpportunityId && ledger == other.ledger && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Commit && id == other.id && contract == other.contract && type == other.type && rateType == other.rateType && name == other.name && priority == other.priority && product == other.product && accessSchedule == other.accessSchedule && invoiceSchedule == other.invoiceSchedule && invoiceContract == other.invoiceContract && rolledOverFrom == other.rolledOverFrom && description == other.description && rolloverFraction == other.rolloverFraction && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && applicableContractIds == other.applicableContractIds && netsuiteSalesOrderId == other.netsuiteSalesOrderId && amount == other.amount && salesforceOpportunityId == other.salesforceOpportunityId && ledger == other.ledger && customFields == other.customFields && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, contract, type, rateType, name, priority, product, accessSchedule, invoiceSchedule, invoiceContract, rolledOverFrom, description, rolloverFraction, applicableProductIds, applicableProductTags, applicableContractIds, netsuiteSalesOrderId, amount, salesforceOpportunityId, ledger, customFields, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, contract, type, rateType, name, priority, product, accessSchedule, invoiceSchedule, invoiceContract, rolledOverFrom, description, rolloverFraction, applicableProductIds, applicableProductTags, applicableContractIds, netsuiteSalesOrderId, amount, salesforceOpportunityId, ledger, customFields, uniquenessKey, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Commit{id=$id, contract=$contract, type=$type, rateType=$rateType, name=$name, priority=$priority, product=$product, accessSchedule=$accessSchedule, invoiceSchedule=$invoiceSchedule, invoiceContract=$invoiceContract, rolledOverFrom=$rolledOverFrom, description=$description, rolloverFraction=$rolloverFraction, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, applicableContractIds=$applicableContractIds, netsuiteSalesOrderId=$netsuiteSalesOrderId, amount=$amount, salesforceOpportunityId=$salesforceOpportunityId, ledger=$ledger, customFields=$customFields, additionalProperties=$additionalProperties}"
+        "Commit{id=$id, contract=$contract, type=$type, rateType=$rateType, name=$name, priority=$priority, product=$product, accessSchedule=$accessSchedule, invoiceSchedule=$invoiceSchedule, invoiceContract=$invoiceContract, rolledOverFrom=$rolledOverFrom, description=$description, rolloverFraction=$rolloverFraction, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, applicableContractIds=$applicableContractIds, netsuiteSalesOrderId=$netsuiteSalesOrderId, amount=$amount, salesforceOpportunityId=$salesforceOpportunityId, ledger=$ledger, customFields=$customFields, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
 }

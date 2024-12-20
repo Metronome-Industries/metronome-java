@@ -179,6 +179,7 @@ class ContractListResponseTest {
                                                     .salesforceOpportunityId(
                                                         "salesforce_opportunity_id"
                                                     )
+                                                    .uniquenessKey("x")
                                                     .build()
                                             )
                                         )
@@ -485,6 +486,7 @@ class ContractListResponseTest {
                                                     .salesforceOpportunityId(
                                                         "salesforce_opportunity_id"
                                                     )
+                                                    .uniquenessKey("x")
                                                     .build()
                                             )
                                         )
@@ -747,6 +749,7 @@ class ContractListResponseTest {
                                                 .salesforceOpportunityId(
                                                     "salesforce_opportunity_id"
                                                 )
+                                                .uniquenessKey("x")
                                                 .build()
                                         )
                                     )
@@ -1058,6 +1061,7 @@ class ContractListResponseTest {
                                                 .salesforceOpportunityId(
                                                     "salesforce_opportunity_id"
                                                 )
+                                                .uniquenessKey("x")
                                                 .build()
                                         )
                                     )
@@ -1357,6 +1361,7 @@ class ContractListResponseTest {
                                                 .salesforceOpportunityId(
                                                     "salesforce_opportunity_id"
                                                 )
+                                                .uniquenessKey("x")
                                                 .build()
                                         )
                                     )
@@ -1668,6 +1673,7 @@ class ContractListResponseTest {
                                                 .salesforceOpportunityId(
                                                     "salesforce_opportunity_id"
                                                 )
+                                                .uniquenessKey("x")
                                                 .build()
                                         )
                                     )
@@ -1998,6 +2004,7 @@ class ContractListResponseTest {
                                             )
                                             .rolloverFraction(0.0)
                                             .salesforceOpportunityId("salesforce_opportunity_id")
+                                            .uniquenessKey("x")
                                             .build()
                                     )
                                 )
@@ -2271,6 +2278,7 @@ class ContractListResponseTest {
                                             .priority(0.0)
                                             .rateType(Credit.RateType.COMMIT_RATE)
                                             .salesforceOpportunityId("salesforce_opportunity_id")
+                                            .uniquenessKey("x")
                                             .build()
                                     )
                                 )
@@ -2512,6 +2520,7 @@ class ContractListResponseTest {
                                         )
                                         .rolloverFraction(0.0)
                                         .salesforceOpportunityId("salesforce_opportunity_id")
+                                        .uniquenessKey("x")
                                         .build()
                                 )
                             )
@@ -2790,6 +2799,7 @@ class ContractListResponseTest {
                                         .priority(0.0)
                                         .rateType(Credit.RateType.COMMIT_RATE)
                                         .salesforceOpportunityId("salesforce_opportunity_id")
+                                        .uniquenessKey("x")
                                         .build()
                                 )
                             )
@@ -3066,6 +3076,7 @@ class ContractListResponseTest {
                                         )
                                         .rolloverFraction(0.0)
                                         .salesforceOpportunityId("salesforce_opportunity_id")
+                                        .uniquenessKey("x")
                                         .build()
                                 )
                             )
@@ -3344,6 +3355,7 @@ class ContractListResponseTest {
                                         .priority(0.0)
                                         .rateType(Credit.RateType.COMMIT_RATE)
                                         .salesforceOpportunityId("salesforce_opportunity_id")
+                                        .uniquenessKey("x")
                                         .build()
                                 )
                             )

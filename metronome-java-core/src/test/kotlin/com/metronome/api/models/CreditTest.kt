@@ -73,6 +73,7 @@ class CreditTest {
                 .priority(0.0)
                 .rateType(Credit.RateType.COMMIT_RATE)
                 .salesforceOpportunityId("salesforce_opportunity_id")
+                .uniquenessKey("x")
                 .build()
         assertThat(credit).isNotNull
         assertThat(credit.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -135,5 +136,6 @@ class CreditTest {
         assertThat(credit.priority()).contains(0.0)
         assertThat(credit.rateType()).contains(Credit.RateType.COMMIT_RATE)
         assertThat(credit.salesforceOpportunityId()).contains("salesforce_opportunity_id")
+        assertThat(credit.uniquenessKey()).contains("x")
     }
 }

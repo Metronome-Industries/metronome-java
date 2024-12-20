@@ -108,6 +108,7 @@ class CommitTest {
                 )
                 .rolloverFraction(0.0)
                 .salesforceOpportunityId("salesforce_opportunity_id")
+                .uniquenessKey("x")
                 .build()
         assertThat(commit).isNotNull
         assertThat(commit.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -209,5 +210,6 @@ class CommitTest {
             )
         assertThat(commit.rolloverFraction()).contains(0.0)
         assertThat(commit.salesforceOpportunityId()).contains("salesforce_opportunity_id")
+        assertThat(commit.uniquenessKey()).contains("x")
     }
 }

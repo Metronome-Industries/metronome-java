@@ -75,6 +75,9 @@ private constructor(
     @JsonProperty("rate_type")
     @ExcludeMissing
     private val rateType: JsonField<RateType> = JsonMissing.of(),
+    @JsonProperty("uniqueness_key")
+    @ExcludeMissing
+    private val uniquenessKey: JsonField<String> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
@@ -129,6 +132,14 @@ private constructor(
 
     fun rateType(): Optional<RateType> = Optional.ofNullable(rateType.getNullable("rate_type"))
 
+    /**
+     * Prevents the creation of duplicates. If a request to create a commit or credit is made with a
+     * uniqueness key that was previously used to create a commit or credit, a new record will not
+     * be created and the request will fail with a 409 error.
+     */
+    fun uniquenessKey(): Optional<String> =
+        Optional.ofNullable(uniquenessKey.getNullable("uniqueness_key"))
+
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
     @JsonProperty("contract") @ExcludeMissing fun _contract() = contract
@@ -182,6 +193,13 @@ private constructor(
 
     @JsonProperty("rate_type") @ExcludeMissing fun _rateType() = rateType
 
+    /**
+     * Prevents the creation of duplicates. If a request to create a commit or credit is made with a
+     * uniqueness key that was previously used to create a commit or credit, a new record will not
+     * be created and the request will fail with a 409 error.
+     */
+    @JsonProperty("uniqueness_key") @ExcludeMissing fun _uniquenessKey() = uniquenessKey
+
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -206,6 +224,7 @@ private constructor(
             ledger()
             customFields().map { it.validate() }
             rateType()
+            uniquenessKey()
             validated = true
         }
     }
@@ -235,6 +254,7 @@ private constructor(
         private var ledger: JsonField<List<Ledger>> = JsonMissing.of()
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var rateType: JsonField<RateType> = JsonMissing.of()
+        private var uniquenessKey: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -255,6 +275,7 @@ private constructor(
             ledger = credit.ledger
             customFields = credit.customFields
             rateType = credit.rateType
+            uniquenessKey = credit.uniquenessKey
             additionalProperties = credit.additionalProperties.toMutableMap()
         }
 
@@ -364,6 +385,22 @@ private constructor(
 
         fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
 
+        /**
+         * Prevents the creation of duplicates. If a request to create a commit or credit is made
+         * with a uniqueness key that was previously used to create a commit or credit, a new record
+         * will not be created and the request will fail with a 409 error.
+         */
+        fun uniquenessKey(uniquenessKey: String) = uniquenessKey(JsonField.of(uniquenessKey))
+
+        /**
+         * Prevents the creation of duplicates. If a request to create a commit or credit is made
+         * with a uniqueness key that was previously used to create a commit or credit, a new record
+         * will not be created and the request will fail with a 409 error.
+         */
+        fun uniquenessKey(uniquenessKey: JsonField<String>) = apply {
+            this.uniquenessKey = uniquenessKey
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -401,6 +438,7 @@ private constructor(
                 ledger.map { it.toImmutable() },
                 customFields,
                 rateType,
+                uniquenessKey,
                 additionalProperties.toImmutable(),
             )
     }
@@ -2292,15 +2330,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Credit && id == other.id && contract == other.contract && type == other.type && name == other.name && priority == other.priority && product == other.product && accessSchedule == other.accessSchedule && description == other.description && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && applicableContractIds == other.applicableContractIds && netsuiteSalesOrderId == other.netsuiteSalesOrderId && salesforceOpportunityId == other.salesforceOpportunityId && ledger == other.ledger && customFields == other.customFields && rateType == other.rateType && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Credit && id == other.id && contract == other.contract && type == other.type && name == other.name && priority == other.priority && product == other.product && accessSchedule == other.accessSchedule && description == other.description && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && applicableContractIds == other.applicableContractIds && netsuiteSalesOrderId == other.netsuiteSalesOrderId && salesforceOpportunityId == other.salesforceOpportunityId && ledger == other.ledger && customFields == other.customFields && rateType == other.rateType && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, contract, type, name, priority, product, accessSchedule, description, applicableProductIds, applicableProductTags, applicableContractIds, netsuiteSalesOrderId, salesforceOpportunityId, ledger, customFields, rateType, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, contract, type, name, priority, product, accessSchedule, description, applicableProductIds, applicableProductTags, applicableContractIds, netsuiteSalesOrderId, salesforceOpportunityId, ledger, customFields, rateType, uniquenessKey, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Credit{id=$id, contract=$contract, type=$type, name=$name, priority=$priority, product=$product, accessSchedule=$accessSchedule, description=$description, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, applicableContractIds=$applicableContractIds, netsuiteSalesOrderId=$netsuiteSalesOrderId, salesforceOpportunityId=$salesforceOpportunityId, ledger=$ledger, customFields=$customFields, rateType=$rateType, additionalProperties=$additionalProperties}"
+        "Credit{id=$id, contract=$contract, type=$type, name=$name, priority=$priority, product=$product, accessSchedule=$accessSchedule, description=$description, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, applicableContractIds=$applicableContractIds, netsuiteSalesOrderId=$netsuiteSalesOrderId, salesforceOpportunityId=$salesforceOpportunityId, ledger=$ledger, customFields=$customFields, rateType=$rateType, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
 }

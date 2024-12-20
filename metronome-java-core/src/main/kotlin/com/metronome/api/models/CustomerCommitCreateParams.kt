@@ -38,6 +38,7 @@ constructor(
     private val netsuiteSalesOrderId: String?,
     private val rateType: RateType?,
     private val salesforceOpportunityId: String?,
+    private val uniquenessKey: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
@@ -75,6 +76,8 @@ constructor(
 
     fun salesforceOpportunityId(): Optional<String> = Optional.ofNullable(salesforceOpportunityId)
 
+    fun uniquenessKey(): Optional<String> = Optional.ofNullable(uniquenessKey)
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
@@ -100,6 +103,7 @@ constructor(
             netsuiteSalesOrderId,
             rateType,
             salesforceOpportunityId,
+            uniquenessKey,
             additionalBodyProperties,
         )
     }
@@ -128,6 +132,7 @@ constructor(
         @JsonProperty("netsuite_sales_order_id") private val netsuiteSalesOrderId: String?,
         @JsonProperty("rate_type") private val rateType: RateType?,
         @JsonProperty("salesforce_opportunity_id") private val salesforceOpportunityId: String?,
+        @JsonProperty("uniqueness_key") private val uniquenessKey: String?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -213,6 +218,14 @@ constructor(
         fun salesforceOpportunityId(): Optional<String> =
             Optional.ofNullable(salesforceOpportunityId)
 
+        /**
+         * Prevents the creation of duplicates. If a request to create a commit or credit is made
+         * with a uniqueness key that was previously used to create a commit or credit, a new record
+         * will not be created and the request will fail with a 409 error.
+         */
+        @JsonProperty("uniqueness_key")
+        fun uniquenessKey(): Optional<String> = Optional.ofNullable(uniquenessKey)
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -242,6 +255,7 @@ constructor(
             private var netsuiteSalesOrderId: String? = null
             private var rateType: RateType? = null
             private var salesforceOpportunityId: String? = null
+            private var uniquenessKey: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -265,6 +279,7 @@ constructor(
                 netsuiteSalesOrderId = customerCommitCreateBody.netsuiteSalesOrderId
                 rateType = customerCommitCreateBody.rateType
                 salesforceOpportunityId = customerCommitCreateBody.salesforceOpportunityId
+                uniquenessKey = customerCommitCreateBody.uniquenessKey
                 additionalProperties = customerCommitCreateBody.additionalProperties.toMutableMap()
             }
 
@@ -353,6 +368,13 @@ constructor(
                 this.salesforceOpportunityId = salesforceOpportunityId
             }
 
+            /**
+             * Prevents the creation of duplicates. If a request to create a commit or credit is
+             * made with a uniqueness key that was previously used to create a commit or credit, a
+             * new record will not be created and the request will fail with a 409 error.
+             */
+            fun uniquenessKey(uniquenessKey: String) = apply { this.uniquenessKey = uniquenessKey }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -390,6 +412,7 @@ constructor(
                     netsuiteSalesOrderId,
                     rateType,
                     salesforceOpportunityId,
+                    uniquenessKey,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -399,17 +422,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerCommitCreateBody && accessSchedule == other.accessSchedule && customerId == other.customerId && priority == other.priority && productId == other.productId && type == other.type && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && customFields == other.customFields && description == other.description && invoiceContractId == other.invoiceContractId && invoiceSchedule == other.invoiceSchedule && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rateType == other.rateType && salesforceOpportunityId == other.salesforceOpportunityId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomerCommitCreateBody && accessSchedule == other.accessSchedule && customerId == other.customerId && priority == other.priority && productId == other.productId && type == other.type && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && customFields == other.customFields && description == other.description && invoiceContractId == other.invoiceContractId && invoiceSchedule == other.invoiceSchedule && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rateType == other.rateType && salesforceOpportunityId == other.salesforceOpportunityId && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(accessSchedule, customerId, priority, productId, type, applicableContractIds, applicableProductIds, applicableProductTags, customFields, description, invoiceContractId, invoiceSchedule, name, netsuiteSalesOrderId, rateType, salesforceOpportunityId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(accessSchedule, customerId, priority, productId, type, applicableContractIds, applicableProductIds, applicableProductTags, customFields, description, invoiceContractId, invoiceSchedule, name, netsuiteSalesOrderId, rateType, salesforceOpportunityId, uniquenessKey, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerCommitCreateBody{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, type=$type, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, additionalProperties=$additionalProperties}"
+            "CustomerCommitCreateBody{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, type=$type, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -438,6 +461,7 @@ constructor(
         private var netsuiteSalesOrderId: String? = null
         private var rateType: RateType? = null
         private var salesforceOpportunityId: String? = null
+        private var uniquenessKey: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
         private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -463,6 +487,7 @@ constructor(
             netsuiteSalesOrderId = customerCommitCreateParams.netsuiteSalesOrderId
             rateType = customerCommitCreateParams.rateType
             salesforceOpportunityId = customerCommitCreateParams.salesforceOpportunityId
+            uniquenessKey = customerCommitCreateParams.uniquenessKey
             additionalHeaders = customerCommitCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = customerCommitCreateParams.additionalQueryParams.toBuilder()
             additionalBodyProperties =
@@ -578,6 +603,13 @@ constructor(
         fun salesforceOpportunityId(salesforceOpportunityId: String) = apply {
             this.salesforceOpportunityId = salesforceOpportunityId
         }
+
+        /**
+         * Prevents the creation of duplicates. If a request to create a commit or credit is made
+         * with a uniqueness key that was previously used to create a commit or credit, a new record
+         * will not be created and the request will fail with a 409 error.
+         */
+        fun uniquenessKey(uniquenessKey: String) = apply { this.uniquenessKey = uniquenessKey }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -717,6 +749,7 @@ constructor(
                 netsuiteSalesOrderId,
                 rateType,
                 salesforceOpportunityId,
+                uniquenessKey,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -1687,11 +1720,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCommitCreateParams && accessSchedule == other.accessSchedule && customerId == other.customerId && priority == other.priority && productId == other.productId && type == other.type && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && customFields == other.customFields && description == other.description && invoiceContractId == other.invoiceContractId && invoiceSchedule == other.invoiceSchedule && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rateType == other.rateType && salesforceOpportunityId == other.salesforceOpportunityId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerCommitCreateParams && accessSchedule == other.accessSchedule && customerId == other.customerId && priority == other.priority && productId == other.productId && type == other.type && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && customFields == other.customFields && description == other.description && invoiceContractId == other.invoiceContractId && invoiceSchedule == other.invoiceSchedule && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rateType == other.rateType && salesforceOpportunityId == other.salesforceOpportunityId && uniquenessKey == other.uniquenessKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(accessSchedule, customerId, priority, productId, type, applicableContractIds, applicableProductIds, applicableProductTags, customFields, description, invoiceContractId, invoiceSchedule, name, netsuiteSalesOrderId, rateType, salesforceOpportunityId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(accessSchedule, customerId, priority, productId, type, applicableContractIds, applicableProductIds, applicableProductTags, customFields, description, invoiceContractId, invoiceSchedule, name, netsuiteSalesOrderId, rateType, salesforceOpportunityId, uniquenessKey, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
-        "CustomerCommitCreateParams{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, type=$type, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerCommitCreateParams{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, type=$type, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, uniquenessKey=$uniquenessKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }
