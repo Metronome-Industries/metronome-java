@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
@@ -26,14 +26,18 @@ import java.util.Optional
  * priced in GB. In this case, the conversion factor would be 1024 and the operation would be
  * "divide".
  */
-@JsonDeserialize(builder = QuantityConversion.Builder::class)
 @NoAutoDetect
 class QuantityConversion
+@JsonCreator
 private constructor(
-    private val name: JsonField<String>,
-    private val conversionFactor: JsonField<Double>,
-    private val operation: JsonField<Operation>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("conversion_factor")
+    @ExcludeMissing
+    private val conversionFactor: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("operation")
+    @ExcludeMissing
+    private val operation: JsonField<Operation> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     /** Optional name for this conversion. */
@@ -95,8 +99,6 @@ private constructor(
         fun name(name: String) = name(JsonField.of(name))
 
         /** Optional name for this conversion. */
-        @JsonProperty("name")
-        @ExcludeMissing
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         /** The factor to multiply or divide the quantity by. */
@@ -104,8 +106,6 @@ private constructor(
             conversionFactor(JsonField.of(conversionFactor))
 
         /** The factor to multiply or divide the quantity by. */
-        @JsonProperty("conversion_factor")
-        @ExcludeMissing
         fun conversionFactor(conversionFactor: JsonField<Double>) = apply {
             this.conversionFactor = conversionFactor
         }
@@ -114,8 +114,6 @@ private constructor(
         fun operation(operation: Operation) = operation(JsonField.of(operation))
 
         /** The operation to perform on the quantity */
-        @JsonProperty("operation")
-        @ExcludeMissing
         fun operation(operation: JsonField<Operation>) = apply { this.operation = operation }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -123,7 +121,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }

@@ -6,45 +6,79 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = Override.Builder::class)
 @NoAutoDetect
 class Override
+@JsonCreator
 private constructor(
-    private val id: JsonField<String>,
-    private val product: JsonField<Product>,
-    private val applicableProductTags: JsonField<List<String>>,
-    private val overrideSpecifiers: JsonField<List<OverrideSpecifier>>,
-    private val startingAt: JsonField<OffsetDateTime>,
-    private val endingBefore: JsonField<OffsetDateTime>,
-    private val entitled: JsonField<Boolean>,
-    private val type: JsonField<Type>,
-    private val priority: JsonField<Double>,
-    private val multiplier: JsonField<Double>,
-    private val overwriteRate: JsonField<OverwriteRate>,
-    private val overrideTiers: JsonField<List<OverrideTier>>,
-    private val isCommitSpecific: JsonField<Boolean>,
-    private val target: JsonField<Target>,
-    private val rateType: JsonField<RateType>,
-    private val price: JsonField<Double>,
-    private val quantity: JsonField<Double>,
-    private val isProrated: JsonField<Boolean>,
-    private val tiers: JsonField<List<Tier>>,
-    private val value: JsonField<Value>,
-    private val creditType: JsonField<CreditTypeData>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("product")
+    @ExcludeMissing
+    private val product: JsonField<Product> = JsonMissing.of(),
+    @JsonProperty("applicable_product_tags")
+    @ExcludeMissing
+    private val applicableProductTags: JsonField<List<String>> = JsonMissing.of(),
+    @JsonProperty("override_specifiers")
+    @ExcludeMissing
+    private val overrideSpecifiers: JsonField<List<OverrideSpecifier>> = JsonMissing.of(),
+    @JsonProperty("starting_at")
+    @ExcludeMissing
+    private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("ending_before")
+    @ExcludeMissing
+    private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("entitled")
+    @ExcludeMissing
+    private val entitled: JsonField<Boolean> = JsonMissing.of(),
+    @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
+    @JsonProperty("priority")
+    @ExcludeMissing
+    private val priority: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("multiplier")
+    @ExcludeMissing
+    private val multiplier: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("overwrite_rate")
+    @ExcludeMissing
+    private val overwriteRate: JsonField<OverwriteRate> = JsonMissing.of(),
+    @JsonProperty("override_tiers")
+    @ExcludeMissing
+    private val overrideTiers: JsonField<List<OverrideTier>> = JsonMissing.of(),
+    @JsonProperty("is_commit_specific")
+    @ExcludeMissing
+    private val isCommitSpecific: JsonField<Boolean> = JsonMissing.of(),
+    @JsonProperty("target")
+    @ExcludeMissing
+    private val target: JsonField<Target> = JsonMissing.of(),
+    @JsonProperty("rate_type")
+    @ExcludeMissing
+    private val rateType: JsonField<RateType> = JsonMissing.of(),
+    @JsonProperty("price") @ExcludeMissing private val price: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("quantity")
+    @ExcludeMissing
+    private val quantity: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("is_prorated")
+    @ExcludeMissing
+    private val isProrated: JsonField<Boolean> = JsonMissing.of(),
+    @JsonProperty("tiers")
+    @ExcludeMissing
+    private val tiers: JsonField<List<Tier>> = JsonMissing.of(),
+    @JsonProperty("value") @ExcludeMissing private val value: JsonField<Value> = JsonMissing.of(),
+    @JsonProperty("credit_type")
+    @ExcludeMissing
+    private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun id(): String = id.getRequired("id")
@@ -255,19 +289,15 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         fun product(product: Product) = product(JsonField.of(product))
 
-        @JsonProperty("product")
-        @ExcludeMissing
         fun product(product: JsonField<Product>) = apply { this.product = product }
 
         fun applicableProductTags(applicableProductTags: List<String>) =
             applicableProductTags(JsonField.of(applicableProductTags))
 
-        @JsonProperty("applicable_product_tags")
-        @ExcludeMissing
         fun applicableProductTags(applicableProductTags: JsonField<List<String>>) = apply {
             this.applicableProductTags = applicableProductTags
         }
@@ -275,56 +305,40 @@ private constructor(
         fun overrideSpecifiers(overrideSpecifiers: List<OverrideSpecifier>) =
             overrideSpecifiers(JsonField.of(overrideSpecifiers))
 
-        @JsonProperty("override_specifiers")
-        @ExcludeMissing
         fun overrideSpecifiers(overrideSpecifiers: JsonField<List<OverrideSpecifier>>) = apply {
             this.overrideSpecifiers = overrideSpecifiers
         }
 
         fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
-        @JsonProperty("starting_at")
-        @ExcludeMissing
         fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
             this.startingAt = startingAt
         }
 
         fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
 
-        @JsonProperty("ending_before")
-        @ExcludeMissing
         fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
             this.endingBefore = endingBefore
         }
 
         fun entitled(entitled: Boolean) = entitled(JsonField.of(entitled))
 
-        @JsonProperty("entitled")
-        @ExcludeMissing
         fun entitled(entitled: JsonField<Boolean>) = apply { this.entitled = entitled }
 
         fun type(type: Type) = type(JsonField.of(type))
 
-        @JsonProperty("type")
-        @ExcludeMissing
         fun type(type: JsonField<Type>) = apply { this.type = type }
 
         fun priority(priority: Double) = priority(JsonField.of(priority))
 
-        @JsonProperty("priority")
-        @ExcludeMissing
         fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
 
         fun multiplier(multiplier: Double) = multiplier(JsonField.of(multiplier))
 
-        @JsonProperty("multiplier")
-        @ExcludeMissing
         fun multiplier(multiplier: JsonField<Double>) = apply { this.multiplier = multiplier }
 
         fun overwriteRate(overwriteRate: OverwriteRate) = overwriteRate(JsonField.of(overwriteRate))
 
-        @JsonProperty("overwrite_rate")
-        @ExcludeMissing
         fun overwriteRate(overwriteRate: JsonField<OverwriteRate>) = apply {
             this.overwriteRate = overwriteRate
         }
@@ -332,8 +346,6 @@ private constructor(
         fun overrideTiers(overrideTiers: List<OverrideTier>) =
             overrideTiers(JsonField.of(overrideTiers))
 
-        @JsonProperty("override_tiers")
-        @ExcludeMissing
         fun overrideTiers(overrideTiers: JsonField<List<OverrideTier>>) = apply {
             this.overrideTiers = overrideTiers
         }
@@ -341,22 +353,16 @@ private constructor(
         fun isCommitSpecific(isCommitSpecific: Boolean) =
             isCommitSpecific(JsonField.of(isCommitSpecific))
 
-        @JsonProperty("is_commit_specific")
-        @ExcludeMissing
         fun isCommitSpecific(isCommitSpecific: JsonField<Boolean>) = apply {
             this.isCommitSpecific = isCommitSpecific
         }
 
         fun target(target: Target) = target(JsonField.of(target))
 
-        @JsonProperty("target")
-        @ExcludeMissing
         fun target(target: JsonField<Target>) = apply { this.target = target }
 
         fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
 
-        @JsonProperty("rate_type")
-        @ExcludeMissing
         fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
 
         /**
@@ -369,16 +375,12 @@ private constructor(
          * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this is a
          * decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
          */
-        @JsonProperty("price")
-        @ExcludeMissing
         fun price(price: JsonField<Double>) = apply { this.price = price }
 
         /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
         fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
         /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-        @JsonProperty("quantity")
-        @ExcludeMissing
         fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
         /**
@@ -391,30 +393,22 @@ private constructor(
          * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
          * true.
          */
-        @JsonProperty("is_prorated")
-        @ExcludeMissing
         fun isProrated(isProrated: JsonField<Boolean>) = apply { this.isProrated = isProrated }
 
         /** Only set for TIERED rate_type. */
         fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
         /** Only set for TIERED rate_type. */
-        @JsonProperty("tiers")
-        @ExcludeMissing
         fun tiers(tiers: JsonField<List<Tier>>) = apply { this.tiers = tiers }
 
         /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
         fun value(value: Value) = value(JsonField.of(value))
 
         /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
-        @JsonProperty("value")
-        @ExcludeMissing
         fun value(value: JsonField<Value>) = apply { this.value = value }
 
         fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
-        @JsonProperty("credit_type")
-        @ExcludeMissing
         fun creditType(creditType: JsonField<CreditTypeData>) = apply {
             this.creditType = creditType
         }
@@ -424,7 +418,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -466,16 +459,27 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = OverrideSpecifier.Builder::class)
     @NoAutoDetect
     class OverrideSpecifier
+    @JsonCreator
     private constructor(
-        private val productId: JsonField<String>,
-        private val productTags: JsonField<List<String>>,
-        private val pricingGroupValues: JsonField<PricingGroupValues>,
-        private val presentationGroupValues: JsonField<PresentationGroupValues>,
-        private val commitIds: JsonField<List<String>>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("product_id")
+        @ExcludeMissing
+        private val productId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("product_tags")
+        @ExcludeMissing
+        private val productTags: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("pricing_group_values")
+        @ExcludeMissing
+        private val pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of(),
+        @JsonProperty("presentation_group_values")
+        @ExcludeMissing
+        private val presentationGroupValues: JsonField<PresentationGroupValues> = JsonMissing.of(),
+        @JsonProperty("commit_ids")
+        @ExcludeMissing
+        private val commitIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun productId(): Optional<String> = Optional.ofNullable(productId.getNullable("product_id"))
@@ -552,14 +556,10 @@ private constructor(
 
             fun productId(productId: String) = productId(JsonField.of(productId))
 
-            @JsonProperty("product_id")
-            @ExcludeMissing
             fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
             fun productTags(productTags: List<String>) = productTags(JsonField.of(productTags))
 
-            @JsonProperty("product_tags")
-            @ExcludeMissing
             fun productTags(productTags: JsonField<List<String>>) = apply {
                 this.productTags = productTags
             }
@@ -567,8 +567,6 @@ private constructor(
             fun pricingGroupValues(pricingGroupValues: PricingGroupValues) =
                 pricingGroupValues(JsonField.of(pricingGroupValues))
 
-            @JsonProperty("pricing_group_values")
-            @ExcludeMissing
             fun pricingGroupValues(pricingGroupValues: JsonField<PricingGroupValues>) = apply {
                 this.pricingGroupValues = pricingGroupValues
             }
@@ -576,16 +574,12 @@ private constructor(
             fun presentationGroupValues(presentationGroupValues: PresentationGroupValues) =
                 presentationGroupValues(JsonField.of(presentationGroupValues))
 
-            @JsonProperty("presentation_group_values")
-            @ExcludeMissing
             fun presentationGroupValues(
                 presentationGroupValues: JsonField<PresentationGroupValues>
             ) = apply { this.presentationGroupValues = presentationGroupValues }
 
             fun commitIds(commitIds: List<String>) = commitIds(JsonField.of(commitIds))
 
-            @JsonProperty("commit_ids")
-            @ExcludeMissing
             fun commitIds(commitIds: JsonField<List<String>>) = apply { this.commitIds = commitIds }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -593,7 +587,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -619,11 +612,12 @@ private constructor(
                 )
         }
 
-        @JsonDeserialize(builder = PresentationGroupValues.Builder::class)
         @NoAutoDetect
         class PresentationGroupValues
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -660,7 +654,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -700,11 +693,12 @@ private constructor(
                 "PresentationGroupValues{additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = PricingGroupValues.Builder::class)
         @NoAutoDetect
         class PricingGroupValues
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -740,7 +734,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -798,13 +791,18 @@ private constructor(
             "OverrideSpecifier{productId=$productId, productTags=$productTags, pricingGroupValues=$pricingGroupValues, presentationGroupValues=$presentationGroupValues, commitIds=$commitIds, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = OverrideTier.Builder::class)
     @NoAutoDetect
     class OverrideTier
+    @JsonCreator
     private constructor(
-        private val size: JsonField<Double>,
-        private val multiplier: JsonField<Double>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("size")
+        @ExcludeMissing
+        private val size: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("multiplier")
+        @ExcludeMissing
+        private val multiplier: JsonField<Double> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun size(): Optional<Double> = Optional.ofNullable(size.getNullable("size"))
@@ -851,14 +849,10 @@ private constructor(
 
             fun size(size: Double) = size(JsonField.of(size))
 
-            @JsonProperty("size")
-            @ExcludeMissing
             fun size(size: JsonField<Double>) = apply { this.size = size }
 
             fun multiplier(multiplier: Double) = multiplier(JsonField.of(multiplier))
 
-            @JsonProperty("multiplier")
-            @ExcludeMissing
             fun multiplier(multiplier: JsonField<Double>) = apply { this.multiplier = multiplier }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -866,7 +860,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -907,18 +900,33 @@ private constructor(
             "OverrideTier{size=$size, multiplier=$multiplier, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = OverwriteRate.Builder::class)
     @NoAutoDetect
     class OverwriteRate
+    @JsonCreator
     private constructor(
-        private val rateType: JsonField<RateType>,
-        private val price: JsonField<Double>,
-        private val quantity: JsonField<Double>,
-        private val isProrated: JsonField<Boolean>,
-        private val tiers: JsonField<List<Tier>>,
-        private val customRate: JsonField<CustomRate>,
-        private val creditType: JsonField<CreditTypeData>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("rate_type")
+        @ExcludeMissing
+        private val rateType: JsonField<RateType> = JsonMissing.of(),
+        @JsonProperty("price")
+        @ExcludeMissing
+        private val price: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("quantity")
+        @ExcludeMissing
+        private val quantity: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("is_prorated")
+        @ExcludeMissing
+        private val isProrated: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("tiers")
+        @ExcludeMissing
+        private val tiers: JsonField<List<Tier>> = JsonMissing.of(),
+        @JsonProperty("custom_rate")
+        @ExcludeMissing
+        private val customRate: JsonField<CustomRate> = JsonMissing.of(),
+        @JsonProperty("credit_type")
+        @ExcludeMissing
+        private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun rateType(): RateType = rateType.getRequired("rate_type")
@@ -1025,8 +1033,6 @@ private constructor(
 
             fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
 
-            @JsonProperty("rate_type")
-            @ExcludeMissing
             fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
 
             /**
@@ -1039,16 +1045,12 @@ private constructor(
              * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this
              * is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
              */
-            @JsonProperty("price")
-            @ExcludeMissing
             fun price(price: JsonField<Double>) = apply { this.price = price }
 
             /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
             fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
             /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-            @JsonProperty("quantity")
-            @ExcludeMissing
             fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
             /**
@@ -1061,16 +1063,12 @@ private constructor(
              * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
              * to true.
              */
-            @JsonProperty("is_prorated")
-            @ExcludeMissing
             fun isProrated(isProrated: JsonField<Boolean>) = apply { this.isProrated = isProrated }
 
             /** Only set for TIERED rate_type. */
             fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
             /** Only set for TIERED rate_type. */
-            @JsonProperty("tiers")
-            @ExcludeMissing
             fun tiers(tiers: JsonField<List<Tier>>) = apply { this.tiers = tiers }
 
             /**
@@ -1081,16 +1079,12 @@ private constructor(
             /**
              * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
              */
-            @JsonProperty("custom_rate")
-            @ExcludeMissing
             fun customRate(customRate: JsonField<CustomRate>) = apply {
                 this.customRate = customRate
             }
 
             fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
-            @JsonProperty("credit_type")
-            @ExcludeMissing
             fun creditType(creditType: JsonField<CreditTypeData>) = apply {
                 this.creditType = creditType
             }
@@ -1100,7 +1094,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -1204,11 +1197,12 @@ private constructor(
         }
 
         /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
-        @JsonDeserialize(builder = CustomRate.Builder::class)
         @NoAutoDetect
         class CustomRate
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -1244,7 +1238,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -1300,13 +1293,16 @@ private constructor(
             "OverwriteRate{rateType=$rateType, price=$price, quantity=$quantity, isProrated=$isProrated, tiers=$tiers, customRate=$customRate, creditType=$creditType, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = Product.Builder::class)
     @NoAutoDetect
     class Product
+    @JsonCreator
     private constructor(
-        private val id: JsonField<String>,
-        private val name: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun id(): String = id.getRequired("id")
@@ -1353,14 +1349,10 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
-            @JsonProperty("id")
-            @ExcludeMissing
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun name(name: String) = name(JsonField.of(name))
 
-            @JsonProperty("name")
-            @ExcludeMissing
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1368,7 +1360,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -1605,11 +1596,12 @@ private constructor(
     }
 
     /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
-    @JsonDeserialize(builder = Value.Builder::class)
     @NoAutoDetect
     class Value
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -1645,7 +1637,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

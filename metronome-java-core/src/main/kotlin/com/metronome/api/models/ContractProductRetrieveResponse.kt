@@ -6,25 +6,25 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = ContractProductRetrieveResponse.Builder::class)
 @NoAutoDetect
 class ContractProductRetrieveResponse
+@JsonCreator
 private constructor(
-    private val data: JsonField<Data>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("data") @ExcludeMissing private val data: JsonField<Data> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun data(): Data = data.getRequired("data")
@@ -66,8 +66,6 @@ private constructor(
 
         fun data(data: Data) = data(JsonField.of(data))
 
-        @JsonProperty("data")
-        @ExcludeMissing
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -75,7 +73,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -94,18 +91,29 @@ private constructor(
             ContractProductRetrieveResponse(data, additionalProperties.toImmutable())
     }
 
-    @JsonDeserialize(builder = Data.Builder::class)
     @NoAutoDetect
     class Data
+    @JsonCreator
     private constructor(
-        private val id: JsonField<String>,
-        private val type: JsonField<Type>,
-        private val archivedAt: JsonField<OffsetDateTime>,
-        private val initial: JsonField<ProductListItemState>,
-        private val current: JsonField<ProductListItemState>,
-        private val updates: JsonField<List<Update>>,
-        private val customFields: JsonField<CustomFields>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
+        @JsonProperty("archived_at")
+        @ExcludeMissing
+        private val archivedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("initial")
+        @ExcludeMissing
+        private val initial: JsonField<ProductListItemState> = JsonMissing.of(),
+        @JsonProperty("current")
+        @ExcludeMissing
+        private val current: JsonField<ProductListItemState> = JsonMissing.of(),
+        @JsonProperty("updates")
+        @ExcludeMissing
+        private val updates: JsonField<List<Update>> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun id(): String = id.getRequired("id")
@@ -189,46 +197,32 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
-            @JsonProperty("id")
-            @ExcludeMissing
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun type(type: Type) = type(JsonField.of(type))
 
-            @JsonProperty("type")
-            @ExcludeMissing
             fun type(type: JsonField<Type>) = apply { this.type = type }
 
             fun archivedAt(archivedAt: OffsetDateTime) = archivedAt(JsonField.of(archivedAt))
 
-            @JsonProperty("archived_at")
-            @ExcludeMissing
             fun archivedAt(archivedAt: JsonField<OffsetDateTime>) = apply {
                 this.archivedAt = archivedAt
             }
 
             fun initial(initial: ProductListItemState) = initial(JsonField.of(initial))
 
-            @JsonProperty("initial")
-            @ExcludeMissing
             fun initial(initial: JsonField<ProductListItemState>) = apply { this.initial = initial }
 
             fun current(current: ProductListItemState) = current(JsonField.of(current))
 
-            @JsonProperty("current")
-            @ExcludeMissing
             fun current(current: JsonField<ProductListItemState>) = apply { this.current = current }
 
             fun updates(updates: List<Update>) = updates(JsonField.of(updates))
 
-            @JsonProperty("updates")
-            @ExcludeMissing
             fun updates(updates: JsonField<List<Update>>) = apply { this.updates = updates }
 
             fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
-            @JsonProperty("custom_fields")
-            @ExcludeMissing
             fun customFields(customFields: JsonField<CustomFields>) = apply {
                 this.customFields = customFields
             }
@@ -238,7 +232,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -341,27 +334,60 @@ private constructor(
             override fun toString() = value.toString()
         }
 
-        @JsonDeserialize(builder = Update.Builder::class)
         @NoAutoDetect
         class Update
+        @JsonCreator
         private constructor(
-            private val name: JsonField<String>,
-            private val startingAt: JsonField<OffsetDateTime>,
-            private val isRefundable: JsonField<Boolean>,
-            private val createdAt: JsonField<OffsetDateTime>,
-            private val createdBy: JsonField<String>,
-            private val billableMetricId: JsonField<String>,
-            private val quantityConversion: JsonField<QuantityConversion>,
-            private val quantityRounding: JsonField<QuantityRounding>,
-            private val netsuiteInternalItemId: JsonField<String>,
-            private val netsuiteOverageItemId: JsonField<String>,
-            private val compositeProductIds: JsonField<List<String>>,
-            private val compositeTags: JsonField<List<String>>,
-            private val tags: JsonField<List<String>>,
-            private val excludeFreeUsage: JsonField<Boolean>,
-            private val pricingGroupKey: JsonField<List<String>>,
-            private val presentationGroupKey: JsonField<List<String>>,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("name")
+            @ExcludeMissing
+            private val name: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("starting_at")
+            @ExcludeMissing
+            private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("is_refundable")
+            @ExcludeMissing
+            private val isRefundable: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("created_at")
+            @ExcludeMissing
+            private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("created_by")
+            @ExcludeMissing
+            private val createdBy: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("billable_metric_id")
+            @ExcludeMissing
+            private val billableMetricId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("quantity_conversion")
+            @ExcludeMissing
+            private val quantityConversion: JsonField<QuantityConversion> = JsonMissing.of(),
+            @JsonProperty("quantity_rounding")
+            @ExcludeMissing
+            private val quantityRounding: JsonField<QuantityRounding> = JsonMissing.of(),
+            @JsonProperty("netsuite_internal_item_id")
+            @ExcludeMissing
+            private val netsuiteInternalItemId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("netsuite_overage_item_id")
+            @ExcludeMissing
+            private val netsuiteOverageItemId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("composite_product_ids")
+            @ExcludeMissing
+            private val compositeProductIds: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("composite_tags")
+            @ExcludeMissing
+            private val compositeTags: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("tags")
+            @ExcludeMissing
+            private val tags: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("exclude_free_usage")
+            @ExcludeMissing
+            private val excludeFreeUsage: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("pricing_group_key")
+            @ExcludeMissing
+            private val pricingGroupKey: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("presentation_group_key")
+            @ExcludeMissing
+            private val presentationGroupKey: JsonField<List<String>> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
@@ -590,45 +616,33 @@ private constructor(
 
                 fun name(name: String) = name(JsonField.of(name))
 
-                @JsonProperty("name")
-                @ExcludeMissing
                 fun name(name: JsonField<String>) = apply { this.name = name }
 
                 fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
-                @JsonProperty("starting_at")
-                @ExcludeMissing
                 fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                     this.startingAt = startingAt
                 }
 
                 fun isRefundable(isRefundable: Boolean) = isRefundable(JsonField.of(isRefundable))
 
-                @JsonProperty("is_refundable")
-                @ExcludeMissing
                 fun isRefundable(isRefundable: JsonField<Boolean>) = apply {
                     this.isRefundable = isRefundable
                 }
 
                 fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
-                @JsonProperty("created_at")
-                @ExcludeMissing
                 fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
                     this.createdAt = createdAt
                 }
 
                 fun createdBy(createdBy: String) = createdBy(JsonField.of(createdBy))
 
-                @JsonProperty("created_by")
-                @ExcludeMissing
                 fun createdBy(createdBy: JsonField<String>) = apply { this.createdBy = createdBy }
 
                 fun billableMetricId(billableMetricId: String) =
                     billableMetricId(JsonField.of(billableMetricId))
 
-                @JsonProperty("billable_metric_id")
-                @ExcludeMissing
                 fun billableMetricId(billableMetricId: JsonField<String>) = apply {
                     this.billableMetricId = billableMetricId
                 }
@@ -654,8 +668,6 @@ private constructor(
                  * this case, the conversion factor would be 1024 and the operation would be
                  * "divide".
                  */
-                @JsonProperty("quantity_conversion")
-                @ExcludeMissing
                 fun quantityConversion(quantityConversion: JsonField<QuantityConversion>) = apply {
                     this.quantityConversion = quantityConversion
                 }
@@ -675,8 +687,6 @@ private constructor(
                  * the method is "round up" and the decimal places is 0, then the quantity will be
                  * rounded up to the nearest integer.
                  */
-                @JsonProperty("quantity_rounding")
-                @ExcludeMissing
                 fun quantityRounding(quantityRounding: JsonField<QuantityRounding>) = apply {
                     this.quantityRounding = quantityRounding
                 }
@@ -686,8 +696,6 @@ private constructor(
                     netsuiteInternalItemId(JsonField.of(netsuiteInternalItemId))
 
                 /** This field's availability is dependent on your client's configuration. */
-                @JsonProperty("netsuite_internal_item_id")
-                @ExcludeMissing
                 fun netsuiteInternalItemId(netsuiteInternalItemId: JsonField<String>) = apply {
                     this.netsuiteInternalItemId = netsuiteInternalItemId
                 }
@@ -697,8 +705,6 @@ private constructor(
                     netsuiteOverageItemId(JsonField.of(netsuiteOverageItemId))
 
                 /** This field's availability is dependent on your client's configuration. */
-                @JsonProperty("netsuite_overage_item_id")
-                @ExcludeMissing
                 fun netsuiteOverageItemId(netsuiteOverageItemId: JsonField<String>) = apply {
                     this.netsuiteOverageItemId = netsuiteOverageItemId
                 }
@@ -706,8 +712,6 @@ private constructor(
                 fun compositeProductIds(compositeProductIds: List<String>) =
                     compositeProductIds(JsonField.of(compositeProductIds))
 
-                @JsonProperty("composite_product_ids")
-                @ExcludeMissing
                 fun compositeProductIds(compositeProductIds: JsonField<List<String>>) = apply {
                     this.compositeProductIds = compositeProductIds
                 }
@@ -715,23 +719,17 @@ private constructor(
                 fun compositeTags(compositeTags: List<String>) =
                     compositeTags(JsonField.of(compositeTags))
 
-                @JsonProperty("composite_tags")
-                @ExcludeMissing
                 fun compositeTags(compositeTags: JsonField<List<String>>) = apply {
                     this.compositeTags = compositeTags
                 }
 
                 fun tags(tags: List<String>) = tags(JsonField.of(tags))
 
-                @JsonProperty("tags")
-                @ExcludeMissing
                 fun tags(tags: JsonField<List<String>>) = apply { this.tags = tags }
 
                 fun excludeFreeUsage(excludeFreeUsage: Boolean) =
                     excludeFreeUsage(JsonField.of(excludeFreeUsage))
 
-                @JsonProperty("exclude_free_usage")
-                @ExcludeMissing
                 fun excludeFreeUsage(excludeFreeUsage: JsonField<Boolean>) = apply {
                     this.excludeFreeUsage = excludeFreeUsage
                 }
@@ -751,8 +749,6 @@ private constructor(
                  * of values in the pricing group key and presentation group key must be set as one
                  * compound group key on the billable metric.
                  */
-                @JsonProperty("pricing_group_key")
-                @ExcludeMissing
                 fun pricingGroupKey(pricingGroupKey: JsonField<List<String>>) = apply {
                     this.pricingGroupKey = pricingGroupKey
                 }
@@ -770,8 +766,6 @@ private constructor(
                  * values in the pricing group key and presentation group key must be set as one
                  * compound group key on the billable metric.
                  */
-                @JsonProperty("presentation_group_key")
-                @ExcludeMissing
                 fun presentationGroupKey(presentationGroupKey: JsonField<List<String>>) = apply {
                     this.presentationGroupKey = presentationGroupKey
                 }
@@ -781,7 +775,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -839,11 +832,12 @@ private constructor(
                 "Update{name=$name, startingAt=$startingAt, isRefundable=$isRefundable, createdAt=$createdAt, createdBy=$createdBy, billableMetricId=$billableMetricId, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, tags=$tags, excludeFreeUsage=$excludeFreeUsage, pricingGroupKey=$pricingGroupKey, presentationGroupKey=$presentationGroupKey, additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = CustomFields.Builder::class)
         @NoAutoDetect
         class CustomFields
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -879,7 +873,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }

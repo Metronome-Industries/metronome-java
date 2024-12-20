@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
@@ -14,6 +13,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
@@ -75,19 +75,20 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = BillableMetricCreateBody.Builder::class)
     @NoAutoDetect
     class BillableMetricCreateBody
+    @JsonCreator
     internal constructor(
-        private val name: String,
-        private val aggregationKey: String?,
-        private val aggregationType: AggregationType?,
-        private val customFields: CustomFields?,
-        private val eventTypeFilter: EventTypeFilter?,
-        private val groupKeys: List<List<String>>?,
-        private val propertyFilters: List<PropertyFilter>?,
-        private val sql: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("name") private val name: String,
+        @JsonProperty("aggregation_key") private val aggregationKey: String?,
+        @JsonProperty("aggregation_type") private val aggregationType: AggregationType?,
+        @JsonProperty("custom_fields") private val customFields: CustomFields?,
+        @JsonProperty("event_type_filter") private val eventTypeFilter: EventTypeFilter?,
+        @JsonProperty("group_keys") private val groupKeys: List<List<String>>?,
+        @JsonProperty("property_filters") private val propertyFilters: List<PropertyFilter>?,
+        @JsonProperty("sql") private val sql: String?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The display name of the billable metric. */
@@ -170,31 +171,27 @@ constructor(
             }
 
             /** The display name of the billable metric. */
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = apply { this.name = name }
 
             /**
              * Specifies the type of aggregation performed on matching events. Required if `sql` is
              * not provided.
              */
-            @JsonProperty("aggregation_key")
             fun aggregationKey(aggregationKey: String) = apply {
                 this.aggregationKey = aggregationKey
             }
 
             /** Specifies the type of aggregation performed on matching events. */
-            @JsonProperty("aggregation_type")
             fun aggregationType(aggregationType: AggregationType) = apply {
                 this.aggregationType = aggregationType
             }
 
             /** Custom fields to attach to the billable metric. */
-            @JsonProperty("custom_fields")
             fun customFields(customFields: CustomFields) = apply {
                 this.customFields = customFields
             }
 
             /** An optional filtering rule to match the 'event_type' property of an event. */
-            @JsonProperty("event_type_filter")
             fun eventTypeFilter(eventTypeFilter: EventTypeFilter) = apply {
                 this.eventTypeFilter = eventTypeFilter
             }
@@ -203,14 +200,12 @@ constructor(
              * Property names that are used to group usage costs on an invoice. Each entry
              * represents a set of properties used to slice events into distinct buckets.
              */
-            @JsonProperty("group_keys")
             fun groupKeys(groupKeys: List<List<String>>) = apply { this.groupKeys = groupKeys }
 
             /**
              * A list of filters to match events to this billable metric. Each filter defines a rule
              * on an event property. All rules must pass for the event to match the billable metric.
              */
-            @JsonProperty("property_filters")
             fun propertyFilters(propertyFilters: List<PropertyFilter>) = apply {
                 this.propertyFilters = propertyFilters
             }
@@ -220,14 +215,13 @@ constructor(
              * with aggregation_type, event_type_filter, property_filters, aggregation_key, and
              * group_keys. If provided, these other fields must be omitted.
              */
-            @JsonProperty("sql") fun sql(sql: String) = apply { this.sql = sql }
+            fun sql(sql: String) = apply { this.sql = sql }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -586,11 +580,12 @@ constructor(
     }
 
     /** Custom fields to attach to the billable metric. */
-    @JsonDeserialize(builder = CustomFields.Builder::class)
     @NoAutoDetect
     class CustomFields
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -618,7 +613,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

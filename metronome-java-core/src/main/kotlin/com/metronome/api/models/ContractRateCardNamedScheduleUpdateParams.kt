@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -64,17 +65,18 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = ContractRateCardNamedScheduleUpdateBody.Builder::class)
     @NoAutoDetect
     class ContractRateCardNamedScheduleUpdateBody
+    @JsonCreator
     internal constructor(
-        private val contractId: String,
-        private val customerId: String,
-        private val scheduleName: String,
-        private val startingAt: OffsetDateTime,
-        private val value: JsonValue,
-        private val endingBefore: OffsetDateTime?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("contract_id") private val contractId: String,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("schedule_name") private val scheduleName: String,
+        @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
+        @JsonProperty("value") private val value: JsonValue,
+        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the contract whose named schedule is to be updated */
@@ -133,27 +135,22 @@ constructor(
             }
 
             /** ID of the contract whose named schedule is to be updated */
-            @JsonProperty("contract_id")
             fun contractId(contractId: String) = apply { this.contractId = contractId }
 
             /** ID of the customer whose named schedule is to be updated */
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             /** The identifier for the schedule to be updated */
-            @JsonProperty("schedule_name")
             fun scheduleName(scheduleName: String) = apply { this.scheduleName = scheduleName }
 
-            @JsonProperty("starting_at")
             fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
 
             /**
              * The value to set for the named schedule. The structure of this object is specific to
              * the named schedule.
              */
-            @JsonProperty("value") fun value(value: JsonValue) = apply { this.value = value }
+            fun value(value: JsonValue) = apply { this.value = value }
 
-            @JsonProperty("ending_before")
             fun endingBefore(endingBefore: OffsetDateTime) = apply {
                 this.endingBefore = endingBefore
             }
@@ -163,7 +160,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

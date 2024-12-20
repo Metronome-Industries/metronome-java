@@ -6,52 +6,102 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = Invoice.Builder::class)
 @NoAutoDetect
 class Invoice
+@JsonCreator
 private constructor(
-    private val id: JsonField<String>,
-    private val customerId: JsonField<String>,
-    private val customerCustomFields: JsonField<CustomerCustomFields>,
-    private val netsuiteSalesOrderId: JsonField<String>,
-    private val salesforceOpportunityId: JsonField<String>,
-    private val netPaymentTermsDays: JsonField<Double>,
-    private val creditType: JsonField<CreditTypeData>,
-    private val invoiceAdjustments: JsonField<List<InvoiceAdjustment>>,
-    private val lineItems: JsonField<List<LineItem>>,
-    private val startTimestamp: JsonField<OffsetDateTime>,
-    private val endTimestamp: JsonField<OffsetDateTime>,
-    private val issuedAt: JsonField<OffsetDateTime>,
-    private val createdAt: JsonField<OffsetDateTime>,
-    private val status: JsonField<String>,
-    private val subtotal: JsonField<Double>,
-    private val total: JsonField<Double>,
-    private val type: JsonField<String>,
-    private val externalInvoice: JsonField<ExternalInvoice>,
-    private val planId: JsonField<String>,
-    private val planName: JsonField<String>,
-    private val planCustomFields: JsonField<PlanCustomFields>,
-    private val contractId: JsonField<String>,
-    private val contractCustomFields: JsonField<ContractCustomFields>,
-    private val amendmentId: JsonField<String>,
-    private val correctionRecord: JsonField<CorrectionRecord>,
-    private val resellerRoyalty: JsonField<ResellerRoyalty>,
-    private val customFields: JsonField<CustomFields>,
-    private val billableStatus: JsonField<BillableStatus>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("customer_id")
+    @ExcludeMissing
+    private val customerId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("customer_custom_fields")
+    @ExcludeMissing
+    private val customerCustomFields: JsonField<CustomerCustomFields> = JsonMissing.of(),
+    @JsonProperty("netsuite_sales_order_id")
+    @ExcludeMissing
+    private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("salesforce_opportunity_id")
+    @ExcludeMissing
+    private val salesforceOpportunityId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("net_payment_terms_days")
+    @ExcludeMissing
+    private val netPaymentTermsDays: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("credit_type")
+    @ExcludeMissing
+    private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
+    @JsonProperty("invoice_adjustments")
+    @ExcludeMissing
+    private val invoiceAdjustments: JsonField<List<InvoiceAdjustment>> = JsonMissing.of(),
+    @JsonProperty("line_items")
+    @ExcludeMissing
+    private val lineItems: JsonField<List<LineItem>> = JsonMissing.of(),
+    @JsonProperty("start_timestamp")
+    @ExcludeMissing
+    private val startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("end_timestamp")
+    @ExcludeMissing
+    private val endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("issued_at")
+    @ExcludeMissing
+    private val issuedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("status")
+    @ExcludeMissing
+    private val status: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("subtotal")
+    @ExcludeMissing
+    private val subtotal: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("total") @ExcludeMissing private val total: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("type") @ExcludeMissing private val type: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("external_invoice")
+    @ExcludeMissing
+    private val externalInvoice: JsonField<ExternalInvoice> = JsonMissing.of(),
+    @JsonProperty("plan_id")
+    @ExcludeMissing
+    private val planId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("plan_name")
+    @ExcludeMissing
+    private val planName: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("plan_custom_fields")
+    @ExcludeMissing
+    private val planCustomFields: JsonField<PlanCustomFields> = JsonMissing.of(),
+    @JsonProperty("contract_id")
+    @ExcludeMissing
+    private val contractId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("contract_custom_fields")
+    @ExcludeMissing
+    private val contractCustomFields: JsonField<ContractCustomFields> = JsonMissing.of(),
+    @JsonProperty("amendment_id")
+    @ExcludeMissing
+    private val amendmentId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("correction_record")
+    @ExcludeMissing
+    private val correctionRecord: JsonField<CorrectionRecord> = JsonMissing.of(),
+    @JsonProperty("reseller_royalty")
+    @ExcludeMissing
+    private val resellerRoyalty: JsonField<ResellerRoyalty> = JsonMissing.of(),
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+    @JsonProperty("billable_status")
+    @ExcludeMissing
+    private val billableStatus: JsonField<BillableStatus> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun id(): String = id.getRequired("id")
@@ -325,19 +375,15 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         fun customerId(customerId: String) = customerId(JsonField.of(customerId))
 
-        @JsonProperty("customer_id")
-        @ExcludeMissing
         fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
         fun customerCustomFields(customerCustomFields: CustomerCustomFields) =
             customerCustomFields(JsonField.of(customerCustomFields))
 
-        @JsonProperty("customer_custom_fields")
-        @ExcludeMissing
         fun customerCustomFields(customerCustomFields: JsonField<CustomerCustomFields>) = apply {
             this.customerCustomFields = customerCustomFields
         }
@@ -347,8 +393,6 @@ private constructor(
             netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
 
         /** This field's availability is dependent on your client's configuration. */
-        @JsonProperty("netsuite_sales_order_id")
-        @ExcludeMissing
         fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
             this.netsuiteSalesOrderId = netsuiteSalesOrderId
         }
@@ -358,8 +402,6 @@ private constructor(
             salesforceOpportunityId(JsonField.of(salesforceOpportunityId))
 
         /** This field's availability is dependent on your client's configuration. */
-        @JsonProperty("salesforce_opportunity_id")
-        @ExcludeMissing
         fun salesforceOpportunityId(salesforceOpportunityId: JsonField<String>) = apply {
             this.salesforceOpportunityId = salesforceOpportunityId
         }
@@ -367,16 +409,12 @@ private constructor(
         fun netPaymentTermsDays(netPaymentTermsDays: Double) =
             netPaymentTermsDays(JsonField.of(netPaymentTermsDays))
 
-        @JsonProperty("net_payment_terms_days")
-        @ExcludeMissing
         fun netPaymentTermsDays(netPaymentTermsDays: JsonField<Double>) = apply {
             this.netPaymentTermsDays = netPaymentTermsDays
         }
 
         fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
-        @JsonProperty("credit_type")
-        @ExcludeMissing
         fun creditType(creditType: JsonField<CreditTypeData>) = apply {
             this.creditType = creditType
         }
@@ -384,16 +422,12 @@ private constructor(
         fun invoiceAdjustments(invoiceAdjustments: List<InvoiceAdjustment>) =
             invoiceAdjustments(JsonField.of(invoiceAdjustments))
 
-        @JsonProperty("invoice_adjustments")
-        @ExcludeMissing
         fun invoiceAdjustments(invoiceAdjustments: JsonField<List<InvoiceAdjustment>>) = apply {
             this.invoiceAdjustments = invoiceAdjustments
         }
 
         fun lineItems(lineItems: List<LineItem>) = lineItems(JsonField.of(lineItems))
 
-        @JsonProperty("line_items")
-        @ExcludeMissing
         fun lineItems(lineItems: JsonField<List<LineItem>>) = apply { this.lineItems = lineItems }
 
         /** Beginning of the usage period this invoice covers (UTC) */
@@ -401,8 +435,6 @@ private constructor(
             startTimestamp(JsonField.of(startTimestamp))
 
         /** Beginning of the usage period this invoice covers (UTC) */
-        @JsonProperty("start_timestamp")
-        @ExcludeMissing
         fun startTimestamp(startTimestamp: JsonField<OffsetDateTime>) = apply {
             this.startTimestamp = startTimestamp
         }
@@ -411,8 +443,6 @@ private constructor(
         fun endTimestamp(endTimestamp: OffsetDateTime) = endTimestamp(JsonField.of(endTimestamp))
 
         /** End of the usage period this invoice covers (UTC) */
-        @JsonProperty("end_timestamp")
-        @ExcludeMissing
         fun endTimestamp(endTimestamp: JsonField<OffsetDateTime>) = apply {
             this.endTimestamp = endTimestamp
         }
@@ -421,8 +451,6 @@ private constructor(
         fun issuedAt(issuedAt: OffsetDateTime) = issuedAt(JsonField.of(issuedAt))
 
         /** When the invoice was issued (UTC) */
-        @JsonProperty("issued_at")
-        @ExcludeMissing
         fun issuedAt(issuedAt: JsonField<OffsetDateTime>) = apply { this.issuedAt = issuedAt }
 
         /**
@@ -433,90 +461,64 @@ private constructor(
         /**
          * When the invoice was created (UTC). This field is present for correction invoices only.
          */
-        @JsonProperty("created_at")
-        @ExcludeMissing
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         fun status(status: String) = status(JsonField.of(status))
 
-        @JsonProperty("status")
-        @ExcludeMissing
         fun status(status: JsonField<String>) = apply { this.status = status }
 
         fun subtotal(subtotal: Double) = subtotal(JsonField.of(subtotal))
 
-        @JsonProperty("subtotal")
-        @ExcludeMissing
         fun subtotal(subtotal: JsonField<Double>) = apply { this.subtotal = subtotal }
 
         fun total(total: Double) = total(JsonField.of(total))
 
-        @JsonProperty("total")
-        @ExcludeMissing
         fun total(total: JsonField<Double>) = apply { this.total = total }
 
         fun type(type: String) = type(JsonField.of(type))
 
-        @JsonProperty("type")
-        @ExcludeMissing
         fun type(type: JsonField<String>) = apply { this.type = type }
 
         fun externalInvoice(externalInvoice: ExternalInvoice) =
             externalInvoice(JsonField.of(externalInvoice))
 
-        @JsonProperty("external_invoice")
-        @ExcludeMissing
         fun externalInvoice(externalInvoice: JsonField<ExternalInvoice>) = apply {
             this.externalInvoice = externalInvoice
         }
 
         fun planId(planId: String) = planId(JsonField.of(planId))
 
-        @JsonProperty("plan_id")
-        @ExcludeMissing
         fun planId(planId: JsonField<String>) = apply { this.planId = planId }
 
         fun planName(planName: String) = planName(JsonField.of(planName))
 
-        @JsonProperty("plan_name")
-        @ExcludeMissing
         fun planName(planName: JsonField<String>) = apply { this.planName = planName }
 
         fun planCustomFields(planCustomFields: PlanCustomFields) =
             planCustomFields(JsonField.of(planCustomFields))
 
-        @JsonProperty("plan_custom_fields")
-        @ExcludeMissing
         fun planCustomFields(planCustomFields: JsonField<PlanCustomFields>) = apply {
             this.planCustomFields = planCustomFields
         }
 
         fun contractId(contractId: String) = contractId(JsonField.of(contractId))
 
-        @JsonProperty("contract_id")
-        @ExcludeMissing
         fun contractId(contractId: JsonField<String>) = apply { this.contractId = contractId }
 
         fun contractCustomFields(contractCustomFields: ContractCustomFields) =
             contractCustomFields(JsonField.of(contractCustomFields))
 
-        @JsonProperty("contract_custom_fields")
-        @ExcludeMissing
         fun contractCustomFields(contractCustomFields: JsonField<ContractCustomFields>) = apply {
             this.contractCustomFields = contractCustomFields
         }
 
         fun amendmentId(amendmentId: String) = amendmentId(JsonField.of(amendmentId))
 
-        @JsonProperty("amendment_id")
-        @ExcludeMissing
         fun amendmentId(amendmentId: JsonField<String>) = apply { this.amendmentId = amendmentId }
 
         fun correctionRecord(correctionRecord: CorrectionRecord) =
             correctionRecord(JsonField.of(correctionRecord))
 
-        @JsonProperty("correction_record")
-        @ExcludeMissing
         fun correctionRecord(correctionRecord: JsonField<CorrectionRecord>) = apply {
             this.correctionRecord = correctionRecord
         }
@@ -526,16 +528,12 @@ private constructor(
             resellerRoyalty(JsonField.of(resellerRoyalty))
 
         /** only present for beta contract invoices with reseller royalties */
-        @JsonProperty("reseller_royalty")
-        @ExcludeMissing
         fun resellerRoyalty(resellerRoyalty: JsonField<ResellerRoyalty>) = apply {
             this.resellerRoyalty = resellerRoyalty
         }
 
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
-        @JsonProperty("custom_fields")
-        @ExcludeMissing
         fun customFields(customFields: JsonField<CustomFields>) = apply {
             this.customFields = customFields
         }
@@ -545,8 +543,6 @@ private constructor(
             billableStatus(JsonField.of(billableStatus))
 
         /** This field's availability is dependent on your client's configuration. */
-        @JsonProperty("billable_status")
-        @ExcludeMissing
         fun billableStatus(billableStatus: JsonField<BillableStatus>) = apply {
             this.billableStatus = billableStatus
         }
@@ -556,7 +552,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -605,47 +600,120 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = LineItem.Builder::class)
     @NoAutoDetect
     class LineItem
+    @JsonCreator
     private constructor(
-        private val name: JsonField<String>,
-        private val groupKey: JsonField<String>,
-        private val groupValue: JsonField<String>,
-        private val quantity: JsonField<Double>,
-        private val total: JsonField<Double>,
-        private val unitPrice: JsonField<Double>,
-        private val listPrice: JsonField<Rate>,
-        private val productId: JsonField<String>,
-        private val productCustomFields: JsonField<ProductCustomFields>,
-        private val productType: JsonField<String>,
-        private val netsuiteItemId: JsonField<String>,
-        private val isProrated: JsonField<Boolean>,
-        private val creditType: JsonField<CreditTypeData>,
-        private val startingAt: JsonField<OffsetDateTime>,
-        private val endingBefore: JsonField<OffsetDateTime>,
-        private val commitId: JsonField<String>,
-        private val appliedCommitOrCredit: JsonField<AppliedCommitOrCredit>,
-        private val commitCustomFields: JsonField<CommitCustomFields>,
-        private val commitSegmentId: JsonField<String>,
-        private val commitType: JsonField<String>,
-        private val commitNetsuiteSalesOrderId: JsonField<String>,
-        private val commitNetsuiteItemId: JsonField<String>,
-        private val postpaidCommit: JsonField<PostpaidCommit>,
-        private val resellerType: JsonField<ResellerType>,
-        private val subLineItems: JsonField<List<SubLineItem>>,
-        private val customFields: JsonField<CustomFields>,
-        private val pricingGroupValues: JsonField<PricingGroupValues>,
-        private val presentationGroupValues: JsonField<PresentationGroupValues>,
-        private val metadata: JsonField<String>,
-        private val netsuiteInvoiceBillingStart: JsonField<OffsetDateTime>,
-        private val netsuiteInvoiceBillingEnd: JsonField<OffsetDateTime>,
-        private val professionalServiceId: JsonField<String>,
-        private val professionalServiceCustomFields: JsonField<ProfessionalServiceCustomFields>,
-        private val scheduledChargeId: JsonField<String>,
-        private val scheduledChargeCustomFields: JsonField<ScheduledChargeCustomFields>,
-        private val tier: JsonField<Tier>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("group_key")
+        @ExcludeMissing
+        private val groupKey: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("group_value")
+        @ExcludeMissing
+        private val groupValue: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("quantity")
+        @ExcludeMissing
+        private val quantity: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("total")
+        @ExcludeMissing
+        private val total: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("unit_price")
+        @ExcludeMissing
+        private val unitPrice: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("list_price")
+        @ExcludeMissing
+        private val listPrice: JsonField<Rate> = JsonMissing.of(),
+        @JsonProperty("product_id")
+        @ExcludeMissing
+        private val productId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("product_custom_fields")
+        @ExcludeMissing
+        private val productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of(),
+        @JsonProperty("product_type")
+        @ExcludeMissing
+        private val productType: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("netsuite_item_id")
+        @ExcludeMissing
+        private val netsuiteItemId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("is_prorated")
+        @ExcludeMissing
+        private val isProrated: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("credit_type")
+        @ExcludeMissing
+        private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("commit_id")
+        @ExcludeMissing
+        private val commitId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("applied_commit_or_credit")
+        @ExcludeMissing
+        private val appliedCommitOrCredit: JsonField<AppliedCommitOrCredit> = JsonMissing.of(),
+        @JsonProperty("commit_custom_fields")
+        @ExcludeMissing
+        private val commitCustomFields: JsonField<CommitCustomFields> = JsonMissing.of(),
+        @JsonProperty("commit_segment_id")
+        @ExcludeMissing
+        private val commitSegmentId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("commit_type")
+        @ExcludeMissing
+        private val commitType: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("commit_netsuite_sales_order_id")
+        @ExcludeMissing
+        private val commitNetsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("commit_netsuite_item_id")
+        @ExcludeMissing
+        private val commitNetsuiteItemId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("postpaid_commit")
+        @ExcludeMissing
+        private val postpaidCommit: JsonField<PostpaidCommit> = JsonMissing.of(),
+        @JsonProperty("reseller_type")
+        @ExcludeMissing
+        private val resellerType: JsonField<ResellerType> = JsonMissing.of(),
+        @JsonProperty("sub_line_items")
+        @ExcludeMissing
+        private val subLineItems: JsonField<List<SubLineItem>> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("pricing_group_values")
+        @ExcludeMissing
+        private val pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of(),
+        @JsonProperty("presentation_group_values")
+        @ExcludeMissing
+        private val presentationGroupValues: JsonField<PresentationGroupValues> = JsonMissing.of(),
+        @JsonProperty("metadata")
+        @ExcludeMissing
+        private val metadata: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("netsuite_invoice_billing_start")
+        @ExcludeMissing
+        private val netsuiteInvoiceBillingStart: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("netsuite_invoice_billing_end")
+        @ExcludeMissing
+        private val netsuiteInvoiceBillingEnd: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("professional_service_id")
+        @ExcludeMissing
+        private val professionalServiceId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("professional_service_custom_fields")
+        @ExcludeMissing
+        private val professionalServiceCustomFields: JsonField<ProfessionalServiceCustomFields> =
+            JsonMissing.of(),
+        @JsonProperty("scheduled_charge_id")
+        @ExcludeMissing
+        private val scheduledChargeId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("scheduled_charge_custom_fields")
+        @ExcludeMissing
+        private val scheduledChargeCustomFields: JsonField<ScheduledChargeCustomFields> =
+            JsonMissing.of(),
+        @JsonProperty("tier") @ExcludeMissing private val tier: JsonField<Tier> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun name(): String = name.getRequired("name")
@@ -1069,40 +1137,28 @@ private constructor(
 
             fun name(name: String) = name(JsonField.of(name))
 
-            @JsonProperty("name")
-            @ExcludeMissing
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun groupKey(groupKey: String) = groupKey(JsonField.of(groupKey))
 
-            @JsonProperty("group_key")
-            @ExcludeMissing
             fun groupKey(groupKey: JsonField<String>) = apply { this.groupKey = groupKey }
 
             fun groupValue(groupValue: String) = groupValue(JsonField.of(groupValue))
 
-            @JsonProperty("group_value")
-            @ExcludeMissing
             fun groupValue(groupValue: JsonField<String>) = apply { this.groupValue = groupValue }
 
             fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-            @JsonProperty("quantity")
-            @ExcludeMissing
             fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
             fun total(total: Double) = total(JsonField.of(total))
 
-            @JsonProperty("total")
-            @ExcludeMissing
             fun total(total: JsonField<Double>) = apply { this.total = total }
 
             /** only present for beta contract invoices */
             fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
 
             /** only present for beta contract invoices */
-            @JsonProperty("unit_price")
-            @ExcludeMissing
             fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
 
             /**
@@ -1117,29 +1173,21 @@ private constructor(
              * is set to true. This will include the list rate for the charge if applicable. Only
              * present for usage and subscription line items.
              */
-            @JsonProperty("list_price")
-            @ExcludeMissing
             fun listPrice(listPrice: JsonField<Rate>) = apply { this.listPrice = listPrice }
 
             fun productId(productId: String) = productId(JsonField.of(productId))
 
-            @JsonProperty("product_id")
-            @ExcludeMissing
             fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
             fun productCustomFields(productCustomFields: ProductCustomFields) =
                 productCustomFields(JsonField.of(productCustomFields))
 
-            @JsonProperty("product_custom_fields")
-            @ExcludeMissing
             fun productCustomFields(productCustomFields: JsonField<ProductCustomFields>) = apply {
                 this.productCustomFields = productCustomFields
             }
 
             fun productType(productType: String) = productType(JsonField.of(productType))
 
-            @JsonProperty("product_type")
-            @ExcludeMissing
             fun productType(productType: JsonField<String>) = apply {
                 this.productType = productType
             }
@@ -1155,8 +1203,6 @@ private constructor(
              * only present for beta contract invoices. This field's availability is dependent on
              * your client's configuration.
              */
-            @JsonProperty("netsuite_item_id")
-            @ExcludeMissing
             fun netsuiteItemId(netsuiteItemId: JsonField<String>) = apply {
                 this.netsuiteItemId = netsuiteItemId
             }
@@ -1165,14 +1211,10 @@ private constructor(
             fun isProrated(isProrated: Boolean) = isProrated(JsonField.of(isProrated))
 
             /** only present for beta contract invoices */
-            @JsonProperty("is_prorated")
-            @ExcludeMissing
             fun isProrated(isProrated: JsonField<Boolean>) = apply { this.isProrated = isProrated }
 
             fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
-            @JsonProperty("credit_type")
-            @ExcludeMissing
             fun creditType(creditType: JsonField<CreditTypeData>) = apply {
                 this.creditType = creditType
             }
@@ -1181,8 +1223,6 @@ private constructor(
             fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
             /** only present for beta contract invoices */
-            @JsonProperty("starting_at")
-            @ExcludeMissing
             fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                 this.startingAt = startingAt
             }
@@ -1192,8 +1232,6 @@ private constructor(
                 endingBefore(JsonField.of(endingBefore))
 
             /** only present for beta contract invoices */
-            @JsonProperty("ending_before")
-            @ExcludeMissing
             fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
             }
@@ -1202,8 +1240,6 @@ private constructor(
             fun commitId(commitId: String) = commitId(JsonField.of(commitId))
 
             /** only present for beta contract invoices */
-            @JsonProperty("commit_id")
-            @ExcludeMissing
             fun commitId(commitId: JsonField<String>) = apply { this.commitId = commitId }
 
             /** only present for beta contract invoices */
@@ -1211,8 +1247,6 @@ private constructor(
                 appliedCommitOrCredit(JsonField.of(appliedCommitOrCredit))
 
             /** only present for beta contract invoices */
-            @JsonProperty("applied_commit_or_credit")
-            @ExcludeMissing
             fun appliedCommitOrCredit(appliedCommitOrCredit: JsonField<AppliedCommitOrCredit>) =
                 apply {
                     this.appliedCommitOrCredit = appliedCommitOrCredit
@@ -1223,8 +1257,6 @@ private constructor(
                 commitCustomFields(JsonField.of(commitCustomFields))
 
             /** only present for beta contract invoices */
-            @JsonProperty("commit_custom_fields")
-            @ExcludeMissing
             fun commitCustomFields(commitCustomFields: JsonField<CommitCustomFields>) = apply {
                 this.commitCustomFields = commitCustomFields
             }
@@ -1234,8 +1266,6 @@ private constructor(
                 commitSegmentId(JsonField.of(commitSegmentId))
 
             /** only present for beta contract invoices */
-            @JsonProperty("commit_segment_id")
-            @ExcludeMissing
             fun commitSegmentId(commitSegmentId: JsonField<String>) = apply {
                 this.commitSegmentId = commitSegmentId
             }
@@ -1244,8 +1274,6 @@ private constructor(
             fun commitType(commitType: String) = commitType(JsonField.of(commitType))
 
             /** only present for beta contract invoices */
-            @JsonProperty("commit_type")
-            @ExcludeMissing
             fun commitType(commitType: JsonField<String>) = apply { this.commitType = commitType }
 
             /**
@@ -1259,8 +1287,6 @@ private constructor(
              * only present for beta contract invoices. This field's availability is dependent on
              * your client's configuration.
              */
-            @JsonProperty("commit_netsuite_sales_order_id")
-            @ExcludeMissing
             fun commitNetsuiteSalesOrderId(commitNetsuiteSalesOrderId: JsonField<String>) = apply {
                 this.commitNetsuiteSalesOrderId = commitNetsuiteSalesOrderId
             }
@@ -1276,8 +1302,6 @@ private constructor(
              * only present for beta contract invoices. This field's availability is dependent on
              * your client's configuration.
              */
-            @JsonProperty("commit_netsuite_item_id")
-            @ExcludeMissing
             fun commitNetsuiteItemId(commitNetsuiteItemId: JsonField<String>) = apply {
                 this.commitNetsuiteItemId = commitNetsuiteItemId
             }
@@ -1287,16 +1311,12 @@ private constructor(
                 postpaidCommit(JsonField.of(postpaidCommit))
 
             /** only present for beta contract invoices */
-            @JsonProperty("postpaid_commit")
-            @ExcludeMissing
             fun postpaidCommit(postpaidCommit: JsonField<PostpaidCommit>) = apply {
                 this.postpaidCommit = postpaidCommit
             }
 
             fun resellerType(resellerType: ResellerType) = resellerType(JsonField.of(resellerType))
 
-            @JsonProperty("reseller_type")
-            @ExcludeMissing
             fun resellerType(resellerType: JsonField<ResellerType>) = apply {
                 this.resellerType = resellerType
             }
@@ -1304,16 +1324,12 @@ private constructor(
             fun subLineItems(subLineItems: List<SubLineItem>) =
                 subLineItems(JsonField.of(subLineItems))
 
-            @JsonProperty("sub_line_items")
-            @ExcludeMissing
             fun subLineItems(subLineItems: JsonField<List<SubLineItem>>) = apply {
                 this.subLineItems = subLineItems
             }
 
             fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
-            @JsonProperty("custom_fields")
-            @ExcludeMissing
             fun customFields(customFields: JsonField<CustomFields>) = apply {
                 this.customFields = customFields
             }
@@ -1327,8 +1343,6 @@ private constructor(
             /**
              * if pricing groups are used, this will contain the values used to calculate the price
              */
-            @JsonProperty("pricing_group_values")
-            @ExcludeMissing
             fun pricingGroupValues(pricingGroupValues: JsonField<PricingGroupValues>) = apply {
                 this.pricingGroupValues = pricingGroupValues
             }
@@ -1344,16 +1358,12 @@ private constructor(
              * if presentation groups are used, this will contain the values used to break down the
              * line item
              */
-            @JsonProperty("presentation_group_values")
-            @ExcludeMissing
             fun presentationGroupValues(
                 presentationGroupValues: JsonField<PresentationGroupValues>
             ) = apply { this.presentationGroupValues = presentationGroupValues }
 
             fun metadata(metadata: String) = metadata(JsonField.of(metadata))
 
-            @JsonProperty("metadata")
-            @ExcludeMissing
             fun metadata(metadata: JsonField<String>) = apply { this.metadata = metadata }
 
             /** The start date for the billing period on the invoice. */
@@ -1361,8 +1371,6 @@ private constructor(
                 netsuiteInvoiceBillingStart(JsonField.of(netsuiteInvoiceBillingStart))
 
             /** The start date for the billing period on the invoice. */
-            @JsonProperty("netsuite_invoice_billing_start")
-            @ExcludeMissing
             fun netsuiteInvoiceBillingStart(
                 netsuiteInvoiceBillingStart: JsonField<OffsetDateTime>
             ) = apply { this.netsuiteInvoiceBillingStart = netsuiteInvoiceBillingStart }
@@ -1372,8 +1380,6 @@ private constructor(
                 netsuiteInvoiceBillingEnd(JsonField.of(netsuiteInvoiceBillingEnd))
 
             /** The end date for the billing period on the invoice. */
-            @JsonProperty("netsuite_invoice_billing_end")
-            @ExcludeMissing
             fun netsuiteInvoiceBillingEnd(netsuiteInvoiceBillingEnd: JsonField<OffsetDateTime>) =
                 apply {
                     this.netsuiteInvoiceBillingEnd = netsuiteInvoiceBillingEnd
@@ -1384,8 +1390,6 @@ private constructor(
                 professionalServiceId(JsonField.of(professionalServiceId))
 
             /** only present for beta contract invoices */
-            @JsonProperty("professional_service_id")
-            @ExcludeMissing
             fun professionalServiceId(professionalServiceId: JsonField<String>) = apply {
                 this.professionalServiceId = professionalServiceId
             }
@@ -1396,8 +1400,6 @@ private constructor(
             ) = professionalServiceCustomFields(JsonField.of(professionalServiceCustomFields))
 
             /** only present for beta contract invoices */
-            @JsonProperty("professional_service_custom_fields")
-            @ExcludeMissing
             fun professionalServiceCustomFields(
                 professionalServiceCustomFields: JsonField<ProfessionalServiceCustomFields>
             ) = apply { this.professionalServiceCustomFields = professionalServiceCustomFields }
@@ -1407,8 +1409,6 @@ private constructor(
                 scheduledChargeId(JsonField.of(scheduledChargeId))
 
             /** only present for beta contract invoices */
-            @JsonProperty("scheduled_charge_id")
-            @ExcludeMissing
             fun scheduledChargeId(scheduledChargeId: JsonField<String>) = apply {
                 this.scheduledChargeId = scheduledChargeId
             }
@@ -1417,16 +1417,12 @@ private constructor(
                 scheduledChargeCustomFields: ScheduledChargeCustomFields
             ) = scheduledChargeCustomFields(JsonField.of(scheduledChargeCustomFields))
 
-            @JsonProperty("scheduled_charge_custom_fields")
-            @ExcludeMissing
             fun scheduledChargeCustomFields(
                 scheduledChargeCustomFields: JsonField<ScheduledChargeCustomFields>
             ) = apply { this.scheduledChargeCustomFields = scheduledChargeCustomFields }
 
             fun tier(tier: Tier) = tier(JsonField.of(tier))
 
-            @JsonProperty("tier")
-            @ExcludeMissing
             fun tier(tier: JsonField<Tier>) = apply { this.tier = tier }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1434,7 +1430,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -1492,13 +1487,18 @@ private constructor(
         }
 
         /** only present for beta contract invoices */
-        @JsonDeserialize(builder = AppliedCommitOrCredit.Builder::class)
         @NoAutoDetect
         class AppliedCommitOrCredit
+        @JsonCreator
         private constructor(
-            private val id: JsonField<String>,
-            private val type: JsonField<Type>,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("id")
+            @ExcludeMissing
+            private val id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("type")
+            @ExcludeMissing
+            private val type: JsonField<Type> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun id(): String = id.getRequired("id")
@@ -1545,14 +1545,10 @@ private constructor(
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
                 fun type(type: Type) = type(JsonField.of(type))
 
-                @JsonProperty("type")
-                @ExcludeMissing
                 fun type(type: JsonField<Type>) = apply { this.type = type }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1560,7 +1556,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -1668,11 +1663,12 @@ private constructor(
         }
 
         /** only present for beta contract invoices */
-        @JsonDeserialize(builder = CommitCustomFields.Builder::class)
         @NoAutoDetect
         class CommitCustomFields
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -1708,7 +1704,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -1748,11 +1743,12 @@ private constructor(
                 "CommitCustomFields{additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = CustomFields.Builder::class)
         @NoAutoDetect
         class CustomFields
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -1788,7 +1784,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -1827,12 +1822,15 @@ private constructor(
         }
 
         /** only present for beta contract invoices */
-        @JsonDeserialize(builder = PostpaidCommit.Builder::class)
         @NoAutoDetect
         class PostpaidCommit
+        @JsonCreator
         private constructor(
-            private val id: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("id")
+            @ExcludeMissing
+            private val id: JsonField<String> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun id(): String = id.getRequired("id")
@@ -1872,8 +1870,6 @@ private constructor(
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1881,7 +1877,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -1924,11 +1919,12 @@ private constructor(
          * if presentation groups are used, this will contain the values used to break down the line
          * item
          */
-        @JsonDeserialize(builder = PresentationGroupValues.Builder::class)
         @NoAutoDetect
         class PresentationGroupValues
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -1965,7 +1961,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -2006,11 +2001,12 @@ private constructor(
         }
 
         /** if pricing groups are used, this will contain the values used to calculate the price */
-        @JsonDeserialize(builder = PricingGroupValues.Builder::class)
         @NoAutoDetect
         class PricingGroupValues
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -2046,7 +2042,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -2086,11 +2081,12 @@ private constructor(
                 "PricingGroupValues{additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = ProductCustomFields.Builder::class)
         @NoAutoDetect
         class ProductCustomFields
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -2126,7 +2122,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -2167,11 +2162,12 @@ private constructor(
         }
 
         /** only present for beta contract invoices */
-        @JsonDeserialize(builder = ProfessionalServiceCustomFields.Builder::class)
         @NoAutoDetect
         class ProfessionalServiceCustomFields
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -2210,7 +2206,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -2319,11 +2314,12 @@ private constructor(
             override fun toString() = value.toString()
         }
 
-        @JsonDeserialize(builder = ScheduledChargeCustomFields.Builder::class)
         @NoAutoDetect
         class ScheduledChargeCustomFields
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -2361,7 +2357,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -2401,22 +2396,45 @@ private constructor(
                 "ScheduledChargeCustomFields{additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = SubLineItem.Builder::class)
         @NoAutoDetect
         class SubLineItem
+        @JsonCreator
         private constructor(
-            private val name: JsonField<String>,
-            private val price: JsonField<Double>,
-            private val quantity: JsonField<Double>,
-            private val subtotal: JsonField<Double>,
-            private val chargeId: JsonField<String>,
-            private val creditGrantId: JsonField<String>,
-            private val tierPeriod: JsonField<TierPeriod>,
-            private val tiers: JsonField<List<Tier>>,
-            private val customFields: JsonField<CustomFields>,
-            private val startDate: JsonField<OffsetDateTime>,
-            private val endDate: JsonField<OffsetDateTime>,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("name")
+            @ExcludeMissing
+            private val name: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("price")
+            @ExcludeMissing
+            private val price: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("quantity")
+            @ExcludeMissing
+            private val quantity: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("subtotal")
+            @ExcludeMissing
+            private val subtotal: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("charge_id")
+            @ExcludeMissing
+            private val chargeId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("credit_grant_id")
+            @ExcludeMissing
+            private val creditGrantId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("tier_period")
+            @ExcludeMissing
+            private val tierPeriod: JsonField<TierPeriod> = JsonMissing.of(),
+            @JsonProperty("tiers")
+            @ExcludeMissing
+            private val tiers: JsonField<List<Tier>> = JsonMissing.of(),
+            @JsonProperty("custom_fields")
+            @ExcludeMissing
+            private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+            @JsonProperty("start_date")
+            @ExcludeMissing
+            private val startDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("end_date")
+            @ExcludeMissing
+            private val endDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun name(): String = name.getRequired("name")
@@ -2545,8 +2563,6 @@ private constructor(
 
                 fun name(name: String) = name(JsonField.of(name))
 
-                @JsonProperty("name")
-                @ExcludeMissing
                 fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
@@ -2559,33 +2575,23 @@ private constructor(
                  * the unit price for this charge, present only if the charge is not tiered and the
                  * quantity is nonzero
                  */
-                @JsonProperty("price")
-                @ExcludeMissing
                 fun price(price: JsonField<Double>) = apply { this.price = price }
 
                 fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-                @JsonProperty("quantity")
-                @ExcludeMissing
                 fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                 fun subtotal(subtotal: Double) = subtotal(JsonField.of(subtotal))
 
-                @JsonProperty("subtotal")
-                @ExcludeMissing
                 fun subtotal(subtotal: JsonField<Double>) = apply { this.subtotal = subtotal }
 
                 fun chargeId(chargeId: String) = chargeId(JsonField.of(chargeId))
 
-                @JsonProperty("charge_id")
-                @ExcludeMissing
                 fun chargeId(chargeId: JsonField<String>) = apply { this.chargeId = chargeId }
 
                 fun creditGrantId(creditGrantId: String) =
                     creditGrantId(JsonField.of(creditGrantId))
 
-                @JsonProperty("credit_grant_id")
-                @ExcludeMissing
                 fun creditGrantId(creditGrantId: JsonField<String>) = apply {
                     this.creditGrantId = creditGrantId
                 }
@@ -2594,23 +2600,17 @@ private constructor(
                 fun tierPeriod(tierPeriod: TierPeriod) = tierPeriod(JsonField.of(tierPeriod))
 
                 /** when the current tier started and ends (for tiered charges only) */
-                @JsonProperty("tier_period")
-                @ExcludeMissing
                 fun tierPeriod(tierPeriod: JsonField<TierPeriod>) = apply {
                     this.tierPeriod = tierPeriod
                 }
 
                 fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
-                @JsonProperty("tiers")
-                @ExcludeMissing
                 fun tiers(tiers: JsonField<List<Tier>>) = apply { this.tiers = tiers }
 
                 fun customFields(customFields: CustomFields) =
                     customFields(JsonField.of(customFields))
 
-                @JsonProperty("custom_fields")
-                @ExcludeMissing
                 fun customFields(customFields: JsonField<CustomFields>) = apply {
                     this.customFields = customFields
                 }
@@ -2619,8 +2619,6 @@ private constructor(
                 fun startDate(startDate: OffsetDateTime) = startDate(JsonField.of(startDate))
 
                 /** The start date for the charge (for seats charges only). */
-                @JsonProperty("start_date")
-                @ExcludeMissing
                 fun startDate(startDate: JsonField<OffsetDateTime>) = apply {
                     this.startDate = startDate
                 }
@@ -2629,8 +2627,6 @@ private constructor(
                 fun endDate(endDate: OffsetDateTime) = endDate(JsonField.of(endDate))
 
                 /** The end date for the charge (for seats charges only). */
-                @JsonProperty("end_date")
-                @ExcludeMissing
                 fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -2638,7 +2634,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -2673,11 +2668,12 @@ private constructor(
                     )
             }
 
-            @JsonDeserialize(builder = CustomFields.Builder::class)
             @NoAutoDetect
             class CustomFields
+            @JsonCreator
             private constructor(
-                private val additionalProperties: Map<String, JsonValue>,
+                @JsonAnySetter
+                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
                 @JsonAnyGetter
@@ -2713,7 +2709,6 @@ private constructor(
                         putAllAdditionalProperties(additionalProperties)
                     }
 
-                    @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                         additionalProperties.put(key, value)
                     }
@@ -2752,13 +2747,18 @@ private constructor(
             }
 
             /** when the current tier started and ends (for tiered charges only) */
-            @JsonDeserialize(builder = TierPeriod.Builder::class)
             @NoAutoDetect
             class TierPeriod
+            @JsonCreator
             private constructor(
-                private val startingAt: JsonField<OffsetDateTime>,
-                private val endingBefore: JsonField<OffsetDateTime>,
-                private val additionalProperties: Map<String, JsonValue>,
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonAnySetter
+                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
                 fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
@@ -2807,8 +2807,6 @@ private constructor(
                     fun startingAt(startingAt: OffsetDateTime) =
                         startingAt(JsonField.of(startingAt))
 
-                    @JsonProperty("starting_at")
-                    @ExcludeMissing
                     fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                         this.startingAt = startingAt
                     }
@@ -2816,8 +2814,6 @@ private constructor(
                     fun endingBefore(endingBefore: OffsetDateTime) =
                         endingBefore(JsonField.of(endingBefore))
 
-                    @JsonProperty("ending_before")
-                    @ExcludeMissing
                     fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                         this.endingBefore = endingBefore
                     }
@@ -2827,7 +2823,6 @@ private constructor(
                         putAllAdditionalProperties(additionalProperties)
                     }
 
-                    @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                         additionalProperties.put(key, value)
                     }
@@ -2871,15 +2866,24 @@ private constructor(
                     "TierPeriod{startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
             }
 
-            @JsonDeserialize(builder = Tier.Builder::class)
             @NoAutoDetect
             class Tier
+            @JsonCreator
             private constructor(
-                private val startingAt: JsonField<Double>,
-                private val quantity: JsonField<Double>,
-                private val price: JsonField<Double>,
-                private val subtotal: JsonField<Double>,
-                private val additionalProperties: Map<String, JsonValue>,
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                private val startingAt: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                private val quantity: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("price")
+                @ExcludeMissing
+                private val price: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("subtotal")
+                @ExcludeMissing
+                private val subtotal: JsonField<Double> = JsonMissing.of(),
+                @JsonAnySetter
+                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
                 /** at what metric amount this tier begins */
@@ -2944,28 +2948,20 @@ private constructor(
                     fun startingAt(startingAt: Double) = startingAt(JsonField.of(startingAt))
 
                     /** at what metric amount this tier begins */
-                    @JsonProperty("starting_at")
-                    @ExcludeMissing
                     fun startingAt(startingAt: JsonField<Double>) = apply {
                         this.startingAt = startingAt
                     }
 
                     fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-                    @JsonProperty("quantity")
-                    @ExcludeMissing
                     fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                     fun price(price: Double) = price(JsonField.of(price))
 
-                    @JsonProperty("price")
-                    @ExcludeMissing
                     fun price(price: JsonField<Double>) = apply { this.price = price }
 
                     fun subtotal(subtotal: Double) = subtotal(JsonField.of(subtotal))
 
-                    @JsonProperty("subtotal")
-                    @ExcludeMissing
                     fun subtotal(subtotal: JsonField<Double>) = apply { this.subtotal = subtotal }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -2973,7 +2969,6 @@ private constructor(
                         putAllAdditionalProperties(additionalProperties)
                     }
 
-                    @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                         additionalProperties.put(key, value)
                     }
@@ -3037,14 +3032,21 @@ private constructor(
                 "SubLineItem{name=$name, price=$price, quantity=$quantity, subtotal=$subtotal, chargeId=$chargeId, creditGrantId=$creditGrantId, tierPeriod=$tierPeriod, tiers=$tiers, customFields=$customFields, startDate=$startDate, endDate=$endDate, additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = Tier.Builder::class)
         @NoAutoDetect
         class Tier
+        @JsonCreator
         private constructor(
-            private val size: JsonField<String>,
-            private val level: JsonField<Double>,
-            private val startingAt: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("size")
+            @ExcludeMissing
+            private val size: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("level")
+            @ExcludeMissing
+            private val level: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("starting_at")
+            @ExcludeMissing
+            private val startingAt: JsonField<String> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun size(): Optional<String> = Optional.ofNullable(size.getNullable("size"))
@@ -3098,20 +3100,14 @@ private constructor(
 
                 fun size(size: String) = size(JsonField.of(size))
 
-                @JsonProperty("size")
-                @ExcludeMissing
                 fun size(size: JsonField<String>) = apply { this.size = size }
 
                 fun level(level: Double) = level(JsonField.of(level))
 
-                @JsonProperty("level")
-                @ExcludeMissing
                 fun level(level: JsonField<Double>) = apply { this.level = level }
 
                 fun startingAt(startingAt: String) = startingAt(JsonField.of(startingAt))
 
-                @JsonProperty("starting_at")
-                @ExcludeMissing
                 fun startingAt(startingAt: JsonField<String>) = apply {
                     this.startingAt = startingAt
                 }
@@ -3121,7 +3117,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -3241,11 +3236,12 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    @JsonDeserialize(builder = ContractCustomFields.Builder::class)
     @NoAutoDetect
     class ContractCustomFields
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -3281,7 +3277,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -3317,15 +3312,25 @@ private constructor(
         override fun toString() = "ContractCustomFields{additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = CorrectionRecord.Builder::class)
     @NoAutoDetect
     class CorrectionRecord
+    @JsonCreator
     private constructor(
-        private val reason: JsonField<String>,
-        private val memo: JsonField<String>,
-        private val correctedInvoiceId: JsonField<String>,
-        private val correctedExternalInvoice: JsonField<CorrectedExternalInvoice>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("reason")
+        @ExcludeMissing
+        private val reason: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("memo")
+        @ExcludeMissing
+        private val memo: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("corrected_invoice_id")
+        @ExcludeMissing
+        private val correctedInvoiceId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("corrected_external_invoice")
+        @ExcludeMissing
+        private val correctedExternalInvoice: JsonField<CorrectedExternalInvoice> =
+            JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun reason(): String = reason.getRequired("reason")
@@ -3392,21 +3397,15 @@ private constructor(
 
             fun reason(reason: String) = reason(JsonField.of(reason))
 
-            @JsonProperty("reason")
-            @ExcludeMissing
             fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
             fun memo(memo: String) = memo(JsonField.of(memo))
 
-            @JsonProperty("memo")
-            @ExcludeMissing
             fun memo(memo: JsonField<String>) = apply { this.memo = memo }
 
             fun correctedInvoiceId(correctedInvoiceId: String) =
                 correctedInvoiceId(JsonField.of(correctedInvoiceId))
 
-            @JsonProperty("corrected_invoice_id")
-            @ExcludeMissing
             fun correctedInvoiceId(correctedInvoiceId: JsonField<String>) = apply {
                 this.correctedInvoiceId = correctedInvoiceId
             }
@@ -3414,8 +3413,6 @@ private constructor(
             fun correctedExternalInvoice(correctedExternalInvoice: CorrectedExternalInvoice) =
                 correctedExternalInvoice(JsonField.of(correctedExternalInvoice))
 
-            @JsonProperty("corrected_external_invoice")
-            @ExcludeMissing
             fun correctedExternalInvoice(
                 correctedExternalInvoice: JsonField<CorrectedExternalInvoice>
             ) = apply { this.correctedExternalInvoice = correctedExternalInvoice }
@@ -3425,7 +3422,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -3450,15 +3446,24 @@ private constructor(
                 )
         }
 
-        @JsonDeserialize(builder = CorrectedExternalInvoice.Builder::class)
         @NoAutoDetect
         class CorrectedExternalInvoice
+        @JsonCreator
         private constructor(
-            private val billingProviderType: JsonField<BillingProviderType>,
-            private val invoiceId: JsonField<String>,
-            private val issuedAtTimestamp: JsonField<OffsetDateTime>,
-            private val externalStatus: JsonField<ExternalStatus>,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("billing_provider_type")
+            @ExcludeMissing
+            private val billingProviderType: JsonField<BillingProviderType> = JsonMissing.of(),
+            @JsonProperty("invoice_id")
+            @ExcludeMissing
+            private val invoiceId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("issued_at_timestamp")
+            @ExcludeMissing
+            private val issuedAtTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("external_status")
+            @ExcludeMissing
+            private val externalStatus: JsonField<ExternalStatus> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun billingProviderType(): BillingProviderType =
@@ -3529,8 +3534,6 @@ private constructor(
                 fun billingProviderType(billingProviderType: BillingProviderType) =
                     billingProviderType(JsonField.of(billingProviderType))
 
-                @JsonProperty("billing_provider_type")
-                @ExcludeMissing
                 fun billingProviderType(billingProviderType: JsonField<BillingProviderType>) =
                     apply {
                         this.billingProviderType = billingProviderType
@@ -3538,15 +3541,11 @@ private constructor(
 
                 fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
 
-                @JsonProperty("invoice_id")
-                @ExcludeMissing
                 fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
 
                 fun issuedAtTimestamp(issuedAtTimestamp: OffsetDateTime) =
                     issuedAtTimestamp(JsonField.of(issuedAtTimestamp))
 
-                @JsonProperty("issued_at_timestamp")
-                @ExcludeMissing
                 fun issuedAtTimestamp(issuedAtTimestamp: JsonField<OffsetDateTime>) = apply {
                     this.issuedAtTimestamp = issuedAtTimestamp
                 }
@@ -3554,8 +3553,6 @@ private constructor(
                 fun externalStatus(externalStatus: ExternalStatus) =
                     externalStatus(JsonField.of(externalStatus))
 
-                @JsonProperty("external_status")
-                @ExcludeMissing
                 fun externalStatus(externalStatus: JsonField<ExternalStatus>) = apply {
                     this.externalStatus = externalStatus
                 }
@@ -3565,7 +3562,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -3837,11 +3833,12 @@ private constructor(
             "CorrectionRecord{reason=$reason, memo=$memo, correctedInvoiceId=$correctedInvoiceId, correctedExternalInvoice=$correctedExternalInvoice, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = CustomFields.Builder::class)
     @NoAutoDetect
     class CustomFields
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -3877,7 +3874,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -3912,11 +3908,12 @@ private constructor(
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = CustomerCustomFields.Builder::class)
     @NoAutoDetect
     class CustomerCustomFields
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -3952,7 +3949,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -3988,15 +3984,24 @@ private constructor(
         override fun toString() = "CustomerCustomFields{additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = ExternalInvoice.Builder::class)
     @NoAutoDetect
     class ExternalInvoice
+    @JsonCreator
     private constructor(
-        private val billingProviderType: JsonField<BillingProviderType>,
-        private val invoiceId: JsonField<String>,
-        private val issuedAtTimestamp: JsonField<OffsetDateTime>,
-        private val externalStatus: JsonField<ExternalStatus>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("billing_provider_type")
+        @ExcludeMissing
+        private val billingProviderType: JsonField<BillingProviderType> = JsonMissing.of(),
+        @JsonProperty("invoice_id")
+        @ExcludeMissing
+        private val invoiceId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("issued_at_timestamp")
+        @ExcludeMissing
+        private val issuedAtTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("external_status")
+        @ExcludeMissing
+        private val externalStatus: JsonField<ExternalStatus> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun billingProviderType(): BillingProviderType =
@@ -4065,23 +4070,17 @@ private constructor(
             fun billingProviderType(billingProviderType: BillingProviderType) =
                 billingProviderType(JsonField.of(billingProviderType))
 
-            @JsonProperty("billing_provider_type")
-            @ExcludeMissing
             fun billingProviderType(billingProviderType: JsonField<BillingProviderType>) = apply {
                 this.billingProviderType = billingProviderType
             }
 
             fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
 
-            @JsonProperty("invoice_id")
-            @ExcludeMissing
             fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
 
             fun issuedAtTimestamp(issuedAtTimestamp: OffsetDateTime) =
                 issuedAtTimestamp(JsonField.of(issuedAtTimestamp))
 
-            @JsonProperty("issued_at_timestamp")
-            @ExcludeMissing
             fun issuedAtTimestamp(issuedAtTimestamp: JsonField<OffsetDateTime>) = apply {
                 this.issuedAtTimestamp = issuedAtTimestamp
             }
@@ -4089,8 +4088,6 @@ private constructor(
             fun externalStatus(externalStatus: ExternalStatus) =
                 externalStatus(JsonField.of(externalStatus))
 
-            @JsonProperty("external_status")
-            @ExcludeMissing
             fun externalStatus(externalStatus: JsonField<ExternalStatus>) = apply {
                 this.externalStatus = externalStatus
             }
@@ -4100,7 +4097,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -4348,16 +4344,27 @@ private constructor(
             "ExternalInvoice{billingProviderType=$billingProviderType, invoiceId=$invoiceId, issuedAtTimestamp=$issuedAtTimestamp, externalStatus=$externalStatus, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = InvoiceAdjustment.Builder::class)
     @NoAutoDetect
     class InvoiceAdjustment
+    @JsonCreator
     private constructor(
-        private val name: JsonField<String>,
-        private val total: JsonField<Double>,
-        private val creditType: JsonField<CreditTypeData>,
-        private val creditGrantId: JsonField<String>,
-        private val creditGrantCustomFields: JsonField<CreditGrantCustomFields>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("total")
+        @ExcludeMissing
+        private val total: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("credit_type")
+        @ExcludeMissing
+        private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
+        @JsonProperty("credit_grant_id")
+        @ExcludeMissing
+        private val creditGrantId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("credit_grant_custom_fields")
+        @ExcludeMissing
+        private val creditGrantCustomFields: JsonField<CreditGrantCustomFields> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun name(): String = name.getRequired("name")
@@ -4430,28 +4437,20 @@ private constructor(
 
             fun name(name: String) = name(JsonField.of(name))
 
-            @JsonProperty("name")
-            @ExcludeMissing
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun total(total: Double) = total(JsonField.of(total))
 
-            @JsonProperty("total")
-            @ExcludeMissing
             fun total(total: JsonField<Double>) = apply { this.total = total }
 
             fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
-            @JsonProperty("credit_type")
-            @ExcludeMissing
             fun creditType(creditType: JsonField<CreditTypeData>) = apply {
                 this.creditType = creditType
             }
 
             fun creditGrantId(creditGrantId: String) = creditGrantId(JsonField.of(creditGrantId))
 
-            @JsonProperty("credit_grant_id")
-            @ExcludeMissing
             fun creditGrantId(creditGrantId: JsonField<String>) = apply {
                 this.creditGrantId = creditGrantId
             }
@@ -4459,8 +4458,6 @@ private constructor(
             fun creditGrantCustomFields(creditGrantCustomFields: CreditGrantCustomFields) =
                 creditGrantCustomFields(JsonField.of(creditGrantCustomFields))
 
-            @JsonProperty("credit_grant_custom_fields")
-            @ExcludeMissing
             fun creditGrantCustomFields(
                 creditGrantCustomFields: JsonField<CreditGrantCustomFields>
             ) = apply { this.creditGrantCustomFields = creditGrantCustomFields }
@@ -4470,7 +4467,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -4496,11 +4492,12 @@ private constructor(
                 )
         }
 
-        @JsonDeserialize(builder = CreditGrantCustomFields.Builder::class)
         @NoAutoDetect
         class CreditGrantCustomFields
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -4537,7 +4534,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -4595,11 +4591,12 @@ private constructor(
             "InvoiceAdjustment{name=$name, total=$total, creditType=$creditType, creditGrantId=$creditGrantId, creditGrantCustomFields=$creditGrantCustomFields, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = PlanCustomFields.Builder::class)
     @NoAutoDetect
     class PlanCustomFields
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -4635,7 +4632,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -4671,16 +4667,27 @@ private constructor(
     }
 
     /** only present for beta contract invoices with reseller royalties */
-    @JsonDeserialize(builder = ResellerRoyalty.Builder::class)
     @NoAutoDetect
     class ResellerRoyalty
+    @JsonCreator
     private constructor(
-        private val resellerType: JsonField<ResellerType>,
-        private val netsuiteResellerId: JsonField<String>,
-        private val fraction: JsonField<String>,
-        private val awsOptions: JsonField<AwsOptions>,
-        private val gcpOptions: JsonField<GcpOptions>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("reseller_type")
+        @ExcludeMissing
+        private val resellerType: JsonField<ResellerType> = JsonMissing.of(),
+        @JsonProperty("netsuite_reseller_id")
+        @ExcludeMissing
+        private val netsuiteResellerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("fraction")
+        @ExcludeMissing
+        private val fraction: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("aws_options")
+        @ExcludeMissing
+        private val awsOptions: JsonField<AwsOptions> = JsonMissing.of(),
+        @JsonProperty("gcp_options")
+        @ExcludeMissing
+        private val gcpOptions: JsonField<GcpOptions> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun resellerType(): ResellerType = resellerType.getRequired("reseller_type")
@@ -4752,8 +4759,6 @@ private constructor(
 
             fun resellerType(resellerType: ResellerType) = resellerType(JsonField.of(resellerType))
 
-            @JsonProperty("reseller_type")
-            @ExcludeMissing
             fun resellerType(resellerType: JsonField<ResellerType>) = apply {
                 this.resellerType = resellerType
             }
@@ -4761,30 +4766,22 @@ private constructor(
             fun netsuiteResellerId(netsuiteResellerId: String) =
                 netsuiteResellerId(JsonField.of(netsuiteResellerId))
 
-            @JsonProperty("netsuite_reseller_id")
-            @ExcludeMissing
             fun netsuiteResellerId(netsuiteResellerId: JsonField<String>) = apply {
                 this.netsuiteResellerId = netsuiteResellerId
             }
 
             fun fraction(fraction: String) = fraction(JsonField.of(fraction))
 
-            @JsonProperty("fraction")
-            @ExcludeMissing
             fun fraction(fraction: JsonField<String>) = apply { this.fraction = fraction }
 
             fun awsOptions(awsOptions: AwsOptions) = awsOptions(JsonField.of(awsOptions))
 
-            @JsonProperty("aws_options")
-            @ExcludeMissing
             fun awsOptions(awsOptions: JsonField<AwsOptions>) = apply {
                 this.awsOptions = awsOptions
             }
 
             fun gcpOptions(gcpOptions: GcpOptions) = gcpOptions(JsonField.of(gcpOptions))
 
-            @JsonProperty("gcp_options")
-            @ExcludeMissing
             fun gcpOptions(gcpOptions: JsonField<GcpOptions>) = apply {
                 this.gcpOptions = gcpOptions
             }
@@ -4794,7 +4791,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -4889,14 +4885,21 @@ private constructor(
             override fun toString() = value.toString()
         }
 
-        @JsonDeserialize(builder = AwsOptions.Builder::class)
         @NoAutoDetect
         class AwsOptions
+        @JsonCreator
         private constructor(
-            private val awsAccountNumber: JsonField<String>,
-            private val awsPayerReferenceId: JsonField<String>,
-            private val awsOfferId: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("aws_account_number")
+            @ExcludeMissing
+            private val awsAccountNumber: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("aws_payer_reference_id")
+            @ExcludeMissing
+            private val awsPayerReferenceId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("aws_offer_id")
+            @ExcludeMissing
+            private val awsOfferId: JsonField<String> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun awsAccountNumber(): Optional<String> =
@@ -4958,8 +4961,6 @@ private constructor(
                 fun awsAccountNumber(awsAccountNumber: String) =
                     awsAccountNumber(JsonField.of(awsAccountNumber))
 
-                @JsonProperty("aws_account_number")
-                @ExcludeMissing
                 fun awsAccountNumber(awsAccountNumber: JsonField<String>) = apply {
                     this.awsAccountNumber = awsAccountNumber
                 }
@@ -4967,16 +4968,12 @@ private constructor(
                 fun awsPayerReferenceId(awsPayerReferenceId: String) =
                     awsPayerReferenceId(JsonField.of(awsPayerReferenceId))
 
-                @JsonProperty("aws_payer_reference_id")
-                @ExcludeMissing
                 fun awsPayerReferenceId(awsPayerReferenceId: JsonField<String>) = apply {
                     this.awsPayerReferenceId = awsPayerReferenceId
                 }
 
                 fun awsOfferId(awsOfferId: String) = awsOfferId(JsonField.of(awsOfferId))
 
-                @JsonProperty("aws_offer_id")
-                @ExcludeMissing
                 fun awsOfferId(awsOfferId: JsonField<String>) = apply {
                     this.awsOfferId = awsOfferId
                 }
@@ -4986,7 +4983,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -5031,13 +5027,18 @@ private constructor(
                 "AwsOptions{awsAccountNumber=$awsAccountNumber, awsPayerReferenceId=$awsPayerReferenceId, awsOfferId=$awsOfferId, additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = GcpOptions.Builder::class)
         @NoAutoDetect
         class GcpOptions
+        @JsonCreator
         private constructor(
-            private val gcpAccountId: JsonField<String>,
-            private val gcpOfferId: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("gcp_account_id")
+            @ExcludeMissing
+            private val gcpAccountId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("gcp_offer_id")
+            @ExcludeMissing
+            private val gcpOfferId: JsonField<String> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun gcpAccountId(): Optional<String> =
@@ -5086,16 +5087,12 @@ private constructor(
 
                 fun gcpAccountId(gcpAccountId: String) = gcpAccountId(JsonField.of(gcpAccountId))
 
-                @JsonProperty("gcp_account_id")
-                @ExcludeMissing
                 fun gcpAccountId(gcpAccountId: JsonField<String>) = apply {
                     this.gcpAccountId = gcpAccountId
                 }
 
                 fun gcpOfferId(gcpOfferId: String) = gcpOfferId(JsonField.of(gcpOfferId))
 
-                @JsonProperty("gcp_offer_id")
-                @ExcludeMissing
                 fun gcpOfferId(gcpOfferId: JsonField<String>) = apply {
                     this.gcpOfferId = gcpOfferId
                 }
@@ -5105,7 +5102,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }

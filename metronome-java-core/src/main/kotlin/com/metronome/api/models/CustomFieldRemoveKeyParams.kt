@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
@@ -14,6 +13,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
@@ -50,13 +50,14 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = CustomFieldRemoveKeyBody.Builder::class)
     @NoAutoDetect
     class CustomFieldRemoveKeyBody
+    @JsonCreator
     internal constructor(
-        private val entity: Entity,
-        private val key: String,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("entity") private val entity: Entity,
+        @JsonProperty("key") private val key: String,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("entity") fun entity(): Entity = entity
@@ -87,16 +88,15 @@ constructor(
                 additionalProperties = customFieldRemoveKeyBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("entity") fun entity(entity: Entity) = apply { this.entity = entity }
+            fun entity(entity: Entity) = apply { this.entity = entity }
 
-            @JsonProperty("key") fun key(key: String) = apply { this.key = key }
+            fun key(key: String) = apply { this.key = key }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -56,15 +57,16 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = ContractRateCardNamedScheduleRetrieveBody.Builder::class)
     @NoAutoDetect
     class ContractRateCardNamedScheduleRetrieveBody
+    @JsonCreator
     internal constructor(
-        private val contractId: String,
-        private val customerId: String,
-        private val scheduleName: String,
-        private val coveringDate: OffsetDateTime?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("contract_id") private val contractId: String,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("schedule_name") private val scheduleName: String,
+        @JsonProperty("covering_date") private val coveringDate: OffsetDateTime?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the contract whose named schedule is to be retrieved */
@@ -115,22 +117,18 @@ constructor(
             }
 
             /** ID of the contract whose named schedule is to be retrieved */
-            @JsonProperty("contract_id")
             fun contractId(contractId: String) = apply { this.contractId = contractId }
 
             /** ID of the customer whose named schedule is to be retrieved */
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             /** The identifier for the schedule to be retrieved */
-            @JsonProperty("schedule_name")
             fun scheduleName(scheduleName: String) = apply { this.scheduleName = scheduleName }
 
             /**
              * If provided, at most one schedule segment will be returned (the one that covers this
              * date). If not provided, all segments will be returned.
              */
-            @JsonProperty("covering_date")
             fun coveringDate(coveringDate: OffsetDateTime) = apply {
                 this.coveringDate = coveringDate
             }
@@ -140,7 +138,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
@@ -14,6 +13,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
@@ -63,16 +63,17 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = CustomerCreateBody.Builder::class)
     @NoAutoDetect
     class CustomerCreateBody
+    @JsonCreator
     internal constructor(
-        private val name: String,
-        private val billingConfig: BillingConfig?,
-        private val customFields: CustomFields?,
-        private val externalId: String?,
-        private val ingestAliases: List<String>?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("name") private val name: String,
+        @JsonProperty("billing_config") private val billingConfig: BillingConfig?,
+        @JsonProperty("custom_fields") private val customFields: CustomFields?,
+        @JsonProperty("external_id") private val externalId: String?,
+        @JsonProperty("ingest_aliases") private val ingestAliases: List<String>?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** This will be truncated to 160 characters if the provided name is longer. */
@@ -126,14 +127,12 @@ constructor(
             }
 
             /** This will be truncated to 160 characters if the provided name is longer. */
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = apply { this.name = name }
 
-            @JsonProperty("billing_config")
             fun billingConfig(billingConfig: BillingConfig) = apply {
                 this.billingConfig = billingConfig
             }
 
-            @JsonProperty("custom_fields")
             fun customFields(customFields: CustomFields) = apply {
                 this.customFields = customFields
             }
@@ -142,11 +141,9 @@ constructor(
              * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
              * customer in usage events
              */
-            @JsonProperty("external_id")
             fun externalId(externalId: String) = apply { this.externalId = externalId }
 
             /** Aliases that can be used to refer to this customer in usage events */
-            @JsonProperty("ingest_aliases")
             fun ingestAliases(ingestAliases: List<String>) = apply {
                 this.ingestAliases = ingestAliases
             }
@@ -156,7 +153,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -388,16 +384,18 @@ constructor(
             )
     }
 
-    @JsonDeserialize(builder = BillingConfig.Builder::class)
     @NoAutoDetect
     class BillingConfig
+    @JsonCreator
     private constructor(
-        private val billingProviderType: BillingProviderType,
-        private val billingProviderCustomerId: String,
+        @JsonProperty("billing_provider_type") private val billingProviderType: BillingProviderType,
+        @JsonProperty("billing_provider_customer_id") private val billingProviderCustomerId: String,
+        @JsonProperty("stripe_collection_method")
         private val stripeCollectionMethod: StripeCollectionMethod?,
-        private val awsProductCode: String?,
-        private val awsRegion: AwsRegion?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("aws_product_code") private val awsProductCode: String?,
+        @JsonProperty("aws_region") private val awsRegion: AwsRegion?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("billing_provider_type")
@@ -446,27 +444,22 @@ constructor(
                 additionalProperties = billingConfig.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("billing_provider_type")
             fun billingProviderType(billingProviderType: BillingProviderType) = apply {
                 this.billingProviderType = billingProviderType
             }
 
-            @JsonProperty("billing_provider_customer_id")
             fun billingProviderCustomerId(billingProviderCustomerId: String) = apply {
                 this.billingProviderCustomerId = billingProviderCustomerId
             }
 
-            @JsonProperty("stripe_collection_method")
             fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) = apply {
                 this.stripeCollectionMethod = stripeCollectionMethod
             }
 
-            @JsonProperty("aws_product_code")
             fun awsProductCode(awsProductCode: String) = apply {
                 this.awsProductCode = awsProductCode
             }
 
-            @JsonProperty("aws_region")
             fun awsRegion(awsRegion: AwsRegion) = apply { this.awsRegion = awsRegion }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -474,7 +467,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -871,11 +863,12 @@ constructor(
             "BillingConfig{billingProviderType=$billingProviderType, billingProviderCustomerId=$billingProviderCustomerId, stripeCollectionMethod=$stripeCollectionMethod, awsProductCode=$awsProductCode, awsRegion=$awsRegion, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = CustomFields.Builder::class)
     @NoAutoDetect
     class CustomFields
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -903,7 +896,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

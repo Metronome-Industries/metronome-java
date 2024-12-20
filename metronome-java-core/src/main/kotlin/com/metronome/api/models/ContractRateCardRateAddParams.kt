@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
@@ -14,6 +13,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
@@ -104,26 +104,27 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = ContractRateCardRateAddBody.Builder::class)
     @NoAutoDetect
     class ContractRateCardRateAddBody
+    @JsonCreator
     internal constructor(
-        private val entitled: Boolean,
-        private val productId: String,
-        private val rateCardId: String,
-        private val rateType: RateType,
-        private val startingAt: OffsetDateTime,
-        private val commitRate: CommitRate?,
-        private val creditTypeId: String?,
-        private val customRate: CustomRate?,
-        private val endingBefore: OffsetDateTime?,
-        private val isProrated: Boolean?,
-        private val price: Double?,
-        private val pricingGroupValues: PricingGroupValues?,
-        private val quantity: Double?,
-        private val tiers: List<Tier>?,
-        private val useListPrices: Boolean?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("entitled") private val entitled: Boolean,
+        @JsonProperty("product_id") private val productId: String,
+        @JsonProperty("rate_card_id") private val rateCardId: String,
+        @JsonProperty("rate_type") private val rateType: RateType,
+        @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
+        @JsonProperty("commit_rate") private val commitRate: CommitRate?,
+        @JsonProperty("credit_type_id") private val creditTypeId: String?,
+        @JsonProperty("custom_rate") private val customRate: CustomRate?,
+        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
+        @JsonProperty("is_prorated") private val isProrated: Boolean?,
+        @JsonProperty("price") private val price: Double?,
+        @JsonProperty("pricing_group_values") private val pricingGroupValues: PricingGroupValues?,
+        @JsonProperty("quantity") private val quantity: Double?,
+        @JsonProperty("tiers") private val tiers: List<Tier>?,
+        @JsonProperty("use_list_prices") private val useListPrices: Boolean?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("entitled") fun entitled(): Boolean = entitled
@@ -247,29 +248,23 @@ constructor(
                     contractRateCardRateAddBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("entitled")
             fun entitled(entitled: Boolean) = apply { this.entitled = entitled }
 
             /** ID of the product to add a rate for */
-            @JsonProperty("product_id")
             fun productId(productId: String) = apply { this.productId = productId }
 
             /** ID of the rate card to update */
-            @JsonProperty("rate_card_id")
             fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
 
-            @JsonProperty("rate_type")
             fun rateType(rateType: RateType) = apply { this.rateType = rateType }
 
             /** inclusive effective date */
-            @JsonProperty("starting_at")
             fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
 
             /**
              * A distinct rate on the rate card. You can choose to use this rate rather than list
              * rate when consuming a credit or commit.
              */
-            @JsonProperty("commit_rate")
             fun commitRate(commitRate: CommitRate) = apply { this.commitRate = commitRate }
 
             /**
@@ -277,17 +272,14 @@ constructor(
              * if not passed. Used by all rate_types except type PERCENTAGE. PERCENTAGE rates use
              * the credit type of associated rates.
              */
-            @JsonProperty("credit_type_id")
             fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
             /**
              * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
              */
-            @JsonProperty("custom_rate")
             fun customRate(customRate: CustomRate) = apply { this.customRate = customRate }
 
             /** exclusive end date */
-            @JsonProperty("ending_before")
             fun endingBefore(endingBefore: OffsetDateTime) = apply {
                 this.endingBefore = endingBefore
             }
@@ -296,7 +288,6 @@ constructor(
              * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
              * to true.
              */
-            @JsonProperty("is_prorated")
             fun isProrated(isProrated: Boolean) = apply { this.isProrated = isProrated }
 
             /**
@@ -304,29 +295,26 @@ constructor(
              * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and
              * <=1.
              */
-            @JsonProperty("price") fun price(price: Double) = apply { this.price = price }
+            fun price(price: Double) = apply { this.price = price }
 
             /**
              * Optional. List of pricing group key value pairs which will be used to calculate the
              * price.
              */
-            @JsonProperty("pricing_group_values")
             fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
                 this.pricingGroupValues = pricingGroupValues
             }
 
             /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-            @JsonProperty("quantity")
             fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
             /** Only set for TIERED rate_type. */
-            @JsonProperty("tiers") fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+            fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
 
             /**
              * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
              * list prices rather than the standard rates for this product on the contract.
              */
-            @JsonProperty("use_list_prices")
             fun useListPrices(useListPrices: Boolean) = apply { this.useListPrices = useListPrices }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -334,7 +322,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -732,14 +719,15 @@ constructor(
      * A distinct rate on the rate card. You can choose to use this rate rather than list rate when
      * consuming a credit or commit.
      */
-    @JsonDeserialize(builder = CommitRate.Builder::class)
     @NoAutoDetect
     class CommitRate
+    @JsonCreator
     private constructor(
-        private val rateType: RateType,
-        private val price: Double?,
-        private val tiers: List<Tier>?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("rate_type") private val rateType: RateType,
+        @JsonProperty("price") private val price: Double?,
+        @JsonProperty("tiers") private val tiers: List<Tier>?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("rate_type") fun rateType(): RateType = rateType
@@ -776,21 +764,19 @@ constructor(
                 additionalProperties = commitRate.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("rate_type")
             fun rateType(rateType: RateType) = apply { this.rateType = rateType }
 
             /** Commit rate price. For FLAT rate_type, this must be >=0. */
-            @JsonProperty("price") fun price(price: Double) = apply { this.price = price }
+            fun price(price: Double) = apply { this.price = price }
 
             /** Only set for TIERED rate_type. */
-            @JsonProperty("tiers") fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+            fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -938,11 +924,12 @@ constructor(
     }
 
     /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
-    @JsonDeserialize(builder = CustomRate.Builder::class)
     @NoAutoDetect
     class CustomRate
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -970,7 +957,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -1008,11 +994,12 @@ constructor(
     /**
      * Optional. List of pricing group key value pairs which will be used to calculate the price.
      */
-    @JsonDeserialize(builder = PricingGroupValues.Builder::class)
     @NoAutoDetect
     class PricingGroupValues
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -1040,7 +1027,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

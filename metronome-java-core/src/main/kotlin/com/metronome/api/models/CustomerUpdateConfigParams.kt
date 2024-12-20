@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
@@ -58,13 +59,15 @@ constructor(
         }
     }
 
-    @JsonDeserialize(builder = CustomerUpdateConfigBody.Builder::class)
     @NoAutoDetect
     class CustomerUpdateConfigBody
+    @JsonCreator
     internal constructor(
+        @JsonProperty("leave_stripe_invoices_in_draft")
         private val leaveStripeInvoicesInDraft: Boolean?,
-        private val salesforceAccountId: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("salesforce_account_id") private val salesforceAccountId: String?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /**
@@ -107,13 +110,11 @@ constructor(
              * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
              * client-level config if unset, which defaults to true if unset.
              */
-            @JsonProperty("leave_stripe_invoices_in_draft")
             fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean) = apply {
                 this.leaveStripeInvoicesInDraft = leaveStripeInvoicesInDraft
             }
 
             /** The Salesforce account ID for the customer */
-            @JsonProperty("salesforce_account_id")
             fun salesforceAccountId(salesforceAccountId: String) = apply {
                 this.salesforceAccountId = salesforceAccountId
             }
@@ -123,7 +124,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

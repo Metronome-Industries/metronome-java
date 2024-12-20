@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -66,17 +67,20 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = ContractScheduleProServicesInvoiceBody.Builder::class)
     @NoAutoDetect
     class ContractScheduleProServicesInvoiceBody
+    @JsonCreator
     internal constructor(
-        private val contractId: String,
-        private val customerId: String,
-        private val issuedAt: OffsetDateTime,
-        private val lineItems: List<LineItem>,
+        @JsonProperty("contract_id") private val contractId: String,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("issued_at") private val issuedAt: OffsetDateTime,
+        @JsonProperty("line_items") private val lineItems: List<LineItem>,
+        @JsonProperty("netsuite_invoice_header_end")
         private val netsuiteInvoiceHeaderEnd: OffsetDateTime?,
+        @JsonProperty("netsuite_invoice_header_start")
         private val netsuiteInvoiceHeaderStart: OffsetDateTime?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("contract_id") fun contractId(): String = contractId
@@ -136,28 +140,22 @@ constructor(
                     contractScheduleProServicesInvoiceBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("contract_id")
             fun contractId(contractId: String) = apply { this.contractId = contractId }
 
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             /** The date the invoice is issued */
-            @JsonProperty("issued_at")
             fun issuedAt(issuedAt: OffsetDateTime) = apply { this.issuedAt = issuedAt }
 
             /** Each line requires an amount or both unit_price and quantity. */
-            @JsonProperty("line_items")
             fun lineItems(lineItems: List<LineItem>) = apply { this.lineItems = lineItems }
 
             /** The end date of the invoice header in Netsuite */
-            @JsonProperty("netsuite_invoice_header_end")
             fun netsuiteInvoiceHeaderEnd(netsuiteInvoiceHeaderEnd: OffsetDateTime) = apply {
                 this.netsuiteInvoiceHeaderEnd = netsuiteInvoiceHeaderEnd
             }
 
             /** The start date of the invoice header in Netsuite */
-            @JsonProperty("netsuite_invoice_header_start")
             fun netsuiteInvoiceHeaderStart(netsuiteInvoiceHeaderStart: OffsetDateTime) = apply {
                 this.netsuiteInvoiceHeaderStart = netsuiteInvoiceHeaderStart
             }
@@ -167,7 +165,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -414,19 +411,22 @@ constructor(
     }
 
     /** Describes the line item for a professional service charge on an invoice. */
-    @JsonDeserialize(builder = LineItem.Builder::class)
     @NoAutoDetect
     class LineItem
+    @JsonCreator
     private constructor(
-        private val professionalServiceId: String,
-        private val amendmentId: String?,
-        private val unitPrice: Double?,
-        private val quantity: Double?,
-        private val amount: Double?,
+        @JsonProperty("professional_service_id") private val professionalServiceId: String,
+        @JsonProperty("amendment_id") private val amendmentId: String?,
+        @JsonProperty("unit_price") private val unitPrice: Double?,
+        @JsonProperty("quantity") private val quantity: Double?,
+        @JsonProperty("amount") private val amount: Double?,
+        @JsonProperty("netsuite_invoice_billing_start")
         private val netsuiteInvoiceBillingStart: OffsetDateTime?,
+        @JsonProperty("netsuite_invoice_billing_end")
         private val netsuiteInvoiceBillingEnd: OffsetDateTime?,
-        private val metadata: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("metadata") private val metadata: String?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("professional_service_id")
@@ -498,45 +498,38 @@ constructor(
                 additionalProperties = lineItem.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("professional_service_id")
             fun professionalServiceId(professionalServiceId: String) = apply {
                 this.professionalServiceId = professionalServiceId
             }
 
             /** If the professional_service_id was added on an amendment, this is required. */
-            @JsonProperty("amendment_id")
             fun amendmentId(amendmentId: String) = apply { this.amendmentId = amendmentId }
 
             /**
              * If specified, this overrides the unit price on the pro service term. Must also
              * provide quantity (but not amount) if providing unit_price.
              */
-            @JsonProperty("unit_price")
             fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
 
             /**
              * Quantity for the charge. Will be multiplied by unit_price to determine the amount.
              */
-            @JsonProperty("quantity")
             fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
             /** Amount for the term on the new invoice. */
-            @JsonProperty("amount") fun amount(amount: Double) = apply { this.amount = amount }
+            fun amount(amount: Double) = apply { this.amount = amount }
 
             /** The start date for the billing period on the invoice. */
-            @JsonProperty("netsuite_invoice_billing_start")
             fun netsuiteInvoiceBillingStart(netsuiteInvoiceBillingStart: OffsetDateTime) = apply {
                 this.netsuiteInvoiceBillingStart = netsuiteInvoiceBillingStart
             }
 
             /** The end date for the billing period on the invoice. */
-            @JsonProperty("netsuite_invoice_billing_end")
             fun netsuiteInvoiceBillingEnd(netsuiteInvoiceBillingEnd: OffsetDateTime) = apply {
                 this.netsuiteInvoiceBillingEnd = netsuiteInvoiceBillingEnd
             }
 
             /** For client use. */
-            @JsonProperty("metadata")
             fun metadata(metadata: String) = apply { this.metadata = metadata }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -544,7 +537,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

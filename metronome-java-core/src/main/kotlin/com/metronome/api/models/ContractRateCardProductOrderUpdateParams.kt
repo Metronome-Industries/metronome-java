@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 
@@ -46,13 +47,14 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = ContractRateCardProductOrderUpdateBody.Builder::class)
     @NoAutoDetect
     class ContractRateCardProductOrderUpdateBody
+    @JsonCreator
     internal constructor(
-        private val productMoves: List<ProductMove>,
-        private val rateCardId: String,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("product_moves") private val productMoves: List<ProductMove>,
+        @JsonProperty("rate_card_id") private val rateCardId: String,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("product_moves") fun productMoves(): List<ProductMove> = productMoves
@@ -87,13 +89,11 @@ constructor(
                     contractRateCardProductOrderUpdateBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("product_moves")
             fun productMoves(productMoves: List<ProductMove>) = apply {
                 this.productMoves = productMoves
             }
 
             /** ID of the rate card to update */
-            @JsonProperty("rate_card_id")
             fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -101,7 +101,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -313,13 +312,14 @@ constructor(
             )
     }
 
-    @JsonDeserialize(builder = ProductMove.Builder::class)
     @NoAutoDetect
     class ProductMove
+    @JsonCreator
     private constructor(
-        private val productId: String,
-        private val position: Double,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("product_id") private val productId: String,
+        @JsonProperty("position") private val position: Double,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the product to move */
@@ -353,11 +353,9 @@ constructor(
             }
 
             /** ID of the product to move */
-            @JsonProperty("product_id")
             fun productId(productId: String) = apply { this.productId = productId }
 
             /** 0-based index of the new position of the product */
-            @JsonProperty("position")
             fun position(position: Double) = apply { this.position = position }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -365,7 +363,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

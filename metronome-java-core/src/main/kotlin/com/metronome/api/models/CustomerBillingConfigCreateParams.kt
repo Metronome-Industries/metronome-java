@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
@@ -14,6 +13,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
@@ -74,15 +74,17 @@ constructor(
         }
     }
 
-    @JsonDeserialize(builder = CustomerBillingConfigCreateBody.Builder::class)
     @NoAutoDetect
     class CustomerBillingConfigCreateBody
+    @JsonCreator
     internal constructor(
-        private val billingProviderCustomerId: String,
-        private val awsProductCode: String?,
-        private val awsRegion: AwsRegion?,
+        @JsonProperty("billing_provider_customer_id") private val billingProviderCustomerId: String,
+        @JsonProperty("aws_product_code") private val awsProductCode: String?,
+        @JsonProperty("aws_region") private val awsRegion: AwsRegion?,
+        @JsonProperty("stripe_collection_method")
         private val stripeCollectionMethod: StripeCollectionMethod?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /**
@@ -136,20 +138,16 @@ constructor(
              * The customer ID in the billing provider's system. For Azure, this is the subscription
              * ID.
              */
-            @JsonProperty("billing_provider_customer_id")
             fun billingProviderCustomerId(billingProviderCustomerId: String) = apply {
                 this.billingProviderCustomerId = billingProviderCustomerId
             }
 
-            @JsonProperty("aws_product_code")
             fun awsProductCode(awsProductCode: String) = apply {
                 this.awsProductCode = awsProductCode
             }
 
-            @JsonProperty("aws_region")
             fun awsRegion(awsRegion: AwsRegion) = apply { this.awsRegion = awsRegion }
 
-            @JsonProperty("stripe_collection_method")
             fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) = apply {
                 this.stripeCollectionMethod = stripeCollectionMethod
             }
@@ -159,7 +157,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

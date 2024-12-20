@@ -6,25 +6,25 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = CustomerBillingConfigRetrieveResponse.Builder::class)
 @NoAutoDetect
 class CustomerBillingConfigRetrieveResponse
+@JsonCreator
 private constructor(
-    private val data: JsonField<Data>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("data") @ExcludeMissing private val data: JsonField<Data> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun data(): Data = data.getRequired("data")
@@ -67,8 +67,6 @@ private constructor(
 
         fun data(data: Data) = data(JsonField.of(data))
 
-        @JsonProperty("data")
-        @ExcludeMissing
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -76,7 +74,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -95,20 +92,39 @@ private constructor(
             CustomerBillingConfigRetrieveResponse(data, additionalProperties.toImmutable())
     }
 
-    @JsonDeserialize(builder = Data.Builder::class)
     @NoAutoDetect
     class Data
+    @JsonCreator
     private constructor(
-        private val billingProviderCustomerId: JsonField<String>,
-        private val stripeCollectionMethod: JsonField<StripeCollectionMethod>,
-        private val awsProductCode: JsonField<String>,
-        private val awsRegion: JsonField<AwsRegion>,
-        private val awsExpirationDate: JsonField<OffsetDateTime>,
-        private val azureSubscriptionStatus: JsonField<AzureSubscriptionStatus>,
-        private val azurePlanId: JsonField<String>,
-        private val azureStartDate: JsonField<OffsetDateTime>,
-        private val azureExpirationDate: JsonField<OffsetDateTime>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("billing_provider_customer_id")
+        @ExcludeMissing
+        private val billingProviderCustomerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("stripe_collection_method")
+        @ExcludeMissing
+        private val stripeCollectionMethod: JsonField<StripeCollectionMethod> = JsonMissing.of(),
+        @JsonProperty("aws_product_code")
+        @ExcludeMissing
+        private val awsProductCode: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("aws_region")
+        @ExcludeMissing
+        private val awsRegion: JsonField<AwsRegion> = JsonMissing.of(),
+        @JsonProperty("aws_expiration_date")
+        @ExcludeMissing
+        private val awsExpirationDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("azure_subscription_status")
+        @ExcludeMissing
+        private val azureSubscriptionStatus: JsonField<AzureSubscriptionStatus> = JsonMissing.of(),
+        @JsonProperty("azure_plan_id")
+        @ExcludeMissing
+        private val azurePlanId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("azure_start_date")
+        @ExcludeMissing
+        private val azureStartDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("azure_expiration_date")
+        @ExcludeMissing
+        private val azureExpirationDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun billingProviderCustomerId(): Optional<String> =
@@ -257,8 +273,6 @@ private constructor(
             fun billingProviderCustomerId(billingProviderCustomerId: String) =
                 billingProviderCustomerId(JsonField.of(billingProviderCustomerId))
 
-            @JsonProperty("billing_provider_customer_id")
-            @ExcludeMissing
             fun billingProviderCustomerId(billingProviderCustomerId: JsonField<String>) = apply {
                 this.billingProviderCustomerId = billingProviderCustomerId
             }
@@ -266,8 +280,6 @@ private constructor(
             fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) =
                 stripeCollectionMethod(JsonField.of(stripeCollectionMethod))
 
-            @JsonProperty("stripe_collection_method")
-            @ExcludeMissing
             fun stripeCollectionMethod(stripeCollectionMethod: JsonField<StripeCollectionMethod>) =
                 apply {
                     this.stripeCollectionMethod = stripeCollectionMethod
@@ -276,16 +288,12 @@ private constructor(
             fun awsProductCode(awsProductCode: String) =
                 awsProductCode(JsonField.of(awsProductCode))
 
-            @JsonProperty("aws_product_code")
-            @ExcludeMissing
             fun awsProductCode(awsProductCode: JsonField<String>) = apply {
                 this.awsProductCode = awsProductCode
             }
 
             fun awsRegion(awsRegion: AwsRegion) = awsRegion(JsonField.of(awsRegion))
 
-            @JsonProperty("aws_region")
-            @ExcludeMissing
             fun awsRegion(awsRegion: JsonField<AwsRegion>) = apply { this.awsRegion = awsRegion }
 
             /**
@@ -301,8 +309,6 @@ private constructor(
              * retrieved from
              * [AWS's GetEntitlements API](https://docs.aws.amazon.com/marketplaceentitlement/latest/APIReference/API_GetEntitlements.html).
              */
-            @JsonProperty("aws_expiration_date")
-            @ExcludeMissing
             fun awsExpirationDate(awsExpirationDate: JsonField<OffsetDateTime>) = apply {
                 this.awsExpirationDate = awsExpirationDate
             }
@@ -310,16 +316,12 @@ private constructor(
             fun azureSubscriptionStatus(azureSubscriptionStatus: AzureSubscriptionStatus) =
                 azureSubscriptionStatus(JsonField.of(azureSubscriptionStatus))
 
-            @JsonProperty("azure_subscription_status")
-            @ExcludeMissing
             fun azureSubscriptionStatus(
                 azureSubscriptionStatus: JsonField<AzureSubscriptionStatus>
             ) = apply { this.azureSubscriptionStatus = azureSubscriptionStatus }
 
             fun azurePlanId(azurePlanId: String) = azurePlanId(JsonField.of(azurePlanId))
 
-            @JsonProperty("azure_plan_id")
-            @ExcludeMissing
             fun azurePlanId(azurePlanId: JsonField<String>) = apply {
                 this.azurePlanId = azurePlanId
             }
@@ -337,8 +339,6 @@ private constructor(
              * and can be retrieved from
              * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
              */
-            @JsonProperty("azure_start_date")
-            @ExcludeMissing
             fun azureStartDate(azureStartDate: JsonField<OffsetDateTime>) = apply {
                 this.azureStartDate = azureStartDate
             }
@@ -356,8 +356,6 @@ private constructor(
              * and can be retrieved from
              * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
              */
-            @JsonProperty("azure_expiration_date")
-            @ExcludeMissing
             fun azureExpirationDate(azureExpirationDate: JsonField<OffsetDateTime>) = apply {
                 this.azureExpirationDate = azureExpirationDate
             }
@@ -367,7 +365,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

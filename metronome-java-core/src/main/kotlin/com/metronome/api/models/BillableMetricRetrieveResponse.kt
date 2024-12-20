@@ -6,25 +6,25 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = BillableMetricRetrieveResponse.Builder::class)
 @NoAutoDetect
 class BillableMetricRetrieveResponse
+@JsonCreator
 private constructor(
-    private val data: JsonField<Data>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("data") @ExcludeMissing private val data: JsonField<Data> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun data(): Data = data.getRequired("data")
@@ -65,8 +65,6 @@ private constructor(
 
         fun data(data: Data) = data(JsonField.of(data))
 
-        @JsonProperty("data")
-        @ExcludeMissing
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -74,7 +72,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -93,21 +90,38 @@ private constructor(
             BillableMetricRetrieveResponse(data, additionalProperties.toImmutable())
     }
 
-    @JsonDeserialize(builder = Data.Builder::class)
     @NoAutoDetect
     class Data
+    @JsonCreator
     private constructor(
-        private val id: JsonField<String>,
-        private val name: JsonField<String>,
-        private val eventTypeFilter: JsonField<EventTypeFilter>,
-        private val propertyFilters: JsonField<List<PropertyFilter>>,
-        private val aggregationType: JsonField<AggregationType>,
-        private val aggregationKey: JsonField<String>,
-        private val groupKeys: JsonField<List<List<String>>>,
-        private val customFields: JsonField<CustomFields>,
-        private val sql: JsonField<String>,
-        private val archivedAt: JsonField<OffsetDateTime>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("event_type_filter")
+        @ExcludeMissing
+        private val eventTypeFilter: JsonField<EventTypeFilter> = JsonMissing.of(),
+        @JsonProperty("property_filters")
+        @ExcludeMissing
+        private val propertyFilters: JsonField<List<PropertyFilter>> = JsonMissing.of(),
+        @JsonProperty("aggregation_type")
+        @ExcludeMissing
+        private val aggregationType: JsonField<AggregationType> = JsonMissing.of(),
+        @JsonProperty("aggregation_key")
+        @ExcludeMissing
+        private val aggregationKey: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("group_keys")
+        @ExcludeMissing
+        private val groupKeys: JsonField<List<List<String>>> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("sql") @ExcludeMissing private val sql: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("archived_at")
+        @ExcludeMissing
+        private val archivedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the billable metric */
@@ -263,16 +277,12 @@ private constructor(
             fun id(id: String) = id(JsonField.of(id))
 
             /** ID of the billable metric */
-            @JsonProperty("id")
-            @ExcludeMissing
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** The display name of the billable metric. */
             fun name(name: String) = name(JsonField.of(name))
 
             /** The display name of the billable metric. */
-            @JsonProperty("name")
-            @ExcludeMissing
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** An optional filtering rule to match the 'event_type' property of an event. */
@@ -280,8 +290,6 @@ private constructor(
                 eventTypeFilter(JsonField.of(eventTypeFilter))
 
             /** An optional filtering rule to match the 'event_type' property of an event. */
-            @JsonProperty("event_type_filter")
-            @ExcludeMissing
             fun eventTypeFilter(eventTypeFilter: JsonField<EventTypeFilter>) = apply {
                 this.eventTypeFilter = eventTypeFilter
             }
@@ -297,8 +305,6 @@ private constructor(
              * A list of filters to match events to this billable metric. Each filter defines a rule
              * on an event property. All rules must pass for the event to match the billable metric.
              */
-            @JsonProperty("property_filters")
-            @ExcludeMissing
             fun propertyFilters(propertyFilters: JsonField<List<PropertyFilter>>) = apply {
                 this.propertyFilters = propertyFilters
             }
@@ -308,8 +314,6 @@ private constructor(
                 aggregationType(JsonField.of(aggregationType))
 
             /** Specifies the type of aggregation performed on matching events. */
-            @JsonProperty("aggregation_type")
-            @ExcludeMissing
             fun aggregationType(aggregationType: JsonField<AggregationType>) = apply {
                 this.aggregationType = aggregationType
             }
@@ -327,8 +331,6 @@ private constructor(
              * must be one of the property filter names and is not applicable when the aggregation
              * type is 'count'.
              */
-            @JsonProperty("aggregation_key")
-            @ExcludeMissing
             fun aggregationKey(aggregationKey: JsonField<String>) = apply {
                 this.aggregationKey = aggregationKey
             }
@@ -343,16 +345,12 @@ private constructor(
              * Property names that are used to group usage costs on an invoice. Each entry
              * represents a set of properties used to slice events into distinct buckets.
              */
-            @JsonProperty("group_keys")
-            @ExcludeMissing
             fun groupKeys(groupKeys: JsonField<List<List<String>>>) = apply {
                 this.groupKeys = groupKeys
             }
 
             fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
-            @JsonProperty("custom_fields")
-            @ExcludeMissing
             fun customFields(customFields: JsonField<CustomFields>) = apply {
                 this.customFields = customFields
             }
@@ -361,8 +359,6 @@ private constructor(
             fun sql(sql: String) = sql(JsonField.of(sql))
 
             /** The SQL query associated with the billable metric */
-            @JsonProperty("sql")
-            @ExcludeMissing
             fun sql(sql: JsonField<String>) = apply { this.sql = sql }
 
             /**
@@ -375,8 +371,6 @@ private constructor(
              * RFC 3339 timestamp indicating when the billable metric was archived. If not provided,
              * the billable metric is not archived.
              */
-            @JsonProperty("archived_at")
-            @ExcludeMissing
             fun archivedAt(archivedAt: JsonField<OffsetDateTime>) = apply {
                 this.archivedAt = archivedAt
             }
@@ -386,7 +380,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -492,11 +485,12 @@ private constructor(
             override fun toString() = value.toString()
         }
 
-        @JsonDeserialize(builder = CustomFields.Builder::class)
         @NoAutoDetect
         class CustomFields
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -532,7 +526,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }

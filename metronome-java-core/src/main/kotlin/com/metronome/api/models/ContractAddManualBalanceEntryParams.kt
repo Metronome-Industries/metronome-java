@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -68,18 +69,19 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = ContractAddManualBalanceEntryBody.Builder::class)
     @NoAutoDetect
     class ContractAddManualBalanceEntryBody
+    @JsonCreator
     internal constructor(
-        private val id: String,
-        private val amount: Double,
-        private val customerId: String,
-        private val reason: String,
-        private val segmentId: String,
-        private val contractId: String?,
-        private val timestamp: OffsetDateTime?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("id") private val id: String,
+        @JsonProperty("amount") private val amount: Double,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("reason") private val reason: String,
+        @JsonProperty("segment_id") private val segmentId: String,
+        @JsonProperty("contract_id") private val contractId: String?,
+        @JsonProperty("timestamp") private val timestamp: OffsetDateTime?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the balance (commit or credit) to update. */
@@ -146,31 +148,27 @@ constructor(
             }
 
             /** ID of the balance (commit or credit) to update. */
-            @JsonProperty("id") fun id(id: String) = apply { this.id = id }
+            fun id(id: String) = apply { this.id = id }
 
             /** Amount to add to the segment. A negative number will draw down from the balance. */
-            @JsonProperty("amount") fun amount(amount: Double) = apply { this.amount = amount }
+            fun amount(amount: Double) = apply { this.amount = amount }
 
             /** ID of the customer whose balance is to be updated. */
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             /** Reason for the manual adjustment. This will be displayed in the ledger. */
-            @JsonProperty("reason") fun reason(reason: String) = apply { this.reason = reason }
+            fun reason(reason: String) = apply { this.reason = reason }
 
             /** ID of the segment to update. */
-            @JsonProperty("segment_id")
             fun segmentId(segmentId: String) = apply { this.segmentId = segmentId }
 
             /** ID of the contract to update. Leave blank to update a customer level balance. */
-            @JsonProperty("contract_id")
             fun contractId(contractId: String) = apply { this.contractId = contractId }
 
             /**
              * RFC 3339 timestamp indicating when the manual adjustment takes place. If not
              * provided, it will default to the start of the segment.
              */
-            @JsonProperty("timestamp")
             fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -178,7 +176,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

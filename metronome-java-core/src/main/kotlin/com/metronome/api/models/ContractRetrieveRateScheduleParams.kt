@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -69,15 +70,16 @@ constructor(
         return queryParams.build()
     }
 
-    @JsonDeserialize(builder = ContractRetrieveRateScheduleBody.Builder::class)
     @NoAutoDetect
     class ContractRetrieveRateScheduleBody
+    @JsonCreator
     internal constructor(
-        private val contractId: String,
-        private val customerId: String,
-        private val at: OffsetDateTime?,
-        private val selectors: List<Selector>?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("contract_id") private val contractId: String,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("at") private val at: OffsetDateTime?,
+        @JsonProperty("selectors") private val selectors: List<Selector>?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the contract to get the rate schedule for. */
@@ -130,24 +132,21 @@ constructor(
                 }
 
             /** ID of the contract to get the rate schedule for. */
-            @JsonProperty("contract_id")
             fun contractId(contractId: String) = apply { this.contractId = contractId }
 
             /** ID of the customer for whose contract to get the rate schedule for. */
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             /**
              * optional timestamp which overlaps with the returned rate schedule segments. When not
              * specified, the current timestamp will be used.
              */
-            @JsonProperty("at") fun at(at: OffsetDateTime) = apply { this.at = at }
+            fun at(at: OffsetDateTime) = apply { this.at = at }
 
             /**
              * List of rate selectors, rates matching ANY of the selectors will be included in the
              * response. Passing no selectors will result in all rates being returned.
              */
-            @JsonProperty("selectors")
             fun selectors(selectors: List<Selector>) = apply { this.selectors = selectors }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -155,7 +154,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -402,15 +400,17 @@ constructor(
             )
     }
 
-    @JsonDeserialize(builder = Selector.Builder::class)
     @NoAutoDetect
     class Selector
+    @JsonCreator
     private constructor(
-        private val productId: String?,
-        private val productTags: List<String>?,
-        private val pricingGroupValues: PricingGroupValues?,
+        @JsonProperty("product_id") private val productId: String?,
+        @JsonProperty("product_tags") private val productTags: List<String>?,
+        @JsonProperty("pricing_group_values") private val pricingGroupValues: PricingGroupValues?,
+        @JsonProperty("partial_pricing_group_values")
         private val partialPricingGroupValues: PartialPricingGroupValues?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Rates matching the product id will be included in the response. */
@@ -468,21 +468,18 @@ constructor(
             }
 
             /** Rates matching the product id will be included in the response. */
-            @JsonProperty("product_id")
             fun productId(productId: String) = apply { this.productId = productId }
 
             /**
              * List of product tags, rates matching any of the tags will be included in the
              * response.
              */
-            @JsonProperty("product_tags")
             fun productTags(productTags: List<String>) = apply { this.productTags = productTags }
 
             /**
              * List of pricing group key value pairs, rates matching all of the key / value pairs
              * will be included in the response.
              */
-            @JsonProperty("pricing_group_values")
             fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
                 this.pricingGroupValues = pricingGroupValues
             }
@@ -491,7 +488,6 @@ constructor(
              * List of pricing group key value pairs, rates containing the matching key / value
              * pairs will be included in the response.
              */
-            @JsonProperty("partial_pricing_group_values")
             fun partialPricingGroupValues(partialPricingGroupValues: PartialPricingGroupValues) =
                 apply {
                     this.partialPricingGroupValues = partialPricingGroupValues
@@ -502,7 +498,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -531,11 +526,12 @@ constructor(
          * List of pricing group key value pairs, rates containing the matching key / value pairs
          * will be included in the response.
          */
-        @JsonDeserialize(builder = PartialPricingGroupValues.Builder::class)
         @NoAutoDetect
         class PartialPricingGroupValues
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -564,7 +560,6 @@ constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -608,11 +603,12 @@ constructor(
          * List of pricing group key value pairs, rates matching all of the key / value pairs will
          * be included in the response.
          */
-        @JsonDeserialize(builder = PricingGroupValues.Builder::class)
         @NoAutoDetect
         class PricingGroupValues
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -640,7 +636,6 @@ constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }

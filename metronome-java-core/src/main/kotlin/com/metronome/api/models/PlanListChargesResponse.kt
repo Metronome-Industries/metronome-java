@@ -6,35 +6,55 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = PlanListChargesResponse.Builder::class)
 @NoAutoDetect
 class PlanListChargesResponse
+@JsonCreator
 private constructor(
-    private val id: JsonField<String>,
-    private val name: JsonField<String>,
-    private val chargeType: JsonField<ChargeType>,
-    private val productId: JsonField<String>,
-    private val productName: JsonField<String>,
-    private val quantity: JsonField<Double>,
-    private val startPeriod: JsonField<Double>,
-    private val tierResetFrequency: JsonField<Double>,
-    private val creditType: JsonField<CreditTypeData>,
-    private val unitConversion: JsonField<UnitConversion>,
-    private val prices: JsonField<List<Price>>,
-    private val customFields: JsonField<CustomFields>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("charge_type")
+    @ExcludeMissing
+    private val chargeType: JsonField<ChargeType> = JsonMissing.of(),
+    @JsonProperty("product_id")
+    @ExcludeMissing
+    private val productId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("product_name")
+    @ExcludeMissing
+    private val productName: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("quantity")
+    @ExcludeMissing
+    private val quantity: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("start_period")
+    @ExcludeMissing
+    private val startPeriod: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("tier_reset_frequency")
+    @ExcludeMissing
+    private val tierResetFrequency: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("credit_type")
+    @ExcludeMissing
+    private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
+    @JsonProperty("unit_conversion")
+    @ExcludeMissing
+    private val unitConversion: JsonField<UnitConversion> = JsonMissing.of(),
+    @JsonProperty("prices")
+    @ExcludeMissing
+    private val prices: JsonField<List<Price>> = JsonMissing.of(),
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun id(): String = id.getRequired("id")
@@ -168,36 +188,26 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         fun name(name: String) = name(JsonField.of(name))
 
-        @JsonProperty("name")
-        @ExcludeMissing
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun chargeType(chargeType: ChargeType) = chargeType(JsonField.of(chargeType))
 
-        @JsonProperty("charge_type")
-        @ExcludeMissing
         fun chargeType(chargeType: JsonField<ChargeType>) = apply { this.chargeType = chargeType }
 
         fun productId(productId: String) = productId(JsonField.of(productId))
 
-        @JsonProperty("product_id")
-        @ExcludeMissing
         fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
         fun productName(productName: String) = productName(JsonField.of(productName))
 
-        @JsonProperty("product_name")
-        @ExcludeMissing
         fun productName(productName: JsonField<String>) = apply { this.productName = productName }
 
         fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-        @JsonProperty("quantity")
-        @ExcludeMissing
         fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
         /**
@@ -208,8 +218,6 @@ private constructor(
         /**
          * Used in price ramps. Indicates how many billing periods pass before the charge applies.
          */
-        @JsonProperty("start_period")
-        @ExcludeMissing
         fun startPeriod(startPeriod: JsonField<Double>) = apply { this.startPeriod = startPeriod }
 
         /**
@@ -223,16 +231,12 @@ private constructor(
          * Used in pricing tiers. Indicates how often the tier resets. Default is 1 - the tier count
          * resets every billing period.
          */
-        @JsonProperty("tier_reset_frequency")
-        @ExcludeMissing
         fun tierResetFrequency(tierResetFrequency: JsonField<Double>) = apply {
             this.tierResetFrequency = tierResetFrequency
         }
 
         fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
-        @JsonProperty("credit_type")
-        @ExcludeMissing
         fun creditType(creditType: JsonField<CreditTypeData>) = apply {
             this.creditType = creditType
         }
@@ -242,22 +246,16 @@ private constructor(
             unitConversion(JsonField.of(unitConversion))
 
         /** Specifies how quantities for usage based charges will be converted. */
-        @JsonProperty("unit_conversion")
-        @ExcludeMissing
         fun unitConversion(unitConversion: JsonField<UnitConversion>) = apply {
             this.unitConversion = unitConversion
         }
 
         fun prices(prices: List<Price>) = prices(JsonField.of(prices))
 
-        @JsonProperty("prices")
-        @ExcludeMissing
         fun prices(prices: JsonField<List<Price>>) = apply { this.prices = prices }
 
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
-        @JsonProperty("custom_fields")
-        @ExcludeMissing
         fun customFields(customFields: JsonField<CustomFields>) = apply {
             this.customFields = customFields
         }
@@ -267,7 +265,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -375,11 +372,12 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    @JsonDeserialize(builder = CustomFields.Builder::class)
     @NoAutoDetect
     class CustomFields
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -415,7 +413,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -450,16 +447,27 @@ private constructor(
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = Price.Builder::class)
     @NoAutoDetect
     class Price
+    @JsonCreator
     private constructor(
-        private val value: JsonField<Double>,
-        private val tier: JsonField<Double>,
-        private val quantity: JsonField<Double>,
-        private val collectionSchedule: JsonField<String>,
-        private val collectionInterval: JsonField<Double>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("value")
+        @ExcludeMissing
+        private val value: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("tier")
+        @ExcludeMissing
+        private val tier: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("quantity")
+        @ExcludeMissing
+        private val quantity: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("collection_schedule")
+        @ExcludeMissing
+        private val collectionSchedule: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("collection_interval")
+        @ExcludeMissing
+        private val collectionInterval: JsonField<Double> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun value(): Double = value.getRequired("value")
@@ -535,29 +543,21 @@ private constructor(
 
             fun value(value: Double) = value(JsonField.of(value))
 
-            @JsonProperty("value")
-            @ExcludeMissing
             fun value(value: JsonField<Double>) = apply { this.value = value }
 
             /** Used in pricing tiers. Indicates at what metric value the price applies. */
             fun tier(tier: Double) = tier(JsonField.of(tier))
 
             /** Used in pricing tiers. Indicates at what metric value the price applies. */
-            @JsonProperty("tier")
-            @ExcludeMissing
             fun tier(tier: JsonField<Double>) = apply { this.tier = tier }
 
             fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-            @JsonProperty("quantity")
-            @ExcludeMissing
             fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
             fun collectionSchedule(collectionSchedule: String) =
                 collectionSchedule(JsonField.of(collectionSchedule))
 
-            @JsonProperty("collection_schedule")
-            @ExcludeMissing
             fun collectionSchedule(collectionSchedule: JsonField<String>) = apply {
                 this.collectionSchedule = collectionSchedule
             }
@@ -565,8 +565,6 @@ private constructor(
             fun collectionInterval(collectionInterval: Double) =
                 collectionInterval(JsonField.of(collectionInterval))
 
-            @JsonProperty("collection_interval")
-            @ExcludeMissing
             fun collectionInterval(collectionInterval: JsonField<Double>) = apply {
                 this.collectionInterval = collectionInterval
             }
@@ -576,7 +574,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -621,13 +618,18 @@ private constructor(
     }
 
     /** Specifies how quantities for usage based charges will be converted. */
-    @JsonDeserialize(builder = UnitConversion.Builder::class)
     @NoAutoDetect
     class UnitConversion
+    @JsonCreator
     private constructor(
-        private val divisionFactor: JsonField<Double>,
-        private val roundingBehavior: JsonField<RoundingBehavior>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("division_factor")
+        @ExcludeMissing
+        private val divisionFactor: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("rounding_behavior")
+        @ExcludeMissing
+        private val roundingBehavior: JsonField<RoundingBehavior> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The conversion factor */
@@ -690,8 +692,6 @@ private constructor(
                 divisionFactor(JsonField.of(divisionFactor))
 
             /** The conversion factor */
-            @JsonProperty("division_factor")
-            @ExcludeMissing
             fun divisionFactor(divisionFactor: JsonField<Double>) = apply {
                 this.divisionFactor = divisionFactor
             }
@@ -707,8 +707,6 @@ private constructor(
              * Whether usage should be rounded down or up to the nearest whole number. If null,
              * quantity will be rounded to 20 decimal places.
              */
-            @JsonProperty("rounding_behavior")
-            @ExcludeMissing
             fun roundingBehavior(roundingBehavior: JsonField<RoundingBehavior>) = apply {
                 this.roundingBehavior = roundingBehavior
             }
@@ -718,7 +716,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

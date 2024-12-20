@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -52,14 +53,15 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = ContractNamedScheduleRetrieveBody.Builder::class)
     @NoAutoDetect
     class ContractNamedScheduleRetrieveBody
+    @JsonCreator
     internal constructor(
-        private val rateCardId: String,
-        private val scheduleName: String,
-        private val coveringDate: OffsetDateTime?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("rate_card_id") private val rateCardId: String,
+        @JsonProperty("schedule_name") private val scheduleName: String,
+        @JsonProperty("covering_date") private val coveringDate: OffsetDateTime?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the rate card whose named schedule is to be retrieved */
@@ -105,18 +107,15 @@ constructor(
             }
 
             /** ID of the rate card whose named schedule is to be retrieved */
-            @JsonProperty("rate_card_id")
             fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
 
             /** The identifier for the schedule to be retrieved */
-            @JsonProperty("schedule_name")
             fun scheduleName(scheduleName: String) = apply { this.scheduleName = scheduleName }
 
             /**
              * If provided, at most one schedule segment will be returned (the one that covers this
              * date). If not provided, all segments will be returned.
              */
-            @JsonProperty("covering_date")
             fun coveringDate(coveringDate: OffsetDateTime) = apply {
                 this.coveringDate = coveringDate
             }
@@ -126,7 +125,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

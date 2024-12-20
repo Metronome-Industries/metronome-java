@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -60,16 +61,17 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = ContractRateCardUpdateBody.Builder::class)
     @NoAutoDetect
     class ContractRateCardUpdateBody
+    @JsonCreator
     internal constructor(
-        private val rateCardId: String,
-        private val aliases: List<Alias>?,
-        private val customFields: CustomFields?,
-        private val description: String?,
-        private val name: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("rate_card_id") private val rateCardId: String,
+        @JsonProperty("aliases") private val aliases: List<Alias>?,
+        @JsonProperty("custom_fields") private val customFields: CustomFields?,
+        @JsonProperty("description") private val description: String?,
+        @JsonProperty("name") private val name: String?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the rate card to update */
@@ -123,7 +125,6 @@ constructor(
             }
 
             /** ID of the rate card to update */
-            @JsonProperty("rate_card_id")
             fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
 
             /**
@@ -131,26 +132,22 @@ constructor(
              * multiple rate cards, it will reference the rate card to which it was most recently
              * assigned. It is not exposed to end customers.
              */
-            @JsonProperty("aliases")
             fun aliases(aliases: List<Alias>) = apply { this.aliases = aliases }
 
-            @JsonProperty("custom_fields")
             fun customFields(customFields: CustomFields) = apply {
                 this.customFields = customFields
             }
 
-            @JsonProperty("description")
             fun description(description: String) = apply { this.description = description }
 
             /** Used only in UI/API. It is not exposed to end customers. */
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -386,14 +383,15 @@ constructor(
             )
     }
 
-    @JsonDeserialize(builder = Alias.Builder::class)
     @NoAutoDetect
     class Alias
+    @JsonCreator
     private constructor(
-        private val name: String,
-        private val startingAt: OffsetDateTime?,
-        private val endingBefore: OffsetDateTime?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("name") private val name: String,
+        @JsonProperty("starting_at") private val startingAt: OffsetDateTime?,
+        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("name") fun name(): String = name
@@ -430,12 +428,10 @@ constructor(
                 additionalProperties = alias.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = apply { this.name = name }
 
-            @JsonProperty("starting_at")
             fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
 
-            @JsonProperty("ending_before")
             fun endingBefore(endingBefore: OffsetDateTime) = apply {
                 this.endingBefore = endingBefore
             }
@@ -445,7 +441,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -487,11 +482,12 @@ constructor(
             "Alias{name=$name, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = CustomFields.Builder::class)
     @NoAutoDetect
     class CustomFields
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -519,7 +515,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

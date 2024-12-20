@@ -4,30 +4,45 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = CreditLedgerEntry.Builder::class)
 @NoAutoDetect
 class CreditLedgerEntry
+@JsonCreator
 private constructor(
-    private val amount: JsonField<Double>,
-    private val reason: JsonField<String>,
-    private val runningBalance: JsonField<Double>,
-    private val effectiveAt: JsonField<OffsetDateTime>,
-    private val createdBy: JsonField<String>,
-    private val creditGrantId: JsonField<String>,
-    private val invoiceId: JsonField<String>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("amount")
+    @ExcludeMissing
+    private val amount: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("reason")
+    @ExcludeMissing
+    private val reason: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("running_balance")
+    @ExcludeMissing
+    private val runningBalance: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("effective_at")
+    @ExcludeMissing
+    private val effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("created_by")
+    @ExcludeMissing
+    private val createdBy: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("credit_grant_id")
+    @ExcludeMissing
+    private val creditGrantId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("invoice_id")
+    @ExcludeMissing
+    private val invoiceId: JsonField<String> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     /** an amount representing the change to the customer's credit balance */
@@ -133,14 +148,10 @@ private constructor(
         fun amount(amount: Double) = amount(JsonField.of(amount))
 
         /** an amount representing the change to the customer's credit balance */
-        @JsonProperty("amount")
-        @ExcludeMissing
         fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
         fun reason(reason: String) = reason(JsonField.of(reason))
 
-        @JsonProperty("reason")
-        @ExcludeMissing
         fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
         /**
@@ -153,32 +164,24 @@ private constructor(
          * the running balance for this credit type at the time of the ledger entry, including all
          * preceding charges
          */
-        @JsonProperty("running_balance")
-        @ExcludeMissing
         fun runningBalance(runningBalance: JsonField<Double>) = apply {
             this.runningBalance = runningBalance
         }
 
         fun effectiveAt(effectiveAt: OffsetDateTime) = effectiveAt(JsonField.of(effectiveAt))
 
-        @JsonProperty("effective_at")
-        @ExcludeMissing
         fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
             this.effectiveAt = effectiveAt
         }
 
         fun createdBy(createdBy: String) = createdBy(JsonField.of(createdBy))
 
-        @JsonProperty("created_by")
-        @ExcludeMissing
         fun createdBy(createdBy: JsonField<String>) = apply { this.createdBy = createdBy }
 
         /** the credit grant this entry is related to */
         fun creditGrantId(creditGrantId: String) = creditGrantId(JsonField.of(creditGrantId))
 
         /** the credit grant this entry is related to */
-        @JsonProperty("credit_grant_id")
-        @ExcludeMissing
         fun creditGrantId(creditGrantId: JsonField<String>) = apply {
             this.creditGrantId = creditGrantId
         }
@@ -195,8 +198,6 @@ private constructor(
          * was consumed; if this entry is a grant, the Metronome ID of the invoice where the grant's
          * paid_amount was charged
          */
-        @JsonProperty("invoice_id")
-        @ExcludeMissing
         fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -204,7 +205,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }

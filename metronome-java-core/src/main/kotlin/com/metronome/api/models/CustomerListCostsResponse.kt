@@ -4,25 +4,32 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 
-@JsonDeserialize(builder = CustomerListCostsResponse.Builder::class)
 @NoAutoDetect
 class CustomerListCostsResponse
+@JsonCreator
 private constructor(
-    private val startTimestamp: JsonField<OffsetDateTime>,
-    private val endTimestamp: JsonField<OffsetDateTime>,
-    private val creditTypes: JsonField<CreditTypes>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("start_timestamp")
+    @ExcludeMissing
+    private val startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("end_timestamp")
+    @ExcludeMissing
+    private val endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("credit_types")
+    @ExcludeMissing
+    private val creditTypes: JsonField<CreditTypes> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun startTimestamp(): OffsetDateTime = startTimestamp.getRequired("start_timestamp")
@@ -77,24 +84,18 @@ private constructor(
         fun startTimestamp(startTimestamp: OffsetDateTime) =
             startTimestamp(JsonField.of(startTimestamp))
 
-        @JsonProperty("start_timestamp")
-        @ExcludeMissing
         fun startTimestamp(startTimestamp: JsonField<OffsetDateTime>) = apply {
             this.startTimestamp = startTimestamp
         }
 
         fun endTimestamp(endTimestamp: OffsetDateTime) = endTimestamp(JsonField.of(endTimestamp))
 
-        @JsonProperty("end_timestamp")
-        @ExcludeMissing
         fun endTimestamp(endTimestamp: JsonField<OffsetDateTime>) = apply {
             this.endTimestamp = endTimestamp
         }
 
         fun creditTypes(creditTypes: CreditTypes) = creditTypes(JsonField.of(creditTypes))
 
-        @JsonProperty("credit_types")
-        @ExcludeMissing
         fun creditTypes(creditTypes: JsonField<CreditTypes>) = apply {
             this.creditTypes = creditTypes
         }
@@ -104,7 +105,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -128,11 +128,12 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = CreditTypes.Builder::class)
     @NoAutoDetect
     class CreditTypes
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -168,7 +169,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

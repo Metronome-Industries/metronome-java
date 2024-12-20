@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -65,15 +66,16 @@ constructor(
         return queryParams.build()
     }
 
-    @JsonDeserialize(builder = CreditGrantListEntriesBody.Builder::class)
     @NoAutoDetect
     class CreditGrantListEntriesBody
+    @JsonCreator
     internal constructor(
-        private val creditTypeIds: List<String>?,
-        private val customerIds: List<String>?,
-        private val endingBefore: OffsetDateTime?,
-        private val startingOn: OffsetDateTime?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("credit_type_ids") private val creditTypeIds: List<String>?,
+        @JsonProperty("customer_ids") private val customerIds: List<String>?,
+        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
+        @JsonProperty("starting_on") private val startingOn: OffsetDateTime?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /**
@@ -135,7 +137,6 @@ constructor(
              * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
              * entries for all credit types will be returned.
              */
-            @JsonProperty("credit_type_ids")
             fun creditTypeIds(creditTypeIds: List<String>) = apply {
                 this.creditTypeIds = creditTypeIds
             }
@@ -144,7 +145,6 @@ constructor(
              * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger
              * entries for all customers will be returned.
              */
-            @JsonProperty("customer_ids")
             fun customerIds(customerIds: List<String>) = apply { this.customerIds = customerIds }
 
             /**
@@ -152,7 +152,6 @@ constructor(
              * time. This timestamp must not be in the future. If no timestamp is supplied, all
              * entries up to the start of the customer's next billing period will be returned.
              */
-            @JsonProperty("ending_before")
             fun endingBefore(endingBefore: OffsetDateTime) = apply {
                 this.endingBefore = endingBefore
             }
@@ -160,7 +159,6 @@ constructor(
             /**
              * If supplied, only ledger entries effective at or after this time will be returned.
              */
-            @JsonProperty("starting_on")
             fun startingOn(startingOn: OffsetDateTime) = apply { this.startingOn = startingOn }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -168,7 +166,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
@@ -37,11 +38,11 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = UsageIngestBody.Builder::class)
     @NoAutoDetect
     class UsageIngestBody
+    @JsonCreator
     internal constructor(
-        private val usage: List<Usage>,
+        @JsonProperty("usage") private val usage: List<Usage>,
     ) {
 
         @JsonProperty("usage") fun usage(): List<Usage> = usage
@@ -62,7 +63,7 @@ constructor(
                 usage = usageIngestBody.usage.toMutableList()
             }
 
-            @JsonProperty("usage") fun usage(usage: List<Usage>) = apply { this.usage = usage }
+            fun usage(usage: List<Usage>) = apply { this.usage = usage }
 
             fun build(): UsageIngestBody =
                 UsageIngestBody(
@@ -221,16 +222,17 @@ constructor(
             )
     }
 
-    @JsonDeserialize(builder = Usage.Builder::class)
     @NoAutoDetect
     class Usage
+    @JsonCreator
     private constructor(
-        private val transactionId: String,
-        private val customerId: String,
-        private val eventType: String,
-        private val timestamp: String,
-        private val properties: Properties?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("transaction_id") private val transactionId: String,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("event_type") private val eventType: String,
+        @JsonProperty("timestamp") private val timestamp: String,
+        @JsonProperty("properties") private val properties: Properties?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("transaction_id") fun transactionId(): String = transactionId
@@ -275,20 +277,15 @@ constructor(
                 additionalProperties = usage.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("transaction_id")
             fun transactionId(transactionId: String) = apply { this.transactionId = transactionId }
 
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
-            @JsonProperty("event_type")
             fun eventType(eventType: String) = apply { this.eventType = eventType }
 
             /** RFC 3339 formatted */
-            @JsonProperty("timestamp")
             fun timestamp(timestamp: String) = apply { this.timestamp = timestamp }
 
-            @JsonProperty("properties")
             fun properties(properties: Properties) = apply { this.properties = properties }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -296,7 +293,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -322,11 +318,12 @@ constructor(
                 )
         }
 
-        @JsonDeserialize(builder = Properties.Builder::class)
         @NoAutoDetect
         class Properties
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -354,7 +351,6 @@ constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }

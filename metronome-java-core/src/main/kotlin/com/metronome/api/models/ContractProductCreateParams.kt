@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
@@ -14,6 +13,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
@@ -99,25 +99,26 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = ContractProductCreateBody.Builder::class)
     @NoAutoDetect
     class ContractProductCreateBody
+    @JsonCreator
     internal constructor(
-        private val name: String,
-        private val type: Type,
-        private val billableMetricId: String?,
-        private val compositeProductIds: List<String>?,
-        private val compositeTags: List<String>?,
-        private val excludeFreeUsage: Boolean?,
-        private val isRefundable: Boolean?,
-        private val netsuiteInternalItemId: String?,
-        private val netsuiteOverageItemId: String?,
-        private val presentationGroupKey: List<String>?,
-        private val pricingGroupKey: List<String>?,
-        private val quantityConversion: QuantityConversion?,
-        private val quantityRounding: QuantityRounding?,
-        private val tags: List<String>?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("name") private val name: String,
+        @JsonProperty("type") private val type: Type,
+        @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+        @JsonProperty("composite_product_ids") private val compositeProductIds: List<String>?,
+        @JsonProperty("composite_tags") private val compositeTags: List<String>?,
+        @JsonProperty("exclude_free_usage") private val excludeFreeUsage: Boolean?,
+        @JsonProperty("is_refundable") private val isRefundable: Boolean?,
+        @JsonProperty("netsuite_internal_item_id") private val netsuiteInternalItemId: String?,
+        @JsonProperty("netsuite_overage_item_id") private val netsuiteOverageItemId: String?,
+        @JsonProperty("presentation_group_key") private val presentationGroupKey: List<String>?,
+        @JsonProperty("pricing_group_key") private val pricingGroupKey: List<String>?,
+        @JsonProperty("quantity_conversion") private val quantityConversion: QuantityConversion?,
+        @JsonProperty("quantity_rounding") private val quantityRounding: QuantityRounding?,
+        @JsonProperty("tags") private val tags: List<String>?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** displayed on invoices */
@@ -248,24 +249,21 @@ constructor(
             }
 
             /** displayed on invoices */
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = apply { this.name = name }
 
-            @JsonProperty("type") fun type(type: Type) = apply { this.type = type }
+            fun type(type: Type) = apply { this.type = type }
 
             /** Required for USAGE products */
-            @JsonProperty("billable_metric_id")
             fun billableMetricId(billableMetricId: String) = apply {
                 this.billableMetricId = billableMetricId
             }
 
             /** Required for COMPOSITE products */
-            @JsonProperty("composite_product_ids")
             fun compositeProductIds(compositeProductIds: List<String>) = apply {
                 this.compositeProductIds = compositeProductIds
             }
 
             /** Required for COMPOSITE products */
-            @JsonProperty("composite_tags")
             fun compositeTags(compositeTags: List<String>) = apply {
                 this.compositeTags = compositeTags
             }
@@ -274,7 +272,6 @@ constructor(
              * Beta feature only available for composite products. If true, products with $0 will
              * not be included when computing composite usage. Defaults to false
              */
-            @JsonProperty("exclude_free_usage")
             fun excludeFreeUsage(excludeFreeUsage: Boolean) = apply {
                 this.excludeFreeUsage = excludeFreeUsage
             }
@@ -283,17 +280,14 @@ constructor(
              * This field's availability is dependent on your client's configuration. Defaults to
              * true.
              */
-            @JsonProperty("is_refundable")
             fun isRefundable(isRefundable: Boolean) = apply { this.isRefundable = isRefundable }
 
             /** This field's availability is dependent on your client's configuration. */
-            @JsonProperty("netsuite_internal_item_id")
             fun netsuiteInternalItemId(netsuiteInternalItemId: String) = apply {
                 this.netsuiteInternalItemId = netsuiteInternalItemId
             }
 
             /** This field's availability is dependent on your client's configuration. */
-            @JsonProperty("netsuite_overage_item_id")
             fun netsuiteOverageItemId(netsuiteOverageItemId: String) = apply {
                 this.netsuiteOverageItemId = netsuiteOverageItemId
             }
@@ -303,7 +297,6 @@ constructor(
              * in the pricing group key and presentation group key must be set as one compound group
              * key on the billable metric.
              */
-            @JsonProperty("presentation_group_key")
             fun presentationGroupKey(presentationGroupKey: List<String>) = apply {
                 this.presentationGroupKey = presentationGroupKey
             }
@@ -314,7 +307,6 @@ constructor(
              * in the pricing group key and presentation group key must be set as one compound group
              * key on the billable metric.
              */
-            @JsonProperty("pricing_group_key")
             fun pricingGroupKey(pricingGroupKey: List<String>) = apply {
                 this.pricingGroupKey = pricingGroupKey
             }
@@ -327,7 +319,6 @@ constructor(
              * another. For example, data could be sent in MB and priced in GB. In this case, the
              * conversion factor would be 1024 and the operation would be "divide".
              */
-            @JsonProperty("quantity_conversion")
             fun quantityConversion(quantityConversion: QuantityConversion) = apply {
                 this.quantityConversion = quantityConversion
             }
@@ -338,19 +329,17 @@ constructor(
              * "round up" and the decimal places is 0, then the quantity will be rounded up to the
              * nearest integer.
              */
-            @JsonProperty("quantity_rounding")
             fun quantityRounding(quantityRounding: QuantityRounding) = apply {
                 this.quantityRounding = quantityRounding
             }
 
-            @JsonProperty("tags") fun tags(tags: List<String>) = apply { this.tags = tags }
+            fun tags(tags: List<String>) = apply { this.tags = tags }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

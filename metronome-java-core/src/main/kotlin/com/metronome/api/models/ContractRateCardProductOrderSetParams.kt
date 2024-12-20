@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 
@@ -46,13 +47,14 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = ContractRateCardProductOrderSetBody.Builder::class)
     @NoAutoDetect
     class ContractRateCardProductOrderSetBody
+    @JsonCreator
     internal constructor(
-        private val productOrder: List<String>,
-        private val rateCardId: String,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("product_order") private val productOrder: List<String>,
+        @JsonProperty("rate_card_id") private val rateCardId: String,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("product_order") fun productOrder(): List<String> = productOrder
@@ -87,13 +89,11 @@ constructor(
                     contractRateCardProductOrderSetBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("product_order")
             fun productOrder(productOrder: List<String>) = apply {
                 this.productOrder = productOrder
             }
 
             /** ID of the rate card to update */
-            @JsonProperty("rate_card_id")
             fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -101,7 +101,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

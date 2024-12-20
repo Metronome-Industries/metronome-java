@@ -4,25 +4,30 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
 /** An optional filtering rule to match the 'event_type' property of an event. */
-@JsonDeserialize(builder = EventTypeFilter.Builder::class)
 @NoAutoDetect
 class EventTypeFilter
+@JsonCreator
 private constructor(
-    private val inValues: JsonField<List<String>>,
-    private val notInValues: JsonField<List<String>>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("in_values")
+    @ExcludeMissing
+    private val inValues: JsonField<List<String>> = JsonMissing.of(),
+    @JsonProperty("not_in_values")
+    @ExcludeMissing
+    private val notInValues: JsonField<List<String>> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     /**
@@ -94,8 +99,6 @@ private constructor(
          * A list of event types that are explicitly included in the billable metric. If specified,
          * only events of these types will match the billable metric. Must be non-empty if present.
          */
-        @JsonProperty("in_values")
-        @ExcludeMissing
         fun inValues(inValues: JsonField<List<String>>) = apply { this.inValues = inValues }
 
         /**
@@ -110,8 +113,6 @@ private constructor(
          * specified, events of these types will not match the billable metric. Must be non-empty if
          * present.
          */
-        @JsonProperty("not_in_values")
-        @ExcludeMissing
         fun notInValues(notInValues: JsonField<List<String>>) = apply {
             this.notInValues = notInValues
         }
@@ -121,7 +122,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }

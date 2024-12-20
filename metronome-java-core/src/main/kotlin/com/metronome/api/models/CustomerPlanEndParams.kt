@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -66,14 +67,15 @@ constructor(
         }
     }
 
-    @JsonDeserialize(builder = CustomerPlanEndBody.Builder::class)
     @NoAutoDetect
     class CustomerPlanEndBody
+    @JsonCreator
     internal constructor(
-        private val endingBefore: OffsetDateTime?,
-        private val voidInvoices: Boolean?,
-        private val voidStripeInvoices: Boolean?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
+        @JsonProperty("void_invoices") private val voidInvoices: Boolean?,
+        @JsonProperty("void_stripe_invoices") private val voidStripeInvoices: Boolean?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /**
@@ -128,7 +130,6 @@ constructor(
              * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at
              * 0:00 UTC (midnight). If not provided, the plan end date will be cleared.
              */
-            @JsonProperty("ending_before")
             fun endingBefore(endingBefore: OffsetDateTime) = apply {
                 this.endingBefore = endingBefore
             }
@@ -137,7 +138,6 @@ constructor(
              * If true, plan end date can be before the last finalized invoice date. Any invoices
              * generated after the plan end date will be voided.
              */
-            @JsonProperty("void_invoices")
             fun voidInvoices(voidInvoices: Boolean) = apply { this.voidInvoices = voidInvoices }
 
             /**
@@ -145,7 +145,6 @@ constructor(
              * voided we will also attempt to void/delete the stripe invoice (if any). Stripe
              * invoices will be voided if finalized or deleted if still in draft state.
              */
-            @JsonProperty("void_stripe_invoices")
             fun voidStripeInvoices(voidStripeInvoices: Boolean) = apply {
                 this.voidStripeInvoices = voidStripeInvoices
             }
@@ -155,7 +154,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

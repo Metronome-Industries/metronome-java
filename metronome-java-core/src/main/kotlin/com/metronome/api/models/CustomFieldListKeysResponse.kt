@@ -6,25 +6,29 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = CustomFieldListKeysResponse.Builder::class)
 @NoAutoDetect
 class CustomFieldListKeysResponse
+@JsonCreator
 private constructor(
-    private val data: JsonField<List<Data>>,
-    private val nextPage: JsonField<String>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("data")
+    @ExcludeMissing
+    private val data: JsonField<List<Data>> = JsonMissing.of(),
+    @JsonProperty("next_page")
+    @ExcludeMissing
+    private val nextPage: JsonField<String> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun data(): List<Data> = data.getRequired("data")
@@ -71,14 +75,10 @@ private constructor(
 
         fun data(data: List<Data>) = data(JsonField.of(data))
 
-        @JsonProperty("data")
-        @ExcludeMissing
         fun data(data: JsonField<List<Data>>) = apply { this.data = data }
 
         fun nextPage(nextPage: String) = nextPage(JsonField.of(nextPage))
 
-        @JsonProperty("next_page")
-        @ExcludeMissing
         fun nextPage(nextPage: JsonField<String>) = apply { this.nextPage = nextPage }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -86,7 +86,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -109,14 +108,19 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = Data.Builder::class)
     @NoAutoDetect
     class Data
+    @JsonCreator
     private constructor(
-        private val entity: JsonField<Entity>,
-        private val key: JsonField<String>,
-        private val enforceUniqueness: JsonField<Boolean>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("entity")
+        @ExcludeMissing
+        private val entity: JsonField<Entity> = JsonMissing.of(),
+        @JsonProperty("key") @ExcludeMissing private val key: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("enforce_uniqueness")
+        @ExcludeMissing
+        private val enforceUniqueness: JsonField<Boolean> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun entity(): Entity = entity.getRequired("entity")
@@ -172,21 +176,15 @@ private constructor(
 
             fun entity(entity: Entity) = entity(JsonField.of(entity))
 
-            @JsonProperty("entity")
-            @ExcludeMissing
             fun entity(entity: JsonField<Entity>) = apply { this.entity = entity }
 
             fun key(key: String) = key(JsonField.of(key))
 
-            @JsonProperty("key")
-            @ExcludeMissing
             fun key(key: JsonField<String>) = apply { this.key = key }
 
             fun enforceUniqueness(enforceUniqueness: Boolean) =
                 enforceUniqueness(JsonField.of(enforceUniqueness))
 
-            @JsonProperty("enforce_uniqueness")
-            @ExcludeMissing
             fun enforceUniqueness(enforceUniqueness: JsonField<Boolean>) = apply {
                 this.enforceUniqueness = enforceUniqueness
             }
@@ -196,7 +194,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

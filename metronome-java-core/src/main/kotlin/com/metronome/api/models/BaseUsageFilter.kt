@@ -4,26 +4,33 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = BaseUsageFilter.Builder::class)
 @NoAutoDetect
 class BaseUsageFilter
+@JsonCreator
 private constructor(
-    private val groupKey: JsonField<String>,
-    private val groupValues: JsonField<List<String>>,
-    private val startingAt: JsonField<OffsetDateTime>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("group_key")
+    @ExcludeMissing
+    private val groupKey: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("group_values")
+    @ExcludeMissing
+    private val groupValues: JsonField<List<String>> = JsonMissing.of(),
+    @JsonProperty("starting_at")
+    @ExcludeMissing
+    private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun groupKey(): String = groupKey.getRequired("group_key")
@@ -78,22 +85,16 @@ private constructor(
 
         fun groupKey(groupKey: String) = groupKey(JsonField.of(groupKey))
 
-        @JsonProperty("group_key")
-        @ExcludeMissing
         fun groupKey(groupKey: JsonField<String>) = apply { this.groupKey = groupKey }
 
         fun groupValues(groupValues: List<String>) = groupValues(JsonField.of(groupValues))
 
-        @JsonProperty("group_values")
-        @ExcludeMissing
         fun groupValues(groupValues: JsonField<List<String>>) = apply {
             this.groupValues = groupValues
         }
 
         fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
-        @JsonProperty("starting_at")
-        @ExcludeMissing
         fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
             this.startingAt = startingAt
         }
@@ -103,7 +104,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }

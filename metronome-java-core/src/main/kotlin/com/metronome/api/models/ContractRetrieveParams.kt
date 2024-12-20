@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
@@ -51,14 +52,15 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = ContractRetrieveBody.Builder::class)
     @NoAutoDetect
     class ContractRetrieveBody
+    @JsonCreator
     internal constructor(
-        private val contractId: String,
-        private val customerId: String,
-        private val includeLedgers: Boolean?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("contract_id") private val contractId: String,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("include_ledgers") private val includeLedgers: Boolean?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("contract_id") fun contractId(): String = contractId
@@ -98,17 +100,14 @@ constructor(
                 additionalProperties = contractRetrieveBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("contract_id")
             fun contractId(contractId: String) = apply { this.contractId = contractId }
 
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             /**
              * Include commit ledgers in the response. Setting this flag may cause the query to be
              * slower.
              */
-            @JsonProperty("include_ledgers")
             fun includeLedgers(includeLedgers: Boolean) = apply {
                 this.includeLedgers = includeLedgers
             }
@@ -118,7 +117,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

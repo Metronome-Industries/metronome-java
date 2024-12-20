@@ -4,26 +4,33 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = PropertyFilter.Builder::class)
 @NoAutoDetect
 class PropertyFilter
+@JsonCreator
 private constructor(
-    private val name: JsonField<String>,
-    private val exists: JsonField<Boolean>,
-    private val inValues: JsonField<List<String>>,
-    private val notInValues: JsonField<List<String>>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("exists")
+    @ExcludeMissing
+    private val exists: JsonField<Boolean> = JsonMissing.of(),
+    @JsonProperty("in_values")
+    @ExcludeMissing
+    private val inValues: JsonField<List<String>> = JsonMissing.of(),
+    @JsonProperty("not_in_values")
+    @ExcludeMissing
+    private val notInValues: JsonField<List<String>> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     /** The name of the event property. */
@@ -119,8 +126,6 @@ private constructor(
         fun name(name: String) = name(JsonField.of(name))
 
         /** The name of the event property. */
-        @JsonProperty("name")
-        @ExcludeMissing
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         /**
@@ -135,8 +140,6 @@ private constructor(
          * property will pass the filter. If false, only events without this property will pass the
          * filter. If null or omitted, the existence of the property is optional.
          */
-        @JsonProperty("exists")
-        @ExcludeMissing
         fun exists(exists: JsonField<Boolean>) = apply { this.exists = exists }
 
         /**
@@ -151,8 +154,6 @@ private constructor(
          * filter only if its property value is included in this list. If undefined, all property
          * values will pass the filter. Must be non-empty if present.
          */
-        @JsonProperty("in_values")
-        @ExcludeMissing
         fun inValues(inValues: JsonField<List<String>>) = apply { this.inValues = inValues }
 
         /**
@@ -167,8 +168,6 @@ private constructor(
          * pass the filter if its property value is included in this list. If null or empty, all
          * property values will pass the filter. Must be non-empty if present.
          */
-        @JsonProperty("not_in_values")
-        @ExcludeMissing
         fun notInValues(notInValues: JsonField<List<String>>) = apply {
             this.notInValues = notInValues
         }
@@ -178,7 +177,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }

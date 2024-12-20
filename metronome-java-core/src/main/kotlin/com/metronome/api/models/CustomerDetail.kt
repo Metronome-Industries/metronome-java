@@ -6,31 +6,41 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = CustomerDetail.Builder::class)
 @NoAutoDetect
 class CustomerDetail
+@JsonCreator
 private constructor(
-    private val id: JsonField<String>,
-    private val externalId: JsonField<String>,
-    private val ingestAliases: JsonField<List<String>>,
-    private val name: JsonField<String>,
-    private val customerConfig: JsonField<CustomerConfig>,
-    private val customFields: JsonField<CustomFields>,
-    private val currentBillableStatus: JsonField<CurrentBillableStatus>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("external_id")
+    @ExcludeMissing
+    private val externalId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("ingest_aliases")
+    @ExcludeMissing
+    private val ingestAliases: JsonField<List<String>> = JsonMissing.of(),
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("customer_config")
+    @ExcludeMissing
+    private val customerConfig: JsonField<CustomerConfig> = JsonMissing.of(),
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+    @JsonProperty("current_billable_status")
+    @ExcludeMissing
+    private val currentBillableStatus: JsonField<CurrentBillableStatus> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     /** the Metronome ID of the customer */
@@ -137,7 +147,7 @@ private constructor(
         fun id(id: String) = id(JsonField.of(id))
 
         /** the Metronome ID of the customer */
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         /**
          * (deprecated, use ingest_aliases instead) the first ID (Metronome or ingest alias) that
@@ -149,8 +159,6 @@ private constructor(
          * (deprecated, use ingest_aliases instead) the first ID (Metronome or ingest alias) that
          * can be used in usage events
          */
-        @JsonProperty("external_id")
-        @ExcludeMissing
         fun externalId(externalId: JsonField<String>) = apply { this.externalId = externalId }
 
         /**
@@ -163,31 +171,23 @@ private constructor(
          * aliases for this customer that can be used instead of the Metronome customer ID in usage
          * events
          */
-        @JsonProperty("ingest_aliases")
-        @ExcludeMissing
         fun ingestAliases(ingestAliases: JsonField<List<String>>) = apply {
             this.ingestAliases = ingestAliases
         }
 
         fun name(name: String) = name(JsonField.of(name))
 
-        @JsonProperty("name")
-        @ExcludeMissing
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun customerConfig(customerConfig: CustomerConfig) =
             customerConfig(JsonField.of(customerConfig))
 
-        @JsonProperty("customer_config")
-        @ExcludeMissing
         fun customerConfig(customerConfig: JsonField<CustomerConfig>) = apply {
             this.customerConfig = customerConfig
         }
 
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
-        @JsonProperty("custom_fields")
-        @ExcludeMissing
         fun customFields(customFields: JsonField<CustomFields>) = apply {
             this.customFields = customFields
         }
@@ -197,8 +197,6 @@ private constructor(
             currentBillableStatus(JsonField.of(currentBillableStatus))
 
         /** This field's availability is dependent on your client's configuration. */
-        @JsonProperty("current_billable_status")
-        @ExcludeMissing
         fun currentBillableStatus(currentBillableStatus: JsonField<CurrentBillableStatus>) = apply {
             this.currentBillableStatus = currentBillableStatus
         }
@@ -208,7 +206,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -236,11 +233,12 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = CustomFields.Builder::class)
     @NoAutoDetect
     class CustomFields
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -276,7 +274,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -311,12 +308,15 @@ private constructor(
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = CustomerConfig.Builder::class)
     @NoAutoDetect
     class CustomerConfig
+    @JsonCreator
     private constructor(
-        private val salesforceAccountId: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("salesforce_account_id")
+        @ExcludeMissing
+        private val salesforceAccountId: JsonField<String> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The Salesforce account ID for the customer */
@@ -364,8 +364,6 @@ private constructor(
                 salesforceAccountId(JsonField.of(salesforceAccountId))
 
             /** The Salesforce account ID for the customer */
-            @JsonProperty("salesforce_account_id")
-            @ExcludeMissing
             fun salesforceAccountId(salesforceAccountId: JsonField<String>) = apply {
                 this.salesforceAccountId = salesforceAccountId
             }
@@ -375,7 +373,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -413,13 +410,18 @@ private constructor(
     }
 
     /** This field's availability is dependent on your client's configuration. */
-    @JsonDeserialize(builder = CurrentBillableStatus.Builder::class)
     @NoAutoDetect
     class CurrentBillableStatus
+    @JsonCreator
     private constructor(
-        private val value: JsonField<Value>,
-        private val effectiveAt: JsonField<OffsetDateTime>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("value")
+        @ExcludeMissing
+        private val value: JsonField<Value> = JsonMissing.of(),
+        @JsonProperty("effective_at")
+        @ExcludeMissing
+        private val effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun value(): Value = value.getRequired("value")
@@ -467,14 +469,10 @@ private constructor(
 
             fun value(value: Value) = value(JsonField.of(value))
 
-            @JsonProperty("value")
-            @ExcludeMissing
             fun value(value: JsonField<Value>) = apply { this.value = value }
 
             fun effectiveAt(effectiveAt: OffsetDateTime) = effectiveAt(JsonField.of(effectiveAt))
 
-            @JsonProperty("effective_at")
-            @ExcludeMissing
             fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
                 this.effectiveAt = effectiveAt
             }
@@ -484,7 +482,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

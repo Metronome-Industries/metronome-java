@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -60,16 +61,17 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = ContractListBody.Builder::class)
     @NoAutoDetect
     class ContractListBody
+    @JsonCreator
     internal constructor(
-        private val customerId: String,
-        private val coveringDate: OffsetDateTime?,
-        private val includeArchived: Boolean?,
-        private val includeLedgers: Boolean?,
-        private val startingAt: OffsetDateTime?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("covering_date") private val coveringDate: OffsetDateTime?,
+        @JsonProperty("include_archived") private val includeArchived: Boolean?,
+        @JsonProperty("include_ledgers") private val includeLedgers: Boolean?,
+        @JsonProperty("starting_at") private val startingAt: OffsetDateTime?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("customer_id") fun customerId(): String = customerId
@@ -131,7 +133,6 @@ constructor(
                 additionalProperties = contractListBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             /**
@@ -139,13 +140,11 @@ constructor(
              * effective on the provided date. This cannot be provided if the starting_at filter is
              * provided.
              */
-            @JsonProperty("covering_date")
             fun coveringDate(coveringDate: OffsetDateTime) = apply {
                 this.coveringDate = coveringDate
             }
 
             /** Include archived contracts in the response */
-            @JsonProperty("include_archived")
             fun includeArchived(includeArchived: Boolean) = apply {
                 this.includeArchived = includeArchived
             }
@@ -154,7 +153,6 @@ constructor(
              * Include commit ledgers in the response. Setting this flag may cause the query to be
              * slower.
              */
-            @JsonProperty("include_ledgers")
             fun includeLedgers(includeLedgers: Boolean) = apply {
                 this.includeLedgers = includeLedgers
             }
@@ -164,7 +162,6 @@ constructor(
              * where effective_at is on or after the provided date. This cannot be provided if the
              * covering_date filter is provided.
              */
-            @JsonProperty("starting_at")
             fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -172,7 +169,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

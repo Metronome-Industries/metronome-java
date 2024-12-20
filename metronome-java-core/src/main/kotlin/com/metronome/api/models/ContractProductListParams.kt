@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
@@ -14,6 +13,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
@@ -57,12 +57,13 @@ constructor(
         return queryParams.build()
     }
 
-    @JsonDeserialize(builder = ContractProductListBody.Builder::class)
     @NoAutoDetect
     class ContractProductListBody
+    @JsonCreator
     internal constructor(
-        private val archiveFilter: ArchiveFilter?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("archive_filter") private val archiveFilter: ArchiveFilter?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Filter options for the product list */
@@ -92,7 +93,6 @@ constructor(
             }
 
             /** Filter options for the product list */
-            @JsonProperty("archive_filter")
             fun archiveFilter(archiveFilter: ArchiveFilter) = apply {
                 this.archiveFilter = archiveFilter
             }
@@ -102,7 +102,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

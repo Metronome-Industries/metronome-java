@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -59,16 +60,17 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = ContractSetUsageFilterBody.Builder::class)
     @NoAutoDetect
     class ContractSetUsageFilterBody
+    @JsonCreator
     internal constructor(
-        private val contractId: String,
-        private val customerId: String,
-        private val groupKey: String,
-        private val groupValues: List<String>,
-        private val startingAt: OffsetDateTime,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("contract_id") private val contractId: String,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("group_key") private val groupKey: String,
+        @JsonProperty("group_values") private val groupValues: List<String>,
+        @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("contract_id") fun contractId(): String = contractId
@@ -112,19 +114,14 @@ constructor(
                     contractSetUsageFilterBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("contract_id")
             fun contractId(contractId: String) = apply { this.contractId = contractId }
 
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
-            @JsonProperty("group_key")
             fun groupKey(groupKey: String) = apply { this.groupKey = groupKey }
 
-            @JsonProperty("group_values")
             fun groupValues(groupValues: List<String>) = apply { this.groupValues = groupValues }
 
-            @JsonProperty("starting_at")
             fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -132,7 +129,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

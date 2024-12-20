@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -73,17 +74,18 @@ constructor(
         }
     }
 
-    @JsonDeserialize(builder = CustomerInvoiceAddChargeBody.Builder::class)
     @NoAutoDetect
     class CustomerInvoiceAddChargeBody
+    @JsonCreator
     internal constructor(
-        private val chargeId: String,
-        private val customerPlanId: String,
-        private val description: String,
-        private val invoiceStartTimestamp: OffsetDateTime,
-        private val price: Double,
-        private val quantity: Double,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("charge_id") private val chargeId: String,
+        @JsonProperty("customer_plan_id") private val customerPlanId: String,
+        @JsonProperty("description") private val description: String,
+        @JsonProperty("invoice_start_timestamp") private val invoiceStartTimestamp: OffsetDateTime,
+        @JsonProperty("price") private val price: Double,
+        @JsonProperty("quantity") private val quantity: Double,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /**
@@ -147,20 +149,16 @@ constructor(
              * a product that is not on the current plan, and the product must have only fixed
              * charges.
              */
-            @JsonProperty("charge_id")
             fun chargeId(chargeId: String) = apply { this.chargeId = chargeId }
 
             /** The Metronome ID of the customer plan to add the charge to. */
-            @JsonProperty("customer_plan_id")
             fun customerPlanId(customerPlanId: String) = apply {
                 this.customerPlanId = customerPlanId
             }
 
-            @JsonProperty("description")
             fun description(description: String) = apply { this.description = description }
 
             /** The start_timestamp of the invoice to add the charge to. */
-            @JsonProperty("invoice_start_timestamp")
             fun invoiceStartTimestamp(invoiceStartTimestamp: OffsetDateTime) = apply {
                 this.invoiceStartTimestamp = invoiceStartTimestamp
             }
@@ -169,9 +167,8 @@ constructor(
              * The price of the charge. This price will match the currency on the invoice, e.g. USD
              * cents.
              */
-            @JsonProperty("price") fun price(price: Double) = apply { this.price = price }
+            fun price(price: Double) = apply { this.price = price }
 
-            @JsonProperty("quantity")
             fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -179,7 +176,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

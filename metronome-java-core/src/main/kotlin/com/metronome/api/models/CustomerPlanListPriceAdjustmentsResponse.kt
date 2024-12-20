@@ -6,28 +6,38 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = CustomerPlanListPriceAdjustmentsResponse.Builder::class)
 @NoAutoDetect
 class CustomerPlanListPriceAdjustmentsResponse
+@JsonCreator
 private constructor(
-    private val chargeId: JsonField<String>,
-    private val chargeType: JsonField<ChargeType>,
-    private val startPeriod: JsonField<Double>,
-    private val quantity: JsonField<Double>,
-    private val prices: JsonField<List<Price>>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("charge_id")
+    @ExcludeMissing
+    private val chargeId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("charge_type")
+    @ExcludeMissing
+    private val chargeType: JsonField<ChargeType> = JsonMissing.of(),
+    @JsonProperty("start_period")
+    @ExcludeMissing
+    private val startPeriod: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("quantity")
+    @ExcludeMissing
+    private val quantity: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("prices")
+    @ExcludeMissing
+    private val prices: JsonField<List<Price>> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun chargeId(): String = chargeId.getRequired("charge_id")
@@ -98,32 +108,22 @@ private constructor(
 
         fun chargeId(chargeId: String) = chargeId(JsonField.of(chargeId))
 
-        @JsonProperty("charge_id")
-        @ExcludeMissing
         fun chargeId(chargeId: JsonField<String>) = apply { this.chargeId = chargeId }
 
         fun chargeType(chargeType: ChargeType) = chargeType(JsonField.of(chargeType))
 
-        @JsonProperty("charge_type")
-        @ExcludeMissing
         fun chargeType(chargeType: JsonField<ChargeType>) = apply { this.chargeType = chargeType }
 
         fun startPeriod(startPeriod: Double) = startPeriod(JsonField.of(startPeriod))
 
-        @JsonProperty("start_period")
-        @ExcludeMissing
         fun startPeriod(startPeriod: JsonField<Double>) = apply { this.startPeriod = startPeriod }
 
         fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-        @JsonProperty("quantity")
-        @ExcludeMissing
         fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
         fun prices(prices: List<Price>) = prices(JsonField.of(prices))
 
-        @JsonProperty("prices")
-        @ExcludeMissing
         fun prices(prices: JsonField<List<Price>>) = apply { this.prices = prices }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -131,7 +131,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -232,14 +231,21 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    @JsonDeserialize(builder = Price.Builder::class)
     @NoAutoDetect
     class Price
+    @JsonCreator
     private constructor(
-        private val adjustmentType: JsonField<AdjustmentType>,
-        private val value: JsonField<Double>,
-        private val tier: JsonField<Double>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("adjustment_type")
+        @ExcludeMissing
+        private val adjustmentType: JsonField<AdjustmentType> = JsonMissing.of(),
+        @JsonProperty("value")
+        @ExcludeMissing
+        private val value: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("tier")
+        @ExcludeMissing
+        private val tier: JsonField<Double> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Determines how the value will be applied. */
@@ -300,24 +306,18 @@ private constructor(
                 adjustmentType(JsonField.of(adjustmentType))
 
             /** Determines how the value will be applied. */
-            @JsonProperty("adjustment_type")
-            @ExcludeMissing
             fun adjustmentType(adjustmentType: JsonField<AdjustmentType>) = apply {
                 this.adjustmentType = adjustmentType
             }
 
             fun value(value: Double) = value(JsonField.of(value))
 
-            @JsonProperty("value")
-            @ExcludeMissing
             fun value(value: JsonField<Double>) = apply { this.value = value }
 
             /** Used in pricing tiers. Indicates at what metric value the price applies. */
             fun tier(tier: Double) = tier(JsonField.of(tier))
 
             /** Used in pricing tiers. Indicates at what metric value the price applies. */
-            @JsonProperty("tier")
-            @ExcludeMissing
             fun tier(tier: JsonField<Double>) = apply { this.tier = tier }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -325,7 +325,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

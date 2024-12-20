@@ -4,25 +4,30 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = SchedulePointInTime.Builder::class)
 @NoAutoDetect
 class SchedulePointInTime
+@JsonCreator
 private constructor(
-    private val creditType: JsonField<CreditTypeData>,
-    private val scheduleItems: JsonField<List<ScheduleItem>>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("credit_type")
+    @ExcludeMissing
+    private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
+    @JsonProperty("schedule_items")
+    @ExcludeMissing
+    private val scheduleItems: JsonField<List<ScheduleItem>> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun creditType(): Optional<CreditTypeData> =
@@ -71,8 +76,6 @@ private constructor(
 
         fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
-        @JsonProperty("credit_type")
-        @ExcludeMissing
         fun creditType(creditType: JsonField<CreditTypeData>) = apply {
             this.creditType = creditType
         }
@@ -80,8 +83,6 @@ private constructor(
         fun scheduleItems(scheduleItems: List<ScheduleItem>) =
             scheduleItems(JsonField.of(scheduleItems))
 
-        @JsonProperty("schedule_items")
-        @ExcludeMissing
         fun scheduleItems(scheduleItems: JsonField<List<ScheduleItem>>) = apply {
             this.scheduleItems = scheduleItems
         }
@@ -91,7 +92,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -114,17 +114,28 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = ScheduleItem.Builder::class)
     @NoAutoDetect
     class ScheduleItem
+    @JsonCreator
     private constructor(
-        private val id: JsonField<String>,
-        private val invoiceId: JsonField<String>,
-        private val amount: JsonField<Double>,
-        private val unitPrice: JsonField<Double>,
-        private val quantity: JsonField<Double>,
-        private val timestamp: JsonField<OffsetDateTime>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("invoice_id")
+        @ExcludeMissing
+        private val invoiceId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("amount")
+        @ExcludeMissing
+        private val amount: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("unit_price")
+        @ExcludeMissing
+        private val unitPrice: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("quantity")
+        @ExcludeMissing
+        private val quantity: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("timestamp")
+        @ExcludeMissing
+        private val timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun id(): String = id.getRequired("id")
@@ -199,38 +210,26 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
-            @JsonProperty("id")
-            @ExcludeMissing
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
 
-            @JsonProperty("invoice_id")
-            @ExcludeMissing
             fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
 
             fun amount(amount: Double) = amount(JsonField.of(amount))
 
-            @JsonProperty("amount")
-            @ExcludeMissing
             fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
             fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
 
-            @JsonProperty("unit_price")
-            @ExcludeMissing
             fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
 
             fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-            @JsonProperty("quantity")
-            @ExcludeMissing
             fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
             fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
 
-            @JsonProperty("timestamp")
-            @ExcludeMissing
             fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
                 this.timestamp = timestamp
             }
@@ -240,7 +239,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

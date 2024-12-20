@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
@@ -14,6 +13,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
@@ -97,24 +97,27 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = AlertCreateBody.Builder::class)
     @NoAutoDetect
     class AlertCreateBody
+    @JsonCreator
     internal constructor(
-        private val alertType: AlertType,
-        private val name: String,
-        private val threshold: Double,
-        private val billableMetricId: String?,
+        @JsonProperty("alert_type") private val alertType: AlertType,
+        @JsonProperty("name") private val name: String,
+        @JsonProperty("threshold") private val threshold: Double,
+        @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+        @JsonProperty("credit_grant_type_filters")
         private val creditGrantTypeFilters: List<String>?,
-        private val creditTypeId: String?,
+        @JsonProperty("credit_type_id") private val creditTypeId: String?,
+        @JsonProperty("custom_field_filters")
         private val customFieldFilters: List<CustomFieldFilter>?,
-        private val customerId: String?,
-        private val evaluateOnCreate: Boolean?,
-        private val groupKeyFilter: GroupKeyFilter?,
-        private val invoiceTypesFilter: List<String>?,
-        private val planId: String?,
-        private val uniquenessKey: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("customer_id") private val customerId: String?,
+        @JsonProperty("evaluate_on_create") private val evaluateOnCreate: Boolean?,
+        @JsonProperty("group_key_filter") private val groupKeyFilter: GroupKeyFilter?,
+        @JsonProperty("invoice_types_filter") private val invoiceTypesFilter: List<String>?,
+        @JsonProperty("plan_id") private val planId: String?,
+        @JsonProperty("uniqueness_key") private val uniquenessKey: String?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Type of the alert */
@@ -244,24 +247,21 @@ constructor(
             }
 
             /** Type of the alert */
-            @JsonProperty("alert_type")
             fun alertType(alertType: AlertType) = apply { this.alertType = alertType }
 
             /** Name of the alert */
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = apply { this.name = name }
 
             /**
              * Threshold value of the alert policy. Depending upon the alert type, this number may
              * represent a financial amount, the days remaining, or a percentage reached.
              */
-            @JsonProperty("threshold")
             fun threshold(threshold: Double) = apply { this.threshold = threshold }
 
             /**
              * For alerts of type `usage_threshold_reached`, specifies which billable metric to
              * track the usage for.
              */
-            @JsonProperty("billable_metric_id")
             fun billableMetricId(billableMetricId: String) = apply {
                 this.billableMetricId = billableMetricId
             }
@@ -271,12 +271,10 @@ constructor(
              * to, by looking at the credit_grant_type field on the credit grant. This field is only
              * defined for CreditPercentage and CreditBalance alerts
              */
-            @JsonProperty("credit_grant_type_filters")
             fun creditGrantTypeFilters(creditGrantTypeFilters: List<String>) = apply {
                 this.creditGrantTypeFilters = creditGrantTypeFilters
             }
 
-            @JsonProperty("credit_type_id")
             fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
             /**
@@ -284,7 +282,6 @@ constructor(
              * your client's configuration. A list of custom field filters for alert types that
              * support advanced filtering
              */
-            @JsonProperty("custom_field_filters")
             fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>) = apply {
                 this.customFieldFilters = customFieldFilters
             }
@@ -293,7 +290,6 @@ constructor(
              * If provided, will create this alert for this specific customer. To create an alert
              * for all customers, do not specify `customer_id` or `plan_id`.
              */
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             /**
@@ -301,7 +297,6 @@ constructor(
              * threshold. If false, it will only evaluate on future customers that trigger the alert
              * threshold. Defaults to true.
              */
-            @JsonProperty("evaluate_on_create")
             fun evaluateOnCreate(evaluateOnCreate: Boolean) = apply {
                 this.evaluateOnCreate = evaluateOnCreate
             }
@@ -310,7 +305,6 @@ constructor(
              * Scopes alert evaluation to a specific presentation group key on individual line
              * items. Only present for spend alerts.
              */
-            @JsonProperty("group_key_filter")
             fun groupKeyFilter(groupKeyFilter: GroupKeyFilter) = apply {
                 this.groupKeyFilter = groupKeyFilter
             }
@@ -318,7 +312,6 @@ constructor(
             /**
              * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
              */
-            @JsonProperty("invoice_types_filter")
             fun invoiceTypesFilter(invoiceTypesFilter: List<String>) = apply {
                 this.invoiceTypesFilter = invoiceTypesFilter
             }
@@ -327,14 +320,13 @@ constructor(
              * If provided, will create this alert for this specific plan. To create an alert for
              * all customers, do not specify `customer_id` or `plan_id`.
              */
-            @JsonProperty("plan_id") fun planId(planId: String) = apply { this.planId = planId }
+            fun planId(planId: String) = apply { this.planId = planId }
 
             /**
              * Prevents the creation of duplicates. If a request to create a record is made with a
              * previously used uniqueness key, a new record will not be created and the request will
              * fail with a 409 error.
              */
-            @JsonProperty("uniqueness_key")
             fun uniquenessKey(uniquenessKey: String) = apply { this.uniquenessKey = uniquenessKey }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -342,7 +334,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -855,14 +846,15 @@ constructor(
         override fun toString() = value.toString()
     }
 
-    @JsonDeserialize(builder = CustomFieldFilter.Builder::class)
     @NoAutoDetect
     class CustomFieldFilter
+    @JsonCreator
     private constructor(
-        private val entity: Entity,
-        private val key: String,
-        private val value: String,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("entity") private val entity: Entity,
+        @JsonProperty("key") private val key: String,
+        @JsonProperty("value") private val value: String,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("entity") fun entity(): Entity = entity
@@ -897,18 +889,17 @@ constructor(
                 additionalProperties = customFieldFilter.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("entity") fun entity(entity: Entity) = apply { this.entity = entity }
+            fun entity(entity: Entity) = apply { this.entity = entity }
 
-            @JsonProperty("key") fun key(key: String) = apply { this.key = key }
+            fun key(key: String) = apply { this.key = key }
 
-            @JsonProperty("value") fun value(value: String) = apply { this.value = value }
+            fun value(value: String) = apply { this.value = value }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -1017,13 +1008,14 @@ constructor(
      * Scopes alert evaluation to a specific presentation group key on individual line items. Only
      * present for spend alerts.
      */
-    @JsonDeserialize(builder = GroupKeyFilter.Builder::class)
     @NoAutoDetect
     class GroupKeyFilter
+    @JsonCreator
     private constructor(
-        private val key: String,
-        private val value: String,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("key") private val key: String,
+        @JsonProperty("value") private val value: String,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("key") fun key(): String = key
@@ -1054,16 +1046,15 @@ constructor(
                 additionalProperties = groupKeyFilter.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("key") fun key(key: String) = apply { this.key = key }
+            fun key(key: String) = apply { this.key = key }
 
-            @JsonProperty("value") fun value(value: String) = apply { this.value = value }
+            fun value(value: String) = apply { this.value = value }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

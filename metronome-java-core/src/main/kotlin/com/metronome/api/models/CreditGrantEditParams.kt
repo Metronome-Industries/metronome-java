@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -56,15 +57,16 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = CreditGrantEditBody.Builder::class)
     @NoAutoDetect
     class CreditGrantEditBody
+    @JsonCreator
     internal constructor(
-        private val id: String,
-        private val creditGrantType: String?,
-        private val expiresAt: OffsetDateTime?,
-        private val name: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("id") private val id: String,
+        @JsonProperty("credit_grant_type") private val creditGrantType: String?,
+        @JsonProperty("expires_at") private val expiresAt: OffsetDateTime?,
+        @JsonProperty("name") private val name: String?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** the ID of the credit grant */
@@ -110,27 +112,24 @@ constructor(
             }
 
             /** the ID of the credit grant */
-            @JsonProperty("id") fun id(id: String) = apply { this.id = id }
+            fun id(id: String) = apply { this.id = id }
 
             /** the updated credit grant type */
-            @JsonProperty("credit_grant_type")
             fun creditGrantType(creditGrantType: String) = apply {
                 this.creditGrantType = creditGrantType
             }
 
             /** the updated expiration date for the credit grant */
-            @JsonProperty("expires_at")
             fun expiresAt(expiresAt: OffsetDateTime) = apply { this.expiresAt = expiresAt }
 
             /** the updated name for the credit grant */
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

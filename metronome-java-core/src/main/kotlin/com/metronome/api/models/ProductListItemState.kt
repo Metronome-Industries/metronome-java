@@ -4,39 +4,70 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = ProductListItemState.Builder::class)
 @NoAutoDetect
 class ProductListItemState
+@JsonCreator
 private constructor(
-    private val name: JsonField<String>,
-    private val startingAt: JsonField<OffsetDateTime>,
-    private val netsuiteInternalItemId: JsonField<String>,
-    private val createdAt: JsonField<OffsetDateTime>,
-    private val createdBy: JsonField<String>,
-    private val netsuiteOverageItemId: JsonField<String>,
-    private val billableMetricId: JsonField<String>,
-    private val compositeProductIds: JsonField<List<String>>,
-    private val quantityConversion: JsonField<QuantityConversion>,
-    private val quantityRounding: JsonField<QuantityRounding>,
-    private val compositeTags: JsonField<List<String>>,
-    private val isRefundable: JsonField<Boolean>,
-    private val tags: JsonField<List<String>>,
-    private val excludeFreeUsage: JsonField<Boolean>,
-    private val pricingGroupKey: JsonField<List<String>>,
-    private val presentationGroupKey: JsonField<List<String>>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("starting_at")
+    @ExcludeMissing
+    private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("netsuite_internal_item_id")
+    @ExcludeMissing
+    private val netsuiteInternalItemId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("created_by")
+    @ExcludeMissing
+    private val createdBy: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("netsuite_overage_item_id")
+    @ExcludeMissing
+    private val netsuiteOverageItemId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("billable_metric_id")
+    @ExcludeMissing
+    private val billableMetricId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("composite_product_ids")
+    @ExcludeMissing
+    private val compositeProductIds: JsonField<List<String>> = JsonMissing.of(),
+    @JsonProperty("quantity_conversion")
+    @ExcludeMissing
+    private val quantityConversion: JsonField<QuantityConversion> = JsonMissing.of(),
+    @JsonProperty("quantity_rounding")
+    @ExcludeMissing
+    private val quantityRounding: JsonField<QuantityRounding> = JsonMissing.of(),
+    @JsonProperty("composite_tags")
+    @ExcludeMissing
+    private val compositeTags: JsonField<List<String>> = JsonMissing.of(),
+    @JsonProperty("is_refundable")
+    @ExcludeMissing
+    private val isRefundable: JsonField<Boolean> = JsonMissing.of(),
+    @JsonProperty("tags")
+    @ExcludeMissing
+    private val tags: JsonField<List<String>> = JsonMissing.of(),
+    @JsonProperty("exclude_free_usage")
+    @ExcludeMissing
+    private val excludeFreeUsage: JsonField<Boolean> = JsonMissing.of(),
+    @JsonProperty("pricing_group_key")
+    @ExcludeMissing
+    private val pricingGroupKey: JsonField<List<String>> = JsonMissing.of(),
+    @JsonProperty("presentation_group_key")
+    @ExcludeMissing
+    private val presentationGroupKey: JsonField<List<String>> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun name(): String = name.getRequired("name")
@@ -257,14 +288,10 @@ private constructor(
 
         fun name(name: String) = name(JsonField.of(name))
 
-        @JsonProperty("name")
-        @ExcludeMissing
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
-        @JsonProperty("starting_at")
-        @ExcludeMissing
         fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
             this.startingAt = startingAt
         }
@@ -274,22 +301,16 @@ private constructor(
             netsuiteInternalItemId(JsonField.of(netsuiteInternalItemId))
 
         /** This field's availability is dependent on your client's configuration. */
-        @JsonProperty("netsuite_internal_item_id")
-        @ExcludeMissing
         fun netsuiteInternalItemId(netsuiteInternalItemId: JsonField<String>) = apply {
             this.netsuiteInternalItemId = netsuiteInternalItemId
         }
 
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
-        @JsonProperty("created_at")
-        @ExcludeMissing
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         fun createdBy(createdBy: String) = createdBy(JsonField.of(createdBy))
 
-        @JsonProperty("created_by")
-        @ExcludeMissing
         fun createdBy(createdBy: JsonField<String>) = apply { this.createdBy = createdBy }
 
         /** This field's availability is dependent on your client's configuration. */
@@ -297,8 +318,6 @@ private constructor(
             netsuiteOverageItemId(JsonField.of(netsuiteOverageItemId))
 
         /** This field's availability is dependent on your client's configuration. */
-        @JsonProperty("netsuite_overage_item_id")
-        @ExcludeMissing
         fun netsuiteOverageItemId(netsuiteOverageItemId: JsonField<String>) = apply {
             this.netsuiteOverageItemId = netsuiteOverageItemId
         }
@@ -306,8 +325,6 @@ private constructor(
         fun billableMetricId(billableMetricId: String) =
             billableMetricId(JsonField.of(billableMetricId))
 
-        @JsonProperty("billable_metric_id")
-        @ExcludeMissing
         fun billableMetricId(billableMetricId: JsonField<String>) = apply {
             this.billableMetricId = billableMetricId
         }
@@ -315,8 +332,6 @@ private constructor(
         fun compositeProductIds(compositeProductIds: List<String>) =
             compositeProductIds(JsonField.of(compositeProductIds))
 
-        @JsonProperty("composite_product_ids")
-        @ExcludeMissing
         fun compositeProductIds(compositeProductIds: JsonField<List<String>>) = apply {
             this.compositeProductIds = compositeProductIds
         }
@@ -340,8 +355,6 @@ private constructor(
          * example, data could be sent in MB and priced in GB. In this case, the conversion factor
          * would be 1024 and the operation would be "divide".
          */
-        @JsonProperty("quantity_conversion")
-        @ExcludeMissing
         fun quantityConversion(quantityConversion: JsonField<QuantityConversion>) = apply {
             this.quantityConversion = quantityConversion
         }
@@ -359,16 +372,12 @@ private constructor(
          * the provided rounding method and decimal places. For example, if the method is "round up"
          * and the decimal places is 0, then the quantity will be rounded up to the nearest integer.
          */
-        @JsonProperty("quantity_rounding")
-        @ExcludeMissing
         fun quantityRounding(quantityRounding: JsonField<QuantityRounding>) = apply {
             this.quantityRounding = quantityRounding
         }
 
         fun compositeTags(compositeTags: List<String>) = compositeTags(JsonField.of(compositeTags))
 
-        @JsonProperty("composite_tags")
-        @ExcludeMissing
         fun compositeTags(compositeTags: JsonField<List<String>>) = apply {
             this.compositeTags = compositeTags
         }
@@ -377,23 +386,17 @@ private constructor(
         fun isRefundable(isRefundable: Boolean) = isRefundable(JsonField.of(isRefundable))
 
         /** This field's availability is dependent on your client's configuration. */
-        @JsonProperty("is_refundable")
-        @ExcludeMissing
         fun isRefundable(isRefundable: JsonField<Boolean>) = apply {
             this.isRefundable = isRefundable
         }
 
         fun tags(tags: List<String>) = tags(JsonField.of(tags))
 
-        @JsonProperty("tags")
-        @ExcludeMissing
         fun tags(tags: JsonField<List<String>>) = apply { this.tags = tags }
 
         fun excludeFreeUsage(excludeFreeUsage: Boolean) =
             excludeFreeUsage(JsonField.of(excludeFreeUsage))
 
-        @JsonProperty("exclude_free_usage")
-        @ExcludeMissing
         fun excludeFreeUsage(excludeFreeUsage: JsonField<Boolean>) = apply {
             this.excludeFreeUsage = excludeFreeUsage
         }
@@ -413,8 +416,6 @@ private constructor(
          * the pricing group key and presentation group key must be set as one compound group key on
          * the billable metric.
          */
-        @JsonProperty("pricing_group_key")
-        @ExcludeMissing
         fun pricingGroupKey(pricingGroupKey: JsonField<List<String>>) = apply {
             this.pricingGroupKey = pricingGroupKey
         }
@@ -432,8 +433,6 @@ private constructor(
          * the pricing group key and presentation group key must be set as one compound group key on
          * the billable metric.
          */
-        @JsonProperty("presentation_group_key")
-        @ExcludeMissing
         fun presentationGroupKey(presentationGroupKey: JsonField<List<String>>) = apply {
             this.presentationGroupKey = presentationGroupKey
         }
@@ -443,7 +442,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }

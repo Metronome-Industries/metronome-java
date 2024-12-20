@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 
@@ -49,12 +50,13 @@ constructor(
         }
     }
 
-    @JsonDeserialize(builder = CustomerSetIngestAliasesBody.Builder::class)
     @NoAutoDetect
     class CustomerSetIngestAliasesBody
+    @JsonCreator
     internal constructor(
-        private val ingestAliases: List<String>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("ingest_aliases") private val ingestAliases: List<String>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("ingest_aliases") fun ingestAliases(): List<String> = ingestAliases
@@ -82,7 +84,6 @@ constructor(
                     customerSetIngestAliasesBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("ingest_aliases")
             fun ingestAliases(ingestAliases: List<String>) = apply {
                 this.ingestAliases = ingestAliases
             }
@@ -92,7 +93,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

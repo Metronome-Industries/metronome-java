@@ -4,24 +4,25 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = Tier.Builder::class)
 @NoAutoDetect
 class Tier
+@JsonCreator
 private constructor(
-    private val size: JsonField<Double>,
-    private val price: JsonField<Double>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("size") @ExcludeMissing private val size: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("price") @ExcludeMissing private val price: JsonField<Double> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun size(): Optional<Double> = Optional.ofNullable(size.getNullable("size"))
@@ -68,14 +69,10 @@ private constructor(
 
         fun size(size: Double) = size(JsonField.of(size))
 
-        @JsonProperty("size")
-        @ExcludeMissing
         fun size(size: JsonField<Double>) = apply { this.size = size }
 
         fun price(price: Double) = price(JsonField.of(price))
 
-        @JsonProperty("price")
-        @ExcludeMissing
         fun price(price: JsonField<Double>) = apply { this.price = price }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -83,7 +80,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }

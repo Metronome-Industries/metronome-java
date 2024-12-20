@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
@@ -14,6 +13,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
@@ -52,13 +52,14 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = ContractCreateHistoricalInvoicesBody.Builder::class)
     @NoAutoDetect
     class ContractCreateHistoricalInvoicesBody
+    @JsonCreator
     internal constructor(
-        private val invoices: List<Invoice>,
-        private val preview: Boolean,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("invoices") private val invoices: List<Invoice>,
+        @JsonProperty("preview") private val preview: Boolean,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("invoices") fun invoices(): List<Invoice> = invoices
@@ -92,10 +93,8 @@ constructor(
                     contractCreateHistoricalInvoicesBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("invoices")
             fun invoices(invoices: List<Invoice>) = apply { this.invoices = invoices }
 
-            @JsonProperty("preview")
             fun preview(preview: Boolean) = apply { this.preview = preview }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -103,7 +102,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -313,21 +311,23 @@ constructor(
             )
     }
 
-    @JsonDeserialize(builder = Invoice.Builder::class)
     @NoAutoDetect
     class Invoice
+    @JsonCreator
     private constructor(
-        private val customerId: String,
-        private val contractId: String,
-        private val creditTypeId: String,
-        private val inclusiveStartDate: OffsetDateTime,
-        private val exclusiveEndDate: OffsetDateTime,
-        private val issueDate: OffsetDateTime,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("contract_id") private val contractId: String,
+        @JsonProperty("credit_type_id") private val creditTypeId: String,
+        @JsonProperty("inclusive_start_date") private val inclusiveStartDate: OffsetDateTime,
+        @JsonProperty("exclusive_end_date") private val exclusiveEndDate: OffsetDateTime,
+        @JsonProperty("issue_date") private val issueDate: OffsetDateTime,
+        @JsonProperty("breakdown_granularity")
         private val breakdownGranularity: BreakdownGranularity?,
-        private val usageLineItems: List<UsageLineItem>,
-        private val billableStatus: BillableStatus?,
-        private val customFields: CustomFields?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("usage_line_items") private val usageLineItems: List<UsageLineItem>,
+        @JsonProperty("billable_status") private val billableStatus: BillableStatus?,
+        @JsonProperty("custom_fields") private val customFields: CustomFields?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("customer_id") fun customerId(): String = customerId
@@ -397,45 +397,35 @@ constructor(
                 additionalProperties = invoice.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
-            @JsonProperty("contract_id")
             fun contractId(contractId: String) = apply { this.contractId = contractId }
 
-            @JsonProperty("credit_type_id")
             fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
-            @JsonProperty("inclusive_start_date")
             fun inclusiveStartDate(inclusiveStartDate: OffsetDateTime) = apply {
                 this.inclusiveStartDate = inclusiveStartDate
             }
 
-            @JsonProperty("exclusive_end_date")
             fun exclusiveEndDate(exclusiveEndDate: OffsetDateTime) = apply {
                 this.exclusiveEndDate = exclusiveEndDate
             }
 
-            @JsonProperty("issue_date")
             fun issueDate(issueDate: OffsetDateTime) = apply { this.issueDate = issueDate }
 
-            @JsonProperty("breakdown_granularity")
             fun breakdownGranularity(breakdownGranularity: BreakdownGranularity) = apply {
                 this.breakdownGranularity = breakdownGranularity
             }
 
-            @JsonProperty("usage_line_items")
             fun usageLineItems(usageLineItems: List<UsageLineItem>) = apply {
                 this.usageLineItems = usageLineItems
             }
 
             /** This field's availability is dependent on your client's configuration. */
-            @JsonProperty("billable_status")
             fun billableStatus(billableStatus: BillableStatus) = apply {
                 this.billableStatus = billableStatus
             }
 
-            @JsonProperty("custom_fields")
             fun customFields(customFields: CustomFields) = apply {
                 this.customFields = customFields
             }
@@ -445,7 +435,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -481,18 +470,22 @@ constructor(
                 )
         }
 
-        @JsonDeserialize(builder = UsageLineItem.Builder::class)
         @NoAutoDetect
         class UsageLineItem
+        @JsonCreator
         private constructor(
-            private val productId: String,
-            private val inclusiveStartDate: OffsetDateTime,
-            private val exclusiveEndDate: OffsetDateTime,
-            private val quantity: Double?,
+            @JsonProperty("product_id") private val productId: String,
+            @JsonProperty("inclusive_start_date") private val inclusiveStartDate: OffsetDateTime,
+            @JsonProperty("exclusive_end_date") private val exclusiveEndDate: OffsetDateTime,
+            @JsonProperty("quantity") private val quantity: Double?,
+            @JsonProperty("pricing_group_values")
             private val pricingGroupValues: PricingGroupValues?,
+            @JsonProperty("presentation_group_values")
             private val presentationGroupValues: PresentationGroupValues?,
+            @JsonProperty("subtotals_with_quantity")
             private val subtotalsWithQuantity: List<SubtotalsWithQuantity>?,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonProperty("product_id") fun productId(): String = productId
@@ -552,34 +545,27 @@ constructor(
                     additionalProperties = usageLineItem.additionalProperties.toMutableMap()
                 }
 
-                @JsonProperty("product_id")
                 fun productId(productId: String) = apply { this.productId = productId }
 
-                @JsonProperty("inclusive_start_date")
                 fun inclusiveStartDate(inclusiveStartDate: OffsetDateTime) = apply {
                     this.inclusiveStartDate = inclusiveStartDate
                 }
 
-                @JsonProperty("exclusive_end_date")
                 fun exclusiveEndDate(exclusiveEndDate: OffsetDateTime) = apply {
                     this.exclusiveEndDate = exclusiveEndDate
                 }
 
-                @JsonProperty("quantity")
                 fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
-                @JsonProperty("pricing_group_values")
                 fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
                     this.pricingGroupValues = pricingGroupValues
                 }
 
-                @JsonProperty("presentation_group_values")
                 fun presentationGroupValues(presentationGroupValues: PresentationGroupValues) =
                     apply {
                         this.presentationGroupValues = presentationGroupValues
                     }
 
-                @JsonProperty("subtotals_with_quantity")
                 fun subtotalsWithQuantity(subtotalsWithQuantity: List<SubtotalsWithQuantity>) =
                     apply {
                         this.subtotalsWithQuantity = subtotalsWithQuantity
@@ -590,7 +576,6 @@ constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -625,11 +610,12 @@ constructor(
                     )
             }
 
-            @JsonDeserialize(builder = PresentationGroupValues.Builder::class)
             @NoAutoDetect
             class PresentationGroupValues
+            @JsonCreator
             private constructor(
-                private val additionalProperties: Map<String, JsonValue>,
+                @JsonAnySetter
+                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
                 @JsonAnyGetter
@@ -658,7 +644,6 @@ constructor(
                         putAllAdditionalProperties(additionalProperties)
                     }
 
-                    @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                         additionalProperties.put(key, value)
                     }
@@ -698,11 +683,12 @@ constructor(
                     "PresentationGroupValues{additionalProperties=$additionalProperties}"
             }
 
-            @JsonDeserialize(builder = PricingGroupValues.Builder::class)
             @NoAutoDetect
             class PricingGroupValues
+            @JsonCreator
             private constructor(
-                private val additionalProperties: Map<String, JsonValue>,
+                @JsonAnySetter
+                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
                 @JsonAnyGetter
@@ -731,7 +717,6 @@ constructor(
                         putAllAdditionalProperties(additionalProperties)
                     }
 
-                    @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                         additionalProperties.put(key, value)
                     }
@@ -771,14 +756,16 @@ constructor(
                     "PricingGroupValues{additionalProperties=$additionalProperties}"
             }
 
-            @JsonDeserialize(builder = SubtotalsWithQuantity.Builder::class)
             @NoAutoDetect
             class SubtotalsWithQuantity
+            @JsonCreator
             private constructor(
+                @JsonProperty("inclusive_start_date")
                 private val inclusiveStartDate: OffsetDateTime,
-                private val exclusiveEndDate: OffsetDateTime,
-                private val quantity: Double,
-                private val additionalProperties: Map<String, JsonValue>,
+                @JsonProperty("exclusive_end_date") private val exclusiveEndDate: OffsetDateTime,
+                @JsonProperty("quantity") private val quantity: Double,
+                @JsonAnySetter
+                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
                 @JsonProperty("inclusive_start_date")
@@ -816,17 +803,14 @@ constructor(
                             subtotalsWithQuantity.additionalProperties.toMutableMap()
                     }
 
-                    @JsonProperty("inclusive_start_date")
                     fun inclusiveStartDate(inclusiveStartDate: OffsetDateTime) = apply {
                         this.inclusiveStartDate = inclusiveStartDate
                     }
 
-                    @JsonProperty("exclusive_end_date")
                     fun exclusiveEndDate(exclusiveEndDate: OffsetDateTime) = apply {
                         this.exclusiveEndDate = exclusiveEndDate
                     }
 
-                    @JsonProperty("quantity")
                     fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -834,7 +818,6 @@ constructor(
                         putAllAdditionalProperties(additionalProperties)
                     }
 
-                    @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                         additionalProperties.put(key, value)
                     }
@@ -1016,11 +999,12 @@ constructor(
             override fun toString() = value.toString()
         }
 
-        @JsonDeserialize(builder = CustomFields.Builder::class)
         @NoAutoDetect
         class CustomFields
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -1048,7 +1032,6 @@ constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }

@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -51,14 +52,15 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = CustomerCreditUpdateEndDateBody.Builder::class)
     @NoAutoDetect
     class CustomerCreditUpdateEndDateBody
+    @JsonCreator
     internal constructor(
-        private val accessEndingBefore: OffsetDateTime,
-        private val creditId: String,
-        private val customerId: String,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("access_ending_before") private val accessEndingBefore: OffsetDateTime,
+        @JsonProperty("credit_id") private val creditId: String,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /**
@@ -106,17 +108,14 @@ constructor(
              * RFC 3339 timestamp indicating when access to the credit will end and it will no
              * longer be possible to draw it down (exclusive).
              */
-            @JsonProperty("access_ending_before")
             fun accessEndingBefore(accessEndingBefore: OffsetDateTime) = apply {
                 this.accessEndingBefore = accessEndingBefore
             }
 
             /** ID of the commit to update */
-            @JsonProperty("credit_id")
             fun creditId(creditId: String) = apply { this.creditId = creditId }
 
             /** ID of the customer whose credit is to be updated */
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -124,7 +123,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

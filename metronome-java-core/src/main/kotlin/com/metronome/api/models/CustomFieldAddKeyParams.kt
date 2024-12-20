@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
@@ -14,6 +13,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
@@ -54,14 +54,15 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = CustomFieldAddKeyBody.Builder::class)
     @NoAutoDetect
     class CustomFieldAddKeyBody
+    @JsonCreator
     internal constructor(
-        private val enforceUniqueness: Boolean,
-        private val entity: Entity,
-        private val key: String,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("enforce_uniqueness") private val enforceUniqueness: Boolean,
+        @JsonProperty("entity") private val entity: Entity,
+        @JsonProperty("key") private val key: String,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("enforce_uniqueness") fun enforceUniqueness(): Boolean = enforceUniqueness
@@ -96,21 +97,19 @@ constructor(
                 additionalProperties = customFieldAddKeyBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("enforce_uniqueness")
             fun enforceUniqueness(enforceUniqueness: Boolean) = apply {
                 this.enforceUniqueness = enforceUniqueness
             }
 
-            @JsonProperty("entity") fun entity(entity: Entity) = apply { this.entity = entity }
+            fun entity(entity: Entity) = apply { this.entity = entity }
 
-            @JsonProperty("key") fun key(key: String) = apply { this.key = key }
+            fun key(key: String) = apply { this.key = key }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

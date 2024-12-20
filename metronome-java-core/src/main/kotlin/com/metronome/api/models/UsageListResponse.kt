@@ -4,25 +4,30 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = UsageListResponse.Builder::class)
 @NoAutoDetect
 class UsageListResponse
+@JsonCreator
 private constructor(
-    private val data: JsonField<List<Data>>,
-    private val nextPage: JsonField<String>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("data")
+    @ExcludeMissing
+    private val data: JsonField<List<Data>> = JsonMissing.of(),
+    @JsonProperty("next_page")
+    @ExcludeMissing
+    private val nextPage: JsonField<String> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun data(): List<Data> = data.getRequired("data")
@@ -69,14 +74,10 @@ private constructor(
 
         fun data(data: List<Data>) = data(JsonField.of(data))
 
-        @JsonProperty("data")
-        @ExcludeMissing
         fun data(data: JsonField<List<Data>>) = apply { this.data = data }
 
         fun nextPage(nextPage: String) = nextPage(JsonField.of(nextPage))
 
-        @JsonProperty("next_page")
-        @ExcludeMissing
         fun nextPage(nextPage: JsonField<String>) = apply { this.nextPage = nextPage }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -84,7 +85,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -107,18 +107,33 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = Data.Builder::class)
     @NoAutoDetect
     class Data
+    @JsonCreator
     private constructor(
-        private val customerId: JsonField<String>,
-        private val billableMetricId: JsonField<String>,
-        private val billableMetricName: JsonField<String>,
-        private val startTimestamp: JsonField<OffsetDateTime>,
-        private val endTimestamp: JsonField<OffsetDateTime>,
-        private val value: JsonField<Double>,
-        private val groups: JsonField<Groups>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("billable_metric_id")
+        @ExcludeMissing
+        private val billableMetricId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("billable_metric_name")
+        @ExcludeMissing
+        private val billableMetricName: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("start_timestamp")
+        @ExcludeMissing
+        private val startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("end_timestamp")
+        @ExcludeMissing
+        private val endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("value")
+        @ExcludeMissing
+        private val value: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("groups")
+        @ExcludeMissing
+        private val groups: JsonField<Groups> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun customerId(): String = customerId.getRequired("customer_id")
@@ -212,15 +227,11 @@ private constructor(
 
             fun customerId(customerId: String) = customerId(JsonField.of(customerId))
 
-            @JsonProperty("customer_id")
-            @ExcludeMissing
             fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             fun billableMetricId(billableMetricId: String) =
                 billableMetricId(JsonField.of(billableMetricId))
 
-            @JsonProperty("billable_metric_id")
-            @ExcludeMissing
             fun billableMetricId(billableMetricId: JsonField<String>) = apply {
                 this.billableMetricId = billableMetricId
             }
@@ -228,8 +239,6 @@ private constructor(
             fun billableMetricName(billableMetricName: String) =
                 billableMetricName(JsonField.of(billableMetricName))
 
-            @JsonProperty("billable_metric_name")
-            @ExcludeMissing
             fun billableMetricName(billableMetricName: JsonField<String>) = apply {
                 this.billableMetricName = billableMetricName
             }
@@ -237,8 +246,6 @@ private constructor(
             fun startTimestamp(startTimestamp: OffsetDateTime) =
                 startTimestamp(JsonField.of(startTimestamp))
 
-            @JsonProperty("start_timestamp")
-            @ExcludeMissing
             fun startTimestamp(startTimestamp: JsonField<OffsetDateTime>) = apply {
                 this.startTimestamp = startTimestamp
             }
@@ -246,16 +253,12 @@ private constructor(
             fun endTimestamp(endTimestamp: OffsetDateTime) =
                 endTimestamp(JsonField.of(endTimestamp))
 
-            @JsonProperty("end_timestamp")
-            @ExcludeMissing
             fun endTimestamp(endTimestamp: JsonField<OffsetDateTime>) = apply {
                 this.endTimestamp = endTimestamp
             }
 
             fun value(value: Double) = value(JsonField.of(value))
 
-            @JsonProperty("value")
-            @ExcludeMissing
             fun value(value: JsonField<Double>) = apply { this.value = value }
 
             /**
@@ -268,8 +271,6 @@ private constructor(
              * Values will be either a number or null. Null indicates that there were no matches for
              * the group_by value.
              */
-            @JsonProperty("groups")
-            @ExcludeMissing
             fun groups(groups: JsonField<Groups>) = apply { this.groups = groups }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -277,7 +278,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -309,11 +309,12 @@ private constructor(
          * Values will be either a number or null. Null indicates that there were no matches for the
          * group_by value.
          */
-        @JsonDeserialize(builder = Groups.Builder::class)
         @NoAutoDetect
         class Groups
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -349,7 +350,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }

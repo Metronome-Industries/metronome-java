@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
@@ -50,12 +51,13 @@ constructor(
         return queryParams.build()
     }
 
-    @JsonDeserialize(builder = ContractRateCardListBody.Builder::class)
     @NoAutoDetect
     class ContractRateCardListBody
+    @JsonCreator
     internal constructor(
-        private val body: JsonValue,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("body") private val body: JsonValue,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("body") fun body(): JsonValue = body
@@ -82,14 +84,13 @@ constructor(
                 additionalProperties = contractRateCardListBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("body") fun body(body: JsonValue) = apply { this.body = body }
+            fun body(body: JsonValue) = apply { this.body = body }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

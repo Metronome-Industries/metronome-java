@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
@@ -14,6 +13,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
@@ -60,13 +60,14 @@ constructor(
         return queryParams.build()
     }
 
-    @JsonDeserialize(builder = CustomerAlertListBody.Builder::class)
     @NoAutoDetect
     class CustomerAlertListBody
+    @JsonCreator
     internal constructor(
-        private val customerId: String,
-        private val alertStatuses: List<AlertStatus>?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("alert_statuses") private val alertStatuses: List<AlertStatus>?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The Metronome ID of the customer */
@@ -101,13 +102,11 @@ constructor(
             }
 
             /** The Metronome ID of the customer */
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             /**
              * Optionally filter by alert status. If absent, only enabled alerts will be returned.
              */
-            @JsonProperty("alert_statuses")
             fun alertStatuses(alertStatuses: List<AlertStatus>) = apply {
                 this.alertStatuses = alertStatuses
             }
@@ -117,7 +116,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

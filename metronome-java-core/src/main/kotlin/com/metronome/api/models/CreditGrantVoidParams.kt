@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
@@ -52,14 +53,16 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = CreditGrantVoidBody.Builder::class)
     @NoAutoDetect
     class CreditGrantVoidBody
+    @JsonCreator
     internal constructor(
-        private val id: String,
-        private val releaseUniquenessKey: Boolean?,
+        @JsonProperty("id") private val id: String,
+        @JsonProperty("release_uniqueness_key") private val releaseUniquenessKey: Boolean?,
+        @JsonProperty("void_credit_purchase_invoice")
         private val voidCreditPurchaseInvoice: Boolean?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("id") fun id(): String = id
@@ -99,16 +102,14 @@ constructor(
                 additionalProperties = creditGrantVoidBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("id") fun id(id: String) = apply { this.id = id }
+            fun id(id: String) = apply { this.id = id }
 
             /** If true, resets the uniqueness key on this grant so it can be re-used */
-            @JsonProperty("release_uniqueness_key")
             fun releaseUniquenessKey(releaseUniquenessKey: Boolean) = apply {
                 this.releaseUniquenessKey = releaseUniquenessKey
             }
 
             /** If true, void the purchase invoice associated with the grant */
-            @JsonProperty("void_credit_purchase_invoice")
             fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Boolean) = apply {
                 this.voidCreditPurchaseInvoice = voidCreditPurchaseInvoice
             }
@@ -118,7 +119,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

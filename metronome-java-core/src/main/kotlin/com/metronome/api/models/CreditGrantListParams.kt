@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -73,16 +74,17 @@ constructor(
         return queryParams.build()
     }
 
-    @JsonDeserialize(builder = CreditGrantListBody.Builder::class)
     @NoAutoDetect
     class CreditGrantListBody
+    @JsonCreator
     internal constructor(
-        private val creditGrantIds: List<String>?,
-        private val creditTypeIds: List<String>?,
-        private val customerIds: List<String>?,
-        private val effectiveBefore: OffsetDateTime?,
-        private val notExpiringBefore: OffsetDateTime?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("credit_grant_ids") private val creditGrantIds: List<String>?,
+        @JsonProperty("credit_type_ids") private val creditTypeIds: List<String>?,
+        @JsonProperty("customer_ids") private val customerIds: List<String>?,
+        @JsonProperty("effective_before") private val effectiveBefore: OffsetDateTime?,
+        @JsonProperty("not_expiring_before") private val notExpiringBefore: OffsetDateTime?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /**
@@ -147,7 +149,6 @@ constructor(
              * An array of credit grant IDs. If this is specified, neither credit_type_ids nor
              * customer_ids may be specified.
              */
-            @JsonProperty("credit_grant_ids")
             fun creditGrantIds(creditGrantIds: List<String>) = apply {
                 this.creditGrantIds = creditGrantIds
             }
@@ -156,7 +157,6 @@ constructor(
              * An array of credit type IDs. This must not be specified if credit_grant_ids is
              * specified.
              */
-            @JsonProperty("credit_type_ids")
             fun creditTypeIds(creditTypeIds: List<String>) = apply {
                 this.creditTypeIds = creditTypeIds
             }
@@ -165,17 +165,14 @@ constructor(
              * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
              * specified.
              */
-            @JsonProperty("customer_ids")
             fun customerIds(customerIds: List<String>) = apply { this.customerIds = customerIds }
 
             /** Only return credit grants that are effective before this timestamp (exclusive). */
-            @JsonProperty("effective_before")
             fun effectiveBefore(effectiveBefore: OffsetDateTime) = apply {
                 this.effectiveBefore = effectiveBefore
             }
 
             /** Only return credit grants that expire at or after this timestamp. */
-            @JsonProperty("not_expiring_before")
             fun notExpiringBefore(notExpiringBefore: OffsetDateTime) = apply {
                 this.notExpiringBefore = notExpiringBefore
             }
@@ -185,7 +182,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

@@ -4,25 +4,30 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = CreditGrantListEntriesResponse.Builder::class)
 @NoAutoDetect
 class CreditGrantListEntriesResponse
+@JsonCreator
 private constructor(
-    private val data: JsonField<List<Data>>,
-    private val nextPage: JsonField<String>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("data")
+    @ExcludeMissing
+    private val data: JsonField<List<Data>> = JsonMissing.of(),
+    @JsonProperty("next_page")
+    @ExcludeMissing
+    private val nextPage: JsonField<String> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun data(): List<Data> = data.getRequired("data")
@@ -70,14 +75,10 @@ private constructor(
 
         fun data(data: List<Data>) = data(JsonField.of(data))
 
-        @JsonProperty("data")
-        @ExcludeMissing
         fun data(data: JsonField<List<Data>>) = apply { this.data = data }
 
         fun nextPage(nextPage: String) = nextPage(JsonField.of(nextPage))
 
-        @JsonProperty("next_page")
-        @ExcludeMissing
         fun nextPage(nextPage: JsonField<String>) = apply { this.nextPage = nextPage }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -85,7 +86,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -108,13 +108,18 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = Data.Builder::class)
     @NoAutoDetect
     class Data
+    @JsonCreator
     private constructor(
-        private val customerId: JsonField<String>,
-        private val ledgers: JsonField<List<Ledger>>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("ledgers")
+        @ExcludeMissing
+        private val ledgers: JsonField<List<Ledger>> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun customerId(): String = customerId.getRequired("customer_id")
@@ -161,14 +166,10 @@ private constructor(
 
             fun customerId(customerId: String) = customerId(JsonField.of(customerId))
 
-            @JsonProperty("customer_id")
-            @ExcludeMissing
             fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             fun ledgers(ledgers: List<Ledger>) = ledgers(JsonField.of(ledgers))
 
-            @JsonProperty("ledgers")
-            @ExcludeMissing
             fun ledgers(ledgers: JsonField<List<Ledger>>) = apply { this.ledgers = ledgers }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -176,7 +177,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -199,16 +199,27 @@ private constructor(
                 )
         }
 
-        @JsonDeserialize(builder = Ledger.Builder::class)
         @NoAutoDetect
         class Ledger
+        @JsonCreator
         private constructor(
-            private val creditType: JsonField<CreditTypeData>,
-            private val startingBalance: JsonField<StartingBalance>,
-            private val endingBalance: JsonField<EndingBalance>,
-            private val entries: JsonField<List<CreditLedgerEntry>>,
-            private val pendingEntries: JsonField<List<CreditLedgerEntry>>,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("credit_type")
+            @ExcludeMissing
+            private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
+            @JsonProperty("starting_balance")
+            @ExcludeMissing
+            private val startingBalance: JsonField<StartingBalance> = JsonMissing.of(),
+            @JsonProperty("ending_balance")
+            @ExcludeMissing
+            private val endingBalance: JsonField<EndingBalance> = JsonMissing.of(),
+            @JsonProperty("entries")
+            @ExcludeMissing
+            private val entries: JsonField<List<CreditLedgerEntry>> = JsonMissing.of(),
+            @JsonProperty("pending_entries")
+            @ExcludeMissing
+            private val pendingEntries: JsonField<List<CreditLedgerEntry>> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
@@ -281,8 +292,6 @@ private constructor(
 
                 fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
-                @JsonProperty("credit_type")
-                @ExcludeMissing
                 fun creditType(creditType: JsonField<CreditTypeData>) = apply {
                     this.creditType = creditType
                 }
@@ -290,8 +299,6 @@ private constructor(
                 fun startingBalance(startingBalance: StartingBalance) =
                     startingBalance(JsonField.of(startingBalance))
 
-                @JsonProperty("starting_balance")
-                @ExcludeMissing
                 fun startingBalance(startingBalance: JsonField<StartingBalance>) = apply {
                     this.startingBalance = startingBalance
                 }
@@ -301,16 +308,12 @@ private constructor(
                     endingBalance(JsonField.of(endingBalance))
 
                 /** the effective balances at the end of the specified time window */
-                @JsonProperty("ending_balance")
-                @ExcludeMissing
                 fun endingBalance(endingBalance: JsonField<EndingBalance>) = apply {
                     this.endingBalance = endingBalance
                 }
 
                 fun entries(entries: List<CreditLedgerEntry>) = entries(JsonField.of(entries))
 
-                @JsonProperty("entries")
-                @ExcludeMissing
                 fun entries(entries: JsonField<List<CreditLedgerEntry>>) = apply {
                     this.entries = entries
                 }
@@ -318,8 +321,6 @@ private constructor(
                 fun pendingEntries(pendingEntries: List<CreditLedgerEntry>) =
                     pendingEntries(JsonField.of(pendingEntries))
 
-                @JsonProperty("pending_entries")
-                @ExcludeMissing
                 fun pendingEntries(pendingEntries: JsonField<List<CreditLedgerEntry>>) = apply {
                     this.pendingEntries = pendingEntries
                 }
@@ -329,7 +330,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -359,14 +359,21 @@ private constructor(
             }
 
             /** the effective balances at the end of the specified time window */
-            @JsonDeserialize(builder = EndingBalance.Builder::class)
             @NoAutoDetect
             class EndingBalance
+            @JsonCreator
             private constructor(
-                private val excludingPending: JsonField<Double>,
-                private val includingPending: JsonField<Double>,
-                private val effectiveAt: JsonField<OffsetDateTime>,
-                private val additionalProperties: Map<String, JsonValue>,
+                @JsonProperty("excluding_pending")
+                @ExcludeMissing
+                private val excludingPending: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("including_pending")
+                @ExcludeMissing
+                private val includingPending: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("effective_at")
+                @ExcludeMissing
+                private val effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonAnySetter
+                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
                 /**
@@ -461,8 +468,6 @@ private constructor(
                      * before the effective_at date and deductions that happened before the
                      * effective_at date
                      */
-                    @JsonProperty("excluding_pending")
-                    @ExcludeMissing
                     fun excludingPending(excludingPending: JsonField<Double>) = apply {
                         this.excludingPending = excludingPending
                     }
@@ -478,8 +483,6 @@ private constructor(
                      * the excluding_pending balance plus any pending invoice deductions and
                      * expirations that will happen by the effective_at date
                      */
-                    @JsonProperty("including_pending")
-                    @ExcludeMissing
                     fun includingPending(includingPending: JsonField<Double>) = apply {
                         this.includingPending = includingPending
                     }
@@ -495,8 +498,6 @@ private constructor(
                      * the ending_before request parameter (if supplied) or the current billing
                      * period's end date
                      */
-                    @JsonProperty("effective_at")
-                    @ExcludeMissing
                     fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
                         this.effectiveAt = effectiveAt
                     }
@@ -506,7 +507,6 @@ private constructor(
                         putAllAdditionalProperties(additionalProperties)
                     }
 
-                    @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                         additionalProperties.put(key, value)
                     }
@@ -551,14 +551,21 @@ private constructor(
                     "EndingBalance{excludingPending=$excludingPending, includingPending=$includingPending, effectiveAt=$effectiveAt, additionalProperties=$additionalProperties}"
             }
 
-            @JsonDeserialize(builder = StartingBalance.Builder::class)
             @NoAutoDetect
             class StartingBalance
+            @JsonCreator
             private constructor(
-                private val excludingPending: JsonField<Double>,
-                private val includingPending: JsonField<Double>,
-                private val effectiveAt: JsonField<OffsetDateTime>,
-                private val additionalProperties: Map<String, JsonValue>,
+                @JsonProperty("excluding_pending")
+                @ExcludeMissing
+                private val excludingPending: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("including_pending")
+                @ExcludeMissing
+                private val includingPending: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("effective_at")
+                @ExcludeMissing
+                private val effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonAnySetter
+                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
                 /**
@@ -649,8 +656,6 @@ private constructor(
                      * the starting balance, including all posted grants, deductions, and
                      * expirations that happened at or before the effective_at timestamp
                      */
-                    @JsonProperty("excluding_pending")
-                    @ExcludeMissing
                     fun excludingPending(excludingPending: JsonField<Double>) = apply {
                         this.excludingPending = excludingPending
                     }
@@ -666,8 +671,6 @@ private constructor(
                      * the excluding_pending balance plus any pending activity that has not been
                      * posted at the time of the query
                      */
-                    @JsonProperty("including_pending")
-                    @ExcludeMissing
                     fun includingPending(includingPending: JsonField<Double>) = apply {
                         this.includingPending = includingPending
                     }
@@ -683,8 +686,6 @@ private constructor(
                      * the starting_on request parameter (if supplied) or the first credit grant's
                      * effective_at date
                      */
-                    @JsonProperty("effective_at")
-                    @ExcludeMissing
                     fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
                         this.effectiveAt = effectiveAt
                     }
@@ -694,7 +695,6 @@ private constructor(
                         putAllAdditionalProperties(additionalProperties)
                     }
 
-                    @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                         additionalProperties.put(key, value)
                     }

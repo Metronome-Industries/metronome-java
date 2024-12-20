@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
@@ -14,6 +13,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
@@ -73,16 +73,17 @@ constructor(
         return queryParams.build()
     }
 
-    @JsonDeserialize(builder = UsageListBody.Builder::class)
     @NoAutoDetect
     class UsageListBody
+    @JsonCreator
     internal constructor(
-        private val endingBefore: OffsetDateTime,
-        private val startingOn: OffsetDateTime,
-        private val windowSize: WindowSize,
-        private val billableMetrics: List<BillableMetric>?,
-        private val customerIds: List<String>?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
+        @JsonProperty("starting_on") private val startingOn: OffsetDateTime,
+        @JsonProperty("window_size") private val windowSize: WindowSize,
+        @JsonProperty("billable_metrics") private val billableMetrics: List<BillableMetric>?,
+        @JsonProperty("customer_ids") private val customerIds: List<String>?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
@@ -140,12 +141,10 @@ constructor(
                 additionalProperties = usageListBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("ending_before")
             fun endingBefore(endingBefore: OffsetDateTime) = apply {
                 this.endingBefore = endingBefore
             }
 
-            @JsonProperty("starting_on")
             fun startingOn(startingOn: OffsetDateTime) = apply { this.startingOn = startingOn }
 
             /**
@@ -153,14 +152,12 @@ constructor(
              * segmented into daily or hourly aggregates. A window_size of "none" will return a
              * single usage aggregate for the entirety of the specified period.
              */
-            @JsonProperty("window_size")
             fun windowSize(windowSize: WindowSize) = apply { this.windowSize = windowSize }
 
             /**
              * A list of billable metrics to fetch usage for. If absent, all billable metrics will
              * be returned.
              */
-            @JsonProperty("billable_metrics")
             fun billableMetrics(billableMetrics: List<BillableMetric>) = apply {
                 this.billableMetrics = billableMetrics
             }
@@ -169,7 +166,6 @@ constructor(
              * A list of Metronome customer IDs to fetch usage for. If absent, usage for all
              * customers will be returned.
              */
-            @JsonProperty("customer_ids")
             fun customerIds(customerIds: List<String>) = apply { this.customerIds = customerIds }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -177,7 +173,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -497,13 +492,14 @@ constructor(
         override fun toString() = value.toString()
     }
 
-    @JsonDeserialize(builder = BillableMetric.Builder::class)
     @NoAutoDetect
     class BillableMetric
+    @JsonCreator
     private constructor(
-        private val id: String,
-        private val groupBy: GroupBy?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("id") private val id: String,
+        @JsonProperty("group_by") private val groupBy: GroupBy?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("id") fun id(): String = id
@@ -534,9 +530,8 @@ constructor(
                 additionalProperties = billableMetric.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("id") fun id(id: String) = apply { this.id = id }
+            fun id(id: String) = apply { this.id = id }
 
-            @JsonProperty("group_by")
             fun groupBy(groupBy: GroupBy) = apply { this.groupBy = groupBy }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -544,7 +539,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -567,13 +561,14 @@ constructor(
                 )
         }
 
-        @JsonDeserialize(builder = GroupBy.Builder::class)
         @NoAutoDetect
         class GroupBy
+        @JsonCreator
         private constructor(
-            private val key: String,
-            private val values: List<String>?,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("key") private val key: String,
+            @JsonProperty("values") private val values: List<String>?,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             /** The name of the group_by key to use */
@@ -611,13 +606,12 @@ constructor(
                 }
 
                 /** The name of the group_by key to use */
-                @JsonProperty("key") fun key(key: String) = apply { this.key = key }
+                fun key(key: String) = apply { this.key = key }
 
                 /**
                  * Values of the group_by key to return in the query. If this field is omitted, all
                  * available values will be returned, up to a maximum of 200.
                  */
-                @JsonProperty("values")
                 fun values(values: List<String>) = apply { this.values = values }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -625,7 +619,6 @@ constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }

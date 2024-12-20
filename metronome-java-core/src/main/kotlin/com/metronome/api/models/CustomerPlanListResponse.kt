@@ -4,32 +4,49 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = CustomerPlanListResponse.Builder::class)
 @NoAutoDetect
 class CustomerPlanListResponse
+@JsonCreator
 private constructor(
-    private val id: JsonField<String>,
-    private val planId: JsonField<String>,
-    private val planName: JsonField<String>,
-    private val planDescription: JsonField<String>,
-    private val startingOn: JsonField<OffsetDateTime>,
-    private val endingBefore: JsonField<OffsetDateTime>,
-    private val netPaymentTermsDays: JsonField<Double>,
-    private val trialInfo: JsonField<TrialInfo>,
-    private val customFields: JsonField<CustomFields>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("plan_id")
+    @ExcludeMissing
+    private val planId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("plan_name")
+    @ExcludeMissing
+    private val planName: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("plan_description")
+    @ExcludeMissing
+    private val planDescription: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("starting_on")
+    @ExcludeMissing
+    private val startingOn: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("ending_before")
+    @ExcludeMissing
+    private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("net_payment_terms_days")
+    @ExcludeMissing
+    private val netPaymentTermsDays: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("trial_info")
+    @ExcludeMissing
+    private val trialInfo: JsonField<TrialInfo> = JsonMissing.of(),
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     /** the ID of the customer plan */
@@ -135,43 +152,33 @@ private constructor(
         fun id(id: String) = id(JsonField.of(id))
 
         /** the ID of the customer plan */
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** the ID of the plan */
         fun planId(planId: String) = planId(JsonField.of(planId))
 
         /** the ID of the plan */
-        @JsonProperty("plan_id")
-        @ExcludeMissing
         fun planId(planId: JsonField<String>) = apply { this.planId = planId }
 
         fun planName(planName: String) = planName(JsonField.of(planName))
 
-        @JsonProperty("plan_name")
-        @ExcludeMissing
         fun planName(planName: JsonField<String>) = apply { this.planName = planName }
 
         fun planDescription(planDescription: String) =
             planDescription(JsonField.of(planDescription))
 
-        @JsonProperty("plan_description")
-        @ExcludeMissing
         fun planDescription(planDescription: JsonField<String>) = apply {
             this.planDescription = planDescription
         }
 
         fun startingOn(startingOn: OffsetDateTime) = startingOn(JsonField.of(startingOn))
 
-        @JsonProperty("starting_on")
-        @ExcludeMissing
         fun startingOn(startingOn: JsonField<OffsetDateTime>) = apply {
             this.startingOn = startingOn
         }
 
         fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
 
-        @JsonProperty("ending_before")
-        @ExcludeMissing
         fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
             this.endingBefore = endingBefore
         }
@@ -179,22 +186,16 @@ private constructor(
         fun netPaymentTermsDays(netPaymentTermsDays: Double) =
             netPaymentTermsDays(JsonField.of(netPaymentTermsDays))
 
-        @JsonProperty("net_payment_terms_days")
-        @ExcludeMissing
         fun netPaymentTermsDays(netPaymentTermsDays: JsonField<Double>) = apply {
             this.netPaymentTermsDays = netPaymentTermsDays
         }
 
         fun trialInfo(trialInfo: TrialInfo) = trialInfo(JsonField.of(trialInfo))
 
-        @JsonProperty("trial_info")
-        @ExcludeMissing
         fun trialInfo(trialInfo: JsonField<TrialInfo>) = apply { this.trialInfo = trialInfo }
 
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
-        @JsonProperty("custom_fields")
-        @ExcludeMissing
         fun customFields(customFields: JsonField<CustomFields>) = apply {
             this.customFields = customFields
         }
@@ -204,7 +205,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -234,11 +234,12 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = CustomFields.Builder::class)
     @NoAutoDetect
     class CustomFields
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -274,7 +275,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -309,13 +309,18 @@ private constructor(
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = TrialInfo.Builder::class)
     @NoAutoDetect
     class TrialInfo
+    @JsonCreator
     private constructor(
-        private val endingBefore: JsonField<OffsetDateTime>,
-        private val spendingCaps: JsonField<List<SpendingCap>>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("spending_caps")
+        @ExcludeMissing
+        private val spendingCaps: JsonField<List<SpendingCap>> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
@@ -363,8 +368,6 @@ private constructor(
             fun endingBefore(endingBefore: OffsetDateTime) =
                 endingBefore(JsonField.of(endingBefore))
 
-            @JsonProperty("ending_before")
-            @ExcludeMissing
             fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
             }
@@ -372,8 +375,6 @@ private constructor(
             fun spendingCaps(spendingCaps: List<SpendingCap>) =
                 spendingCaps(JsonField.of(spendingCaps))
 
-            @JsonProperty("spending_caps")
-            @ExcludeMissing
             fun spendingCaps(spendingCaps: JsonField<List<SpendingCap>>) = apply {
                 this.spendingCaps = spendingCaps
             }
@@ -383,7 +384,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -406,14 +406,21 @@ private constructor(
                 )
         }
 
-        @JsonDeserialize(builder = SpendingCap.Builder::class)
         @NoAutoDetect
         class SpendingCap
+        @JsonCreator
         private constructor(
-            private val creditType: JsonField<CreditTypeData>,
-            private val amount: JsonField<Double>,
-            private val amountRemaining: JsonField<Double>,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("credit_type")
+            @ExcludeMissing
+            private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
+            @JsonProperty("amount")
+            @ExcludeMissing
+            private val amount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("amount_remaining")
+            @ExcludeMissing
+            private val amountRemaining: JsonField<Double> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
@@ -469,23 +476,17 @@ private constructor(
 
                 fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
-                @JsonProperty("credit_type")
-                @ExcludeMissing
                 fun creditType(creditType: JsonField<CreditTypeData>) = apply {
                     this.creditType = creditType
                 }
 
                 fun amount(amount: Double) = amount(JsonField.of(amount))
 
-                @JsonProperty("amount")
-                @ExcludeMissing
                 fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
                 fun amountRemaining(amountRemaining: Double) =
                     amountRemaining(JsonField.of(amountRemaining))
 
-                @JsonProperty("amount_remaining")
-                @ExcludeMissing
                 fun amountRemaining(amountRemaining: JsonField<Double>) = apply {
                     this.amountRemaining = amountRemaining
                 }
@@ -495,7 +496,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }

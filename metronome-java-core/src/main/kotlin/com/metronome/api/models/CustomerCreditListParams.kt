@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -76,20 +77,21 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = CustomerCreditListBody.Builder::class)
     @NoAutoDetect
     class CustomerCreditListBody
+    @JsonCreator
     internal constructor(
-        private val customerId: String,
-        private val coveringDate: OffsetDateTime?,
-        private val creditId: String?,
-        private val effectiveBefore: OffsetDateTime?,
-        private val includeArchived: Boolean?,
-        private val includeContractCredits: Boolean?,
-        private val includeLedgers: Boolean?,
-        private val nextPage: String?,
-        private val startingAt: OffsetDateTime?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("covering_date") private val coveringDate: OffsetDateTime?,
+        @JsonProperty("credit_id") private val creditId: String?,
+        @JsonProperty("effective_before") private val effectiveBefore: OffsetDateTime?,
+        @JsonProperty("include_archived") private val includeArchived: Boolean?,
+        @JsonProperty("include_contract_credits") private val includeContractCredits: Boolean?,
+        @JsonProperty("include_ledgers") private val includeLedgers: Boolean?,
+        @JsonProperty("next_page") private val nextPage: String?,
+        @JsonProperty("starting_at") private val startingAt: OffsetDateTime?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("customer_id") fun customerId(): String = customerId
@@ -165,32 +167,26 @@ constructor(
                 additionalProperties = customerCreditListBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             /** Return only credits that have access schedules that "cover" the provided date */
-            @JsonProperty("covering_date")
             fun coveringDate(coveringDate: OffsetDateTime) = apply {
                 this.coveringDate = coveringDate
             }
 
-            @JsonProperty("credit_id")
             fun creditId(creditId: String) = apply { this.creditId = creditId }
 
             /** Include only credits that have any access before the provided date (exclusive) */
-            @JsonProperty("effective_before")
             fun effectiveBefore(effectiveBefore: OffsetDateTime) = apply {
                 this.effectiveBefore = effectiveBefore
             }
 
             /** Include credits from archived contracts. */
-            @JsonProperty("include_archived")
             fun includeArchived(includeArchived: Boolean) = apply {
                 this.includeArchived = includeArchived
             }
 
             /** Include credits on the contract level. */
-            @JsonProperty("include_contract_credits")
             fun includeContractCredits(includeContractCredits: Boolean) = apply {
                 this.includeContractCredits = includeContractCredits
             }
@@ -199,17 +195,14 @@ constructor(
              * Include credit ledgers in the response. Setting this flag may cause the query to be
              * slower.
              */
-            @JsonProperty("include_ledgers")
             fun includeLedgers(includeLedgers: Boolean) = apply {
                 this.includeLedgers = includeLedgers
             }
 
             /** The next page token from a previous response. */
-            @JsonProperty("next_page")
             fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
 
             /** Include only credits that have any access on or after the provided date */
-            @JsonProperty("starting_at")
             fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -217,7 +210,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

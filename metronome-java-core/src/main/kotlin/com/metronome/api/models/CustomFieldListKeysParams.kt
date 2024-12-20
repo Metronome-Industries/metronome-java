@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
@@ -14,6 +13,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
@@ -53,12 +53,13 @@ constructor(
         return queryParams.build()
     }
 
-    @JsonDeserialize(builder = CustomFieldListKeysBody.Builder::class)
     @NoAutoDetect
     class CustomFieldListKeysBody
+    @JsonCreator
     internal constructor(
-        private val entities: List<Entity>?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("entities") private val entities: List<Entity>?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Optional list of entity types to return keys for */
@@ -88,7 +89,6 @@ constructor(
             }
 
             /** Optional list of entity types to return keys for */
-            @JsonProperty("entities")
             fun entities(entities: List<Entity>) = apply { this.entities = entities }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -96,7 +96,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

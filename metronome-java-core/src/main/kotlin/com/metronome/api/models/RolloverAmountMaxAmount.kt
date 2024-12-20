@@ -6,24 +6,24 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 
-@JsonDeserialize(builder = RolloverAmountMaxAmount.Builder::class)
 @NoAutoDetect
 class RolloverAmountMaxAmount
+@JsonCreator
 private constructor(
-    private val type: JsonField<Type>,
-    private val value: JsonField<Double>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
+    @JsonProperty("value") @ExcludeMissing private val value: JsonField<Double> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     /** Rollover up to a fixed amount of the original credit grant amount. */
@@ -76,16 +76,12 @@ private constructor(
         fun type(type: Type) = type(JsonField.of(type))
 
         /** Rollover up to a fixed amount of the original credit grant amount. */
-        @JsonProperty("type")
-        @ExcludeMissing
         fun type(type: JsonField<Type>) = apply { this.type = type }
 
         /** The maximum amount to rollover. */
         fun value(value: Double) = value(JsonField.of(value))
 
         /** The maximum amount to rollover. */
-        @JsonProperty("value")
-        @ExcludeMissing
         fun value(value: JsonField<Double>) = apply { this.value = value }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -93,7 +89,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }

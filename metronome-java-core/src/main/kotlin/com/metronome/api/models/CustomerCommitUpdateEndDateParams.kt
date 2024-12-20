@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -56,15 +57,16 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = CustomerCommitUpdateEndDateBody.Builder::class)
     @NoAutoDetect
     class CustomerCommitUpdateEndDateBody
+    @JsonCreator
     internal constructor(
-        private val commitId: String,
-        private val customerId: String,
-        private val accessEndingBefore: OffsetDateTime?,
-        private val invoicesEndingBefore: OffsetDateTime?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("commit_id") private val commitId: String,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("access_ending_before") private val accessEndingBefore: OffsetDateTime?,
+        @JsonProperty("invoices_ending_before") private val invoicesEndingBefore: OffsetDateTime?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the commit to update. Only supports "PREPAID" commits. */
@@ -119,11 +121,9 @@ constructor(
                 }
 
             /** ID of the commit to update. Only supports "PREPAID" commits. */
-            @JsonProperty("commit_id")
             fun commitId(commitId: String) = apply { this.commitId = commitId }
 
             /** ID of the customer whose commit is to be updated */
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             /**
@@ -131,7 +131,6 @@ constructor(
              * longer be possible to draw it down (exclusive). If not provided, the access will not
              * be updated.
              */
-            @JsonProperty("access_ending_before")
             fun accessEndingBefore(accessEndingBefore: OffsetDateTime) = apply {
                 this.accessEndingBefore = accessEndingBefore
             }
@@ -140,7 +139,6 @@ constructor(
              * RFC 3339 timestamp indicating when the commit will stop being invoiced (exclusive).
              * If not provided, the invoice schedule will not be updated.
              */
-            @JsonProperty("invoices_ending_before")
             fun invoicesEndingBefore(invoicesEndingBefore: OffsetDateTime) = apply {
                 this.invoicesEndingBefore = invoicesEndingBefore
             }
@@ -150,7 +148,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

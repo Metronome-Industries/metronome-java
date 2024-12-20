@@ -4,30 +4,45 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = ProService.Builder::class)
 @NoAutoDetect
 class ProService
+@JsonCreator
 private constructor(
-    private val id: JsonField<String>,
-    private val description: JsonField<String>,
-    private val productId: JsonField<String>,
-    private val netsuiteSalesOrderId: JsonField<String>,
-    private val unitPrice: JsonField<Double>,
-    private val quantity: JsonField<Double>,
-    private val maxAmount: JsonField<Double>,
-    private val customFields: JsonField<CustomFields>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("description")
+    @ExcludeMissing
+    private val description: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("product_id")
+    @ExcludeMissing
+    private val productId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("netsuite_sales_order_id")
+    @ExcludeMissing
+    private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("unit_price")
+    @ExcludeMissing
+    private val unitPrice: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("quantity")
+    @ExcludeMissing
+    private val quantity: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("max_amount")
+    @ExcludeMissing
+    private val maxAmount: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun id(): String = id.getRequired("id")
@@ -135,18 +150,14 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         fun description(description: String) = description(JsonField.of(description))
 
-        @JsonProperty("description")
-        @ExcludeMissing
         fun description(description: JsonField<String>) = apply { this.description = description }
 
         fun productId(productId: String) = productId(JsonField.of(productId))
 
-        @JsonProperty("product_id")
-        @ExcludeMissing
         fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
         /** This field's availability is dependent on your client's configuration. */
@@ -154,8 +165,6 @@ private constructor(
             netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
 
         /** This field's availability is dependent on your client's configuration. */
-        @JsonProperty("netsuite_sales_order_id")
-        @ExcludeMissing
         fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
             this.netsuiteSalesOrderId = netsuiteSalesOrderId
         }
@@ -170,30 +179,22 @@ private constructor(
          * Unit price for the charge. Will be multiplied by quantity to determine the amount and
          * must be specified.
          */
-        @JsonProperty("unit_price")
-        @ExcludeMissing
         fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
 
         /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
         fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
         /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
-        @JsonProperty("quantity")
-        @ExcludeMissing
         fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
         /** Maximum amount for the term. */
         fun maxAmount(maxAmount: Double) = maxAmount(JsonField.of(maxAmount))
 
         /** Maximum amount for the term. */
-        @JsonProperty("max_amount")
-        @ExcludeMissing
         fun maxAmount(maxAmount: JsonField<Double>) = apply { this.maxAmount = maxAmount }
 
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
-        @JsonProperty("custom_fields")
-        @ExcludeMissing
         fun customFields(customFields: JsonField<CustomFields>) = apply {
             this.customFields = customFields
         }
@@ -203,7 +204,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -232,11 +232,12 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = CustomFields.Builder::class)
     @NoAutoDetect
     class CustomFields
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -272,7 +273,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

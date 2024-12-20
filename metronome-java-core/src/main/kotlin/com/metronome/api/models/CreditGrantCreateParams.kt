@@ -4,6 +4,7 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.ObjectCodec
@@ -20,6 +21,7 @@ import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.getOrThrow
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
@@ -106,25 +108,26 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = CreditGrantCreateBody.Builder::class)
     @NoAutoDetect
     class CreditGrantCreateBody
+    @JsonCreator
     internal constructor(
-        private val customerId: String,
-        private val expiresAt: OffsetDateTime,
-        private val grantAmount: GrantAmount,
-        private val name: String,
-        private val paidAmount: PaidAmount,
-        private val priority: Double,
-        private val creditGrantType: String?,
-        private val customFields: CustomFields?,
-        private val effectiveAt: OffsetDateTime?,
-        private val invoiceDate: OffsetDateTime?,
-        private val productIds: List<String>?,
-        private val reason: String?,
-        private val rolloverSettings: RolloverSettings?,
-        private val uniquenessKey: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("expires_at") private val expiresAt: OffsetDateTime,
+        @JsonProperty("grant_amount") private val grantAmount: GrantAmount,
+        @JsonProperty("name") private val name: String,
+        @JsonProperty("paid_amount") private val paidAmount: PaidAmount,
+        @JsonProperty("priority") private val priority: Double,
+        @JsonProperty("credit_grant_type") private val creditGrantType: String?,
+        @JsonProperty("custom_fields") private val customFields: CustomFields?,
+        @JsonProperty("effective_at") private val effectiveAt: OffsetDateTime?,
+        @JsonProperty("invoice_date") private val invoiceDate: OffsetDateTime?,
+        @JsonProperty("product_ids") private val productIds: List<String>?,
+        @JsonProperty("reason") private val reason: String?,
+        @JsonProperty("rollover_settings") private val rolloverSettings: RolloverSettings?,
+        @JsonProperty("uniqueness_key") private val uniquenessKey: String?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** the Metronome ID of the customer */
@@ -234,34 +237,27 @@ constructor(
             }
 
             /** the Metronome ID of the customer */
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             /** The credit grant will only apply to usage or charges dated before this timestamp */
-            @JsonProperty("expires_at")
             fun expiresAt(expiresAt: OffsetDateTime) = apply { this.expiresAt = expiresAt }
 
             /** the amount of credits granted */
-            @JsonProperty("grant_amount")
             fun grantAmount(grantAmount: GrantAmount) = apply { this.grantAmount = grantAmount }
 
             /** the name of the credit grant as it will appear on invoices */
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = apply { this.name = name }
 
             /** the amount paid for this credit grant */
-            @JsonProperty("paid_amount")
             fun paidAmount(paidAmount: PaidAmount) = apply { this.paidAmount = paidAmount }
 
-            @JsonProperty("priority")
             fun priority(priority: Double) = apply { this.priority = priority }
 
-            @JsonProperty("credit_grant_type")
             fun creditGrantType(creditGrantType: String) = apply {
                 this.creditGrantType = creditGrantType
             }
 
             /** Custom fields to attach to the credit grant. */
-            @JsonProperty("custom_fields")
             fun customFields(customFields: CustomFields) = apply {
                 this.customFields = customFields
             }
@@ -269,11 +265,9 @@ constructor(
             /**
              * The credit grant will only apply to usage or charges dated on or after this timestamp
              */
-            @JsonProperty("effective_at")
             fun effectiveAt(effectiveAt: OffsetDateTime) = apply { this.effectiveAt = effectiveAt }
 
             /** The date to issue an invoice for the paid_amount. */
-            @JsonProperty("invoice_date")
             fun invoiceDate(invoiceDate: OffsetDateTime) = apply { this.invoiceDate = invoiceDate }
 
             /**
@@ -281,17 +275,15 @@ constructor(
              * will be applied to charges for all products.). The array ordering specified here will
              * be used to determine the order in which credits will be applied to invoice line items
              */
-            @JsonProperty("product_ids")
             fun productIds(productIds: List<String>) = apply { this.productIds = productIds }
 
-            @JsonProperty("reason") fun reason(reason: String) = apply { this.reason = reason }
+            fun reason(reason: String) = apply { this.reason = reason }
 
             /**
              * Configure a rollover for this credit grant so if it expires it rolls over a
              * configured amount to a new credit grant. This feature is currently opt-in only.
              * Contact Metronome to be added to the beta.
              */
-            @JsonProperty("rollover_settings")
             fun rolloverSettings(rolloverSettings: RolloverSettings) = apply {
                 this.rolloverSettings = rolloverSettings
             }
@@ -301,7 +293,6 @@ constructor(
              * previously used uniqueness key, a new record will not be created and the request will
              * fail with a 409 error.
              */
-            @JsonProperty("uniqueness_key")
             fun uniquenessKey(uniquenessKey: String) = apply { this.uniquenessKey = uniquenessKey }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -309,7 +300,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -620,13 +610,14 @@ constructor(
     }
 
     /** the amount of credits granted */
-    @JsonDeserialize(builder = GrantAmount.Builder::class)
     @NoAutoDetect
     class GrantAmount
+    @JsonCreator
     private constructor(
-        private val amount: Double,
-        private val creditTypeId: String,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("amount") private val amount: Double,
+        @JsonProperty("credit_type_id") private val creditTypeId: String,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("amount") fun amount(): Double = amount
@@ -658,10 +649,9 @@ constructor(
                 additionalProperties = grantAmount.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("amount") fun amount(amount: Double) = apply { this.amount = amount }
+            fun amount(amount: Double) = apply { this.amount = amount }
 
             /** the ID of the pricing unit to be used. Defaults to USD (cents) if not passed. */
-            @JsonProperty("credit_type_id")
             fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -669,7 +659,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -711,13 +700,14 @@ constructor(
     }
 
     /** the amount paid for this credit grant */
-    @JsonDeserialize(builder = PaidAmount.Builder::class)
     @NoAutoDetect
     class PaidAmount
+    @JsonCreator
     private constructor(
-        private val amount: Double,
-        private val creditTypeId: String,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("amount") private val amount: Double,
+        @JsonProperty("credit_type_id") private val creditTypeId: String,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("amount") fun amount(): Double = amount
@@ -749,10 +739,9 @@ constructor(
                 additionalProperties = paidAmount.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("amount") fun amount(amount: Double) = apply { this.amount = amount }
+            fun amount(amount: Double) = apply { this.amount = amount }
 
             /** the ID of the pricing unit to be used. Defaults to USD (cents) if not passed. */
-            @JsonProperty("credit_type_id")
             fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -760,7 +749,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -802,11 +790,12 @@ constructor(
     }
 
     /** Custom fields to attach to the credit grant. */
-    @JsonDeserialize(builder = CustomFields.Builder::class)
     @NoAutoDetect
     class CustomFields
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -834,7 +823,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -874,14 +862,15 @@ constructor(
      * to a new credit grant. This feature is currently opt-in only. Contact Metronome to be added
      * to the beta.
      */
-    @JsonDeserialize(builder = RolloverSettings.Builder::class)
     @NoAutoDetect
     class RolloverSettings
+    @JsonCreator
     private constructor(
-        private val expiresAt: OffsetDateTime,
-        private val priority: Double,
-        private val rolloverAmount: RolloverAmount,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("expires_at") private val expiresAt: OffsetDateTime,
+        @JsonProperty("priority") private val priority: Double,
+        @JsonProperty("rollover_amount") private val rolloverAmount: RolloverAmount,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The date to expire the rollover credits. */
@@ -922,18 +911,15 @@ constructor(
             }
 
             /** The date to expire the rollover credits. */
-            @JsonProperty("expires_at")
             fun expiresAt(expiresAt: OffsetDateTime) = apply { this.expiresAt = expiresAt }
 
             /**
              * The priority to give the rollover credit grant that gets created when a rollover
              * happens.
              */
-            @JsonProperty("priority")
             fun priority(priority: Double) = apply { this.priority = priority }
 
             /** Specify how much to rollover to the rollover credit grant */
-            @JsonProperty("rollover_amount")
             fun rolloverAmount(rolloverAmount: RolloverAmount) = apply {
                 this.rolloverAmount = rolloverAmount
             }
@@ -943,7 +929,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

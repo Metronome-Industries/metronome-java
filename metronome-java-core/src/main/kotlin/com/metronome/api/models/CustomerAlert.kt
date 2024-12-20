@@ -6,27 +6,31 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = CustomerAlert.Builder::class)
 @NoAutoDetect
 class CustomerAlert
+@JsonCreator
 private constructor(
-    private val customerStatus: JsonField<CustomerStatus>,
-    private val triggeredBy: JsonField<String>,
-    private val alert: JsonField<Alert>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("customer_status")
+    @ExcludeMissing
+    private val customerStatus: JsonField<CustomerStatus> = JsonMissing.of(),
+    @JsonProperty("triggered_by")
+    @ExcludeMissing
+    private val triggeredBy: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("alert") @ExcludeMissing private val alert: JsonField<Alert> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     /** The status of the customer alert. If the alert is archived, null will be returned. */
@@ -89,8 +93,6 @@ private constructor(
             customerStatus(JsonField.of(customerStatus))
 
         /** The status of the customer alert. If the alert is archived, null will be returned. */
-        @JsonProperty("customer_status")
-        @ExcludeMissing
         fun customerStatus(customerStatus: JsonField<CustomerStatus>) = apply {
             this.customerStatus = customerStatus
         }
@@ -99,14 +101,10 @@ private constructor(
         fun triggeredBy(triggeredBy: String) = triggeredBy(JsonField.of(triggeredBy))
 
         /** If present, indicates the reason the alert was triggered. */
-        @JsonProperty("triggered_by")
-        @ExcludeMissing
         fun triggeredBy(triggeredBy: JsonField<String>) = apply { this.triggeredBy = triggeredBy }
 
         fun alert(alert: Alert) = alert(JsonField.of(alert))
 
-        @JsonProperty("alert")
-        @ExcludeMissing
         fun alert(alert: JsonField<Alert>) = apply { this.alert = alert }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -114,7 +112,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -138,23 +135,44 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = Alert.Builder::class)
     @NoAutoDetect
     class Alert
+    @JsonCreator
     private constructor(
-        private val id: JsonField<String>,
-        private val name: JsonField<String>,
-        private val uniquenessKey: JsonField<String>,
-        private val type: JsonField<Type>,
-        private val status: JsonField<Status>,
-        private val creditType: JsonField<CreditTypeData>,
-        private val threshold: JsonField<Double>,
-        private val updatedAt: JsonField<OffsetDateTime>,
-        private val creditGrantTypeFilters: JsonField<List<String>>,
-        private val customFieldFilters: JsonField<List<CustomFieldFilter>>,
-        private val groupKeyFilter: JsonField<GroupKeyFilter>,
-        private val invoiceTypesFilter: JsonField<List<String>>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("uniqueness_key")
+        @ExcludeMissing
+        private val uniquenessKey: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
+        @JsonProperty("status")
+        @ExcludeMissing
+        private val status: JsonField<Status> = JsonMissing.of(),
+        @JsonProperty("credit_type")
+        @ExcludeMissing
+        private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
+        @JsonProperty("threshold")
+        @ExcludeMissing
+        private val threshold: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("updated_at")
+        @ExcludeMissing
+        private val updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("credit_grant_type_filters")
+        @ExcludeMissing
+        private val creditGrantTypeFilters: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("custom_field_filters")
+        @ExcludeMissing
+        private val customFieldFilters: JsonField<List<CustomFieldFilter>> = JsonMissing.of(),
+        @JsonProperty("group_key_filter")
+        @ExcludeMissing
+        private val groupKeyFilter: JsonField<GroupKeyFilter> = JsonMissing.of(),
+        @JsonProperty("invoice_types_filter")
+        @ExcludeMissing
+        private val invoiceTypesFilter: JsonField<List<String>> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** the Metronome ID of the alert */
@@ -329,16 +347,12 @@ private constructor(
             fun id(id: String) = id(JsonField.of(id))
 
             /** the Metronome ID of the alert */
-            @JsonProperty("id")
-            @ExcludeMissing
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** Name of the alert */
             fun name(name: String) = name(JsonField.of(name))
 
             /** Name of the alert */
-            @JsonProperty("name")
-            @ExcludeMissing
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             /**
@@ -353,8 +367,6 @@ private constructor(
              * previously used uniqueness key, a new record will not be created and the request will
              * fail with a 409 error.
              */
-            @JsonProperty("uniqueness_key")
-            @ExcludeMissing
             fun uniquenessKey(uniquenessKey: JsonField<String>) = apply {
                 this.uniquenessKey = uniquenessKey
             }
@@ -363,22 +375,16 @@ private constructor(
             fun type(type: Type) = type(JsonField.of(type))
 
             /** Type of the alert */
-            @JsonProperty("type")
-            @ExcludeMissing
             fun type(type: JsonField<Type>) = apply { this.type = type }
 
             /** Status of the alert */
             fun status(status: Status) = status(JsonField.of(status))
 
             /** Status of the alert */
-            @JsonProperty("status")
-            @ExcludeMissing
             fun status(status: JsonField<Status>) = apply { this.status = status }
 
             fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
-            @JsonProperty("credit_type")
-            @ExcludeMissing
             fun creditType(creditType: JsonField<CreditTypeData>) = apply {
                 this.creditType = creditType
             }
@@ -387,16 +393,12 @@ private constructor(
             fun threshold(threshold: Double) = threshold(JsonField.of(threshold))
 
             /** Threshold value of the alert policy */
-            @JsonProperty("threshold")
-            @ExcludeMissing
             fun threshold(threshold: JsonField<Double>) = apply { this.threshold = threshold }
 
             /** Timestamp for when the alert was last updated */
             fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
             /** Timestamp for when the alert was last updated */
-            @JsonProperty("updated_at")
-            @ExcludeMissing
             fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply {
                 this.updatedAt = updatedAt
             }
@@ -414,8 +416,6 @@ private constructor(
              * to, by looking at the credit_grant_type field on the credit grant. This field is only
              * defined for CreditPercentage and CreditBalance alerts
              */
-            @JsonProperty("credit_grant_type_filters")
-            @ExcludeMissing
             fun creditGrantTypeFilters(creditGrantTypeFilters: JsonField<List<String>>) = apply {
                 this.creditGrantTypeFilters = creditGrantTypeFilters
             }
@@ -425,8 +425,6 @@ private constructor(
                 customFieldFilters(JsonField.of(customFieldFilters))
 
             /** A list of custom field filters for alert types that support advanced filtering */
-            @JsonProperty("custom_field_filters")
-            @ExcludeMissing
             fun customFieldFilters(customFieldFilters: JsonField<List<CustomFieldFilter>>) = apply {
                 this.customFieldFilters = customFieldFilters
             }
@@ -442,8 +440,6 @@ private constructor(
              * Scopes alert evaluation to a specific presentation group key on individual line
              * items. Only present for spend alerts.
              */
-            @JsonProperty("group_key_filter")
-            @ExcludeMissing
             fun groupKeyFilter(groupKeyFilter: JsonField<GroupKeyFilter>) = apply {
                 this.groupKeyFilter = groupKeyFilter
             }
@@ -457,8 +453,6 @@ private constructor(
             /**
              * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
              */
-            @JsonProperty("invoice_types_filter")
-            @ExcludeMissing
             fun invoiceTypesFilter(invoiceTypesFilter: JsonField<List<String>>) = apply {
                 this.invoiceTypesFilter = invoiceTypesFilter
             }
@@ -468,7 +462,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -730,14 +723,21 @@ private constructor(
             override fun toString() = value.toString()
         }
 
-        @JsonDeserialize(builder = CustomFieldFilter.Builder::class)
         @NoAutoDetect
         class CustomFieldFilter
+        @JsonCreator
         private constructor(
-            private val entity: JsonField<Entity>,
-            private val key: JsonField<String>,
-            private val value: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("entity")
+            @ExcludeMissing
+            private val entity: JsonField<Entity> = JsonMissing.of(),
+            @JsonProperty("key")
+            @ExcludeMissing
+            private val key: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("value")
+            @ExcludeMissing
+            private val value: JsonField<String> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun entity(): Entity = entity.getRequired("entity")
@@ -791,20 +791,14 @@ private constructor(
 
                 fun entity(entity: Entity) = entity(JsonField.of(entity))
 
-                @JsonProperty("entity")
-                @ExcludeMissing
                 fun entity(entity: JsonField<Entity>) = apply { this.entity = entity }
 
                 fun key(key: String) = key(JsonField.of(key))
 
-                @JsonProperty("key")
-                @ExcludeMissing
                 fun key(key: JsonField<String>) = apply { this.key = key }
 
                 fun value(value: String) = value(JsonField.of(value))
 
-                @JsonProperty("value")
-                @ExcludeMissing
                 fun value(value: JsonField<String>) = apply { this.value = value }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -812,7 +806,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -924,13 +917,18 @@ private constructor(
          * Scopes alert evaluation to a specific presentation group key on individual line items.
          * Only present for spend alerts.
          */
-        @JsonDeserialize(builder = GroupKeyFilter.Builder::class)
         @NoAutoDetect
         class GroupKeyFilter
+        @JsonCreator
         private constructor(
-            private val key: JsonField<String>,
-            private val value: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("key")
+            @ExcludeMissing
+            private val key: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("value")
+            @ExcludeMissing
+            private val value: JsonField<String> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun key(): String = key.getRequired("key")
@@ -977,14 +975,10 @@ private constructor(
 
                 fun key(key: String) = key(JsonField.of(key))
 
-                @JsonProperty("key")
-                @ExcludeMissing
                 fun key(key: JsonField<String>) = apply { this.key = key }
 
                 fun value(value: String) = value(JsonField.of(value))
 
-                @JsonProperty("value")
-                @ExcludeMissing
                 fun value(value: JsonField<String>) = apply { this.value = value }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -992,7 +986,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }

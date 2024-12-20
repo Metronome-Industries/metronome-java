@@ -4,25 +4,28 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = CreditGrantListCreditTypesResponse.Builder::class)
 @NoAutoDetect
 class CreditGrantListCreditTypesResponse
+@JsonCreator
 private constructor(
-    private val name: JsonField<String>,
-    private val id: JsonField<String>,
-    private val isCurrency: JsonField<Boolean>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("is_currency")
+    @ExcludeMissing
+    private val isCurrency: JsonField<Boolean> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
@@ -78,18 +81,14 @@ private constructor(
 
         fun name(name: String) = name(JsonField.of(name))
 
-        @JsonProperty("name")
-        @ExcludeMissing
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun id(id: String) = id(JsonField.of(id))
 
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         fun isCurrency(isCurrency: Boolean) = isCurrency(JsonField.of(isCurrency))
 
-        @JsonProperty("is_currency")
-        @ExcludeMissing
         fun isCurrency(isCurrency: JsonField<Boolean>) = apply { this.isCurrency = isCurrency }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -97,7 +96,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }

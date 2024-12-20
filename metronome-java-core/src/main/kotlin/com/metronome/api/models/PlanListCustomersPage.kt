@@ -4,13 +4,14 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.services.blocking.PlanService
 import java.util.Objects
@@ -82,13 +83,15 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = Response.Builder::class)
     @NoAutoDetect
     class Response
+    @JsonCreator
     constructor(
-        private val nextPage: JsonField<String>,
-        private val data: JsonField<List<PlanListCustomersResponse>>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("next_page") private val nextPage: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("data")
+        private val data: JsonField<List<PlanListCustomersResponse>> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         private var validated: Boolean = false
@@ -151,15 +154,12 @@ private constructor(
 
             fun nextPage(nextPage: String) = nextPage(JsonField.of(nextPage))
 
-            @JsonProperty("next_page")
             fun nextPage(nextPage: JsonField<String>) = apply { this.nextPage = nextPage }
 
             fun data(data: List<PlanListCustomersResponse>) = data(JsonField.of(data))
 
-            @JsonProperty("data")
             fun data(data: JsonField<List<PlanListCustomersResponse>>) = apply { this.data = data }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 this.additionalProperties.put(key, value)
             }

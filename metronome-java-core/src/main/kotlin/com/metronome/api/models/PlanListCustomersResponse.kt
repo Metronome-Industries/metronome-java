@@ -4,25 +4,30 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = PlanListCustomersResponse.Builder::class)
 @NoAutoDetect
 class PlanListCustomersResponse
+@JsonCreator
 private constructor(
-    private val customerDetails: JsonField<CustomerDetail>,
-    private val planDetails: JsonField<PlanDetails>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("customer_details")
+    @ExcludeMissing
+    private val customerDetails: JsonField<CustomerDetail> = JsonMissing.of(),
+    @JsonProperty("plan_details")
+    @ExcludeMissing
+    private val planDetails: JsonField<PlanDetails> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun customerDetails(): CustomerDetail = customerDetails.getRequired("customer_details")
@@ -70,16 +75,12 @@ private constructor(
         fun customerDetails(customerDetails: CustomerDetail) =
             customerDetails(JsonField.of(customerDetails))
 
-        @JsonProperty("customer_details")
-        @ExcludeMissing
         fun customerDetails(customerDetails: JsonField<CustomerDetail>) = apply {
             this.customerDetails = customerDetails
         }
 
         fun planDetails(planDetails: PlanDetails) = planDetails(JsonField.of(planDetails))
 
-        @JsonProperty("plan_details")
-        @ExcludeMissing
         fun planDetails(planDetails: JsonField<PlanDetails>) = apply {
             this.planDetails = planDetails
         }
@@ -89,7 +90,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -112,17 +112,28 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = PlanDetails.Builder::class)
     @NoAutoDetect
     class PlanDetails
+    @JsonCreator
     private constructor(
-        private val id: JsonField<String>,
-        private val name: JsonField<String>,
-        private val startingOn: JsonField<OffsetDateTime>,
-        private val endingBefore: JsonField<OffsetDateTime>,
-        private val customFields: JsonField<CustomFields>,
-        private val customerPlanId: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("starting_on")
+        @ExcludeMissing
+        private val startingOn: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("customer_plan_id")
+        @ExcludeMissing
+        private val customerPlanId: JsonField<String> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun id(): String = id.getRequired("id")
@@ -202,22 +213,16 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
-            @JsonProperty("id")
-            @ExcludeMissing
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun name(name: String) = name(JsonField.of(name))
 
-            @JsonProperty("name")
-            @ExcludeMissing
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** The start date of the plan */
             fun startingOn(startingOn: OffsetDateTime) = startingOn(JsonField.of(startingOn))
 
             /** The start date of the plan */
-            @JsonProperty("starting_on")
-            @ExcludeMissing
             fun startingOn(startingOn: JsonField<OffsetDateTime>) = apply {
                 this.startingOn = startingOn
             }
@@ -227,16 +232,12 @@ private constructor(
                 endingBefore(JsonField.of(endingBefore))
 
             /** The end date of the plan */
-            @JsonProperty("ending_before")
-            @ExcludeMissing
             fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
             }
 
             fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
-            @JsonProperty("custom_fields")
-            @ExcludeMissing
             fun customFields(customFields: JsonField<CustomFields>) = apply {
                 this.customFields = customFields
             }
@@ -244,8 +245,6 @@ private constructor(
             fun customerPlanId(customerPlanId: String) =
                 customerPlanId(JsonField.of(customerPlanId))
 
-            @JsonProperty("customer_plan_id")
-            @ExcludeMissing
             fun customerPlanId(customerPlanId: JsonField<String>) = apply {
                 this.customerPlanId = customerPlanId
             }
@@ -255,7 +254,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -282,11 +280,12 @@ private constructor(
                 )
         }
 
-        @JsonDeserialize(builder = CustomFields.Builder::class)
         @NoAutoDetect
         class CustomFields
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -322,7 +321,6 @@ private constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }

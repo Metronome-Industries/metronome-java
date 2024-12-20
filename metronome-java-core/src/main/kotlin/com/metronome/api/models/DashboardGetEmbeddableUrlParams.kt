@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
@@ -14,6 +13,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
@@ -64,16 +64,18 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = DashboardGetEmbeddableUrlBody.Builder::class)
     @NoAutoDetect
     class DashboardGetEmbeddableUrlBody
+    @JsonCreator
     internal constructor(
-        private val customerId: String,
-        private val dashboard: Dashboard,
+        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("dashboard") private val dashboard: Dashboard,
+        @JsonProperty("bm_group_key_overrides")
         private val bmGroupKeyOverrides: List<BmGroupKeyOverride>?,
-        private val colorOverrides: List<ColorOverride>?,
-        private val dashboardOptions: List<DashboardOption>?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("color_overrides") private val colorOverrides: List<ColorOverride>?,
+        @JsonProperty("dashboard_options") private val dashboardOptions: List<DashboardOption>?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("customer_id") fun customerId(): String = customerId
@@ -129,27 +131,22 @@ constructor(
                         dashboardGetEmbeddableUrlBody.additionalProperties.toMutableMap()
                 }
 
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             /** The type of dashboard to retrieve. */
-            @JsonProperty("dashboard")
             fun dashboard(dashboard: Dashboard) = apply { this.dashboard = dashboard }
 
             /** Optional list of billable metric group key overrides */
-            @JsonProperty("bm_group_key_overrides")
             fun bmGroupKeyOverrides(bmGroupKeyOverrides: List<BmGroupKeyOverride>) = apply {
                 this.bmGroupKeyOverrides = bmGroupKeyOverrides
             }
 
             /** Optional list of colors to override */
-            @JsonProperty("color_overrides")
             fun colorOverrides(colorOverrides: List<ColorOverride>) = apply {
                 this.colorOverrides = colorOverrides
             }
 
             /** Optional dashboard specific options */
-            @JsonProperty("dashboard_options")
             fun dashboardOptions(dashboardOptions: List<DashboardOption>) = apply {
                 this.dashboardOptions = dashboardOptions
             }
@@ -159,7 +156,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -477,14 +473,15 @@ constructor(
         override fun toString() = value.toString()
     }
 
-    @JsonDeserialize(builder = BmGroupKeyOverride.Builder::class)
     @NoAutoDetect
     class BmGroupKeyOverride
+    @JsonCreator
     private constructor(
-        private val groupKeyName: String,
-        private val displayName: String?,
-        private val valueDisplayNames: ValueDisplayNames?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("group_key_name") private val groupKeyName: String,
+        @JsonProperty("display_name") private val displayName: String?,
+        @JsonProperty("value_display_names") private val valueDisplayNames: ValueDisplayNames?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The name of the billable metric group key. */
@@ -529,18 +526,15 @@ constructor(
             }
 
             /** The name of the billable metric group key. */
-            @JsonProperty("group_key_name")
             fun groupKeyName(groupKeyName: String) = apply { this.groupKeyName = groupKeyName }
 
             /** The display name for the billable metric group key */
-            @JsonProperty("display_name")
             fun displayName(displayName: String) = apply { this.displayName = displayName }
 
             /**
              * <key, value> pairs of the billable metric group key values and their display names.
              * e.g. {"a": "Asia", "b": "Euro"}
              */
-            @JsonProperty("value_display_names")
             fun valueDisplayNames(valueDisplayNames: ValueDisplayNames) = apply {
                 this.valueDisplayNames = valueDisplayNames
             }
@@ -550,7 +544,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -578,11 +571,12 @@ constructor(
          * <key, value> pairs of the billable metric group key values and their display names. e.g.
          * {"a": "Asia", "b": "Euro"}
          */
-        @JsonDeserialize(builder = ValueDisplayNames.Builder::class)
         @NoAutoDetect
         class ValueDisplayNames
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -610,7 +604,6 @@ constructor(
                     putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                     additionalProperties.put(key, value)
                 }
@@ -668,13 +661,14 @@ constructor(
             "BmGroupKeyOverride{groupKeyName=$groupKeyName, displayName=$displayName, valueDisplayNames=$valueDisplayNames, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = ColorOverride.Builder::class)
     @NoAutoDetect
     class ColorOverride
+    @JsonCreator
     private constructor(
-        private val name: Name?,
-        private val value: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("name") private val name: Name?,
+        @JsonProperty("value") private val value: String?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The color to override */
@@ -708,17 +702,16 @@ constructor(
             }
 
             /** The color to override */
-            @JsonProperty("name") fun name(name: Name) = apply { this.name = name }
+            fun name(name: Name) = apply { this.name = name }
 
             /** Hex value representation of the color */
-            @JsonProperty("value") fun value(value: String) = apply { this.value = value }
+            fun value(value: String) = apply { this.value = value }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -918,13 +911,14 @@ constructor(
             "ColorOverride{name=$name, value=$value, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = DashboardOption.Builder::class)
     @NoAutoDetect
     class DashboardOption
+    @JsonCreator
     private constructor(
-        private val key: String,
-        private val value: String,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("key") private val key: String,
+        @JsonProperty("value") private val value: String,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The option key name */
@@ -958,17 +952,16 @@ constructor(
             }
 
             /** The option key name */
-            @JsonProperty("key") fun key(key: String) = apply { this.key = key }
+            fun key(key: String) = apply { this.key = key }
 
             /** The option value */
-            @JsonProperty("value") fun value(value: String) = apply { this.value = value }
+            fun value(value: String) = apply { this.value = value }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

@@ -6,32 +6,44 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = AuditLogListResponse.Builder::class)
 @NoAutoDetect
 class AuditLogListResponse
+@JsonCreator
 private constructor(
-    private val id: JsonField<String>,
-    private val timestamp: JsonField<OffsetDateTime>,
-    private val actor: JsonField<Actor>,
-    private val resourceType: JsonField<String>,
-    private val resourceId: JsonField<String>,
-    private val action: JsonField<String>,
-    private val status: JsonField<Status>,
-    private val description: JsonField<String>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("timestamp")
+    @ExcludeMissing
+    private val timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("actor") @ExcludeMissing private val actor: JsonField<Actor> = JsonMissing.of(),
+    @JsonProperty("resource_type")
+    @ExcludeMissing
+    private val resourceType: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("resource_id")
+    @ExcludeMissing
+    private val resourceId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("action")
+    @ExcludeMissing
+    private val action: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("status")
+    @ExcludeMissing
+    private val status: JsonField<Status> = JsonMissing.of(),
+    @JsonProperty("description")
+    @ExcludeMissing
+    private val description: JsonField<String> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun id(): String = id.getRequired("id")
@@ -122,50 +134,36 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
 
-        @JsonProperty("timestamp")
-        @ExcludeMissing
         fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply { this.timestamp = timestamp }
 
         fun actor(actor: Actor) = actor(JsonField.of(actor))
 
-        @JsonProperty("actor")
-        @ExcludeMissing
         fun actor(actor: JsonField<Actor>) = apply { this.actor = actor }
 
         fun resourceType(resourceType: String) = resourceType(JsonField.of(resourceType))
 
-        @JsonProperty("resource_type")
-        @ExcludeMissing
         fun resourceType(resourceType: JsonField<String>) = apply {
             this.resourceType = resourceType
         }
 
         fun resourceId(resourceId: String) = resourceId(JsonField.of(resourceId))
 
-        @JsonProperty("resource_id")
-        @ExcludeMissing
         fun resourceId(resourceId: JsonField<String>) = apply { this.resourceId = resourceId }
 
         fun action(action: String) = action(JsonField.of(action))
 
-        @JsonProperty("action")
-        @ExcludeMissing
         fun action(action: JsonField<String>) = apply { this.action = action }
 
         fun status(status: Status) = status(JsonField.of(status))
 
-        @JsonProperty("status")
-        @ExcludeMissing
         fun status(status: JsonField<Status>) = apply { this.status = status }
 
         fun description(description: String) = description(JsonField.of(description))
 
-        @JsonProperty("description")
-        @ExcludeMissing
         fun description(description: JsonField<String>) = apply { this.description = description }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -173,7 +171,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -202,14 +199,19 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = Actor.Builder::class)
     @NoAutoDetect
     class Actor
+    @JsonCreator
     private constructor(
-        private val id: JsonField<String>,
-        private val email: JsonField<String>,
-        private val name: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("email")
+        @ExcludeMissing
+        private val email: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun id(): String = id.getRequired("id")
@@ -263,20 +265,14 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
-            @JsonProperty("id")
-            @ExcludeMissing
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun email(email: String) = email(JsonField.of(email))
 
-            @JsonProperty("email")
-            @ExcludeMissing
             fun email(email: JsonField<String>) = apply { this.email = email }
 
             fun name(name: String) = name(JsonField.of(name))
 
-            @JsonProperty("name")
-            @ExcludeMissing
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -284,7 +280,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

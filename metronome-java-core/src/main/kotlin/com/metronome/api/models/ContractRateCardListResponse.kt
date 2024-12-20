@@ -4,32 +4,47 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = ContractRateCardListResponse.Builder::class)
 @NoAutoDetect
 class ContractRateCardListResponse
+@JsonCreator
 private constructor(
-    private val id: JsonField<String>,
-    private val name: JsonField<String>,
-    private val createdAt: JsonField<OffsetDateTime>,
-    private val createdBy: JsonField<String>,
-    private val description: JsonField<String>,
-    private val fiatCreditType: JsonField<CreditTypeData>,
-    private val creditTypeConversions: JsonField<List<CreditTypeConversion>>,
-    private val aliases: JsonField<List<Alias>>,
-    private val customFields: JsonField<CustomFields>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("created_by")
+    @ExcludeMissing
+    private val createdBy: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("description")
+    @ExcludeMissing
+    private val description: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("fiat_credit_type")
+    @ExcludeMissing
+    private val fiatCreditType: JsonField<CreditTypeData> = JsonMissing.of(),
+    @JsonProperty("credit_type_conversions")
+    @ExcludeMissing
+    private val creditTypeConversions: JsonField<List<CreditTypeConversion>> = JsonMissing.of(),
+    @JsonProperty("aliases")
+    @ExcludeMissing
+    private val aliases: JsonField<List<Alias>> = JsonMissing.of(),
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun id(): String = id.getRequired("id")
@@ -131,37 +146,27 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         fun name(name: String) = name(JsonField.of(name))
 
-        @JsonProperty("name")
-        @ExcludeMissing
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
-        @JsonProperty("created_at")
-        @ExcludeMissing
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         fun createdBy(createdBy: String) = createdBy(JsonField.of(createdBy))
 
-        @JsonProperty("created_by")
-        @ExcludeMissing
         fun createdBy(createdBy: JsonField<String>) = apply { this.createdBy = createdBy }
 
         fun description(description: String) = description(JsonField.of(description))
 
-        @JsonProperty("description")
-        @ExcludeMissing
         fun description(description: JsonField<String>) = apply { this.description = description }
 
         fun fiatCreditType(fiatCreditType: CreditTypeData) =
             fiatCreditType(JsonField.of(fiatCreditType))
 
-        @JsonProperty("fiat_credit_type")
-        @ExcludeMissing
         fun fiatCreditType(fiatCreditType: JsonField<CreditTypeData>) = apply {
             this.fiatCreditType = fiatCreditType
         }
@@ -169,8 +174,6 @@ private constructor(
         fun creditTypeConversions(creditTypeConversions: List<CreditTypeConversion>) =
             creditTypeConversions(JsonField.of(creditTypeConversions))
 
-        @JsonProperty("credit_type_conversions")
-        @ExcludeMissing
         fun creditTypeConversions(creditTypeConversions: JsonField<List<CreditTypeConversion>>) =
             apply {
                 this.creditTypeConversions = creditTypeConversions
@@ -178,14 +181,10 @@ private constructor(
 
         fun aliases(aliases: List<Alias>) = aliases(JsonField.of(aliases))
 
-        @JsonProperty("aliases")
-        @ExcludeMissing
         fun aliases(aliases: JsonField<List<Alias>>) = apply { this.aliases = aliases }
 
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
-        @JsonProperty("custom_fields")
-        @ExcludeMissing
         fun customFields(customFields: JsonField<CustomFields>) = apply {
             this.customFields = customFields
         }
@@ -195,7 +194,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
@@ -225,14 +223,21 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = Alias.Builder::class)
     @NoAutoDetect
     class Alias
+    @JsonCreator
     private constructor(
-        private val name: JsonField<String>,
-        private val startingAt: JsonField<OffsetDateTime>,
-        private val endingBefore: JsonField<OffsetDateTime>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun name(): String = name.getRequired("name")
@@ -288,14 +293,10 @@ private constructor(
 
             fun name(name: String) = name(JsonField.of(name))
 
-            @JsonProperty("name")
-            @ExcludeMissing
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
-            @JsonProperty("starting_at")
-            @ExcludeMissing
             fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                 this.startingAt = startingAt
             }
@@ -303,8 +304,6 @@ private constructor(
             fun endingBefore(endingBefore: OffsetDateTime) =
                 endingBefore(JsonField.of(endingBefore))
 
-            @JsonProperty("ending_before")
-            @ExcludeMissing
             fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
             }
@@ -314,7 +313,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -356,13 +354,18 @@ private constructor(
             "Alias{name=$name, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = CreditTypeConversion.Builder::class)
     @NoAutoDetect
     class CreditTypeConversion
+    @JsonCreator
     private constructor(
-        private val fiatPerCustomCredit: JsonField<String>,
-        private val customCreditType: JsonField<CreditTypeData>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("fiat_per_custom_credit")
+        @ExcludeMissing
+        private val fiatPerCustomCredit: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("custom_credit_type")
+        @ExcludeMissing
+        private val customCreditType: JsonField<CreditTypeData> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun fiatPerCustomCredit(): String =
@@ -415,8 +418,6 @@ private constructor(
             fun fiatPerCustomCredit(fiatPerCustomCredit: String) =
                 fiatPerCustomCredit(JsonField.of(fiatPerCustomCredit))
 
-            @JsonProperty("fiat_per_custom_credit")
-            @ExcludeMissing
             fun fiatPerCustomCredit(fiatPerCustomCredit: JsonField<String>) = apply {
                 this.fiatPerCustomCredit = fiatPerCustomCredit
             }
@@ -424,8 +425,6 @@ private constructor(
             fun customCreditType(customCreditType: CreditTypeData) =
                 customCreditType(JsonField.of(customCreditType))
 
-            @JsonProperty("custom_credit_type")
-            @ExcludeMissing
             fun customCreditType(customCreditType: JsonField<CreditTypeData>) = apply {
                 this.customCreditType = customCreditType
             }
@@ -435,7 +434,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
@@ -476,11 +474,12 @@ private constructor(
             "CreditTypeConversion{fiatPerCustomCredit=$fiatPerCustomCredit, customCreditType=$customCreditType, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = CustomFields.Builder::class)
     @NoAutoDetect
     class CustomFields
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -516,7 +515,6 @@ private constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }

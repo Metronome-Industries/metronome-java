@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
@@ -22,13 +22,17 @@ import java.util.Objects
  * provided rounding method and decimal places. For example, if the method is "round up" and the
  * decimal places is 0, then the quantity will be rounded up to the nearest integer.
  */
-@JsonDeserialize(builder = QuantityRounding.Builder::class)
 @NoAutoDetect
 class QuantityRounding
+@JsonCreator
 private constructor(
-    private val roundingMethod: JsonField<RoundingMethod>,
-    private val decimalPlaces: JsonField<Double>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("rounding_method")
+    @ExcludeMissing
+    private val roundingMethod: JsonField<RoundingMethod> = JsonMissing.of(),
+    @JsonProperty("decimal_places")
+    @ExcludeMissing
+    private val decimalPlaces: JsonField<Double> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun roundingMethod(): RoundingMethod = roundingMethod.getRequired("rounding_method")
@@ -76,16 +80,12 @@ private constructor(
         fun roundingMethod(roundingMethod: RoundingMethod) =
             roundingMethod(JsonField.of(roundingMethod))
 
-        @JsonProperty("rounding_method")
-        @ExcludeMissing
         fun roundingMethod(roundingMethod: JsonField<RoundingMethod>) = apply {
             this.roundingMethod = roundingMethod
         }
 
         fun decimalPlaces(decimalPlaces: Double) = decimalPlaces(JsonField.of(decimalPlaces))
 
-        @JsonProperty("decimal_places")
-        @ExcludeMissing
         fun decimalPlaces(decimalPlaces: JsonField<Double>) = apply {
             this.decimalPlaces = decimalPlaces
         }
@@ -95,7 +95,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }

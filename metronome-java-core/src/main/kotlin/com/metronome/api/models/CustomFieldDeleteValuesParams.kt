@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
@@ -14,6 +13,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
@@ -54,14 +54,15 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = CustomFieldDeleteValuesBody.Builder::class)
     @NoAutoDetect
     class CustomFieldDeleteValuesBody
+    @JsonCreator
     internal constructor(
-        private val entity: Entity,
-        private val entityId: String,
-        private val keys: List<String>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("entity") private val entity: Entity,
+        @JsonProperty("entity_id") private val entityId: String,
+        @JsonProperty("keys") private val keys: List<String>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("entity") fun entity(): Entity = entity
@@ -97,19 +98,17 @@ constructor(
                     customFieldDeleteValuesBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("entity") fun entity(entity: Entity) = apply { this.entity = entity }
+            fun entity(entity: Entity) = apply { this.entity = entity }
 
-            @JsonProperty("entity_id")
             fun entityId(entityId: String) = apply { this.entityId = entityId }
 
-            @JsonProperty("keys") fun keys(keys: List<String>) = apply { this.keys = keys }
+            fun keys(keys: List<String>) = apply { this.keys = keys }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
