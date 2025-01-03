@@ -914,6 +914,7 @@ constructor(
                 )
         }
 
+        /** Specify how much to rollover to the rollover credit grant */
         @JsonDeserialize(using = RolloverAmount.Deserializer::class)
         @JsonSerialize(using = RolloverAmount.Serializer::class)
         class RolloverAmount
