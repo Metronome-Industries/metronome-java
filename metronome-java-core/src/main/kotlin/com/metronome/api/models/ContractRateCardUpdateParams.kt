@@ -34,8 +34,6 @@ constructor(
      */
     fun aliases(): Optional<List<Alias>> = body.aliases()
 
-    fun customFields(): Optional<CustomFields> = body.customFields()
-
     fun description(): Optional<String> = body.description()
 
     /** Used only in UI/API. It is not exposed to end customers. */
@@ -59,7 +57,6 @@ constructor(
     internal constructor(
         @JsonProperty("rate_card_id") private val rateCardId: String,
         @JsonProperty("aliases") private val aliases: List<Alias>?,
-        @JsonProperty("custom_fields") private val customFields: CustomFields?,
         @JsonProperty("description") private val description: String?,
         @JsonProperty("name") private val name: String?,
         @JsonAnySetter
@@ -75,9 +72,6 @@ constructor(
          * not exposed to end customers.
          */
         @JsonProperty("aliases") fun aliases(): Optional<List<Alias>> = Optional.ofNullable(aliases)
-
-        @JsonProperty("custom_fields")
-        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
 
         @JsonProperty("description")
         fun description(): Optional<String> = Optional.ofNullable(description)
@@ -100,7 +94,6 @@ constructor(
 
             private var rateCardId: String? = null
             private var aliases: MutableList<Alias>? = null
-            private var customFields: CustomFields? = null
             private var description: String? = null
             private var name: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -109,7 +102,6 @@ constructor(
             internal fun from(contractRateCardUpdateBody: ContractRateCardUpdateBody) = apply {
                 rateCardId = contractRateCardUpdateBody.rateCardId
                 aliases = contractRateCardUpdateBody.aliases?.toMutableList()
-                customFields = contractRateCardUpdateBody.customFields
                 description = contractRateCardUpdateBody.description
                 name = contractRateCardUpdateBody.name
                 additionalProperties =
@@ -133,10 +125,6 @@ constructor(
              */
             fun addAlias(alias: Alias) = apply {
                 aliases = (aliases ?: mutableListOf()).apply { add(alias) }
-            }
-
-            fun customFields(customFields: CustomFields) = apply {
-                this.customFields = customFields
             }
 
             fun description(description: String) = apply { this.description = description }
@@ -167,7 +155,6 @@ constructor(
                 ContractRateCardUpdateBody(
                     checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
                     aliases?.toImmutable(),
-                    customFields,
                     description,
                     name,
                     additionalProperties.toImmutable(),
@@ -179,17 +166,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractRateCardUpdateBody && rateCardId == other.rateCardId && aliases == other.aliases && customFields == other.customFields && description == other.description && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractRateCardUpdateBody && rateCardId == other.rateCardId && aliases == other.aliases && description == other.description && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(rateCardId, aliases, customFields, description, name, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(rateCardId, aliases, description, name, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractRateCardUpdateBody{rateCardId=$rateCardId, aliases=$aliases, customFields=$customFields, description=$description, name=$name, additionalProperties=$additionalProperties}"
+            "ContractRateCardUpdateBody{rateCardId=$rateCardId, aliases=$aliases, description=$description, name=$name, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -229,8 +216,6 @@ constructor(
          * not exposed to end customers.
          */
         fun addAlias(alias: Alias) = apply { body.addAlias(alias) }
-
-        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
 
         fun description(description: String) = apply { body.description(description) }
 
@@ -459,73 +444,6 @@ constructor(
 
         override fun toString() =
             "Alias{name=$name, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
-    }
-
-    @NoAutoDetect
-    class CustomFields
-    @JsonCreator
-    private constructor(
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(customFields: CustomFields) = apply {
-                additionalProperties = customFields.additionalProperties.toMutableMap()
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is CustomFields && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

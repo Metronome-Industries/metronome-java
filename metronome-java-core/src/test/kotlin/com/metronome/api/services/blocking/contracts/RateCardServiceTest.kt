@@ -98,11 +98,6 @@ class RateCardServiceTest {
                                 .build()
                         )
                     )
-                    .customFields(
-                        ContractRateCardUpdateParams.CustomFields.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("string"))
-                            .build()
-                    )
                     .description("My Updated Rate Card Description")
                     .name("My Updated Rate Card")
                     .build()

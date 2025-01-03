@@ -2,7 +2,6 @@
 
 package com.metronome.api.models
 
-import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -21,11 +20,6 @@ class ContractRateCardUpdateParamsTest {
                         .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
-            )
-            .customFields(
-                ContractRateCardUpdateParams.CustomFields.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
             )
             .description("My Updated Rate Card Description")
             .name("My Updated Rate Card")
@@ -46,11 +40,6 @@ class ContractRateCardUpdateParamsTest {
                             .build()
                     )
                 )
-                .customFields(
-                    ContractRateCardUpdateParams.CustomFields.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("string"))
-                        .build()
-                )
                 .description("My Updated Rate Card Description")
                 .name("My Updated Rate Card")
                 .build()
@@ -66,12 +55,6 @@ class ContractRateCardUpdateParamsTest {
                         .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
-            )
-        assertThat(body.customFields())
-            .contains(
-                ContractRateCardUpdateParams.CustomFields.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
             )
         assertThat(body.description()).contains("My Updated Rate Card Description")
         assertThat(body.name()).contains("My Updated Rate Card")
