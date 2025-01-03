@@ -18,26 +18,22 @@ import java.util.Objects
 class CustomerSetIngestAliasesParams
 constructor(
     private val customerId: String,
-    private val ingestAliases: List<String>,
+    private val body: CustomerSetIngestAliasesBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun customerId(): String = customerId
 
-    fun ingestAliases(): List<String> = ingestAliases
+    fun ingestAliases(): List<String> = body.ingestAliases()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomerSetIngestAliasesBody {
-        return CustomerSetIngestAliasesBody(ingestAliases, additionalBodyProperties)
-    }
+    @JvmSynthetic internal fun getBody(): CustomerSetIngestAliasesBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -74,7 +70,7 @@ constructor(
 
         class Builder {
 
-            private var ingestAliases: List<String>? = null
+            private var ingestAliases: MutableList<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -85,7 +81,11 @@ constructor(
             }
 
             fun ingestAliases(ingestAliases: List<String>) = apply {
-                this.ingestAliases = ingestAliases
+                this.ingestAliases = ingestAliases.toMutableList()
+            }
+
+            fun addIngestAlias(ingestAlias: String) = apply {
+                ingestAliases = (ingestAliases ?: mutableListOf()).apply { add(ingestAlias) }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -144,29 +144,24 @@ constructor(
     class Builder {
 
         private var customerId: String? = null
-        private var ingestAliases: MutableList<String> = mutableListOf()
+        private var body: CustomerSetIngestAliasesBody.Builder =
+            CustomerSetIngestAliasesBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerSetIngestAliasesParams: CustomerSetIngestAliasesParams) = apply {
             customerId = customerSetIngestAliasesParams.customerId
-            ingestAliases = customerSetIngestAliasesParams.ingestAliases.toMutableList()
+            body = customerSetIngestAliasesParams.body.toBuilder()
             additionalHeaders = customerSetIngestAliasesParams.additionalHeaders.toBuilder()
             additionalQueryParams = customerSetIngestAliasesParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                customerSetIngestAliasesParams.additionalBodyProperties.toMutableMap()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
 
-        fun ingestAliases(ingestAliases: List<String>) = apply {
-            this.ingestAliases.clear()
-            this.ingestAliases.addAll(ingestAliases)
-        }
+        fun ingestAliases(ingestAliases: List<String>) = apply { body.ingestAliases(ingestAliases) }
 
-        fun addIngestAlias(ingestAlias: String) = apply { this.ingestAliases.add(ingestAlias) }
+        fun addIngestAlias(ingestAlias: String) = apply { body.addIngestAlias(ingestAlias) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -267,34 +262,30 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerSetIngestAliasesParams =
             CustomerSetIngestAliasesParams(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
-                ingestAliases.toImmutable(),
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -303,11 +294,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerSetIngestAliasesParams && customerId == other.customerId && ingestAliases == other.ingestAliases && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerSetIngestAliasesParams && customerId == other.customerId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, ingestAliases, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomerSetIngestAliasesParams{customerId=$customerId, ingestAliases=$ingestAliases, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerSetIngestAliasesParams{customerId=$customerId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

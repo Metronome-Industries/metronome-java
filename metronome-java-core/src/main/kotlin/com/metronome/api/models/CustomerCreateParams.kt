@@ -21,43 +21,34 @@ import java.util.Optional
 
 class CustomerCreateParams
 constructor(
-    private val name: String,
-    private val billingConfig: BillingConfig?,
-    private val customFields: CustomFields?,
-    private val externalId: String?,
-    private val ingestAliases: List<String>?,
+    private val body: CustomerCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun name(): String = name
+    /** This will be truncated to 160 characters if the provided name is longer. */
+    fun name(): String = body.name()
 
-    fun billingConfig(): Optional<BillingConfig> = Optional.ofNullable(billingConfig)
+    fun billingConfig(): Optional<BillingConfig> = body.billingConfig()
 
-    fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+    fun customFields(): Optional<CustomFields> = body.customFields()
 
-    fun externalId(): Optional<String> = Optional.ofNullable(externalId)
+    /**
+     * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this customer
+     * in usage events
+     */
+    fun externalId(): Optional<String> = body.externalId()
 
-    fun ingestAliases(): Optional<List<String>> = Optional.ofNullable(ingestAliases)
+    /** Aliases that can be used to refer to this customer in usage events */
+    fun ingestAliases(): Optional<List<String>> = body.ingestAliases()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomerCreateBody {
-        return CustomerCreateBody(
-            name,
-            billingConfig,
-            customFields,
-            externalId,
-            ingestAliases,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomerCreateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -113,7 +104,7 @@ constructor(
             private var billingConfig: BillingConfig? = null
             private var customFields: CustomFields? = null
             private var externalId: String? = null
-            private var ingestAliases: List<String>? = null
+            private var ingestAliases: MutableList<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -145,7 +136,12 @@ constructor(
 
             /** Aliases that can be used to refer to this customer in usage events */
             fun ingestAliases(ingestAliases: List<String>) = apply {
-                this.ingestAliases = ingestAliases
+                this.ingestAliases = ingestAliases.toMutableList()
+            }
+
+            /** Aliases that can be used to refer to this customer in usage events */
+            fun addIngestAlias(ingestAlias: String) = apply {
+                ingestAliases = (ingestAliases ?: mutableListOf()).apply { add(ingestAlias) }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -206,50 +202,37 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var name: String? = null
-        private var billingConfig: BillingConfig? = null
-        private var customFields: CustomFields? = null
-        private var externalId: String? = null
-        private var ingestAliases: MutableList<String> = mutableListOf()
+        private var body: CustomerCreateBody.Builder = CustomerCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerCreateParams: CustomerCreateParams) = apply {
-            name = customerCreateParams.name
-            billingConfig = customerCreateParams.billingConfig
-            customFields = customerCreateParams.customFields
-            externalId = customerCreateParams.externalId
-            ingestAliases = customerCreateParams.ingestAliases?.toMutableList() ?: mutableListOf()
+            body = customerCreateParams.body.toBuilder()
             additionalHeaders = customerCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = customerCreateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = customerCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** This will be truncated to 160 characters if the provided name is longer. */
-        fun name(name: String) = apply { this.name = name }
+        fun name(name: String) = apply { body.name(name) }
 
         fun billingConfig(billingConfig: BillingConfig) = apply {
-            this.billingConfig = billingConfig
+            body.billingConfig(billingConfig)
         }
 
-        fun customFields(customFields: CustomFields) = apply { this.customFields = customFields }
+        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
 
         /**
          * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
          * customer in usage events
          */
-        fun externalId(externalId: String) = apply { this.externalId = externalId }
+        fun externalId(externalId: String) = apply { body.externalId(externalId) }
 
         /** Aliases that can be used to refer to this customer in usage events */
-        fun ingestAliases(ingestAliases: List<String>) = apply {
-            this.ingestAliases.clear()
-            this.ingestAliases.addAll(ingestAliases)
-        }
+        fun ingestAliases(ingestAliases: List<String>) = apply { body.ingestAliases(ingestAliases) }
 
         /** Aliases that can be used to refer to this customer in usage events */
-        fun addIngestAlias(ingestAlias: String) = apply { this.ingestAliases.add(ingestAlias) }
+        fun addIngestAlias(ingestAlias: String) = apply { body.addIngestAlias(ingestAlias) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -350,37 +333,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerCreateParams =
             CustomerCreateParams(
-                checkNotNull(name) { "`name` is required but was not set" },
-                billingConfig,
-                customFields,
-                externalId,
-                ingestAliases.toImmutable().ifEmpty { null },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -935,11 +910,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCreateParams && name == other.name && billingConfig == other.billingConfig && customFields == other.customFields && externalId == other.externalId && ingestAliases == other.ingestAliases && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(name, billingConfig, customFields, externalId, ingestAliases, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomerCreateParams{name=$name, billingConfig=$billingConfig, customFields=$customFields, externalId=$externalId, ingestAliases=$ingestAliases, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

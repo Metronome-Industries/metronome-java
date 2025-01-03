@@ -20,35 +20,24 @@ import java.util.Objects
 
 class CustomFieldDeleteValuesParams
 constructor(
-    private val entity: Entity,
-    private val entityId: String,
-    private val keys: List<String>,
+    private val body: CustomFieldDeleteValuesBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun entity(): Entity = entity
+    fun entity(): Entity = body.entity()
 
-    fun entityId(): String = entityId
+    fun entityId(): String = body.entityId()
 
-    fun keys(): List<String> = keys
+    fun keys(): List<String> = body.keys()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomFieldDeleteValuesBody {
-        return CustomFieldDeleteValuesBody(
-            entity,
-            entityId,
-            keys,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomFieldDeleteValuesBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -86,7 +75,7 @@ constructor(
 
             private var entity: Entity? = null
             private var entityId: String? = null
-            private var keys: List<String>? = null
+            private var keys: MutableList<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -102,7 +91,9 @@ constructor(
 
             fun entityId(entityId: String) = apply { this.entityId = entityId }
 
-            fun keys(keys: List<String>) = apply { this.keys = keys }
+            fun keys(keys: List<String>) = apply { this.keys = keys.toMutableList() }
+
+            fun addKey(key: String) = apply { keys = (keys ?: mutableListOf()).apply { add(key) } }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -160,34 +151,25 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var entity: Entity? = null
-        private var entityId: String? = null
-        private var keys: MutableList<String> = mutableListOf()
+        private var body: CustomFieldDeleteValuesBody.Builder =
+            CustomFieldDeleteValuesBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customFieldDeleteValuesParams: CustomFieldDeleteValuesParams) = apply {
-            entity = customFieldDeleteValuesParams.entity
-            entityId = customFieldDeleteValuesParams.entityId
-            keys = customFieldDeleteValuesParams.keys.toMutableList()
+            body = customFieldDeleteValuesParams.body.toBuilder()
             additionalHeaders = customFieldDeleteValuesParams.additionalHeaders.toBuilder()
             additionalQueryParams = customFieldDeleteValuesParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                customFieldDeleteValuesParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun entity(entity: Entity) = apply { this.entity = entity }
+        fun entity(entity: Entity) = apply { body.entity(entity) }
 
-        fun entityId(entityId: String) = apply { this.entityId = entityId }
+        fun entityId(entityId: String) = apply { body.entityId(entityId) }
 
-        fun keys(keys: List<String>) = apply {
-            this.keys.clear()
-            this.keys.addAll(keys)
-        }
+        fun keys(keys: List<String>) = apply { body.keys(keys) }
 
-        fun addKey(key: String) = apply { this.keys.add(key) }
+        fun addKey(key: String) = apply { body.addKey(key) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -288,35 +270,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomFieldDeleteValuesParams =
             CustomFieldDeleteValuesParams(
-                checkNotNull(entity) { "`entity` is required but was not set" },
-                checkNotNull(entityId) { "`entityId` is required but was not set" },
-                keys.toImmutable(),
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -466,11 +442,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomFieldDeleteValuesParams && entity == other.entity && entityId == other.entityId && keys == other.keys && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomFieldDeleteValuesParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(entity, entityId, keys, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomFieldDeleteValuesParams{entity=$entity, entityId=$entityId, keys=$keys, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomFieldDeleteValuesParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -18,36 +18,26 @@ import java.util.Optional
 
 class CreditGrantVoidParams
 constructor(
-    private val id: String,
-    private val releaseUniquenessKey: Boolean?,
-    private val voidCreditPurchaseInvoice: Boolean?,
+    private val body: CreditGrantVoidBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun id(): String = id
+    fun id(): String = body.id()
 
-    fun releaseUniquenessKey(): Optional<Boolean> = Optional.ofNullable(releaseUniquenessKey)
+    /** If true, resets the uniqueness key on this grant so it can be re-used */
+    fun releaseUniquenessKey(): Optional<Boolean> = body.releaseUniquenessKey()
 
-    fun voidCreditPurchaseInvoice(): Optional<Boolean> =
-        Optional.ofNullable(voidCreditPurchaseInvoice)
+    /** If true, void the purchase invoice associated with the grant */
+    fun voidCreditPurchaseInvoice(): Optional<Boolean> = body.voidCreditPurchaseInvoice()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CreditGrantVoidBody {
-        return CreditGrantVoidBody(
-            id,
-            releaseUniquenessKey,
-            voidCreditPurchaseInvoice,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CreditGrantVoidBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -170,33 +160,27 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var id: String? = null
-        private var releaseUniquenessKey: Boolean? = null
-        private var voidCreditPurchaseInvoice: Boolean? = null
+        private var body: CreditGrantVoidBody.Builder = CreditGrantVoidBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(creditGrantVoidParams: CreditGrantVoidParams) = apply {
-            id = creditGrantVoidParams.id
-            releaseUniquenessKey = creditGrantVoidParams.releaseUniquenessKey
-            voidCreditPurchaseInvoice = creditGrantVoidParams.voidCreditPurchaseInvoice
+            body = creditGrantVoidParams.body.toBuilder()
             additionalHeaders = creditGrantVoidParams.additionalHeaders.toBuilder()
             additionalQueryParams = creditGrantVoidParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = creditGrantVoidParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun id(id: String) = apply { this.id = id }
+        fun id(id: String) = apply { body.id(id) }
 
         /** If true, resets the uniqueness key on this grant so it can be re-used */
         fun releaseUniquenessKey(releaseUniquenessKey: Boolean) = apply {
-            this.releaseUniquenessKey = releaseUniquenessKey
+            body.releaseUniquenessKey(releaseUniquenessKey)
         }
 
         /** If true, void the purchase invoice associated with the grant */
         fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Boolean) = apply {
-            this.voidCreditPurchaseInvoice = voidCreditPurchaseInvoice
+            body.voidCreditPurchaseInvoice(voidCreditPurchaseInvoice)
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -298,35 +282,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CreditGrantVoidParams =
             CreditGrantVoidParams(
-                checkNotNull(id) { "`id` is required but was not set" },
-                releaseUniquenessKey,
-                voidCreditPurchaseInvoice,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -335,11 +313,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditGrantVoidParams && id == other.id && releaseUniquenessKey == other.releaseUniquenessKey && voidCreditPurchaseInvoice == other.voidCreditPurchaseInvoice && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CreditGrantVoidParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, releaseUniquenessKey, voidCreditPurchaseInvoice, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CreditGrantVoidParams{id=$id, releaseUniquenessKey=$releaseUniquenessKey, voidCreditPurchaseInvoice=$voidCreditPurchaseInvoice, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CreditGrantVoidParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

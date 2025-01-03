@@ -19,59 +19,45 @@ import java.util.Optional
 
 class CustomerCommitListParams
 constructor(
-    private val customerId: String,
-    private val commitId: String?,
-    private val coveringDate: OffsetDateTime?,
-    private val effectiveBefore: OffsetDateTime?,
-    private val includeArchived: Boolean?,
-    private val includeContractCommits: Boolean?,
-    private val includeLedgers: Boolean?,
-    private val nextPage: String?,
-    private val startingAt: OffsetDateTime?,
+    private val body: CustomerCommitListBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun customerId(): String = customerId
+    fun customerId(): String = body.customerId()
 
-    fun commitId(): Optional<String> = Optional.ofNullable(commitId)
+    fun commitId(): Optional<String> = body.commitId()
 
-    fun coveringDate(): Optional<OffsetDateTime> = Optional.ofNullable(coveringDate)
+    /** Include only commits that have access schedules that "cover" the provided date */
+    fun coveringDate(): Optional<OffsetDateTime> = body.coveringDate()
 
-    fun effectiveBefore(): Optional<OffsetDateTime> = Optional.ofNullable(effectiveBefore)
+    /** Include only commits that have any access before the provided date (exclusive) */
+    fun effectiveBefore(): Optional<OffsetDateTime> = body.effectiveBefore()
 
-    fun includeArchived(): Optional<Boolean> = Optional.ofNullable(includeArchived)
+    /** Include commits from archived contracts. */
+    fun includeArchived(): Optional<Boolean> = body.includeArchived()
 
-    fun includeContractCommits(): Optional<Boolean> = Optional.ofNullable(includeContractCommits)
+    /** Include commits on the contract level. */
+    fun includeContractCommits(): Optional<Boolean> = body.includeContractCommits()
 
-    fun includeLedgers(): Optional<Boolean> = Optional.ofNullable(includeLedgers)
+    /**
+     * Include commit ledgers in the response. Setting this flag may cause the query to be slower.
+     */
+    fun includeLedgers(): Optional<Boolean> = body.includeLedgers()
 
-    fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
+    /** The next page token from a previous response. */
+    fun nextPage(): Optional<String> = body.nextPage()
 
-    fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
+    /** Include only commits that have any access on or after the provided date */
+    fun startingAt(): Optional<OffsetDateTime> = body.startingAt()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomerCommitListBody {
-        return CustomerCommitListBody(
-            customerId,
-            commitId,
-            coveringDate,
-            effectiveBefore,
-            includeArchived,
-            includeContractCommits,
-            includeLedgers,
-            nextPage,
-            startingAt,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomerCommitListBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -267,69 +253,50 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var customerId: String? = null
-        private var commitId: String? = null
-        private var coveringDate: OffsetDateTime? = null
-        private var effectiveBefore: OffsetDateTime? = null
-        private var includeArchived: Boolean? = null
-        private var includeContractCommits: Boolean? = null
-        private var includeLedgers: Boolean? = null
-        private var nextPage: String? = null
-        private var startingAt: OffsetDateTime? = null
+        private var body: CustomerCommitListBody.Builder = CustomerCommitListBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerCommitListParams: CustomerCommitListParams) = apply {
-            customerId = customerCommitListParams.customerId
-            commitId = customerCommitListParams.commitId
-            coveringDate = customerCommitListParams.coveringDate
-            effectiveBefore = customerCommitListParams.effectiveBefore
-            includeArchived = customerCommitListParams.includeArchived
-            includeContractCommits = customerCommitListParams.includeContractCommits
-            includeLedgers = customerCommitListParams.includeLedgers
-            nextPage = customerCommitListParams.nextPage
-            startingAt = customerCommitListParams.startingAt
+            body = customerCommitListParams.body.toBuilder()
             additionalHeaders = customerCommitListParams.additionalHeaders.toBuilder()
             additionalQueryParams = customerCommitListParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                customerCommitListParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
-        fun commitId(commitId: String) = apply { this.commitId = commitId }
+        fun commitId(commitId: String) = apply { body.commitId(commitId) }
 
         /** Include only commits that have access schedules that "cover" the provided date */
-        fun coveringDate(coveringDate: OffsetDateTime) = apply { this.coveringDate = coveringDate }
+        fun coveringDate(coveringDate: OffsetDateTime) = apply { body.coveringDate(coveringDate) }
 
         /** Include only commits that have any access before the provided date (exclusive) */
         fun effectiveBefore(effectiveBefore: OffsetDateTime) = apply {
-            this.effectiveBefore = effectiveBefore
+            body.effectiveBefore(effectiveBefore)
         }
 
         /** Include commits from archived contracts. */
         fun includeArchived(includeArchived: Boolean) = apply {
-            this.includeArchived = includeArchived
+            body.includeArchived(includeArchived)
         }
 
         /** Include commits on the contract level. */
         fun includeContractCommits(includeContractCommits: Boolean) = apply {
-            this.includeContractCommits = includeContractCommits
+            body.includeContractCommits(includeContractCommits)
         }
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        fun includeLedgers(includeLedgers: Boolean) = apply { this.includeLedgers = includeLedgers }
+        fun includeLedgers(includeLedgers: Boolean) = apply { body.includeLedgers(includeLedgers) }
 
         /** The next page token from a previous response. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String) = apply { body.nextPage(nextPage) }
 
         /** Include only commits that have any access on or after the provided date */
-        fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+        fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -430,41 +397,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerCommitListParams =
             CustomerCommitListParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                commitId,
-                coveringDate,
-                effectiveBefore,
-                includeArchived,
-                includeContractCommits,
-                includeLedgers,
-                nextPage,
-                startingAt,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -473,11 +428,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCommitListParams && customerId == other.customerId && commitId == other.commitId && coveringDate == other.coveringDate && effectiveBefore == other.effectiveBefore && includeArchived == other.includeArchived && includeContractCommits == other.includeContractCommits && includeLedgers == other.includeLedgers && nextPage == other.nextPage && startingAt == other.startingAt && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerCommitListParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, commitId, coveringDate, effectiveBefore, includeArchived, includeContractCommits, includeLedgers, nextPage, startingAt, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomerCommitListParams{customerId=$customerId, commitId=$commitId, coveringDate=$coveringDate, effectiveBefore=$effectiveBefore, includeArchived=$includeArchived, includeContractCommits=$includeContractCommits, includeLedgers=$includeLedgers, nextPage=$nextPage, startingAt=$startingAt, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerCommitListParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

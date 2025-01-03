@@ -19,43 +19,41 @@ import java.util.Optional
 
 class ContractListParams
 constructor(
-    private val customerId: String,
-    private val coveringDate: OffsetDateTime?,
-    private val includeArchived: Boolean?,
-    private val includeLedgers: Boolean?,
-    private val startingAt: OffsetDateTime?,
+    private val body: ContractListBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun customerId(): String = customerId
+    fun customerId(): String = body.customerId()
 
-    fun coveringDate(): Optional<OffsetDateTime> = Optional.ofNullable(coveringDate)
+    /**
+     * Optional RFC 3339 timestamp. If provided, the response will include only contracts effective
+     * on the provided date. This cannot be provided if the starting_at filter is provided.
+     */
+    fun coveringDate(): Optional<OffsetDateTime> = body.coveringDate()
 
-    fun includeArchived(): Optional<Boolean> = Optional.ofNullable(includeArchived)
+    /** Include archived contracts in the response */
+    fun includeArchived(): Optional<Boolean> = body.includeArchived()
 
-    fun includeLedgers(): Optional<Boolean> = Optional.ofNullable(includeLedgers)
+    /**
+     * Include commit ledgers in the response. Setting this flag may cause the query to be slower.
+     */
+    fun includeLedgers(): Optional<Boolean> = body.includeLedgers()
 
-    fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
+    /**
+     * Optional RFC 3339 timestamp. If provided, the response will include only contracts where
+     * effective_at is on or after the provided date. This cannot be provided if the covering_date
+     * filter is provided.
+     */
+    fun startingAt(): Optional<OffsetDateTime> = body.startingAt()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractListBody {
-        return ContractListBody(
-            customerId,
-            coveringDate,
-            includeArchived,
-            includeLedgers,
-            startingAt,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractListBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -222,53 +220,43 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var customerId: String? = null
-        private var coveringDate: OffsetDateTime? = null
-        private var includeArchived: Boolean? = null
-        private var includeLedgers: Boolean? = null
-        private var startingAt: OffsetDateTime? = null
+        private var body: ContractListBody.Builder = ContractListBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractListParams: ContractListParams) = apply {
-            customerId = contractListParams.customerId
-            coveringDate = contractListParams.coveringDate
-            includeArchived = contractListParams.includeArchived
-            includeLedgers = contractListParams.includeLedgers
-            startingAt = contractListParams.startingAt
+            body = contractListParams.body.toBuilder()
             additionalHeaders = contractListParams.additionalHeaders.toBuilder()
             additionalQueryParams = contractListParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = contractListParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /**
          * Optional RFC 3339 timestamp. If provided, the response will include only contracts
          * effective on the provided date. This cannot be provided if the starting_at filter is
          * provided.
          */
-        fun coveringDate(coveringDate: OffsetDateTime) = apply { this.coveringDate = coveringDate }
+        fun coveringDate(coveringDate: OffsetDateTime) = apply { body.coveringDate(coveringDate) }
 
         /** Include archived contracts in the response */
         fun includeArchived(includeArchived: Boolean) = apply {
-            this.includeArchived = includeArchived
+            body.includeArchived(includeArchived)
         }
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        fun includeLedgers(includeLedgers: Boolean) = apply { this.includeLedgers = includeLedgers }
+        fun includeLedgers(includeLedgers: Boolean) = apply { body.includeLedgers(includeLedgers) }
 
         /**
          * Optional RFC 3339 timestamp. If provided, the response will include only contracts where
          * effective_at is on or after the provided date. This cannot be provided if the
          * covering_date filter is provided.
          */
-        fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+        fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -369,37 +357,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractListParams =
             ContractListParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                coveringDate,
-                includeArchived,
-                includeLedgers,
-                startingAt,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -408,11 +388,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractListParams && customerId == other.customerId && coveringDate == other.coveringDate && includeArchived == other.includeArchived && includeLedgers == other.includeLedgers && startingAt == other.startingAt && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractListParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, coveringDate, includeArchived, includeLedgers, startingAt, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractListParams{customerId=$customerId, coveringDate=$coveringDate, includeArchived=$includeArchived, includeLedgers=$includeLedgers, startingAt=$startingAt, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractListParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

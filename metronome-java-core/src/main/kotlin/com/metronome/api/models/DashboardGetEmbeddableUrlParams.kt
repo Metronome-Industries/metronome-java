@@ -21,44 +21,32 @@ import java.util.Optional
 
 class DashboardGetEmbeddableUrlParams
 constructor(
-    private val customerId: String,
-    private val dashboard: Dashboard,
-    private val bmGroupKeyOverrides: List<BmGroupKeyOverride>?,
-    private val colorOverrides: List<ColorOverride>?,
-    private val dashboardOptions: List<DashboardOption>?,
+    private val body: DashboardGetEmbeddableUrlBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun customerId(): String = customerId
+    fun customerId(): String = body.customerId()
 
-    fun dashboard(): Dashboard = dashboard
+    /** The type of dashboard to retrieve. */
+    fun dashboard(): Dashboard = body.dashboard()
 
-    fun bmGroupKeyOverrides(): Optional<List<BmGroupKeyOverride>> =
-        Optional.ofNullable(bmGroupKeyOverrides)
+    /** Optional list of billable metric group key overrides */
+    fun bmGroupKeyOverrides(): Optional<List<BmGroupKeyOverride>> = body.bmGroupKeyOverrides()
 
-    fun colorOverrides(): Optional<List<ColorOverride>> = Optional.ofNullable(colorOverrides)
+    /** Optional list of colors to override */
+    fun colorOverrides(): Optional<List<ColorOverride>> = body.colorOverrides()
 
-    fun dashboardOptions(): Optional<List<DashboardOption>> = Optional.ofNullable(dashboardOptions)
+    /** Optional dashboard specific options */
+    fun dashboardOptions(): Optional<List<DashboardOption>> = body.dashboardOptions()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): DashboardGetEmbeddableUrlBody {
-        return DashboardGetEmbeddableUrlBody(
-            customerId,
-            dashboard,
-            bmGroupKeyOverrides,
-            colorOverrides,
-            dashboardOptions,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): DashboardGetEmbeddableUrlBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -112,9 +100,9 @@ constructor(
 
             private var customerId: String? = null
             private var dashboard: Dashboard? = null
-            private var bmGroupKeyOverrides: List<BmGroupKeyOverride>? = null
-            private var colorOverrides: List<ColorOverride>? = null
-            private var dashboardOptions: List<DashboardOption>? = null
+            private var bmGroupKeyOverrides: MutableList<BmGroupKeyOverride>? = null
+            private var colorOverrides: MutableList<ColorOverride>? = null
+            private var dashboardOptions: MutableList<DashboardOption>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -138,17 +126,34 @@ constructor(
 
             /** Optional list of billable metric group key overrides */
             fun bmGroupKeyOverrides(bmGroupKeyOverrides: List<BmGroupKeyOverride>) = apply {
-                this.bmGroupKeyOverrides = bmGroupKeyOverrides
+                this.bmGroupKeyOverrides = bmGroupKeyOverrides.toMutableList()
+            }
+
+            /** Optional list of billable metric group key overrides */
+            fun addBmGroupKeyOverride(bmGroupKeyOverride: BmGroupKeyOverride) = apply {
+                bmGroupKeyOverrides =
+                    (bmGroupKeyOverrides ?: mutableListOf()).apply { add(bmGroupKeyOverride) }
             }
 
             /** Optional list of colors to override */
             fun colorOverrides(colorOverrides: List<ColorOverride>) = apply {
-                this.colorOverrides = colorOverrides
+                this.colorOverrides = colorOverrides.toMutableList()
+            }
+
+            /** Optional list of colors to override */
+            fun addColorOverride(colorOverride: ColorOverride) = apply {
+                colorOverrides = (colorOverrides ?: mutableListOf()).apply { add(colorOverride) }
             }
 
             /** Optional dashboard specific options */
             fun dashboardOptions(dashboardOptions: List<DashboardOption>) = apply {
-                this.dashboardOptions = dashboardOptions
+                this.dashboardOptions = dashboardOptions.toMutableList()
+            }
+
+            /** Optional dashboard specific options */
+            fun addDashboardOption(dashboardOption: DashboardOption) = apply {
+                dashboardOptions =
+                    (dashboardOptions ?: mutableListOf()).apply { add(dashboardOption) }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -209,72 +214,53 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var customerId: String? = null
-        private var dashboard: Dashboard? = null
-        private var bmGroupKeyOverrides: MutableList<BmGroupKeyOverride> = mutableListOf()
-        private var colorOverrides: MutableList<ColorOverride> = mutableListOf()
-        private var dashboardOptions: MutableList<DashboardOption> = mutableListOf()
+        private var body: DashboardGetEmbeddableUrlBody.Builder =
+            DashboardGetEmbeddableUrlBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(dashboardGetEmbeddableUrlParams: DashboardGetEmbeddableUrlParams) =
             apply {
-                customerId = dashboardGetEmbeddableUrlParams.customerId
-                dashboard = dashboardGetEmbeddableUrlParams.dashboard
-                bmGroupKeyOverrides =
-                    dashboardGetEmbeddableUrlParams.bmGroupKeyOverrides?.toMutableList()
-                        ?: mutableListOf()
-                colorOverrides =
-                    dashboardGetEmbeddableUrlParams.colorOverrides?.toMutableList()
-                        ?: mutableListOf()
-                dashboardOptions =
-                    dashboardGetEmbeddableUrlParams.dashboardOptions?.toMutableList()
-                        ?: mutableListOf()
+                body = dashboardGetEmbeddableUrlParams.body.toBuilder()
                 additionalHeaders = dashboardGetEmbeddableUrlParams.additionalHeaders.toBuilder()
                 additionalQueryParams =
                     dashboardGetEmbeddableUrlParams.additionalQueryParams.toBuilder()
-                additionalBodyProperties =
-                    dashboardGetEmbeddableUrlParams.additionalBodyProperties.toMutableMap()
             }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /** The type of dashboard to retrieve. */
-        fun dashboard(dashboard: Dashboard) = apply { this.dashboard = dashboard }
+        fun dashboard(dashboard: Dashboard) = apply { body.dashboard(dashboard) }
 
         /** Optional list of billable metric group key overrides */
         fun bmGroupKeyOverrides(bmGroupKeyOverrides: List<BmGroupKeyOverride>) = apply {
-            this.bmGroupKeyOverrides.clear()
-            this.bmGroupKeyOverrides.addAll(bmGroupKeyOverrides)
+            body.bmGroupKeyOverrides(bmGroupKeyOverrides)
         }
 
         /** Optional list of billable metric group key overrides */
         fun addBmGroupKeyOverride(bmGroupKeyOverride: BmGroupKeyOverride) = apply {
-            this.bmGroupKeyOverrides.add(bmGroupKeyOverride)
+            body.addBmGroupKeyOverride(bmGroupKeyOverride)
         }
 
         /** Optional list of colors to override */
         fun colorOverrides(colorOverrides: List<ColorOverride>) = apply {
-            this.colorOverrides.clear()
-            this.colorOverrides.addAll(colorOverrides)
+            body.colorOverrides(colorOverrides)
         }
 
         /** Optional list of colors to override */
         fun addColorOverride(colorOverride: ColorOverride) = apply {
-            this.colorOverrides.add(colorOverride)
+            body.addColorOverride(colorOverride)
         }
 
         /** Optional dashboard specific options */
         fun dashboardOptions(dashboardOptions: List<DashboardOption>) = apply {
-            this.dashboardOptions.clear()
-            this.dashboardOptions.addAll(dashboardOptions)
+            body.dashboardOptions(dashboardOptions)
         }
 
         /** Optional dashboard specific options */
         fun addDashboardOption(dashboardOption: DashboardOption) = apply {
-            this.dashboardOptions.add(dashboardOption)
+            body.addDashboardOption(dashboardOption)
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -376,37 +362,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): DashboardGetEmbeddableUrlParams =
             DashboardGetEmbeddableUrlParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(dashboard) { "`dashboard` is required but was not set" },
-                bmGroupKeyOverrides.toImmutable().ifEmpty { null },
-                colorOverrides.toImmutable().ifEmpty { null },
-                dashboardOptions.toImmutable().ifEmpty { null },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -1007,11 +985,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is DashboardGetEmbeddableUrlParams && customerId == other.customerId && dashboard == other.dashboard && bmGroupKeyOverrides == other.bmGroupKeyOverrides && colorOverrides == other.colorOverrides && dashboardOptions == other.dashboardOptions && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is DashboardGetEmbeddableUrlParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, dashboard, bmGroupKeyOverrides, colorOverrides, dashboardOptions, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "DashboardGetEmbeddableUrlParams{customerId=$customerId, dashboard=$dashboard, bmGroupKeyOverrides=$bmGroupKeyOverrides, colorOverrides=$colorOverrides, dashboardOptions=$dashboardOptions, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "DashboardGetEmbeddableUrlParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

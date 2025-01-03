@@ -19,35 +19,30 @@ import java.util.Optional
 
 class ContractUpdateEndDateParams
 constructor(
-    private val contractId: String,
-    private val customerId: String,
-    private val endingBefore: OffsetDateTime?,
+    private val body: ContractUpdateEndDateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun contractId(): String = contractId
+    /** ID of the contract to update */
+    fun contractId(): String = body.contractId()
 
-    fun customerId(): String = customerId
+    /** ID of the customer whose contract is to be updated */
+    fun customerId(): String = body.customerId()
 
-    fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+    /**
+     * RFC 3339 timestamp indicating when the contract will end (exclusive). If not provided, the
+     * contract will be updated to be open-ended.
+     */
+    fun endingBefore(): Optional<OffsetDateTime> = body.endingBefore()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractUpdateEndDateBody {
-        return ContractUpdateEndDateBody(
-            contractId,
-            customerId,
-            endingBefore,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractUpdateEndDateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -173,35 +168,28 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var contractId: String? = null
-        private var customerId: String? = null
-        private var endingBefore: OffsetDateTime? = null
+        private var body: ContractUpdateEndDateBody.Builder = ContractUpdateEndDateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractUpdateEndDateParams: ContractUpdateEndDateParams) = apply {
-            contractId = contractUpdateEndDateParams.contractId
-            customerId = contractUpdateEndDateParams.customerId
-            endingBefore = contractUpdateEndDateParams.endingBefore
+            body = contractUpdateEndDateParams.body.toBuilder()
             additionalHeaders = contractUpdateEndDateParams.additionalHeaders.toBuilder()
             additionalQueryParams = contractUpdateEndDateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                contractUpdateEndDateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the contract to update */
-        fun contractId(contractId: String) = apply { this.contractId = contractId }
+        fun contractId(contractId: String) = apply { body.contractId(contractId) }
 
         /** ID of the customer whose contract is to be updated */
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /**
          * RFC 3339 timestamp indicating when the contract will end (exclusive). If not provided,
          * the contract will be updated to be open-ended.
          */
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { this.endingBefore = endingBefore }
+        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -302,35 +290,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractUpdateEndDateParams =
             ContractUpdateEndDateParams(
-                checkNotNull(contractId) { "`contractId` is required but was not set" },
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                endingBefore,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -339,11 +321,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractUpdateEndDateParams && contractId == other.contractId && customerId == other.customerId && endingBefore == other.endingBefore && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractUpdateEndDateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, endingBefore, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractUpdateEndDateParams{contractId=$contractId, customerId=$customerId, endingBefore=$endingBefore, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractUpdateEndDateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

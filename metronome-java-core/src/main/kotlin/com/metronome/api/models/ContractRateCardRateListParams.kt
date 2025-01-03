@@ -19,41 +19,38 @@ import java.util.Optional
 
 class ContractRateCardRateListParams
 constructor(
-    private val at: OffsetDateTime,
-    private val rateCardId: String,
     private val limit: Long?,
     private val nextPage: String?,
-    private val selectors: List<Selector>?,
+    private val body: ContractRateCardRateListBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun at(): OffsetDateTime = at
-
-    fun rateCardId(): String = rateCardId
-
+    /** Max number of results that should be returned */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
-    fun selectors(): Optional<List<Selector>> = Optional.ofNullable(selectors)
+    /** inclusive starting point for the rates schedule */
+    fun at(): OffsetDateTime = body.at()
+
+    /** ID of the rate card to get the schedule for */
+    fun rateCardId(): String = body.rateCardId()
+
+    /**
+     * List of rate selectors, rates matching ANY of the selector will be included in the response
+     * Passing no selectors will result in all rates being returned.
+     */
+    fun selectors(): Optional<List<Selector>> = body.selectors()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractRateCardRateListBody {
-        return ContractRateCardRateListBody(
-            at,
-            rateCardId,
-            selectors,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractRateCardRateListBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -105,7 +102,7 @@ constructor(
 
             private var at: OffsetDateTime? = null
             private var rateCardId: String? = null
-            private var selectors: List<Selector>? = null
+            private var selectors: MutableList<Selector>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -127,7 +124,17 @@ constructor(
              * List of rate selectors, rates matching ANY of the selector will be included in the
              * response Passing no selectors will result in all rates being returned.
              */
-            fun selectors(selectors: List<Selector>) = apply { this.selectors = selectors }
+            fun selectors(selectors: List<Selector>) = apply {
+                this.selectors = selectors.toMutableList()
+            }
+
+            /**
+             * List of rate selectors, rates matching ANY of the selector will be included in the
+             * response Passing no selectors will result in all rates being returned.
+             */
+            fun addSelector(selector: Selector) = apply {
+                selectors = (selectors ?: mutableListOf()).apply { add(selector) }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -185,33 +192,21 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var at: OffsetDateTime? = null
-        private var rateCardId: String? = null
         private var limit: Long? = null
         private var nextPage: String? = null
-        private var selectors: MutableList<Selector> = mutableListOf()
+        private var body: ContractRateCardRateListBody.Builder =
+            ContractRateCardRateListBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractRateCardRateListParams: ContractRateCardRateListParams) = apply {
-            at = contractRateCardRateListParams.at
-            rateCardId = contractRateCardRateListParams.rateCardId
             limit = contractRateCardRateListParams.limit
             nextPage = contractRateCardRateListParams.nextPage
-            selectors = contractRateCardRateListParams.selectors?.toMutableList() ?: mutableListOf()
+            body = contractRateCardRateListParams.body.toBuilder()
             additionalHeaders = contractRateCardRateListParams.additionalHeaders.toBuilder()
             additionalQueryParams = contractRateCardRateListParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                contractRateCardRateListParams.additionalBodyProperties.toMutableMap()
         }
-
-        /** inclusive starting point for the rates schedule */
-        fun at(at: OffsetDateTime) = apply { this.at = at }
-
-        /** ID of the rate card to get the schedule for */
-        fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
 
         /** Max number of results that should be returned */
         fun limit(limit: Long) = apply { this.limit = limit }
@@ -219,20 +214,23 @@ constructor(
         /** Cursor that indicates where the next page of results should start. */
         fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
 
-        /**
-         * List of rate selectors, rates matching ANY of the selector will be included in the
-         * response Passing no selectors will result in all rates being returned.
-         */
-        fun selectors(selectors: List<Selector>) = apply {
-            this.selectors.clear()
-            this.selectors.addAll(selectors)
-        }
+        /** inclusive starting point for the rates schedule */
+        fun at(at: OffsetDateTime) = apply { body.at(at) }
+
+        /** ID of the rate card to get the schedule for */
+        fun rateCardId(rateCardId: String) = apply { body.rateCardId(rateCardId) }
 
         /**
          * List of rate selectors, rates matching ANY of the selector will be included in the
          * response Passing no selectors will result in all rates being returned.
          */
-        fun addSelector(selector: Selector) = apply { this.selectors.add(selector) }
+        fun selectors(selectors: List<Selector>) = apply { body.selectors(selectors) }
+
+        /**
+         * List of rate selectors, rates matching ANY of the selector will be included in the
+         * response Passing no selectors will result in all rates being returned.
+         */
+        fun addSelector(selector: Selector) = apply { body.addSelector(selector) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -333,37 +331,31 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractRateCardRateListParams =
             ContractRateCardRateListParams(
-                checkNotNull(at) { "`at` is required but was not set" },
-                checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
                 limit,
                 nextPage,
-                selectors.toImmutable().ifEmpty { null },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -420,7 +412,7 @@ constructor(
         class Builder {
 
             private var productId: String? = null
-            private var productTags: List<String>? = null
+            private var productTags: MutableList<String>? = null
             private var pricingGroupValues: PricingGroupValues? = null
             private var partialPricingGroupValues: PartialPricingGroupValues? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -441,7 +433,17 @@ constructor(
              * List of product tags, rates matching any of the tags will be included in the
              * response.
              */
-            fun productTags(productTags: List<String>) = apply { this.productTags = productTags }
+            fun productTags(productTags: List<String>) = apply {
+                this.productTags = productTags.toMutableList()
+            }
+
+            /**
+             * List of product tags, rates matching any of the tags will be included in the
+             * response.
+             */
+            fun addProductTag(productTag: String) = apply {
+                productTags = (productTags ?: mutableListOf()).apply { add(productTag) }
+            }
 
             /**
              * List of pricing group key value pairs, rates matching all of the key / value pairs
@@ -665,11 +667,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardRateListParams && at == other.at && rateCardId == other.rateCardId && limit == other.limit && nextPage == other.nextPage && selectors == other.selectors && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardRateListParams && limit == other.limit && nextPage == other.nextPage && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(at, rateCardId, limit, nextPage, selectors, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(limit, nextPage, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractRateCardRateListParams{at=$at, rateCardId=$rateCardId, limit=$limit, nextPage=$nextPage, selectors=$selectors, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractRateCardRateListParams{limit=$limit, nextPage=$nextPage, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

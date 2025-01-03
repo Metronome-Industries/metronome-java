@@ -19,49 +19,41 @@ import java.util.Objects
 class CustomerInvoiceAddChargeParams
 constructor(
     private val customerId: String,
-    private val chargeId: String,
-    private val customerPlanId: String,
-    private val description: String,
-    private val invoiceStartTimestamp: OffsetDateTime,
-    private val price: Double,
-    private val quantity: Double,
+    private val body: CustomerInvoiceAddChargeBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun customerId(): String = customerId
 
-    fun chargeId(): String = chargeId
+    /**
+     * The Metronome ID of the charge to add to the invoice. Note that the charge must be on a
+     * product that is not on the current plan, and the product must have only fixed charges.
+     */
+    fun chargeId(): String = body.chargeId()
 
-    fun customerPlanId(): String = customerPlanId
+    /** The Metronome ID of the customer plan to add the charge to. */
+    fun customerPlanId(): String = body.customerPlanId()
 
-    fun description(): String = description
+    fun description(): String = body.description()
 
-    fun invoiceStartTimestamp(): OffsetDateTime = invoiceStartTimestamp
+    /** The start_timestamp of the invoice to add the charge to. */
+    fun invoiceStartTimestamp(): OffsetDateTime = body.invoiceStartTimestamp()
 
-    fun price(): Double = price
+    /**
+     * The price of the charge. This price will match the currency on the invoice, e.g. USD cents.
+     */
+    fun price(): Double = body.price()
 
-    fun quantity(): Double = quantity
+    fun quantity(): Double = body.quantity()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomerInvoiceAddChargeBody {
-        return CustomerInvoiceAddChargeBody(
-            chargeId,
-            customerPlanId,
-            description,
-            invoiceStartTimestamp,
-            price,
-            quantity,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomerInvoiceAddChargeBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -233,29 +225,17 @@ constructor(
     class Builder {
 
         private var customerId: String? = null
-        private var chargeId: String? = null
-        private var customerPlanId: String? = null
-        private var description: String? = null
-        private var invoiceStartTimestamp: OffsetDateTime? = null
-        private var price: Double? = null
-        private var quantity: Double? = null
+        private var body: CustomerInvoiceAddChargeBody.Builder =
+            CustomerInvoiceAddChargeBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerInvoiceAddChargeParams: CustomerInvoiceAddChargeParams) = apply {
             customerId = customerInvoiceAddChargeParams.customerId
-            chargeId = customerInvoiceAddChargeParams.chargeId
-            customerPlanId = customerInvoiceAddChargeParams.customerPlanId
-            description = customerInvoiceAddChargeParams.description
-            invoiceStartTimestamp = customerInvoiceAddChargeParams.invoiceStartTimestamp
-            price = customerInvoiceAddChargeParams.price
-            quantity = customerInvoiceAddChargeParams.quantity
+            body = customerInvoiceAddChargeParams.body.toBuilder()
             additionalHeaders = customerInvoiceAddChargeParams.additionalHeaders.toBuilder()
             additionalQueryParams = customerInvoiceAddChargeParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                customerInvoiceAddChargeParams.additionalBodyProperties.toMutableMap()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -264,25 +244,25 @@ constructor(
          * The Metronome ID of the charge to add to the invoice. Note that the charge must be on a
          * product that is not on the current plan, and the product must have only fixed charges.
          */
-        fun chargeId(chargeId: String) = apply { this.chargeId = chargeId }
+        fun chargeId(chargeId: String) = apply { body.chargeId(chargeId) }
 
         /** The Metronome ID of the customer plan to add the charge to. */
-        fun customerPlanId(customerPlanId: String) = apply { this.customerPlanId = customerPlanId }
+        fun customerPlanId(customerPlanId: String) = apply { body.customerPlanId(customerPlanId) }
 
-        fun description(description: String) = apply { this.description = description }
+        fun description(description: String) = apply { body.description(description) }
 
         /** The start_timestamp of the invoice to add the charge to. */
         fun invoiceStartTimestamp(invoiceStartTimestamp: OffsetDateTime) = apply {
-            this.invoiceStartTimestamp = invoiceStartTimestamp
+            body.invoiceStartTimestamp(invoiceStartTimestamp)
         }
 
         /**
          * The price of the charge. This price will match the currency on the invoice, e.g. USD
          * cents.
          */
-        fun price(price: Double) = apply { this.price = price }
+        fun price(price: Double) = apply { body.price(price) }
 
-        fun quantity(quantity: Double) = apply { this.quantity = quantity }
+        fun quantity(quantity: Double) = apply { body.quantity(quantity) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -383,41 +363,30 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerInvoiceAddChargeParams =
             CustomerInvoiceAddChargeParams(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(chargeId) { "`chargeId` is required but was not set" },
-                checkNotNull(customerPlanId) { "`customerPlanId` is required but was not set" },
-                checkNotNull(description) { "`description` is required but was not set" },
-                checkNotNull(invoiceStartTimestamp) {
-                    "`invoiceStartTimestamp` is required but was not set"
-                },
-                checkNotNull(price) { "`price` is required but was not set" },
-                checkNotNull(quantity) { "`quantity` is required but was not set" },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -426,11 +395,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerInvoiceAddChargeParams && customerId == other.customerId && chargeId == other.chargeId && customerPlanId == other.customerPlanId && description == other.description && invoiceStartTimestamp == other.invoiceStartTimestamp && price == other.price && quantity == other.quantity && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerInvoiceAddChargeParams && customerId == other.customerId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, chargeId, customerPlanId, description, invoiceStartTimestamp, price, quantity, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomerInvoiceAddChargeParams{customerId=$customerId, chargeId=$chargeId, customerPlanId=$customerPlanId, description=$description, invoiceStartTimestamp=$invoiceStartTimestamp, price=$price, quantity=$quantity, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerInvoiceAddChargeParams{customerId=$customerId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -19,83 +19,108 @@ import java.util.Optional
 
 class ContractProductUpdateParams
 constructor(
-    private val productId: String,
-    private val startingAt: OffsetDateTime,
-    private val billableMetricId: String?,
-    private val compositeProductIds: List<String>?,
-    private val compositeTags: List<String>?,
-    private val excludeFreeUsage: Boolean?,
-    private val isRefundable: Boolean?,
-    private val name: String?,
-    private val netsuiteInternalItemId: String?,
-    private val netsuiteOverageItemId: String?,
-    private val presentationGroupKey: List<String>?,
-    private val pricingGroupKey: List<String>?,
-    private val quantityConversion: QuantityConversion?,
-    private val quantityRounding: QuantityRounding?,
-    private val tags: List<String>?,
+    private val body: ContractProductUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun productId(): String = productId
+    /** ID of the product to update */
+    fun productId(): String = body.productId()
 
-    fun startingAt(): OffsetDateTime = startingAt
+    /**
+     * Timestamp representing when the update should go into effect. It must be on an hour boundary
+     * (e.g. 1:00, not 1:30).
+     */
+    fun startingAt(): OffsetDateTime = body.startingAt()
 
-    fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
+    /**
+     * Available for USAGE products only. If not provided, defaults to product's current billable
+     * metric.
+     */
+    fun billableMetricId(): Optional<String> = body.billableMetricId()
 
-    fun compositeProductIds(): Optional<List<String>> = Optional.ofNullable(compositeProductIds)
+    /**
+     * Available for COMPOSITE products only. If not provided, defaults to product's current
+     * composite_product_ids.
+     */
+    fun compositeProductIds(): Optional<List<String>> = body.compositeProductIds()
 
-    fun compositeTags(): Optional<List<String>> = Optional.ofNullable(compositeTags)
+    /**
+     * Available for COMPOSITE products only. If not provided, defaults to product's current
+     * composite_tags.
+     */
+    fun compositeTags(): Optional<List<String>> = body.compositeTags()
 
-    fun excludeFreeUsage(): Optional<Boolean> = Optional.ofNullable(excludeFreeUsage)
+    /**
+     * Beta feature only available for composite products. If true, products with $0 will not be
+     * included when computing composite usage. Defaults to false
+     */
+    fun excludeFreeUsage(): Optional<Boolean> = body.excludeFreeUsage()
 
-    fun isRefundable(): Optional<Boolean> = Optional.ofNullable(isRefundable)
+    /**
+     * Defaults to product's current refundability status. This field's availability is dependent on
+     * your client's configuration.
+     */
+    fun isRefundable(): Optional<Boolean> = body.isRefundable()
 
-    fun name(): Optional<String> = Optional.ofNullable(name)
+    /** displayed on invoices. If not provided, defaults to product's current name. */
+    fun name(): Optional<String> = body.name()
 
-    fun netsuiteInternalItemId(): Optional<String> = Optional.ofNullable(netsuiteInternalItemId)
+    /**
+     * If not provided, defaults to product's current netsuite_internal_item_id. This field's
+     * availability is dependent on your client's configuration.
+     */
+    fun netsuiteInternalItemId(): Optional<String> = body.netsuiteInternalItemId()
 
-    fun netsuiteOverageItemId(): Optional<String> = Optional.ofNullable(netsuiteOverageItemId)
+    /**
+     * Available for USAGE and COMPOSITE products only. If not provided, defaults to product's
+     * current netsuite_overage_item_id. This field's availability is dependent on your client's
+     * configuration.
+     */
+    fun netsuiteOverageItemId(): Optional<String> = body.netsuiteOverageItemId()
 
-    fun presentationGroupKey(): Optional<List<String>> = Optional.ofNullable(presentationGroupKey)
+    /**
+     * For USAGE products only. Groups usage line items on invoices. The superset of values in the
+     * pricing group key and presentation group key must be set as one compound group key on the
+     * billable metric.
+     */
+    fun presentationGroupKey(): Optional<List<String>> = body.presentationGroupKey()
 
-    fun pricingGroupKey(): Optional<List<String>> = Optional.ofNullable(pricingGroupKey)
+    /**
+     * For USAGE products only. If set, pricing for this product will be determined for each
+     * pricing_group_key value, as opposed to the product as a whole. The superset of values in the
+     * pricing group key and presentation group key must be set as one compound group key on the
+     * billable metric.
+     */
+    fun pricingGroupKey(): Optional<List<String>> = body.pricingGroupKey()
 
-    fun quantityConversion(): Optional<QuantityConversion> = Optional.ofNullable(quantityConversion)
+    /**
+     * Optional. Only valid for USAGE products. If provided, the quantity will be converted using
+     * the provided conversion factor and operation. For example, if the operation is "multiply" and
+     * the conversion factor is 100, then the quantity will be multiplied by 100. This can be used
+     * in cases where data is sent in one unit and priced in another. For example, data could be
+     * sent in MB and priced in GB. In this case, the conversion factor would be 1024 and the
+     * operation would be "divide".
+     */
+    fun quantityConversion(): Optional<QuantityConversion> = body.quantityConversion()
 
-    fun quantityRounding(): Optional<QuantityRounding> = Optional.ofNullable(quantityRounding)
+    /**
+     * Optional. Only valid for USAGE products. If provided, the quantity will be rounded using the
+     * provided rounding method and decimal places. For example, if the method is "round up" and the
+     * decimal places is 0, then the quantity will be rounded up to the nearest integer.
+     */
+    fun quantityRounding(): Optional<QuantityRounding> = body.quantityRounding()
 
-    fun tags(): Optional<List<String>> = Optional.ofNullable(tags)
+    /** If not provided, defaults to product's current tags */
+    fun tags(): Optional<List<String>> = body.tags()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractProductUpdateBody {
-        return ContractProductUpdateBody(
-            productId,
-            startingAt,
-            billableMetricId,
-            compositeProductIds,
-            compositeTags,
-            excludeFreeUsage,
-            isRefundable,
-            name,
-            netsuiteInternalItemId,
-            netsuiteOverageItemId,
-            presentationGroupKey,
-            pricingGroupKey,
-            quantityConversion,
-            quantityRounding,
-            tags,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractProductUpdateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -243,18 +268,18 @@ constructor(
             private var productId: String? = null
             private var startingAt: OffsetDateTime? = null
             private var billableMetricId: String? = null
-            private var compositeProductIds: List<String>? = null
-            private var compositeTags: List<String>? = null
+            private var compositeProductIds: MutableList<String>? = null
+            private var compositeTags: MutableList<String>? = null
             private var excludeFreeUsage: Boolean? = null
             private var isRefundable: Boolean? = null
             private var name: String? = null
             private var netsuiteInternalItemId: String? = null
             private var netsuiteOverageItemId: String? = null
-            private var presentationGroupKey: List<String>? = null
-            private var pricingGroupKey: List<String>? = null
+            private var presentationGroupKey: MutableList<String>? = null
+            private var pricingGroupKey: MutableList<String>? = null
             private var quantityConversion: QuantityConversion? = null
             private var quantityRounding: QuantityRounding? = null
-            private var tags: List<String>? = null
+            private var tags: MutableList<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -300,7 +325,16 @@ constructor(
              * composite_product_ids.
              */
             fun compositeProductIds(compositeProductIds: List<String>) = apply {
-                this.compositeProductIds = compositeProductIds
+                this.compositeProductIds = compositeProductIds.toMutableList()
+            }
+
+            /**
+             * Available for COMPOSITE products only. If not provided, defaults to product's current
+             * composite_product_ids.
+             */
+            fun addCompositeProductId(compositeProductId: String) = apply {
+                compositeProductIds =
+                    (compositeProductIds ?: mutableListOf()).apply { add(compositeProductId) }
             }
 
             /**
@@ -308,7 +342,15 @@ constructor(
              * composite_tags.
              */
             fun compositeTags(compositeTags: List<String>) = apply {
-                this.compositeTags = compositeTags
+                this.compositeTags = compositeTags.toMutableList()
+            }
+
+            /**
+             * Available for COMPOSITE products only. If not provided, defaults to product's current
+             * composite_tags.
+             */
+            fun addCompositeTag(compositeTag: String) = apply {
+                compositeTags = (compositeTags ?: mutableListOf()).apply { add(compositeTag) }
             }
 
             /**
@@ -351,7 +393,19 @@ constructor(
              * key on the billable metric.
              */
             fun presentationGroupKey(presentationGroupKey: List<String>) = apply {
-                this.presentationGroupKey = presentationGroupKey
+                this.presentationGroupKey = presentationGroupKey.toMutableList()
+            }
+
+            /**
+             * For USAGE products only. Groups usage line items on invoices. The superset of values
+             * in the pricing group key and presentation group key must be set as one compound group
+             * key on the billable metric.
+             */
+            fun addPresentationGroupKey(presentationGroupKey: String) = apply {
+                this.presentationGroupKey =
+                    (this.presentationGroupKey ?: mutableListOf()).apply {
+                        add(presentationGroupKey)
+                    }
             }
 
             /**
@@ -361,7 +415,18 @@ constructor(
              * key on the billable metric.
              */
             fun pricingGroupKey(pricingGroupKey: List<String>) = apply {
-                this.pricingGroupKey = pricingGroupKey
+                this.pricingGroupKey = pricingGroupKey.toMutableList()
+            }
+
+            /**
+             * For USAGE products only. If set, pricing for this product will be determined for each
+             * pricing_group_key value, as opposed to the product as a whole. The superset of values
+             * in the pricing group key and presentation group key must be set as one compound group
+             * key on the billable metric.
+             */
+            fun addPricingGroupKey(pricingGroupKey: String) = apply {
+                this.pricingGroupKey =
+                    (this.pricingGroupKey ?: mutableListOf()).apply { add(pricingGroupKey) }
             }
 
             /**
@@ -387,7 +452,10 @@ constructor(
             }
 
             /** If not provided, defaults to product's current tags */
-            fun tags(tags: List<String>) = apply { this.tags = tags }
+            fun tags(tags: List<String>) = apply { this.tags = tags.toMutableList() }
+
+            /** If not provided, defaults to product's current tags */
+            fun addTag(tag: String) = apply { tags = (tags ?: mutableListOf()).apply { add(tag) } }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -457,67 +525,32 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var productId: String? = null
-        private var startingAt: OffsetDateTime? = null
-        private var billableMetricId: String? = null
-        private var compositeProductIds: MutableList<String> = mutableListOf()
-        private var compositeTags: MutableList<String> = mutableListOf()
-        private var excludeFreeUsage: Boolean? = null
-        private var isRefundable: Boolean? = null
-        private var name: String? = null
-        private var netsuiteInternalItemId: String? = null
-        private var netsuiteOverageItemId: String? = null
-        private var presentationGroupKey: MutableList<String> = mutableListOf()
-        private var pricingGroupKey: MutableList<String> = mutableListOf()
-        private var quantityConversion: QuantityConversion? = null
-        private var quantityRounding: QuantityRounding? = null
-        private var tags: MutableList<String> = mutableListOf()
+        private var body: ContractProductUpdateBody.Builder = ContractProductUpdateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractProductUpdateParams: ContractProductUpdateParams) = apply {
-            productId = contractProductUpdateParams.productId
-            startingAt = contractProductUpdateParams.startingAt
-            billableMetricId = contractProductUpdateParams.billableMetricId
-            compositeProductIds =
-                contractProductUpdateParams.compositeProductIds?.toMutableList() ?: mutableListOf()
-            compositeTags =
-                contractProductUpdateParams.compositeTags?.toMutableList() ?: mutableListOf()
-            excludeFreeUsage = contractProductUpdateParams.excludeFreeUsage
-            isRefundable = contractProductUpdateParams.isRefundable
-            name = contractProductUpdateParams.name
-            netsuiteInternalItemId = contractProductUpdateParams.netsuiteInternalItemId
-            netsuiteOverageItemId = contractProductUpdateParams.netsuiteOverageItemId
-            presentationGroupKey =
-                contractProductUpdateParams.presentationGroupKey?.toMutableList() ?: mutableListOf()
-            pricingGroupKey =
-                contractProductUpdateParams.pricingGroupKey?.toMutableList() ?: mutableListOf()
-            quantityConversion = contractProductUpdateParams.quantityConversion
-            quantityRounding = contractProductUpdateParams.quantityRounding
-            tags = contractProductUpdateParams.tags?.toMutableList() ?: mutableListOf()
+            body = contractProductUpdateParams.body.toBuilder()
             additionalHeaders = contractProductUpdateParams.additionalHeaders.toBuilder()
             additionalQueryParams = contractProductUpdateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                contractProductUpdateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the product to update */
-        fun productId(productId: String) = apply { this.productId = productId }
+        fun productId(productId: String) = apply { body.productId(productId) }
 
         /**
          * Timestamp representing when the update should go into effect. It must be on an hour
          * boundary (e.g. 1:00, not 1:30).
          */
-        fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+        fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
 
         /**
          * Available for USAGE products only. If not provided, defaults to product's current
          * billable metric.
          */
         fun billableMetricId(billableMetricId: String) = apply {
-            this.billableMetricId = billableMetricId
+            body.billableMetricId(billableMetricId)
         }
 
         /**
@@ -525,8 +558,7 @@ constructor(
          * composite_product_ids.
          */
         fun compositeProductIds(compositeProductIds: List<String>) = apply {
-            this.compositeProductIds.clear()
-            this.compositeProductIds.addAll(compositeProductIds)
+            body.compositeProductIds(compositeProductIds)
         }
 
         /**
@@ -534,47 +566,44 @@ constructor(
          * composite_product_ids.
          */
         fun addCompositeProductId(compositeProductId: String) = apply {
-            this.compositeProductIds.add(compositeProductId)
+            body.addCompositeProductId(compositeProductId)
         }
 
         /**
          * Available for COMPOSITE products only. If not provided, defaults to product's current
          * composite_tags.
          */
-        fun compositeTags(compositeTags: List<String>) = apply {
-            this.compositeTags.clear()
-            this.compositeTags.addAll(compositeTags)
-        }
+        fun compositeTags(compositeTags: List<String>) = apply { body.compositeTags(compositeTags) }
 
         /**
          * Available for COMPOSITE products only. If not provided, defaults to product's current
          * composite_tags.
          */
-        fun addCompositeTag(compositeTag: String) = apply { this.compositeTags.add(compositeTag) }
+        fun addCompositeTag(compositeTag: String) = apply { body.addCompositeTag(compositeTag) }
 
         /**
          * Beta feature only available for composite products. If true, products with $0 will not be
          * included when computing composite usage. Defaults to false
          */
         fun excludeFreeUsage(excludeFreeUsage: Boolean) = apply {
-            this.excludeFreeUsage = excludeFreeUsage
+            body.excludeFreeUsage(excludeFreeUsage)
         }
 
         /**
          * Defaults to product's current refundability status. This field's availability is
          * dependent on your client's configuration.
          */
-        fun isRefundable(isRefundable: Boolean) = apply { this.isRefundable = isRefundable }
+        fun isRefundable(isRefundable: Boolean) = apply { body.isRefundable(isRefundable) }
 
         /** displayed on invoices. If not provided, defaults to product's current name. */
-        fun name(name: String) = apply { this.name = name }
+        fun name(name: String) = apply { body.name(name) }
 
         /**
          * If not provided, defaults to product's current netsuite_internal_item_id. This field's
          * availability is dependent on your client's configuration.
          */
         fun netsuiteInternalItemId(netsuiteInternalItemId: String) = apply {
-            this.netsuiteInternalItemId = netsuiteInternalItemId
+            body.netsuiteInternalItemId(netsuiteInternalItemId)
         }
 
         /**
@@ -583,7 +612,7 @@ constructor(
          * configuration.
          */
         fun netsuiteOverageItemId(netsuiteOverageItemId: String) = apply {
-            this.netsuiteOverageItemId = netsuiteOverageItemId
+            body.netsuiteOverageItemId(netsuiteOverageItemId)
         }
 
         /**
@@ -592,8 +621,7 @@ constructor(
          * the billable metric.
          */
         fun presentationGroupKey(presentationGroupKey: List<String>) = apply {
-            this.presentationGroupKey.clear()
-            this.presentationGroupKey.addAll(presentationGroupKey)
+            body.presentationGroupKey(presentationGroupKey)
         }
 
         /**
@@ -602,7 +630,7 @@ constructor(
          * the billable metric.
          */
         fun addPresentationGroupKey(presentationGroupKey: String) = apply {
-            this.presentationGroupKey.add(presentationGroupKey)
+            body.addPresentationGroupKey(presentationGroupKey)
         }
 
         /**
@@ -612,8 +640,7 @@ constructor(
          * the billable metric.
          */
         fun pricingGroupKey(pricingGroupKey: List<String>) = apply {
-            this.pricingGroupKey.clear()
-            this.pricingGroupKey.addAll(pricingGroupKey)
+            body.pricingGroupKey(pricingGroupKey)
         }
 
         /**
@@ -623,7 +650,7 @@ constructor(
          * the billable metric.
          */
         fun addPricingGroupKey(pricingGroupKey: String) = apply {
-            this.pricingGroupKey.add(pricingGroupKey)
+            body.addPricingGroupKey(pricingGroupKey)
         }
 
         /**
@@ -635,7 +662,7 @@ constructor(
          * would be 1024 and the operation would be "divide".
          */
         fun quantityConversion(quantityConversion: QuantityConversion) = apply {
-            this.quantityConversion = quantityConversion
+            body.quantityConversion(quantityConversion)
         }
 
         /**
@@ -644,17 +671,14 @@ constructor(
          * and the decimal places is 0, then the quantity will be rounded up to the nearest integer.
          */
         fun quantityRounding(quantityRounding: QuantityRounding) = apply {
-            this.quantityRounding = quantityRounding
+            body.quantityRounding(quantityRounding)
         }
 
         /** If not provided, defaults to product's current tags */
-        fun tags(tags: List<String>) = apply {
-            this.tags.clear()
-            this.tags.addAll(tags)
-        }
+        fun tags(tags: List<String>) = apply { body.tags(tags) }
 
         /** If not provided, defaults to product's current tags */
-        fun addTag(tag: String) = apply { this.tags.add(tag) }
+        fun addTag(tag: String) = apply { body.addTag(tag) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -755,47 +779,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractProductUpdateParams =
             ContractProductUpdateParams(
-                checkNotNull(productId) { "`productId` is required but was not set" },
-                checkNotNull(startingAt) { "`startingAt` is required but was not set" },
-                billableMetricId,
-                compositeProductIds.toImmutable().ifEmpty { null },
-                compositeTags.toImmutable().ifEmpty { null },
-                excludeFreeUsage,
-                isRefundable,
-                name,
-                netsuiteInternalItemId,
-                netsuiteOverageItemId,
-                presentationGroupKey.toImmutable().ifEmpty { null },
-                pricingGroupKey.toImmutable().ifEmpty { null },
-                quantityConversion,
-                quantityRounding,
-                tags.toImmutable().ifEmpty { null },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -804,11 +810,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractProductUpdateParams && productId == other.productId && startingAt == other.startingAt && billableMetricId == other.billableMetricId && compositeProductIds == other.compositeProductIds && compositeTags == other.compositeTags && excludeFreeUsage == other.excludeFreeUsage && isRefundable == other.isRefundable && name == other.name && netsuiteInternalItemId == other.netsuiteInternalItemId && netsuiteOverageItemId == other.netsuiteOverageItemId && presentationGroupKey == other.presentationGroupKey && pricingGroupKey == other.pricingGroupKey && quantityConversion == other.quantityConversion && quantityRounding == other.quantityRounding && tags == other.tags && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractProductUpdateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(productId, startingAt, billableMetricId, compositeProductIds, compositeTags, excludeFreeUsage, isRefundable, name, netsuiteInternalItemId, netsuiteOverageItemId, presentationGroupKey, pricingGroupKey, quantityConversion, quantityRounding, tags, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractProductUpdateParams{productId=$productId, startingAt=$startingAt, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, name=$name, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, tags=$tags, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractProductUpdateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

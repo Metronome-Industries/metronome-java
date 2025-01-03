@@ -19,51 +19,42 @@ import java.util.Optional
 
 class ContractAddManualBalanceEntryParams
 constructor(
-    private val id: String,
-    private val amount: Double,
-    private val customerId: String,
-    private val reason: String,
-    private val segmentId: String,
-    private val contractId: String?,
-    private val timestamp: OffsetDateTime?,
+    private val body: ContractAddManualBalanceEntryBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun id(): String = id
+    /** ID of the balance (commit or credit) to update. */
+    fun id(): String = body.id()
 
-    fun amount(): Double = amount
+    /** Amount to add to the segment. A negative number will draw down from the balance. */
+    fun amount(): Double = body.amount()
 
-    fun customerId(): String = customerId
+    /** ID of the customer whose balance is to be updated. */
+    fun customerId(): String = body.customerId()
 
-    fun reason(): String = reason
+    /** Reason for the manual adjustment. This will be displayed in the ledger. */
+    fun reason(): String = body.reason()
 
-    fun segmentId(): String = segmentId
+    /** ID of the segment to update. */
+    fun segmentId(): String = body.segmentId()
 
-    fun contractId(): Optional<String> = Optional.ofNullable(contractId)
+    /** ID of the contract to update. Leave blank to update a customer level balance. */
+    fun contractId(): Optional<String> = body.contractId()
 
-    fun timestamp(): Optional<OffsetDateTime> = Optional.ofNullable(timestamp)
+    /**
+     * RFC 3339 timestamp indicating when the manual adjustment takes place. If not provided, it
+     * will default to the start of the segment.
+     */
+    fun timestamp(): Optional<OffsetDateTime> = body.timestamp()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractAddManualBalanceEntryBody {
-        return ContractAddManualBalanceEntryBody(
-            id,
-            amount,
-            customerId,
-            reason,
-            segmentId,
-            contractId,
-            timestamp,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractAddManualBalanceEntryBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -231,58 +222,44 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var id: String? = null
-        private var amount: Double? = null
-        private var customerId: String? = null
-        private var reason: String? = null
-        private var segmentId: String? = null
-        private var contractId: String? = null
-        private var timestamp: OffsetDateTime? = null
+        private var body: ContractAddManualBalanceEntryBody.Builder =
+            ContractAddManualBalanceEntryBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(
             contractAddManualBalanceEntryParams: ContractAddManualBalanceEntryParams
         ) = apply {
-            id = contractAddManualBalanceEntryParams.id
-            amount = contractAddManualBalanceEntryParams.amount
-            customerId = contractAddManualBalanceEntryParams.customerId
-            reason = contractAddManualBalanceEntryParams.reason
-            segmentId = contractAddManualBalanceEntryParams.segmentId
-            contractId = contractAddManualBalanceEntryParams.contractId
-            timestamp = contractAddManualBalanceEntryParams.timestamp
+            body = contractAddManualBalanceEntryParams.body.toBuilder()
             additionalHeaders = contractAddManualBalanceEntryParams.additionalHeaders.toBuilder()
             additionalQueryParams =
                 contractAddManualBalanceEntryParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                contractAddManualBalanceEntryParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the balance (commit or credit) to update. */
-        fun id(id: String) = apply { this.id = id }
+        fun id(id: String) = apply { body.id(id) }
 
         /** Amount to add to the segment. A negative number will draw down from the balance. */
-        fun amount(amount: Double) = apply { this.amount = amount }
+        fun amount(amount: Double) = apply { body.amount(amount) }
 
         /** ID of the customer whose balance is to be updated. */
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /** Reason for the manual adjustment. This will be displayed in the ledger. */
-        fun reason(reason: String) = apply { this.reason = reason }
+        fun reason(reason: String) = apply { body.reason(reason) }
 
         /** ID of the segment to update. */
-        fun segmentId(segmentId: String) = apply { this.segmentId = segmentId }
+        fun segmentId(segmentId: String) = apply { body.segmentId(segmentId) }
 
         /** ID of the contract to update. Leave blank to update a customer level balance. */
-        fun contractId(contractId: String) = apply { this.contractId = contractId }
+        fun contractId(contractId: String) = apply { body.contractId(contractId) }
 
         /**
          * RFC 3339 timestamp indicating when the manual adjustment takes place. If not provided, it
          * will default to the start of the segment.
          */
-        fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
+        fun timestamp(timestamp: OffsetDateTime) = apply { body.timestamp(timestamp) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -383,39 +360,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractAddManualBalanceEntryParams =
             ContractAddManualBalanceEntryParams(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(amount) { "`amount` is required but was not set" },
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(reason) { "`reason` is required but was not set" },
-                checkNotNull(segmentId) { "`segmentId` is required but was not set" },
-                contractId,
-                timestamp,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -424,11 +391,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractAddManualBalanceEntryParams && id == other.id && amount == other.amount && customerId == other.customerId && reason == other.reason && segmentId == other.segmentId && contractId == other.contractId && timestamp == other.timestamp && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractAddManualBalanceEntryParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, amount, customerId, reason, segmentId, contractId, timestamp, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractAddManualBalanceEntryParams{id=$id, amount=$amount, customerId=$customerId, reason=$reason, segmentId=$segmentId, contractId=$contractId, timestamp=$timestamp, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractAddManualBalanceEntryParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

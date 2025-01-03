@@ -19,45 +19,44 @@ import java.util.Optional
 
 class ContractRetrieveRateScheduleParams
 constructor(
-    private val contractId: String,
-    private val customerId: String,
     private val limit: Long?,
     private val nextPage: String?,
-    private val at: OffsetDateTime?,
-    private val selectors: List<Selector>?,
+    private val body: ContractRetrieveRateScheduleBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun contractId(): String = contractId
-
-    fun customerId(): String = customerId
-
+    /** Max number of results that should be returned */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
-    fun at(): Optional<OffsetDateTime> = Optional.ofNullable(at)
+    /** ID of the contract to get the rate schedule for. */
+    fun contractId(): String = body.contractId()
 
-    fun selectors(): Optional<List<Selector>> = Optional.ofNullable(selectors)
+    /** ID of the customer for whose contract to get the rate schedule for. */
+    fun customerId(): String = body.customerId()
+
+    /**
+     * optional timestamp which overlaps with the returned rate schedule segments. When not
+     * specified, the current timestamp will be used.
+     */
+    fun at(): Optional<OffsetDateTime> = body.at()
+
+    /**
+     * List of rate selectors, rates matching ANY of the selectors will be included in the response.
+     * Passing no selectors will result in all rates being returned.
+     */
+    fun selectors(): Optional<List<Selector>> = body.selectors()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractRetrieveRateScheduleBody {
-        return ContractRetrieveRateScheduleBody(
-            contractId,
-            customerId,
-            at,
-            selectors,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractRetrieveRateScheduleBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -117,7 +116,7 @@ constructor(
             private var contractId: String? = null
             private var customerId: String? = null
             private var at: OffsetDateTime? = null
-            private var selectors: List<Selector>? = null
+            private var selectors: MutableList<Selector>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -147,7 +146,17 @@ constructor(
              * List of rate selectors, rates matching ANY of the selectors will be included in the
              * response. Passing no selectors will result in all rates being returned.
              */
-            fun selectors(selectors: List<Selector>) = apply { this.selectors = selectors }
+            fun selectors(selectors: List<Selector>) = apply {
+                this.selectors = selectors.toMutableList()
+            }
+
+            /**
+             * List of rate selectors, rates matching ANY of the selectors will be included in the
+             * response. Passing no selectors will result in all rates being returned.
+             */
+            fun addSelector(selector: Selector) = apply {
+                selectors = (selectors ?: mutableListOf()).apply { add(selector) }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -206,38 +215,23 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var contractId: String? = null
-        private var customerId: String? = null
         private var limit: Long? = null
         private var nextPage: String? = null
-        private var at: OffsetDateTime? = null
-        private var selectors: MutableList<Selector> = mutableListOf()
+        private var body: ContractRetrieveRateScheduleBody.Builder =
+            ContractRetrieveRateScheduleBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractRetrieveRateScheduleParams: ContractRetrieveRateScheduleParams) =
             apply {
-                contractId = contractRetrieveRateScheduleParams.contractId
-                customerId = contractRetrieveRateScheduleParams.customerId
                 limit = contractRetrieveRateScheduleParams.limit
                 nextPage = contractRetrieveRateScheduleParams.nextPage
-                at = contractRetrieveRateScheduleParams.at
-                selectors =
-                    contractRetrieveRateScheduleParams.selectors?.toMutableList() ?: mutableListOf()
+                body = contractRetrieveRateScheduleParams.body.toBuilder()
                 additionalHeaders = contractRetrieveRateScheduleParams.additionalHeaders.toBuilder()
                 additionalQueryParams =
                     contractRetrieveRateScheduleParams.additionalQueryParams.toBuilder()
-                additionalBodyProperties =
-                    contractRetrieveRateScheduleParams.additionalBodyProperties.toMutableMap()
             }
-
-        /** ID of the contract to get the rate schedule for. */
-        fun contractId(contractId: String) = apply { this.contractId = contractId }
-
-        /** ID of the customer for whose contract to get the rate schedule for. */
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
 
         /** Max number of results that should be returned */
         fun limit(limit: Long) = apply { this.limit = limit }
@@ -245,26 +239,29 @@ constructor(
         /** Cursor that indicates where the next page of results should start. */
         fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
 
+        /** ID of the contract to get the rate schedule for. */
+        fun contractId(contractId: String) = apply { body.contractId(contractId) }
+
+        /** ID of the customer for whose contract to get the rate schedule for. */
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
+
         /**
          * optional timestamp which overlaps with the returned rate schedule segments. When not
          * specified, the current timestamp will be used.
          */
-        fun at(at: OffsetDateTime) = apply { this.at = at }
+        fun at(at: OffsetDateTime) = apply { body.at(at) }
 
         /**
          * List of rate selectors, rates matching ANY of the selectors will be included in the
          * response. Passing no selectors will result in all rates being returned.
          */
-        fun selectors(selectors: List<Selector>) = apply {
-            this.selectors.clear()
-            this.selectors.addAll(selectors)
-        }
+        fun selectors(selectors: List<Selector>) = apply { body.selectors(selectors) }
 
         /**
          * List of rate selectors, rates matching ANY of the selectors will be included in the
          * response. Passing no selectors will result in all rates being returned.
          */
-        fun addSelector(selector: Selector) = apply { this.selectors.add(selector) }
+        fun addSelector(selector: Selector) = apply { body.addSelector(selector) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -365,38 +362,31 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractRetrieveRateScheduleParams =
             ContractRetrieveRateScheduleParams(
-                checkNotNull(contractId) { "`contractId` is required but was not set" },
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
                 limit,
                 nextPage,
-                at,
-                selectors.toImmutable().ifEmpty { null },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -453,7 +443,7 @@ constructor(
         class Builder {
 
             private var productId: String? = null
-            private var productTags: List<String>? = null
+            private var productTags: MutableList<String>? = null
             private var pricingGroupValues: PricingGroupValues? = null
             private var partialPricingGroupValues: PartialPricingGroupValues? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -474,7 +464,17 @@ constructor(
              * List of product tags, rates matching any of the tags will be included in the
              * response.
              */
-            fun productTags(productTags: List<String>) = apply { this.productTags = productTags }
+            fun productTags(productTags: List<String>) = apply {
+                this.productTags = productTags.toMutableList()
+            }
+
+            /**
+             * List of product tags, rates matching any of the tags will be included in the
+             * response.
+             */
+            fun addProductTag(productTag: String) = apply {
+                productTags = (productTags ?: mutableListOf()).apply { add(productTag) }
+            }
 
             /**
              * List of pricing group key value pairs, rates matching all of the key / value pairs
@@ -698,11 +698,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRetrieveRateScheduleParams && contractId == other.contractId && customerId == other.customerId && limit == other.limit && nextPage == other.nextPage && at == other.at && selectors == other.selectors && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRetrieveRateScheduleParams && limit == other.limit && nextPage == other.nextPage && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, limit, nextPage, at, selectors, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(limit, nextPage, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractRetrieveRateScheduleParams{contractId=$contractId, customerId=$customerId, limit=$limit, nextPage=$nextPage, at=$at, selectors=$selectors, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractRetrieveRateScheduleParams{limit=$limit, nextPage=$nextPage, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

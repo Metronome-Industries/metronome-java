@@ -22,57 +22,50 @@ import java.util.Optional
 
 class UsageListWithGroupsParams
 constructor(
-    private val billableMetricId: String,
-    private val customerId: String,
-    private val windowSize: WindowSize,
     private val limit: Long?,
     private val nextPage: String?,
-    private val currentPeriod: Boolean?,
-    private val endingBefore: OffsetDateTime?,
-    private val groupBy: GroupBy?,
-    private val startingOn: OffsetDateTime?,
+    private val body: UsageListWithGroupsBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun billableMetricId(): String = billableMetricId
-
-    fun customerId(): String = customerId
-
-    fun windowSize(): WindowSize = windowSize
-
+    /** Max number of results that should be returned */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
-    fun currentPeriod(): Optional<Boolean> = Optional.ofNullable(currentPeriod)
+    fun billableMetricId(): String = body.billableMetricId()
 
-    fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+    fun customerId(): String = body.customerId()
 
-    fun groupBy(): Optional<GroupBy> = Optional.ofNullable(groupBy)
+    /**
+     * A window_size of "day" or "hour" will return the usage for the specified period segmented
+     * into daily or hourly aggregates. A window_size of "none" will return a single usage aggregate
+     * for the entirety of the specified period.
+     */
+    fun windowSize(): WindowSize = body.windowSize()
 
-    fun startingOn(): Optional<OffsetDateTime> = Optional.ofNullable(startingOn)
+    /**
+     * If true, will return the usage for the current billing period. Will return an error if the
+     * customer is currently uncontracted or starting_on and ending_before are specified when this
+     * is true.
+     */
+    fun currentPeriod(): Optional<Boolean> = body.currentPeriod()
+
+    fun endingBefore(): Optional<OffsetDateTime> = body.endingBefore()
+
+    fun groupBy(): Optional<GroupBy> = body.groupBy()
+
+    fun startingOn(): Optional<OffsetDateTime> = body.startingOn()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): UsageListWithGroupsBody {
-        return UsageListWithGroupsBody(
-            billableMetricId,
-            customerId,
-            windowSize,
-            currentPeriod,
-            endingBefore,
-            groupBy,
-            startingOn,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): UsageListWithGroupsBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -251,48 +244,20 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var billableMetricId: String? = null
-        private var customerId: String? = null
-        private var windowSize: WindowSize? = null
         private var limit: Long? = null
         private var nextPage: String? = null
-        private var currentPeriod: Boolean? = null
-        private var endingBefore: OffsetDateTime? = null
-        private var groupBy: GroupBy? = null
-        private var startingOn: OffsetDateTime? = null
+        private var body: UsageListWithGroupsBody.Builder = UsageListWithGroupsBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(usageListWithGroupsParams: UsageListWithGroupsParams) = apply {
-            billableMetricId = usageListWithGroupsParams.billableMetricId
-            customerId = usageListWithGroupsParams.customerId
-            windowSize = usageListWithGroupsParams.windowSize
             limit = usageListWithGroupsParams.limit
             nextPage = usageListWithGroupsParams.nextPage
-            currentPeriod = usageListWithGroupsParams.currentPeriod
-            endingBefore = usageListWithGroupsParams.endingBefore
-            groupBy = usageListWithGroupsParams.groupBy
-            startingOn = usageListWithGroupsParams.startingOn
+            body = usageListWithGroupsParams.body.toBuilder()
             additionalHeaders = usageListWithGroupsParams.additionalHeaders.toBuilder()
             additionalQueryParams = usageListWithGroupsParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                usageListWithGroupsParams.additionalBodyProperties.toMutableMap()
         }
-
-        fun billableMetricId(billableMetricId: String) = apply {
-            this.billableMetricId = billableMetricId
-        }
-
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
-
-        /**
-         * A window_size of "day" or "hour" will return the usage for the specified period segmented
-         * into daily or hourly aggregates. A window_size of "none" will return a single usage
-         * aggregate for the entirety of the specified period.
-         */
-        fun windowSize(windowSize: WindowSize) = apply { this.windowSize = windowSize }
 
         /** Max number of results that should be returned */
         fun limit(limit: Long) = apply { this.limit = limit }
@@ -300,18 +265,31 @@ constructor(
         /** Cursor that indicates where the next page of results should start. */
         fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
 
+        fun billableMetricId(billableMetricId: String) = apply {
+            body.billableMetricId(billableMetricId)
+        }
+
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
+
+        /**
+         * A window_size of "day" or "hour" will return the usage for the specified period segmented
+         * into daily or hourly aggregates. A window_size of "none" will return a single usage
+         * aggregate for the entirety of the specified period.
+         */
+        fun windowSize(windowSize: WindowSize) = apply { body.windowSize(windowSize) }
+
         /**
          * If true, will return the usage for the current billing period. Will return an error if
          * the customer is currently uncontracted or starting_on and ending_before are specified
          * when this is true.
          */
-        fun currentPeriod(currentPeriod: Boolean) = apply { this.currentPeriod = currentPeriod }
+        fun currentPeriod(currentPeriod: Boolean) = apply { body.currentPeriod(currentPeriod) }
 
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { this.endingBefore = endingBefore }
+        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
 
-        fun groupBy(groupBy: GroupBy) = apply { this.groupBy = groupBy }
+        fun groupBy(groupBy: GroupBy) = apply { body.groupBy(groupBy) }
 
-        fun startingOn(startingOn: OffsetDateTime) = apply { this.startingOn = startingOn }
+        fun startingOn(startingOn: OffsetDateTime) = apply { body.startingOn(startingOn) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -412,41 +390,31 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): UsageListWithGroupsParams =
             UsageListWithGroupsParams(
-                checkNotNull(billableMetricId) { "`billableMetricId` is required but was not set" },
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(windowSize) { "`windowSize` is required but was not set" },
                 limit,
                 nextPage,
-                currentPeriod,
-                endingBefore,
-                groupBy,
-                startingOn,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -546,7 +514,7 @@ constructor(
         class Builder {
 
             private var key: String? = null
-            private var values: List<String>? = null
+            private var values: MutableList<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -563,7 +531,15 @@ constructor(
              * Values of the group_by key to return in the query. Omit this if you'd like all values
              * for the key returned.
              */
-            fun values(values: List<String>) = apply { this.values = values }
+            fun values(values: List<String>) = apply { this.values = values.toMutableList() }
+
+            /**
+             * Values of the group_by key to return in the query. Omit this if you'd like all values
+             * for the key returned.
+             */
+            fun addValue(value: String) = apply {
+                values = (values ?: mutableListOf()).apply { add(value) }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -615,11 +591,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is UsageListWithGroupsParams && billableMetricId == other.billableMetricId && customerId == other.customerId && windowSize == other.windowSize && limit == other.limit && nextPage == other.nextPage && currentPeriod == other.currentPeriod && endingBefore == other.endingBefore && groupBy == other.groupBy && startingOn == other.startingOn && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is UsageListWithGroupsParams && limit == other.limit && nextPage == other.nextPage && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(billableMetricId, customerId, windowSize, limit, nextPage, currentPeriod, endingBefore, groupBy, startingOn, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(limit, nextPage, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "UsageListWithGroupsParams{billableMetricId=$billableMetricId, customerId=$customerId, windowSize=$windowSize, limit=$limit, nextPage=$nextPage, currentPeriod=$currentPeriod, endingBefore=$endingBefore, groupBy=$groupBy, startingOn=$startingOn, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "UsageListWithGroupsParams{limit=$limit, nextPage=$nextPage, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

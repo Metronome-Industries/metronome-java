@@ -21,79 +21,81 @@ import java.util.Optional
 
 class ContractProductCreateParams
 constructor(
-    private val name: String,
-    private val type: Type,
-    private val billableMetricId: String?,
-    private val compositeProductIds: List<String>?,
-    private val compositeTags: List<String>?,
-    private val excludeFreeUsage: Boolean?,
-    private val isRefundable: Boolean?,
-    private val netsuiteInternalItemId: String?,
-    private val netsuiteOverageItemId: String?,
-    private val presentationGroupKey: List<String>?,
-    private val pricingGroupKey: List<String>?,
-    private val quantityConversion: QuantityConversion?,
-    private val quantityRounding: QuantityRounding?,
-    private val tags: List<String>?,
+    private val body: ContractProductCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun name(): String = name
+    /** displayed on invoices */
+    fun name(): String = body.name()
 
-    fun type(): Type = type
+    fun type(): Type = body.type()
 
-    fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
+    /** Required for USAGE products */
+    fun billableMetricId(): Optional<String> = body.billableMetricId()
 
-    fun compositeProductIds(): Optional<List<String>> = Optional.ofNullable(compositeProductIds)
+    /** Required for COMPOSITE products */
+    fun compositeProductIds(): Optional<List<String>> = body.compositeProductIds()
 
-    fun compositeTags(): Optional<List<String>> = Optional.ofNullable(compositeTags)
+    /** Required for COMPOSITE products */
+    fun compositeTags(): Optional<List<String>> = body.compositeTags()
 
-    fun excludeFreeUsage(): Optional<Boolean> = Optional.ofNullable(excludeFreeUsage)
+    /**
+     * Beta feature only available for composite products. If true, products with $0 will not be
+     * included when computing composite usage. Defaults to false
+     */
+    fun excludeFreeUsage(): Optional<Boolean> = body.excludeFreeUsage()
 
-    fun isRefundable(): Optional<Boolean> = Optional.ofNullable(isRefundable)
+    /** This field's availability is dependent on your client's configuration. Defaults to true. */
+    fun isRefundable(): Optional<Boolean> = body.isRefundable()
 
-    fun netsuiteInternalItemId(): Optional<String> = Optional.ofNullable(netsuiteInternalItemId)
+    /** This field's availability is dependent on your client's configuration. */
+    fun netsuiteInternalItemId(): Optional<String> = body.netsuiteInternalItemId()
 
-    fun netsuiteOverageItemId(): Optional<String> = Optional.ofNullable(netsuiteOverageItemId)
+    /** This field's availability is dependent on your client's configuration. */
+    fun netsuiteOverageItemId(): Optional<String> = body.netsuiteOverageItemId()
 
-    fun presentationGroupKey(): Optional<List<String>> = Optional.ofNullable(presentationGroupKey)
+    /**
+     * For USAGE products only. Groups usage line items on invoices. The superset of values in the
+     * pricing group key and presentation group key must be set as one compound group key on the
+     * billable metric.
+     */
+    fun presentationGroupKey(): Optional<List<String>> = body.presentationGroupKey()
 
-    fun pricingGroupKey(): Optional<List<String>> = Optional.ofNullable(pricingGroupKey)
+    /**
+     * For USAGE products only. If set, pricing for this product will be determined for each
+     * pricing_group_key value, as opposed to the product as a whole. The superset of values in the
+     * pricing group key and presentation group key must be set as one compound group key on the
+     * billable metric.
+     */
+    fun pricingGroupKey(): Optional<List<String>> = body.pricingGroupKey()
 
-    fun quantityConversion(): Optional<QuantityConversion> = Optional.ofNullable(quantityConversion)
+    /**
+     * Optional. Only valid for USAGE products. If provided, the quantity will be converted using
+     * the provided conversion factor and operation. For example, if the operation is "multiply" and
+     * the conversion factor is 100, then the quantity will be multiplied by 100. This can be used
+     * in cases where data is sent in one unit and priced in another. For example, data could be
+     * sent in MB and priced in GB. In this case, the conversion factor would be 1024 and the
+     * operation would be "divide".
+     */
+    fun quantityConversion(): Optional<QuantityConversion> = body.quantityConversion()
 
-    fun quantityRounding(): Optional<QuantityRounding> = Optional.ofNullable(quantityRounding)
+    /**
+     * Optional. Only valid for USAGE products. If provided, the quantity will be rounded using the
+     * provided rounding method and decimal places. For example, if the method is "round up" and the
+     * decimal places is 0, then the quantity will be rounded up to the nearest integer.
+     */
+    fun quantityRounding(): Optional<QuantityRounding> = body.quantityRounding()
 
-    fun tags(): Optional<List<String>> = Optional.ofNullable(tags)
+    fun tags(): Optional<List<String>> = body.tags()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractProductCreateBody {
-        return ContractProductCreateBody(
-            name,
-            type,
-            billableMetricId,
-            compositeProductIds,
-            compositeTags,
-            excludeFreeUsage,
-            isRefundable,
-            netsuiteInternalItemId,
-            netsuiteOverageItemId,
-            presentationGroupKey,
-            pricingGroupKey,
-            quantityConversion,
-            quantityRounding,
-            tags,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractProductCreateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -215,17 +217,17 @@ constructor(
             private var name: String? = null
             private var type: Type? = null
             private var billableMetricId: String? = null
-            private var compositeProductIds: List<String>? = null
-            private var compositeTags: List<String>? = null
+            private var compositeProductIds: MutableList<String>? = null
+            private var compositeTags: MutableList<String>? = null
             private var excludeFreeUsage: Boolean? = null
             private var isRefundable: Boolean? = null
             private var netsuiteInternalItemId: String? = null
             private var netsuiteOverageItemId: String? = null
-            private var presentationGroupKey: List<String>? = null
-            private var pricingGroupKey: List<String>? = null
+            private var presentationGroupKey: MutableList<String>? = null
+            private var pricingGroupKey: MutableList<String>? = null
             private var quantityConversion: QuantityConversion? = null
             private var quantityRounding: QuantityRounding? = null
-            private var tags: List<String>? = null
+            private var tags: MutableList<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -260,12 +262,23 @@ constructor(
 
             /** Required for COMPOSITE products */
             fun compositeProductIds(compositeProductIds: List<String>) = apply {
-                this.compositeProductIds = compositeProductIds
+                this.compositeProductIds = compositeProductIds.toMutableList()
+            }
+
+            /** Required for COMPOSITE products */
+            fun addCompositeProductId(compositeProductId: String) = apply {
+                compositeProductIds =
+                    (compositeProductIds ?: mutableListOf()).apply { add(compositeProductId) }
             }
 
             /** Required for COMPOSITE products */
             fun compositeTags(compositeTags: List<String>) = apply {
-                this.compositeTags = compositeTags
+                this.compositeTags = compositeTags.toMutableList()
+            }
+
+            /** Required for COMPOSITE products */
+            fun addCompositeTag(compositeTag: String) = apply {
+                compositeTags = (compositeTags ?: mutableListOf()).apply { add(compositeTag) }
             }
 
             /**
@@ -298,7 +311,19 @@ constructor(
              * key on the billable metric.
              */
             fun presentationGroupKey(presentationGroupKey: List<String>) = apply {
-                this.presentationGroupKey = presentationGroupKey
+                this.presentationGroupKey = presentationGroupKey.toMutableList()
+            }
+
+            /**
+             * For USAGE products only. Groups usage line items on invoices. The superset of values
+             * in the pricing group key and presentation group key must be set as one compound group
+             * key on the billable metric.
+             */
+            fun addPresentationGroupKey(presentationGroupKey: String) = apply {
+                this.presentationGroupKey =
+                    (this.presentationGroupKey ?: mutableListOf()).apply {
+                        add(presentationGroupKey)
+                    }
             }
 
             /**
@@ -308,7 +333,18 @@ constructor(
              * key on the billable metric.
              */
             fun pricingGroupKey(pricingGroupKey: List<String>) = apply {
-                this.pricingGroupKey = pricingGroupKey
+                this.pricingGroupKey = pricingGroupKey.toMutableList()
+            }
+
+            /**
+             * For USAGE products only. If set, pricing for this product will be determined for each
+             * pricing_group_key value, as opposed to the product as a whole. The superset of values
+             * in the pricing group key and presentation group key must be set as one compound group
+             * key on the billable metric.
+             */
+            fun addPricingGroupKey(pricingGroupKey: String) = apply {
+                this.pricingGroupKey =
+                    (this.pricingGroupKey ?: mutableListOf()).apply { add(pricingGroupKey) }
             }
 
             /**
@@ -333,7 +369,9 @@ constructor(
                 this.quantityRounding = quantityRounding
             }
 
-            fun tags(tags: List<String>) = apply { this.tags = tags }
+            fun tags(tags: List<String>) = apply { this.tags = tags.toMutableList() }
+
+            fun addTag(tag: String) = apply { tags = (tags ?: mutableListOf()).apply { add(tag) } }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -402,101 +440,64 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var name: String? = null
-        private var type: Type? = null
-        private var billableMetricId: String? = null
-        private var compositeProductIds: MutableList<String> = mutableListOf()
-        private var compositeTags: MutableList<String> = mutableListOf()
-        private var excludeFreeUsage: Boolean? = null
-        private var isRefundable: Boolean? = null
-        private var netsuiteInternalItemId: String? = null
-        private var netsuiteOverageItemId: String? = null
-        private var presentationGroupKey: MutableList<String> = mutableListOf()
-        private var pricingGroupKey: MutableList<String> = mutableListOf()
-        private var quantityConversion: QuantityConversion? = null
-        private var quantityRounding: QuantityRounding? = null
-        private var tags: MutableList<String> = mutableListOf()
+        private var body: ContractProductCreateBody.Builder = ContractProductCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractProductCreateParams: ContractProductCreateParams) = apply {
-            name = contractProductCreateParams.name
-            type = contractProductCreateParams.type
-            billableMetricId = contractProductCreateParams.billableMetricId
-            compositeProductIds =
-                contractProductCreateParams.compositeProductIds?.toMutableList() ?: mutableListOf()
-            compositeTags =
-                contractProductCreateParams.compositeTags?.toMutableList() ?: mutableListOf()
-            excludeFreeUsage = contractProductCreateParams.excludeFreeUsage
-            isRefundable = contractProductCreateParams.isRefundable
-            netsuiteInternalItemId = contractProductCreateParams.netsuiteInternalItemId
-            netsuiteOverageItemId = contractProductCreateParams.netsuiteOverageItemId
-            presentationGroupKey =
-                contractProductCreateParams.presentationGroupKey?.toMutableList() ?: mutableListOf()
-            pricingGroupKey =
-                contractProductCreateParams.pricingGroupKey?.toMutableList() ?: mutableListOf()
-            quantityConversion = contractProductCreateParams.quantityConversion
-            quantityRounding = contractProductCreateParams.quantityRounding
-            tags = contractProductCreateParams.tags?.toMutableList() ?: mutableListOf()
+            body = contractProductCreateParams.body.toBuilder()
             additionalHeaders = contractProductCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = contractProductCreateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                contractProductCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** displayed on invoices */
-        fun name(name: String) = apply { this.name = name }
+        fun name(name: String) = apply { body.name(name) }
 
-        fun type(type: Type) = apply { this.type = type }
+        fun type(type: Type) = apply { body.type(type) }
 
         /** Required for USAGE products */
         fun billableMetricId(billableMetricId: String) = apply {
-            this.billableMetricId = billableMetricId
+            body.billableMetricId(billableMetricId)
         }
 
         /** Required for COMPOSITE products */
         fun compositeProductIds(compositeProductIds: List<String>) = apply {
-            this.compositeProductIds.clear()
-            this.compositeProductIds.addAll(compositeProductIds)
+            body.compositeProductIds(compositeProductIds)
         }
 
         /** Required for COMPOSITE products */
         fun addCompositeProductId(compositeProductId: String) = apply {
-            this.compositeProductIds.add(compositeProductId)
+            body.addCompositeProductId(compositeProductId)
         }
 
         /** Required for COMPOSITE products */
-        fun compositeTags(compositeTags: List<String>) = apply {
-            this.compositeTags.clear()
-            this.compositeTags.addAll(compositeTags)
-        }
+        fun compositeTags(compositeTags: List<String>) = apply { body.compositeTags(compositeTags) }
 
         /** Required for COMPOSITE products */
-        fun addCompositeTag(compositeTag: String) = apply { this.compositeTags.add(compositeTag) }
+        fun addCompositeTag(compositeTag: String) = apply { body.addCompositeTag(compositeTag) }
 
         /**
          * Beta feature only available for composite products. If true, products with $0 will not be
          * included when computing composite usage. Defaults to false
          */
         fun excludeFreeUsage(excludeFreeUsage: Boolean) = apply {
-            this.excludeFreeUsage = excludeFreeUsage
+            body.excludeFreeUsage(excludeFreeUsage)
         }
 
         /**
          * This field's availability is dependent on your client's configuration. Defaults to true.
          */
-        fun isRefundable(isRefundable: Boolean) = apply { this.isRefundable = isRefundable }
+        fun isRefundable(isRefundable: Boolean) = apply { body.isRefundable(isRefundable) }
 
         /** This field's availability is dependent on your client's configuration. */
         fun netsuiteInternalItemId(netsuiteInternalItemId: String) = apply {
-            this.netsuiteInternalItemId = netsuiteInternalItemId
+            body.netsuiteInternalItemId(netsuiteInternalItemId)
         }
 
         /** This field's availability is dependent on your client's configuration. */
         fun netsuiteOverageItemId(netsuiteOverageItemId: String) = apply {
-            this.netsuiteOverageItemId = netsuiteOverageItemId
+            body.netsuiteOverageItemId(netsuiteOverageItemId)
         }
 
         /**
@@ -505,8 +506,7 @@ constructor(
          * the billable metric.
          */
         fun presentationGroupKey(presentationGroupKey: List<String>) = apply {
-            this.presentationGroupKey.clear()
-            this.presentationGroupKey.addAll(presentationGroupKey)
+            body.presentationGroupKey(presentationGroupKey)
         }
 
         /**
@@ -515,7 +515,7 @@ constructor(
          * the billable metric.
          */
         fun addPresentationGroupKey(presentationGroupKey: String) = apply {
-            this.presentationGroupKey.add(presentationGroupKey)
+            body.addPresentationGroupKey(presentationGroupKey)
         }
 
         /**
@@ -525,8 +525,7 @@ constructor(
          * the billable metric.
          */
         fun pricingGroupKey(pricingGroupKey: List<String>) = apply {
-            this.pricingGroupKey.clear()
-            this.pricingGroupKey.addAll(pricingGroupKey)
+            body.pricingGroupKey(pricingGroupKey)
         }
 
         /**
@@ -536,7 +535,7 @@ constructor(
          * the billable metric.
          */
         fun addPricingGroupKey(pricingGroupKey: String) = apply {
-            this.pricingGroupKey.add(pricingGroupKey)
+            body.addPricingGroupKey(pricingGroupKey)
         }
 
         /**
@@ -548,7 +547,7 @@ constructor(
          * would be 1024 and the operation would be "divide".
          */
         fun quantityConversion(quantityConversion: QuantityConversion) = apply {
-            this.quantityConversion = quantityConversion
+            body.quantityConversion(quantityConversion)
         }
 
         /**
@@ -557,15 +556,12 @@ constructor(
          * and the decimal places is 0, then the quantity will be rounded up to the nearest integer.
          */
         fun quantityRounding(quantityRounding: QuantityRounding) = apply {
-            this.quantityRounding = quantityRounding
+            body.quantityRounding(quantityRounding)
         }
 
-        fun tags(tags: List<String>) = apply {
-            this.tags.clear()
-            this.tags.addAll(tags)
-        }
+        fun tags(tags: List<String>) = apply { body.tags(tags) }
 
-        fun addTag(tag: String) = apply { this.tags.add(tag) }
+        fun addTag(tag: String) = apply { body.addTag(tag) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -666,46 +662,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractProductCreateParams =
             ContractProductCreateParams(
-                checkNotNull(name) { "`name` is required but was not set" },
-                checkNotNull(type) { "`type` is required but was not set" },
-                billableMetricId,
-                compositeProductIds.toImmutable().ifEmpty { null },
-                compositeTags.toImmutable().ifEmpty { null },
-                excludeFreeUsage,
-                isRefundable,
-                netsuiteInternalItemId,
-                netsuiteOverageItemId,
-                presentationGroupKey.toImmutable().ifEmpty { null },
-                pricingGroupKey.toImmutable().ifEmpty { null },
-                quantityConversion,
-                quantityRounding,
-                tags.toImmutable().ifEmpty { null },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -795,11 +774,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractProductCreateParams && name == other.name && type == other.type && billableMetricId == other.billableMetricId && compositeProductIds == other.compositeProductIds && compositeTags == other.compositeTags && excludeFreeUsage == other.excludeFreeUsage && isRefundable == other.isRefundable && netsuiteInternalItemId == other.netsuiteInternalItemId && netsuiteOverageItemId == other.netsuiteOverageItemId && presentationGroupKey == other.presentationGroupKey && pricingGroupKey == other.pricingGroupKey && quantityConversion == other.quantityConversion && quantityRounding == other.quantityRounding && tags == other.tags && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractProductCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(name, type, billableMetricId, compositeProductIds, compositeTags, excludeFreeUsage, isRefundable, netsuiteInternalItemId, netsuiteOverageItemId, presentationGroupKey, pricingGroupKey, quantityConversion, quantityRounding, tags, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractProductCreateParams{name=$name, type=$type, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, tags=$tags, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractProductCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

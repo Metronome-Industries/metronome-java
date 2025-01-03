@@ -23,54 +23,58 @@ import java.util.Optional
 class CustomerPlanAddParams
 constructor(
     private val customerId: String,
-    private val planId: String,
-    private val startingOn: OffsetDateTime,
-    private val endingBefore: OffsetDateTime?,
-    private val netPaymentTermsDays: Double?,
-    private val overageRateAdjustments: List<OverageRateAdjustment>?,
-    private val priceAdjustments: List<PriceAdjustment>?,
-    private val trialSpec: TrialSpec?,
+    private val body: CustomerPlanAddBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun customerId(): String = customerId
 
-    fun planId(): String = planId
+    fun planId(): String = body.planId()
 
-    fun startingOn(): OffsetDateTime = startingOn
+    /**
+     * RFC 3339 timestamp for when the plan becomes active for this customer. Must be at 0:00 UTC
+     * (midnight).
+     */
+    fun startingOn(): OffsetDateTime = body.startingOn()
 
-    fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+    /**
+     * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00 UTC
+     * (midnight).
+     */
+    fun endingBefore(): Optional<OffsetDateTime> = body.endingBefore()
 
-    fun netPaymentTermsDays(): Optional<Double> = Optional.ofNullable(netPaymentTermsDays)
+    /** Number of days after issuance of invoice after which the invoice is due (e.g. Net 30). */
+    fun netPaymentTermsDays(): Optional<Double> = body.netPaymentTermsDays()
 
+    /**
+     * An optional list of overage rates that override the rates of the original plan configuration.
+     * These new rates will apply to all pricing ramps.
+     */
     fun overageRateAdjustments(): Optional<List<OverageRateAdjustment>> =
-        Optional.ofNullable(overageRateAdjustments)
+        body.overageRateAdjustments()
 
-    fun priceAdjustments(): Optional<List<PriceAdjustment>> = Optional.ofNullable(priceAdjustments)
+    /**
+     * A list of price adjustments can be applied on top of the pricing in the plans. See the
+     * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
+     * for details.
+     */
+    fun priceAdjustments(): Optional<List<PriceAdjustment>> = body.priceAdjustments()
 
-    fun trialSpec(): Optional<TrialSpec> = Optional.ofNullable(trialSpec)
+    /**
+     * A custom trial can be set for the customer's plan. See the
+     * [trial configuration documentation](https://docs.metronome.com/provisioning/configure-trials/)
+     * for details.
+     */
+    fun trialSpec(): Optional<TrialSpec> = body.trialSpec()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomerPlanAddBody {
-        return CustomerPlanAddBody(
-            planId,
-            startingOn,
-            endingBefore,
-            netPaymentTermsDays,
-            overageRateAdjustments,
-            priceAdjustments,
-            trialSpec,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomerPlanAddBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -162,8 +166,8 @@ constructor(
             private var startingOn: OffsetDateTime? = null
             private var endingBefore: OffsetDateTime? = null
             private var netPaymentTermsDays: Double? = null
-            private var overageRateAdjustments: List<OverageRateAdjustment>? = null
-            private var priceAdjustments: List<PriceAdjustment>? = null
+            private var overageRateAdjustments: MutableList<OverageRateAdjustment>? = null
+            private var priceAdjustments: MutableList<PriceAdjustment>? = null
             private var trialSpec: TrialSpec? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -209,8 +213,17 @@ constructor(
              */
             fun overageRateAdjustments(overageRateAdjustments: List<OverageRateAdjustment>) =
                 apply {
-                    this.overageRateAdjustments = overageRateAdjustments
+                    this.overageRateAdjustments = overageRateAdjustments.toMutableList()
                 }
+
+            /**
+             * An optional list of overage rates that override the rates of the original plan
+             * configuration. These new rates will apply to all pricing ramps.
+             */
+            fun addOverageRateAdjustment(overageRateAdjustment: OverageRateAdjustment) = apply {
+                overageRateAdjustments =
+                    (overageRateAdjustments ?: mutableListOf()).apply { add(overageRateAdjustment) }
+            }
 
             /**
              * A list of price adjustments can be applied on top of the pricing in the plans. See
@@ -219,7 +232,18 @@ constructor(
              * for details.
              */
             fun priceAdjustments(priceAdjustments: List<PriceAdjustment>) = apply {
-                this.priceAdjustments = priceAdjustments
+                this.priceAdjustments = priceAdjustments.toMutableList()
+            }
+
+            /**
+             * A list of price adjustments can be applied on top of the pricing in the plans. See
+             * the
+             * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
+             * for details.
+             */
+            fun addPriceAdjustment(priceAdjustment: PriceAdjustment) = apply {
+                priceAdjustments =
+                    (priceAdjustments ?: mutableListOf()).apply { add(priceAdjustment) }
             }
 
             /**
@@ -290,55 +314,39 @@ constructor(
     class Builder {
 
         private var customerId: String? = null
-        private var planId: String? = null
-        private var startingOn: OffsetDateTime? = null
-        private var endingBefore: OffsetDateTime? = null
-        private var netPaymentTermsDays: Double? = null
-        private var overageRateAdjustments: MutableList<OverageRateAdjustment> = mutableListOf()
-        private var priceAdjustments: MutableList<PriceAdjustment> = mutableListOf()
-        private var trialSpec: TrialSpec? = null
+        private var body: CustomerPlanAddBody.Builder = CustomerPlanAddBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerPlanAddParams: CustomerPlanAddParams) = apply {
             customerId = customerPlanAddParams.customerId
-            planId = customerPlanAddParams.planId
-            startingOn = customerPlanAddParams.startingOn
-            endingBefore = customerPlanAddParams.endingBefore
-            netPaymentTermsDays = customerPlanAddParams.netPaymentTermsDays
-            overageRateAdjustments =
-                customerPlanAddParams.overageRateAdjustments?.toMutableList() ?: mutableListOf()
-            priceAdjustments =
-                customerPlanAddParams.priceAdjustments?.toMutableList() ?: mutableListOf()
-            trialSpec = customerPlanAddParams.trialSpec
+            body = customerPlanAddParams.body.toBuilder()
             additionalHeaders = customerPlanAddParams.additionalHeaders.toBuilder()
             additionalQueryParams = customerPlanAddParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = customerPlanAddParams.additionalBodyProperties.toMutableMap()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
 
-        fun planId(planId: String) = apply { this.planId = planId }
+        fun planId(planId: String) = apply { body.planId(planId) }
 
         /**
          * RFC 3339 timestamp for when the plan becomes active for this customer. Must be at 0:00
          * UTC (midnight).
          */
-        fun startingOn(startingOn: OffsetDateTime) = apply { this.startingOn = startingOn }
+        fun startingOn(startingOn: OffsetDateTime) = apply { body.startingOn(startingOn) }
 
         /**
          * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
          * UTC (midnight).
          */
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { this.endingBefore = endingBefore }
+        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
 
         /**
          * Number of days after issuance of invoice after which the invoice is due (e.g. Net 30).
          */
         fun netPaymentTermsDays(netPaymentTermsDays: Double) = apply {
-            this.netPaymentTermsDays = netPaymentTermsDays
+            body.netPaymentTermsDays(netPaymentTermsDays)
         }
 
         /**
@@ -346,8 +354,7 @@ constructor(
          * configuration. These new rates will apply to all pricing ramps.
          */
         fun overageRateAdjustments(overageRateAdjustments: List<OverageRateAdjustment>) = apply {
-            this.overageRateAdjustments.clear()
-            this.overageRateAdjustments.addAll(overageRateAdjustments)
+            body.overageRateAdjustments(overageRateAdjustments)
         }
 
         /**
@@ -355,7 +362,7 @@ constructor(
          * configuration. These new rates will apply to all pricing ramps.
          */
         fun addOverageRateAdjustment(overageRateAdjustment: OverageRateAdjustment) = apply {
-            this.overageRateAdjustments.add(overageRateAdjustment)
+            body.addOverageRateAdjustment(overageRateAdjustment)
         }
 
         /**
@@ -364,8 +371,7 @@ constructor(
          * for details.
          */
         fun priceAdjustments(priceAdjustments: List<PriceAdjustment>) = apply {
-            this.priceAdjustments.clear()
-            this.priceAdjustments.addAll(priceAdjustments)
+            body.priceAdjustments(priceAdjustments)
         }
 
         /**
@@ -374,7 +380,7 @@ constructor(
          * for details.
          */
         fun addPriceAdjustment(priceAdjustment: PriceAdjustment) = apply {
-            this.priceAdjustments.add(priceAdjustment)
+            body.addPriceAdjustment(priceAdjustment)
         }
 
         /**
@@ -382,7 +388,7 @@ constructor(
          * [trial configuration documentation](https://docs.metronome.com/provisioning/configure-trials/)
          * for details.
          */
-        fun trialSpec(trialSpec: TrialSpec) = apply { this.trialSpec = trialSpec }
+        fun trialSpec(trialSpec: TrialSpec) = apply { body.trialSpec(trialSpec) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -483,40 +489,30 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerPlanAddParams =
             CustomerPlanAddParams(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(planId) { "`planId` is required but was not set" },
-                checkNotNull(startingOn) { "`startingOn` is required but was not set" },
-                endingBefore,
-                netPaymentTermsDays,
-                overageRateAdjustments.toImmutable().ifEmpty { null },
-                priceAdjustments.toImmutable().ifEmpty { null },
-                trialSpec,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -1040,11 +1036,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerPlanAddParams && customerId == other.customerId && planId == other.planId && startingOn == other.startingOn && endingBefore == other.endingBefore && netPaymentTermsDays == other.netPaymentTermsDays && overageRateAdjustments == other.overageRateAdjustments && priceAdjustments == other.priceAdjustments && trialSpec == other.trialSpec && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerPlanAddParams && customerId == other.customerId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, planId, startingOn, endingBefore, netPaymentTermsDays, overageRateAdjustments, priceAdjustments, trialSpec, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomerPlanAddParams{customerId=$customerId, planId=$planId, startingOn=$startingOn, endingBefore=$endingBefore, netPaymentTermsDays=$netPaymentTermsDays, overageRateAdjustments=$overageRateAdjustments, priceAdjustments=$priceAdjustments, trialSpec=$trialSpec, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerPlanAddParams{customerId=$customerId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

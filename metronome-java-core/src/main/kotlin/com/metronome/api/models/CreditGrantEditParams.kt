@@ -19,39 +19,30 @@ import java.util.Optional
 
 class CreditGrantEditParams
 constructor(
-    private val id: String,
-    private val creditGrantType: String?,
-    private val expiresAt: OffsetDateTime?,
-    private val name: String?,
+    private val body: CreditGrantEditBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun id(): String = id
+    /** the ID of the credit grant */
+    fun id(): String = body.id()
 
-    fun creditGrantType(): Optional<String> = Optional.ofNullable(creditGrantType)
+    /** the updated credit grant type */
+    fun creditGrantType(): Optional<String> = body.creditGrantType()
 
-    fun expiresAt(): Optional<OffsetDateTime> = Optional.ofNullable(expiresAt)
+    /** the updated expiration date for the credit grant */
+    fun expiresAt(): Optional<OffsetDateTime> = body.expiresAt()
 
-    fun name(): Optional<String> = Optional.ofNullable(name)
+    /** the updated name for the credit grant */
+    fun name(): Optional<String> = body.name()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CreditGrantEditBody {
-        return CreditGrantEditBody(
-            id,
-            creditGrantType,
-            expiresAt,
-            name,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CreditGrantEditBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -182,38 +173,30 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var id: String? = null
-        private var creditGrantType: String? = null
-        private var expiresAt: OffsetDateTime? = null
-        private var name: String? = null
+        private var body: CreditGrantEditBody.Builder = CreditGrantEditBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(creditGrantEditParams: CreditGrantEditParams) = apply {
-            id = creditGrantEditParams.id
-            creditGrantType = creditGrantEditParams.creditGrantType
-            expiresAt = creditGrantEditParams.expiresAt
-            name = creditGrantEditParams.name
+            body = creditGrantEditParams.body.toBuilder()
             additionalHeaders = creditGrantEditParams.additionalHeaders.toBuilder()
             additionalQueryParams = creditGrantEditParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = creditGrantEditParams.additionalBodyProperties.toMutableMap()
         }
 
         /** the ID of the credit grant */
-        fun id(id: String) = apply { this.id = id }
+        fun id(id: String) = apply { body.id(id) }
 
         /** the updated credit grant type */
         fun creditGrantType(creditGrantType: String) = apply {
-            this.creditGrantType = creditGrantType
+            body.creditGrantType(creditGrantType)
         }
 
         /** the updated expiration date for the credit grant */
-        fun expiresAt(expiresAt: OffsetDateTime) = apply { this.expiresAt = expiresAt }
+        fun expiresAt(expiresAt: OffsetDateTime) = apply { body.expiresAt(expiresAt) }
 
         /** the updated name for the credit grant */
-        fun name(name: String) = apply { this.name = name }
+        fun name(name: String) = apply { body.name(name) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -314,36 +297,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CreditGrantEditParams =
             CreditGrantEditParams(
-                checkNotNull(id) { "`id` is required but was not set" },
-                creditGrantType,
-                expiresAt,
-                name,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -352,11 +328,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditGrantEditParams && id == other.id && creditGrantType == other.creditGrantType && expiresAt == other.expiresAt && name == other.name && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CreditGrantEditParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, creditGrantType, expiresAt, name, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CreditGrantEditParams{id=$id, creditGrantType=$creditGrantType, expiresAt=$expiresAt, name=$name, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CreditGrantEditParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

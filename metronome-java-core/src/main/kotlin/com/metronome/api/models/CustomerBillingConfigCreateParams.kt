@@ -23,44 +23,31 @@ class CustomerBillingConfigCreateParams
 constructor(
     private val customerId: String,
     private val billingProviderType: BillingProviderType,
-    private val billingProviderCustomerId: String,
-    private val awsProductCode: String?,
-    private val awsRegion: AwsRegion?,
-    private val stripeCollectionMethod: StripeCollectionMethod?,
+    private val body: CustomerBillingConfigCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun customerId(): String = customerId
 
     fun billingProviderType(): BillingProviderType = billingProviderType
 
-    fun billingProviderCustomerId(): String = billingProviderCustomerId
+    /** The customer ID in the billing provider's system. For Azure, this is the subscription ID. */
+    fun billingProviderCustomerId(): String = body.billingProviderCustomerId()
 
-    fun awsProductCode(): Optional<String> = Optional.ofNullable(awsProductCode)
+    fun awsProductCode(): Optional<String> = body.awsProductCode()
 
-    fun awsRegion(): Optional<AwsRegion> = Optional.ofNullable(awsRegion)
+    fun awsRegion(): Optional<AwsRegion> = body.awsRegion()
 
-    fun stripeCollectionMethod(): Optional<StripeCollectionMethod> =
-        Optional.ofNullable(stripeCollectionMethod)
+    fun stripeCollectionMethod(): Optional<StripeCollectionMethod> = body.stripeCollectionMethod()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomerBillingConfigCreateBody {
-        return CustomerBillingConfigCreateBody(
-            billingProviderCustomerId,
-            awsProductCode,
-            awsRegion,
-            stripeCollectionMethod,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomerBillingConfigCreateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -213,29 +200,20 @@ constructor(
 
         private var customerId: String? = null
         private var billingProviderType: BillingProviderType? = null
-        private var billingProviderCustomerId: String? = null
-        private var awsProductCode: String? = null
-        private var awsRegion: AwsRegion? = null
-        private var stripeCollectionMethod: StripeCollectionMethod? = null
+        private var body: CustomerBillingConfigCreateBody.Builder =
+            CustomerBillingConfigCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerBillingConfigCreateParams: CustomerBillingConfigCreateParams) =
             apply {
                 customerId = customerBillingConfigCreateParams.customerId
                 billingProviderType = customerBillingConfigCreateParams.billingProviderType
-                billingProviderCustomerId =
-                    customerBillingConfigCreateParams.billingProviderCustomerId
-                awsProductCode = customerBillingConfigCreateParams.awsProductCode
-                awsRegion = customerBillingConfigCreateParams.awsRegion
-                stripeCollectionMethod = customerBillingConfigCreateParams.stripeCollectionMethod
+                body = customerBillingConfigCreateParams.body.toBuilder()
                 additionalHeaders = customerBillingConfigCreateParams.additionalHeaders.toBuilder()
                 additionalQueryParams =
                     customerBillingConfigCreateParams.additionalQueryParams.toBuilder()
-                additionalBodyProperties =
-                    customerBillingConfigCreateParams.additionalBodyProperties.toMutableMap()
             }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -248,15 +226,15 @@ constructor(
          * The customer ID in the billing provider's system. For Azure, this is the subscription ID.
          */
         fun billingProviderCustomerId(billingProviderCustomerId: String) = apply {
-            this.billingProviderCustomerId = billingProviderCustomerId
+            body.billingProviderCustomerId(billingProviderCustomerId)
         }
 
-        fun awsProductCode(awsProductCode: String) = apply { this.awsProductCode = awsProductCode }
+        fun awsProductCode(awsProductCode: String) = apply { body.awsProductCode(awsProductCode) }
 
-        fun awsRegion(awsRegion: AwsRegion) = apply { this.awsRegion = awsRegion }
+        fun awsRegion(awsRegion: AwsRegion) = apply { body.awsRegion(awsRegion) }
 
         fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) = apply {
-            this.stripeCollectionMethod = stripeCollectionMethod
+            body.stripeCollectionMethod(stripeCollectionMethod)
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -358,25 +336,22 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerBillingConfigCreateParams =
@@ -385,15 +360,9 @@ constructor(
                 checkNotNull(billingProviderType) {
                     "`billingProviderType` is required but was not set"
                 },
-                checkNotNull(billingProviderCustomerId) {
-                    "`billingProviderCustomerId` is required but was not set"
-                },
-                awsProductCode,
-                awsRegion,
-                stripeCollectionMethod,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -748,11 +717,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerBillingConfigCreateParams && customerId == other.customerId && billingProviderType == other.billingProviderType && billingProviderCustomerId == other.billingProviderCustomerId && awsProductCode == other.awsProductCode && awsRegion == other.awsRegion && stripeCollectionMethod == other.stripeCollectionMethod && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerBillingConfigCreateParams && customerId == other.customerId && billingProviderType == other.billingProviderType && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, billingProviderType, billingProviderCustomerId, awsProductCode, awsRegion, stripeCollectionMethod, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, billingProviderType, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomerBillingConfigCreateParams{customerId=$customerId, billingProviderType=$billingProviderType, billingProviderCustomerId=$billingProviderCustomerId, awsProductCode=$awsProductCode, awsRegion=$awsRegion, stripeCollectionMethod=$stripeCollectionMethod, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerBillingConfigCreateParams{customerId=$customerId, billingProviderType=$billingProviderType, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -20,35 +20,24 @@ import java.util.Objects
 
 class CustomFieldSetValuesParams
 constructor(
-    private val customFields: CustomFields,
-    private val entity: Entity,
-    private val entityId: String,
+    private val body: CustomFieldSetValuesBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun customFields(): CustomFields = customFields
+    fun customFields(): CustomFields = body.customFields()
 
-    fun entity(): Entity = entity
+    fun entity(): Entity = body.entity()
 
-    fun entityId(): String = entityId
+    fun entityId(): String = body.entityId()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomFieldSetValuesBody {
-        return CustomFieldSetValuesBody(
-            customFields,
-            entity,
-            entityId,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomFieldSetValuesBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -161,29 +150,22 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var customFields: CustomFields? = null
-        private var entity: Entity? = null
-        private var entityId: String? = null
+        private var body: CustomFieldSetValuesBody.Builder = CustomFieldSetValuesBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customFieldSetValuesParams: CustomFieldSetValuesParams) = apply {
-            customFields = customFieldSetValuesParams.customFields
-            entity = customFieldSetValuesParams.entity
-            entityId = customFieldSetValuesParams.entityId
+            body = customFieldSetValuesParams.body.toBuilder()
             additionalHeaders = customFieldSetValuesParams.additionalHeaders.toBuilder()
             additionalQueryParams = customFieldSetValuesParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                customFieldSetValuesParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun customFields(customFields: CustomFields) = apply { this.customFields = customFields }
+        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
 
-        fun entity(entity: Entity) = apply { this.entity = entity }
+        fun entity(entity: Entity) = apply { body.entity(entity) }
 
-        fun entityId(entityId: String) = apply { this.entityId = entityId }
+        fun entityId(entityId: String) = apply { body.entityId(entityId) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -284,35 +266,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomFieldSetValuesParams =
             CustomFieldSetValuesParams(
-                checkNotNull(customFields) { "`customFields` is required but was not set" },
-                checkNotNull(entity) { "`entity` is required but was not set" },
-                checkNotNull(entityId) { "`entityId` is required but was not set" },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -529,11 +505,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomFieldSetValuesParams && customFields == other.customFields && entity == other.entity && entityId == other.entityId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomFieldSetValuesParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customFields, entity, entityId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomFieldSetValuesParams{customFields=$customFields, entity=$entity, entityId=$entityId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomFieldSetValuesParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

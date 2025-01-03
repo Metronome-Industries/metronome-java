@@ -22,83 +22,78 @@ import java.util.Optional
 
 class ContractRateCardRateAddParams
 constructor(
-    private val entitled: Boolean,
-    private val productId: String,
-    private val rateCardId: String,
-    private val rateType: RateType,
-    private val startingAt: OffsetDateTime,
-    private val commitRate: CommitRate?,
-    private val creditTypeId: String?,
-    private val customRate: CustomRate?,
-    private val endingBefore: OffsetDateTime?,
-    private val isProrated: Boolean?,
-    private val price: Double?,
-    private val pricingGroupValues: PricingGroupValues?,
-    private val quantity: Double?,
-    private val tiers: List<Tier>?,
-    private val useListPrices: Boolean?,
+    private val body: ContractRateCardRateAddBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun entitled(): Boolean = entitled
+    fun entitled(): Boolean = body.entitled()
 
-    fun productId(): String = productId
+    /** ID of the product to add a rate for */
+    fun productId(): String = body.productId()
 
-    fun rateCardId(): String = rateCardId
+    /** ID of the rate card to update */
+    fun rateCardId(): String = body.rateCardId()
 
-    fun rateType(): RateType = rateType
+    fun rateType(): RateType = body.rateType()
 
-    fun startingAt(): OffsetDateTime = startingAt
+    /** inclusive effective date */
+    fun startingAt(): OffsetDateTime = body.startingAt()
 
-    fun commitRate(): Optional<CommitRate> = Optional.ofNullable(commitRate)
+    /**
+     * A distinct rate on the rate card. You can choose to use this rate rather than list rate when
+     * consuming a credit or commit.
+     */
+    fun commitRate(): Optional<CommitRate> = body.commitRate()
 
-    fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
+    /**
+     * The Metronome ID of the credit type to associate with price, defaults to USD (cents) if not
+     * passed. Used by all rate_types except type PERCENTAGE. PERCENTAGE rates use the credit type
+     * of associated rates.
+     */
+    fun creditTypeId(): Optional<String> = body.creditTypeId()
 
-    fun customRate(): Optional<CustomRate> = Optional.ofNullable(customRate)
+    /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
+    fun customRate(): Optional<CustomRate> = body.customRate()
 
-    fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+    /** exclusive end date */
+    fun endingBefore(): Optional<OffsetDateTime> = body.endingBefore()
 
-    fun isProrated(): Optional<Boolean> = Optional.ofNullable(isProrated)
+    /**
+     * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to true.
+     */
+    fun isProrated(): Optional<Boolean> = body.isProrated()
 
-    fun price(): Optional<Double> = Optional.ofNullable(price)
+    /**
+     * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
+     * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+     */
+    fun price(): Optional<Double> = body.price()
 
-    fun pricingGroupValues(): Optional<PricingGroupValues> = Optional.ofNullable(pricingGroupValues)
+    /**
+     * Optional. List of pricing group key value pairs which will be used to calculate the price.
+     */
+    fun pricingGroupValues(): Optional<PricingGroupValues> = body.pricingGroupValues()
 
-    fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
+    /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+    fun quantity(): Optional<Double> = body.quantity()
 
-    fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers)
+    /** Only set for TIERED rate_type. */
+    fun tiers(): Optional<List<Tier>> = body.tiers()
 
-    fun useListPrices(): Optional<Boolean> = Optional.ofNullable(useListPrices)
+    /**
+     * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using list
+     * prices rather than the standard rates for this product on the contract.
+     */
+    fun useListPrices(): Optional<Boolean> = body.useListPrices()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractRateCardRateAddBody {
-        return ContractRateCardRateAddBody(
-            entitled,
-            productId,
-            rateCardId,
-            rateType,
-            startingAt,
-            commitRate,
-            creditTypeId,
-            customRate,
-            endingBefore,
-            isProrated,
-            price,
-            pricingGroupValues,
-            quantity,
-            tiers,
-            useListPrices,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractRateCardRateAddBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -223,7 +218,7 @@ constructor(
             private var price: Double? = null
             private var pricingGroupValues: PricingGroupValues? = null
             private var quantity: Double? = null
-            private var tiers: List<Tier>? = null
+            private var tiers: MutableList<Tier>? = null
             private var useListPrices: Boolean? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -309,7 +304,12 @@ constructor(
             fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
             /** Only set for TIERED rate_type. */
-            fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+            fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+            /** Only set for TIERED rate_type. */
+            fun addTier(tier: Tier) = apply {
+                tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+            }
 
             /**
              * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
@@ -385,117 +385,84 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var entitled: Boolean? = null
-        private var productId: String? = null
-        private var rateCardId: String? = null
-        private var rateType: RateType? = null
-        private var startingAt: OffsetDateTime? = null
-        private var commitRate: CommitRate? = null
-        private var creditTypeId: String? = null
-        private var customRate: CustomRate? = null
-        private var endingBefore: OffsetDateTime? = null
-        private var isProrated: Boolean? = null
-        private var price: Double? = null
-        private var pricingGroupValues: PricingGroupValues? = null
-        private var quantity: Double? = null
-        private var tiers: MutableList<Tier> = mutableListOf()
-        private var useListPrices: Boolean? = null
+        private var body: ContractRateCardRateAddBody.Builder =
+            ContractRateCardRateAddBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractRateCardRateAddParams: ContractRateCardRateAddParams) = apply {
-            entitled = contractRateCardRateAddParams.entitled
-            productId = contractRateCardRateAddParams.productId
-            rateCardId = contractRateCardRateAddParams.rateCardId
-            rateType = contractRateCardRateAddParams.rateType
-            startingAt = contractRateCardRateAddParams.startingAt
-            commitRate = contractRateCardRateAddParams.commitRate
-            creditTypeId = contractRateCardRateAddParams.creditTypeId
-            customRate = contractRateCardRateAddParams.customRate
-            endingBefore = contractRateCardRateAddParams.endingBefore
-            isProrated = contractRateCardRateAddParams.isProrated
-            price = contractRateCardRateAddParams.price
-            pricingGroupValues = contractRateCardRateAddParams.pricingGroupValues
-            quantity = contractRateCardRateAddParams.quantity
-            tiers = contractRateCardRateAddParams.tiers?.toMutableList() ?: mutableListOf()
-            useListPrices = contractRateCardRateAddParams.useListPrices
+            body = contractRateCardRateAddParams.body.toBuilder()
             additionalHeaders = contractRateCardRateAddParams.additionalHeaders.toBuilder()
             additionalQueryParams = contractRateCardRateAddParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                contractRateCardRateAddParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun entitled(entitled: Boolean) = apply { this.entitled = entitled }
+        fun entitled(entitled: Boolean) = apply { body.entitled(entitled) }
 
         /** ID of the product to add a rate for */
-        fun productId(productId: String) = apply { this.productId = productId }
+        fun productId(productId: String) = apply { body.productId(productId) }
 
         /** ID of the rate card to update */
-        fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
+        fun rateCardId(rateCardId: String) = apply { body.rateCardId(rateCardId) }
 
-        fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+        fun rateType(rateType: RateType) = apply { body.rateType(rateType) }
 
         /** inclusive effective date */
-        fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+        fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
 
         /**
          * A distinct rate on the rate card. You can choose to use this rate rather than list rate
          * when consuming a credit or commit.
          */
-        fun commitRate(commitRate: CommitRate) = apply { this.commitRate = commitRate }
+        fun commitRate(commitRate: CommitRate) = apply { body.commitRate(commitRate) }
 
         /**
          * The Metronome ID of the credit type to associate with price, defaults to USD (cents) if
          * not passed. Used by all rate_types except type PERCENTAGE. PERCENTAGE rates use the
          * credit type of associated rates.
          */
-        fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+        fun creditTypeId(creditTypeId: String) = apply { body.creditTypeId(creditTypeId) }
 
         /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
-        fun customRate(customRate: CustomRate) = apply { this.customRate = customRate }
+        fun customRate(customRate: CustomRate) = apply { body.customRate(customRate) }
 
         /** exclusive end date */
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { this.endingBefore = endingBefore }
+        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
 
         /**
          * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
          * true.
          */
-        fun isProrated(isProrated: Boolean) = apply { this.isProrated = isProrated }
+        fun isProrated(isProrated: Boolean) = apply { body.isProrated(isProrated) }
 
         /**
          * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
          * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
          */
-        fun price(price: Double) = apply { this.price = price }
+        fun price(price: Double) = apply { body.price(price) }
 
         /**
          * Optional. List of pricing group key value pairs which will be used to calculate the
          * price.
          */
         fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
-            this.pricingGroupValues = pricingGroupValues
+            body.pricingGroupValues(pricingGroupValues)
         }
 
         /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-        fun quantity(quantity: Double) = apply { this.quantity = quantity }
+        fun quantity(quantity: Double) = apply { body.quantity(quantity) }
 
         /** Only set for TIERED rate_type. */
-        fun tiers(tiers: List<Tier>) = apply {
-            this.tiers.clear()
-            this.tiers.addAll(tiers)
-        }
+        fun tiers(tiers: List<Tier>) = apply { body.tiers(tiers) }
 
         /** Only set for TIERED rate_type. */
-        fun addTier(tier: Tier) = apply { this.tiers.add(tier) }
+        fun addTier(tier: Tier) = apply { body.addTier(tier) }
 
         /**
          * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
          * list prices rather than the standard rates for this product on the contract.
          */
-        fun useListPrices(useListPrices: Boolean) = apply { this.useListPrices = useListPrices }
+        fun useListPrices(useListPrices: Boolean) = apply { body.useListPrices(useListPrices) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -596,47 +563,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractRateCardRateAddParams =
             ContractRateCardRateAddParams(
-                checkNotNull(entitled) { "`entitled` is required but was not set" },
-                checkNotNull(productId) { "`productId` is required but was not set" },
-                checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
-                checkNotNull(rateType) { "`rateType` is required but was not set" },
-                checkNotNull(startingAt) { "`startingAt` is required but was not set" },
-                commitRate,
-                creditTypeId,
-                customRate,
-                endingBefore,
-                isProrated,
-                price,
-                pricingGroupValues,
-                quantity,
-                tiers.toImmutable().ifEmpty { null },
-                useListPrices,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -753,7 +702,7 @@ constructor(
 
             private var rateType: RateType? = null
             private var price: Double? = null
-            private var tiers: List<Tier>? = null
+            private var tiers: MutableList<Tier>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -770,7 +719,12 @@ constructor(
             fun price(price: Double) = apply { this.price = price }
 
             /** Only set for TIERED rate_type. */
-            fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+            fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+            /** Only set for TIERED rate_type. */
+            fun addTier(tier: Tier) = apply {
+                tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1066,11 +1020,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardRateAddParams && entitled == other.entitled && productId == other.productId && rateCardId == other.rateCardId && rateType == other.rateType && startingAt == other.startingAt && commitRate == other.commitRate && creditTypeId == other.creditTypeId && customRate == other.customRate && endingBefore == other.endingBefore && isProrated == other.isProrated && price == other.price && pricingGroupValues == other.pricingGroupValues && quantity == other.quantity && tiers == other.tiers && useListPrices == other.useListPrices && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardRateAddParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(entitled, productId, rateCardId, rateType, startingAt, commitRate, creditTypeId, customRate, endingBefore, isProrated, price, pricingGroupValues, quantity, tiers, useListPrices, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractRateCardRateAddParams{entitled=$entitled, productId=$productId, rateCardId=$rateCardId, rateType=$rateType, startingAt=$startingAt, commitRate=$commitRate, creditTypeId=$creditTypeId, customRate=$customRate, endingBefore=$endingBefore, isProrated=$isProrated, price=$price, pricingGroupValues=$pricingGroupValues, quantity=$quantity, tiers=$tiers, useListPrices=$useListPrices, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractRateCardRateAddParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -21,47 +21,45 @@ class CreditGrantListParams
 constructor(
     private val limit: Long?,
     private val nextPage: String?,
-    private val creditGrantIds: List<String>?,
-    private val creditTypeIds: List<String>?,
-    private val customerIds: List<String>?,
-    private val effectiveBefore: OffsetDateTime?,
-    private val notExpiringBefore: OffsetDateTime?,
+    private val body: CreditGrantListBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
+    /** Max number of results that should be returned */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
-    fun creditGrantIds(): Optional<List<String>> = Optional.ofNullable(creditGrantIds)
+    /**
+     * An array of credit grant IDs. If this is specified, neither credit_type_ids nor customer_ids
+     * may be specified.
+     */
+    fun creditGrantIds(): Optional<List<String>> = body.creditGrantIds()
 
-    fun creditTypeIds(): Optional<List<String>> = Optional.ofNullable(creditTypeIds)
+    /** An array of credit type IDs. This must not be specified if credit_grant_ids is specified. */
+    fun creditTypeIds(): Optional<List<String>> = body.creditTypeIds()
 
-    fun customerIds(): Optional<List<String>> = Optional.ofNullable(customerIds)
+    /**
+     * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
+     * specified.
+     */
+    fun customerIds(): Optional<List<String>> = body.customerIds()
 
-    fun effectiveBefore(): Optional<OffsetDateTime> = Optional.ofNullable(effectiveBefore)
+    /** Only return credit grants that are effective before this timestamp (exclusive). */
+    fun effectiveBefore(): Optional<OffsetDateTime> = body.effectiveBefore()
 
-    fun notExpiringBefore(): Optional<OffsetDateTime> = Optional.ofNullable(notExpiringBefore)
+    /** Only return credit grants that expire at or after this timestamp. */
+    fun notExpiringBefore(): Optional<OffsetDateTime> = body.notExpiringBefore()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CreditGrantListBody {
-        return CreditGrantListBody(
-            creditGrantIds,
-            creditTypeIds,
-            customerIds,
-            effectiveBefore,
-            notExpiringBefore,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CreditGrantListBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -128,9 +126,9 @@ constructor(
 
         class Builder {
 
-            private var creditGrantIds: List<String>? = null
-            private var creditTypeIds: List<String>? = null
-            private var customerIds: List<String>? = null
+            private var creditGrantIds: MutableList<String>? = null
+            private var creditTypeIds: MutableList<String>? = null
+            private var customerIds: MutableList<String>? = null
             private var effectiveBefore: OffsetDateTime? = null
             private var notExpiringBefore: OffsetDateTime? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -150,7 +148,15 @@ constructor(
              * customer_ids may be specified.
              */
             fun creditGrantIds(creditGrantIds: List<String>) = apply {
-                this.creditGrantIds = creditGrantIds
+                this.creditGrantIds = creditGrantIds.toMutableList()
+            }
+
+            /**
+             * An array of credit grant IDs. If this is specified, neither credit_type_ids nor
+             * customer_ids may be specified.
+             */
+            fun addCreditGrantId(creditGrantId: String) = apply {
+                creditGrantIds = (creditGrantIds ?: mutableListOf()).apply { add(creditGrantId) }
             }
 
             /**
@@ -158,14 +164,32 @@ constructor(
              * specified.
              */
             fun creditTypeIds(creditTypeIds: List<String>) = apply {
-                this.creditTypeIds = creditTypeIds
+                this.creditTypeIds = creditTypeIds.toMutableList()
+            }
+
+            /**
+             * An array of credit type IDs. This must not be specified if credit_grant_ids is
+             * specified.
+             */
+            fun addCreditTypeId(creditTypeId: String) = apply {
+                creditTypeIds = (creditTypeIds ?: mutableListOf()).apply { add(creditTypeId) }
             }
 
             /**
              * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
              * specified.
              */
-            fun customerIds(customerIds: List<String>) = apply { this.customerIds = customerIds }
+            fun customerIds(customerIds: List<String>) = apply {
+                this.customerIds = customerIds.toMutableList()
+            }
+
+            /**
+             * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
+             * specified.
+             */
+            fun addCustomerId(customerId: String) = apply {
+                customerIds = (customerIds ?: mutableListOf()).apply { add(customerId) }
+            }
 
             /** Only return credit grants that are effective before this timestamp (exclusive). */
             fun effectiveBefore(effectiveBefore: OffsetDateTime) = apply {
@@ -237,28 +261,17 @@ constructor(
 
         private var limit: Long? = null
         private var nextPage: String? = null
-        private var creditGrantIds: MutableList<String> = mutableListOf()
-        private var creditTypeIds: MutableList<String> = mutableListOf()
-        private var customerIds: MutableList<String> = mutableListOf()
-        private var effectiveBefore: OffsetDateTime? = null
-        private var notExpiringBefore: OffsetDateTime? = null
+        private var body: CreditGrantListBody.Builder = CreditGrantListBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(creditGrantListParams: CreditGrantListParams) = apply {
             limit = creditGrantListParams.limit
             nextPage = creditGrantListParams.nextPage
-            creditGrantIds =
-                creditGrantListParams.creditGrantIds?.toMutableList() ?: mutableListOf()
-            creditTypeIds = creditGrantListParams.creditTypeIds?.toMutableList() ?: mutableListOf()
-            customerIds = creditGrantListParams.customerIds?.toMutableList() ?: mutableListOf()
-            effectiveBefore = creditGrantListParams.effectiveBefore
-            notExpiringBefore = creditGrantListParams.notExpiringBefore
+            body = creditGrantListParams.body.toBuilder()
             additionalHeaders = creditGrantListParams.additionalHeaders.toBuilder()
             additionalQueryParams = creditGrantListParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = creditGrantListParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Max number of results that should be returned */
@@ -272,54 +285,45 @@ constructor(
          * customer_ids may be specified.
          */
         fun creditGrantIds(creditGrantIds: List<String>) = apply {
-            this.creditGrantIds.clear()
-            this.creditGrantIds.addAll(creditGrantIds)
+            body.creditGrantIds(creditGrantIds)
         }
 
         /**
          * An array of credit grant IDs. If this is specified, neither credit_type_ids nor
          * customer_ids may be specified.
          */
-        fun addCreditGrantId(creditGrantId: String) = apply {
-            this.creditGrantIds.add(creditGrantId)
-        }
+        fun addCreditGrantId(creditGrantId: String) = apply { body.addCreditGrantId(creditGrantId) }
 
         /**
          * An array of credit type IDs. This must not be specified if credit_grant_ids is specified.
          */
-        fun creditTypeIds(creditTypeIds: List<String>) = apply {
-            this.creditTypeIds.clear()
-            this.creditTypeIds.addAll(creditTypeIds)
-        }
+        fun creditTypeIds(creditTypeIds: List<String>) = apply { body.creditTypeIds(creditTypeIds) }
 
         /**
          * An array of credit type IDs. This must not be specified if credit_grant_ids is specified.
          */
-        fun addCreditTypeId(creditTypeId: String) = apply { this.creditTypeIds.add(creditTypeId) }
+        fun addCreditTypeId(creditTypeId: String) = apply { body.addCreditTypeId(creditTypeId) }
 
         /**
          * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
          * specified.
          */
-        fun customerIds(customerIds: List<String>) = apply {
-            this.customerIds.clear()
-            this.customerIds.addAll(customerIds)
-        }
+        fun customerIds(customerIds: List<String>) = apply { body.customerIds(customerIds) }
 
         /**
          * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
          * specified.
          */
-        fun addCustomerId(customerId: String) = apply { this.customerIds.add(customerId) }
+        fun addCustomerId(customerId: String) = apply { body.addCustomerId(customerId) }
 
         /** Only return credit grants that are effective before this timestamp (exclusive). */
         fun effectiveBefore(effectiveBefore: OffsetDateTime) = apply {
-            this.effectiveBefore = effectiveBefore
+            body.effectiveBefore(effectiveBefore)
         }
 
         /** Only return credit grants that expire at or after this timestamp. */
         fun notExpiringBefore(notExpiringBefore: OffsetDateTime) = apply {
-            this.notExpiringBefore = notExpiringBefore
+            body.notExpiringBefore(notExpiringBefore)
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -421,39 +425,31 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CreditGrantListParams =
             CreditGrantListParams(
                 limit,
                 nextPage,
-                creditGrantIds.toImmutable().ifEmpty { null },
-                creditTypeIds.toImmutable().ifEmpty { null },
-                customerIds.toImmutable().ifEmpty { null },
-                effectiveBefore,
-                notExpiringBefore,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -462,11 +458,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditGrantListParams && limit == other.limit && nextPage == other.nextPage && creditGrantIds == other.creditGrantIds && creditTypeIds == other.creditTypeIds && customerIds == other.customerIds && effectiveBefore == other.effectiveBefore && notExpiringBefore == other.notExpiringBefore && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CreditGrantListParams && limit == other.limit && nextPage == other.nextPage && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(limit, nextPage, creditGrantIds, creditTypeIds, customerIds, effectiveBefore, notExpiringBefore, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(limit, nextPage, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CreditGrantListParams{limit=$limit, nextPage=$nextPage, creditGrantIds=$creditGrantIds, creditTypeIds=$creditTypeIds, customerIds=$customerIds, effectiveBefore=$effectiveBefore, notExpiringBefore=$notExpiringBefore, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CreditGrantListParams{limit=$limit, nextPage=$nextPage, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

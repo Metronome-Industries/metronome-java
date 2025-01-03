@@ -20,41 +20,43 @@ import java.util.Optional
 class CreditGrantListEntriesParams
 constructor(
     private val nextPage: String?,
-    private val creditTypeIds: List<String>?,
-    private val customerIds: List<String>?,
-    private val endingBefore: OffsetDateTime?,
-    private val startingOn: OffsetDateTime?,
+    private val body: CreditGrantListEntriesBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
-    fun creditTypeIds(): Optional<List<String>> = Optional.ofNullable(creditTypeIds)
+    /**
+     * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger entries
+     * for all credit types will be returned.
+     */
+    fun creditTypeIds(): Optional<List<String>> = body.creditTypeIds()
 
-    fun customerIds(): Optional<List<String>> = Optional.ofNullable(customerIds)
+    /**
+     * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger entries for
+     * all customers will be returned.
+     */
+    fun customerIds(): Optional<List<String>> = body.customerIds()
 
-    fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+    /**
+     * If supplied, ledger entries will only be returned with an effective_at before this time. This
+     * timestamp must not be in the future. If no timestamp is supplied, all entries up to the start
+     * of the customer's next billing period will be returned.
+     */
+    fun endingBefore(): Optional<OffsetDateTime> = body.endingBefore()
 
-    fun startingOn(): Optional<OffsetDateTime> = Optional.ofNullable(startingOn)
+    /** If supplied, only ledger entries effective at or after this time will be returned. */
+    fun startingOn(): Optional<OffsetDateTime> = body.startingOn()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CreditGrantListEntriesBody {
-        return CreditGrantListEntriesBody(
-            creditTypeIds,
-            customerIds,
-            endingBefore,
-            startingOn,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CreditGrantListEntriesBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -117,8 +119,8 @@ constructor(
 
         class Builder {
 
-            private var creditTypeIds: List<String>? = null
-            private var customerIds: List<String>? = null
+            private var creditTypeIds: MutableList<String>? = null
+            private var customerIds: MutableList<String>? = null
             private var endingBefore: OffsetDateTime? = null
             private var startingOn: OffsetDateTime? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -138,14 +140,32 @@ constructor(
              * entries for all credit types will be returned.
              */
             fun creditTypeIds(creditTypeIds: List<String>) = apply {
-                this.creditTypeIds = creditTypeIds
+                this.creditTypeIds = creditTypeIds.toMutableList()
+            }
+
+            /**
+             * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
+             * entries for all credit types will be returned.
+             */
+            fun addCreditTypeId(creditTypeId: String) = apply {
+                creditTypeIds = (creditTypeIds ?: mutableListOf()).apply { add(creditTypeId) }
             }
 
             /**
              * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger
              * entries for all customers will be returned.
              */
-            fun customerIds(customerIds: List<String>) = apply { this.customerIds = customerIds }
+            fun customerIds(customerIds: List<String>) = apply {
+                this.customerIds = customerIds.toMutableList()
+            }
+
+            /**
+             * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger
+             * entries for all customers will be returned.
+             */
+            fun addCustomerId(customerId: String) = apply {
+                customerIds = (customerIds ?: mutableListOf()).apply { add(customerId) }
+            }
 
             /**
              * If supplied, ledger entries will only be returned with an effective_at before this
@@ -219,27 +239,16 @@ constructor(
     class Builder {
 
         private var nextPage: String? = null
-        private var creditTypeIds: MutableList<String> = mutableListOf()
-        private var customerIds: MutableList<String> = mutableListOf()
-        private var endingBefore: OffsetDateTime? = null
-        private var startingOn: OffsetDateTime? = null
+        private var body: CreditGrantListEntriesBody.Builder = CreditGrantListEntriesBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(creditGrantListEntriesParams: CreditGrantListEntriesParams) = apply {
             nextPage = creditGrantListEntriesParams.nextPage
-            creditTypeIds =
-                creditGrantListEntriesParams.creditTypeIds?.toMutableList() ?: mutableListOf()
-            customerIds =
-                creditGrantListEntriesParams.customerIds?.toMutableList() ?: mutableListOf()
-            endingBefore = creditGrantListEntriesParams.endingBefore
-            startingOn = creditGrantListEntriesParams.startingOn
+            body = creditGrantListEntriesParams.body.toBuilder()
             additionalHeaders = creditGrantListEntriesParams.additionalHeaders.toBuilder()
             additionalQueryParams = creditGrantListEntriesParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                creditGrantListEntriesParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Cursor that indicates where the next page of results should start. */
@@ -249,41 +258,35 @@ constructor(
          * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
          * entries for all credit types will be returned.
          */
-        fun creditTypeIds(creditTypeIds: List<String>) = apply {
-            this.creditTypeIds.clear()
-            this.creditTypeIds.addAll(creditTypeIds)
-        }
+        fun creditTypeIds(creditTypeIds: List<String>) = apply { body.creditTypeIds(creditTypeIds) }
 
         /**
          * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
          * entries for all credit types will be returned.
          */
-        fun addCreditTypeId(creditTypeId: String) = apply { this.creditTypeIds.add(creditTypeId) }
+        fun addCreditTypeId(creditTypeId: String) = apply { body.addCreditTypeId(creditTypeId) }
 
         /**
          * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger entries
          * for all customers will be returned.
          */
-        fun customerIds(customerIds: List<String>) = apply {
-            this.customerIds.clear()
-            this.customerIds.addAll(customerIds)
-        }
+        fun customerIds(customerIds: List<String>) = apply { body.customerIds(customerIds) }
 
         /**
          * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger entries
          * for all customers will be returned.
          */
-        fun addCustomerId(customerId: String) = apply { this.customerIds.add(customerId) }
+        fun addCustomerId(customerId: String) = apply { body.addCustomerId(customerId) }
 
         /**
          * If supplied, ledger entries will only be returned with an effective_at before this time.
          * This timestamp must not be in the future. If no timestamp is supplied, all entries up to
          * the start of the customer's next billing period will be returned.
          */
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { this.endingBefore = endingBefore }
+        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
 
         /** If supplied, only ledger entries effective at or after this time will be returned. */
-        fun startingOn(startingOn: OffsetDateTime) = apply { this.startingOn = startingOn }
+        fun startingOn(startingOn: OffsetDateTime) = apply { body.startingOn(startingOn) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -384,37 +387,30 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CreditGrantListEntriesParams =
             CreditGrantListEntriesParams(
                 nextPage,
-                creditTypeIds.toImmutable().ifEmpty { null },
-                customerIds.toImmutable().ifEmpty { null },
-                endingBefore,
-                startingOn,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -423,11 +419,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditGrantListEntriesParams && nextPage == other.nextPage && creditTypeIds == other.creditTypeIds && customerIds == other.customerIds && endingBefore == other.endingBefore && startingOn == other.startingOn && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CreditGrantListEntriesParams && nextPage == other.nextPage && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(nextPage, creditTypeIds, customerIds, endingBefore, startingOn, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(nextPage, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CreditGrantListEntriesParams{nextPage=$nextPage, creditTypeIds=$creditTypeIds, customerIds=$customerIds, endingBefore=$endingBefore, startingOn=$startingOn, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CreditGrantListEntriesParams{nextPage=$nextPage, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

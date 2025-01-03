@@ -18,35 +18,27 @@ import java.util.Optional
 
 class ContractRetrieveParams
 constructor(
-    private val contractId: String,
-    private val customerId: String,
-    private val includeLedgers: Boolean?,
+    private val body: ContractRetrieveBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun contractId(): String = contractId
+    fun contractId(): String = body.contractId()
 
-    fun customerId(): String = customerId
+    fun customerId(): String = body.customerId()
 
-    fun includeLedgers(): Optional<Boolean> = Optional.ofNullable(includeLedgers)
+    /**
+     * Include commit ledgers in the response. Setting this flag may cause the query to be slower.
+     */
+    fun includeLedgers(): Optional<Boolean> = body.includeLedgers()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractRetrieveBody {
-        return ContractRetrieveBody(
-            contractId,
-            customerId,
-            includeLedgers,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractRetrieveBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -168,33 +160,26 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var contractId: String? = null
-        private var customerId: String? = null
-        private var includeLedgers: Boolean? = null
+        private var body: ContractRetrieveBody.Builder = ContractRetrieveBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractRetrieveParams: ContractRetrieveParams) = apply {
-            contractId = contractRetrieveParams.contractId
-            customerId = contractRetrieveParams.customerId
-            includeLedgers = contractRetrieveParams.includeLedgers
+            body = contractRetrieveParams.body.toBuilder()
             additionalHeaders = contractRetrieveParams.additionalHeaders.toBuilder()
             additionalQueryParams = contractRetrieveParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                contractRetrieveParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun contractId(contractId: String) = apply { this.contractId = contractId }
+        fun contractId(contractId: String) = apply { body.contractId(contractId) }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        fun includeLedgers(includeLedgers: Boolean) = apply { this.includeLedgers = includeLedgers }
+        fun includeLedgers(includeLedgers: Boolean) = apply { body.includeLedgers(includeLedgers) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -295,35 +280,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractRetrieveParams =
             ContractRetrieveParams(
-                checkNotNull(contractId) { "`contractId` is required but was not set" },
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                includeLedgers,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -332,11 +311,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRetrieveParams && contractId == other.contractId && customerId == other.customerId && includeLedgers == other.includeLedgers && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRetrieveParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, includeLedgers, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractRetrieveParams{contractId=$contractId, customerId=$customerId, includeLedgers=$includeLedgers, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractRetrieveParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -31,20 +31,34 @@ constructor(
 
     fun customerId(): String = customerId
 
+    /** Only return invoices for the specified credit type */
     fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
 
+    /**
+     * RFC 3339 timestamp (exclusive). Invoices will only be returned for billing periods that end
+     * before this time.
+     */
     fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
+    /** Max number of results that should be returned */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
+    /** If set, all zero quantity line items will be filtered out of the response */
     fun skipZeroQtyLineItems(): Optional<Boolean> = Optional.ofNullable(skipZeroQtyLineItems)
 
+    /** Invoice sort order by issued_at, e.g. date_asc or date_desc. Defaults to date_asc. */
     fun sort(): Optional<Sort> = Optional.ofNullable(sort)
 
+    /**
+     * RFC 3339 timestamp (inclusive). Invoices will only be returned for billing periods that start
+     * at or after this time.
+     */
     fun startingOn(): Optional<OffsetDateTime> = Optional.ofNullable(startingOn)
 
+    /** Invoice status, e.g. DRAFT, FINALIZED, or VOID */
     fun status(): Optional<String> = Optional.ofNullable(status)
 
     fun _additionalHeaders(): Headers = additionalHeaders

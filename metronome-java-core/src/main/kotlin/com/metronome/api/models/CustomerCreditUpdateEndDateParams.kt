@@ -18,35 +18,30 @@ import java.util.Objects
 
 class CustomerCreditUpdateEndDateParams
 constructor(
-    private val accessEndingBefore: OffsetDateTime,
-    private val creditId: String,
-    private val customerId: String,
+    private val body: CustomerCreditUpdateEndDateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun accessEndingBefore(): OffsetDateTime = accessEndingBefore
+    /**
+     * RFC 3339 timestamp indicating when access to the credit will end and it will no longer be
+     * possible to draw it down (exclusive).
+     */
+    fun accessEndingBefore(): OffsetDateTime = body.accessEndingBefore()
 
-    fun creditId(): String = creditId
+    /** ID of the commit to update */
+    fun creditId(): String = body.creditId()
 
-    fun customerId(): String = customerId
+    /** ID of the customer whose credit is to be updated */
+    fun customerId(): String = body.customerId()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomerCreditUpdateEndDateBody {
-        return CustomerCreditUpdateEndDateBody(
-            accessEndingBefore,
-            creditId,
-            customerId,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomerCreditUpdateEndDateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -176,24 +171,18 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var accessEndingBefore: OffsetDateTime? = null
-        private var creditId: String? = null
-        private var customerId: String? = null
+        private var body: CustomerCreditUpdateEndDateBody.Builder =
+            CustomerCreditUpdateEndDateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerCreditUpdateEndDateParams: CustomerCreditUpdateEndDateParams) =
             apply {
-                accessEndingBefore = customerCreditUpdateEndDateParams.accessEndingBefore
-                creditId = customerCreditUpdateEndDateParams.creditId
-                customerId = customerCreditUpdateEndDateParams.customerId
+                body = customerCreditUpdateEndDateParams.body.toBuilder()
                 additionalHeaders = customerCreditUpdateEndDateParams.additionalHeaders.toBuilder()
                 additionalQueryParams =
                     customerCreditUpdateEndDateParams.additionalQueryParams.toBuilder()
-                additionalBodyProperties =
-                    customerCreditUpdateEndDateParams.additionalBodyProperties.toMutableMap()
             }
 
         /**
@@ -201,14 +190,14 @@ constructor(
          * possible to draw it down (exclusive).
          */
         fun accessEndingBefore(accessEndingBefore: OffsetDateTime) = apply {
-            this.accessEndingBefore = accessEndingBefore
+            body.accessEndingBefore(accessEndingBefore)
         }
 
         /** ID of the commit to update */
-        fun creditId(creditId: String) = apply { this.creditId = creditId }
+        fun creditId(creditId: String) = apply { body.creditId(creditId) }
 
         /** ID of the customer whose credit is to be updated */
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -309,37 +298,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerCreditUpdateEndDateParams =
             CustomerCreditUpdateEndDateParams(
-                checkNotNull(accessEndingBefore) {
-                    "`accessEndingBefore` is required but was not set"
-                },
-                checkNotNull(creditId) { "`creditId` is required but was not set" },
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -348,11 +329,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCreditUpdateEndDateParams && accessEndingBefore == other.accessEndingBefore && creditId == other.creditId && customerId == other.customerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerCreditUpdateEndDateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(accessEndingBefore, creditId, customerId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomerCreditUpdateEndDateParams{accessEndingBefore=$accessEndingBefore, creditId=$creditId, customerId=$customerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerCreditUpdateEndDateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

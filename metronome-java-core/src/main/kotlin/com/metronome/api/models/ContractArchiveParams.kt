@@ -17,35 +17,27 @@ import java.util.Objects
 
 class ContractArchiveParams
 constructor(
-    private val contractId: String,
-    private val customerId: String,
-    private val voidInvoices: Boolean,
+    private val body: ContractArchiveBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun contractId(): String = contractId
+    /** ID of the contract to archive */
+    fun contractId(): String = body.contractId()
 
-    fun customerId(): String = customerId
+    /** ID of the customer whose contract is to be archived */
+    fun customerId(): String = body.customerId()
 
-    fun voidInvoices(): Boolean = voidInvoices
+    /** If false, the existing finalized invoices will remain after the contract is archived. */
+    fun voidInvoices(): Boolean = body.voidInvoices()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractArchiveBody {
-        return ContractArchiveBody(
-            contractId,
-            customerId,
-            voidInvoices,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractArchiveBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -164,31 +156,25 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var contractId: String? = null
-        private var customerId: String? = null
-        private var voidInvoices: Boolean? = null
+        private var body: ContractArchiveBody.Builder = ContractArchiveBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractArchiveParams: ContractArchiveParams) = apply {
-            contractId = contractArchiveParams.contractId
-            customerId = contractArchiveParams.customerId
-            voidInvoices = contractArchiveParams.voidInvoices
+            body = contractArchiveParams.body.toBuilder()
             additionalHeaders = contractArchiveParams.additionalHeaders.toBuilder()
             additionalQueryParams = contractArchiveParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = contractArchiveParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the contract to archive */
-        fun contractId(contractId: String) = apply { this.contractId = contractId }
+        fun contractId(contractId: String) = apply { body.contractId(contractId) }
 
         /** ID of the customer whose contract is to be archived */
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /** If false, the existing finalized invoices will remain after the contract is archived. */
-        fun voidInvoices(voidInvoices: Boolean) = apply { this.voidInvoices = voidInvoices }
+        fun voidInvoices(voidInvoices: Boolean) = apply { body.voidInvoices(voidInvoices) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -289,35 +275,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractArchiveParams =
             ContractArchiveParams(
-                checkNotNull(contractId) { "`contractId` is required but was not set" },
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(voidInvoices) { "`voidInvoices` is required but was not set" },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -326,11 +306,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractArchiveParams && contractId == other.contractId && customerId == other.customerId && voidInvoices == other.voidInvoices && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractArchiveParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, voidInvoices, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractArchiveParams{contractId=$contractId, customerId=$customerId, voidInvoices=$voidInvoices, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractArchiveParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

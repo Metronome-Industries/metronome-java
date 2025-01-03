@@ -22,31 +22,22 @@ import java.util.Optional
 
 class ContractCreateHistoricalInvoicesParams
 constructor(
-    private val invoices: List<Invoice>,
-    private val preview: Boolean,
+    private val body: ContractCreateHistoricalInvoicesBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun invoices(): List<Invoice> = invoices
+    fun invoices(): List<Invoice> = body.invoices()
 
-    fun preview(): Boolean = preview
+    fun preview(): Boolean = body.preview()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractCreateHistoricalInvoicesBody {
-        return ContractCreateHistoricalInvoicesBody(
-            invoices,
-            preview,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractCreateHistoricalInvoicesBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -79,7 +70,7 @@ constructor(
 
         class Builder {
 
-            private var invoices: List<Invoice>? = null
+            private var invoices: MutableList<Invoice>? = null
             private var preview: Boolean? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -93,7 +84,13 @@ constructor(
                     contractCreateHistoricalInvoicesBody.additionalProperties.toMutableMap()
             }
 
-            fun invoices(invoices: List<Invoice>) = apply { this.invoices = invoices }
+            fun invoices(invoices: List<Invoice>) = apply {
+                this.invoices = invoices.toMutableList()
+            }
+
+            fun addInvoice(invoice: Invoice) = apply {
+                invoices = (invoices ?: mutableListOf()).apply { add(invoice) }
+            }
 
             fun preview(preview: Boolean) = apply { this.preview = preview }
 
@@ -153,33 +150,26 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var invoices: MutableList<Invoice> = mutableListOf()
-        private var preview: Boolean? = null
+        private var body: ContractCreateHistoricalInvoicesBody.Builder =
+            ContractCreateHistoricalInvoicesBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(
             contractCreateHistoricalInvoicesParams: ContractCreateHistoricalInvoicesParams
         ) = apply {
-            invoices = contractCreateHistoricalInvoicesParams.invoices.toMutableList()
-            preview = contractCreateHistoricalInvoicesParams.preview
+            body = contractCreateHistoricalInvoicesParams.body.toBuilder()
             additionalHeaders = contractCreateHistoricalInvoicesParams.additionalHeaders.toBuilder()
             additionalQueryParams =
                 contractCreateHistoricalInvoicesParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                contractCreateHistoricalInvoicesParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun invoices(invoices: List<Invoice>) = apply {
-            this.invoices.clear()
-            this.invoices.addAll(invoices)
-        }
+        fun invoices(invoices: List<Invoice>) = apply { body.invoices(invoices) }
 
-        fun addInvoice(invoice: Invoice) = apply { this.invoices.add(invoice) }
+        fun addInvoice(invoice: Invoice) = apply { body.addInvoice(invoice) }
 
-        fun preview(preview: Boolean) = apply { this.preview = preview }
+        fun preview(preview: Boolean) = apply { body.preview(preview) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -280,34 +270,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractCreateHistoricalInvoicesParams =
             ContractCreateHistoricalInvoicesParams(
-                invoices.toImmutable(),
-                checkNotNull(preview) { "`preview` is required but was not set" },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -377,7 +362,7 @@ constructor(
             private var exclusiveEndDate: OffsetDateTime? = null
             private var issueDate: OffsetDateTime? = null
             private var breakdownGranularity: BreakdownGranularity? = null
-            private var usageLineItems: List<UsageLineItem>? = null
+            private var usageLineItems: MutableList<UsageLineItem>? = null
             private var billableStatus: BillableStatus? = null
             private var customFields: CustomFields? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -418,7 +403,11 @@ constructor(
             }
 
             fun usageLineItems(usageLineItems: List<UsageLineItem>) = apply {
-                this.usageLineItems = usageLineItems
+                this.usageLineItems = usageLineItems.toMutableList()
+            }
+
+            fun addUsageLineItem(usageLineItem: UsageLineItem) = apply {
+                usageLineItems = (usageLineItems ?: mutableListOf()).apply { add(usageLineItem) }
             }
 
             /** This field's availability is dependent on your client's configuration. */
@@ -530,7 +519,7 @@ constructor(
                 private var quantity: Double? = null
                 private var pricingGroupValues: PricingGroupValues? = null
                 private var presentationGroupValues: PresentationGroupValues? = null
-                private var subtotalsWithQuantity: List<SubtotalsWithQuantity>? = null
+                private var subtotalsWithQuantity: MutableList<SubtotalsWithQuantity>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -568,8 +557,15 @@ constructor(
 
                 fun subtotalsWithQuantity(subtotalsWithQuantity: List<SubtotalsWithQuantity>) =
                     apply {
-                        this.subtotalsWithQuantity = subtotalsWithQuantity
+                        this.subtotalsWithQuantity = subtotalsWithQuantity.toMutableList()
                     }
+
+                fun addSubtotalsWithQuantity(subtotalsWithQuantity: SubtotalsWithQuantity) = apply {
+                    this.subtotalsWithQuantity =
+                        (this.subtotalsWithQuantity ?: mutableListOf()).apply {
+                            add(subtotalsWithQuantity)
+                        }
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -1092,11 +1088,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractCreateHistoricalInvoicesParams && invoices == other.invoices && preview == other.preview && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractCreateHistoricalInvoicesParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(invoices, preview, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractCreateHistoricalInvoicesParams{invoices=$invoices, preview=$preview, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractCreateHistoricalInvoicesParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

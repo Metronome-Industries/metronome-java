@@ -19,39 +19,36 @@ import java.util.Optional
 
 class CustomerCommitUpdateEndDateParams
 constructor(
-    private val commitId: String,
-    private val customerId: String,
-    private val accessEndingBefore: OffsetDateTime?,
-    private val invoicesEndingBefore: OffsetDateTime?,
+    private val body: CustomerCommitUpdateEndDateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun commitId(): String = commitId
+    /** ID of the commit to update. Only supports "PREPAID" commits. */
+    fun commitId(): String = body.commitId()
 
-    fun customerId(): String = customerId
+    /** ID of the customer whose commit is to be updated */
+    fun customerId(): String = body.customerId()
 
-    fun accessEndingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(accessEndingBefore)
+    /**
+     * RFC 3339 timestamp indicating when access to the commit will end and it will no longer be
+     * possible to draw it down (exclusive). If not provided, the access will not be updated.
+     */
+    fun accessEndingBefore(): Optional<OffsetDateTime> = body.accessEndingBefore()
 
-    fun invoicesEndingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(invoicesEndingBefore)
+    /**
+     * RFC 3339 timestamp indicating when the commit will stop being invoiced (exclusive). If not
+     * provided, the invoice schedule will not be updated.
+     */
+    fun invoicesEndingBefore(): Optional<OffsetDateTime> = body.invoicesEndingBefore()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomerCommitUpdateEndDateBody {
-        return CustomerCommitUpdateEndDateBody(
-            commitId,
-            customerId,
-            accessEndingBefore,
-            invoicesEndingBefore,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomerCommitUpdateEndDateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -200,40 +197,32 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var commitId: String? = null
-        private var customerId: String? = null
-        private var accessEndingBefore: OffsetDateTime? = null
-        private var invoicesEndingBefore: OffsetDateTime? = null
+        private var body: CustomerCommitUpdateEndDateBody.Builder =
+            CustomerCommitUpdateEndDateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerCommitUpdateEndDateParams: CustomerCommitUpdateEndDateParams) =
             apply {
-                commitId = customerCommitUpdateEndDateParams.commitId
-                customerId = customerCommitUpdateEndDateParams.customerId
-                accessEndingBefore = customerCommitUpdateEndDateParams.accessEndingBefore
-                invoicesEndingBefore = customerCommitUpdateEndDateParams.invoicesEndingBefore
+                body = customerCommitUpdateEndDateParams.body.toBuilder()
                 additionalHeaders = customerCommitUpdateEndDateParams.additionalHeaders.toBuilder()
                 additionalQueryParams =
                     customerCommitUpdateEndDateParams.additionalQueryParams.toBuilder()
-                additionalBodyProperties =
-                    customerCommitUpdateEndDateParams.additionalBodyProperties.toMutableMap()
             }
 
         /** ID of the commit to update. Only supports "PREPAID" commits. */
-        fun commitId(commitId: String) = apply { this.commitId = commitId }
+        fun commitId(commitId: String) = apply { body.commitId(commitId) }
 
         /** ID of the customer whose commit is to be updated */
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /**
          * RFC 3339 timestamp indicating when access to the commit will end and it will no longer be
          * possible to draw it down (exclusive). If not provided, the access will not be updated.
          */
         fun accessEndingBefore(accessEndingBefore: OffsetDateTime) = apply {
-            this.accessEndingBefore = accessEndingBefore
+            body.accessEndingBefore(accessEndingBefore)
         }
 
         /**
@@ -241,7 +230,7 @@ constructor(
          * not provided, the invoice schedule will not be updated.
          */
         fun invoicesEndingBefore(invoicesEndingBefore: OffsetDateTime) = apply {
-            this.invoicesEndingBefore = invoicesEndingBefore
+            body.invoicesEndingBefore(invoicesEndingBefore)
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -343,36 +332,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerCommitUpdateEndDateParams =
             CustomerCommitUpdateEndDateParams(
-                checkNotNull(commitId) { "`commitId` is required but was not set" },
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                accessEndingBefore,
-                invoicesEndingBefore,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -381,11 +363,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCommitUpdateEndDateParams && commitId == other.commitId && customerId == other.customerId && accessEndingBefore == other.accessEndingBefore && invoicesEndingBefore == other.invoicesEndingBefore && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerCommitUpdateEndDateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(commitId, customerId, accessEndingBefore, invoicesEndingBefore, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomerCommitUpdateEndDateParams{commitId=$commitId, customerId=$customerId, accessEndingBefore=$accessEndingBefore, invoicesEndingBefore=$invoicesEndingBefore, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerCommitUpdateEndDateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

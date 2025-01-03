@@ -2,17 +2,10 @@
 
 package com.metronome.api.models
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
-import com.metronome.api.core.immutableEmptyMap
-import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
@@ -27,18 +20,17 @@ constructor(
 
     fun body(): JsonValue = body
 
+    /** Max number of results that should be returned */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic
-    internal fun getBody(): JsonValue {
-        return body
-    }
+    @JvmSynthetic internal fun getBody(): JsonValue = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -49,85 +41,6 @@ constructor(
         this.nextPage?.let { queryParams.put("next_page", listOf(it.toString())) }
         queryParams.putAll(additionalQueryParams)
         return queryParams.build()
-    }
-
-    @NoAutoDetect
-    class ContractRateCardListBody
-    @JsonCreator
-    internal constructor(
-        @JsonProperty("body") private val body: JsonValue,
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        @JsonProperty("body") fun body(): JsonValue = body
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var body: JsonValue? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(contractRateCardListBody: ContractRateCardListBody) = apply {
-                body = contractRateCardListBody.body
-                additionalProperties = contractRateCardListBody.additionalProperties.toMutableMap()
-            }
-
-            fun body(body: JsonValue) = apply { this.body = body }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            fun build(): ContractRateCardListBody =
-                ContractRateCardListBody(
-                    checkNotNull(body) { "`body` is required but was not set" },
-                    additionalProperties.toImmutable()
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is ContractRateCardListBody && body == other.body && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(body, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "ContractRateCardListBody{body=$body, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)

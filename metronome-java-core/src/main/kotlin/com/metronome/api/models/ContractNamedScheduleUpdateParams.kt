@@ -19,43 +19,34 @@ import java.util.Optional
 
 class ContractNamedScheduleUpdateParams
 constructor(
-    private val rateCardId: String,
-    private val scheduleName: String,
-    private val startingAt: OffsetDateTime,
-    private val value: JsonValue,
-    private val endingBefore: OffsetDateTime?,
+    private val body: ContractNamedScheduleUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun rateCardId(): String = rateCardId
+    /** ID of the rate card whose named schedule is to be updated */
+    fun rateCardId(): String = body.rateCardId()
 
-    fun scheduleName(): String = scheduleName
+    /** The identifier for the schedule to be updated */
+    fun scheduleName(): String = body.scheduleName()
 
-    fun startingAt(): OffsetDateTime = startingAt
+    fun startingAt(): OffsetDateTime = body.startingAt()
 
-    fun value(): JsonValue = value
+    /**
+     * The value to set for the named schedule. The structure of this object is specific to the
+     * named schedule.
+     */
+    fun value(): JsonValue = body.value()
 
-    fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+    fun endingBefore(): Optional<OffsetDateTime> = body.endingBefore()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractNamedScheduleUpdateBody {
-        return ContractNamedScheduleUpdateBody(
-            rateCardId,
-            scheduleName,
-            startingAt,
-            value,
-            endingBefore,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractNamedScheduleUpdateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -199,45 +190,35 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var rateCardId: String? = null
-        private var scheduleName: String? = null
-        private var startingAt: OffsetDateTime? = null
-        private var value: JsonValue? = null
-        private var endingBefore: OffsetDateTime? = null
+        private var body: ContractNamedScheduleUpdateBody.Builder =
+            ContractNamedScheduleUpdateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractNamedScheduleUpdateParams: ContractNamedScheduleUpdateParams) =
             apply {
-                rateCardId = contractNamedScheduleUpdateParams.rateCardId
-                scheduleName = contractNamedScheduleUpdateParams.scheduleName
-                startingAt = contractNamedScheduleUpdateParams.startingAt
-                value = contractNamedScheduleUpdateParams.value
-                endingBefore = contractNamedScheduleUpdateParams.endingBefore
+                body = contractNamedScheduleUpdateParams.body.toBuilder()
                 additionalHeaders = contractNamedScheduleUpdateParams.additionalHeaders.toBuilder()
                 additionalQueryParams =
                     contractNamedScheduleUpdateParams.additionalQueryParams.toBuilder()
-                additionalBodyProperties =
-                    contractNamedScheduleUpdateParams.additionalBodyProperties.toMutableMap()
             }
 
         /** ID of the rate card whose named schedule is to be updated */
-        fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
+        fun rateCardId(rateCardId: String) = apply { body.rateCardId(rateCardId) }
 
         /** The identifier for the schedule to be updated */
-        fun scheduleName(scheduleName: String) = apply { this.scheduleName = scheduleName }
+        fun scheduleName(scheduleName: String) = apply { body.scheduleName(scheduleName) }
 
-        fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+        fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
 
         /**
          * The value to set for the named schedule. The structure of this object is specific to the
          * named schedule.
          */
-        fun value(value: JsonValue) = apply { this.value = value }
+        fun value(value: JsonValue) = apply { body.value(value) }
 
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { this.endingBefore = endingBefore }
+        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -338,37 +319,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractNamedScheduleUpdateParams =
             ContractNamedScheduleUpdateParams(
-                checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
-                checkNotNull(scheduleName) { "`scheduleName` is required but was not set" },
-                checkNotNull(startingAt) { "`startingAt` is required but was not set" },
-                checkNotNull(value) { "`value` is required but was not set" },
-                endingBefore,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -377,11 +350,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractNamedScheduleUpdateParams && rateCardId == other.rateCardId && scheduleName == other.scheduleName && startingAt == other.startingAt && value == other.value && endingBefore == other.endingBefore && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractNamedScheduleUpdateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(rateCardId, scheduleName, startingAt, value, endingBefore, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractNamedScheduleUpdateParams{rateCardId=$rateCardId, scheduleName=$scheduleName, startingAt=$startingAt, value=$value, endingBefore=$endingBefore, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractNamedScheduleUpdateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

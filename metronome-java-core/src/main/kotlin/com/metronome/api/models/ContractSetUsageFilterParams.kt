@@ -18,43 +18,28 @@ import java.util.Objects
 
 class ContractSetUsageFilterParams
 constructor(
-    private val contractId: String,
-    private val customerId: String,
-    private val groupKey: String,
-    private val groupValues: List<String>,
-    private val startingAt: OffsetDateTime,
+    private val body: ContractSetUsageFilterBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun contractId(): String = contractId
+    fun contractId(): String = body.contractId()
 
-    fun customerId(): String = customerId
+    fun customerId(): String = body.customerId()
 
-    fun groupKey(): String = groupKey
+    fun groupKey(): String = body.groupKey()
 
-    fun groupValues(): List<String> = groupValues
+    fun groupValues(): List<String> = body.groupValues()
 
-    fun startingAt(): OffsetDateTime = startingAt
+    fun startingAt(): OffsetDateTime = body.startingAt()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractSetUsageFilterBody {
-        return ContractSetUsageFilterBody(
-            contractId,
-            customerId,
-            groupKey,
-            groupValues,
-            startingAt,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractSetUsageFilterBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -99,7 +84,7 @@ constructor(
             private var contractId: String? = null
             private var customerId: String? = null
             private var groupKey: String? = null
-            private var groupValues: List<String>? = null
+            private var groupValues: MutableList<String>? = null
             private var startingAt: OffsetDateTime? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -120,7 +105,13 @@ constructor(
 
             fun groupKey(groupKey: String) = apply { this.groupKey = groupKey }
 
-            fun groupValues(groupValues: List<String>) = apply { this.groupValues = groupValues }
+            fun groupValues(groupValues: List<String>) = apply {
+                this.groupValues = groupValues.toMutableList()
+            }
+
+            fun addGroupValue(groupValue: String) = apply {
+                groupValues = (groupValues ?: mutableListOf()).apply { add(groupValue) }
+            }
 
             fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
 
@@ -183,42 +174,28 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var contractId: String? = null
-        private var customerId: String? = null
-        private var groupKey: String? = null
-        private var groupValues: MutableList<String> = mutableListOf()
-        private var startingAt: OffsetDateTime? = null
+        private var body: ContractSetUsageFilterBody.Builder = ContractSetUsageFilterBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractSetUsageFilterParams: ContractSetUsageFilterParams) = apply {
-            contractId = contractSetUsageFilterParams.contractId
-            customerId = contractSetUsageFilterParams.customerId
-            groupKey = contractSetUsageFilterParams.groupKey
-            groupValues = contractSetUsageFilterParams.groupValues.toMutableList()
-            startingAt = contractSetUsageFilterParams.startingAt
+            body = contractSetUsageFilterParams.body.toBuilder()
             additionalHeaders = contractSetUsageFilterParams.additionalHeaders.toBuilder()
             additionalQueryParams = contractSetUsageFilterParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                contractSetUsageFilterParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun contractId(contractId: String) = apply { this.contractId = contractId }
+        fun contractId(contractId: String) = apply { body.contractId(contractId) }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
-        fun groupKey(groupKey: String) = apply { this.groupKey = groupKey }
+        fun groupKey(groupKey: String) = apply { body.groupKey(groupKey) }
 
-        fun groupValues(groupValues: List<String>) = apply {
-            this.groupValues.clear()
-            this.groupValues.addAll(groupValues)
-        }
+        fun groupValues(groupValues: List<String>) = apply { body.groupValues(groupValues) }
 
-        fun addGroupValue(groupValue: String) = apply { this.groupValues.add(groupValue) }
+        fun addGroupValue(groupValue: String) = apply { body.addGroupValue(groupValue) }
 
-        fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+        fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -319,37 +296,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractSetUsageFilterParams =
             ContractSetUsageFilterParams(
-                checkNotNull(contractId) { "`contractId` is required but was not set" },
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(groupKey) { "`groupKey` is required but was not set" },
-                groupValues.toImmutable(),
-                checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -358,11 +327,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractSetUsageFilterParams && contractId == other.contractId && customerId == other.customerId && groupKey == other.groupKey && groupValues == other.groupValues && startingAt == other.startingAt && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractSetUsageFilterParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, groupKey, groupValues, startingAt, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractSetUsageFilterParams{contractId=$contractId, customerId=$customerId, groupKey=$groupKey, groupValues=$groupValues, startingAt=$startingAt, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractSetUsageFilterParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

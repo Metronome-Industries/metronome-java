@@ -19,59 +19,45 @@ import java.util.Optional
 
 class CustomerCreditListParams
 constructor(
-    private val customerId: String,
-    private val coveringDate: OffsetDateTime?,
-    private val creditId: String?,
-    private val effectiveBefore: OffsetDateTime?,
-    private val includeArchived: Boolean?,
-    private val includeContractCredits: Boolean?,
-    private val includeLedgers: Boolean?,
-    private val nextPage: String?,
-    private val startingAt: OffsetDateTime?,
+    private val body: CustomerCreditListBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun customerId(): String = customerId
+    fun customerId(): String = body.customerId()
 
-    fun coveringDate(): Optional<OffsetDateTime> = Optional.ofNullable(coveringDate)
+    /** Return only credits that have access schedules that "cover" the provided date */
+    fun coveringDate(): Optional<OffsetDateTime> = body.coveringDate()
 
-    fun creditId(): Optional<String> = Optional.ofNullable(creditId)
+    fun creditId(): Optional<String> = body.creditId()
 
-    fun effectiveBefore(): Optional<OffsetDateTime> = Optional.ofNullable(effectiveBefore)
+    /** Include only credits that have any access before the provided date (exclusive) */
+    fun effectiveBefore(): Optional<OffsetDateTime> = body.effectiveBefore()
 
-    fun includeArchived(): Optional<Boolean> = Optional.ofNullable(includeArchived)
+    /** Include credits from archived contracts. */
+    fun includeArchived(): Optional<Boolean> = body.includeArchived()
 
-    fun includeContractCredits(): Optional<Boolean> = Optional.ofNullable(includeContractCredits)
+    /** Include credits on the contract level. */
+    fun includeContractCredits(): Optional<Boolean> = body.includeContractCredits()
 
-    fun includeLedgers(): Optional<Boolean> = Optional.ofNullable(includeLedgers)
+    /**
+     * Include credit ledgers in the response. Setting this flag may cause the query to be slower.
+     */
+    fun includeLedgers(): Optional<Boolean> = body.includeLedgers()
 
-    fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
+    /** The next page token from a previous response. */
+    fun nextPage(): Optional<String> = body.nextPage()
 
-    fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
+    /** Include only credits that have any access on or after the provided date */
+    fun startingAt(): Optional<OffsetDateTime> = body.startingAt()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomerCreditListBody {
-        return CustomerCreditListBody(
-            customerId,
-            coveringDate,
-            creditId,
-            effectiveBefore,
-            includeArchived,
-            includeContractCredits,
-            includeLedgers,
-            nextPage,
-            startingAt,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomerCreditListBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -267,69 +253,50 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var customerId: String? = null
-        private var coveringDate: OffsetDateTime? = null
-        private var creditId: String? = null
-        private var effectiveBefore: OffsetDateTime? = null
-        private var includeArchived: Boolean? = null
-        private var includeContractCredits: Boolean? = null
-        private var includeLedgers: Boolean? = null
-        private var nextPage: String? = null
-        private var startingAt: OffsetDateTime? = null
+        private var body: CustomerCreditListBody.Builder = CustomerCreditListBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerCreditListParams: CustomerCreditListParams) = apply {
-            customerId = customerCreditListParams.customerId
-            coveringDate = customerCreditListParams.coveringDate
-            creditId = customerCreditListParams.creditId
-            effectiveBefore = customerCreditListParams.effectiveBefore
-            includeArchived = customerCreditListParams.includeArchived
-            includeContractCredits = customerCreditListParams.includeContractCredits
-            includeLedgers = customerCreditListParams.includeLedgers
-            nextPage = customerCreditListParams.nextPage
-            startingAt = customerCreditListParams.startingAt
+            body = customerCreditListParams.body.toBuilder()
             additionalHeaders = customerCreditListParams.additionalHeaders.toBuilder()
             additionalQueryParams = customerCreditListParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                customerCreditListParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /** Return only credits that have access schedules that "cover" the provided date */
-        fun coveringDate(coveringDate: OffsetDateTime) = apply { this.coveringDate = coveringDate }
+        fun coveringDate(coveringDate: OffsetDateTime) = apply { body.coveringDate(coveringDate) }
 
-        fun creditId(creditId: String) = apply { this.creditId = creditId }
+        fun creditId(creditId: String) = apply { body.creditId(creditId) }
 
         /** Include only credits that have any access before the provided date (exclusive) */
         fun effectiveBefore(effectiveBefore: OffsetDateTime) = apply {
-            this.effectiveBefore = effectiveBefore
+            body.effectiveBefore(effectiveBefore)
         }
 
         /** Include credits from archived contracts. */
         fun includeArchived(includeArchived: Boolean) = apply {
-            this.includeArchived = includeArchived
+            body.includeArchived(includeArchived)
         }
 
         /** Include credits on the contract level. */
         fun includeContractCredits(includeContractCredits: Boolean) = apply {
-            this.includeContractCredits = includeContractCredits
+            body.includeContractCredits(includeContractCredits)
         }
 
         /**
          * Include credit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        fun includeLedgers(includeLedgers: Boolean) = apply { this.includeLedgers = includeLedgers }
+        fun includeLedgers(includeLedgers: Boolean) = apply { body.includeLedgers(includeLedgers) }
 
         /** The next page token from a previous response. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String) = apply { body.nextPage(nextPage) }
 
         /** Include only credits that have any access on or after the provided date */
-        fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+        fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -430,41 +397,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerCreditListParams =
             CustomerCreditListParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                coveringDate,
-                creditId,
-                effectiveBefore,
-                includeArchived,
-                includeContractCredits,
-                includeLedgers,
-                nextPage,
-                startingAt,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -473,11 +428,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCreditListParams && customerId == other.customerId && coveringDate == other.coveringDate && creditId == other.creditId && effectiveBefore == other.effectiveBefore && includeArchived == other.includeArchived && includeContractCredits == other.includeContractCredits && includeLedgers == other.includeLedgers && nextPage == other.nextPage && startingAt == other.startingAt && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerCreditListParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, coveringDate, creditId, effectiveBefore, includeArchived, includeContractCredits, includeLedgers, nextPage, startingAt, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomerCreditListParams{customerId=$customerId, coveringDate=$coveringDate, creditId=$creditId, effectiveBefore=$effectiveBefore, includeArchived=$includeArchived, includeContractCredits=$includeContractCredits, includeLedgers=$includeLedgers, nextPage=$nextPage, startingAt=$startingAt, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerCreditListParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

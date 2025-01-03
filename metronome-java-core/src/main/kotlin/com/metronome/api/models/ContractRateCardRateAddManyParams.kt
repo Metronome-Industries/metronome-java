@@ -22,31 +22,22 @@ import java.util.Optional
 
 class ContractRateCardRateAddManyParams
 constructor(
-    private val rateCardId: String,
-    private val rates: List<Rate>,
+    private val body: ContractRateCardRateAddManyBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun rateCardId(): String = rateCardId
+    fun rateCardId(): String = body.rateCardId()
 
-    fun rates(): List<Rate> = rates
+    fun rates(): List<Rate> = body.rates()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractRateCardRateAddManyBody {
-        return ContractRateCardRateAddManyBody(
-            rateCardId,
-            rates,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractRateCardRateAddManyBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -80,7 +71,7 @@ constructor(
         class Builder {
 
             private var rateCardId: String? = null
-            private var rates: List<Rate>? = null
+            private var rates: MutableList<Rate>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -94,7 +85,11 @@ constructor(
 
             fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
 
-            fun rates(rates: List<Rate>) = apply { this.rates = rates }
+            fun rates(rates: List<Rate>) = apply { this.rates = rates.toMutableList() }
+
+            fun addRate(rate: Rate) = apply {
+                rates = (rates ?: mutableListOf()).apply { add(rate) }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -151,32 +146,25 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var rateCardId: String? = null
-        private var rates: MutableList<Rate> = mutableListOf()
+        private var body: ContractRateCardRateAddManyBody.Builder =
+            ContractRateCardRateAddManyBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractRateCardRateAddManyParams: ContractRateCardRateAddManyParams) =
             apply {
-                rateCardId = contractRateCardRateAddManyParams.rateCardId
-                rates = contractRateCardRateAddManyParams.rates.toMutableList()
+                body = contractRateCardRateAddManyParams.body.toBuilder()
                 additionalHeaders = contractRateCardRateAddManyParams.additionalHeaders.toBuilder()
                 additionalQueryParams =
                     contractRateCardRateAddManyParams.additionalQueryParams.toBuilder()
-                additionalBodyProperties =
-                    contractRateCardRateAddManyParams.additionalBodyProperties.toMutableMap()
             }
 
-        fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
+        fun rateCardId(rateCardId: String) = apply { body.rateCardId(rateCardId) }
 
-        fun rates(rates: List<Rate>) = apply {
-            this.rates.clear()
-            this.rates.addAll(rates)
-        }
+        fun rates(rates: List<Rate>) = apply { body.rates(rates) }
 
-        fun addRate(rate: Rate) = apply { this.rates.add(rate) }
+        fun addRate(rate: Rate) = apply { body.addRate(rate) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -277,34 +265,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractRateCardRateAddManyParams =
             ContractRateCardRateAddManyParams(
-                checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
-                rates.toImmutable(),
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -421,7 +404,7 @@ constructor(
             private var quantity: Double? = null
             private var isProrated: Boolean? = null
             private var useListPrices: Boolean? = null
-            private var tiers: List<Tier>? = null
+            private var tiers: MutableList<Tier>? = null
             private var customRate: CustomRate? = null
             private var commitRate: CommitRate? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -498,7 +481,12 @@ constructor(
             fun useListPrices(useListPrices: Boolean) = apply { this.useListPrices = useListPrices }
 
             /** Only set for TIERED rate_type. */
-            fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+            fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+            /** Only set for TIERED rate_type. */
+            fun addTier(tier: Tier) = apply {
+                tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+            }
 
             /**
              * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
@@ -663,7 +651,7 @@ constructor(
 
                 private var rateType: RateType? = null
                 private var price: Double? = null
-                private var tiers: List<Tier>? = null
+                private var tiers: MutableList<Tier>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -680,7 +668,12 @@ constructor(
                 fun price(price: Double) = apply { this.price = price }
 
                 /** Only set for TIERED rate_type. */
-                fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                /** Only set for TIERED rate_type. */
+                fun addTier(tier: Tier) = apply {
+                    tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -1006,11 +999,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardRateAddManyParams && rateCardId == other.rateCardId && rates == other.rates && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardRateAddManyParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(rateCardId, rates, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractRateCardRateAddManyParams{rateCardId=$rateCardId, rates=$rates, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractRateCardRateAddManyParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

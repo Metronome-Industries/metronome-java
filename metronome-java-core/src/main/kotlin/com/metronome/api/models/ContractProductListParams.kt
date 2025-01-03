@@ -23,28 +23,27 @@ class ContractProductListParams
 constructor(
     private val limit: Long?,
     private val nextPage: String?,
-    private val archiveFilter: ArchiveFilter?,
+    private val body: ContractProductListBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
+    /** Max number of results that should be returned */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
-    fun archiveFilter(): Optional<ArchiveFilter> = Optional.ofNullable(archiveFilter)
+    /** Filter options for the product list */
+    fun archiveFilter(): Optional<ArchiveFilter> = body.archiveFilter()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractProductListBody {
-        return ContractProductListBody(archiveFilter, additionalBodyProperties)
-    }
+    @JvmSynthetic internal fun getBody(): ContractProductListBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -150,20 +149,17 @@ constructor(
 
         private var limit: Long? = null
         private var nextPage: String? = null
-        private var archiveFilter: ArchiveFilter? = null
+        private var body: ContractProductListBody.Builder = ContractProductListBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractProductListParams: ContractProductListParams) = apply {
             limit = contractProductListParams.limit
             nextPage = contractProductListParams.nextPage
-            archiveFilter = contractProductListParams.archiveFilter
+            body = contractProductListParams.body.toBuilder()
             additionalHeaders = contractProductListParams.additionalHeaders.toBuilder()
             additionalQueryParams = contractProductListParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                contractProductListParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Max number of results that should be returned */
@@ -174,7 +170,7 @@ constructor(
 
         /** Filter options for the product list */
         fun archiveFilter(archiveFilter: ArchiveFilter) = apply {
-            this.archiveFilter = archiveFilter
+            body.archiveFilter(archiveFilter)
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -276,35 +272,31 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractProductListParams =
             ContractProductListParams(
                 limit,
                 nextPage,
-                archiveFilter,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -376,11 +368,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractProductListParams && limit == other.limit && nextPage == other.nextPage && archiveFilter == other.archiveFilter && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractProductListParams && limit == other.limit && nextPage == other.nextPage && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(limit, nextPage, archiveFilter, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(limit, nextPage, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractProductListParams{limit=$limit, nextPage=$nextPage, archiveFilter=$archiveFilter, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractProductListParams{limit=$limit, nextPage=$nextPage, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

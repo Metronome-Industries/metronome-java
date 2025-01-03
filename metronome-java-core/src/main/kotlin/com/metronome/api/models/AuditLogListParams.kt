@@ -27,18 +27,31 @@ constructor(
     private val additionalQueryParams: QueryParams,
 ) {
 
+    /** RFC 3339 timestamp (exclusive). Cannot be used with 'next_page'. */
     fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
+    /** Max number of results that should be returned */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
+    /**
+     * Optional parameter that can be used to filter which audit logs are returned. If you specify
+     * resource_id, you must also specify resource_type.
+     */
     fun resourceId(): Optional<String> = Optional.ofNullable(resourceId)
 
+    /**
+     * Optional parameter that can be used to filter which audit logs are returned. If you specify
+     * resource_type, you must also specify resource_id.
+     */
     fun resourceType(): Optional<String> = Optional.ofNullable(resourceType)
 
+    /** Sort order by timestamp, e.g. date_asc or date_desc. Defaults to date_asc. */
     fun sort(): Optional<Sort> = Optional.ofNullable(sort)
 
+    /** RFC 3339 timestamp of the earliest audit log to return. Cannot be used with 'next_page'. */
     fun startingOn(): Optional<OffsetDateTime> = Optional.ofNullable(startingOn)
 
     fun _additionalHeaders(): Headers = additionalHeaders

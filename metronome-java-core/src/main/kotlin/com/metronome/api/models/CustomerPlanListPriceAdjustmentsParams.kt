@@ -22,8 +22,10 @@ constructor(
 
     fun customerPlanId(): String = customerPlanId
 
+    /** Max number of results that should be returned */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
     fun _additionalHeaders(): Headers = additionalHeaders

@@ -22,46 +22,45 @@ import java.util.Optional
 
 class UsageListParams
 constructor(
-    private val endingBefore: OffsetDateTime,
-    private val startingOn: OffsetDateTime,
-    private val windowSize: WindowSize,
     private val nextPage: String?,
-    private val billableMetrics: List<BillableMetric>?,
-    private val customerIds: List<String>?,
+    private val body: UsageListBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun endingBefore(): OffsetDateTime = endingBefore
-
-    fun startingOn(): OffsetDateTime = startingOn
-
-    fun windowSize(): WindowSize = windowSize
-
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
-    fun billableMetrics(): Optional<List<BillableMetric>> = Optional.ofNullable(billableMetrics)
+    fun endingBefore(): OffsetDateTime = body.endingBefore()
 
-    fun customerIds(): Optional<List<String>> = Optional.ofNullable(customerIds)
+    fun startingOn(): OffsetDateTime = body.startingOn()
+
+    /**
+     * A window_size of "day" or "hour" will return the usage for the specified period segmented
+     * into daily or hourly aggregates. A window_size of "none" will return a single usage aggregate
+     * for the entirety of the specified period.
+     */
+    fun windowSize(): WindowSize = body.windowSize()
+
+    /**
+     * A list of billable metrics to fetch usage for. If absent, all billable metrics will be
+     * returned.
+     */
+    fun billableMetrics(): Optional<List<BillableMetric>> = body.billableMetrics()
+
+    /**
+     * A list of Metronome customer IDs to fetch usage for. If absent, usage for all customers will
+     * be returned.
+     */
+    fun customerIds(): Optional<List<String>> = body.customerIds()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): UsageListBody {
-        return UsageListBody(
-            endingBefore,
-            startingOn,
-            windowSize,
-            billableMetrics,
-            customerIds,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): UsageListBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -127,8 +126,8 @@ constructor(
             private var endingBefore: OffsetDateTime? = null
             private var startingOn: OffsetDateTime? = null
             private var windowSize: WindowSize? = null
-            private var billableMetrics: List<BillableMetric>? = null
-            private var customerIds: List<String>? = null
+            private var billableMetrics: MutableList<BillableMetric>? = null
+            private var customerIds: MutableList<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -159,14 +158,32 @@ constructor(
              * be returned.
              */
             fun billableMetrics(billableMetrics: List<BillableMetric>) = apply {
-                this.billableMetrics = billableMetrics
+                this.billableMetrics = billableMetrics.toMutableList()
+            }
+
+            /**
+             * A list of billable metrics to fetch usage for. If absent, all billable metrics will
+             * be returned.
+             */
+            fun addBillableMetric(billableMetric: BillableMetric) = apply {
+                billableMetrics = (billableMetrics ?: mutableListOf()).apply { add(billableMetric) }
             }
 
             /**
              * A list of Metronome customer IDs to fetch usage for. If absent, usage for all
              * customers will be returned.
              */
-            fun customerIds(customerIds: List<String>) = apply { this.customerIds = customerIds }
+            fun customerIds(customerIds: List<String>) = apply {
+                this.customerIds = customerIds.toMutableList()
+            }
+
+            /**
+             * A list of Metronome customer IDs to fetch usage for. If absent, usage for all
+             * customers will be returned.
+             */
+            fun addCustomerId(customerId: String) = apply {
+                customerIds = (customerIds ?: mutableListOf()).apply { add(customerId) }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -226,50 +243,39 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var endingBefore: OffsetDateTime? = null
-        private var startingOn: OffsetDateTime? = null
-        private var windowSize: WindowSize? = null
         private var nextPage: String? = null
-        private var billableMetrics: MutableList<BillableMetric> = mutableListOf()
-        private var customerIds: MutableList<String> = mutableListOf()
+        private var body: UsageListBody.Builder = UsageListBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(usageListParams: UsageListParams) = apply {
-            endingBefore = usageListParams.endingBefore
-            startingOn = usageListParams.startingOn
-            windowSize = usageListParams.windowSize
             nextPage = usageListParams.nextPage
-            billableMetrics = usageListParams.billableMetrics?.toMutableList() ?: mutableListOf()
-            customerIds = usageListParams.customerIds?.toMutableList() ?: mutableListOf()
+            body = usageListParams.body.toBuilder()
             additionalHeaders = usageListParams.additionalHeaders.toBuilder()
             additionalQueryParams = usageListParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = usageListParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { this.endingBefore = endingBefore }
+        /** Cursor that indicates where the next page of results should start. */
+        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
 
-        fun startingOn(startingOn: OffsetDateTime) = apply { this.startingOn = startingOn }
+        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
+
+        fun startingOn(startingOn: OffsetDateTime) = apply { body.startingOn(startingOn) }
 
         /**
          * A window_size of "day" or "hour" will return the usage for the specified period segmented
          * into daily or hourly aggregates. A window_size of "none" will return a single usage
          * aggregate for the entirety of the specified period.
          */
-        fun windowSize(windowSize: WindowSize) = apply { this.windowSize = windowSize }
-
-        /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun windowSize(windowSize: WindowSize) = apply { body.windowSize(windowSize) }
 
         /**
          * A list of billable metrics to fetch usage for. If absent, all billable metrics will be
          * returned.
          */
         fun billableMetrics(billableMetrics: List<BillableMetric>) = apply {
-            this.billableMetrics.clear()
-            this.billableMetrics.addAll(billableMetrics)
+            body.billableMetrics(billableMetrics)
         }
 
         /**
@@ -277,23 +283,20 @@ constructor(
          * returned.
          */
         fun addBillableMetric(billableMetric: BillableMetric) = apply {
-            this.billableMetrics.add(billableMetric)
+            body.addBillableMetric(billableMetric)
         }
 
         /**
          * A list of Metronome customer IDs to fetch usage for. If absent, usage for all customers
          * will be returned.
          */
-        fun customerIds(customerIds: List<String>) = apply {
-            this.customerIds.clear()
-            this.customerIds.addAll(customerIds)
-        }
+        fun customerIds(customerIds: List<String>) = apply { body.customerIds(customerIds) }
 
         /**
          * A list of Metronome customer IDs to fetch usage for. If absent, usage for all customers
          * will be returned.
          */
-        fun addCustomerId(customerId: String) = apply { this.customerIds.add(customerId) }
+        fun addCustomerId(customerId: String) = apply { body.addCustomerId(customerId) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -394,38 +397,30 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): UsageListParams =
             UsageListParams(
-                checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
-                checkNotNull(startingOn) { "`startingOn` is required but was not set" },
-                checkNotNull(windowSize) { "`windowSize` is required but was not set" },
                 nextPage,
-                billableMetrics.toImmutable().ifEmpty { null },
-                customerIds.toImmutable().ifEmpty { null },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -595,7 +590,7 @@ constructor(
             class Builder {
 
                 private var key: String? = null
-                private var values: List<String>? = null
+                private var values: MutableList<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -612,7 +607,15 @@ constructor(
                  * Values of the group_by key to return in the query. If this field is omitted, all
                  * available values will be returned, up to a maximum of 200.
                  */
-                fun values(values: List<String>) = apply { this.values = values }
+                fun values(values: List<String>) = apply { this.values = values.toMutableList() }
+
+                /**
+                 * Values of the group_by key to return in the query. If this field is omitted, all
+                 * available values will be returned, up to a maximum of 200.
+                 */
+                fun addValue(value: String) = apply {
+                    values = (values ?: mutableListOf()).apply { add(value) }
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -685,11 +688,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is UsageListParams && endingBefore == other.endingBefore && startingOn == other.startingOn && windowSize == other.windowSize && nextPage == other.nextPage && billableMetrics == other.billableMetrics && customerIds == other.customerIds && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is UsageListParams && nextPage == other.nextPage && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(endingBefore, startingOn, windowSize, nextPage, billableMetrics, customerIds, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(nextPage, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "UsageListParams{endingBefore=$endingBefore, startingOn=$startingOn, windowSize=$windowSize, nextPage=$nextPage, billableMetrics=$billableMetrics, customerIds=$customerIds, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "UsageListParams{nextPage=$nextPage, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

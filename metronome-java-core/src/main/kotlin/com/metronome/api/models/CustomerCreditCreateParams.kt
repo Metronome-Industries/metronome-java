@@ -22,79 +22,71 @@ import java.util.Optional
 
 class CustomerCreditCreateParams
 constructor(
-    private val accessSchedule: AccessSchedule,
-    private val customerId: String,
-    private val priority: Double,
-    private val productId: String,
-    private val applicableContractIds: List<String>?,
-    private val applicableProductIds: List<String>?,
-    private val applicableProductTags: List<String>?,
-    private val customFields: CustomFields?,
-    private val description: String?,
-    private val name: String?,
-    private val netsuiteSalesOrderId: String?,
-    private val rateType: RateType?,
-    private val salesforceOpportunityId: String?,
-    private val uniquenessKey: String?,
+    private val body: CustomerCreditCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun accessSchedule(): AccessSchedule = accessSchedule
+    /** Schedule for distributing the credit to the customer. */
+    fun accessSchedule(): AccessSchedule = body.accessSchedule()
 
-    fun customerId(): String = customerId
+    fun customerId(): String = body.customerId()
 
-    fun priority(): Double = priority
+    /**
+     * If multiple credits or commits are applicable, the one with the lower priority will apply
+     * first.
+     */
+    fun priority(): Double = body.priority()
 
-    fun productId(): String = productId
+    fun productId(): String = body.productId()
 
-    fun applicableContractIds(): Optional<List<String>> = Optional.ofNullable(applicableContractIds)
+    /**
+     * Which contract the credit applies to. If not provided, the credit applies to all contracts.
+     */
+    fun applicableContractIds(): Optional<List<String>> = body.applicableContractIds()
 
-    fun applicableProductIds(): Optional<List<String>> = Optional.ofNullable(applicableProductIds)
+    /**
+     * Which products the credit applies to. If both applicable_product_ids and
+     * applicable_product_tags are not provided, the credit applies to all products.
+     */
+    fun applicableProductIds(): Optional<List<String>> = body.applicableProductIds()
 
-    fun applicableProductTags(): Optional<List<String>> = Optional.ofNullable(applicableProductTags)
+    /**
+     * Which tags the credit applies to. If both applicable_product_ids and applicable_product_tags
+     * are not provided, the credit applies to all products.
+     */
+    fun applicableProductTags(): Optional<List<String>> = body.applicableProductTags()
 
-    fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+    fun customFields(): Optional<CustomFields> = body.customFields()
 
-    fun description(): Optional<String> = Optional.ofNullable(description)
+    /** Used only in UI/API. It is not exposed to end customers. */
+    fun description(): Optional<String> = body.description()
 
-    fun name(): Optional<String> = Optional.ofNullable(name)
+    /** displayed on invoices */
+    fun name(): Optional<String> = body.name()
 
-    fun netsuiteSalesOrderId(): Optional<String> = Optional.ofNullable(netsuiteSalesOrderId)
+    /** This field's availability is dependent on your client's configuration. */
+    fun netsuiteSalesOrderId(): Optional<String> = body.netsuiteSalesOrderId()
 
-    fun rateType(): Optional<RateType> = Optional.ofNullable(rateType)
+    fun rateType(): Optional<RateType> = body.rateType()
 
-    fun salesforceOpportunityId(): Optional<String> = Optional.ofNullable(salesforceOpportunityId)
+    /** This field's availability is dependent on your client's configuration. */
+    fun salesforceOpportunityId(): Optional<String> = body.salesforceOpportunityId()
 
-    fun uniquenessKey(): Optional<String> = Optional.ofNullable(uniquenessKey)
+    /**
+     * Prevents the creation of duplicates. If a request to create a commit or credit is made with a
+     * uniqueness key that was previously used to create a commit or credit, a new record will not
+     * be created and the request will fail with a 409 error.
+     */
+    fun uniquenessKey(): Optional<String> = body.uniquenessKey()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomerCreditCreateBody {
-        return CustomerCreditCreateBody(
-            accessSchedule,
-            customerId,
-            priority,
-            productId,
-            applicableContractIds,
-            applicableProductIds,
-            applicableProductTags,
-            customFields,
-            description,
-            name,
-            netsuiteSalesOrderId,
-            rateType,
-            salesforceOpportunityId,
-            uniquenessKey,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomerCreditCreateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -206,9 +198,9 @@ constructor(
             private var customerId: String? = null
             private var priority: Double? = null
             private var productId: String? = null
-            private var applicableContractIds: List<String>? = null
-            private var applicableProductIds: List<String>? = null
-            private var applicableProductTags: List<String>? = null
+            private var applicableContractIds: MutableList<String>? = null
+            private var applicableProductIds: MutableList<String>? = null
+            private var applicableProductTags: MutableList<String>? = null
             private var customFields: CustomFields? = null
             private var description: String? = null
             private var name: String? = null
@@ -260,7 +252,16 @@ constructor(
              * contracts.
              */
             fun applicableContractIds(applicableContractIds: List<String>) = apply {
-                this.applicableContractIds = applicableContractIds
+                this.applicableContractIds = applicableContractIds.toMutableList()
+            }
+
+            /**
+             * Which contract the credit applies to. If not provided, the credit applies to all
+             * contracts.
+             */
+            fun addApplicableContractId(applicableContractId: String) = apply {
+                applicableContractIds =
+                    (applicableContractIds ?: mutableListOf()).apply { add(applicableContractId) }
             }
 
             /**
@@ -268,7 +269,16 @@ constructor(
              * applicable_product_tags are not provided, the credit applies to all products.
              */
             fun applicableProductIds(applicableProductIds: List<String>) = apply {
-                this.applicableProductIds = applicableProductIds
+                this.applicableProductIds = applicableProductIds.toMutableList()
+            }
+
+            /**
+             * Which products the credit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the credit applies to all products.
+             */
+            fun addApplicableProductId(applicableProductId: String) = apply {
+                applicableProductIds =
+                    (applicableProductIds ?: mutableListOf()).apply { add(applicableProductId) }
             }
 
             /**
@@ -276,7 +286,16 @@ constructor(
              * applicable_product_tags are not provided, the credit applies to all products.
              */
             fun applicableProductTags(applicableProductTags: List<String>) = apply {
-                this.applicableProductTags = applicableProductTags
+                this.applicableProductTags = applicableProductTags.toMutableList()
+            }
+
+            /**
+             * Which tags the credit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the credit applies to all products.
+             */
+            fun addApplicableProductTag(applicableProductTag: String) = apply {
+                applicableProductTags =
+                    (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
             }
 
             fun customFields(customFields: CustomFields) = apply {
@@ -375,71 +394,38 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var accessSchedule: AccessSchedule? = null
-        private var customerId: String? = null
-        private var priority: Double? = null
-        private var productId: String? = null
-        private var applicableContractIds: MutableList<String> = mutableListOf()
-        private var applicableProductIds: MutableList<String> = mutableListOf()
-        private var applicableProductTags: MutableList<String> = mutableListOf()
-        private var customFields: CustomFields? = null
-        private var description: String? = null
-        private var name: String? = null
-        private var netsuiteSalesOrderId: String? = null
-        private var rateType: RateType? = null
-        private var salesforceOpportunityId: String? = null
-        private var uniquenessKey: String? = null
+        private var body: CustomerCreditCreateBody.Builder = CustomerCreditCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerCreditCreateParams: CustomerCreditCreateParams) = apply {
-            accessSchedule = customerCreditCreateParams.accessSchedule
-            customerId = customerCreditCreateParams.customerId
-            priority = customerCreditCreateParams.priority
-            productId = customerCreditCreateParams.productId
-            applicableContractIds =
-                customerCreditCreateParams.applicableContractIds?.toMutableList() ?: mutableListOf()
-            applicableProductIds =
-                customerCreditCreateParams.applicableProductIds?.toMutableList() ?: mutableListOf()
-            applicableProductTags =
-                customerCreditCreateParams.applicableProductTags?.toMutableList() ?: mutableListOf()
-            customFields = customerCreditCreateParams.customFields
-            description = customerCreditCreateParams.description
-            name = customerCreditCreateParams.name
-            netsuiteSalesOrderId = customerCreditCreateParams.netsuiteSalesOrderId
-            rateType = customerCreditCreateParams.rateType
-            salesforceOpportunityId = customerCreditCreateParams.salesforceOpportunityId
-            uniquenessKey = customerCreditCreateParams.uniquenessKey
+            body = customerCreditCreateParams.body.toBuilder()
             additionalHeaders = customerCreditCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = customerCreditCreateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                customerCreditCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Schedule for distributing the credit to the customer. */
         fun accessSchedule(accessSchedule: AccessSchedule) = apply {
-            this.accessSchedule = accessSchedule
+            body.accessSchedule(accessSchedule)
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /**
          * If multiple credits or commits are applicable, the one with the lower priority will apply
          * first.
          */
-        fun priority(priority: Double) = apply { this.priority = priority }
+        fun priority(priority: Double) = apply { body.priority(priority) }
 
-        fun productId(productId: String) = apply { this.productId = productId }
+        fun productId(productId: String) = apply { body.productId(productId) }
 
         /**
          * Which contract the credit applies to. If not provided, the credit applies to all
          * contracts.
          */
         fun applicableContractIds(applicableContractIds: List<String>) = apply {
-            this.applicableContractIds.clear()
-            this.applicableContractIds.addAll(applicableContractIds)
+            body.applicableContractIds(applicableContractIds)
         }
 
         /**
@@ -447,7 +433,7 @@ constructor(
          * contracts.
          */
         fun addApplicableContractId(applicableContractId: String) = apply {
-            this.applicableContractIds.add(applicableContractId)
+            body.addApplicableContractId(applicableContractId)
         }
 
         /**
@@ -455,8 +441,7 @@ constructor(
          * applicable_product_tags are not provided, the credit applies to all products.
          */
         fun applicableProductIds(applicableProductIds: List<String>) = apply {
-            this.applicableProductIds.clear()
-            this.applicableProductIds.addAll(applicableProductIds)
+            body.applicableProductIds(applicableProductIds)
         }
 
         /**
@@ -464,7 +449,7 @@ constructor(
          * applicable_product_tags are not provided, the credit applies to all products.
          */
         fun addApplicableProductId(applicableProductId: String) = apply {
-            this.applicableProductIds.add(applicableProductId)
+            body.addApplicableProductId(applicableProductId)
         }
 
         /**
@@ -472,8 +457,7 @@ constructor(
          * applicable_product_tags are not provided, the credit applies to all products.
          */
         fun applicableProductTags(applicableProductTags: List<String>) = apply {
-            this.applicableProductTags.clear()
-            this.applicableProductTags.addAll(applicableProductTags)
+            body.applicableProductTags(applicableProductTags)
         }
 
         /**
@@ -481,27 +465,27 @@ constructor(
          * applicable_product_tags are not provided, the credit applies to all products.
          */
         fun addApplicableProductTag(applicableProductTag: String) = apply {
-            this.applicableProductTags.add(applicableProductTag)
+            body.addApplicableProductTag(applicableProductTag)
         }
 
-        fun customFields(customFields: CustomFields) = apply { this.customFields = customFields }
+        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
 
         /** Used only in UI/API. It is not exposed to end customers. */
-        fun description(description: String) = apply { this.description = description }
+        fun description(description: String) = apply { body.description(description) }
 
         /** displayed on invoices */
-        fun name(name: String) = apply { this.name = name }
+        fun name(name: String) = apply { body.name(name) }
 
         /** This field's availability is dependent on your client's configuration. */
         fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
-            this.netsuiteSalesOrderId = netsuiteSalesOrderId
+            body.netsuiteSalesOrderId(netsuiteSalesOrderId)
         }
 
-        fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+        fun rateType(rateType: RateType) = apply { body.rateType(rateType) }
 
         /** This field's availability is dependent on your client's configuration. */
         fun salesforceOpportunityId(salesforceOpportunityId: String) = apply {
-            this.salesforceOpportunityId = salesforceOpportunityId
+            body.salesforceOpportunityId(salesforceOpportunityId)
         }
 
         /**
@@ -509,7 +493,7 @@ constructor(
          * with a uniqueness key that was previously used to create a commit or credit, a new record
          * will not be created and the request will fail with a 409 error.
          */
-        fun uniquenessKey(uniquenessKey: String) = apply { this.uniquenessKey = uniquenessKey }
+        fun uniquenessKey(uniquenessKey: String) = apply { body.uniquenessKey(uniquenessKey) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -610,46 +594,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerCreditCreateParams =
             CustomerCreditCreateParams(
-                checkNotNull(accessSchedule) { "`accessSchedule` is required but was not set" },
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(priority) { "`priority` is required but was not set" },
-                checkNotNull(productId) { "`productId` is required but was not set" },
-                applicableContractIds.toImmutable().ifEmpty { null },
-                applicableProductIds.toImmutable().ifEmpty { null },
-                applicableProductTags.toImmutable().ifEmpty { null },
-                customFields,
-                description,
-                name,
-                netsuiteSalesOrderId,
-                rateType,
-                salesforceOpportunityId,
-                uniquenessKey,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -684,7 +651,7 @@ constructor(
         class Builder {
 
             private var creditTypeId: String? = null
-            private var scheduleItems: List<ScheduleItem>? = null
+            private var scheduleItems: MutableList<ScheduleItem>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -698,7 +665,11 @@ constructor(
             fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
             fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
-                this.scheduleItems = scheduleItems
+                this.scheduleItems = scheduleItems.toMutableList()
+            }
+
+            fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
+                scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -992,11 +963,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCreditCreateParams && accessSchedule == other.accessSchedule && customerId == other.customerId && priority == other.priority && productId == other.productId && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && customFields == other.customFields && description == other.description && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rateType == other.rateType && salesforceOpportunityId == other.salesforceOpportunityId && uniquenessKey == other.uniquenessKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerCreditCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(accessSchedule, customerId, priority, productId, applicableContractIds, applicableProductIds, applicableProductTags, customFields, description, name, netsuiteSalesOrderId, rateType, salesforceOpportunityId, uniquenessKey, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomerCreditCreateParams{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, uniquenessKey=$uniquenessKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerCreditCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

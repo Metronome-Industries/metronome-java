@@ -21,6 +21,7 @@ constructor(
 
     fun invoiceId(): String = invoiceId
 
+    /** If set, all zero quantity line items will be filtered out of the response */
     fun skipZeroQtyLineItems(): Optional<Boolean> = Optional.ofNullable(skipZeroQtyLineItems)
 
     fun _additionalHeaders(): Headers = additionalHeaders

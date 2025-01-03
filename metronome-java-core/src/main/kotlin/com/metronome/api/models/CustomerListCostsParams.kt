@@ -23,12 +23,16 @@ constructor(
 
     fun customerId(): String = customerId
 
+    /** RFC 3339 timestamp (exclusive) */
     fun endingBefore(): OffsetDateTime = endingBefore
 
+    /** RFC 3339 timestamp (inclusive) */
     fun startingOn(): OffsetDateTime = startingOn
 
+    /** Max number of results that should be returned */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
     fun _additionalHeaders(): Headers = additionalHeaders

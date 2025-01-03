@@ -19,35 +19,30 @@ import java.util.Optional
 
 class CustomerNamedScheduleRetrieveParams
 constructor(
-    private val customerId: String,
-    private val scheduleName: String,
-    private val coveringDate: OffsetDateTime?,
+    private val body: CustomerNamedScheduleRetrieveBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun customerId(): String = customerId
+    /** ID of the customer whose named schedule is to be retrieved */
+    fun customerId(): String = body.customerId()
 
-    fun scheduleName(): String = scheduleName
+    /** The identifier for the schedule to be retrieved */
+    fun scheduleName(): String = body.scheduleName()
 
-    fun coveringDate(): Optional<OffsetDateTime> = Optional.ofNullable(coveringDate)
+    /**
+     * If provided, at most one schedule segment will be returned (the one that covers this date).
+     * If not provided, all segments will be returned.
+     */
+    fun coveringDate(): Optional<OffsetDateTime> = body.coveringDate()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomerNamedScheduleRetrieveBody {
-        return CustomerNamedScheduleRetrieveBody(
-            customerId,
-            scheduleName,
-            coveringDate,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomerNamedScheduleRetrieveBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -176,38 +171,32 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var customerId: String? = null
-        private var scheduleName: String? = null
-        private var coveringDate: OffsetDateTime? = null
+        private var body: CustomerNamedScheduleRetrieveBody.Builder =
+            CustomerNamedScheduleRetrieveBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(
             customerNamedScheduleRetrieveParams: CustomerNamedScheduleRetrieveParams
         ) = apply {
-            customerId = customerNamedScheduleRetrieveParams.customerId
-            scheduleName = customerNamedScheduleRetrieveParams.scheduleName
-            coveringDate = customerNamedScheduleRetrieveParams.coveringDate
+            body = customerNamedScheduleRetrieveParams.body.toBuilder()
             additionalHeaders = customerNamedScheduleRetrieveParams.additionalHeaders.toBuilder()
             additionalQueryParams =
                 customerNamedScheduleRetrieveParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                customerNamedScheduleRetrieveParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the customer whose named schedule is to be retrieved */
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /** The identifier for the schedule to be retrieved */
-        fun scheduleName(scheduleName: String) = apply { this.scheduleName = scheduleName }
+        fun scheduleName(scheduleName: String) = apply { body.scheduleName(scheduleName) }
 
         /**
          * If provided, at most one schedule segment will be returned (the one that covers this
          * date). If not provided, all segments will be returned.
          */
-        fun coveringDate(coveringDate: OffsetDateTime) = apply { this.coveringDate = coveringDate }
+        fun coveringDate(coveringDate: OffsetDateTime) = apply { body.coveringDate(coveringDate) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -308,35 +297,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerNamedScheduleRetrieveParams =
             CustomerNamedScheduleRetrieveParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(scheduleName) { "`scheduleName` is required but was not set" },
-                coveringDate,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -345,11 +328,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerNamedScheduleRetrieveParams && customerId == other.customerId && scheduleName == other.scheduleName && coveringDate == other.coveringDate && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerNamedScheduleRetrieveParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, scheduleName, coveringDate, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomerNamedScheduleRetrieveParams{customerId=$customerId, scheduleName=$scheduleName, coveringDate=$coveringDate, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerNamedScheduleRetrieveParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

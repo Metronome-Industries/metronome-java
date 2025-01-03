@@ -21,12 +21,19 @@ constructor(
 
     fun customerId(): String = customerId
 
+    /** If true, the list of returned metrics will include archived metrics */
     fun includeArchived(): Optional<Boolean> = Optional.ofNullable(includeArchived)
 
+    /** Max number of results that should be returned */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
+    /**
+     * If true, the list of metrics will be filtered to just ones that are on the customer's current
+     * plan
+     */
     fun onCurrentPlan(): Optional<Boolean> = Optional.ofNullable(onCurrentPlan)
 
     fun _additionalHeaders(): Headers = additionalHeaders

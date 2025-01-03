@@ -21,55 +21,55 @@ import java.util.Optional
 
 class BillableMetricCreateParams
 constructor(
-    private val name: String,
-    private val aggregationKey: String?,
-    private val aggregationType: AggregationType?,
-    private val customFields: CustomFields?,
-    private val eventTypeFilter: EventTypeFilter?,
-    private val groupKeys: List<List<String>>?,
-    private val propertyFilters: List<PropertyFilter>?,
-    private val sql: String?,
+    private val body: BillableMetricCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun name(): String = name
+    /** The display name of the billable metric. */
+    fun name(): String = body.name()
 
-    fun aggregationKey(): Optional<String> = Optional.ofNullable(aggregationKey)
+    /**
+     * Specifies the type of aggregation performed on matching events. Required if `sql` is not
+     * provided.
+     */
+    fun aggregationKey(): Optional<String> = body.aggregationKey()
 
-    fun aggregationType(): Optional<AggregationType> = Optional.ofNullable(aggregationType)
+    /** Specifies the type of aggregation performed on matching events. */
+    fun aggregationType(): Optional<AggregationType> = body.aggregationType()
 
-    fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+    /** Custom fields to attach to the billable metric. */
+    fun customFields(): Optional<CustomFields> = body.customFields()
 
-    fun eventTypeFilter(): Optional<EventTypeFilter> = Optional.ofNullable(eventTypeFilter)
+    /** An optional filtering rule to match the 'event_type' property of an event. */
+    fun eventTypeFilter(): Optional<EventTypeFilter> = body.eventTypeFilter()
 
-    fun groupKeys(): Optional<List<List<String>>> = Optional.ofNullable(groupKeys)
+    /**
+     * Property names that are used to group usage costs on an invoice. Each entry represents a set
+     * of properties used to slice events into distinct buckets.
+     */
+    fun groupKeys(): Optional<List<List<String>>> = body.groupKeys()
 
-    fun propertyFilters(): Optional<List<PropertyFilter>> = Optional.ofNullable(propertyFilters)
+    /**
+     * A list of filters to match events to this billable metric. Each filter defines a rule on an
+     * event property. All rules must pass for the event to match the billable metric.
+     */
+    fun propertyFilters(): Optional<List<PropertyFilter>> = body.propertyFilters()
 
-    fun sql(): Optional<String> = Optional.ofNullable(sql)
+    /**
+     * The SQL query associated with the billable metric. This field is mutually exclusive with
+     * aggregation_type, event_type_filter, property_filters, aggregation_key, and group_keys. If
+     * provided, these other fields must be omitted.
+     */
+    fun sql(): Optional<String> = body.sql()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): BillableMetricCreateBody {
-        return BillableMetricCreateBody(
-            name,
-            aggregationKey,
-            aggregationType,
-            customFields,
-            eventTypeFilter,
-            groupKeys,
-            propertyFilters,
-            sql,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): BillableMetricCreateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -152,8 +152,8 @@ constructor(
             private var aggregationType: AggregationType? = null
             private var customFields: CustomFields? = null
             private var eventTypeFilter: EventTypeFilter? = null
-            private var groupKeys: List<List<String>>? = null
-            private var propertyFilters: List<PropertyFilter>? = null
+            private var groupKeys: MutableList<List<String>>? = null
+            private var propertyFilters: MutableList<PropertyFilter>? = null
             private var sql: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -200,14 +200,32 @@ constructor(
              * Property names that are used to group usage costs on an invoice. Each entry
              * represents a set of properties used to slice events into distinct buckets.
              */
-            fun groupKeys(groupKeys: List<List<String>>) = apply { this.groupKeys = groupKeys }
+            fun groupKeys(groupKeys: List<List<String>>) = apply {
+                this.groupKeys = groupKeys.toMutableList()
+            }
+
+            /**
+             * Property names that are used to group usage costs on an invoice. Each entry
+             * represents a set of properties used to slice events into distinct buckets.
+             */
+            fun addGroupKey(groupKey: List<String>) = apply {
+                groupKeys = (groupKeys ?: mutableListOf()).apply { add(groupKey) }
+            }
 
             /**
              * A list of filters to match events to this billable metric. Each filter defines a rule
              * on an event property. All rules must pass for the event to match the billable metric.
              */
             fun propertyFilters(propertyFilters: List<PropertyFilter>) = apply {
-                this.propertyFilters = propertyFilters
+                this.propertyFilters = propertyFilters.toMutableList()
+            }
+
+            /**
+             * A list of filters to match events to this billable metric. Each filter defines a rule
+             * on an event property. All rules must pass for the event to match the billable metric.
+             */
+            fun addPropertyFilter(propertyFilter: PropertyFilter) = apply {
+                propertyFilters = (propertyFilters ?: mutableListOf()).apply { add(propertyFilter) }
             }
 
             /**
@@ -278,79 +296,57 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var name: String? = null
-        private var aggregationKey: String? = null
-        private var aggregationType: AggregationType? = null
-        private var customFields: CustomFields? = null
-        private var eventTypeFilter: EventTypeFilter? = null
-        private var groupKeys: MutableList<List<String>> = mutableListOf()
-        private var propertyFilters: MutableList<PropertyFilter> = mutableListOf()
-        private var sql: String? = null
+        private var body: BillableMetricCreateBody.Builder = BillableMetricCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(billableMetricCreateParams: BillableMetricCreateParams) = apply {
-            name = billableMetricCreateParams.name
-            aggregationKey = billableMetricCreateParams.aggregationKey
-            aggregationType = billableMetricCreateParams.aggregationType
-            customFields = billableMetricCreateParams.customFields
-            eventTypeFilter = billableMetricCreateParams.eventTypeFilter
-            groupKeys = billableMetricCreateParams.groupKeys?.toMutableList() ?: mutableListOf()
-            propertyFilters =
-                billableMetricCreateParams.propertyFilters?.toMutableList() ?: mutableListOf()
-            sql = billableMetricCreateParams.sql
+            body = billableMetricCreateParams.body.toBuilder()
             additionalHeaders = billableMetricCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = billableMetricCreateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                billableMetricCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** The display name of the billable metric. */
-        fun name(name: String) = apply { this.name = name }
+        fun name(name: String) = apply { body.name(name) }
 
         /**
          * Specifies the type of aggregation performed on matching events. Required if `sql` is not
          * provided.
          */
-        fun aggregationKey(aggregationKey: String) = apply { this.aggregationKey = aggregationKey }
+        fun aggregationKey(aggregationKey: String) = apply { body.aggregationKey(aggregationKey) }
 
         /** Specifies the type of aggregation performed on matching events. */
         fun aggregationType(aggregationType: AggregationType) = apply {
-            this.aggregationType = aggregationType
+            body.aggregationType(aggregationType)
         }
 
         /** Custom fields to attach to the billable metric. */
-        fun customFields(customFields: CustomFields) = apply { this.customFields = customFields }
+        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
 
         /** An optional filtering rule to match the 'event_type' property of an event. */
         fun eventTypeFilter(eventTypeFilter: EventTypeFilter) = apply {
-            this.eventTypeFilter = eventTypeFilter
+            body.eventTypeFilter(eventTypeFilter)
         }
 
         /**
          * Property names that are used to group usage costs on an invoice. Each entry represents a
          * set of properties used to slice events into distinct buckets.
          */
-        fun groupKeys(groupKeys: List<List<String>>) = apply {
-            this.groupKeys.clear()
-            this.groupKeys.addAll(groupKeys)
-        }
+        fun groupKeys(groupKeys: List<List<String>>) = apply { body.groupKeys(groupKeys) }
 
         /**
          * Property names that are used to group usage costs on an invoice. Each entry represents a
          * set of properties used to slice events into distinct buckets.
          */
-        fun addGroupKey(groupKey: List<String>) = apply { this.groupKeys.add(groupKey) }
+        fun addGroupKey(groupKey: List<String>) = apply { body.addGroupKey(groupKey) }
 
         /**
          * A list of filters to match events to this billable metric. Each filter defines a rule on
          * an event property. All rules must pass for the event to match the billable metric.
          */
         fun propertyFilters(propertyFilters: List<PropertyFilter>) = apply {
-            this.propertyFilters.clear()
-            this.propertyFilters.addAll(propertyFilters)
+            body.propertyFilters(propertyFilters)
         }
 
         /**
@@ -358,7 +354,7 @@ constructor(
          * an event property. All rules must pass for the event to match the billable metric.
          */
         fun addPropertyFilter(propertyFilter: PropertyFilter) = apply {
-            this.propertyFilters.add(propertyFilter)
+            body.addPropertyFilter(propertyFilter)
         }
 
         /**
@@ -366,7 +362,7 @@ constructor(
          * aggregation_type, event_type_filter, property_filters, aggregation_key, and group_keys.
          * If provided, these other fields must be omitted.
          */
-        fun sql(sql: String) = apply { this.sql = sql }
+        fun sql(sql: String) = apply { body.sql(sql) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -467,40 +463,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): BillableMetricCreateParams =
             BillableMetricCreateParams(
-                checkNotNull(name) { "`name` is required but was not set" },
-                aggregationKey,
-                aggregationType,
-                customFields,
-                eventTypeFilter,
-                groupKeys.toImmutable().ifEmpty { null },
-                propertyFilters.toImmutable().ifEmpty { null },
-                sql,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -652,11 +637,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is BillableMetricCreateParams && name == other.name && aggregationKey == other.aggregationKey && aggregationType == other.aggregationType && customFields == other.customFields && eventTypeFilter == other.eventTypeFilter && groupKeys == other.groupKeys && propertyFilters == other.propertyFilters && sql == other.sql && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is BillableMetricCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(name, aggregationKey, aggregationType, customFields, eventTypeFilter, groupKeys, propertyFilters, sql, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "BillableMetricCreateParams{name=$name, aggregationKey=$aggregationKey, aggregationType=$aggregationType, customFields=$customFields, eventTypeFilter=$eventTypeFilter, groupKeys=$groupKeys, propertyFilters=$propertyFilters, sql=$sql, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "BillableMetricCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

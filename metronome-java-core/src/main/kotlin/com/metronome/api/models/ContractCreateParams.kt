@@ -22,124 +22,89 @@ import java.util.Optional
 
 class ContractCreateParams
 constructor(
-    private val customerId: String,
-    private val startingAt: OffsetDateTime,
-    private val billingProviderConfiguration: BillingProviderConfiguration?,
-    private val commits: List<Commit>?,
-    private val credits: List<Credit>?,
-    private val customFields: CustomFields?,
-    private val discounts: List<Discount>?,
-    private val endingBefore: OffsetDateTime?,
-    private val multiplierOverridePrioritization: MultiplierOverridePrioritization?,
-    private val name: String?,
-    private val netPaymentTermsDays: Double?,
-    private val netsuiteSalesOrderId: String?,
-    private val overrides: List<Override>?,
-    private val professionalServices: List<ProfessionalService>?,
-    private val rateCardAlias: String?,
-    private val rateCardId: String?,
-    private val resellerRoyalties: List<ResellerRoyalty>?,
-    private val salesforceOpportunityId: String?,
-    private val scheduledCharges: List<ScheduledCharge>?,
-    private val totalContractValue: Double?,
-    private val transition: Transition?,
-    private val uniquenessKey: String?,
-    private val usageFilter: BaseUsageFilter?,
-    private val usageStatementSchedule: UsageStatementSchedule?,
+    private val body: ContractCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun customerId(): String = customerId
+    fun customerId(): String = body.customerId()
 
-    fun startingAt(): OffsetDateTime = startingAt
+    /** inclusive contract start time */
+    fun startingAt(): OffsetDateTime = body.startingAt()
 
+    /** The billing provider configuration associated with a contract. */
     fun billingProviderConfiguration(): Optional<BillingProviderConfiguration> =
-        Optional.ofNullable(billingProviderConfiguration)
+        body.billingProviderConfiguration()
 
-    fun commits(): Optional<List<Commit>> = Optional.ofNullable(commits)
+    fun commits(): Optional<List<Commit>> = body.commits()
 
-    fun credits(): Optional<List<Credit>> = Optional.ofNullable(credits)
+    fun credits(): Optional<List<Credit>> = body.credits()
 
-    fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+    fun customFields(): Optional<CustomFields> = body.customFields()
 
-    fun discounts(): Optional<List<Discount>> = Optional.ofNullable(discounts)
+    /** This field's availability is dependent on your client's configuration. */
+    fun discounts(): Optional<List<Discount>> = body.discounts()
 
-    fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+    /** exclusive contract end time */
+    fun endingBefore(): Optional<OffsetDateTime> = body.endingBefore()
 
+    /**
+     * Defaults to LOWEST_MULTIPLIER, which applies the greatest discount to list prices
+     * automatically. EXPLICIT prioritization requires specifying priorities for each multiplier;
+     * the one with the lowest priority value will be prioritized first. If tiered overrides are
+     * used, prioritization must be explicit.
+     */
     fun multiplierOverridePrioritization(): Optional<MultiplierOverridePrioritization> =
-        Optional.ofNullable(multiplierOverridePrioritization)
+        body.multiplierOverridePrioritization()
 
-    fun name(): Optional<String> = Optional.ofNullable(name)
+    fun name(): Optional<String> = body.name()
 
-    fun netPaymentTermsDays(): Optional<Double> = Optional.ofNullable(netPaymentTermsDays)
+    fun netPaymentTermsDays(): Optional<Double> = body.netPaymentTermsDays()
 
-    fun netsuiteSalesOrderId(): Optional<String> = Optional.ofNullable(netsuiteSalesOrderId)
+    /** This field's availability is dependent on your client's configuration. */
+    fun netsuiteSalesOrderId(): Optional<String> = body.netsuiteSalesOrderId()
 
-    fun overrides(): Optional<List<Override>> = Optional.ofNullable(overrides)
+    fun overrides(): Optional<List<Override>> = body.overrides()
 
-    fun professionalServices(): Optional<List<ProfessionalService>> =
-        Optional.ofNullable(professionalServices)
+    /** This field's availability is dependent on your client's configuration. */
+    fun professionalServices(): Optional<List<ProfessionalService>> = body.professionalServices()
 
-    fun rateCardAlias(): Optional<String> = Optional.ofNullable(rateCardAlias)
+    /** Selects the rate card linked to the specified alias as of the contract's start date. */
+    fun rateCardAlias(): Optional<String> = body.rateCardAlias()
 
-    fun rateCardId(): Optional<String> = Optional.ofNullable(rateCardId)
+    fun rateCardId(): Optional<String> = body.rateCardId()
 
-    fun resellerRoyalties(): Optional<List<ResellerRoyalty>> =
-        Optional.ofNullable(resellerRoyalties)
+    /** This field's availability is dependent on your client's configuration. */
+    fun resellerRoyalties(): Optional<List<ResellerRoyalty>> = body.resellerRoyalties()
 
-    fun salesforceOpportunityId(): Optional<String> = Optional.ofNullable(salesforceOpportunityId)
+    /** This field's availability is dependent on your client's configuration. */
+    fun salesforceOpportunityId(): Optional<String> = body.salesforceOpportunityId()
 
-    fun scheduledCharges(): Optional<List<ScheduledCharge>> = Optional.ofNullable(scheduledCharges)
+    fun scheduledCharges(): Optional<List<ScheduledCharge>> = body.scheduledCharges()
 
-    fun totalContractValue(): Optional<Double> = Optional.ofNullable(totalContractValue)
+    /** This field's availability is dependent on your client's configuration. */
+    fun totalContractValue(): Optional<Double> = body.totalContractValue()
 
-    fun transition(): Optional<Transition> = Optional.ofNullable(transition)
+    fun transition(): Optional<Transition> = body.transition()
 
-    fun uniquenessKey(): Optional<String> = Optional.ofNullable(uniquenessKey)
+    /**
+     * Prevents the creation of duplicates. If a request to create a record is made with a
+     * previously used uniqueness key, a new record will not be created and the request will fail
+     * with a 409 error.
+     */
+    fun uniquenessKey(): Optional<String> = body.uniquenessKey()
 
-    fun usageFilter(): Optional<BaseUsageFilter> = Optional.ofNullable(usageFilter)
+    fun usageFilter(): Optional<BaseUsageFilter> = body.usageFilter()
 
-    fun usageStatementSchedule(): Optional<UsageStatementSchedule> =
-        Optional.ofNullable(usageStatementSchedule)
+    fun usageStatementSchedule(): Optional<UsageStatementSchedule> = body.usageStatementSchedule()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractCreateBody {
-        return ContractCreateBody(
-            customerId,
-            startingAt,
-            billingProviderConfiguration,
-            commits,
-            credits,
-            customFields,
-            discounts,
-            endingBefore,
-            multiplierOverridePrioritization,
-            name,
-            netPaymentTermsDays,
-            netsuiteSalesOrderId,
-            overrides,
-            professionalServices,
-            rateCardAlias,
-            rateCardId,
-            resellerRoyalties,
-            salesforceOpportunityId,
-            scheduledCharges,
-            totalContractValue,
-            transition,
-            uniquenessKey,
-            usageFilter,
-            usageStatementSchedule,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractCreateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -294,22 +259,22 @@ constructor(
             private var customerId: String? = null
             private var startingAt: OffsetDateTime? = null
             private var billingProviderConfiguration: BillingProviderConfiguration? = null
-            private var commits: List<Commit>? = null
-            private var credits: List<Credit>? = null
+            private var commits: MutableList<Commit>? = null
+            private var credits: MutableList<Credit>? = null
             private var customFields: CustomFields? = null
-            private var discounts: List<Discount>? = null
+            private var discounts: MutableList<Discount>? = null
             private var endingBefore: OffsetDateTime? = null
             private var multiplierOverridePrioritization: MultiplierOverridePrioritization? = null
             private var name: String? = null
             private var netPaymentTermsDays: Double? = null
             private var netsuiteSalesOrderId: String? = null
-            private var overrides: List<Override>? = null
-            private var professionalServices: List<ProfessionalService>? = null
+            private var overrides: MutableList<Override>? = null
+            private var professionalServices: MutableList<ProfessionalService>? = null
             private var rateCardAlias: String? = null
             private var rateCardId: String? = null
-            private var resellerRoyalties: List<ResellerRoyalty>? = null
+            private var resellerRoyalties: MutableList<ResellerRoyalty>? = null
             private var salesforceOpportunityId: String? = null
-            private var scheduledCharges: List<ScheduledCharge>? = null
+            private var scheduledCharges: MutableList<ScheduledCharge>? = null
             private var totalContractValue: Double? = null
             private var transition: Transition? = null
             private var uniquenessKey: String? = null
@@ -357,16 +322,31 @@ constructor(
                 billingProviderConfiguration: BillingProviderConfiguration
             ) = apply { this.billingProviderConfiguration = billingProviderConfiguration }
 
-            fun commits(commits: List<Commit>) = apply { this.commits = commits }
+            fun commits(commits: List<Commit>) = apply { this.commits = commits.toMutableList() }
 
-            fun credits(credits: List<Credit>) = apply { this.credits = credits }
+            fun addCommit(commit: Commit) = apply {
+                commits = (commits ?: mutableListOf()).apply { add(commit) }
+            }
+
+            fun credits(credits: List<Credit>) = apply { this.credits = credits.toMutableList() }
+
+            fun addCredit(credit: Credit) = apply {
+                credits = (credits ?: mutableListOf()).apply { add(credit) }
+            }
 
             fun customFields(customFields: CustomFields) = apply {
                 this.customFields = customFields
             }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun discounts(discounts: List<Discount>) = apply { this.discounts = discounts }
+            fun discounts(discounts: List<Discount>) = apply {
+                this.discounts = discounts.toMutableList()
+            }
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun addDiscount(discount: Discount) = apply {
+                discounts = (discounts ?: mutableListOf()).apply { add(discount) }
+            }
 
             /** exclusive contract end time */
             fun endingBefore(endingBefore: OffsetDateTime) = apply {
@@ -394,11 +374,23 @@ constructor(
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
 
-            fun overrides(overrides: List<Override>) = apply { this.overrides = overrides }
+            fun overrides(overrides: List<Override>) = apply {
+                this.overrides = overrides.toMutableList()
+            }
+
+            fun addOverride(override: Override) = apply {
+                overrides = (overrides ?: mutableListOf()).apply { add(override) }
+            }
 
             /** This field's availability is dependent on your client's configuration. */
             fun professionalServices(professionalServices: List<ProfessionalService>) = apply {
-                this.professionalServices = professionalServices
+                this.professionalServices = professionalServices.toMutableList()
+            }
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun addProfessionalService(professionalService: ProfessionalService) = apply {
+                professionalServices =
+                    (professionalServices ?: mutableListOf()).apply { add(professionalService) }
             }
 
             /**
@@ -410,7 +402,13 @@ constructor(
 
             /** This field's availability is dependent on your client's configuration. */
             fun resellerRoyalties(resellerRoyalties: List<ResellerRoyalty>) = apply {
-                this.resellerRoyalties = resellerRoyalties
+                this.resellerRoyalties = resellerRoyalties.toMutableList()
+            }
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun addResellerRoyalty(resellerRoyalty: ResellerRoyalty) = apply {
+                resellerRoyalties =
+                    (resellerRoyalties ?: mutableListOf()).apply { add(resellerRoyalty) }
             }
 
             /** This field's availability is dependent on your client's configuration. */
@@ -419,7 +417,12 @@ constructor(
             }
 
             fun scheduledCharges(scheduledCharges: List<ScheduledCharge>) = apply {
-                this.scheduledCharges = scheduledCharges
+                this.scheduledCharges = scheduledCharges.toMutableList()
+            }
+
+            fun addScheduledCharge(scheduledCharge: ScheduledCharge) = apply {
+                scheduledCharges =
+                    (scheduledCharges ?: mutableListOf()).apply { add(scheduledCharge) }
             }
 
             /** This field's availability is dependent on your client's configuration. */
@@ -519,105 +522,45 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var customerId: String? = null
-        private var startingAt: OffsetDateTime? = null
-        private var billingProviderConfiguration: BillingProviderConfiguration? = null
-        private var commits: MutableList<Commit> = mutableListOf()
-        private var credits: MutableList<Credit> = mutableListOf()
-        private var customFields: CustomFields? = null
-        private var discounts: MutableList<Discount> = mutableListOf()
-        private var endingBefore: OffsetDateTime? = null
-        private var multiplierOverridePrioritization: MultiplierOverridePrioritization? = null
-        private var name: String? = null
-        private var netPaymentTermsDays: Double? = null
-        private var netsuiteSalesOrderId: String? = null
-        private var overrides: MutableList<Override> = mutableListOf()
-        private var professionalServices: MutableList<ProfessionalService> = mutableListOf()
-        private var rateCardAlias: String? = null
-        private var rateCardId: String? = null
-        private var resellerRoyalties: MutableList<ResellerRoyalty> = mutableListOf()
-        private var salesforceOpportunityId: String? = null
-        private var scheduledCharges: MutableList<ScheduledCharge> = mutableListOf()
-        private var totalContractValue: Double? = null
-        private var transition: Transition? = null
-        private var uniquenessKey: String? = null
-        private var usageFilter: BaseUsageFilter? = null
-        private var usageStatementSchedule: UsageStatementSchedule? = null
+        private var body: ContractCreateBody.Builder = ContractCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractCreateParams: ContractCreateParams) = apply {
-            customerId = contractCreateParams.customerId
-            startingAt = contractCreateParams.startingAt
-            billingProviderConfiguration = contractCreateParams.billingProviderConfiguration
-            commits = contractCreateParams.commits?.toMutableList() ?: mutableListOf()
-            credits = contractCreateParams.credits?.toMutableList() ?: mutableListOf()
-            customFields = contractCreateParams.customFields
-            discounts = contractCreateParams.discounts?.toMutableList() ?: mutableListOf()
-            endingBefore = contractCreateParams.endingBefore
-            multiplierOverridePrioritization = contractCreateParams.multiplierOverridePrioritization
-            name = contractCreateParams.name
-            netPaymentTermsDays = contractCreateParams.netPaymentTermsDays
-            netsuiteSalesOrderId = contractCreateParams.netsuiteSalesOrderId
-            overrides = contractCreateParams.overrides?.toMutableList() ?: mutableListOf()
-            professionalServices =
-                contractCreateParams.professionalServices?.toMutableList() ?: mutableListOf()
-            rateCardAlias = contractCreateParams.rateCardAlias
-            rateCardId = contractCreateParams.rateCardId
-            resellerRoyalties =
-                contractCreateParams.resellerRoyalties?.toMutableList() ?: mutableListOf()
-            salesforceOpportunityId = contractCreateParams.salesforceOpportunityId
-            scheduledCharges =
-                contractCreateParams.scheduledCharges?.toMutableList() ?: mutableListOf()
-            totalContractValue = contractCreateParams.totalContractValue
-            transition = contractCreateParams.transition
-            uniquenessKey = contractCreateParams.uniquenessKey
-            usageFilter = contractCreateParams.usageFilter
-            usageStatementSchedule = contractCreateParams.usageStatementSchedule
+            body = contractCreateParams.body.toBuilder()
             additionalHeaders = contractCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = contractCreateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = contractCreateParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /** inclusive contract start time */
-        fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+        fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
 
         /** The billing provider configuration associated with a contract. */
         fun billingProviderConfiguration(
             billingProviderConfiguration: BillingProviderConfiguration
-        ) = apply { this.billingProviderConfiguration = billingProviderConfiguration }
+        ) = apply { body.billingProviderConfiguration(billingProviderConfiguration) }
 
-        fun commits(commits: List<Commit>) = apply {
-            this.commits.clear()
-            this.commits.addAll(commits)
-        }
+        fun commits(commits: List<Commit>) = apply { body.commits(commits) }
 
-        fun addCommit(commit: Commit) = apply { this.commits.add(commit) }
+        fun addCommit(commit: Commit) = apply { body.addCommit(commit) }
 
-        fun credits(credits: List<Credit>) = apply {
-            this.credits.clear()
-            this.credits.addAll(credits)
-        }
+        fun credits(credits: List<Credit>) = apply { body.credits(credits) }
 
-        fun addCredit(credit: Credit) = apply { this.credits.add(credit) }
+        fun addCredit(credit: Credit) = apply { body.addCredit(credit) }
 
-        fun customFields(customFields: CustomFields) = apply { this.customFields = customFields }
+        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun discounts(discounts: List<Discount>) = apply {
-            this.discounts.clear()
-            this.discounts.addAll(discounts)
-        }
+        fun discounts(discounts: List<Discount>) = apply { body.discounts(discounts) }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun addDiscount(discount: Discount) = apply { this.discounts.add(discount) }
+        fun addDiscount(discount: Discount) = apply { body.addDiscount(discount) }
 
         /** exclusive contract end time */
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { this.endingBefore = endingBefore }
+        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
 
         /**
          * Defaults to LOWEST_MULTIPLIER, which applies the greatest discount to list prices
@@ -627,85 +570,79 @@ constructor(
          */
         fun multiplierOverridePrioritization(
             multiplierOverridePrioritization: MultiplierOverridePrioritization
-        ) = apply { this.multiplierOverridePrioritization = multiplierOverridePrioritization }
+        ) = apply { body.multiplierOverridePrioritization(multiplierOverridePrioritization) }
 
-        fun name(name: String) = apply { this.name = name }
+        fun name(name: String) = apply { body.name(name) }
 
         fun netPaymentTermsDays(netPaymentTermsDays: Double) = apply {
-            this.netPaymentTermsDays = netPaymentTermsDays
+            body.netPaymentTermsDays(netPaymentTermsDays)
         }
 
         /** This field's availability is dependent on your client's configuration. */
         fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
-            this.netsuiteSalesOrderId = netsuiteSalesOrderId
+            body.netsuiteSalesOrderId(netsuiteSalesOrderId)
         }
 
-        fun overrides(overrides: List<Override>) = apply {
-            this.overrides.clear()
-            this.overrides.addAll(overrides)
-        }
+        fun overrides(overrides: List<Override>) = apply { body.overrides(overrides) }
 
-        fun addOverride(override: Override) = apply { this.overrides.add(override) }
+        fun addOverride(override: Override) = apply { body.addOverride(override) }
 
         /** This field's availability is dependent on your client's configuration. */
         fun professionalServices(professionalServices: List<ProfessionalService>) = apply {
-            this.professionalServices.clear()
-            this.professionalServices.addAll(professionalServices)
+            body.professionalServices(professionalServices)
         }
 
         /** This field's availability is dependent on your client's configuration. */
         fun addProfessionalService(professionalService: ProfessionalService) = apply {
-            this.professionalServices.add(professionalService)
+            body.addProfessionalService(professionalService)
         }
 
         /** Selects the rate card linked to the specified alias as of the contract's start date. */
-        fun rateCardAlias(rateCardAlias: String) = apply { this.rateCardAlias = rateCardAlias }
+        fun rateCardAlias(rateCardAlias: String) = apply { body.rateCardAlias(rateCardAlias) }
 
-        fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
+        fun rateCardId(rateCardId: String) = apply { body.rateCardId(rateCardId) }
 
         /** This field's availability is dependent on your client's configuration. */
         fun resellerRoyalties(resellerRoyalties: List<ResellerRoyalty>) = apply {
-            this.resellerRoyalties.clear()
-            this.resellerRoyalties.addAll(resellerRoyalties)
+            body.resellerRoyalties(resellerRoyalties)
         }
 
         /** This field's availability is dependent on your client's configuration. */
         fun addResellerRoyalty(resellerRoyalty: ResellerRoyalty) = apply {
-            this.resellerRoyalties.add(resellerRoyalty)
+            body.addResellerRoyalty(resellerRoyalty)
         }
 
         /** This field's availability is dependent on your client's configuration. */
         fun salesforceOpportunityId(salesforceOpportunityId: String) = apply {
-            this.salesforceOpportunityId = salesforceOpportunityId
+            body.salesforceOpportunityId(salesforceOpportunityId)
         }
 
         fun scheduledCharges(scheduledCharges: List<ScheduledCharge>) = apply {
-            this.scheduledCharges.clear()
-            this.scheduledCharges.addAll(scheduledCharges)
+            body.scheduledCharges(scheduledCharges)
         }
 
         fun addScheduledCharge(scheduledCharge: ScheduledCharge) = apply {
-            this.scheduledCharges.add(scheduledCharge)
+            body.addScheduledCharge(scheduledCharge)
         }
 
         /** This field's availability is dependent on your client's configuration. */
         fun totalContractValue(totalContractValue: Double) = apply {
-            this.totalContractValue = totalContractValue
+            body.totalContractValue(totalContractValue)
         }
 
-        fun transition(transition: Transition) = apply { this.transition = transition }
+        fun transition(transition: Transition) = apply { body.transition(transition) }
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
          * previously used uniqueness key, a new record will not be created and the request will
          * fail with a 409 error.
          */
-        fun uniquenessKey(uniquenessKey: String) = apply { this.uniquenessKey = uniquenessKey }
+        fun uniquenessKey(uniquenessKey: String) = apply { body.uniquenessKey(uniquenessKey) }
 
-        fun usageFilter(usageFilter: BaseUsageFilter) = apply { this.usageFilter = usageFilter }
+        fun usageFilter(usageFilter: BaseUsageFilter) = apply { body.usageFilter(usageFilter) }
 
         fun usageStatementSchedule(usageStatementSchedule: UsageStatementSchedule) = apply {
-            this.usageStatementSchedule = usageStatementSchedule
+            body.usageStatementSchedule(usageStatementSchedule)
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -807,56 +744,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractCreateParams =
             ContractCreateParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(startingAt) { "`startingAt` is required but was not set" },
-                billingProviderConfiguration,
-                commits.toImmutable().ifEmpty { null },
-                credits.toImmutable().ifEmpty { null },
-                customFields,
-                discounts.toImmutable().ifEmpty { null },
-                endingBefore,
-                multiplierOverridePrioritization,
-                name,
-                netPaymentTermsDays,
-                netsuiteSalesOrderId,
-                overrides.toImmutable().ifEmpty { null },
-                professionalServices.toImmutable().ifEmpty { null },
-                rateCardAlias,
-                rateCardId,
-                resellerRoyalties.toImmutable().ifEmpty { null },
-                salesforceOpportunityId,
-                scheduledCharges.toImmutable().ifEmpty { null },
-                totalContractValue,
-                transition,
-                uniquenessKey,
-                usageFilter,
-                usageStatementSchedule,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -1231,8 +1141,8 @@ constructor(
             private var description: String? = null
             private var rolloverFraction: Double? = null
             private var priority: Double? = null
-            private var applicableProductIds: List<String>? = null
-            private var applicableProductTags: List<String>? = null
+            private var applicableProductIds: MutableList<String>? = null
+            private var applicableProductTags: MutableList<String>? = null
             private var netsuiteSalesOrderId: String? = null
             private var customFields: CustomFields? = null
             private var temporaryId: String? = null
@@ -1307,7 +1217,16 @@ constructor(
              * applicable_product_tags are not provided, the commit applies to all products.
              */
             fun applicableProductIds(applicableProductIds: List<String>) = apply {
-                this.applicableProductIds = applicableProductIds
+                this.applicableProductIds = applicableProductIds.toMutableList()
+            }
+
+            /**
+             * Which products the commit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the commit applies to all products.
+             */
+            fun addApplicableProductId(applicableProductId: String) = apply {
+                applicableProductIds =
+                    (applicableProductIds ?: mutableListOf()).apply { add(applicableProductId) }
             }
 
             /**
@@ -1315,7 +1234,16 @@ constructor(
              * applicable_product_tags are not provided, the commit applies to all products.
              */
             fun applicableProductTags(applicableProductTags: List<String>) = apply {
-                this.applicableProductTags = applicableProductTags
+                this.applicableProductTags = applicableProductTags.toMutableList()
+            }
+
+            /**
+             * Which tags the commit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the commit applies to all products.
+             */
+            fun addApplicableProductTag(applicableProductTag: String) = apply {
+                applicableProductTags =
+                    (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
             }
 
             /** This field's availability is dependent on your client's configuration. */
@@ -1464,7 +1392,7 @@ constructor(
             class Builder {
 
                 private var creditTypeId: String? = null
-                private var scheduleItems: List<ScheduleItem>? = null
+                private var scheduleItems: MutableList<ScheduleItem>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -1478,7 +1406,11 @@ constructor(
                 fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
                 fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
-                    this.scheduleItems = scheduleItems
+                    this.scheduleItems = scheduleItems.toMutableList()
+                }
+
+                fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
+                    scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1758,7 +1690,7 @@ constructor(
             class Builder {
 
                 private var creditTypeId: String? = null
-                private var scheduleItems: List<ScheduleItem>? = null
+                private var scheduleItems: MutableList<ScheduleItem>? = null
                 private var recurringSchedule: RecurringSchedule? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -1775,7 +1707,12 @@ constructor(
 
                 /** Either provide amount or provide both unit_price and quantity. */
                 fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
-                    this.scheduleItems = scheduleItems
+                    this.scheduleItems = scheduleItems.toMutableList()
+                }
+
+                /** Either provide amount or provide both unit_price and quantity. */
+                fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
+                    scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
                 }
 
                 /**
@@ -2455,8 +2392,8 @@ constructor(
             private var productId: String? = null
             private var accessSchedule: AccessSchedule? = null
             private var description: String? = null
-            private var applicableProductIds: List<String>? = null
-            private var applicableProductTags: List<String>? = null
+            private var applicableProductIds: MutableList<String>? = null
+            private var applicableProductTags: MutableList<String>? = null
             private var netsuiteSalesOrderId: String? = null
             private var priority: Double? = null
             private var customFields: CustomFields? = null
@@ -2496,7 +2433,16 @@ constructor(
              * applicable_product_tags are not provided, the credit applies to all products.
              */
             fun applicableProductIds(applicableProductIds: List<String>) = apply {
-                this.applicableProductIds = applicableProductIds
+                this.applicableProductIds = applicableProductIds.toMutableList()
+            }
+
+            /**
+             * Which products the credit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the credit applies to all products.
+             */
+            fun addApplicableProductId(applicableProductId: String) = apply {
+                applicableProductIds =
+                    (applicableProductIds ?: mutableListOf()).apply { add(applicableProductId) }
             }
 
             /**
@@ -2504,7 +2450,16 @@ constructor(
              * applicable_product_tags are not provided, the credit applies to all products.
              */
             fun applicableProductTags(applicableProductTags: List<String>) = apply {
-                this.applicableProductTags = applicableProductTags
+                this.applicableProductTags = applicableProductTags.toMutableList()
+            }
+
+            /**
+             * Which tags the credit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the credit applies to all products.
+             */
+            fun addApplicableProductTag(applicableProductTag: String) = apply {
+                applicableProductTags =
+                    (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
             }
 
             /** This field's availability is dependent on your client's configuration. */
@@ -2589,7 +2544,7 @@ constructor(
             class Builder {
 
                 private var creditTypeId: String? = null
-                private var scheduleItems: List<ScheduleItem>? = null
+                private var scheduleItems: MutableList<ScheduleItem>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -2603,7 +2558,11 @@ constructor(
                 fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
                 fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
-                    this.scheduleItems = scheduleItems
+                    this.scheduleItems = scheduleItems.toMutableList()
+                }
+
+                fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
+                    scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -3126,7 +3085,7 @@ constructor(
             class Builder {
 
                 private var creditTypeId: String? = null
-                private var scheduleItems: List<ScheduleItem>? = null
+                private var scheduleItems: MutableList<ScheduleItem>? = null
                 private var recurringSchedule: RecurringSchedule? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -3143,7 +3102,12 @@ constructor(
 
                 /** Either provide amount or provide both unit_price and quantity. */
                 fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
-                    this.scheduleItems = scheduleItems
+                    this.scheduleItems = scheduleItems.toMutableList()
+                }
+
+                /** Either provide amount or provide both unit_price and quantity. */
+                fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
+                    scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
                 }
 
                 /**
@@ -3849,9 +3813,9 @@ constructor(
             private var priority: Double? = null
             private var overwriteRate: OverwriteRate? = null
             private var productId: String? = null
-            private var applicableProductTags: List<String>? = null
-            private var overrideSpecifiers: List<OverrideSpecifier>? = null
-            private var tiers: List<Tier>? = null
+            private var applicableProductTags: MutableList<String>? = null
+            private var overrideSpecifiers: MutableList<OverrideSpecifier>? = null
+            private var tiers: MutableList<Tier>? = null
             private var isCommitSpecific: Boolean? = null
             private var target: Target? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -3914,7 +3878,16 @@ constructor(
              * conjunction with override_specifiers.
              */
             fun applicableProductTags(applicableProductTags: List<String>) = apply {
-                this.applicableProductTags = applicableProductTags
+                this.applicableProductTags = applicableProductTags.toMutableList()
+            }
+
+            /**
+             * tags identifying products whose rates are being overridden. Cannot be used in
+             * conjunction with override_specifiers.
+             */
+            fun addApplicableProductTag(applicableProductTag: String) = apply {
+                applicableProductTags =
+                    (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
             }
 
             /**
@@ -3922,11 +3895,25 @@ constructor(
              * provided, the override will apply to all products with the specified specifiers.
              */
             fun overrideSpecifiers(overrideSpecifiers: List<OverrideSpecifier>) = apply {
-                this.overrideSpecifiers = overrideSpecifiers
+                this.overrideSpecifiers = overrideSpecifiers.toMutableList()
+            }
+
+            /**
+             * Cannot be used in conjunction with product_id or applicable_product_tags. If
+             * provided, the override will apply to all products with the specified specifiers.
+             */
+            fun addOverrideSpecifier(overrideSpecifier: OverrideSpecifier) = apply {
+                overrideSpecifiers =
+                    (overrideSpecifiers ?: mutableListOf()).apply { add(overrideSpecifier) }
             }
 
             /** Required for TIERED type. Must have at least one tier. */
-            fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+            fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+            /** Required for TIERED type. Must have at least one tier. */
+            fun addTier(tier: Tier) = apply {
+                tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+            }
 
             /**
              * Indicates whether the override should only apply to commits. Defaults to `false`. If
@@ -4046,9 +4033,9 @@ constructor(
 
             class Builder {
 
-                private var commitIds: List<String>? = null
+                private var commitIds: MutableList<String>? = null
                 private var productId: String? = null
-                private var productTags: List<String>? = null
+                private var productTags: MutableList<String>? = null
                 private var pricingGroupValues: PricingGroupValues? = null
                 private var presentationGroupValues: PresentationGroupValues? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -4069,7 +4056,19 @@ constructor(
                  * presentation_group_values. If provided, the override will only apply to the
                  * specified commits. If not provided, the override will apply to all commits.
                  */
-                fun commitIds(commitIds: List<String>) = apply { this.commitIds = commitIds }
+                fun commitIds(commitIds: List<String>) = apply {
+                    this.commitIds = commitIds.toMutableList()
+                }
+
+                /**
+                 * Can only be used for commit specific overrides. Must be used in conjunction with
+                 * one of product_id, product_tags, pricing_group_values, or
+                 * presentation_group_values. If provided, the override will only apply to the
+                 * specified commits. If not provided, the override will apply to all commits.
+                 */
+                fun addCommitId(commitId: String) = apply {
+                    commitIds = (commitIds ?: mutableListOf()).apply { add(commitId) }
+                }
 
                 /**
                  * If provided, the override will only apply to the product with the specified ID.
@@ -4081,7 +4080,15 @@ constructor(
                  * tags.
                  */
                 fun productTags(productTags: List<String>) = apply {
-                    this.productTags = productTags
+                    this.productTags = productTags.toMutableList()
+                }
+
+                /**
+                 * If provided, the override will only apply to products with all the specified
+                 * tags.
+                 */
+                fun addProductTag(productTag: String) = apply {
+                    productTags = (productTags ?: mutableListOf()).apply { add(productTag) }
                 }
 
                 /**
@@ -4371,7 +4378,7 @@ constructor(
                 private var price: Double? = null
                 private var quantity: Double? = null
                 private var isProrated: Boolean? = null
-                private var tiers: List<Tier>? = null
+                private var tiers: MutableList<Tier>? = null
                 private var customRate: CustomRate? = null
                 private var creditTypeId: String? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -4406,7 +4413,12 @@ constructor(
                 fun isProrated(isProrated: Boolean) = apply { this.isProrated = isProrated }
 
                 /** Only set for TIERED rate_type. */
-                fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                /** Only set for TIERED rate_type. */
+                fun addTier(tier: Tier) = apply {
+                    tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                }
 
                 /**
                  * Only set for CUSTOM rate_type. This field is interpreted by custom rate
@@ -5141,8 +5153,8 @@ constructor(
             private var resellerType: ResellerType? = null
             private var fraction: Double? = null
             private var netsuiteResellerId: String? = null
-            private var applicableProductIds: List<String>? = null
-            private var applicableProductTags: List<String>? = null
+            private var applicableProductIds: MutableList<String>? = null
+            private var applicableProductTags: MutableList<String>? = null
             private var startingAt: OffsetDateTime? = null
             private var endingBefore: OffsetDateTime? = null
             private var resellerContractValue: Double? = null
@@ -5177,12 +5189,24 @@ constructor(
 
             /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
             fun applicableProductIds(applicableProductIds: List<String>) = apply {
-                this.applicableProductIds = applicableProductIds
+                this.applicableProductIds = applicableProductIds.toMutableList()
+            }
+
+            /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
+            fun addApplicableProductId(applicableProductId: String) = apply {
+                applicableProductIds =
+                    (applicableProductIds ?: mutableListOf()).apply { add(applicableProductId) }
             }
 
             /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
             fun applicableProductTags(applicableProductTags: List<String>) = apply {
-                this.applicableProductTags = applicableProductTags
+                this.applicableProductTags = applicableProductTags.toMutableList()
+            }
+
+            /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
+            fun addApplicableProductTag(applicableProductTag: String) = apply {
+                applicableProductTags =
+                    (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
             }
 
             fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
@@ -5657,7 +5681,7 @@ constructor(
             class Builder {
 
                 private var creditTypeId: String? = null
-                private var scheduleItems: List<ScheduleItem>? = null
+                private var scheduleItems: MutableList<ScheduleItem>? = null
                 private var recurringSchedule: RecurringSchedule? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -5674,7 +5698,12 @@ constructor(
 
                 /** Either provide amount or provide both unit_price and quantity. */
                 fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
-                    this.scheduleItems = scheduleItems
+                    this.scheduleItems = scheduleItems.toMutableList()
+                }
+
+                /** Either provide amount or provide both unit_price and quantity. */
+                fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
+                    scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
                 }
 
                 /**
@@ -6790,11 +6819,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractCreateParams && customerId == other.customerId && startingAt == other.startingAt && billingProviderConfiguration == other.billingProviderConfiguration && commits == other.commits && credits == other.credits && customFields == other.customFields && discounts == other.discounts && endingBefore == other.endingBefore && multiplierOverridePrioritization == other.multiplierOverridePrioritization && name == other.name && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && overrides == other.overrides && professionalServices == other.professionalServices && rateCardAlias == other.rateCardAlias && rateCardId == other.rateCardId && resellerRoyalties == other.resellerRoyalties && salesforceOpportunityId == other.salesforceOpportunityId && scheduledCharges == other.scheduledCharges && totalContractValue == other.totalContractValue && transition == other.transition && uniquenessKey == other.uniquenessKey && usageFilter == other.usageFilter && usageStatementSchedule == other.usageStatementSchedule && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, startingAt, billingProviderConfiguration, commits, credits, customFields, discounts, endingBefore, multiplierOverridePrioritization, name, netPaymentTermsDays, netsuiteSalesOrderId, overrides, professionalServices, rateCardAlias, rateCardId, resellerRoyalties, salesforceOpportunityId, scheduledCharges, totalContractValue, transition, uniquenessKey, usageFilter, usageStatementSchedule, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractCreateParams{customerId=$customerId, startingAt=$startingAt, billingProviderConfiguration=$billingProviderConfiguration, commits=$commits, credits=$credits, customFields=$customFields, discounts=$discounts, endingBefore=$endingBefore, multiplierOverridePrioritization=$multiplierOverridePrioritization, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, overrides=$overrides, professionalServices=$professionalServices, rateCardAlias=$rateCardAlias, rateCardId=$rateCardId, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledCharges=$scheduledCharges, totalContractValue=$totalContractValue, transition=$transition, uniquenessKey=$uniquenessKey, usageFilter=$usageFilter, usageStatementSchedule=$usageStatementSchedule, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

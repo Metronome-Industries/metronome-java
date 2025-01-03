@@ -21,39 +21,41 @@ class CustomerPlanEndParams
 constructor(
     private val customerId: String,
     private val customerPlanId: String,
-    private val endingBefore: OffsetDateTime?,
-    private val voidInvoices: Boolean?,
-    private val voidStripeInvoices: Boolean?,
+    private val body: CustomerPlanEndBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun customerId(): String = customerId
 
     fun customerPlanId(): String = customerPlanId
 
-    fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+    /**
+     * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00 UTC
+     * (midnight). If not provided, the plan end date will be cleared.
+     */
+    fun endingBefore(): Optional<OffsetDateTime> = body.endingBefore()
 
-    fun voidInvoices(): Optional<Boolean> = Optional.ofNullable(voidInvoices)
+    /**
+     * If true, plan end date can be before the last finalized invoice date. Any invoices generated
+     * after the plan end date will be voided.
+     */
+    fun voidInvoices(): Optional<Boolean> = body.voidInvoices()
 
-    fun voidStripeInvoices(): Optional<Boolean> = Optional.ofNullable(voidStripeInvoices)
+    /**
+     * Only applicable when void_invoices is set to true. If true, for every invoice that is voided
+     * we will also attempt to void/delete the stripe invoice (if any). Stripe invoices will be
+     * voided if finalized or deleted if still in draft state.
+     */
+    fun voidStripeInvoices(): Optional<Boolean> = body.voidStripeInvoices()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomerPlanEndBody {
-        return CustomerPlanEndBody(
-            endingBefore,
-            voidInvoices,
-            voidStripeInvoices,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomerPlanEndBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -207,23 +209,17 @@ constructor(
 
         private var customerId: String? = null
         private var customerPlanId: String? = null
-        private var endingBefore: OffsetDateTime? = null
-        private var voidInvoices: Boolean? = null
-        private var voidStripeInvoices: Boolean? = null
+        private var body: CustomerPlanEndBody.Builder = CustomerPlanEndBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerPlanEndParams: CustomerPlanEndParams) = apply {
             customerId = customerPlanEndParams.customerId
             customerPlanId = customerPlanEndParams.customerPlanId
-            endingBefore = customerPlanEndParams.endingBefore
-            voidInvoices = customerPlanEndParams.voidInvoices
-            voidStripeInvoices = customerPlanEndParams.voidStripeInvoices
+            body = customerPlanEndParams.body.toBuilder()
             additionalHeaders = customerPlanEndParams.additionalHeaders.toBuilder()
             additionalQueryParams = customerPlanEndParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = customerPlanEndParams.additionalBodyProperties.toMutableMap()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -234,13 +230,13 @@ constructor(
          * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
          * UTC (midnight). If not provided, the plan end date will be cleared.
          */
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { this.endingBefore = endingBefore }
+        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
 
         /**
          * If true, plan end date can be before the last finalized invoice date. Any invoices
          * generated after the plan end date will be voided.
          */
-        fun voidInvoices(voidInvoices: Boolean) = apply { this.voidInvoices = voidInvoices }
+        fun voidInvoices(voidInvoices: Boolean) = apply { body.voidInvoices(voidInvoices) }
 
         /**
          * Only applicable when void_invoices is set to true. If true, for every invoice that is
@@ -248,7 +244,7 @@ constructor(
          * will be voided if finalized or deleted if still in draft state.
          */
         fun voidStripeInvoices(voidStripeInvoices: Boolean) = apply {
-            this.voidStripeInvoices = voidStripeInvoices
+            body.voidStripeInvoices(voidStripeInvoices)
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -350,37 +346,31 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerPlanEndParams =
             CustomerPlanEndParams(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
                 checkNotNull(customerPlanId) { "`customerPlanId` is required but was not set" },
-                endingBefore,
-                voidInvoices,
-                voidStripeInvoices,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -389,11 +379,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerPlanEndParams && customerId == other.customerId && customerPlanId == other.customerPlanId && endingBefore == other.endingBefore && voidInvoices == other.voidInvoices && voidStripeInvoices == other.voidStripeInvoices && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerPlanEndParams && customerId == other.customerId && customerPlanId == other.customerPlanId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, customerPlanId, endingBefore, voidInvoices, voidStripeInvoices, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, customerPlanId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomerPlanEndParams{customerId=$customerId, customerPlanId=$customerPlanId, endingBefore=$endingBefore, voidInvoices=$voidInvoices, voidStripeInvoices=$voidStripeInvoices, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerPlanEndParams{customerId=$customerId, customerPlanId=$customerPlanId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -20,35 +20,24 @@ import java.util.Objects
 
 class CustomFieldAddKeyParams
 constructor(
-    private val enforceUniqueness: Boolean,
-    private val entity: Entity,
-    private val key: String,
+    private val body: CustomFieldAddKeyBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun enforceUniqueness(): Boolean = enforceUniqueness
+    fun enforceUniqueness(): Boolean = body.enforceUniqueness()
 
-    fun entity(): Entity = entity
+    fun entity(): Entity = body.entity()
 
-    fun key(): String = key
+    fun key(): String = body.key()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomFieldAddKeyBody {
-        return CustomFieldAddKeyBody(
-            enforceUniqueness,
-            entity,
-            key,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomFieldAddKeyBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -163,31 +152,24 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var enforceUniqueness: Boolean? = null
-        private var entity: Entity? = null
-        private var key: String? = null
+        private var body: CustomFieldAddKeyBody.Builder = CustomFieldAddKeyBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customFieldAddKeyParams: CustomFieldAddKeyParams) = apply {
-            enforceUniqueness = customFieldAddKeyParams.enforceUniqueness
-            entity = customFieldAddKeyParams.entity
-            key = customFieldAddKeyParams.key
+            body = customFieldAddKeyParams.body.toBuilder()
             additionalHeaders = customFieldAddKeyParams.additionalHeaders.toBuilder()
             additionalQueryParams = customFieldAddKeyParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                customFieldAddKeyParams.additionalBodyProperties.toMutableMap()
         }
 
         fun enforceUniqueness(enforceUniqueness: Boolean) = apply {
-            this.enforceUniqueness = enforceUniqueness
+            body.enforceUniqueness(enforceUniqueness)
         }
 
-        fun entity(entity: Entity) = apply { this.entity = entity }
+        fun entity(entity: Entity) = apply { body.entity(entity) }
 
-        fun key(key: String) = apply { this.key = key }
+        fun key(key: String) = apply { body.key(key) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -288,37 +270,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomFieldAddKeyParams =
             CustomFieldAddKeyParams(
-                checkNotNull(enforceUniqueness) {
-                    "`enforceUniqueness` is required but was not set"
-                },
-                checkNotNull(entity) { "`entity` is required but was not set" },
-                checkNotNull(key) { "`key` is required but was not set" },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -468,11 +442,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomFieldAddKeyParams && enforceUniqueness == other.enforceUniqueness && entity == other.entity && key == other.key && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomFieldAddKeyParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(enforceUniqueness, entity, key, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomFieldAddKeyParams{enforceUniqueness=$enforceUniqueness, entity=$entity, key=$key, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomFieldAddKeyParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -29,64 +29,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic
-    internal fun getBody(): List<Usage> {
-        return usage
-    }
+    @JvmSynthetic internal fun getBody(): List<Usage> = usage
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    @NoAutoDetect
-    class UsageIngestBody
-    @JsonCreator
-    internal constructor(
-        @JsonProperty("usage") private val usage: List<Usage>,
-    ) {
-
-        @JsonProperty("usage") fun usage(): List<Usage> = usage
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var usage: List<Usage>? = null
-
-            @JvmSynthetic
-            internal fun from(usageIngestBody: UsageIngestBody) = apply {
-                usage = usageIngestBody.usage.toMutableList()
-            }
-
-            fun usage(usage: List<Usage>) = apply { this.usage = usage }
-
-            fun build(): UsageIngestBody =
-                UsageIngestBody(
-                    checkNotNull(usage) { "`usage` is required but was not set" }.toImmutable()
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is UsageIngestBody && usage == other.usage /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(usage) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "UsageIngestBody{usage=$usage}"
-    }
 
     fun toBuilder() = Builder().from(this)
 
@@ -98,7 +45,7 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var usage: MutableList<Usage> = mutableListOf()
+        private var usage: MutableList<Usage>? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -109,12 +56,11 @@ constructor(
             additionalQueryParams = usageIngestParams.additionalQueryParams.toBuilder()
         }
 
-        fun usage(usage: List<Usage>) = apply {
-            this.usage.clear()
-            this.usage.addAll(usage)
-        }
+        fun usage(usage: List<Usage>) = apply { this.usage = usage.toMutableList() }
 
-        fun addUsage(usage: Usage) = apply { this.usage.add(usage) }
+        fun addUsage(usage: Usage) = apply {
+            this.usage = (this.usage ?: mutableListOf()).apply { add(usage) }
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -216,7 +162,7 @@ constructor(
 
         fun build(): UsageIngestParams =
             UsageIngestParams(
-                usage.toImmutable(),
+                checkNotNull(usage) { "`usage` is required but was not set" }.toImmutable(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )

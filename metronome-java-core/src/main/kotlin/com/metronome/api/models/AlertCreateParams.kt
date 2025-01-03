@@ -21,77 +21,87 @@ import java.util.Optional
 
 class AlertCreateParams
 constructor(
-    private val alertType: AlertType,
-    private val name: String,
-    private val threshold: Double,
-    private val billableMetricId: String?,
-    private val creditGrantTypeFilters: List<String>?,
-    private val creditTypeId: String?,
-    private val customFieldFilters: List<CustomFieldFilter>?,
-    private val customerId: String?,
-    private val evaluateOnCreate: Boolean?,
-    private val groupKeyFilter: GroupKeyFilter?,
-    private val invoiceTypesFilter: List<String>?,
-    private val planId: String?,
-    private val uniquenessKey: String?,
+    private val body: AlertCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun alertType(): AlertType = alertType
+    /** Type of the alert */
+    fun alertType(): AlertType = body.alertType()
 
-    fun name(): String = name
+    /** Name of the alert */
+    fun name(): String = body.name()
 
-    fun threshold(): Double = threshold
+    /**
+     * Threshold value of the alert policy. Depending upon the alert type, this number may represent
+     * a financial amount, the days remaining, or a percentage reached.
+     */
+    fun threshold(): Double = body.threshold()
 
-    fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
+    /**
+     * For alerts of type `usage_threshold_reached`, specifies which billable metric to track the
+     * usage for.
+     */
+    fun billableMetricId(): Optional<String> = body.billableMetricId()
 
-    fun creditGrantTypeFilters(): Optional<List<String>> =
-        Optional.ofNullable(creditGrantTypeFilters)
+    /**
+     * An array of strings, representing a way to filter the credit grant this alert applies to, by
+     * looking at the credit_grant_type field on the credit grant. This field is only defined for
+     * CreditPercentage and CreditBalance alerts
+     */
+    fun creditGrantTypeFilters(): Optional<List<String>> = body.creditGrantTypeFilters()
 
-    fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
+    fun creditTypeId(): Optional<String> = body.creditTypeId()
 
-    fun customFieldFilters(): Optional<List<CustomFieldFilter>> =
-        Optional.ofNullable(customFieldFilters)
+    /**
+     * Only present for beta contract invoices. This field's availability is dependent on your
+     * client's configuration. A list of custom field filters for alert types that support advanced
+     * filtering
+     */
+    fun customFieldFilters(): Optional<List<CustomFieldFilter>> = body.customFieldFilters()
 
-    fun customerId(): Optional<String> = Optional.ofNullable(customerId)
+    /**
+     * If provided, will create this alert for this specific customer. To create an alert for all
+     * customers, do not specify `customer_id` or `plan_id`.
+     */
+    fun customerId(): Optional<String> = body.customerId()
 
-    fun evaluateOnCreate(): Optional<Boolean> = Optional.ofNullable(evaluateOnCreate)
+    /**
+     * If true, the alert will evaluate immediately on customers that already meet the alert
+     * threshold. If false, it will only evaluate on future customers that trigger the alert
+     * threshold. Defaults to true.
+     */
+    fun evaluateOnCreate(): Optional<Boolean> = body.evaluateOnCreate()
 
-    fun groupKeyFilter(): Optional<GroupKeyFilter> = Optional.ofNullable(groupKeyFilter)
+    /**
+     * Scopes alert evaluation to a specific presentation group key on individual line items. Only
+     * present for spend alerts.
+     */
+    fun groupKeyFilter(): Optional<GroupKeyFilter> = body.groupKeyFilter()
 
-    fun invoiceTypesFilter(): Optional<List<String>> = Optional.ofNullable(invoiceTypesFilter)
+    /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
+    fun invoiceTypesFilter(): Optional<List<String>> = body.invoiceTypesFilter()
 
-    fun planId(): Optional<String> = Optional.ofNullable(planId)
+    /**
+     * If provided, will create this alert for this specific plan. To create an alert for all
+     * customers, do not specify `customer_id` or `plan_id`.
+     */
+    fun planId(): Optional<String> = body.planId()
 
-    fun uniquenessKey(): Optional<String> = Optional.ofNullable(uniquenessKey)
+    /**
+     * Prevents the creation of duplicates. If a request to create a record is made with a
+     * previously used uniqueness key, a new record will not be created and the request will fail
+     * with a 409 error.
+     */
+    fun uniquenessKey(): Optional<String> = body.uniquenessKey()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): AlertCreateBody {
-        return AlertCreateBody(
-            alertType,
-            name,
-            threshold,
-            billableMetricId,
-            creditGrantTypeFilters,
-            creditTypeId,
-            customFieldFilters,
-            customerId,
-            evaluateOnCreate,
-            groupKeyFilter,
-            invoiceTypesFilter,
-            planId,
-            uniquenessKey,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): AlertCreateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -217,13 +227,13 @@ constructor(
             private var name: String? = null
             private var threshold: Double? = null
             private var billableMetricId: String? = null
-            private var creditGrantTypeFilters: List<String>? = null
+            private var creditGrantTypeFilters: MutableList<String>? = null
             private var creditTypeId: String? = null
-            private var customFieldFilters: List<CustomFieldFilter>? = null
+            private var customFieldFilters: MutableList<CustomFieldFilter>? = null
             private var customerId: String? = null
             private var evaluateOnCreate: Boolean? = null
             private var groupKeyFilter: GroupKeyFilter? = null
-            private var invoiceTypesFilter: List<String>? = null
+            private var invoiceTypesFilter: MutableList<String>? = null
             private var planId: String? = null
             private var uniquenessKey: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -272,7 +282,17 @@ constructor(
              * defined for CreditPercentage and CreditBalance alerts
              */
             fun creditGrantTypeFilters(creditGrantTypeFilters: List<String>) = apply {
-                this.creditGrantTypeFilters = creditGrantTypeFilters
+                this.creditGrantTypeFilters = creditGrantTypeFilters.toMutableList()
+            }
+
+            /**
+             * An array of strings, representing a way to filter the credit grant this alert applies
+             * to, by looking at the credit_grant_type field on the credit grant. This field is only
+             * defined for CreditPercentage and CreditBalance alerts
+             */
+            fun addCreditGrantTypeFilter(creditGrantTypeFilter: String) = apply {
+                creditGrantTypeFilters =
+                    (creditGrantTypeFilters ?: mutableListOf()).apply { add(creditGrantTypeFilter) }
             }
 
             fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
@@ -283,7 +303,17 @@ constructor(
              * support advanced filtering
              */
             fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>) = apply {
-                this.customFieldFilters = customFieldFilters
+                this.customFieldFilters = customFieldFilters.toMutableList()
+            }
+
+            /**
+             * Only present for beta contract invoices. This field's availability is dependent on
+             * your client's configuration. A list of custom field filters for alert types that
+             * support advanced filtering
+             */
+            fun addCustomFieldFilter(customFieldFilter: CustomFieldFilter) = apply {
+                customFieldFilters =
+                    (customFieldFilters ?: mutableListOf()).apply { add(customFieldFilter) }
             }
 
             /**
@@ -313,7 +343,15 @@ constructor(
              * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
              */
             fun invoiceTypesFilter(invoiceTypesFilter: List<String>) = apply {
-                this.invoiceTypesFilter = invoiceTypesFilter
+                this.invoiceTypesFilter = invoiceTypesFilter.toMutableList()
+            }
+
+            /**
+             * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
+             */
+            fun addInvoiceTypesFilter(invoiceTypesFilter: String) = apply {
+                this.invoiceTypesFilter =
+                    (this.invoiceTypesFilter ?: mutableListOf()).apply { add(invoiceTypesFilter) }
             }
 
             /**
@@ -395,64 +433,35 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var alertType: AlertType? = null
-        private var name: String? = null
-        private var threshold: Double? = null
-        private var billableMetricId: String? = null
-        private var creditGrantTypeFilters: MutableList<String> = mutableListOf()
-        private var creditTypeId: String? = null
-        private var customFieldFilters: MutableList<CustomFieldFilter> = mutableListOf()
-        private var customerId: String? = null
-        private var evaluateOnCreate: Boolean? = null
-        private var groupKeyFilter: GroupKeyFilter? = null
-        private var invoiceTypesFilter: MutableList<String> = mutableListOf()
-        private var planId: String? = null
-        private var uniquenessKey: String? = null
+        private var body: AlertCreateBody.Builder = AlertCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(alertCreateParams: AlertCreateParams) = apply {
-            alertType = alertCreateParams.alertType
-            name = alertCreateParams.name
-            threshold = alertCreateParams.threshold
-            billableMetricId = alertCreateParams.billableMetricId
-            creditGrantTypeFilters =
-                alertCreateParams.creditGrantTypeFilters?.toMutableList() ?: mutableListOf()
-            creditTypeId = alertCreateParams.creditTypeId
-            customFieldFilters =
-                alertCreateParams.customFieldFilters?.toMutableList() ?: mutableListOf()
-            customerId = alertCreateParams.customerId
-            evaluateOnCreate = alertCreateParams.evaluateOnCreate
-            groupKeyFilter = alertCreateParams.groupKeyFilter
-            invoiceTypesFilter =
-                alertCreateParams.invoiceTypesFilter?.toMutableList() ?: mutableListOf()
-            planId = alertCreateParams.planId
-            uniquenessKey = alertCreateParams.uniquenessKey
+            body = alertCreateParams.body.toBuilder()
             additionalHeaders = alertCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = alertCreateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = alertCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Type of the alert */
-        fun alertType(alertType: AlertType) = apply { this.alertType = alertType }
+        fun alertType(alertType: AlertType) = apply { body.alertType(alertType) }
 
         /** Name of the alert */
-        fun name(name: String) = apply { this.name = name }
+        fun name(name: String) = apply { body.name(name) }
 
         /**
          * Threshold value of the alert policy. Depending upon the alert type, this number may
          * represent a financial amount, the days remaining, or a percentage reached.
          */
-        fun threshold(threshold: Double) = apply { this.threshold = threshold }
+        fun threshold(threshold: Double) = apply { body.threshold(threshold) }
 
         /**
          * For alerts of type `usage_threshold_reached`, specifies which billable metric to track
          * the usage for.
          */
         fun billableMetricId(billableMetricId: String) = apply {
-            this.billableMetricId = billableMetricId
+            body.billableMetricId(billableMetricId)
         }
 
         /**
@@ -461,8 +470,7 @@ constructor(
          * for CreditPercentage and CreditBalance alerts
          */
         fun creditGrantTypeFilters(creditGrantTypeFilters: List<String>) = apply {
-            this.creditGrantTypeFilters.clear()
-            this.creditGrantTypeFilters.addAll(creditGrantTypeFilters)
+            body.creditGrantTypeFilters(creditGrantTypeFilters)
         }
 
         /**
@@ -471,10 +479,10 @@ constructor(
          * for CreditPercentage and CreditBalance alerts
          */
         fun addCreditGrantTypeFilter(creditGrantTypeFilter: String) = apply {
-            this.creditGrantTypeFilters.add(creditGrantTypeFilter)
+            body.addCreditGrantTypeFilter(creditGrantTypeFilter)
         }
 
-        fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+        fun creditTypeId(creditTypeId: String) = apply { body.creditTypeId(creditTypeId) }
 
         /**
          * Only present for beta contract invoices. This field's availability is dependent on your
@@ -482,8 +490,7 @@ constructor(
          * advanced filtering
          */
         fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>) = apply {
-            this.customFieldFilters.clear()
-            this.customFieldFilters.addAll(customFieldFilters)
+            body.customFieldFilters(customFieldFilters)
         }
 
         /**
@@ -492,14 +499,14 @@ constructor(
          * advanced filtering
          */
         fun addCustomFieldFilter(customFieldFilter: CustomFieldFilter) = apply {
-            this.customFieldFilters.add(customFieldFilter)
+            body.addCustomFieldFilter(customFieldFilter)
         }
 
         /**
          * If provided, will create this alert for this specific customer. To create an alert for
          * all customers, do not specify `customer_id` or `plan_id`.
          */
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /**
          * If true, the alert will evaluate immediately on customers that already meet the alert
@@ -507,7 +514,7 @@ constructor(
          * threshold. Defaults to true.
          */
         fun evaluateOnCreate(evaluateOnCreate: Boolean) = apply {
-            this.evaluateOnCreate = evaluateOnCreate
+            body.evaluateOnCreate(evaluateOnCreate)
         }
 
         /**
@@ -515,32 +522,31 @@ constructor(
          * Only present for spend alerts.
          */
         fun groupKeyFilter(groupKeyFilter: GroupKeyFilter) = apply {
-            this.groupKeyFilter = groupKeyFilter
+            body.groupKeyFilter(groupKeyFilter)
         }
 
         /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
         fun invoiceTypesFilter(invoiceTypesFilter: List<String>) = apply {
-            this.invoiceTypesFilter.clear()
-            this.invoiceTypesFilter.addAll(invoiceTypesFilter)
+            body.invoiceTypesFilter(invoiceTypesFilter)
         }
 
         /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
         fun addInvoiceTypesFilter(invoiceTypesFilter: String) = apply {
-            this.invoiceTypesFilter.add(invoiceTypesFilter)
+            body.addInvoiceTypesFilter(invoiceTypesFilter)
         }
 
         /**
          * If provided, will create this alert for this specific plan. To create an alert for all
          * customers, do not specify `customer_id` or `plan_id`.
          */
-        fun planId(planId: String) = apply { this.planId = planId }
+        fun planId(planId: String) = apply { body.planId(planId) }
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
          * previously used uniqueness key, a new record will not be created and the request will
          * fail with a 409 error.
          */
-        fun uniquenessKey(uniquenessKey: String) = apply { this.uniquenessKey = uniquenessKey }
+        fun uniquenessKey(uniquenessKey: String) = apply { body.uniquenessKey(uniquenessKey) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -641,45 +647,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): AlertCreateParams =
             AlertCreateParams(
-                checkNotNull(alertType) { "`alertType` is required but was not set" },
-                checkNotNull(name) { "`name` is required but was not set" },
-                checkNotNull(threshold) { "`threshold` is required but was not set" },
-                billableMetricId,
-                creditGrantTypeFilters.toImmutable().ifEmpty { null },
-                creditTypeId,
-                customFieldFilters.toImmutable().ifEmpty { null },
-                customerId,
-                evaluateOnCreate,
-                groupKeyFilter,
-                invoiceTypesFilter.toImmutable().ifEmpty { null },
-                planId,
-                uniquenessKey,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -1100,11 +1090,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is AlertCreateParams && alertType == other.alertType && name == other.name && threshold == other.threshold && billableMetricId == other.billableMetricId && creditGrantTypeFilters == other.creditGrantTypeFilters && creditTypeId == other.creditTypeId && customFieldFilters == other.customFieldFilters && customerId == other.customerId && evaluateOnCreate == other.evaluateOnCreate && groupKeyFilter == other.groupKeyFilter && invoiceTypesFilter == other.invoiceTypesFilter && planId == other.planId && uniquenessKey == other.uniquenessKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is AlertCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertType, name, threshold, billableMetricId, creditGrantTypeFilters, creditTypeId, customFieldFilters, customerId, evaluateOnCreate, groupKeyFilter, invoiceTypesFilter, planId, uniquenessKey, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "AlertCreateParams{alertType=$alertType, name=$name, threshold=$threshold, billableMetricId=$billableMetricId, creditGrantTypeFilters=$creditGrantTypeFilters, creditTypeId=$creditTypeId, customFieldFilters=$customFieldFilters, customerId=$customerId, evaluateOnCreate=$evaluateOnCreate, groupKeyFilter=$groupKeyFilter, invoiceTypesFilter=$invoiceTypesFilter, planId=$planId, uniquenessKey=$uniquenessKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "AlertCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

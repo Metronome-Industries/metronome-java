@@ -19,49 +19,34 @@ import java.util.Optional
 
 class ContractScheduleProServicesInvoiceParams
 constructor(
-    private val contractId: String,
-    private val customerId: String,
-    private val issuedAt: OffsetDateTime,
-    private val lineItems: List<LineItem>,
-    private val netsuiteInvoiceHeaderEnd: OffsetDateTime?,
-    private val netsuiteInvoiceHeaderStart: OffsetDateTime?,
+    private val body: ContractScheduleProServicesInvoiceBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun contractId(): String = contractId
+    fun contractId(): String = body.contractId()
 
-    fun customerId(): String = customerId
+    fun customerId(): String = body.customerId()
 
-    fun issuedAt(): OffsetDateTime = issuedAt
+    /** The date the invoice is issued */
+    fun issuedAt(): OffsetDateTime = body.issuedAt()
 
-    fun lineItems(): List<LineItem> = lineItems
+    /** Each line requires an amount or both unit_price and quantity. */
+    fun lineItems(): List<LineItem> = body.lineItems()
 
-    fun netsuiteInvoiceHeaderEnd(): Optional<OffsetDateTime> =
-        Optional.ofNullable(netsuiteInvoiceHeaderEnd)
+    /** The end date of the invoice header in Netsuite */
+    fun netsuiteInvoiceHeaderEnd(): Optional<OffsetDateTime> = body.netsuiteInvoiceHeaderEnd()
 
-    fun netsuiteInvoiceHeaderStart(): Optional<OffsetDateTime> =
-        Optional.ofNullable(netsuiteInvoiceHeaderStart)
+    /** The start date of the invoice header in Netsuite */
+    fun netsuiteInvoiceHeaderStart(): Optional<OffsetDateTime> = body.netsuiteInvoiceHeaderStart()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractScheduleProServicesInvoiceBody {
-        return ContractScheduleProServicesInvoiceBody(
-            contractId,
-            customerId,
-            issuedAt,
-            lineItems,
-            netsuiteInvoiceHeaderEnd,
-            netsuiteInvoiceHeaderStart,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractScheduleProServicesInvoiceBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -119,7 +104,7 @@ constructor(
             private var contractId: String? = null
             private var customerId: String? = null
             private var issuedAt: OffsetDateTime? = null
-            private var lineItems: List<LineItem>? = null
+            private var lineItems: MutableList<LineItem>? = null
             private var netsuiteInvoiceHeaderEnd: OffsetDateTime? = null
             private var netsuiteInvoiceHeaderStart: OffsetDateTime? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -148,7 +133,14 @@ constructor(
             fun issuedAt(issuedAt: OffsetDateTime) = apply { this.issuedAt = issuedAt }
 
             /** Each line requires an amount or both unit_price and quantity. */
-            fun lineItems(lineItems: List<LineItem>) = apply { this.lineItems = lineItems }
+            fun lineItems(lineItems: List<LineItem>) = apply {
+                this.lineItems = lineItems.toMutableList()
+            }
+
+            /** Each line requires an amount or both unit_price and quantity. */
+            fun addLineItem(lineItem: LineItem) = apply {
+                lineItems = (lineItems ?: mutableListOf()).apply { add(lineItem) }
+            }
 
             /** The end date of the invoice header in Netsuite */
             fun netsuiteInvoiceHeaderEnd(netsuiteInvoiceHeaderEnd: OffsetDateTime) = apply {
@@ -220,60 +212,43 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var contractId: String? = null
-        private var customerId: String? = null
-        private var issuedAt: OffsetDateTime? = null
-        private var lineItems: MutableList<LineItem> = mutableListOf()
-        private var netsuiteInvoiceHeaderEnd: OffsetDateTime? = null
-        private var netsuiteInvoiceHeaderStart: OffsetDateTime? = null
+        private var body: ContractScheduleProServicesInvoiceBody.Builder =
+            ContractScheduleProServicesInvoiceBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(
             contractScheduleProServicesInvoiceParams: ContractScheduleProServicesInvoiceParams
         ) = apply {
-            contractId = contractScheduleProServicesInvoiceParams.contractId
-            customerId = contractScheduleProServicesInvoiceParams.customerId
-            issuedAt = contractScheduleProServicesInvoiceParams.issuedAt
-            lineItems = contractScheduleProServicesInvoiceParams.lineItems.toMutableList()
-            netsuiteInvoiceHeaderEnd =
-                contractScheduleProServicesInvoiceParams.netsuiteInvoiceHeaderEnd
-            netsuiteInvoiceHeaderStart =
-                contractScheduleProServicesInvoiceParams.netsuiteInvoiceHeaderStart
+            body = contractScheduleProServicesInvoiceParams.body.toBuilder()
             additionalHeaders =
                 contractScheduleProServicesInvoiceParams.additionalHeaders.toBuilder()
             additionalQueryParams =
                 contractScheduleProServicesInvoiceParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                contractScheduleProServicesInvoiceParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun contractId(contractId: String) = apply { this.contractId = contractId }
+        fun contractId(contractId: String) = apply { body.contractId(contractId) }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /** The date the invoice is issued */
-        fun issuedAt(issuedAt: OffsetDateTime) = apply { this.issuedAt = issuedAt }
+        fun issuedAt(issuedAt: OffsetDateTime) = apply { body.issuedAt(issuedAt) }
 
         /** Each line requires an amount or both unit_price and quantity. */
-        fun lineItems(lineItems: List<LineItem>) = apply {
-            this.lineItems.clear()
-            this.lineItems.addAll(lineItems)
-        }
+        fun lineItems(lineItems: List<LineItem>) = apply { body.lineItems(lineItems) }
 
         /** Each line requires an amount or both unit_price and quantity. */
-        fun addLineItem(lineItem: LineItem) = apply { this.lineItems.add(lineItem) }
+        fun addLineItem(lineItem: LineItem) = apply { body.addLineItem(lineItem) }
 
         /** The end date of the invoice header in Netsuite */
         fun netsuiteInvoiceHeaderEnd(netsuiteInvoiceHeaderEnd: OffsetDateTime) = apply {
-            this.netsuiteInvoiceHeaderEnd = netsuiteInvoiceHeaderEnd
+            body.netsuiteInvoiceHeaderEnd(netsuiteInvoiceHeaderEnd)
         }
 
         /** The start date of the invoice header in Netsuite */
         fun netsuiteInvoiceHeaderStart(netsuiteInvoiceHeaderStart: OffsetDateTime) = apply {
-            this.netsuiteInvoiceHeaderStart = netsuiteInvoiceHeaderStart
+            body.netsuiteInvoiceHeaderStart(netsuiteInvoiceHeaderStart)
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -375,38 +350,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractScheduleProServicesInvoiceParams =
             ContractScheduleProServicesInvoiceParams(
-                checkNotNull(contractId) { "`contractId` is required but was not set" },
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(issuedAt) { "`issuedAt` is required but was not set" },
-                lineItems.toImmutable(),
-                netsuiteInvoiceHeaderEnd,
-                netsuiteInvoiceHeaderStart,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -590,11 +556,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractScheduleProServicesInvoiceParams && contractId == other.contractId && customerId == other.customerId && issuedAt == other.issuedAt && lineItems == other.lineItems && netsuiteInvoiceHeaderEnd == other.netsuiteInvoiceHeaderEnd && netsuiteInvoiceHeaderStart == other.netsuiteInvoiceHeaderStart && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractScheduleProServicesInvoiceParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(contractId, customerId, issuedAt, lineItems, netsuiteInvoiceHeaderEnd, netsuiteInvoiceHeaderStart, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractScheduleProServicesInvoiceParams{contractId=$contractId, customerId=$customerId, issuedAt=$issuedAt, lineItems=$lineItems, netsuiteInvoiceHeaderEnd=$netsuiteInvoiceHeaderEnd, netsuiteInvoiceHeaderStart=$netsuiteInvoiceHeaderStart, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractScheduleProServicesInvoiceParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -21,16 +21,22 @@ constructor(
     private val additionalQueryParams: QueryParams,
 ) {
 
+    /** Filter the customer list by customer_id. Up to 100 ids can be provided. */
     fun customerIds(): Optional<List<String>> = Optional.ofNullable(customerIds)
 
+    /** Filter the customer list by ingest_alias */
     fun ingestAlias(): Optional<String> = Optional.ofNullable(ingestAlias)
 
+    /** Max number of results that should be returned */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
+    /** Filter the customer list by only archived customers. */
     fun onlyArchived(): Optional<Boolean> = Optional.ofNullable(onlyArchived)
 
+    /** Filter the customer list by salesforce_account_id. Up to 100 ids can be provided. */
     fun salesforceAccountIds(): Optional<List<String>> = Optional.ofNullable(salesforceAccountIds)
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -66,36 +72,36 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var customerIds: MutableList<String> = mutableListOf()
+        private var customerIds: MutableList<String>? = null
         private var ingestAlias: String? = null
         private var limit: Long? = null
         private var nextPage: String? = null
         private var onlyArchived: Boolean? = null
-        private var salesforceAccountIds: MutableList<String> = mutableListOf()
+        private var salesforceAccountIds: MutableList<String>? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(customerListParams: CustomerListParams) = apply {
-            customerIds = customerListParams.customerIds?.toMutableList() ?: mutableListOf()
+            customerIds = customerListParams.customerIds?.toMutableList()
             ingestAlias = customerListParams.ingestAlias
             limit = customerListParams.limit
             nextPage = customerListParams.nextPage
             onlyArchived = customerListParams.onlyArchived
-            salesforceAccountIds =
-                customerListParams.salesforceAccountIds?.toMutableList() ?: mutableListOf()
+            salesforceAccountIds = customerListParams.salesforceAccountIds?.toMutableList()
             additionalHeaders = customerListParams.additionalHeaders.toBuilder()
             additionalQueryParams = customerListParams.additionalQueryParams.toBuilder()
         }
 
         /** Filter the customer list by customer_id. Up to 100 ids can be provided. */
         fun customerIds(customerIds: List<String>) = apply {
-            this.customerIds.clear()
-            this.customerIds.addAll(customerIds)
+            this.customerIds = customerIds.toMutableList()
         }
 
         /** Filter the customer list by customer_id. Up to 100 ids can be provided. */
-        fun addCustomerId(customerId: String) = apply { this.customerIds.add(customerId) }
+        fun addCustomerId(customerId: String) = apply {
+            customerIds = (customerIds ?: mutableListOf()).apply { add(customerId) }
+        }
 
         /** Filter the customer list by ingest_alias */
         fun ingestAlias(ingestAlias: String) = apply { this.ingestAlias = ingestAlias }
@@ -111,13 +117,13 @@ constructor(
 
         /** Filter the customer list by salesforce_account_id. Up to 100 ids can be provided. */
         fun salesforceAccountIds(salesforceAccountIds: List<String>) = apply {
-            this.salesforceAccountIds.clear()
-            this.salesforceAccountIds.addAll(salesforceAccountIds)
+            this.salesforceAccountIds = salesforceAccountIds.toMutableList()
         }
 
         /** Filter the customer list by salesforce_account_id. Up to 100 ids can be provided. */
         fun addSalesforceAccountId(salesforceAccountId: String) = apply {
-            this.salesforceAccountIds.add(salesforceAccountId)
+            salesforceAccountIds =
+                (salesforceAccountIds ?: mutableListOf()).apply { add(salesforceAccountId) }
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -220,12 +226,12 @@ constructor(
 
         fun build(): CustomerListParams =
             CustomerListParams(
-                customerIds.toImmutable().ifEmpty { null },
+                customerIds?.toImmutable(),
                 ingestAlias,
                 limit,
                 nextPage,
                 onlyArchived,
-                salesforceAccountIds.toImmutable().ifEmpty { null },
+                salesforceAccountIds?.toImmutable(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )

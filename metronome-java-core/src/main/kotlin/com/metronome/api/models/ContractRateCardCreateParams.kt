@@ -19,48 +19,41 @@ import java.util.Optional
 
 class ContractRateCardCreateParams
 constructor(
-    private val name: String,
-    private val aliases: List<Alias>?,
-    private val creditTypeConversions: List<CreditTypeConversion>?,
-    private val customFields: CustomFields?,
-    private val description: String?,
-    private val fiatCreditTypeId: String?,
+    private val body: ContractRateCardCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun name(): String = name
+    /** Used only in UI/API. It is not exposed to end customers. */
+    fun name(): String = body.name()
 
-    fun aliases(): Optional<List<Alias>> = Optional.ofNullable(aliases)
+    /**
+     * Reference this alias when creating a contract. If the same alias is assigned to multiple rate
+     * cards, it will reference the rate card to which it was most recently assigned. It is not
+     * exposed to end customers.
+     */
+    fun aliases(): Optional<List<Alias>> = body.aliases()
 
-    fun creditTypeConversions(): Optional<List<CreditTypeConversion>> =
-        Optional.ofNullable(creditTypeConversions)
+    /** Required when using custom pricing units in rates. */
+    fun creditTypeConversions(): Optional<List<CreditTypeConversion>> = body.creditTypeConversions()
 
-    fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+    fun customFields(): Optional<CustomFields> = body.customFields()
 
-    fun description(): Optional<String> = Optional.ofNullable(description)
+    fun description(): Optional<String> = body.description()
 
-    fun fiatCreditTypeId(): Optional<String> = Optional.ofNullable(fiatCreditTypeId)
+    /**
+     * The Metronome ID of the credit type to associate with the rate card, defaults to USD (cents)
+     * if not passed.
+     */
+    fun fiatCreditTypeId(): Optional<String> = body.fiatCreditTypeId()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractRateCardCreateBody {
-        return ContractRateCardCreateBody(
-            name,
-            aliases,
-            creditTypeConversions,
-            customFields,
-            description,
-            fiatCreditTypeId,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractRateCardCreateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -123,8 +116,8 @@ constructor(
         class Builder {
 
             private var name: String? = null
-            private var aliases: List<Alias>? = null
-            private var creditTypeConversions: List<CreditTypeConversion>? = null
+            private var aliases: MutableList<Alias>? = null
+            private var creditTypeConversions: MutableList<CreditTypeConversion>? = null
             private var customFields: CustomFields? = null
             private var description: String? = null
             private var fiatCreditTypeId: String? = null
@@ -151,11 +144,26 @@ constructor(
              * multiple rate cards, it will reference the rate card to which it was most recently
              * assigned. It is not exposed to end customers.
              */
-            fun aliases(aliases: List<Alias>) = apply { this.aliases = aliases }
+            fun aliases(aliases: List<Alias>) = apply { this.aliases = aliases.toMutableList() }
+
+            /**
+             * Reference this alias when creating a contract. If the same alias is assigned to
+             * multiple rate cards, it will reference the rate card to which it was most recently
+             * assigned. It is not exposed to end customers.
+             */
+            fun addAlias(alias: Alias) = apply {
+                aliases = (aliases ?: mutableListOf()).apply { add(alias) }
+            }
 
             /** Required when using custom pricing units in rates. */
             fun creditTypeConversions(creditTypeConversions: List<CreditTypeConversion>) = apply {
-                this.creditTypeConversions = creditTypeConversions
+                this.creditTypeConversions = creditTypeConversions.toMutableList()
+            }
+
+            /** Required when using custom pricing units in rates. */
+            fun addCreditTypeConversion(creditTypeConversion: CreditTypeConversion) = apply {
+                creditTypeConversions =
+                    (creditTypeConversions ?: mutableListOf()).apply { add(creditTypeConversion) }
             }
 
             fun customFields(customFields: CustomFields) = apply {
@@ -231,73 +239,54 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var name: String? = null
-        private var aliases: MutableList<Alias> = mutableListOf()
-        private var creditTypeConversions: MutableList<CreditTypeConversion> = mutableListOf()
-        private var customFields: CustomFields? = null
-        private var description: String? = null
-        private var fiatCreditTypeId: String? = null
+        private var body: ContractRateCardCreateBody.Builder = ContractRateCardCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractRateCardCreateParams: ContractRateCardCreateParams) = apply {
-            name = contractRateCardCreateParams.name
-            aliases = contractRateCardCreateParams.aliases?.toMutableList() ?: mutableListOf()
-            creditTypeConversions =
-                contractRateCardCreateParams.creditTypeConversions?.toMutableList()
-                    ?: mutableListOf()
-            customFields = contractRateCardCreateParams.customFields
-            description = contractRateCardCreateParams.description
-            fiatCreditTypeId = contractRateCardCreateParams.fiatCreditTypeId
+            body = contractRateCardCreateParams.body.toBuilder()
             additionalHeaders = contractRateCardCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = contractRateCardCreateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                contractRateCardCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Used only in UI/API. It is not exposed to end customers. */
-        fun name(name: String) = apply { this.name = name }
+        fun name(name: String) = apply { body.name(name) }
 
         /**
          * Reference this alias when creating a contract. If the same alias is assigned to multiple
          * rate cards, it will reference the rate card to which it was most recently assigned. It is
          * not exposed to end customers.
          */
-        fun aliases(aliases: List<Alias>) = apply {
-            this.aliases.clear()
-            this.aliases.addAll(aliases)
-        }
+        fun aliases(aliases: List<Alias>) = apply { body.aliases(aliases) }
 
         /**
          * Reference this alias when creating a contract. If the same alias is assigned to multiple
          * rate cards, it will reference the rate card to which it was most recently assigned. It is
          * not exposed to end customers.
          */
-        fun addAlias(alias: Alias) = apply { this.aliases.add(alias) }
+        fun addAlias(alias: Alias) = apply { body.addAlias(alias) }
 
         /** Required when using custom pricing units in rates. */
         fun creditTypeConversions(creditTypeConversions: List<CreditTypeConversion>) = apply {
-            this.creditTypeConversions.clear()
-            this.creditTypeConversions.addAll(creditTypeConversions)
+            body.creditTypeConversions(creditTypeConversions)
         }
 
         /** Required when using custom pricing units in rates. */
         fun addCreditTypeConversion(creditTypeConversion: CreditTypeConversion) = apply {
-            this.creditTypeConversions.add(creditTypeConversion)
+            body.addCreditTypeConversion(creditTypeConversion)
         }
 
-        fun customFields(customFields: CustomFields) = apply { this.customFields = customFields }
+        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
 
-        fun description(description: String) = apply { this.description = description }
+        fun description(description: String) = apply { body.description(description) }
 
         /**
          * The Metronome ID of the credit type to associate with the rate card, defaults to USD
          * (cents) if not passed.
          */
         fun fiatCreditTypeId(fiatCreditTypeId: String) = apply {
-            this.fiatCreditTypeId = fiatCreditTypeId
+            body.fiatCreditTypeId(fiatCreditTypeId)
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -399,38 +388,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractRateCardCreateParams =
             ContractRateCardCreateParams(
-                checkNotNull(name) { "`name` is required but was not set" },
-                aliases.toImmutable().ifEmpty { null },
-                creditTypeConversions.toImmutable().ifEmpty { null },
-                customFields,
-                description,
-                fiatCreditTypeId,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -701,11 +681,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardCreateParams && name == other.name && aliases == other.aliases && creditTypeConversions == other.creditTypeConversions && customFields == other.customFields && description == other.description && fiatCreditTypeId == other.fiatCreditTypeId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(name, aliases, creditTypeConversions, customFields, description, fiatCreditTypeId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractRateCardCreateParams{name=$name, aliases=$aliases, creditTypeConversions=$creditTypeConversions, customFields=$customFields, description=$description, fiatCreditTypeId=$fiatCreditTypeId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractRateCardCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

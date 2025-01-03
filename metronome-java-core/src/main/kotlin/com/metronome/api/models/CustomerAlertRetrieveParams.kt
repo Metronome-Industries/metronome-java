@@ -17,31 +17,24 @@ import java.util.Objects
 
 class CustomerAlertRetrieveParams
 constructor(
-    private val alertId: String,
-    private val customerId: String,
+    private val body: CustomerAlertRetrieveBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun alertId(): String = alertId
+    /** The Metronome ID of the alert */
+    fun alertId(): String = body.alertId()
 
-    fun customerId(): String = customerId
+    /** The Metronome ID of the customer */
+    fun customerId(): String = body.customerId()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomerAlertRetrieveBody {
-        return CustomerAlertRetrieveBody(
-            alertId,
-            customerId,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomerAlertRetrieveBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -148,27 +141,22 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var alertId: String? = null
-        private var customerId: String? = null
+        private var body: CustomerAlertRetrieveBody.Builder = CustomerAlertRetrieveBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerAlertRetrieveParams: CustomerAlertRetrieveParams) = apply {
-            alertId = customerAlertRetrieveParams.alertId
-            customerId = customerAlertRetrieveParams.customerId
+            body = customerAlertRetrieveParams.body.toBuilder()
             additionalHeaders = customerAlertRetrieveParams.additionalHeaders.toBuilder()
             additionalQueryParams = customerAlertRetrieveParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                customerAlertRetrieveParams.additionalBodyProperties.toMutableMap()
         }
 
         /** The Metronome ID of the alert */
-        fun alertId(alertId: String) = apply { this.alertId = alertId }
+        fun alertId(alertId: String) = apply { body.alertId(alertId) }
 
         /** The Metronome ID of the customer */
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -269,34 +257,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerAlertRetrieveParams =
             CustomerAlertRetrieveParams(
-                checkNotNull(alertId) { "`alertId` is required but was not set" },
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -305,11 +288,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerAlertRetrieveParams && alertId == other.alertId && customerId == other.customerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerAlertRetrieveParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertId, customerId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomerAlertRetrieveParams{alertId=$alertId, customerId=$customerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerAlertRetrieveParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

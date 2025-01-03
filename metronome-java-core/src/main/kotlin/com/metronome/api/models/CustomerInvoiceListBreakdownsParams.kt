@@ -32,22 +32,41 @@ constructor(
 
     fun customerId(): String = customerId
 
+    /**
+     * RFC 3339 timestamp. Breakdowns will only be returned for time windows that end on or before
+     * this time.
+     */
     fun endingBefore(): OffsetDateTime = endingBefore
 
+    /**
+     * RFC 3339 timestamp. Breakdowns will only be returned for time windows that start on or after
+     * this time.
+     */
     fun startingOn(): OffsetDateTime = startingOn
 
+    /** Only return invoices for the specified credit type */
     fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
 
+    /**
+     * Max number of results that should be returned. For daily breakdowns, the response can return
+     * up to 35 days worth of breakdowns. For hourly breakdowns, the response can return up to 24
+     * hours. If there are more results, a cursor to the next page is returned.
+     */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
+    /** If set, all zero quantity line items will be filtered out of the response */
     fun skipZeroQtyLineItems(): Optional<Boolean> = Optional.ofNullable(skipZeroQtyLineItems)
 
+    /** Invoice sort order by issued_at, e.g. date_asc or date_desc. Defaults to date_asc. */
     fun sort(): Optional<Sort> = Optional.ofNullable(sort)
 
+    /** Invoice status, e.g. DRAFT or FINALIZED */
     fun status(): Optional<String> = Optional.ofNullable(status)
 
+    /** The granularity of the breakdowns to return. Defaults to day. */
     fun windowSize(): Optional<WindowSize> = Optional.ofNullable(windowSize)
 
     fun _additionalHeaders(): Headers = additionalHeaders

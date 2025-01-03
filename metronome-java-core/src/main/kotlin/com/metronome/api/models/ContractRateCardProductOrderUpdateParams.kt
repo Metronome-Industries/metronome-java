@@ -17,31 +17,23 @@ import java.util.Objects
 
 class ContractRateCardProductOrderUpdateParams
 constructor(
-    private val productMoves: List<ProductMove>,
-    private val rateCardId: String,
+    private val body: ContractRateCardProductOrderUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun productMoves(): List<ProductMove> = productMoves
+    fun productMoves(): List<ProductMove> = body.productMoves()
 
-    fun rateCardId(): String = rateCardId
+    /** ID of the rate card to update */
+    fun rateCardId(): String = body.rateCardId()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): ContractRateCardProductOrderUpdateBody {
-        return ContractRateCardProductOrderUpdateBody(
-            productMoves,
-            rateCardId,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): ContractRateCardProductOrderUpdateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -75,7 +67,7 @@ constructor(
 
         class Builder {
 
-            private var productMoves: List<ProductMove>? = null
+            private var productMoves: MutableList<ProductMove>? = null
             private var rateCardId: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -90,7 +82,11 @@ constructor(
             }
 
             fun productMoves(productMoves: List<ProductMove>) = apply {
-                this.productMoves = productMoves
+                this.productMoves = productMoves.toMutableList()
+            }
+
+            fun addProductMove(productMove: ProductMove) = apply {
+                productMoves = (productMoves ?: mutableListOf()).apply { add(productMove) }
             }
 
             /** ID of the rate card to update */
@@ -152,35 +148,30 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var productMoves: MutableList<ProductMove> = mutableListOf()
-        private var rateCardId: String? = null
+        private var body: ContractRateCardProductOrderUpdateBody.Builder =
+            ContractRateCardProductOrderUpdateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(
             contractRateCardProductOrderUpdateParams: ContractRateCardProductOrderUpdateParams
         ) = apply {
-            productMoves = contractRateCardProductOrderUpdateParams.productMoves.toMutableList()
-            rateCardId = contractRateCardProductOrderUpdateParams.rateCardId
+            body = contractRateCardProductOrderUpdateParams.body.toBuilder()
             additionalHeaders =
                 contractRateCardProductOrderUpdateParams.additionalHeaders.toBuilder()
             additionalQueryParams =
                 contractRateCardProductOrderUpdateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                contractRateCardProductOrderUpdateParams.additionalBodyProperties.toMutableMap()
         }
 
         fun productMoves(productMoves: List<ProductMove>) = apply {
-            this.productMoves.clear()
-            this.productMoves.addAll(productMoves)
+            body.productMoves(productMoves)
         }
 
-        fun addProductMove(productMove: ProductMove) = apply { this.productMoves.add(productMove) }
+        fun addProductMove(productMove: ProductMove) = apply { body.addProductMove(productMove) }
 
         /** ID of the rate card to update */
-        fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
+        fun rateCardId(rateCardId: String) = apply { body.rateCardId(rateCardId) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -281,34 +272,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractRateCardProductOrderUpdateParams =
             ContractRateCardProductOrderUpdateParams(
-                productMoves.toImmutable(),
-                checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -408,11 +394,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardProductOrderUpdateParams && productMoves == other.productMoves && rateCardId == other.rateCardId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardProductOrderUpdateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(productMoves, rateCardId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractRateCardProductOrderUpdateParams{productMoves=$productMoves, rateCardId=$rateCardId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ContractRateCardProductOrderUpdateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

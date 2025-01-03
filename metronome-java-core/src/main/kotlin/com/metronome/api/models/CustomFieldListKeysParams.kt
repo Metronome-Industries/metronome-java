@@ -22,26 +22,24 @@ import java.util.Optional
 class CustomFieldListKeysParams
 constructor(
     private val nextPage: String?,
-    private val entities: List<Entity>?,
+    private val body: CustomFieldListKeysBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
+    /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
-    fun entities(): Optional<List<Entity>> = Optional.ofNullable(entities)
+    /** Optional list of entity types to return keys for */
+    fun entities(): Optional<List<Entity>> = body.entities()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomFieldListKeysBody {
-        return CustomFieldListKeysBody(entities, additionalBodyProperties)
-    }
+    @JvmSynthetic internal fun getBody(): CustomFieldListKeysBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -79,7 +77,7 @@ constructor(
 
         class Builder {
 
-            private var entities: List<Entity>? = null
+            private var entities: MutableList<Entity>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -89,7 +87,14 @@ constructor(
             }
 
             /** Optional list of entity types to return keys for */
-            fun entities(entities: List<Entity>) = apply { this.entities = entities }
+            fun entities(entities: List<Entity>) = apply {
+                this.entities = entities.toMutableList()
+            }
+
+            /** Optional list of entity types to return keys for */
+            fun addEntity(entity: Entity) = apply {
+                entities = (entities ?: mutableListOf()).apply { add(entity) }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -143,32 +148,26 @@ constructor(
     class Builder {
 
         private var nextPage: String? = null
-        private var entities: MutableList<Entity> = mutableListOf()
+        private var body: CustomFieldListKeysBody.Builder = CustomFieldListKeysBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customFieldListKeysParams: CustomFieldListKeysParams) = apply {
             nextPage = customFieldListKeysParams.nextPage
-            entities = customFieldListKeysParams.entities?.toMutableList() ?: mutableListOf()
+            body = customFieldListKeysParams.body.toBuilder()
             additionalHeaders = customFieldListKeysParams.additionalHeaders.toBuilder()
             additionalQueryParams = customFieldListKeysParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                customFieldListKeysParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Cursor that indicates where the next page of results should start. */
         fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
 
         /** Optional list of entity types to return keys for */
-        fun entities(entities: List<Entity>) = apply {
-            this.entities.clear()
-            this.entities.addAll(entities)
-        }
+        fun entities(entities: List<Entity>) = apply { body.entities(entities) }
 
         /** Optional list of entity types to return keys for */
-        fun addEntity(entity: Entity) = apply { this.entities.add(entity) }
+        fun addEntity(entity: Entity) = apply { body.addEntity(entity) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -269,34 +268,30 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomFieldListKeysParams =
             CustomFieldListKeysParams(
                 nextPage,
-                entities.toImmutable().ifEmpty { null },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -446,11 +441,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomFieldListKeysParams && nextPage == other.nextPage && entities == other.entities && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomFieldListKeysParams && nextPage == other.nextPage && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(nextPage, entities, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(nextPage, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomFieldListKeysParams{nextPage=$nextPage, entities=$entities, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomFieldListKeysParams{nextPage=$nextPage, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

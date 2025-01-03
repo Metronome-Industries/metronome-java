@@ -30,79 +30,69 @@ import java.util.Optional
 
 class CreditGrantCreateParams
 constructor(
-    private val customerId: String,
-    private val expiresAt: OffsetDateTime,
-    private val grantAmount: GrantAmount,
-    private val name: String,
-    private val paidAmount: PaidAmount,
-    private val priority: Double,
-    private val creditGrantType: String?,
-    private val customFields: CustomFields?,
-    private val effectiveAt: OffsetDateTime?,
-    private val invoiceDate: OffsetDateTime?,
-    private val productIds: List<String>?,
-    private val reason: String?,
-    private val rolloverSettings: RolloverSettings?,
-    private val uniquenessKey: String?,
+    private val body: CreditGrantCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun customerId(): String = customerId
+    /** the Metronome ID of the customer */
+    fun customerId(): String = body.customerId()
 
-    fun expiresAt(): OffsetDateTime = expiresAt
+    /** The credit grant will only apply to usage or charges dated before this timestamp */
+    fun expiresAt(): OffsetDateTime = body.expiresAt()
 
-    fun grantAmount(): GrantAmount = grantAmount
+    /** the amount of credits granted */
+    fun grantAmount(): GrantAmount = body.grantAmount()
 
-    fun name(): String = name
+    /** the name of the credit grant as it will appear on invoices */
+    fun name(): String = body.name()
 
-    fun paidAmount(): PaidAmount = paidAmount
+    /** the amount paid for this credit grant */
+    fun paidAmount(): PaidAmount = body.paidAmount()
 
-    fun priority(): Double = priority
+    fun priority(): Double = body.priority()
 
-    fun creditGrantType(): Optional<String> = Optional.ofNullable(creditGrantType)
+    fun creditGrantType(): Optional<String> = body.creditGrantType()
 
-    fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+    /** Custom fields to attach to the credit grant. */
+    fun customFields(): Optional<CustomFields> = body.customFields()
 
-    fun effectiveAt(): Optional<OffsetDateTime> = Optional.ofNullable(effectiveAt)
+    /** The credit grant will only apply to usage or charges dated on or after this timestamp */
+    fun effectiveAt(): Optional<OffsetDateTime> = body.effectiveAt()
 
-    fun invoiceDate(): Optional<OffsetDateTime> = Optional.ofNullable(invoiceDate)
+    /** The date to issue an invoice for the paid_amount. */
+    fun invoiceDate(): Optional<OffsetDateTime> = body.invoiceDate()
 
-    fun productIds(): Optional<List<String>> = Optional.ofNullable(productIds)
+    /**
+     * The product(s) which these credits will be applied to. (If unspecified, the credits will be
+     * applied to charges for all products.). The array ordering specified here will be used to
+     * determine the order in which credits will be applied to invoice line items
+     */
+    fun productIds(): Optional<List<String>> = body.productIds()
 
-    fun reason(): Optional<String> = Optional.ofNullable(reason)
+    fun reason(): Optional<String> = body.reason()
 
-    fun rolloverSettings(): Optional<RolloverSettings> = Optional.ofNullable(rolloverSettings)
+    /**
+     * Configure a rollover for this credit grant so if it expires it rolls over a configured amount
+     * to a new credit grant. This feature is currently opt-in only. Contact Metronome to be added
+     * to the beta.
+     */
+    fun rolloverSettings(): Optional<RolloverSettings> = body.rolloverSettings()
 
-    fun uniquenessKey(): Optional<String> = Optional.ofNullable(uniquenessKey)
+    /**
+     * Prevents the creation of duplicates. If a request to create a record is made with a
+     * previously used uniqueness key, a new record will not be created and the request will fail
+     * with a 409 error.
+     */
+    fun uniquenessKey(): Optional<String> = body.uniquenessKey()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): CreditGrantCreateBody {
-        return CreditGrantCreateBody(
-            customerId,
-            expiresAt,
-            grantAmount,
-            name,
-            paidAmount,
-            priority,
-            creditGrantType,
-            customFields,
-            effectiveAt,
-            invoiceDate,
-            productIds,
-            reason,
-            rolloverSettings,
-            uniquenessKey,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CreditGrantCreateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -211,7 +201,7 @@ constructor(
             private var customFields: CustomFields? = null
             private var effectiveAt: OffsetDateTime? = null
             private var invoiceDate: OffsetDateTime? = null
-            private var productIds: List<String>? = null
+            private var productIds: MutableList<String>? = null
             private var reason: String? = null
             private var rolloverSettings: RolloverSettings? = null
             private var uniquenessKey: String? = null
@@ -275,7 +265,18 @@ constructor(
              * will be applied to charges for all products.). The array ordering specified here will
              * be used to determine the order in which credits will be applied to invoice line items
              */
-            fun productIds(productIds: List<String>) = apply { this.productIds = productIds }
+            fun productIds(productIds: List<String>) = apply {
+                this.productIds = productIds.toMutableList()
+            }
+
+            /**
+             * The product(s) which these credits will be applied to. (If unspecified, the credits
+             * will be applied to charges for all products.). The array ordering specified here will
+             * be used to determine the order in which credits will be applied to invoice line items
+             */
+            fun addProductId(productId: String) = apply {
+                productIds = (productIds ?: mutableListOf()).apply { add(productId) }
+            }
 
             fun reason(reason: String) = apply { this.reason = reason }
 
@@ -362,94 +363,62 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var customerId: String? = null
-        private var expiresAt: OffsetDateTime? = null
-        private var grantAmount: GrantAmount? = null
-        private var name: String? = null
-        private var paidAmount: PaidAmount? = null
-        private var priority: Double? = null
-        private var creditGrantType: String? = null
-        private var customFields: CustomFields? = null
-        private var effectiveAt: OffsetDateTime? = null
-        private var invoiceDate: OffsetDateTime? = null
-        private var productIds: MutableList<String> = mutableListOf()
-        private var reason: String? = null
-        private var rolloverSettings: RolloverSettings? = null
-        private var uniquenessKey: String? = null
+        private var body: CreditGrantCreateBody.Builder = CreditGrantCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(creditGrantCreateParams: CreditGrantCreateParams) = apply {
-            customerId = creditGrantCreateParams.customerId
-            expiresAt = creditGrantCreateParams.expiresAt
-            grantAmount = creditGrantCreateParams.grantAmount
-            name = creditGrantCreateParams.name
-            paidAmount = creditGrantCreateParams.paidAmount
-            priority = creditGrantCreateParams.priority
-            creditGrantType = creditGrantCreateParams.creditGrantType
-            customFields = creditGrantCreateParams.customFields
-            effectiveAt = creditGrantCreateParams.effectiveAt
-            invoiceDate = creditGrantCreateParams.invoiceDate
-            productIds = creditGrantCreateParams.productIds?.toMutableList() ?: mutableListOf()
-            reason = creditGrantCreateParams.reason
-            rolloverSettings = creditGrantCreateParams.rolloverSettings
-            uniquenessKey = creditGrantCreateParams.uniquenessKey
+            body = creditGrantCreateParams.body.toBuilder()
             additionalHeaders = creditGrantCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = creditGrantCreateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                creditGrantCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** the Metronome ID of the customer */
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /** The credit grant will only apply to usage or charges dated before this timestamp */
-        fun expiresAt(expiresAt: OffsetDateTime) = apply { this.expiresAt = expiresAt }
+        fun expiresAt(expiresAt: OffsetDateTime) = apply { body.expiresAt(expiresAt) }
 
         /** the amount of credits granted */
-        fun grantAmount(grantAmount: GrantAmount) = apply { this.grantAmount = grantAmount }
+        fun grantAmount(grantAmount: GrantAmount) = apply { body.grantAmount(grantAmount) }
 
         /** the name of the credit grant as it will appear on invoices */
-        fun name(name: String) = apply { this.name = name }
+        fun name(name: String) = apply { body.name(name) }
 
         /** the amount paid for this credit grant */
-        fun paidAmount(paidAmount: PaidAmount) = apply { this.paidAmount = paidAmount }
+        fun paidAmount(paidAmount: PaidAmount) = apply { body.paidAmount(paidAmount) }
 
-        fun priority(priority: Double) = apply { this.priority = priority }
+        fun priority(priority: Double) = apply { body.priority(priority) }
 
         fun creditGrantType(creditGrantType: String) = apply {
-            this.creditGrantType = creditGrantType
+            body.creditGrantType(creditGrantType)
         }
 
         /** Custom fields to attach to the credit grant. */
-        fun customFields(customFields: CustomFields) = apply { this.customFields = customFields }
+        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
 
         /** The credit grant will only apply to usage or charges dated on or after this timestamp */
-        fun effectiveAt(effectiveAt: OffsetDateTime) = apply { this.effectiveAt = effectiveAt }
+        fun effectiveAt(effectiveAt: OffsetDateTime) = apply { body.effectiveAt(effectiveAt) }
 
         /** The date to issue an invoice for the paid_amount. */
-        fun invoiceDate(invoiceDate: OffsetDateTime) = apply { this.invoiceDate = invoiceDate }
+        fun invoiceDate(invoiceDate: OffsetDateTime) = apply { body.invoiceDate(invoiceDate) }
 
         /**
          * The product(s) which these credits will be applied to. (If unspecified, the credits will
          * be applied to charges for all products.). The array ordering specified here will be used
          * to determine the order in which credits will be applied to invoice line items
          */
-        fun productIds(productIds: List<String>) = apply {
-            this.productIds.clear()
-            this.productIds.addAll(productIds)
-        }
+        fun productIds(productIds: List<String>) = apply { body.productIds(productIds) }
 
         /**
          * The product(s) which these credits will be applied to. (If unspecified, the credits will
          * be applied to charges for all products.). The array ordering specified here will be used
          * to determine the order in which credits will be applied to invoice line items
          */
-        fun addProductId(productId: String) = apply { this.productIds.add(productId) }
+        fun addProductId(productId: String) = apply { body.addProductId(productId) }
 
-        fun reason(reason: String) = apply { this.reason = reason }
+        fun reason(reason: String) = apply { body.reason(reason) }
 
         /**
          * Configure a rollover for this credit grant so if it expires it rolls over a configured
@@ -457,7 +426,7 @@ constructor(
          * be added to the beta.
          */
         fun rolloverSettings(rolloverSettings: RolloverSettings) = apply {
-            this.rolloverSettings = rolloverSettings
+            body.rolloverSettings(rolloverSettings)
         }
 
         /**
@@ -465,7 +434,7 @@ constructor(
          * previously used uniqueness key, a new record will not be created and the request will
          * fail with a 409 error.
          */
-        fun uniquenessKey(uniquenessKey: String) = apply { this.uniquenessKey = uniquenessKey }
+        fun uniquenessKey(uniquenessKey: String) = apply { body.uniquenessKey(uniquenessKey) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -566,46 +535,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CreditGrantCreateParams =
             CreditGrantCreateParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(expiresAt) { "`expiresAt` is required but was not set" },
-                checkNotNull(grantAmount) { "`grantAmount` is required but was not set" },
-                checkNotNull(name) { "`name` is required but was not set" },
-                checkNotNull(paidAmount) { "`paidAmount` is required but was not set" },
-                checkNotNull(priority) { "`priority` is required but was not set" },
-                creditGrantType,
-                customFields,
-                effectiveAt,
-                invoiceDate,
-                productIds.toImmutable().ifEmpty { null },
-                reason,
-                rolloverSettings,
-                uniquenessKey,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -924,6 +876,16 @@ constructor(
                 this.rolloverAmount = rolloverAmount
             }
 
+            fun rolloverAmount(rolloverAmountMaxPercentage: RolloverAmountMaxPercentage) = apply {
+                this.rolloverAmount =
+                    RolloverAmount.ofRolloverAmountMaxPercentage(rolloverAmountMaxPercentage)
+            }
+
+            fun rolloverAmount(rolloverAmountMaxAmount: RolloverAmountMaxAmount) = apply {
+                this.rolloverAmount =
+                    RolloverAmount.ofRolloverAmountMaxAmount(rolloverAmountMaxAmount)
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -1094,11 +1056,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditGrantCreateParams && customerId == other.customerId && expiresAt == other.expiresAt && grantAmount == other.grantAmount && name == other.name && paidAmount == other.paidAmount && priority == other.priority && creditGrantType == other.creditGrantType && customFields == other.customFields && effectiveAt == other.effectiveAt && invoiceDate == other.invoiceDate && productIds == other.productIds && reason == other.reason && rolloverSettings == other.rolloverSettings && uniquenessKey == other.uniquenessKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CreditGrantCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, expiresAt, grantAmount, name, paidAmount, priority, creditGrantType, customFields, effectiveAt, invoiceDate, productIds, reason, rolloverSettings, uniquenessKey, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CreditGrantCreateParams{customerId=$customerId, expiresAt=$expiresAt, grantAmount=$grantAmount, name=$name, paidAmount=$paidAmount, priority=$priority, creditGrantType=$creditGrantType, customFields=$customFields, effectiveAt=$effectiveAt, invoiceDate=$invoiceDate, productIds=$productIds, reason=$reason, rolloverSettings=$rolloverSettings, uniquenessKey=$uniquenessKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CreditGrantCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
