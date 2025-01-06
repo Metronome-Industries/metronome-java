@@ -112,30 +112,30 @@ private constructor(
     class Data
     @JsonCreator
     private constructor(
+        @JsonProperty("enforce_uniqueness")
+        @ExcludeMissing
+        private val enforceUniqueness: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("entity")
         @ExcludeMissing
         private val entity: JsonField<Entity> = JsonMissing.of(),
         @JsonProperty("key") @ExcludeMissing private val key: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("enforce_uniqueness")
-        @ExcludeMissing
-        private val enforceUniqueness: JsonField<Boolean> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
+
+        fun enforceUniqueness(): Boolean = enforceUniqueness.getRequired("enforce_uniqueness")
 
         fun entity(): Entity = entity.getRequired("entity")
 
         fun key(): String = key.getRequired("key")
 
-        fun enforceUniqueness(): Boolean = enforceUniqueness.getRequired("enforce_uniqueness")
+        @JsonProperty("enforce_uniqueness")
+        @ExcludeMissing
+        fun _enforceUniqueness() = enforceUniqueness
 
         @JsonProperty("entity") @ExcludeMissing fun _entity() = entity
 
         @JsonProperty("key") @ExcludeMissing fun _key() = key
-
-        @JsonProperty("enforce_uniqueness")
-        @ExcludeMissing
-        fun _enforceUniqueness() = enforceUniqueness
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -145,9 +145,9 @@ private constructor(
 
         fun validate(): Data = apply {
             if (!validated) {
+                enforceUniqueness()
                 entity()
                 key()
-                enforceUniqueness()
                 validated = true
             }
         }
@@ -161,17 +161,24 @@ private constructor(
 
         class Builder {
 
+            private var enforceUniqueness: JsonField<Boolean> = JsonMissing.of()
             private var entity: JsonField<Entity> = JsonMissing.of()
             private var key: JsonField<String> = JsonMissing.of()
-            private var enforceUniqueness: JsonField<Boolean> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(data: Data) = apply {
+                enforceUniqueness = data.enforceUniqueness
                 entity = data.entity
                 key = data.key
-                enforceUniqueness = data.enforceUniqueness
                 additionalProperties = data.additionalProperties.toMutableMap()
+            }
+
+            fun enforceUniqueness(enforceUniqueness: Boolean) =
+                enforceUniqueness(JsonField.of(enforceUniqueness))
+
+            fun enforceUniqueness(enforceUniqueness: JsonField<Boolean>) = apply {
+                this.enforceUniqueness = enforceUniqueness
             }
 
             fun entity(entity: Entity) = entity(JsonField.of(entity))
@@ -181,13 +188,6 @@ private constructor(
             fun key(key: String) = key(JsonField.of(key))
 
             fun key(key: JsonField<String>) = apply { this.key = key }
-
-            fun enforceUniqueness(enforceUniqueness: Boolean) =
-                enforceUniqueness(JsonField.of(enforceUniqueness))
-
-            fun enforceUniqueness(enforceUniqueness: JsonField<Boolean>) = apply {
-                this.enforceUniqueness = enforceUniqueness
-            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -210,9 +210,9 @@ private constructor(
 
             fun build(): Data =
                 Data(
+                    enforceUniqueness,
                     entity,
                     key,
-                    enforceUniqueness,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -363,17 +363,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && entity == other.entity && key == other.key && enforceUniqueness == other.enforceUniqueness && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && enforceUniqueness == other.enforceUniqueness && entity == other.entity && key == other.key && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(entity, key, enforceUniqueness, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(enforceUniqueness, entity, key, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Data{entity=$entity, key=$key, enforceUniqueness=$enforceUniqueness, additionalProperties=$additionalProperties}"
+            "Data{enforceUniqueness=$enforceUniqueness, entity=$entity, key=$key, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

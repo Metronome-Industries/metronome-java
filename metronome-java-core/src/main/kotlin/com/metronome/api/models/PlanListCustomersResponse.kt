@@ -117,6 +117,12 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("customer_plan_id")
+        @ExcludeMissing
+        private val customerPlanId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("name")
         @ExcludeMissing
         private val name: JsonField<String> = JsonMissing.of(),
@@ -126,17 +132,15 @@ private constructor(
         @JsonProperty("ending_before")
         @ExcludeMissing
         private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("custom_fields")
-        @ExcludeMissing
-        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
-        @JsonProperty("customer_plan_id")
-        @ExcludeMissing
-        private val customerPlanId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun id(): String = id.getRequired("id")
+
+        fun customFields(): CustomFields = customFields.getRequired("custom_fields")
+
+        fun customerPlanId(): String = customerPlanId.getRequired("customer_plan_id")
 
         fun name(): String = name.getRequired("name")
 
@@ -147,11 +151,11 @@ private constructor(
         fun endingBefore(): Optional<OffsetDateTime> =
             Optional.ofNullable(endingBefore.getNullable("ending_before"))
 
-        fun customFields(): CustomFields = customFields.getRequired("custom_fields")
-
-        fun customerPlanId(): String = customerPlanId.getRequired("customer_plan_id")
-
         @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+        @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+
+        @JsonProperty("customer_plan_id") @ExcludeMissing fun _customerPlanId() = customerPlanId
 
         @JsonProperty("name") @ExcludeMissing fun _name() = name
 
@@ -160,10 +164,6 @@ private constructor(
 
         /** The end date of the plan */
         @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
-
-        @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
-
-        @JsonProperty("customer_plan_id") @ExcludeMissing fun _customerPlanId() = customerPlanId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -174,11 +174,11 @@ private constructor(
         fun validate(): PlanDetails = apply {
             if (!validated) {
                 id()
+                customFields().validate()
+                customerPlanId()
                 name()
                 startingOn()
                 endingBefore()
-                customFields().validate()
-                customerPlanId()
                 validated = true
             }
         }
@@ -193,27 +193,40 @@ private constructor(
         class Builder {
 
             private var id: JsonField<String> = JsonMissing.of()
+            private var customFields: JsonField<CustomFields> = JsonMissing.of()
+            private var customerPlanId: JsonField<String> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var startingOn: JsonField<OffsetDateTime> = JsonMissing.of()
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var customFields: JsonField<CustomFields> = JsonMissing.of()
-            private var customerPlanId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(planDetails: PlanDetails) = apply {
                 id = planDetails.id
+                customFields = planDetails.customFields
+                customerPlanId = planDetails.customerPlanId
                 name = planDetails.name
                 startingOn = planDetails.startingOn
                 endingBefore = planDetails.endingBefore
-                customFields = planDetails.customFields
-                customerPlanId = planDetails.customerPlanId
                 additionalProperties = planDetails.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
 
             fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+
+            fun customFields(customFields: JsonField<CustomFields>) = apply {
+                this.customFields = customFields
+            }
+
+            fun customerPlanId(customerPlanId: String) =
+                customerPlanId(JsonField.of(customerPlanId))
+
+            fun customerPlanId(customerPlanId: JsonField<String>) = apply {
+                this.customerPlanId = customerPlanId
+            }
 
             fun name(name: String) = name(JsonField.of(name))
 
@@ -234,19 +247,6 @@ private constructor(
             /** The end date of the plan */
             fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
-            }
-
-            fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
-
-            fun customFields(customFields: JsonField<CustomFields>) = apply {
-                this.customFields = customFields
-            }
-
-            fun customerPlanId(customerPlanId: String) =
-                customerPlanId(JsonField.of(customerPlanId))
-
-            fun customerPlanId(customerPlanId: JsonField<String>) = apply {
-                this.customerPlanId = customerPlanId
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -271,11 +271,11 @@ private constructor(
             fun build(): PlanDetails =
                 PlanDetails(
                     id,
+                    customFields,
+                    customerPlanId,
                     name,
                     startingOn,
                     endingBefore,
-                    customFields,
-                    customerPlanId,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -363,17 +363,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is PlanDetails && id == other.id && name == other.name && startingOn == other.startingOn && endingBefore == other.endingBefore && customFields == other.customFields && customerPlanId == other.customerPlanId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is PlanDetails && id == other.id && customFields == other.customFields && customerPlanId == other.customerPlanId && name == other.name && startingOn == other.startingOn && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, name, startingOn, endingBefore, customFields, customerPlanId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, customFields, customerPlanId, name, startingOn, endingBefore, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "PlanDetails{id=$id, name=$name, startingOn=$startingOn, endingBefore=$endingBefore, customFields=$customFields, customerPlanId=$customerPlanId, additionalProperties=$additionalProperties}"
+            "PlanDetails{id=$id, customFields=$customFields, customerPlanId=$customerPlanId, name=$name, startingOn=$startingOn, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

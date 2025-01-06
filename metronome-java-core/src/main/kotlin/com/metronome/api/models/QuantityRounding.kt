@@ -26,22 +26,22 @@ import java.util.Objects
 class QuantityRounding
 @JsonCreator
 private constructor(
-    @JsonProperty("rounding_method")
-    @ExcludeMissing
-    private val roundingMethod: JsonField<RoundingMethod> = JsonMissing.of(),
     @JsonProperty("decimal_places")
     @ExcludeMissing
     private val decimalPlaces: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("rounding_method")
+    @ExcludeMissing
+    private val roundingMethod: JsonField<RoundingMethod> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    fun roundingMethod(): RoundingMethod = roundingMethod.getRequired("rounding_method")
-
     fun decimalPlaces(): Double = decimalPlaces.getRequired("decimal_places")
 
-    @JsonProperty("rounding_method") @ExcludeMissing fun _roundingMethod() = roundingMethod
+    fun roundingMethod(): RoundingMethod = roundingMethod.getRequired("rounding_method")
 
     @JsonProperty("decimal_places") @ExcludeMissing fun _decimalPlaces() = decimalPlaces
+
+    @JsonProperty("rounding_method") @ExcludeMissing fun _roundingMethod() = roundingMethod
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -51,8 +51,8 @@ private constructor(
 
     fun validate(): QuantityRounding = apply {
         if (!validated) {
-            roundingMethod()
             decimalPlaces()
+            roundingMethod()
             validated = true
         }
     }
@@ -66,15 +66,21 @@ private constructor(
 
     class Builder {
 
-        private var roundingMethod: JsonField<RoundingMethod> = JsonMissing.of()
         private var decimalPlaces: JsonField<Double> = JsonMissing.of()
+        private var roundingMethod: JsonField<RoundingMethod> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(quantityRounding: QuantityRounding) = apply {
-            roundingMethod = quantityRounding.roundingMethod
             decimalPlaces = quantityRounding.decimalPlaces
+            roundingMethod = quantityRounding.roundingMethod
             additionalProperties = quantityRounding.additionalProperties.toMutableMap()
+        }
+
+        fun decimalPlaces(decimalPlaces: Double) = decimalPlaces(JsonField.of(decimalPlaces))
+
+        fun decimalPlaces(decimalPlaces: JsonField<Double>) = apply {
+            this.decimalPlaces = decimalPlaces
         }
 
         fun roundingMethod(roundingMethod: RoundingMethod) =
@@ -82,12 +88,6 @@ private constructor(
 
         fun roundingMethod(roundingMethod: JsonField<RoundingMethod>) = apply {
             this.roundingMethod = roundingMethod
-        }
-
-        fun decimalPlaces(decimalPlaces: Double) = decimalPlaces(JsonField.of(decimalPlaces))
-
-        fun decimalPlaces(decimalPlaces: JsonField<Double>) = apply {
-            this.decimalPlaces = decimalPlaces
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -111,8 +111,8 @@ private constructor(
 
         fun build(): QuantityRounding =
             QuantityRounding(
-                roundingMethod,
                 decimalPlaces,
+                roundingMethod,
                 additionalProperties.toImmutable(),
             )
     }
@@ -185,15 +185,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is QuantityRounding && roundingMethod == other.roundingMethod && decimalPlaces == other.decimalPlaces && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is QuantityRounding && decimalPlaces == other.decimalPlaces && roundingMethod == other.roundingMethod && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(roundingMethod, decimalPlaces, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(decimalPlaces, roundingMethod, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "QuantityRounding{roundingMethod=$roundingMethod, decimalPlaces=$decimalPlaces, additionalProperties=$additionalProperties}"
+        "QuantityRounding{decimalPlaces=$decimalPlaces, roundingMethod=$roundingMethod, additionalProperties=$additionalProperties}"
 }

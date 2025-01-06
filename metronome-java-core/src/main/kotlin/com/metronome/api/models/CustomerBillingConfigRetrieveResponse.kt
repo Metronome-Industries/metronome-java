@@ -96,50 +96,36 @@ private constructor(
     class Data
     @JsonCreator
     private constructor(
-        @JsonProperty("billing_provider_customer_id")
+        @JsonProperty("aws_expiration_date")
         @ExcludeMissing
-        private val billingProviderCustomerId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("stripe_collection_method")
-        @ExcludeMissing
-        private val stripeCollectionMethod: JsonField<StripeCollectionMethod> = JsonMissing.of(),
+        private val awsExpirationDate: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("aws_product_code")
         @ExcludeMissing
         private val awsProductCode: JsonField<String> = JsonMissing.of(),
         @JsonProperty("aws_region")
         @ExcludeMissing
         private val awsRegion: JsonField<AwsRegion> = JsonMissing.of(),
-        @JsonProperty("aws_expiration_date")
+        @JsonProperty("azure_expiration_date")
         @ExcludeMissing
-        private val awsExpirationDate: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("azure_subscription_status")
-        @ExcludeMissing
-        private val azureSubscriptionStatus: JsonField<AzureSubscriptionStatus> = JsonMissing.of(),
+        private val azureExpirationDate: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("azure_plan_id")
         @ExcludeMissing
         private val azurePlanId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("azure_start_date")
         @ExcludeMissing
         private val azureStartDate: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("azure_expiration_date")
+        @JsonProperty("azure_subscription_status")
         @ExcludeMissing
-        private val azureExpirationDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+        private val azureSubscriptionStatus: JsonField<AzureSubscriptionStatus> = JsonMissing.of(),
+        @JsonProperty("billing_provider_customer_id")
+        @ExcludeMissing
+        private val billingProviderCustomerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("stripe_collection_method")
+        @ExcludeMissing
+        private val stripeCollectionMethod: JsonField<StripeCollectionMethod> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
-
-        fun billingProviderCustomerId(): Optional<String> =
-            Optional.ofNullable(
-                billingProviderCustomerId.getNullable("billing_provider_customer_id")
-            )
-
-        fun stripeCollectionMethod(): Optional<StripeCollectionMethod> =
-            Optional.ofNullable(stripeCollectionMethod.getNullable("stripe_collection_method"))
-
-        fun awsProductCode(): Optional<String> =
-            Optional.ofNullable(awsProductCode.getNullable("aws_product_code"))
-
-        fun awsRegion(): Optional<AwsRegion> =
-            Optional.ofNullable(awsRegion.getNullable("aws_region"))
 
         /**
          * Contract expiration date for the customer. The expected format is RFC 3339 and can be
@@ -149,8 +135,19 @@ private constructor(
         fun awsExpirationDate(): Optional<OffsetDateTime> =
             Optional.ofNullable(awsExpirationDate.getNullable("aws_expiration_date"))
 
-        fun azureSubscriptionStatus(): Optional<AzureSubscriptionStatus> =
-            Optional.ofNullable(azureSubscriptionStatus.getNullable("azure_subscription_status"))
+        fun awsProductCode(): Optional<String> =
+            Optional.ofNullable(awsProductCode.getNullable("aws_product_code"))
+
+        fun awsRegion(): Optional<AwsRegion> =
+            Optional.ofNullable(awsRegion.getNullable("aws_region"))
+
+        /**
+         * Subscription term start/end date for the customer. The expected format is RFC 3339 and
+         * can be retrieved from
+         * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
+         */
+        fun azureExpirationDate(): Optional<OffsetDateTime> =
+            Optional.ofNullable(azureExpirationDate.getNullable("azure_expiration_date"))
 
         fun azurePlanId(): Optional<String> =
             Optional.ofNullable(azurePlanId.getNullable("azure_plan_id"))
@@ -163,25 +160,16 @@ private constructor(
         fun azureStartDate(): Optional<OffsetDateTime> =
             Optional.ofNullable(azureStartDate.getNullable("azure_start_date"))
 
-        /**
-         * Subscription term start/end date for the customer. The expected format is RFC 3339 and
-         * can be retrieved from
-         * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
-         */
-        fun azureExpirationDate(): Optional<OffsetDateTime> =
-            Optional.ofNullable(azureExpirationDate.getNullable("azure_expiration_date"))
+        fun azureSubscriptionStatus(): Optional<AzureSubscriptionStatus> =
+            Optional.ofNullable(azureSubscriptionStatus.getNullable("azure_subscription_status"))
 
-        @JsonProperty("billing_provider_customer_id")
-        @ExcludeMissing
-        fun _billingProviderCustomerId() = billingProviderCustomerId
+        fun billingProviderCustomerId(): Optional<String> =
+            Optional.ofNullable(
+                billingProviderCustomerId.getNullable("billing_provider_customer_id")
+            )
 
-        @JsonProperty("stripe_collection_method")
-        @ExcludeMissing
-        fun _stripeCollectionMethod() = stripeCollectionMethod
-
-        @JsonProperty("aws_product_code") @ExcludeMissing fun _awsProductCode() = awsProductCode
-
-        @JsonProperty("aws_region") @ExcludeMissing fun _awsRegion() = awsRegion
+        fun stripeCollectionMethod(): Optional<StripeCollectionMethod> =
+            Optional.ofNullable(stripeCollectionMethod.getNullable("stripe_collection_method"))
 
         /**
          * Contract expiration date for the customer. The expected format is RFC 3339 and can be
@@ -192,18 +180,9 @@ private constructor(
         @ExcludeMissing
         fun _awsExpirationDate() = awsExpirationDate
 
-        @JsonProperty("azure_subscription_status")
-        @ExcludeMissing
-        fun _azureSubscriptionStatus() = azureSubscriptionStatus
+        @JsonProperty("aws_product_code") @ExcludeMissing fun _awsProductCode() = awsProductCode
 
-        @JsonProperty("azure_plan_id") @ExcludeMissing fun _azurePlanId() = azurePlanId
-
-        /**
-         * Subscription term start/end date for the customer. The expected format is RFC 3339 and
-         * can be retrieved from
-         * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
-         */
-        @JsonProperty("azure_start_date") @ExcludeMissing fun _azureStartDate() = azureStartDate
+        @JsonProperty("aws_region") @ExcludeMissing fun _awsRegion() = awsRegion
 
         /**
          * Subscription term start/end date for the customer. The expected format is RFC 3339 and
@@ -214,6 +193,27 @@ private constructor(
         @ExcludeMissing
         fun _azureExpirationDate() = azureExpirationDate
 
+        @JsonProperty("azure_plan_id") @ExcludeMissing fun _azurePlanId() = azurePlanId
+
+        /**
+         * Subscription term start/end date for the customer. The expected format is RFC 3339 and
+         * can be retrieved from
+         * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
+         */
+        @JsonProperty("azure_start_date") @ExcludeMissing fun _azureStartDate() = azureStartDate
+
+        @JsonProperty("azure_subscription_status")
+        @ExcludeMissing
+        fun _azureSubscriptionStatus() = azureSubscriptionStatus
+
+        @JsonProperty("billing_provider_customer_id")
+        @ExcludeMissing
+        fun _billingProviderCustomerId() = billingProviderCustomerId
+
+        @JsonProperty("stripe_collection_method")
+        @ExcludeMissing
+        fun _stripeCollectionMethod() = stripeCollectionMethod
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -222,15 +222,15 @@ private constructor(
 
         fun validate(): Data = apply {
             if (!validated) {
-                billingProviderCustomerId()
-                stripeCollectionMethod()
+                awsExpirationDate()
                 awsProductCode()
                 awsRegion()
-                awsExpirationDate()
-                azureSubscriptionStatus()
+                azureExpirationDate()
                 azurePlanId()
                 azureStartDate()
-                azureExpirationDate()
+                azureSubscriptionStatus()
+                billingProviderCustomerId()
+                stripeCollectionMethod()
                 validated = true
             }
         }
@@ -244,57 +244,31 @@ private constructor(
 
         class Builder {
 
-            private var billingProviderCustomerId: JsonField<String> = JsonMissing.of()
-            private var stripeCollectionMethod: JsonField<StripeCollectionMethod> = JsonMissing.of()
+            private var awsExpirationDate: JsonField<OffsetDateTime> = JsonMissing.of()
             private var awsProductCode: JsonField<String> = JsonMissing.of()
             private var awsRegion: JsonField<AwsRegion> = JsonMissing.of()
-            private var awsExpirationDate: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var azureSubscriptionStatus: JsonField<AzureSubscriptionStatus> =
-                JsonMissing.of()
+            private var azureExpirationDate: JsonField<OffsetDateTime> = JsonMissing.of()
             private var azurePlanId: JsonField<String> = JsonMissing.of()
             private var azureStartDate: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var azureExpirationDate: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var azureSubscriptionStatus: JsonField<AzureSubscriptionStatus> =
+                JsonMissing.of()
+            private var billingProviderCustomerId: JsonField<String> = JsonMissing.of()
+            private var stripeCollectionMethod: JsonField<StripeCollectionMethod> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(data: Data) = apply {
-                billingProviderCustomerId = data.billingProviderCustomerId
-                stripeCollectionMethod = data.stripeCollectionMethod
+                awsExpirationDate = data.awsExpirationDate
                 awsProductCode = data.awsProductCode
                 awsRegion = data.awsRegion
-                awsExpirationDate = data.awsExpirationDate
-                azureSubscriptionStatus = data.azureSubscriptionStatus
+                azureExpirationDate = data.azureExpirationDate
                 azurePlanId = data.azurePlanId
                 azureStartDate = data.azureStartDate
-                azureExpirationDate = data.azureExpirationDate
+                azureSubscriptionStatus = data.azureSubscriptionStatus
+                billingProviderCustomerId = data.billingProviderCustomerId
+                stripeCollectionMethod = data.stripeCollectionMethod
                 additionalProperties = data.additionalProperties.toMutableMap()
             }
-
-            fun billingProviderCustomerId(billingProviderCustomerId: String) =
-                billingProviderCustomerId(JsonField.of(billingProviderCustomerId))
-
-            fun billingProviderCustomerId(billingProviderCustomerId: JsonField<String>) = apply {
-                this.billingProviderCustomerId = billingProviderCustomerId
-            }
-
-            fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) =
-                stripeCollectionMethod(JsonField.of(stripeCollectionMethod))
-
-            fun stripeCollectionMethod(stripeCollectionMethod: JsonField<StripeCollectionMethod>) =
-                apply {
-                    this.stripeCollectionMethod = stripeCollectionMethod
-                }
-
-            fun awsProductCode(awsProductCode: String) =
-                awsProductCode(JsonField.of(awsProductCode))
-
-            fun awsProductCode(awsProductCode: JsonField<String>) = apply {
-                this.awsProductCode = awsProductCode
-            }
-
-            fun awsRegion(awsRegion: AwsRegion) = awsRegion(JsonField.of(awsRegion))
-
-            fun awsRegion(awsRegion: JsonField<AwsRegion>) = apply { this.awsRegion = awsRegion }
 
             /**
              * Contract expiration date for the customer. The expected format is RFC 3339 and can be
@@ -313,12 +287,33 @@ private constructor(
                 this.awsExpirationDate = awsExpirationDate
             }
 
-            fun azureSubscriptionStatus(azureSubscriptionStatus: AzureSubscriptionStatus) =
-                azureSubscriptionStatus(JsonField.of(azureSubscriptionStatus))
+            fun awsProductCode(awsProductCode: String) =
+                awsProductCode(JsonField.of(awsProductCode))
 
-            fun azureSubscriptionStatus(
-                azureSubscriptionStatus: JsonField<AzureSubscriptionStatus>
-            ) = apply { this.azureSubscriptionStatus = azureSubscriptionStatus }
+            fun awsProductCode(awsProductCode: JsonField<String>) = apply {
+                this.awsProductCode = awsProductCode
+            }
+
+            fun awsRegion(awsRegion: AwsRegion) = awsRegion(JsonField.of(awsRegion))
+
+            fun awsRegion(awsRegion: JsonField<AwsRegion>) = apply { this.awsRegion = awsRegion }
+
+            /**
+             * Subscription term start/end date for the customer. The expected format is RFC 3339
+             * and can be retrieved from
+             * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
+             */
+            fun azureExpirationDate(azureExpirationDate: OffsetDateTime) =
+                azureExpirationDate(JsonField.of(azureExpirationDate))
+
+            /**
+             * Subscription term start/end date for the customer. The expected format is RFC 3339
+             * and can be retrieved from
+             * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
+             */
+            fun azureExpirationDate(azureExpirationDate: JsonField<OffsetDateTime>) = apply {
+                this.azureExpirationDate = azureExpirationDate
+            }
 
             fun azurePlanId(azurePlanId: String) = azurePlanId(JsonField.of(azurePlanId))
 
@@ -343,22 +338,27 @@ private constructor(
                 this.azureStartDate = azureStartDate
             }
 
-            /**
-             * Subscription term start/end date for the customer. The expected format is RFC 3339
-             * and can be retrieved from
-             * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
-             */
-            fun azureExpirationDate(azureExpirationDate: OffsetDateTime) =
-                azureExpirationDate(JsonField.of(azureExpirationDate))
+            fun azureSubscriptionStatus(azureSubscriptionStatus: AzureSubscriptionStatus) =
+                azureSubscriptionStatus(JsonField.of(azureSubscriptionStatus))
 
-            /**
-             * Subscription term start/end date for the customer. The expected format is RFC 3339
-             * and can be retrieved from
-             * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
-             */
-            fun azureExpirationDate(azureExpirationDate: JsonField<OffsetDateTime>) = apply {
-                this.azureExpirationDate = azureExpirationDate
+            fun azureSubscriptionStatus(
+                azureSubscriptionStatus: JsonField<AzureSubscriptionStatus>
+            ) = apply { this.azureSubscriptionStatus = azureSubscriptionStatus }
+
+            fun billingProviderCustomerId(billingProviderCustomerId: String) =
+                billingProviderCustomerId(JsonField.of(billingProviderCustomerId))
+
+            fun billingProviderCustomerId(billingProviderCustomerId: JsonField<String>) = apply {
+                this.billingProviderCustomerId = billingProviderCustomerId
             }
+
+            fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) =
+                stripeCollectionMethod(JsonField.of(stripeCollectionMethod))
+
+            fun stripeCollectionMethod(stripeCollectionMethod: JsonField<StripeCollectionMethod>) =
+                apply {
+                    this.stripeCollectionMethod = stripeCollectionMethod
+                }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -381,15 +381,15 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    billingProviderCustomerId,
-                    stripeCollectionMethod,
+                    awsExpirationDate,
                     awsProductCode,
                     awsRegion,
-                    awsExpirationDate,
-                    azureSubscriptionStatus,
+                    azureExpirationDate,
                     azurePlanId,
                     azureStartDate,
-                    azureExpirationDate,
+                    azureSubscriptionStatus,
+                    billingProviderCustomerId,
+                    stripeCollectionMethod,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -726,17 +726,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && billingProviderCustomerId == other.billingProviderCustomerId && stripeCollectionMethod == other.stripeCollectionMethod && awsProductCode == other.awsProductCode && awsRegion == other.awsRegion && awsExpirationDate == other.awsExpirationDate && azureSubscriptionStatus == other.azureSubscriptionStatus && azurePlanId == other.azurePlanId && azureStartDate == other.azureStartDate && azureExpirationDate == other.azureExpirationDate && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && awsExpirationDate == other.awsExpirationDate && awsProductCode == other.awsProductCode && awsRegion == other.awsRegion && azureExpirationDate == other.azureExpirationDate && azurePlanId == other.azurePlanId && azureStartDate == other.azureStartDate && azureSubscriptionStatus == other.azureSubscriptionStatus && billingProviderCustomerId == other.billingProviderCustomerId && stripeCollectionMethod == other.stripeCollectionMethod && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(billingProviderCustomerId, stripeCollectionMethod, awsProductCode, awsRegion, awsExpirationDate, azureSubscriptionStatus, azurePlanId, azureStartDate, azureExpirationDate, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(awsExpirationDate, awsProductCode, awsRegion, azureExpirationDate, azurePlanId, azureStartDate, azureSubscriptionStatus, billingProviderCustomerId, stripeCollectionMethod, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Data{billingProviderCustomerId=$billingProviderCustomerId, stripeCollectionMethod=$stripeCollectionMethod, awsProductCode=$awsProductCode, awsRegion=$awsRegion, awsExpirationDate=$awsExpirationDate, azureSubscriptionStatus=$azureSubscriptionStatus, azurePlanId=$azurePlanId, azureStartDate=$azureStartDate, azureExpirationDate=$azureExpirationDate, additionalProperties=$additionalProperties}"
+            "Data{awsExpirationDate=$awsExpirationDate, awsProductCode=$awsProductCode, awsRegion=$awsRegion, azureExpirationDate=$azureExpirationDate, azurePlanId=$azurePlanId, azureStartDate=$azureStartDate, azureSubscriptionStatus=$azureSubscriptionStatus, billingProviderCustomerId=$billingProviderCustomerId, stripeCollectionMethod=$stripeCollectionMethod, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

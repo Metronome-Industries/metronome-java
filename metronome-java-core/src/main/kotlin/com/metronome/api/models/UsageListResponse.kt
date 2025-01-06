@@ -111,21 +111,21 @@ private constructor(
     class Data
     @JsonCreator
     private constructor(
-        @JsonProperty("customer_id")
-        @ExcludeMissing
-        private val customerId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("billable_metric_id")
         @ExcludeMissing
         private val billableMetricId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("billable_metric_name")
         @ExcludeMissing
         private val billableMetricName: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("start_timestamp")
+        @JsonProperty("customer_id")
         @ExcludeMissing
-        private val startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+        private val customerId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("end_timestamp")
         @ExcludeMissing
         private val endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("start_timestamp")
+        @ExcludeMissing
+        private val startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("value")
         @ExcludeMissing
         private val value: JsonField<Double> = JsonMissing.of(),
@@ -136,15 +136,15 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        fun customerId(): String = customerId.getRequired("customer_id")
-
         fun billableMetricId(): String = billableMetricId.getRequired("billable_metric_id")
 
         fun billableMetricName(): String = billableMetricName.getRequired("billable_metric_name")
 
-        fun startTimestamp(): OffsetDateTime = startTimestamp.getRequired("start_timestamp")
+        fun customerId(): String = customerId.getRequired("customer_id")
 
         fun endTimestamp(): OffsetDateTime = endTimestamp.getRequired("end_timestamp")
+
+        fun startTimestamp(): OffsetDateTime = startTimestamp.getRequired("start_timestamp")
 
         fun value(): Optional<Double> = Optional.ofNullable(value.getNullable("value"))
 
@@ -154,8 +154,6 @@ private constructor(
          */
         fun groups(): Optional<Groups> = Optional.ofNullable(groups.getNullable("groups"))
 
-        @JsonProperty("customer_id") @ExcludeMissing fun _customerId() = customerId
-
         @JsonProperty("billable_metric_id")
         @ExcludeMissing
         fun _billableMetricId() = billableMetricId
@@ -164,9 +162,11 @@ private constructor(
         @ExcludeMissing
         fun _billableMetricName() = billableMetricName
 
-        @JsonProperty("start_timestamp") @ExcludeMissing fun _startTimestamp() = startTimestamp
+        @JsonProperty("customer_id") @ExcludeMissing fun _customerId() = customerId
 
         @JsonProperty("end_timestamp") @ExcludeMissing fun _endTimestamp() = endTimestamp
+
+        @JsonProperty("start_timestamp") @ExcludeMissing fun _startTimestamp() = startTimestamp
 
         @JsonProperty("value") @ExcludeMissing fun _value() = value
 
@@ -184,11 +184,11 @@ private constructor(
 
         fun validate(): Data = apply {
             if (!validated) {
-                customerId()
                 billableMetricId()
                 billableMetricName()
-                startTimestamp()
+                customerId()
                 endTimestamp()
+                startTimestamp()
                 value()
                 groups().map { it.validate() }
                 validated = true
@@ -204,30 +204,26 @@ private constructor(
 
         class Builder {
 
-            private var customerId: JsonField<String> = JsonMissing.of()
             private var billableMetricId: JsonField<String> = JsonMissing.of()
             private var billableMetricName: JsonField<String> = JsonMissing.of()
-            private var startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var customerId: JsonField<String> = JsonMissing.of()
             private var endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
             private var value: JsonField<Double> = JsonMissing.of()
             private var groups: JsonField<Groups> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(data: Data) = apply {
-                customerId = data.customerId
                 billableMetricId = data.billableMetricId
                 billableMetricName = data.billableMetricName
-                startTimestamp = data.startTimestamp
+                customerId = data.customerId
                 endTimestamp = data.endTimestamp
+                startTimestamp = data.startTimestamp
                 value = data.value
                 groups = data.groups
                 additionalProperties = data.additionalProperties.toMutableMap()
             }
-
-            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
-
-            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             fun billableMetricId(billableMetricId: String) =
                 billableMetricId(JsonField.of(billableMetricId))
@@ -243,18 +239,22 @@ private constructor(
                 this.billableMetricName = billableMetricName
             }
 
-            fun startTimestamp(startTimestamp: OffsetDateTime) =
-                startTimestamp(JsonField.of(startTimestamp))
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
 
-            fun startTimestamp(startTimestamp: JsonField<OffsetDateTime>) = apply {
-                this.startTimestamp = startTimestamp
-            }
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             fun endTimestamp(endTimestamp: OffsetDateTime) =
                 endTimestamp(JsonField.of(endTimestamp))
 
             fun endTimestamp(endTimestamp: JsonField<OffsetDateTime>) = apply {
                 this.endTimestamp = endTimestamp
+            }
+
+            fun startTimestamp(startTimestamp: OffsetDateTime) =
+                startTimestamp(JsonField.of(startTimestamp))
+
+            fun startTimestamp(startTimestamp: JsonField<OffsetDateTime>) = apply {
+                this.startTimestamp = startTimestamp
             }
 
             fun value(value: Double) = value(JsonField.of(value))
@@ -294,11 +294,11 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    customerId,
                     billableMetricId,
                     billableMetricName,
-                    startTimestamp,
+                    customerId,
                     endTimestamp,
+                    startTimestamp,
                     value,
                     groups,
                     additionalProperties.toImmutable(),
@@ -392,17 +392,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && customerId == other.customerId && billableMetricId == other.billableMetricId && billableMetricName == other.billableMetricName && startTimestamp == other.startTimestamp && endTimestamp == other.endTimestamp && value == other.value && groups == other.groups && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && billableMetricId == other.billableMetricId && billableMetricName == other.billableMetricName && customerId == other.customerId && endTimestamp == other.endTimestamp && startTimestamp == other.startTimestamp && value == other.value && groups == other.groups && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(customerId, billableMetricId, billableMetricName, startTimestamp, endTimestamp, value, groups, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(billableMetricId, billableMetricName, customerId, endTimestamp, startTimestamp, value, groups, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Data{customerId=$customerId, billableMetricId=$billableMetricId, billableMetricName=$billableMetricName, startTimestamp=$startTimestamp, endTimestamp=$endTimestamp, value=$value, groups=$groups, additionalProperties=$additionalProperties}"
+            "Data{billableMetricId=$billableMetricId, billableMetricName=$billableMetricName, customerId=$customerId, endTimestamp=$endTimestamp, startTimestamp=$startTimestamp, value=$value, groups=$groups, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

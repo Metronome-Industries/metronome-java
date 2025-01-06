@@ -300,44 +300,44 @@ constructor(
     class Invoice
     @JsonCreator
     private constructor(
-        @JsonProperty("customer_id") private val customerId: String,
         @JsonProperty("contract_id") private val contractId: String,
         @JsonProperty("credit_type_id") private val creditTypeId: String,
-        @JsonProperty("inclusive_start_date") private val inclusiveStartDate: OffsetDateTime,
+        @JsonProperty("customer_id") private val customerId: String,
         @JsonProperty("exclusive_end_date") private val exclusiveEndDate: OffsetDateTime,
+        @JsonProperty("inclusive_start_date") private val inclusiveStartDate: OffsetDateTime,
         @JsonProperty("issue_date") private val issueDate: OffsetDateTime,
-        @JsonProperty("breakdown_granularity")
-        private val breakdownGranularity: BreakdownGranularity?,
         @JsonProperty("usage_line_items") private val usageLineItems: List<UsageLineItem>,
         @JsonProperty("billable_status") private val billableStatus: BillableStatus?,
+        @JsonProperty("breakdown_granularity")
+        private val breakdownGranularity: BreakdownGranularity?,
         @JsonProperty("custom_fields") private val customFields: CustomFields?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("customer_id") fun customerId(): String = customerId
-
         @JsonProperty("contract_id") fun contractId(): String = contractId
 
         @JsonProperty("credit_type_id") fun creditTypeId(): String = creditTypeId
 
-        @JsonProperty("inclusive_start_date")
-        fun inclusiveStartDate(): OffsetDateTime = inclusiveStartDate
+        @JsonProperty("customer_id") fun customerId(): String = customerId
 
         @JsonProperty("exclusive_end_date")
         fun exclusiveEndDate(): OffsetDateTime = exclusiveEndDate
 
-        @JsonProperty("issue_date") fun issueDate(): OffsetDateTime = issueDate
+        @JsonProperty("inclusive_start_date")
+        fun inclusiveStartDate(): OffsetDateTime = inclusiveStartDate
 
-        @JsonProperty("breakdown_granularity")
-        fun breakdownGranularity(): Optional<BreakdownGranularity> =
-            Optional.ofNullable(breakdownGranularity)
+        @JsonProperty("issue_date") fun issueDate(): OffsetDateTime = issueDate
 
         @JsonProperty("usage_line_items") fun usageLineItems(): List<UsageLineItem> = usageLineItems
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("billable_status")
         fun billableStatus(): Optional<BillableStatus> = Optional.ofNullable(billableStatus)
+
+        @JsonProperty("breakdown_granularity")
+        fun breakdownGranularity(): Optional<BreakdownGranularity> =
+            Optional.ofNullable(breakdownGranularity)
 
         @JsonProperty("custom_fields")
         fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
@@ -355,52 +355,48 @@ constructor(
 
         class Builder {
 
-            private var customerId: String? = null
             private var contractId: String? = null
             private var creditTypeId: String? = null
-            private var inclusiveStartDate: OffsetDateTime? = null
+            private var customerId: String? = null
             private var exclusiveEndDate: OffsetDateTime? = null
+            private var inclusiveStartDate: OffsetDateTime? = null
             private var issueDate: OffsetDateTime? = null
-            private var breakdownGranularity: BreakdownGranularity? = null
             private var usageLineItems: MutableList<UsageLineItem>? = null
             private var billableStatus: BillableStatus? = null
+            private var breakdownGranularity: BreakdownGranularity? = null
             private var customFields: CustomFields? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(invoice: Invoice) = apply {
-                customerId = invoice.customerId
                 contractId = invoice.contractId
                 creditTypeId = invoice.creditTypeId
-                inclusiveStartDate = invoice.inclusiveStartDate
+                customerId = invoice.customerId
                 exclusiveEndDate = invoice.exclusiveEndDate
+                inclusiveStartDate = invoice.inclusiveStartDate
                 issueDate = invoice.issueDate
-                breakdownGranularity = invoice.breakdownGranularity
                 usageLineItems = invoice.usageLineItems.toMutableList()
                 billableStatus = invoice.billableStatus
+                breakdownGranularity = invoice.breakdownGranularity
                 customFields = invoice.customFields
                 additionalProperties = invoice.additionalProperties.toMutableMap()
             }
-
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             fun contractId(contractId: String) = apply { this.contractId = contractId }
 
             fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
-            fun inclusiveStartDate(inclusiveStartDate: OffsetDateTime) = apply {
-                this.inclusiveStartDate = inclusiveStartDate
-            }
+            fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             fun exclusiveEndDate(exclusiveEndDate: OffsetDateTime) = apply {
                 this.exclusiveEndDate = exclusiveEndDate
             }
 
-            fun issueDate(issueDate: OffsetDateTime) = apply { this.issueDate = issueDate }
-
-            fun breakdownGranularity(breakdownGranularity: BreakdownGranularity) = apply {
-                this.breakdownGranularity = breakdownGranularity
+            fun inclusiveStartDate(inclusiveStartDate: OffsetDateTime) = apply {
+                this.inclusiveStartDate = inclusiveStartDate
             }
+
+            fun issueDate(issueDate: OffsetDateTime) = apply { this.issueDate = issueDate }
 
             fun usageLineItems(usageLineItems: List<UsageLineItem>) = apply {
                 this.usageLineItems = usageLineItems.toMutableList()
@@ -413,6 +409,10 @@ constructor(
             /** This field's availability is dependent on your client's configuration. */
             fun billableStatus(billableStatus: BillableStatus) = apply {
                 this.billableStatus = billableStatus
+            }
+
+            fun breakdownGranularity(breakdownGranularity: BreakdownGranularity) = apply {
+                this.breakdownGranularity = breakdownGranularity
             }
 
             fun customFields(customFields: CustomFields) = apply {
@@ -440,20 +440,20 @@ constructor(
 
             fun build(): Invoice =
                 Invoice(
-                    checkNotNull(customerId) { "`customerId` is required but was not set" },
                     checkNotNull(contractId) { "`contractId` is required but was not set" },
                     checkNotNull(creditTypeId) { "`creditTypeId` is required but was not set" },
-                    checkNotNull(inclusiveStartDate) {
-                        "`inclusiveStartDate` is required but was not set"
-                    },
+                    checkNotNull(customerId) { "`customerId` is required but was not set" },
                     checkNotNull(exclusiveEndDate) {
                         "`exclusiveEndDate` is required but was not set"
                     },
+                    checkNotNull(inclusiveStartDate) {
+                        "`inclusiveStartDate` is required but was not set"
+                    },
                     checkNotNull(issueDate) { "`issueDate` is required but was not set" },
-                    breakdownGranularity,
                     checkNotNull(usageLineItems) { "`usageLineItems` is required but was not set" }
                         .toImmutable(),
                     billableStatus,
+                    breakdownGranularity,
                     customFields,
                     additionalProperties.toImmutable(),
                 )
@@ -463,38 +463,38 @@ constructor(
         class UsageLineItem
         @JsonCreator
         private constructor(
-            @JsonProperty("product_id") private val productId: String,
-            @JsonProperty("inclusive_start_date") private val inclusiveStartDate: OffsetDateTime,
             @JsonProperty("exclusive_end_date") private val exclusiveEndDate: OffsetDateTime,
-            @JsonProperty("quantity") private val quantity: Double?,
-            @JsonProperty("pricing_group_values")
-            private val pricingGroupValues: PricingGroupValues?,
+            @JsonProperty("inclusive_start_date") private val inclusiveStartDate: OffsetDateTime,
+            @JsonProperty("product_id") private val productId: String,
             @JsonProperty("presentation_group_values")
             private val presentationGroupValues: PresentationGroupValues?,
+            @JsonProperty("pricing_group_values")
+            private val pricingGroupValues: PricingGroupValues?,
+            @JsonProperty("quantity") private val quantity: Double?,
             @JsonProperty("subtotals_with_quantity")
             private val subtotalsWithQuantity: List<SubtotalsWithQuantity>?,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            @JsonProperty("product_id") fun productId(): String = productId
+            @JsonProperty("exclusive_end_date")
+            fun exclusiveEndDate(): OffsetDateTime = exclusiveEndDate
 
             @JsonProperty("inclusive_start_date")
             fun inclusiveStartDate(): OffsetDateTime = inclusiveStartDate
 
-            @JsonProperty("exclusive_end_date")
-            fun exclusiveEndDate(): OffsetDateTime = exclusiveEndDate
+            @JsonProperty("product_id") fun productId(): String = productId
 
-            @JsonProperty("quantity")
-            fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
+            @JsonProperty("presentation_group_values")
+            fun presentationGroupValues(): Optional<PresentationGroupValues> =
+                Optional.ofNullable(presentationGroupValues)
 
             @JsonProperty("pricing_group_values")
             fun pricingGroupValues(): Optional<PricingGroupValues> =
                 Optional.ofNullable(pricingGroupValues)
 
-            @JsonProperty("presentation_group_values")
-            fun presentationGroupValues(): Optional<PresentationGroupValues> =
-                Optional.ofNullable(presentationGroupValues)
+            @JsonProperty("quantity")
+            fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
             @JsonProperty("subtotals_with_quantity")
             fun subtotalsWithQuantity(): Optional<List<SubtotalsWithQuantity>> =
@@ -513,47 +513,47 @@ constructor(
 
             class Builder {
 
-                private var productId: String? = null
-                private var inclusiveStartDate: OffsetDateTime? = null
                 private var exclusiveEndDate: OffsetDateTime? = null
-                private var quantity: Double? = null
-                private var pricingGroupValues: PricingGroupValues? = null
+                private var inclusiveStartDate: OffsetDateTime? = null
+                private var productId: String? = null
                 private var presentationGroupValues: PresentationGroupValues? = null
+                private var pricingGroupValues: PricingGroupValues? = null
+                private var quantity: Double? = null
                 private var subtotalsWithQuantity: MutableList<SubtotalsWithQuantity>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(usageLineItem: UsageLineItem) = apply {
-                    productId = usageLineItem.productId
-                    inclusiveStartDate = usageLineItem.inclusiveStartDate
                     exclusiveEndDate = usageLineItem.exclusiveEndDate
-                    quantity = usageLineItem.quantity
-                    pricingGroupValues = usageLineItem.pricingGroupValues
+                    inclusiveStartDate = usageLineItem.inclusiveStartDate
+                    productId = usageLineItem.productId
                     presentationGroupValues = usageLineItem.presentationGroupValues
+                    pricingGroupValues = usageLineItem.pricingGroupValues
+                    quantity = usageLineItem.quantity
                     subtotalsWithQuantity = usageLineItem.subtotalsWithQuantity?.toMutableList()
                     additionalProperties = usageLineItem.additionalProperties.toMutableMap()
-                }
-
-                fun productId(productId: String) = apply { this.productId = productId }
-
-                fun inclusiveStartDate(inclusiveStartDate: OffsetDateTime) = apply {
-                    this.inclusiveStartDate = inclusiveStartDate
                 }
 
                 fun exclusiveEndDate(exclusiveEndDate: OffsetDateTime) = apply {
                     this.exclusiveEndDate = exclusiveEndDate
                 }
 
-                fun quantity(quantity: Double) = apply { this.quantity = quantity }
-
-                fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
-                    this.pricingGroupValues = pricingGroupValues
+                fun inclusiveStartDate(inclusiveStartDate: OffsetDateTime) = apply {
+                    this.inclusiveStartDate = inclusiveStartDate
                 }
+
+                fun productId(productId: String) = apply { this.productId = productId }
 
                 fun presentationGroupValues(presentationGroupValues: PresentationGroupValues) =
                     apply {
                         this.presentationGroupValues = presentationGroupValues
                     }
+
+                fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
+                    this.pricingGroupValues = pricingGroupValues
+                }
+
+                fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
                 fun subtotalsWithQuantity(subtotalsWithQuantity: List<SubtotalsWithQuantity>) =
                     apply {
@@ -591,16 +591,16 @@ constructor(
 
                 fun build(): UsageLineItem =
                     UsageLineItem(
-                        checkNotNull(productId) { "`productId` is required but was not set" },
-                        checkNotNull(inclusiveStartDate) {
-                            "`inclusiveStartDate` is required but was not set"
-                        },
                         checkNotNull(exclusiveEndDate) {
                             "`exclusiveEndDate` is required but was not set"
                         },
-                        quantity,
-                        pricingGroupValues,
+                        checkNotNull(inclusiveStartDate) {
+                            "`inclusiveStartDate` is required but was not set"
+                        },
+                        checkNotNull(productId) { "`productId` is required but was not set" },
                         presentationGroupValues,
+                        pricingGroupValues,
+                        quantity,
                         subtotalsWithQuantity?.toImmutable(),
                         additionalProperties.toImmutable(),
                     )
@@ -756,19 +756,19 @@ constructor(
             class SubtotalsWithQuantity
             @JsonCreator
             private constructor(
+                @JsonProperty("exclusive_end_date") private val exclusiveEndDate: OffsetDateTime,
                 @JsonProperty("inclusive_start_date")
                 private val inclusiveStartDate: OffsetDateTime,
-                @JsonProperty("exclusive_end_date") private val exclusiveEndDate: OffsetDateTime,
                 @JsonProperty("quantity") private val quantity: Double,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                @JsonProperty("inclusive_start_date")
-                fun inclusiveStartDate(): OffsetDateTime = inclusiveStartDate
-
                 @JsonProperty("exclusive_end_date")
                 fun exclusiveEndDate(): OffsetDateTime = exclusiveEndDate
+
+                @JsonProperty("inclusive_start_date")
+                fun inclusiveStartDate(): OffsetDateTime = inclusiveStartDate
 
                 @JsonProperty("quantity") fun quantity(): Double = quantity
 
@@ -785,26 +785,26 @@ constructor(
 
                 class Builder {
 
-                    private var inclusiveStartDate: OffsetDateTime? = null
                     private var exclusiveEndDate: OffsetDateTime? = null
+                    private var inclusiveStartDate: OffsetDateTime? = null
                     private var quantity: Double? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(subtotalsWithQuantity: SubtotalsWithQuantity) = apply {
-                        inclusiveStartDate = subtotalsWithQuantity.inclusiveStartDate
                         exclusiveEndDate = subtotalsWithQuantity.exclusiveEndDate
+                        inclusiveStartDate = subtotalsWithQuantity.inclusiveStartDate
                         quantity = subtotalsWithQuantity.quantity
                         additionalProperties =
                             subtotalsWithQuantity.additionalProperties.toMutableMap()
                     }
 
-                    fun inclusiveStartDate(inclusiveStartDate: OffsetDateTime) = apply {
-                        this.inclusiveStartDate = inclusiveStartDate
-                    }
-
                     fun exclusiveEndDate(exclusiveEndDate: OffsetDateTime) = apply {
                         this.exclusiveEndDate = exclusiveEndDate
+                    }
+
+                    fun inclusiveStartDate(inclusiveStartDate: OffsetDateTime) = apply {
+                        this.inclusiveStartDate = inclusiveStartDate
                     }
 
                     fun quantity(quantity: Double) = apply { this.quantity = quantity }
@@ -833,11 +833,11 @@ constructor(
 
                     fun build(): SubtotalsWithQuantity =
                         SubtotalsWithQuantity(
-                            checkNotNull(inclusiveStartDate) {
-                                "`inclusiveStartDate` is required but was not set"
-                            },
                             checkNotNull(exclusiveEndDate) {
                                 "`exclusiveEndDate` is required but was not set"
+                            },
+                            checkNotNull(inclusiveStartDate) {
+                                "`inclusiveStartDate` is required but was not set"
                             },
                             checkNotNull(quantity) { "`quantity` is required but was not set" },
                             additionalProperties.toImmutable(),
@@ -849,17 +849,17 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is SubtotalsWithQuantity && inclusiveStartDate == other.inclusiveStartDate && exclusiveEndDate == other.exclusiveEndDate && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is SubtotalsWithQuantity && exclusiveEndDate == other.exclusiveEndDate && inclusiveStartDate == other.inclusiveStartDate && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(inclusiveStartDate, exclusiveEndDate, quantity, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(exclusiveEndDate, inclusiveStartDate, quantity, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "SubtotalsWithQuantity{inclusiveStartDate=$inclusiveStartDate, exclusiveEndDate=$exclusiveEndDate, quantity=$quantity, additionalProperties=$additionalProperties}"
+                    "SubtotalsWithQuantity{exclusiveEndDate=$exclusiveEndDate, inclusiveStartDate=$inclusiveStartDate, quantity=$quantity, additionalProperties=$additionalProperties}"
             }
 
             override fun equals(other: Any?): Boolean {
@@ -867,17 +867,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is UsageLineItem && productId == other.productId && inclusiveStartDate == other.inclusiveStartDate && exclusiveEndDate == other.exclusiveEndDate && quantity == other.quantity && pricingGroupValues == other.pricingGroupValues && presentationGroupValues == other.presentationGroupValues && subtotalsWithQuantity == other.subtotalsWithQuantity && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is UsageLineItem && exclusiveEndDate == other.exclusiveEndDate && inclusiveStartDate == other.inclusiveStartDate && productId == other.productId && presentationGroupValues == other.presentationGroupValues && pricingGroupValues == other.pricingGroupValues && quantity == other.quantity && subtotalsWithQuantity == other.subtotalsWithQuantity && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(productId, inclusiveStartDate, exclusiveEndDate, quantity, pricingGroupValues, presentationGroupValues, subtotalsWithQuantity, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(exclusiveEndDate, inclusiveStartDate, productId, presentationGroupValues, pricingGroupValues, quantity, subtotalsWithQuantity, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "UsageLineItem{productId=$productId, inclusiveStartDate=$inclusiveStartDate, exclusiveEndDate=$exclusiveEndDate, quantity=$quantity, pricingGroupValues=$pricingGroupValues, presentationGroupValues=$presentationGroupValues, subtotalsWithQuantity=$subtotalsWithQuantity, additionalProperties=$additionalProperties}"
+                "UsageLineItem{exclusiveEndDate=$exclusiveEndDate, inclusiveStartDate=$inclusiveStartDate, productId=$productId, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, quantity=$quantity, subtotalsWithQuantity=$subtotalsWithQuantity, additionalProperties=$additionalProperties}"
         }
 
         class BillableStatus
@@ -1070,17 +1070,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Invoice && customerId == other.customerId && contractId == other.contractId && creditTypeId == other.creditTypeId && inclusiveStartDate == other.inclusiveStartDate && exclusiveEndDate == other.exclusiveEndDate && issueDate == other.issueDate && breakdownGranularity == other.breakdownGranularity && usageLineItems == other.usageLineItems && billableStatus == other.billableStatus && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Invoice && contractId == other.contractId && creditTypeId == other.creditTypeId && customerId == other.customerId && exclusiveEndDate == other.exclusiveEndDate && inclusiveStartDate == other.inclusiveStartDate && issueDate == other.issueDate && usageLineItems == other.usageLineItems && billableStatus == other.billableStatus && breakdownGranularity == other.breakdownGranularity && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(customerId, contractId, creditTypeId, inclusiveStartDate, exclusiveEndDate, issueDate, breakdownGranularity, usageLineItems, billableStatus, customFields, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(contractId, creditTypeId, customerId, exclusiveEndDate, inclusiveStartDate, issueDate, usageLineItems, billableStatus, breakdownGranularity, customFields, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Invoice{customerId=$customerId, contractId=$contractId, creditTypeId=$creditTypeId, inclusiveStartDate=$inclusiveStartDate, exclusiveEndDate=$exclusiveEndDate, issueDate=$issueDate, breakdownGranularity=$breakdownGranularity, usageLineItems=$usageLineItems, billableStatus=$billableStatus, customFields=$customFields, additionalProperties=$additionalProperties}"
+            "Invoice{contractId=$contractId, creditTypeId=$creditTypeId, customerId=$customerId, exclusiveEndDate=$exclusiveEndDate, inclusiveStartDate=$inclusiveStartDate, issueDate=$issueDate, usageLineItems=$usageLineItems, billableStatus=$billableStatus, breakdownGranularity=$breakdownGranularity, customFields=$customFields, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

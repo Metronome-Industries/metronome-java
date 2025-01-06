@@ -21,10 +21,10 @@ class PlanListResponse
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
     @JsonProperty("description")
     @ExcludeMissing
     private val description: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
     @JsonProperty("custom_fields")
     @ExcludeMissing
     private val customFields: JsonField<CustomFields> = JsonMissing.of(),
@@ -33,18 +33,18 @@ private constructor(
 
     fun id(): String = id.getRequired("id")
 
-    fun name(): String = name.getRequired("name")
-
     fun description(): String = description.getRequired("description")
+
+    fun name(): String = name.getRequired("name")
 
     fun customFields(): Optional<CustomFields> =
         Optional.ofNullable(customFields.getNullable("custom_fields"))
 
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
-
     @JsonProperty("description") @ExcludeMissing fun _description() = description
+
+    @JsonProperty("name") @ExcludeMissing fun _name() = name
 
     @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
 
@@ -57,8 +57,8 @@ private constructor(
     fun validate(): PlanListResponse = apply {
         if (!validated) {
             id()
-            name()
             description()
+            name()
             customFields().map { it.validate() }
             validated = true
         }
@@ -74,16 +74,16 @@ private constructor(
     class Builder {
 
         private var id: JsonField<String> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
+        private var name: JsonField<String> = JsonMissing.of()
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(planListResponse: PlanListResponse) = apply {
             id = planListResponse.id
-            name = planListResponse.name
             description = planListResponse.description
+            name = planListResponse.name
             customFields = planListResponse.customFields
             additionalProperties = planListResponse.additionalProperties.toMutableMap()
         }
@@ -92,13 +92,13 @@ private constructor(
 
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        fun name(name: String) = name(JsonField.of(name))
-
-        fun name(name: JsonField<String>) = apply { this.name = name }
-
         fun description(description: String) = description(JsonField.of(description))
 
         fun description(description: JsonField<String>) = apply { this.description = description }
+
+        fun name(name: String) = name(JsonField.of(name))
+
+        fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
@@ -128,8 +128,8 @@ private constructor(
         fun build(): PlanListResponse =
             PlanListResponse(
                 id,
-                name,
                 description,
+                name,
                 customFields,
                 additionalProperties.toImmutable(),
             )
@@ -215,15 +215,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is PlanListResponse && id == other.id && name == other.name && description == other.description && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is PlanListResponse && id == other.id && description == other.description && name == other.name && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, name, description, customFields, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, description, name, customFields, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PlanListResponse{id=$id, name=$name, description=$description, customFields=$customFields, additionalProperties=$additionalProperties}"
+        "PlanListResponse{id=$id, description=$description, name=$name, customFields=$customFields, additionalProperties=$additionalProperties}"
 }

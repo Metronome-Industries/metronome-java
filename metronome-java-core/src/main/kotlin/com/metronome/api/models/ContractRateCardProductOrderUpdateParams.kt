@@ -302,17 +302,17 @@ constructor(
     class ProductMove
     @JsonCreator
     private constructor(
-        @JsonProperty("product_id") private val productId: String,
         @JsonProperty("position") private val position: Double,
+        @JsonProperty("product_id") private val productId: String,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** ID of the product to move */
-        @JsonProperty("product_id") fun productId(): String = productId
-
         /** 0-based index of the new position of the product */
         @JsonProperty("position") fun position(): Double = position
+
+        /** ID of the product to move */
+        @JsonProperty("product_id") fun productId(): String = productId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -327,22 +327,22 @@ constructor(
 
         class Builder {
 
-            private var productId: String? = null
             private var position: Double? = null
+            private var productId: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(productMove: ProductMove) = apply {
-                productId = productMove.productId
                 position = productMove.position
+                productId = productMove.productId
                 additionalProperties = productMove.additionalProperties.toMutableMap()
             }
 
-            /** ID of the product to move */
-            fun productId(productId: String) = apply { this.productId = productId }
-
             /** 0-based index of the new position of the product */
             fun position(position: Double) = apply { this.position = position }
+
+            /** ID of the product to move */
+            fun productId(productId: String) = apply { this.productId = productId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -365,8 +365,8 @@ constructor(
 
             fun build(): ProductMove =
                 ProductMove(
-                    checkNotNull(productId) { "`productId` is required but was not set" },
                     checkNotNull(position) { "`position` is required but was not set" },
+                    checkNotNull(productId) { "`productId` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -376,17 +376,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ProductMove && productId == other.productId && position == other.position && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ProductMove && position == other.position && productId == other.productId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(productId, position, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(position, productId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ProductMove{productId=$productId, position=$position, additionalProperties=$additionalProperties}"
+            "ProductMove{position=$position, productId=$productId, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

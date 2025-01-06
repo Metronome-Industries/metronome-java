@@ -352,19 +352,19 @@ constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("name") private val name: String,
-        @JsonProperty("starting_at") private val startingAt: OffsetDateTime?,
         @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
+        @JsonProperty("starting_at") private val startingAt: OffsetDateTime?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("name") fun name(): String = name
 
-        @JsonProperty("starting_at")
-        fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
-
         @JsonProperty("ending_before")
         fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+
+        @JsonProperty("starting_at")
+        fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -380,25 +380,25 @@ constructor(
         class Builder {
 
             private var name: String? = null
-            private var startingAt: OffsetDateTime? = null
             private var endingBefore: OffsetDateTime? = null
+            private var startingAt: OffsetDateTime? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(alias: Alias) = apply {
                 name = alias.name
-                startingAt = alias.startingAt
                 endingBefore = alias.endingBefore
+                startingAt = alias.startingAt
                 additionalProperties = alias.additionalProperties.toMutableMap()
             }
 
             fun name(name: String) = apply { this.name = name }
 
-            fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
-
             fun endingBefore(endingBefore: OffsetDateTime) = apply {
                 this.endingBefore = endingBefore
             }
+
+            fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -422,8 +422,8 @@ constructor(
             fun build(): Alias =
                 Alias(
                     checkNotNull(name) { "`name` is required but was not set" },
-                    startingAt,
                     endingBefore,
+                    startingAt,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -433,17 +433,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Alias && name == other.name && startingAt == other.startingAt && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Alias && name == other.name && endingBefore == other.endingBefore && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(name, startingAt, endingBefore, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(name, endingBefore, startingAt, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Alias{name=$name, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
+            "Alias{name=$name, endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

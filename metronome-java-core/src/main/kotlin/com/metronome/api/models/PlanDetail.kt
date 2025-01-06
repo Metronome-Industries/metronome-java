@@ -21,7 +21,13 @@ class PlanDetail
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
     @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("credit_grants")
+    @ExcludeMissing
+    private val creditGrants: JsonField<List<CreditGrant>> = JsonMissing.of(),
     @JsonProperty("description")
     @ExcludeMissing
     private val description: JsonField<String> = JsonMissing.of(),
@@ -31,18 +37,17 @@ private constructor(
     @JsonProperty("overage_rates")
     @ExcludeMissing
     private val overageRates: JsonField<List<OverageRate>> = JsonMissing.of(),
-    @JsonProperty("credit_grants")
-    @ExcludeMissing
-    private val creditGrants: JsonField<List<CreditGrant>> = JsonMissing.of(),
-    @JsonProperty("custom_fields")
-    @ExcludeMissing
-    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun id(): String = id.getRequired("id")
 
+    fun customFields(): CustomFields = customFields.getRequired("custom_fields")
+
     fun name(): String = name.getRequired("name")
+
+    fun creditGrants(): Optional<List<CreditGrant>> =
+        Optional.ofNullable(creditGrants.getNullable("credit_grants"))
 
     fun description(): Optional<String> =
         Optional.ofNullable(description.getNullable("description"))
@@ -52,24 +57,19 @@ private constructor(
     fun overageRates(): Optional<List<OverageRate>> =
         Optional.ofNullable(overageRates.getNullable("overage_rates"))
 
-    fun creditGrants(): Optional<List<CreditGrant>> =
-        Optional.ofNullable(creditGrants.getNullable("credit_grants"))
-
-    fun customFields(): CustomFields = customFields.getRequired("custom_fields")
-
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
+    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+
     @JsonProperty("name") @ExcludeMissing fun _name() = name
+
+    @JsonProperty("credit_grants") @ExcludeMissing fun _creditGrants() = creditGrants
 
     @JsonProperty("description") @ExcludeMissing fun _description() = description
 
     @JsonProperty("minimums") @ExcludeMissing fun _minimums() = minimums
 
     @JsonProperty("overage_rates") @ExcludeMissing fun _overageRates() = overageRates
-
-    @JsonProperty("credit_grants") @ExcludeMissing fun _creditGrants() = creditGrants
-
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -80,12 +80,12 @@ private constructor(
     fun validate(): PlanDetail = apply {
         if (!validated) {
             id()
+            customFields().validate()
             name()
+            creditGrants().map { it.forEach { it.validate() } }
             description()
             minimums().map { it.forEach { it.validate() } }
             overageRates().map { it.forEach { it.validate() } }
-            creditGrants().map { it.forEach { it.validate() } }
-            customFields().validate()
             validated = true
         }
     }
@@ -100,23 +100,23 @@ private constructor(
     class Builder {
 
         private var id: JsonField<String> = JsonMissing.of()
+        private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
+        private var creditGrants: JsonField<List<CreditGrant>> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
         private var minimums: JsonField<List<Minimum>> = JsonMissing.of()
         private var overageRates: JsonField<List<OverageRate>> = JsonMissing.of()
-        private var creditGrants: JsonField<List<CreditGrant>> = JsonMissing.of()
-        private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(planDetail: PlanDetail) = apply {
             id = planDetail.id
+            customFields = planDetail.customFields
             name = planDetail.name
+            creditGrants = planDetail.creditGrants
             description = planDetail.description
             minimums = planDetail.minimums
             overageRates = planDetail.overageRates
-            creditGrants = planDetail.creditGrants
-            customFields = planDetail.customFields
             additionalProperties = planDetail.additionalProperties.toMutableMap()
         }
 
@@ -124,9 +124,21 @@ private constructor(
 
         fun id(id: JsonField<String>) = apply { this.id = id }
 
+        fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+
+        fun customFields(customFields: JsonField<CustomFields>) = apply {
+            this.customFields = customFields
+        }
+
         fun name(name: String) = name(JsonField.of(name))
 
         fun name(name: JsonField<String>) = apply { this.name = name }
+
+        fun creditGrants(creditGrants: List<CreditGrant>) = creditGrants(JsonField.of(creditGrants))
+
+        fun creditGrants(creditGrants: JsonField<List<CreditGrant>>) = apply {
+            this.creditGrants = creditGrants
+        }
 
         fun description(description: String) = description(JsonField.of(description))
 
@@ -140,18 +152,6 @@ private constructor(
 
         fun overageRates(overageRates: JsonField<List<OverageRate>>) = apply {
             this.overageRates = overageRates
-        }
-
-        fun creditGrants(creditGrants: List<CreditGrant>) = creditGrants(JsonField.of(creditGrants))
-
-        fun creditGrants(creditGrants: JsonField<List<CreditGrant>>) = apply {
-            this.creditGrants = creditGrants
-        }
-
-        fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
-
-        fun customFields(customFields: JsonField<CustomFields>) = apply {
-            this.customFields = customFields
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -176,12 +176,12 @@ private constructor(
         fun build(): PlanDetail =
             PlanDetail(
                 id,
+                customFields,
                 name,
+                creditGrants.map { it.toImmutable() },
                 description,
                 minimums.map { it.toImmutable() },
                 overageRates.map { it.toImmutable() },
-                creditGrants.map { it.toImmutable() },
-                customFields,
                 additionalProperties.toImmutable(),
             )
     }
@@ -265,18 +265,24 @@ private constructor(
     class CreditGrant
     @JsonCreator
     private constructor(
-        @JsonProperty("name")
-        @ExcludeMissing
-        private val name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("amount_granted")
         @ExcludeMissing
         private val amountGranted: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("amount_granted_credit_type")
+        @ExcludeMissing
+        private val amountGrantedCreditType: JsonField<CreditTypeData> = JsonMissing.of(),
         @JsonProperty("amount_paid")
         @ExcludeMissing
         private val amountPaid: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("amount_paid_credit_type")
+        @ExcludeMissing
+        private val amountPaidCreditType: JsonField<CreditTypeData> = JsonMissing.of(),
         @JsonProperty("effective_duration")
         @ExcludeMissing
         private val effectiveDuration: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("priority")
         @ExcludeMissing
         private val priority: JsonField<String> = JsonMissing.of(),
@@ -292,23 +298,23 @@ private constructor(
         @JsonProperty("recurrence_interval")
         @ExcludeMissing
         private val recurrenceInterval: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("amount_paid_credit_type")
-        @ExcludeMissing
-        private val amountPaidCreditType: JsonField<CreditTypeData> = JsonMissing.of(),
-        @JsonProperty("amount_granted_credit_type")
-        @ExcludeMissing
-        private val amountGrantedCreditType: JsonField<CreditTypeData> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        fun name(): String = name.getRequired("name")
-
         fun amountGranted(): Double = amountGranted.getRequired("amount_granted")
+
+        fun amountGrantedCreditType(): CreditTypeData =
+            amountGrantedCreditType.getRequired("amount_granted_credit_type")
 
         fun amountPaid(): Double = amountPaid.getRequired("amount_paid")
 
+        fun amountPaidCreditType(): CreditTypeData =
+            amountPaidCreditType.getRequired("amount_paid_credit_type")
+
         fun effectiveDuration(): Double = effectiveDuration.getRequired("effective_duration")
+
+        fun name(): String = name.getRequired("name")
 
         fun priority(): String = priority.getRequired("priority")
 
@@ -322,21 +328,23 @@ private constructor(
         fun recurrenceInterval(): Optional<Double> =
             Optional.ofNullable(recurrenceInterval.getNullable("recurrence_interval"))
 
-        fun amountPaidCreditType(): CreditTypeData =
-            amountPaidCreditType.getRequired("amount_paid_credit_type")
-
-        fun amountGrantedCreditType(): CreditTypeData =
-            amountGrantedCreditType.getRequired("amount_granted_credit_type")
-
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
-
         @JsonProperty("amount_granted") @ExcludeMissing fun _amountGranted() = amountGranted
 
+        @JsonProperty("amount_granted_credit_type")
+        @ExcludeMissing
+        fun _amountGrantedCreditType() = amountGrantedCreditType
+
         @JsonProperty("amount_paid") @ExcludeMissing fun _amountPaid() = amountPaid
+
+        @JsonProperty("amount_paid_credit_type")
+        @ExcludeMissing
+        fun _amountPaidCreditType() = amountPaidCreditType
 
         @JsonProperty("effective_duration")
         @ExcludeMissing
         fun _effectiveDuration() = effectiveDuration
+
+        @JsonProperty("name") @ExcludeMissing fun _name() = name
 
         @JsonProperty("priority") @ExcludeMissing fun _priority() = priority
 
@@ -352,14 +360,6 @@ private constructor(
         @ExcludeMissing
         fun _recurrenceInterval() = recurrenceInterval
 
-        @JsonProperty("amount_paid_credit_type")
-        @ExcludeMissing
-        fun _amountPaidCreditType() = amountPaidCreditType
-
-        @JsonProperty("amount_granted_credit_type")
-        @ExcludeMissing
-        fun _amountGrantedCreditType() = amountGrantedCreditType
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -368,17 +368,17 @@ private constructor(
 
         fun validate(): CreditGrant = apply {
             if (!validated) {
-                name()
                 amountGranted()
+                amountGrantedCreditType().validate()
                 amountPaid()
+                amountPaidCreditType().validate()
                 effectiveDuration()
+                name()
                 priority()
                 sendInvoice()
                 reason()
                 recurrenceDuration()
                 recurrenceInterval()
-                amountPaidCreditType().validate()
-                amountGrantedCreditType().validate()
                 validated = true
             }
         }
@@ -392,38 +392,34 @@ private constructor(
 
         class Builder {
 
-            private var name: JsonField<String> = JsonMissing.of()
             private var amountGranted: JsonField<Double> = JsonMissing.of()
+            private var amountGrantedCreditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var amountPaid: JsonField<Double> = JsonMissing.of()
+            private var amountPaidCreditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var effectiveDuration: JsonField<Double> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
             private var priority: JsonField<String> = JsonMissing.of()
             private var sendInvoice: JsonField<Boolean> = JsonMissing.of()
             private var reason: JsonField<String> = JsonMissing.of()
             private var recurrenceDuration: JsonField<Double> = JsonMissing.of()
             private var recurrenceInterval: JsonField<Double> = JsonMissing.of()
-            private var amountPaidCreditType: JsonField<CreditTypeData> = JsonMissing.of()
-            private var amountGrantedCreditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(creditGrant: CreditGrant) = apply {
-                name = creditGrant.name
                 amountGranted = creditGrant.amountGranted
+                amountGrantedCreditType = creditGrant.amountGrantedCreditType
                 amountPaid = creditGrant.amountPaid
+                amountPaidCreditType = creditGrant.amountPaidCreditType
                 effectiveDuration = creditGrant.effectiveDuration
+                name = creditGrant.name
                 priority = creditGrant.priority
                 sendInvoice = creditGrant.sendInvoice
                 reason = creditGrant.reason
                 recurrenceDuration = creditGrant.recurrenceDuration
                 recurrenceInterval = creditGrant.recurrenceInterval
-                amountPaidCreditType = creditGrant.amountPaidCreditType
-                amountGrantedCreditType = creditGrant.amountGrantedCreditType
                 additionalProperties = creditGrant.additionalProperties.toMutableMap()
             }
-
-            fun name(name: String) = name(JsonField.of(name))
-
-            fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun amountGranted(amountGranted: Double) = amountGranted(JsonField.of(amountGranted))
 
@@ -431,9 +427,24 @@ private constructor(
                 this.amountGranted = amountGranted
             }
 
+            fun amountGrantedCreditType(amountGrantedCreditType: CreditTypeData) =
+                amountGrantedCreditType(JsonField.of(amountGrantedCreditType))
+
+            fun amountGrantedCreditType(amountGrantedCreditType: JsonField<CreditTypeData>) =
+                apply {
+                    this.amountGrantedCreditType = amountGrantedCreditType
+                }
+
             fun amountPaid(amountPaid: Double) = amountPaid(JsonField.of(amountPaid))
 
             fun amountPaid(amountPaid: JsonField<Double>) = apply { this.amountPaid = amountPaid }
+
+            fun amountPaidCreditType(amountPaidCreditType: CreditTypeData) =
+                amountPaidCreditType(JsonField.of(amountPaidCreditType))
+
+            fun amountPaidCreditType(amountPaidCreditType: JsonField<CreditTypeData>) = apply {
+                this.amountPaidCreditType = amountPaidCreditType
+            }
 
             fun effectiveDuration(effectiveDuration: Double) =
                 effectiveDuration(JsonField.of(effectiveDuration))
@@ -441,6 +452,10 @@ private constructor(
             fun effectiveDuration(effectiveDuration: JsonField<Double>) = apply {
                 this.effectiveDuration = effectiveDuration
             }
+
+            fun name(name: String) = name(JsonField.of(name))
+
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun priority(priority: String) = priority(JsonField.of(priority))
 
@@ -470,21 +485,6 @@ private constructor(
                 this.recurrenceInterval = recurrenceInterval
             }
 
-            fun amountPaidCreditType(amountPaidCreditType: CreditTypeData) =
-                amountPaidCreditType(JsonField.of(amountPaidCreditType))
-
-            fun amountPaidCreditType(amountPaidCreditType: JsonField<CreditTypeData>) = apply {
-                this.amountPaidCreditType = amountPaidCreditType
-            }
-
-            fun amountGrantedCreditType(amountGrantedCreditType: CreditTypeData) =
-                amountGrantedCreditType(JsonField.of(amountGrantedCreditType))
-
-            fun amountGrantedCreditType(amountGrantedCreditType: JsonField<CreditTypeData>) =
-                apply {
-                    this.amountGrantedCreditType = amountGrantedCreditType
-                }
-
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -506,17 +506,17 @@ private constructor(
 
             fun build(): CreditGrant =
                 CreditGrant(
-                    name,
                     amountGranted,
+                    amountGrantedCreditType,
                     amountPaid,
+                    amountPaidCreditType,
                     effectiveDuration,
+                    name,
                     priority,
                     sendInvoice,
                     reason,
                     recurrenceDuration,
                     recurrenceInterval,
-                    amountPaidCreditType,
-                    amountGrantedCreditType,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -526,60 +526,60 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CreditGrant && name == other.name && amountGranted == other.amountGranted && amountPaid == other.amountPaid && effectiveDuration == other.effectiveDuration && priority == other.priority && sendInvoice == other.sendInvoice && reason == other.reason && recurrenceDuration == other.recurrenceDuration && recurrenceInterval == other.recurrenceInterval && amountPaidCreditType == other.amountPaidCreditType && amountGrantedCreditType == other.amountGrantedCreditType && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CreditGrant && amountGranted == other.amountGranted && amountGrantedCreditType == other.amountGrantedCreditType && amountPaid == other.amountPaid && amountPaidCreditType == other.amountPaidCreditType && effectiveDuration == other.effectiveDuration && name == other.name && priority == other.priority && sendInvoice == other.sendInvoice && reason == other.reason && recurrenceDuration == other.recurrenceDuration && recurrenceInterval == other.recurrenceInterval && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(name, amountGranted, amountPaid, effectiveDuration, priority, sendInvoice, reason, recurrenceDuration, recurrenceInterval, amountPaidCreditType, amountGrantedCreditType, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(amountGranted, amountGrantedCreditType, amountPaid, amountPaidCreditType, effectiveDuration, name, priority, sendInvoice, reason, recurrenceDuration, recurrenceInterval, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CreditGrant{name=$name, amountGranted=$amountGranted, amountPaid=$amountPaid, effectiveDuration=$effectiveDuration, priority=$priority, sendInvoice=$sendInvoice, reason=$reason, recurrenceDuration=$recurrenceDuration, recurrenceInterval=$recurrenceInterval, amountPaidCreditType=$amountPaidCreditType, amountGrantedCreditType=$amountGrantedCreditType, additionalProperties=$additionalProperties}"
+            "CreditGrant{amountGranted=$amountGranted, amountGrantedCreditType=$amountGrantedCreditType, amountPaid=$amountPaid, amountPaidCreditType=$amountPaidCreditType, effectiveDuration=$effectiveDuration, name=$name, priority=$priority, sendInvoice=$sendInvoice, reason=$reason, recurrenceDuration=$recurrenceDuration, recurrenceInterval=$recurrenceInterval, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
     class Minimum
     @JsonCreator
     private constructor(
-        @JsonProperty("name")
-        @ExcludeMissing
-        private val name: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("value")
-        @ExcludeMissing
-        private val value: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("start_period")
-        @ExcludeMissing
-        private val startPeriod: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("credit_type")
         @ExcludeMissing
         private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("start_period")
+        @ExcludeMissing
+        private val startPeriod: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("value")
+        @ExcludeMissing
+        private val value: JsonField<Double> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        fun name(): String = name.getRequired("name")
+        fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
-        fun value(): Double = value.getRequired("value")
+        fun name(): String = name.getRequired("name")
 
         /**
          * Used in price ramps. Indicates how many billing periods pass before the charge applies.
          */
         fun startPeriod(): Double = startPeriod.getRequired("start_period")
 
-        fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
+        fun value(): Double = value.getRequired("value")
+
+        @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
 
         @JsonProperty("name") @ExcludeMissing fun _name() = name
-
-        @JsonProperty("value") @ExcludeMissing fun _value() = value
 
         /**
          * Used in price ramps. Indicates how many billing periods pass before the charge applies.
          */
         @JsonProperty("start_period") @ExcludeMissing fun _startPeriod() = startPeriod
 
-        @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+        @JsonProperty("value") @ExcludeMissing fun _value() = value
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -589,10 +589,10 @@ private constructor(
 
         fun validate(): Minimum = apply {
             if (!validated) {
-                name()
-                value()
-                startPeriod()
                 creditType().validate()
+                name()
+                startPeriod()
+                value()
                 validated = true
             }
         }
@@ -606,28 +606,30 @@ private constructor(
 
         class Builder {
 
-            private var name: JsonField<String> = JsonMissing.of()
-            private var value: JsonField<Double> = JsonMissing.of()
-            private var startPeriod: JsonField<Double> = JsonMissing.of()
             private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
+            private var startPeriod: JsonField<Double> = JsonMissing.of()
+            private var value: JsonField<Double> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(minimum: Minimum) = apply {
-                name = minimum.name
-                value = minimum.value
-                startPeriod = minimum.startPeriod
                 creditType = minimum.creditType
+                name = minimum.name
+                startPeriod = minimum.startPeriod
+                value = minimum.value
                 additionalProperties = minimum.additionalProperties.toMutableMap()
+            }
+
+            fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
+
+            fun creditType(creditType: JsonField<CreditTypeData>) = apply {
+                this.creditType = creditType
             }
 
             fun name(name: String) = name(JsonField.of(name))
 
             fun name(name: JsonField<String>) = apply { this.name = name }
-
-            fun value(value: Double) = value(JsonField.of(value))
-
-            fun value(value: JsonField<Double>) = apply { this.value = value }
 
             /**
              * Used in price ramps. Indicates how many billing periods pass before the charge
@@ -643,11 +645,9 @@ private constructor(
                 this.startPeriod = startPeriod
             }
 
-            fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
+            fun value(value: Double) = value(JsonField.of(value))
 
-            fun creditType(creditType: JsonField<CreditTypeData>) = apply {
-                this.creditType = creditType
-            }
+            fun value(value: JsonField<Double>) = apply { this.value = value }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -670,10 +670,10 @@ private constructor(
 
             fun build(): Minimum =
                 Minimum(
-                    name,
-                    value,
-                    startPeriod,
                     creditType,
+                    name,
+                    startPeriod,
+                    value,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -683,63 +683,63 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Minimum && name == other.name && value == other.value && startPeriod == other.startPeriod && creditType == other.creditType && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Minimum && creditType == other.creditType && name == other.name && startPeriod == other.startPeriod && value == other.value && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(name, value, startPeriod, creditType, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(creditType, name, startPeriod, value, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Minimum{name=$name, value=$value, startPeriod=$startPeriod, creditType=$creditType, additionalProperties=$additionalProperties}"
+            "Minimum{creditType=$creditType, name=$name, startPeriod=$startPeriod, value=$value, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
     class OverageRate
     @JsonCreator
     private constructor(
-        @JsonProperty("to_fiat_conversion_factor")
-        @ExcludeMissing
-        private val toFiatConversionFactor: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("start_period")
-        @ExcludeMissing
-        private val startPeriod: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("fiat_credit_type")
-        @ExcludeMissing
-        private val fiatCreditType: JsonField<CreditTypeData> = JsonMissing.of(),
         @JsonProperty("credit_type")
         @ExcludeMissing
         private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
+        @JsonProperty("fiat_credit_type")
+        @ExcludeMissing
+        private val fiatCreditType: JsonField<CreditTypeData> = JsonMissing.of(),
+        @JsonProperty("start_period")
+        @ExcludeMissing
+        private val startPeriod: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("to_fiat_conversion_factor")
+        @ExcludeMissing
+        private val toFiatConversionFactor: JsonField<Double> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        fun toFiatConversionFactor(): Double =
-            toFiatConversionFactor.getRequired("to_fiat_conversion_factor")
+        fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
+
+        fun fiatCreditType(): CreditTypeData = fiatCreditType.getRequired("fiat_credit_type")
 
         /**
          * Used in price ramps. Indicates how many billing periods pass before the charge applies.
          */
         fun startPeriod(): Double = startPeriod.getRequired("start_period")
 
-        fun fiatCreditType(): CreditTypeData = fiatCreditType.getRequired("fiat_credit_type")
+        fun toFiatConversionFactor(): Double =
+            toFiatConversionFactor.getRequired("to_fiat_conversion_factor")
 
-        fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
+        @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
 
-        @JsonProperty("to_fiat_conversion_factor")
-        @ExcludeMissing
-        fun _toFiatConversionFactor() = toFiatConversionFactor
+        @JsonProperty("fiat_credit_type") @ExcludeMissing fun _fiatCreditType() = fiatCreditType
 
         /**
          * Used in price ramps. Indicates how many billing periods pass before the charge applies.
          */
         @JsonProperty("start_period") @ExcludeMissing fun _startPeriod() = startPeriod
 
-        @JsonProperty("fiat_credit_type") @ExcludeMissing fun _fiatCreditType() = fiatCreditType
-
-        @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+        @JsonProperty("to_fiat_conversion_factor")
+        @ExcludeMissing
+        fun _toFiatConversionFactor() = toFiatConversionFactor
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -749,10 +749,10 @@ private constructor(
 
         fun validate(): OverageRate = apply {
             if (!validated) {
-                toFiatConversionFactor()
-                startPeriod()
-                fiatCreditType().validate()
                 creditType().validate()
+                fiatCreditType().validate()
+                startPeriod()
+                toFiatConversionFactor()
                 validated = true
             }
         }
@@ -766,26 +766,32 @@ private constructor(
 
         class Builder {
 
-            private var toFiatConversionFactor: JsonField<Double> = JsonMissing.of()
-            private var startPeriod: JsonField<Double> = JsonMissing.of()
-            private var fiatCreditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
+            private var fiatCreditType: JsonField<CreditTypeData> = JsonMissing.of()
+            private var startPeriod: JsonField<Double> = JsonMissing.of()
+            private var toFiatConversionFactor: JsonField<Double> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(overageRate: OverageRate) = apply {
-                toFiatConversionFactor = overageRate.toFiatConversionFactor
-                startPeriod = overageRate.startPeriod
-                fiatCreditType = overageRate.fiatCreditType
                 creditType = overageRate.creditType
+                fiatCreditType = overageRate.fiatCreditType
+                startPeriod = overageRate.startPeriod
+                toFiatConversionFactor = overageRate.toFiatConversionFactor
                 additionalProperties = overageRate.additionalProperties.toMutableMap()
             }
 
-            fun toFiatConversionFactor(toFiatConversionFactor: Double) =
-                toFiatConversionFactor(JsonField.of(toFiatConversionFactor))
+            fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
-            fun toFiatConversionFactor(toFiatConversionFactor: JsonField<Double>) = apply {
-                this.toFiatConversionFactor = toFiatConversionFactor
+            fun creditType(creditType: JsonField<CreditTypeData>) = apply {
+                this.creditType = creditType
+            }
+
+            fun fiatCreditType(fiatCreditType: CreditTypeData) =
+                fiatCreditType(JsonField.of(fiatCreditType))
+
+            fun fiatCreditType(fiatCreditType: JsonField<CreditTypeData>) = apply {
+                this.fiatCreditType = fiatCreditType
             }
 
             /**
@@ -802,17 +808,11 @@ private constructor(
                 this.startPeriod = startPeriod
             }
 
-            fun fiatCreditType(fiatCreditType: CreditTypeData) =
-                fiatCreditType(JsonField.of(fiatCreditType))
+            fun toFiatConversionFactor(toFiatConversionFactor: Double) =
+                toFiatConversionFactor(JsonField.of(toFiatConversionFactor))
 
-            fun fiatCreditType(fiatCreditType: JsonField<CreditTypeData>) = apply {
-                this.fiatCreditType = fiatCreditType
-            }
-
-            fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
-
-            fun creditType(creditType: JsonField<CreditTypeData>) = apply {
-                this.creditType = creditType
+            fun toFiatConversionFactor(toFiatConversionFactor: JsonField<Double>) = apply {
+                this.toFiatConversionFactor = toFiatConversionFactor
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -836,10 +836,10 @@ private constructor(
 
             fun build(): OverageRate =
                 OverageRate(
-                    toFiatConversionFactor,
-                    startPeriod,
-                    fiatCreditType,
                     creditType,
+                    fiatCreditType,
+                    startPeriod,
+                    toFiatConversionFactor,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -849,17 +849,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is OverageRate && toFiatConversionFactor == other.toFiatConversionFactor && startPeriod == other.startPeriod && fiatCreditType == other.fiatCreditType && creditType == other.creditType && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is OverageRate && creditType == other.creditType && fiatCreditType == other.fiatCreditType && startPeriod == other.startPeriod && toFiatConversionFactor == other.toFiatConversionFactor && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(toFiatConversionFactor, startPeriod, fiatCreditType, creditType, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(creditType, fiatCreditType, startPeriod, toFiatConversionFactor, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "OverageRate{toFiatConversionFactor=$toFiatConversionFactor, startPeriod=$startPeriod, fiatCreditType=$fiatCreditType, creditType=$creditType, additionalProperties=$additionalProperties}"
+            "OverageRate{creditType=$creditType, fiatCreditType=$fiatCreditType, startPeriod=$startPeriod, toFiatConversionFactor=$toFiatConversionFactor, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -867,15 +867,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is PlanDetail && id == other.id && name == other.name && description == other.description && minimums == other.minimums && overageRates == other.overageRates && creditGrants == other.creditGrants && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is PlanDetail && id == other.id && customFields == other.customFields && name == other.name && creditGrants == other.creditGrants && description == other.description && minimums == other.minimums && overageRates == other.overageRates && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, name, description, minimums, overageRates, creditGrants, customFields, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, customFields, name, creditGrants, description, minimums, overageRates, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PlanDetail{id=$id, name=$name, description=$description, minimums=$minimums, overageRates=$overageRates, creditGrants=$creditGrants, customFields=$customFields, additionalProperties=$additionalProperties}"
+        "PlanDetail{id=$id, customFields=$customFields, name=$name, creditGrants=$creditGrants, description=$description, minimums=$minimums, overageRates=$overageRates, additionalProperties=$additionalProperties}"
 }

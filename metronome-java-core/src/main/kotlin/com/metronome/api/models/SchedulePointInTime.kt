@@ -119,48 +119,48 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("invoice_id")
-        @ExcludeMissing
-        private val invoiceId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("amount")
         @ExcludeMissing
         private val amount: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("unit_price")
+        @JsonProperty("invoice_id")
         @ExcludeMissing
-        private val unitPrice: JsonField<Double> = JsonMissing.of(),
+        private val invoiceId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("quantity")
         @ExcludeMissing
         private val quantity: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("timestamp")
         @ExcludeMissing
         private val timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("unit_price")
+        @ExcludeMissing
+        private val unitPrice: JsonField<Double> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun id(): String = id.getRequired("id")
 
-        fun invoiceId(): String = invoiceId.getRequired("invoice_id")
-
         fun amount(): Double = amount.getRequired("amount")
 
-        fun unitPrice(): Double = unitPrice.getRequired("unit_price")
+        fun invoiceId(): String = invoiceId.getRequired("invoice_id")
 
         fun quantity(): Double = quantity.getRequired("quantity")
 
         fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
 
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        fun unitPrice(): Double = unitPrice.getRequired("unit_price")
 
-        @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
+        @JsonProperty("id") @ExcludeMissing fun _id() = id
 
         @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
 
-        @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice() = unitPrice
+        @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
 
         @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
 
         @JsonProperty("timestamp") @ExcludeMissing fun _timestamp() = timestamp
+
+        @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice() = unitPrice
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -171,11 +171,11 @@ private constructor(
         fun validate(): ScheduleItem = apply {
             if (!validated) {
                 id()
-                invoiceId()
                 amount()
-                unitPrice()
+                invoiceId()
                 quantity()
                 timestamp()
+                unitPrice()
                 validated = true
             }
         }
@@ -190,21 +190,21 @@ private constructor(
         class Builder {
 
             private var id: JsonField<String> = JsonMissing.of()
-            private var invoiceId: JsonField<String> = JsonMissing.of()
             private var amount: JsonField<Double> = JsonMissing.of()
-            private var unitPrice: JsonField<Double> = JsonMissing.of()
+            private var invoiceId: JsonField<String> = JsonMissing.of()
             private var quantity: JsonField<Double> = JsonMissing.of()
             private var timestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var unitPrice: JsonField<Double> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(scheduleItem: ScheduleItem) = apply {
                 id = scheduleItem.id
-                invoiceId = scheduleItem.invoiceId
                 amount = scheduleItem.amount
-                unitPrice = scheduleItem.unitPrice
+                invoiceId = scheduleItem.invoiceId
                 quantity = scheduleItem.quantity
                 timestamp = scheduleItem.timestamp
+                unitPrice = scheduleItem.unitPrice
                 additionalProperties = scheduleItem.additionalProperties.toMutableMap()
             }
 
@@ -212,17 +212,13 @@ private constructor(
 
             fun id(id: JsonField<String>) = apply { this.id = id }
 
-            fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
-
-            fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
-
             fun amount(amount: Double) = amount(JsonField.of(amount))
 
             fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
-            fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
+            fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
 
-            fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
+            fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
 
             fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
@@ -233,6 +229,10 @@ private constructor(
             fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
                 this.timestamp = timestamp
             }
+
+            fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
+
+            fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -256,11 +256,11 @@ private constructor(
             fun build(): ScheduleItem =
                 ScheduleItem(
                     id,
-                    invoiceId,
                     amount,
-                    unitPrice,
+                    invoiceId,
                     quantity,
                     timestamp,
+                    unitPrice,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -270,17 +270,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ScheduleItem && id == other.id && invoiceId == other.invoiceId && amount == other.amount && unitPrice == other.unitPrice && quantity == other.quantity && timestamp == other.timestamp && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ScheduleItem && id == other.id && amount == other.amount && invoiceId == other.invoiceId && quantity == other.quantity && timestamp == other.timestamp && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, invoiceId, amount, unitPrice, quantity, timestamp, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, amount, invoiceId, quantity, timestamp, unitPrice, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ScheduleItem{id=$id, invoiceId=$invoiceId, amount=$amount, unitPrice=$unitPrice, quantity=$quantity, timestamp=$timestamp, additionalProperties=$additionalProperties}"
+            "ScheduleItem{id=$id, amount=$amount, invoiceId=$invoiceId, quantity=$quantity, timestamp=$timestamp, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

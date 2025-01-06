@@ -24,21 +24,21 @@ private constructor(
     @JsonProperty("amount")
     @ExcludeMissing
     private val amount: JsonField<Double> = JsonMissing.of(),
-    @JsonProperty("reason")
-    @ExcludeMissing
-    private val reason: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("running_balance")
-    @ExcludeMissing
-    private val runningBalance: JsonField<Double> = JsonMissing.of(),
-    @JsonProperty("effective_at")
-    @ExcludeMissing
-    private val effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonProperty("created_by")
     @ExcludeMissing
     private val createdBy: JsonField<String> = JsonMissing.of(),
     @JsonProperty("credit_grant_id")
     @ExcludeMissing
     private val creditGrantId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("effective_at")
+    @ExcludeMissing
+    private val effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("reason")
+    @ExcludeMissing
+    private val reason: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("running_balance")
+    @ExcludeMissing
+    private val runningBalance: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("invoice_id")
     @ExcludeMissing
     private val invoiceId: JsonField<String> = JsonMissing.of(),
@@ -48,6 +48,13 @@ private constructor(
     /** an amount representing the change to the customer's credit balance */
     fun amount(): Double = amount.getRequired("amount")
 
+    fun createdBy(): String = createdBy.getRequired("created_by")
+
+    /** the credit grant this entry is related to */
+    fun creditGrantId(): String = creditGrantId.getRequired("credit_grant_id")
+
+    fun effectiveAt(): OffsetDateTime = effectiveAt.getRequired("effective_at")
+
     fun reason(): String = reason.getRequired("reason")
 
     /**
@@ -55,13 +62,6 @@ private constructor(
      * preceding charges
      */
     fun runningBalance(): Double = runningBalance.getRequired("running_balance")
-
-    fun effectiveAt(): OffsetDateTime = effectiveAt.getRequired("effective_at")
-
-    fun createdBy(): String = createdBy.getRequired("created_by")
-
-    /** the credit grant this entry is related to */
-    fun creditGrantId(): String = creditGrantId.getRequired("credit_grant_id")
 
     /**
      * if this entry is a deduction, the Metronome ID of the invoice where the credit deduction was
@@ -73,6 +73,13 @@ private constructor(
     /** an amount representing the change to the customer's credit balance */
     @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
 
+    @JsonProperty("created_by") @ExcludeMissing fun _createdBy() = createdBy
+
+    /** the credit grant this entry is related to */
+    @JsonProperty("credit_grant_id") @ExcludeMissing fun _creditGrantId() = creditGrantId
+
+    @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
+
     @JsonProperty("reason") @ExcludeMissing fun _reason() = reason
 
     /**
@@ -80,13 +87,6 @@ private constructor(
      * preceding charges
      */
     @JsonProperty("running_balance") @ExcludeMissing fun _runningBalance() = runningBalance
-
-    @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
-
-    @JsonProperty("created_by") @ExcludeMissing fun _createdBy() = createdBy
-
-    /** the credit grant this entry is related to */
-    @JsonProperty("credit_grant_id") @ExcludeMissing fun _creditGrantId() = creditGrantId
 
     /**
      * if this entry is a deduction, the Metronome ID of the invoice where the credit deduction was
@@ -104,11 +104,11 @@ private constructor(
     fun validate(): CreditLedgerEntry = apply {
         if (!validated) {
             amount()
-            reason()
-            runningBalance()
-            effectiveAt()
             createdBy()
             creditGrantId()
+            effectiveAt()
+            reason()
+            runningBalance()
             invoiceId()
             validated = true
         }
@@ -124,22 +124,22 @@ private constructor(
     class Builder {
 
         private var amount: JsonField<Double> = JsonMissing.of()
-        private var reason: JsonField<String> = JsonMissing.of()
-        private var runningBalance: JsonField<Double> = JsonMissing.of()
-        private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var createdBy: JsonField<String> = JsonMissing.of()
         private var creditGrantId: JsonField<String> = JsonMissing.of()
+        private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var reason: JsonField<String> = JsonMissing.of()
+        private var runningBalance: JsonField<Double> = JsonMissing.of()
         private var invoiceId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(creditLedgerEntry: CreditLedgerEntry) = apply {
             amount = creditLedgerEntry.amount
-            reason = creditLedgerEntry.reason
-            runningBalance = creditLedgerEntry.runningBalance
-            effectiveAt = creditLedgerEntry.effectiveAt
             createdBy = creditLedgerEntry.createdBy
             creditGrantId = creditLedgerEntry.creditGrantId
+            effectiveAt = creditLedgerEntry.effectiveAt
+            reason = creditLedgerEntry.reason
+            runningBalance = creditLedgerEntry.runningBalance
             invoiceId = creditLedgerEntry.invoiceId
             additionalProperties = creditLedgerEntry.additionalProperties.toMutableMap()
         }
@@ -149,6 +149,24 @@ private constructor(
 
         /** an amount representing the change to the customer's credit balance */
         fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+        fun createdBy(createdBy: String) = createdBy(JsonField.of(createdBy))
+
+        fun createdBy(createdBy: JsonField<String>) = apply { this.createdBy = createdBy }
+
+        /** the credit grant this entry is related to */
+        fun creditGrantId(creditGrantId: String) = creditGrantId(JsonField.of(creditGrantId))
+
+        /** the credit grant this entry is related to */
+        fun creditGrantId(creditGrantId: JsonField<String>) = apply {
+            this.creditGrantId = creditGrantId
+        }
+
+        fun effectiveAt(effectiveAt: OffsetDateTime) = effectiveAt(JsonField.of(effectiveAt))
+
+        fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
+            this.effectiveAt = effectiveAt
+        }
 
         fun reason(reason: String) = reason(JsonField.of(reason))
 
@@ -166,24 +184,6 @@ private constructor(
          */
         fun runningBalance(runningBalance: JsonField<Double>) = apply {
             this.runningBalance = runningBalance
-        }
-
-        fun effectiveAt(effectiveAt: OffsetDateTime) = effectiveAt(JsonField.of(effectiveAt))
-
-        fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
-            this.effectiveAt = effectiveAt
-        }
-
-        fun createdBy(createdBy: String) = createdBy(JsonField.of(createdBy))
-
-        fun createdBy(createdBy: JsonField<String>) = apply { this.createdBy = createdBy }
-
-        /** the credit grant this entry is related to */
-        fun creditGrantId(creditGrantId: String) = creditGrantId(JsonField.of(creditGrantId))
-
-        /** the credit grant this entry is related to */
-        fun creditGrantId(creditGrantId: JsonField<String>) = apply {
-            this.creditGrantId = creditGrantId
         }
 
         /**
@@ -222,11 +222,11 @@ private constructor(
         fun build(): CreditLedgerEntry =
             CreditLedgerEntry(
                 amount,
-                reason,
-                runningBalance,
-                effectiveAt,
                 createdBy,
                 creditGrantId,
+                effectiveAt,
+                reason,
+                runningBalance,
                 invoiceId,
                 additionalProperties.toImmutable(),
             )
@@ -237,15 +237,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditLedgerEntry && amount == other.amount && reason == other.reason && runningBalance == other.runningBalance && effectiveAt == other.effectiveAt && createdBy == other.createdBy && creditGrantId == other.creditGrantId && invoiceId == other.invoiceId && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CreditLedgerEntry && amount == other.amount && createdBy == other.createdBy && creditGrantId == other.creditGrantId && effectiveAt == other.effectiveAt && reason == other.reason && runningBalance == other.runningBalance && invoiceId == other.invoiceId && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(amount, reason, runningBalance, effectiveAt, createdBy, creditGrantId, invoiceId, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(amount, createdBy, creditGrantId, effectiveAt, reason, runningBalance, invoiceId, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CreditLedgerEntry{amount=$amount, reason=$reason, runningBalance=$runningBalance, effectiveAt=$effectiveAt, createdBy=$createdBy, creditGrantId=$creditGrantId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
+        "CreditLedgerEntry{amount=$amount, createdBy=$createdBy, creditGrantId=$creditGrantId, effectiveAt=$effectiveAt, reason=$reason, runningBalance=$runningBalance, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
 }

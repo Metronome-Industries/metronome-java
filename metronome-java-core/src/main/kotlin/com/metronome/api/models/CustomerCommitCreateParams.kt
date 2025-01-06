@@ -728,17 +728,17 @@ constructor(
     class AccessSchedule
     @JsonCreator
     private constructor(
-        @JsonProperty("credit_type_id") private val creditTypeId: String?,
         @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>,
+        @JsonProperty("credit_type_id") private val creditTypeId: String?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem> = scheduleItems
+
         /** Defaults to USD (cents) if not passed */
         @JsonProperty("credit_type_id")
         fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
-
-        @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem> = scheduleItems
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -753,19 +753,16 @@ constructor(
 
         class Builder {
 
-            private var creditTypeId: String? = null
             private var scheduleItems: MutableList<ScheduleItem>? = null
+            private var creditTypeId: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(accessSchedule: AccessSchedule) = apply {
-                creditTypeId = accessSchedule.creditTypeId
                 scheduleItems = accessSchedule.scheduleItems.toMutableList()
+                creditTypeId = accessSchedule.creditTypeId
                 additionalProperties = accessSchedule.additionalProperties.toMutableMap()
             }
-
-            /** Defaults to USD (cents) if not passed */
-            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
             fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
                 this.scheduleItems = scheduleItems.toMutableList()
@@ -774,6 +771,9 @@ constructor(
             fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
                 scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
             }
+
+            /** Defaults to USD (cents) if not passed */
+            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -796,9 +796,9 @@ constructor(
 
             fun build(): AccessSchedule =
                 AccessSchedule(
-                    creditTypeId,
                     checkNotNull(scheduleItems) { "`scheduleItems` is required but was not set" }
                         .toImmutable(),
+                    creditTypeId,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -808,19 +808,19 @@ constructor(
         @JsonCreator
         private constructor(
             @JsonProperty("amount") private val amount: Double,
-            @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
             @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
+            @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonProperty("amount") fun amount(): Double = amount
 
-            /** RFC 3339 timestamp (inclusive) */
-            @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
-
             /** RFC 3339 timestamp (exclusive) */
             @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
+
+            /** RFC 3339 timestamp (inclusive) */
+            @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -836,27 +836,27 @@ constructor(
             class Builder {
 
                 private var amount: Double? = null
-                private var startingAt: OffsetDateTime? = null
                 private var endingBefore: OffsetDateTime? = null
+                private var startingAt: OffsetDateTime? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(scheduleItem: ScheduleItem) = apply {
                     amount = scheduleItem.amount
-                    startingAt = scheduleItem.startingAt
                     endingBefore = scheduleItem.endingBefore
+                    startingAt = scheduleItem.startingAt
                     additionalProperties = scheduleItem.additionalProperties.toMutableMap()
                 }
 
                 fun amount(amount: Double) = apply { this.amount = amount }
 
-                /** RFC 3339 timestamp (inclusive) */
-                fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
-
                 /** RFC 3339 timestamp (exclusive) */
                 fun endingBefore(endingBefore: OffsetDateTime) = apply {
                     this.endingBefore = endingBefore
                 }
+
+                /** RFC 3339 timestamp (inclusive) */
+                fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -883,8 +883,8 @@ constructor(
                 fun build(): ScheduleItem =
                     ScheduleItem(
                         checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                         checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
+                        checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -894,17 +894,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ScheduleItem && amount == other.amount && startingAt == other.startingAt && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is ScheduleItem && amount == other.amount && endingBefore == other.endingBefore && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(amount, startingAt, endingBefore, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(amount, endingBefore, startingAt, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "ScheduleItem{amount=$amount, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
+                "ScheduleItem{amount=$amount, endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -912,17 +912,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is AccessSchedule && creditTypeId == other.creditTypeId && scheduleItems == other.scheduleItems && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is AccessSchedule && scheduleItems == other.scheduleItems && creditTypeId == other.creditTypeId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(creditTypeId, scheduleItems, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(scheduleItems, creditTypeId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "AccessSchedule{creditTypeId=$creditTypeId, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
+            "AccessSchedule{scheduleItems=$scheduleItems, creditTypeId=$creditTypeId, additionalProperties=$additionalProperties}"
     }
 
     class Type
@@ -1059,8 +1059,8 @@ constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("credit_type_id") private val creditTypeId: String?,
-        @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>?,
         @JsonProperty("recurring_schedule") private val recurringSchedule: RecurringSchedule?,
+        @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -1068,10 +1068,6 @@ constructor(
         /** Defaults to USD (cents) if not passed. */
         @JsonProperty("credit_type_id")
         fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
-
-        /** Either provide amount or provide both unit_price and quantity. */
-        @JsonProperty("schedule_items")
-        fun scheduleItems(): Optional<List<ScheduleItem>> = Optional.ofNullable(scheduleItems)
 
         /**
          * Enter the unit price and quantity for the charge or instead only send the amount. If
@@ -1081,6 +1077,10 @@ constructor(
         @JsonProperty("recurring_schedule")
         fun recurringSchedule(): Optional<RecurringSchedule> =
             Optional.ofNullable(recurringSchedule)
+
+        /** Either provide amount or provide both unit_price and quantity. */
+        @JsonProperty("schedule_items")
+        fun scheduleItems(): Optional<List<ScheduleItem>> = Optional.ofNullable(scheduleItems)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1096,20 +1096,29 @@ constructor(
         class Builder {
 
             private var creditTypeId: String? = null
-            private var scheduleItems: MutableList<ScheduleItem>? = null
             private var recurringSchedule: RecurringSchedule? = null
+            private var scheduleItems: MutableList<ScheduleItem>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(invoiceSchedule: InvoiceSchedule) = apply {
                 creditTypeId = invoiceSchedule.creditTypeId
-                scheduleItems = invoiceSchedule.scheduleItems?.toMutableList()
                 recurringSchedule = invoiceSchedule.recurringSchedule
+                scheduleItems = invoiceSchedule.scheduleItems?.toMutableList()
                 additionalProperties = invoiceSchedule.additionalProperties.toMutableMap()
             }
 
             /** Defaults to USD (cents) if not passed. */
             fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+
+            /**
+             * Enter the unit price and quantity for the charge or instead only send the amount. If
+             * amount is sent, the unit price is assumed to be the amount and quantity is inferred
+             * to be 1.
+             */
+            fun recurringSchedule(recurringSchedule: RecurringSchedule) = apply {
+                this.recurringSchedule = recurringSchedule
+            }
 
             /** Either provide amount or provide both unit_price and quantity. */
             fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
@@ -1119,15 +1128,6 @@ constructor(
             /** Either provide amount or provide both unit_price and quantity. */
             fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
                 scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
-            }
-
-            /**
-             * Enter the unit price and quantity for the charge or instead only send the amount. If
-             * amount is sent, the unit price is assumed to be the amount and quantity is inferred
-             * to be 1.
-             */
-            fun recurringSchedule(recurringSchedule: RecurringSchedule) = apply {
-                this.recurringSchedule = recurringSchedule
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1152,8 +1152,8 @@ constructor(
             fun build(): InvoiceSchedule =
                 InvoiceSchedule(
                     creditTypeId,
-                    scheduleItems?.toImmutable(),
                     recurringSchedule,
+                    scheduleItems?.toImmutable(),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -1167,31 +1167,33 @@ constructor(
         class RecurringSchedule
         @JsonCreator
         private constructor(
-            @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
+            @JsonProperty("amount_distribution") private val amountDistribution: AmountDistribution,
             @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
             @JsonProperty("frequency") private val frequency: Frequency,
-            @JsonProperty("unit_price") private val unitPrice: Double?,
-            @JsonProperty("quantity") private val quantity: Double?,
+            @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
             @JsonProperty("amount") private val amount: Double?,
-            @JsonProperty("amount_distribution") private val amountDistribution: AmountDistribution,
+            @JsonProperty("quantity") private val quantity: Double?,
+            @JsonProperty("unit_price") private val unitPrice: Double?,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            /** RFC 3339 timestamp (inclusive). */
-            @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+            @JsonProperty("amount_distribution")
+            fun amountDistribution(): AmountDistribution = amountDistribution
 
             /** RFC 3339 timestamp (exclusive). */
             @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
 
             @JsonProperty("frequency") fun frequency(): Frequency = frequency
 
+            /** RFC 3339 timestamp (inclusive). */
+            @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+
             /**
-             * Unit price for the charge. Will be multiplied by quantity to determine the amount and
-             * must be specified with quantity. If specified amount cannot be provided.
+             * Amount for the charge. Can be provided instead of unit_price and quantity. If amount
+             * is sent, the unit_price is assumed to be the amount and quantity is inferred to be 1.
              */
-            @JsonProperty("unit_price")
-            fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
+            @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
 
             /**
              * Quantity for the charge. Will be multiplied by unit_price to determine the amount and
@@ -1201,13 +1203,11 @@ constructor(
             fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
             /**
-             * Amount for the charge. Can be provided instead of unit_price and quantity. If amount
-             * is sent, the unit_price is assumed to be the amount and quantity is inferred to be 1.
+             * Unit price for the charge. Will be multiplied by quantity to determine the amount and
+             * must be specified with quantity. If specified amount cannot be provided.
              */
-            @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
-
-            @JsonProperty("amount_distribution")
-            fun amountDistribution(): AmountDistribution = amountDistribution
+            @JsonProperty("unit_price")
+            fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1222,29 +1222,30 @@ constructor(
 
             class Builder {
 
-                private var startingAt: OffsetDateTime? = null
+                private var amountDistribution: AmountDistribution? = null
                 private var endingBefore: OffsetDateTime? = null
                 private var frequency: Frequency? = null
-                private var unitPrice: Double? = null
-                private var quantity: Double? = null
+                private var startingAt: OffsetDateTime? = null
                 private var amount: Double? = null
-                private var amountDistribution: AmountDistribution? = null
+                private var quantity: Double? = null
+                private var unitPrice: Double? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(recurringSchedule: RecurringSchedule) = apply {
-                    startingAt = recurringSchedule.startingAt
+                    amountDistribution = recurringSchedule.amountDistribution
                     endingBefore = recurringSchedule.endingBefore
                     frequency = recurringSchedule.frequency
-                    unitPrice = recurringSchedule.unitPrice
-                    quantity = recurringSchedule.quantity
+                    startingAt = recurringSchedule.startingAt
                     amount = recurringSchedule.amount
-                    amountDistribution = recurringSchedule.amountDistribution
+                    quantity = recurringSchedule.quantity
+                    unitPrice = recurringSchedule.unitPrice
                     additionalProperties = recurringSchedule.additionalProperties.toMutableMap()
                 }
 
-                /** RFC 3339 timestamp (inclusive). */
-                fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+                fun amountDistribution(amountDistribution: AmountDistribution) = apply {
+                    this.amountDistribution = amountDistribution
+                }
 
                 /** RFC 3339 timestamp (exclusive). */
                 fun endingBefore(endingBefore: OffsetDateTime) = apply {
@@ -1253,17 +1254,8 @@ constructor(
 
                 fun frequency(frequency: Frequency) = apply { this.frequency = frequency }
 
-                /**
-                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
-                 * and must be specified with quantity. If specified amount cannot be provided.
-                 */
-                fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
-
-                /**
-                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
-                 * and must be specified with unit_price. If specified amount cannot be provided.
-                 */
-                fun quantity(quantity: Double) = apply { this.quantity = quantity }
+                /** RFC 3339 timestamp (inclusive). */
+                fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
 
                 /**
                  * Amount for the charge. Can be provided instead of unit_price and quantity. If
@@ -1272,9 +1264,17 @@ constructor(
                  */
                 fun amount(amount: Double) = apply { this.amount = amount }
 
-                fun amountDistribution(amountDistribution: AmountDistribution) = apply {
-                    this.amountDistribution = amountDistribution
-                }
+                /**
+                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
+                 * and must be specified with unit_price. If specified amount cannot be provided.
+                 */
+                fun quantity(quantity: Double) = apply { this.quantity = quantity }
+
+                /**
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
+                 */
+                fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -1300,15 +1300,15 @@ constructor(
 
                 fun build(): RecurringSchedule =
                     RecurringSchedule(
-                        checkNotNull(startingAt) { "`startingAt` is required but was not set" },
-                        checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
-                        checkNotNull(frequency) { "`frequency` is required but was not set" },
-                        unitPrice,
-                        quantity,
-                        amount,
                         checkNotNull(amountDistribution) {
                             "`amountDistribution` is required but was not set"
                         },
+                        checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
+                        checkNotNull(frequency) { "`frequency` is required but was not set" },
+                        checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                        amount,
+                        quantity,
+                        unitPrice,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -1453,37 +1453,39 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is RecurringSchedule && startingAt == other.startingAt && endingBefore == other.endingBefore && frequency == other.frequency && unitPrice == other.unitPrice && quantity == other.quantity && amount == other.amount && amountDistribution == other.amountDistribution && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is RecurringSchedule && amountDistribution == other.amountDistribution && endingBefore == other.endingBefore && frequency == other.frequency && startingAt == other.startingAt && amount == other.amount && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(startingAt, endingBefore, frequency, unitPrice, quantity, amount, amountDistribution, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(amountDistribution, endingBefore, frequency, startingAt, amount, quantity, unitPrice, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "RecurringSchedule{startingAt=$startingAt, endingBefore=$endingBefore, frequency=$frequency, unitPrice=$unitPrice, quantity=$quantity, amount=$amount, amountDistribution=$amountDistribution, additionalProperties=$additionalProperties}"
+                "RecurringSchedule{amountDistribution=$amountDistribution, endingBefore=$endingBefore, frequency=$frequency, startingAt=$startingAt, amount=$amount, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
         }
 
         @NoAutoDetect
         class ScheduleItem
         @JsonCreator
         private constructor(
-            @JsonProperty("unit_price") private val unitPrice: Double?,
-            @JsonProperty("quantity") private val quantity: Double?,
-            @JsonProperty("amount") private val amount: Double?,
             @JsonProperty("timestamp") private val timestamp: OffsetDateTime,
+            @JsonProperty("amount") private val amount: Double?,
+            @JsonProperty("quantity") private val quantity: Double?,
+            @JsonProperty("unit_price") private val unitPrice: Double?,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            /** timestamp of the scheduled event */
+            @JsonProperty("timestamp") fun timestamp(): OffsetDateTime = timestamp
+
             /**
-             * Unit price for the charge. Will be multiplied by quantity to determine the amount and
-             * must be specified with quantity. If specified amount cannot be provided.
+             * Amount for the charge. Can be provided instead of unit_price and quantity. If amount
+             * is sent, the unit_price is assumed to be the amount and quantity is inferred to be 1.
              */
-            @JsonProperty("unit_price")
-            fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
+            @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
 
             /**
              * Quantity for the charge. Will be multiplied by unit_price to determine the amount and
@@ -1493,13 +1495,11 @@ constructor(
             fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
             /**
-             * Amount for the charge. Can be provided instead of unit_price and quantity. If amount
-             * is sent, the unit_price is assumed to be the amount and quantity is inferred to be 1.
+             * Unit price for the charge. Will be multiplied by quantity to determine the amount and
+             * must be specified with quantity. If specified amount cannot be provided.
              */
-            @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
-
-            /** timestamp of the scheduled event */
-            @JsonProperty("timestamp") fun timestamp(): OffsetDateTime = timestamp
+            @JsonProperty("unit_price")
+            fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1514,32 +1514,23 @@ constructor(
 
             class Builder {
 
-                private var unitPrice: Double? = null
-                private var quantity: Double? = null
-                private var amount: Double? = null
                 private var timestamp: OffsetDateTime? = null
+                private var amount: Double? = null
+                private var quantity: Double? = null
+                private var unitPrice: Double? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(scheduleItem: ScheduleItem) = apply {
-                    unitPrice = scheduleItem.unitPrice
-                    quantity = scheduleItem.quantity
-                    amount = scheduleItem.amount
                     timestamp = scheduleItem.timestamp
+                    amount = scheduleItem.amount
+                    quantity = scheduleItem.quantity
+                    unitPrice = scheduleItem.unitPrice
                     additionalProperties = scheduleItem.additionalProperties.toMutableMap()
                 }
 
-                /**
-                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
-                 * and must be specified with quantity. If specified amount cannot be provided.
-                 */
-                fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
-
-                /**
-                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
-                 * and must be specified with unit_price. If specified amount cannot be provided.
-                 */
-                fun quantity(quantity: Double) = apply { this.quantity = quantity }
+                /** timestamp of the scheduled event */
+                fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
 
                 /**
                  * Amount for the charge. Can be provided instead of unit_price and quantity. If
@@ -1548,8 +1539,17 @@ constructor(
                  */
                 fun amount(amount: Double) = apply { this.amount = amount }
 
-                /** timestamp of the scheduled event */
-                fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
+                /**
+                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
+                 * and must be specified with unit_price. If specified amount cannot be provided.
+                 */
+                fun quantity(quantity: Double) = apply { this.quantity = quantity }
+
+                /**
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
+                 */
+                fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -1575,10 +1575,10 @@ constructor(
 
                 fun build(): ScheduleItem =
                     ScheduleItem(
-                        unitPrice,
-                        quantity,
-                        amount,
                         checkNotNull(timestamp) { "`timestamp` is required but was not set" },
+                        amount,
+                        quantity,
+                        unitPrice,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -1588,17 +1588,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ScheduleItem && unitPrice == other.unitPrice && quantity == other.quantity && amount == other.amount && timestamp == other.timestamp && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is ScheduleItem && timestamp == other.timestamp && amount == other.amount && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(unitPrice, quantity, amount, timestamp, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(timestamp, amount, quantity, unitPrice, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "ScheduleItem{unitPrice=$unitPrice, quantity=$quantity, amount=$amount, timestamp=$timestamp, additionalProperties=$additionalProperties}"
+                "ScheduleItem{timestamp=$timestamp, amount=$amount, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -1606,17 +1606,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is InvoiceSchedule && creditTypeId == other.creditTypeId && scheduleItems == other.scheduleItems && recurringSchedule == other.recurringSchedule && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is InvoiceSchedule && creditTypeId == other.creditTypeId && recurringSchedule == other.recurringSchedule && scheduleItems == other.scheduleItems && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(creditTypeId, scheduleItems, recurringSchedule, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(creditTypeId, recurringSchedule, scheduleItems, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "InvoiceSchedule{creditTypeId=$creditTypeId, scheduleItems=$scheduleItems, recurringSchedule=$recurringSchedule, additionalProperties=$additionalProperties}"
+            "InvoiceSchedule{creditTypeId=$creditTypeId, recurringSchedule=$recurringSchedule, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
     }
 
     class RateType

@@ -21,40 +21,39 @@ class ProService
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("description")
-    @ExcludeMissing
-    private val description: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("product_id")
-    @ExcludeMissing
-    private val productId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("netsuite_sales_order_id")
-    @ExcludeMissing
-    private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("unit_price")
-    @ExcludeMissing
-    private val unitPrice: JsonField<Double> = JsonMissing.of(),
-    @JsonProperty("quantity")
-    @ExcludeMissing
-    private val quantity: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("max_amount")
     @ExcludeMissing
     private val maxAmount: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("product_id")
+    @ExcludeMissing
+    private val productId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("quantity")
+    @ExcludeMissing
+    private val quantity: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("unit_price")
+    @ExcludeMissing
+    private val unitPrice: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("custom_fields")
     @ExcludeMissing
     private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+    @JsonProperty("description")
+    @ExcludeMissing
+    private val description: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("netsuite_sales_order_id")
+    @ExcludeMissing
+    private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun id(): String = id.getRequired("id")
 
-    fun description(): Optional<String> =
-        Optional.ofNullable(description.getNullable("description"))
+    /** Maximum amount for the term. */
+    fun maxAmount(): Double = maxAmount.getRequired("max_amount")
 
     fun productId(): String = productId.getRequired("product_id")
 
-    /** This field's availability is dependent on your client's configuration. */
-    fun netsuiteSalesOrderId(): Optional<String> =
-        Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
+    /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
+    fun quantity(): Double = quantity.getRequired("quantity")
 
     /**
      * Unit price for the charge. Will be multiplied by quantity to determine the amount and must be
@@ -62,25 +61,25 @@ private constructor(
      */
     fun unitPrice(): Double = unitPrice.getRequired("unit_price")
 
-    /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
-    fun quantity(): Double = quantity.getRequired("quantity")
-
-    /** Maximum amount for the term. */
-    fun maxAmount(): Double = maxAmount.getRequired("max_amount")
-
     fun customFields(): Optional<CustomFields> =
         Optional.ofNullable(customFields.getNullable("custom_fields"))
 
+    fun description(): Optional<String> =
+        Optional.ofNullable(description.getNullable("description"))
+
+    /** This field's availability is dependent on your client's configuration. */
+    fun netsuiteSalesOrderId(): Optional<String> =
+        Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
+
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
-    @JsonProperty("description") @ExcludeMissing fun _description() = description
+    /** Maximum amount for the term. */
+    @JsonProperty("max_amount") @ExcludeMissing fun _maxAmount() = maxAmount
 
     @JsonProperty("product_id") @ExcludeMissing fun _productId() = productId
 
-    /** This field's availability is dependent on your client's configuration. */
-    @JsonProperty("netsuite_sales_order_id")
-    @ExcludeMissing
-    fun _netsuiteSalesOrderId() = netsuiteSalesOrderId
+    /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
+    @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
 
     /**
      * Unit price for the charge. Will be multiplied by quantity to determine the amount and must be
@@ -88,13 +87,14 @@ private constructor(
      */
     @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice() = unitPrice
 
-    /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
-    @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
-
-    /** Maximum amount for the term. */
-    @JsonProperty("max_amount") @ExcludeMissing fun _maxAmount() = maxAmount
-
     @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+
+    @JsonProperty("description") @ExcludeMissing fun _description() = description
+
+    /** This field's availability is dependent on your client's configuration. */
+    @JsonProperty("netsuite_sales_order_id")
+    @ExcludeMissing
+    fun _netsuiteSalesOrderId() = netsuiteSalesOrderId
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -105,13 +105,13 @@ private constructor(
     fun validate(): ProService = apply {
         if (!validated) {
             id()
-            description()
-            productId()
-            netsuiteSalesOrderId()
-            unitPrice()
-            quantity()
             maxAmount()
+            productId()
+            quantity()
+            unitPrice()
             customFields().map { it.validate() }
+            description()
+            netsuiteSalesOrderId()
             validated = true
         }
     }
@@ -126,25 +126,25 @@ private constructor(
     class Builder {
 
         private var id: JsonField<String> = JsonMissing.of()
-        private var description: JsonField<String> = JsonMissing.of()
-        private var productId: JsonField<String> = JsonMissing.of()
-        private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
-        private var unitPrice: JsonField<Double> = JsonMissing.of()
-        private var quantity: JsonField<Double> = JsonMissing.of()
         private var maxAmount: JsonField<Double> = JsonMissing.of()
+        private var productId: JsonField<String> = JsonMissing.of()
+        private var quantity: JsonField<Double> = JsonMissing.of()
+        private var unitPrice: JsonField<Double> = JsonMissing.of()
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
+        private var description: JsonField<String> = JsonMissing.of()
+        private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(proService: ProService) = apply {
             id = proService.id
-            description = proService.description
-            productId = proService.productId
-            netsuiteSalesOrderId = proService.netsuiteSalesOrderId
-            unitPrice = proService.unitPrice
-            quantity = proService.quantity
             maxAmount = proService.maxAmount
+            productId = proService.productId
+            quantity = proService.quantity
+            unitPrice = proService.unitPrice
             customFields = proService.customFields
+            description = proService.description
+            netsuiteSalesOrderId = proService.netsuiteSalesOrderId
             additionalProperties = proService.additionalProperties.toMutableMap()
         }
 
@@ -152,22 +152,21 @@ private constructor(
 
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        fun description(description: String) = description(JsonField.of(description))
+        /** Maximum amount for the term. */
+        fun maxAmount(maxAmount: Double) = maxAmount(JsonField.of(maxAmount))
 
-        fun description(description: JsonField<String>) = apply { this.description = description }
+        /** Maximum amount for the term. */
+        fun maxAmount(maxAmount: JsonField<Double>) = apply { this.maxAmount = maxAmount }
 
         fun productId(productId: String) = productId(JsonField.of(productId))
 
         fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
-        /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
-            netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
+        /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
+        fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-        /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
-            this.netsuiteSalesOrderId = netsuiteSalesOrderId
-        }
+        /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
+        fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
         /**
          * Unit price for the charge. Will be multiplied by quantity to determine the amount and
@@ -181,22 +180,23 @@ private constructor(
          */
         fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
 
-        /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
-        fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
-
-        /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
-        fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
-
-        /** Maximum amount for the term. */
-        fun maxAmount(maxAmount: Double) = maxAmount(JsonField.of(maxAmount))
-
-        /** Maximum amount for the term. */
-        fun maxAmount(maxAmount: JsonField<Double>) = apply { this.maxAmount = maxAmount }
-
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
         fun customFields(customFields: JsonField<CustomFields>) = apply {
             this.customFields = customFields
+        }
+
+        fun description(description: String) = description(JsonField.of(description))
+
+        fun description(description: JsonField<String>) = apply { this.description = description }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
+            netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
+            this.netsuiteSalesOrderId = netsuiteSalesOrderId
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -221,13 +221,13 @@ private constructor(
         fun build(): ProService =
             ProService(
                 id,
-                description,
-                productId,
-                netsuiteSalesOrderId,
-                unitPrice,
-                quantity,
                 maxAmount,
+                productId,
+                quantity,
+                unitPrice,
                 customFields,
+                description,
+                netsuiteSalesOrderId,
                 additionalProperties.toImmutable(),
             )
     }
@@ -312,15 +312,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ProService && id == other.id && description == other.description && productId == other.productId && netsuiteSalesOrderId == other.netsuiteSalesOrderId && unitPrice == other.unitPrice && quantity == other.quantity && maxAmount == other.maxAmount && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ProService && id == other.id && maxAmount == other.maxAmount && productId == other.productId && quantity == other.quantity && unitPrice == other.unitPrice && customFields == other.customFields && description == other.description && netsuiteSalesOrderId == other.netsuiteSalesOrderId && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, description, productId, netsuiteSalesOrderId, unitPrice, quantity, maxAmount, customFields, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, maxAmount, productId, quantity, unitPrice, customFields, description, netsuiteSalesOrderId, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ProService{id=$id, description=$description, productId=$productId, netsuiteSalesOrderId=$netsuiteSalesOrderId, unitPrice=$unitPrice, quantity=$quantity, maxAmount=$maxAmount, customFields=$customFields, additionalProperties=$additionalProperties}"
+        "ProService{id=$id, maxAmount=$maxAmount, productId=$productId, quantity=$quantity, unitPrice=$unitPrice, customFields=$customFields, description=$description, netsuiteSalesOrderId=$netsuiteSalesOrderId, additionalProperties=$additionalProperties}"
 }

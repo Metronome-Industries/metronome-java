@@ -383,14 +383,14 @@ constructor(
     private constructor(
         @JsonProperty("professional_service_id") private val professionalServiceId: String,
         @JsonProperty("amendment_id") private val amendmentId: String?,
-        @JsonProperty("unit_price") private val unitPrice: Double?,
-        @JsonProperty("quantity") private val quantity: Double?,
         @JsonProperty("amount") private val amount: Double?,
-        @JsonProperty("netsuite_invoice_billing_start")
-        private val netsuiteInvoiceBillingStart: OffsetDateTime?,
+        @JsonProperty("metadata") private val metadata: String?,
         @JsonProperty("netsuite_invoice_billing_end")
         private val netsuiteInvoiceBillingEnd: OffsetDateTime?,
-        @JsonProperty("metadata") private val metadata: String?,
+        @JsonProperty("netsuite_invoice_billing_start")
+        private val netsuiteInvoiceBillingStart: OffsetDateTime?,
+        @JsonProperty("quantity") private val quantity: Double?,
+        @JsonProperty("unit_price") private val unitPrice: Double?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -402,31 +402,31 @@ constructor(
         @JsonProperty("amendment_id")
         fun amendmentId(): Optional<String> = Optional.ofNullable(amendmentId)
 
-        /**
-         * If specified, this overrides the unit price on the pro service term. Must also provide
-         * quantity (but not amount) if providing unit_price.
-         */
-        @JsonProperty("unit_price")
-        fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
-
-        /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
-        @JsonProperty("quantity") fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
-
         /** Amount for the term on the new invoice. */
         @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
 
-        /** The start date for the billing period on the invoice. */
-        @JsonProperty("netsuite_invoice_billing_start")
-        fun netsuiteInvoiceBillingStart(): Optional<OffsetDateTime> =
-            Optional.ofNullable(netsuiteInvoiceBillingStart)
+        /** For client use. */
+        @JsonProperty("metadata") fun metadata(): Optional<String> = Optional.ofNullable(metadata)
 
         /** The end date for the billing period on the invoice. */
         @JsonProperty("netsuite_invoice_billing_end")
         fun netsuiteInvoiceBillingEnd(): Optional<OffsetDateTime> =
             Optional.ofNullable(netsuiteInvoiceBillingEnd)
 
-        /** For client use. */
-        @JsonProperty("metadata") fun metadata(): Optional<String> = Optional.ofNullable(metadata)
+        /** The start date for the billing period on the invoice. */
+        @JsonProperty("netsuite_invoice_billing_start")
+        fun netsuiteInvoiceBillingStart(): Optional<OffsetDateTime> =
+            Optional.ofNullable(netsuiteInvoiceBillingStart)
+
+        /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
+        @JsonProperty("quantity") fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
+
+        /**
+         * If specified, this overrides the unit price on the pro service term. Must also provide
+         * quantity (but not amount) if providing unit_price.
+         */
+        @JsonProperty("unit_price")
+        fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -443,24 +443,24 @@ constructor(
 
             private var professionalServiceId: String? = null
             private var amendmentId: String? = null
-            private var unitPrice: Double? = null
-            private var quantity: Double? = null
             private var amount: Double? = null
-            private var netsuiteInvoiceBillingStart: OffsetDateTime? = null
-            private var netsuiteInvoiceBillingEnd: OffsetDateTime? = null
             private var metadata: String? = null
+            private var netsuiteInvoiceBillingEnd: OffsetDateTime? = null
+            private var netsuiteInvoiceBillingStart: OffsetDateTime? = null
+            private var quantity: Double? = null
+            private var unitPrice: Double? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(lineItem: LineItem) = apply {
                 professionalServiceId = lineItem.professionalServiceId
                 amendmentId = lineItem.amendmentId
-                unitPrice = lineItem.unitPrice
-                quantity = lineItem.quantity
                 amount = lineItem.amount
-                netsuiteInvoiceBillingStart = lineItem.netsuiteInvoiceBillingStart
-                netsuiteInvoiceBillingEnd = lineItem.netsuiteInvoiceBillingEnd
                 metadata = lineItem.metadata
+                netsuiteInvoiceBillingEnd = lineItem.netsuiteInvoiceBillingEnd
+                netsuiteInvoiceBillingStart = lineItem.netsuiteInvoiceBillingStart
+                quantity = lineItem.quantity
+                unitPrice = lineItem.unitPrice
                 additionalProperties = lineItem.additionalProperties.toMutableMap()
             }
 
@@ -471,32 +471,32 @@ constructor(
             /** If the professional_service_id was added on an amendment, this is required. */
             fun amendmentId(amendmentId: String) = apply { this.amendmentId = amendmentId }
 
-            /**
-             * If specified, this overrides the unit price on the pro service term. Must also
-             * provide quantity (but not amount) if providing unit_price.
-             */
-            fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
-
-            /**
-             * Quantity for the charge. Will be multiplied by unit_price to determine the amount.
-             */
-            fun quantity(quantity: Double) = apply { this.quantity = quantity }
-
             /** Amount for the term on the new invoice. */
             fun amount(amount: Double) = apply { this.amount = amount }
 
-            /** The start date for the billing period on the invoice. */
-            fun netsuiteInvoiceBillingStart(netsuiteInvoiceBillingStart: OffsetDateTime) = apply {
-                this.netsuiteInvoiceBillingStart = netsuiteInvoiceBillingStart
-            }
+            /** For client use. */
+            fun metadata(metadata: String) = apply { this.metadata = metadata }
 
             /** The end date for the billing period on the invoice. */
             fun netsuiteInvoiceBillingEnd(netsuiteInvoiceBillingEnd: OffsetDateTime) = apply {
                 this.netsuiteInvoiceBillingEnd = netsuiteInvoiceBillingEnd
             }
 
-            /** For client use. */
-            fun metadata(metadata: String) = apply { this.metadata = metadata }
+            /** The start date for the billing period on the invoice. */
+            fun netsuiteInvoiceBillingStart(netsuiteInvoiceBillingStart: OffsetDateTime) = apply {
+                this.netsuiteInvoiceBillingStart = netsuiteInvoiceBillingStart
+            }
+
+            /**
+             * Quantity for the charge. Will be multiplied by unit_price to determine the amount.
+             */
+            fun quantity(quantity: Double) = apply { this.quantity = quantity }
+
+            /**
+             * If specified, this overrides the unit price on the pro service term. Must also
+             * provide quantity (but not amount) if providing unit_price.
+             */
+            fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -523,12 +523,12 @@ constructor(
                         "`professionalServiceId` is required but was not set"
                     },
                     amendmentId,
-                    unitPrice,
-                    quantity,
                     amount,
-                    netsuiteInvoiceBillingStart,
-                    netsuiteInvoiceBillingEnd,
                     metadata,
+                    netsuiteInvoiceBillingEnd,
+                    netsuiteInvoiceBillingStart,
+                    quantity,
+                    unitPrice,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -538,17 +538,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is LineItem && professionalServiceId == other.professionalServiceId && amendmentId == other.amendmentId && unitPrice == other.unitPrice && quantity == other.quantity && amount == other.amount && netsuiteInvoiceBillingStart == other.netsuiteInvoiceBillingStart && netsuiteInvoiceBillingEnd == other.netsuiteInvoiceBillingEnd && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is LineItem && professionalServiceId == other.professionalServiceId && amendmentId == other.amendmentId && amount == other.amount && metadata == other.metadata && netsuiteInvoiceBillingEnd == other.netsuiteInvoiceBillingEnd && netsuiteInvoiceBillingStart == other.netsuiteInvoiceBillingStart && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(professionalServiceId, amendmentId, unitPrice, quantity, amount, netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd, metadata, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(professionalServiceId, amendmentId, amount, metadata, netsuiteInvoiceBillingEnd, netsuiteInvoiceBillingStart, quantity, unitPrice, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "LineItem{professionalServiceId=$professionalServiceId, amendmentId=$amendmentId, unitPrice=$unitPrice, quantity=$quantity, amount=$amount, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, metadata=$metadata, additionalProperties=$additionalProperties}"
+            "LineItem{professionalServiceId=$professionalServiceId, amendmentId=$amendmentId, amount=$amount, metadata=$metadata, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

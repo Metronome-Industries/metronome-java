@@ -24,6 +24,12 @@ class CustomerDetail
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+    @JsonProperty("customer_config")
+    @ExcludeMissing
+    private val customerConfig: JsonField<CustomerConfig> = JsonMissing.of(),
     @JsonProperty("external_id")
     @ExcludeMissing
     private val externalId: JsonField<String> = JsonMissing.of(),
@@ -31,12 +37,6 @@ private constructor(
     @ExcludeMissing
     private val ingestAliases: JsonField<List<String>> = JsonMissing.of(),
     @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("customer_config")
-    @ExcludeMissing
-    private val customerConfig: JsonField<CustomerConfig> = JsonMissing.of(),
-    @JsonProperty("custom_fields")
-    @ExcludeMissing
-    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
     @JsonProperty("current_billable_status")
     @ExcludeMissing
     private val currentBillableStatus: JsonField<CurrentBillableStatus> = JsonMissing.of(),
@@ -45,6 +45,10 @@ private constructor(
 
     /** the Metronome ID of the customer */
     fun id(): String = id.getRequired("id")
+
+    fun customFields(): CustomFields = customFields.getRequired("custom_fields")
+
+    fun customerConfig(): CustomerConfig = customerConfig.getRequired("customer_config")
 
     /**
      * (deprecated, use ingest_aliases instead) the first ID (Metronome or ingest alias) that can be
@@ -60,16 +64,16 @@ private constructor(
 
     fun name(): String = name.getRequired("name")
 
-    fun customerConfig(): CustomerConfig = customerConfig.getRequired("customer_config")
-
-    fun customFields(): CustomFields = customFields.getRequired("custom_fields")
-
     /** This field's availability is dependent on your client's configuration. */
     fun currentBillableStatus(): Optional<CurrentBillableStatus> =
         Optional.ofNullable(currentBillableStatus.getNullable("current_billable_status"))
 
     /** the Metronome ID of the customer */
     @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+
+    @JsonProperty("customer_config") @ExcludeMissing fun _customerConfig() = customerConfig
 
     /**
      * (deprecated, use ingest_aliases instead) the first ID (Metronome or ingest alias) that can be
@@ -85,10 +89,6 @@ private constructor(
 
     @JsonProperty("name") @ExcludeMissing fun _name() = name
 
-    @JsonProperty("customer_config") @ExcludeMissing fun _customerConfig() = customerConfig
-
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
-
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("current_billable_status")
     @ExcludeMissing
@@ -103,11 +103,11 @@ private constructor(
     fun validate(): CustomerDetail = apply {
         if (!validated) {
             id()
+            customFields().validate()
+            customerConfig().validate()
             externalId()
             ingestAliases()
             name()
-            customerConfig().validate()
-            customFields().validate()
             currentBillableStatus().map { it.validate() }
             validated = true
         }
@@ -123,22 +123,22 @@ private constructor(
     class Builder {
 
         private var id: JsonField<String> = JsonMissing.of()
+        private var customFields: JsonField<CustomFields> = JsonMissing.of()
+        private var customerConfig: JsonField<CustomerConfig> = JsonMissing.of()
         private var externalId: JsonField<String> = JsonMissing.of()
         private var ingestAliases: JsonField<List<String>> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
-        private var customerConfig: JsonField<CustomerConfig> = JsonMissing.of()
-        private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var currentBillableStatus: JsonField<CurrentBillableStatus> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerDetail: CustomerDetail) = apply {
             id = customerDetail.id
+            customFields = customerDetail.customFields
+            customerConfig = customerDetail.customerConfig
             externalId = customerDetail.externalId
             ingestAliases = customerDetail.ingestAliases
             name = customerDetail.name
-            customerConfig = customerDetail.customerConfig
-            customFields = customerDetail.customFields
             currentBillableStatus = customerDetail.currentBillableStatus
             additionalProperties = customerDetail.additionalProperties.toMutableMap()
         }
@@ -148,6 +148,19 @@ private constructor(
 
         /** the Metronome ID of the customer */
         fun id(id: JsonField<String>) = apply { this.id = id }
+
+        fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+
+        fun customFields(customFields: JsonField<CustomFields>) = apply {
+            this.customFields = customFields
+        }
+
+        fun customerConfig(customerConfig: CustomerConfig) =
+            customerConfig(JsonField.of(customerConfig))
+
+        fun customerConfig(customerConfig: JsonField<CustomerConfig>) = apply {
+            this.customerConfig = customerConfig
+        }
 
         /**
          * (deprecated, use ingest_aliases instead) the first ID (Metronome or ingest alias) that
@@ -178,19 +191,6 @@ private constructor(
         fun name(name: String) = name(JsonField.of(name))
 
         fun name(name: JsonField<String>) = apply { this.name = name }
-
-        fun customerConfig(customerConfig: CustomerConfig) =
-            customerConfig(JsonField.of(customerConfig))
-
-        fun customerConfig(customerConfig: JsonField<CustomerConfig>) = apply {
-            this.customerConfig = customerConfig
-        }
-
-        fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
-
-        fun customFields(customFields: JsonField<CustomFields>) = apply {
-            this.customFields = customFields
-        }
 
         /** This field's availability is dependent on your client's configuration. */
         fun currentBillableStatus(currentBillableStatus: CurrentBillableStatus) =
@@ -223,11 +223,11 @@ private constructor(
         fun build(): CustomerDetail =
             CustomerDetail(
                 id,
+                customFields,
+                customerConfig,
                 externalId,
                 ingestAliases.map { it.toImmutable() },
                 name,
-                customerConfig,
-                customFields,
                 currentBillableStatus,
                 additionalProperties.toImmutable(),
             )
@@ -584,15 +584,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerDetail && id == other.id && externalId == other.externalId && ingestAliases == other.ingestAliases && name == other.name && customerConfig == other.customerConfig && customFields == other.customFields && currentBillableStatus == other.currentBillableStatus && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerDetail && id == other.id && customFields == other.customFields && customerConfig == other.customerConfig && externalId == other.externalId && ingestAliases == other.ingestAliases && name == other.name && currentBillableStatus == other.currentBillableStatus && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, externalId, ingestAliases, name, customerConfig, customFields, currentBillableStatus, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, customFields, customerConfig, externalId, ingestAliases, name, currentBillableStatus, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CustomerDetail{id=$id, externalId=$externalId, ingestAliases=$ingestAliases, name=$name, customerConfig=$customerConfig, customFields=$customFields, currentBillableStatus=$currentBillableStatus, additionalProperties=$additionalProperties}"
+        "CustomerDetail{id=$id, customFields=$customFields, customerConfig=$customerConfig, externalId=$externalId, ingestAliases=$ingestAliases, name=$name, currentBillableStatus=$currentBillableStatus, additionalProperties=$additionalProperties}"
 }

@@ -96,30 +96,30 @@ private constructor(
     class Service
     @JsonCreator
     private constructor(
+        @JsonProperty("ips")
+        @ExcludeMissing
+        private val ips: JsonField<List<String>> = JsonMissing.of(),
         @JsonProperty("name")
         @ExcludeMissing
         private val name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("usage")
         @ExcludeMissing
         private val usage: JsonField<Usage> = JsonMissing.of(),
-        @JsonProperty("ips")
-        @ExcludeMissing
-        private val ips: JsonField<List<String>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
+
+        fun ips(): List<String> = ips.getRequired("ips")
 
         fun name(): String = name.getRequired("name")
 
         fun usage(): Usage = usage.getRequired("usage")
 
-        fun ips(): List<String> = ips.getRequired("ips")
+        @JsonProperty("ips") @ExcludeMissing fun _ips() = ips
 
         @JsonProperty("name") @ExcludeMissing fun _name() = name
 
         @JsonProperty("usage") @ExcludeMissing fun _usage() = usage
-
-        @JsonProperty("ips") @ExcludeMissing fun _ips() = ips
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -129,9 +129,9 @@ private constructor(
 
         fun validate(): Service = apply {
             if (!validated) {
+                ips()
                 name()
                 usage()
-                ips()
                 validated = true
             }
         }
@@ -145,18 +145,22 @@ private constructor(
 
         class Builder {
 
+            private var ips: JsonField<List<String>> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var usage: JsonField<Usage> = JsonMissing.of()
-            private var ips: JsonField<List<String>> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(service: Service) = apply {
+                ips = service.ips
                 name = service.name
                 usage = service.usage
-                ips = service.ips
                 additionalProperties = service.additionalProperties.toMutableMap()
             }
+
+            fun ips(ips: List<String>) = ips(JsonField.of(ips))
+
+            fun ips(ips: JsonField<List<String>>) = apply { this.ips = ips }
 
             fun name(name: String) = name(JsonField.of(name))
 
@@ -165,10 +169,6 @@ private constructor(
             fun usage(usage: Usage) = usage(JsonField.of(usage))
 
             fun usage(usage: JsonField<Usage>) = apply { this.usage = usage }
-
-            fun ips(ips: List<String>) = ips(JsonField.of(ips))
-
-            fun ips(ips: JsonField<List<String>>) = apply { this.ips = ips }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -191,9 +191,9 @@ private constructor(
 
             fun build(): Service =
                 Service(
+                    ips.map { it.toImmutable() },
                     name,
                     usage,
-                    ips.map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -260,17 +260,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Service && name == other.name && usage == other.usage && ips == other.ips && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Service && ips == other.ips && name == other.name && usage == other.usage && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(name, usage, ips, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(ips, name, usage, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Service{name=$name, usage=$usage, ips=$ips, additionalProperties=$additionalProperties}"
+            "Service{ips=$ips, name=$name, usage=$usage, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

@@ -20,18 +20,18 @@ import java.util.Optional
 class Tier
 @JsonCreator
 private constructor(
-    @JsonProperty("size") @ExcludeMissing private val size: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("price") @ExcludeMissing private val price: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("size") @ExcludeMissing private val size: JsonField<Double> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    fun size(): Optional<Double> = Optional.ofNullable(size.getNullable("size"))
-
     fun price(): Double = price.getRequired("price")
 
-    @JsonProperty("size") @ExcludeMissing fun _size() = size
+    fun size(): Optional<Double> = Optional.ofNullable(size.getNullable("size"))
 
     @JsonProperty("price") @ExcludeMissing fun _price() = price
+
+    @JsonProperty("size") @ExcludeMissing fun _size() = size
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -41,8 +41,8 @@ private constructor(
 
     fun validate(): Tier = apply {
         if (!validated) {
-            size()
             price()
+            size()
             validated = true
         }
     }
@@ -56,24 +56,24 @@ private constructor(
 
     class Builder {
 
-        private var size: JsonField<Double> = JsonMissing.of()
         private var price: JsonField<Double> = JsonMissing.of()
+        private var size: JsonField<Double> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(tier: Tier) = apply {
-            size = tier.size
             price = tier.price
+            size = tier.size
             additionalProperties = tier.additionalProperties.toMutableMap()
         }
-
-        fun size(size: Double) = size(JsonField.of(size))
-
-        fun size(size: JsonField<Double>) = apply { this.size = size }
 
         fun price(price: Double) = price(JsonField.of(price))
 
         fun price(price: JsonField<Double>) = apply { this.price = price }
+
+        fun size(size: Double) = size(JsonField.of(size))
+
+        fun size(size: JsonField<Double>) = apply { this.size = size }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -96,8 +96,8 @@ private constructor(
 
         fun build(): Tier =
             Tier(
-                size,
                 price,
+                size,
                 additionalProperties.toImmutable(),
             )
     }
@@ -107,15 +107,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Tier && size == other.size && price == other.price && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Tier && price == other.price && size == other.size && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(size, price, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(price, size, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Tier{size=$size, price=$price, additionalProperties=$additionalProperties}"
+        "Tier{price=$price, size=$size, additionalProperties=$additionalProperties}"
 }

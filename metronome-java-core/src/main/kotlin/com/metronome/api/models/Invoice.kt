@@ -24,242 +24,242 @@ class Invoice
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("customer_id")
-    @ExcludeMissing
-    private val customerId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("customer_custom_fields")
-    @ExcludeMissing
-    private val customerCustomFields: JsonField<CustomerCustomFields> = JsonMissing.of(),
-    @JsonProperty("netsuite_sales_order_id")
-    @ExcludeMissing
-    private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("salesforce_opportunity_id")
-    @ExcludeMissing
-    private val salesforceOpportunityId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("net_payment_terms_days")
-    @ExcludeMissing
-    private val netPaymentTermsDays: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("credit_type")
     @ExcludeMissing
     private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
-    @JsonProperty("invoice_adjustments")
+    @JsonProperty("customer_id")
     @ExcludeMissing
-    private val invoiceAdjustments: JsonField<List<InvoiceAdjustment>> = JsonMissing.of(),
+    private val customerId: JsonField<String> = JsonMissing.of(),
     @JsonProperty("line_items")
     @ExcludeMissing
     private val lineItems: JsonField<List<LineItem>> = JsonMissing.of(),
-    @JsonProperty("start_timestamp")
-    @ExcludeMissing
-    private val startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("end_timestamp")
-    @ExcludeMissing
-    private val endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("issued_at")
-    @ExcludeMissing
-    private val issuedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("created_at")
-    @ExcludeMissing
-    private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonProperty("status")
     @ExcludeMissing
     private val status: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("subtotal")
-    @ExcludeMissing
-    private val subtotal: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("total") @ExcludeMissing private val total: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("type") @ExcludeMissing private val type: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("amendment_id")
+    @ExcludeMissing
+    private val amendmentId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("billable_status")
+    @ExcludeMissing
+    private val billableStatus: JsonField<BillableStatus> = JsonMissing.of(),
+    @JsonProperty("contract_custom_fields")
+    @ExcludeMissing
+    private val contractCustomFields: JsonField<ContractCustomFields> = JsonMissing.of(),
+    @JsonProperty("contract_id")
+    @ExcludeMissing
+    private val contractId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("correction_record")
+    @ExcludeMissing
+    private val correctionRecord: JsonField<CorrectionRecord> = JsonMissing.of(),
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+    @JsonProperty("customer_custom_fields")
+    @ExcludeMissing
+    private val customerCustomFields: JsonField<CustomerCustomFields> = JsonMissing.of(),
+    @JsonProperty("end_timestamp")
+    @ExcludeMissing
+    private val endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonProperty("external_invoice")
     @ExcludeMissing
     private val externalInvoice: JsonField<ExternalInvoice> = JsonMissing.of(),
+    @JsonProperty("invoice_adjustments")
+    @ExcludeMissing
+    private val invoiceAdjustments: JsonField<List<InvoiceAdjustment>> = JsonMissing.of(),
+    @JsonProperty("issued_at")
+    @ExcludeMissing
+    private val issuedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("net_payment_terms_days")
+    @ExcludeMissing
+    private val netPaymentTermsDays: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("netsuite_sales_order_id")
+    @ExcludeMissing
+    private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("plan_custom_fields")
+    @ExcludeMissing
+    private val planCustomFields: JsonField<PlanCustomFields> = JsonMissing.of(),
     @JsonProperty("plan_id")
     @ExcludeMissing
     private val planId: JsonField<String> = JsonMissing.of(),
     @JsonProperty("plan_name")
     @ExcludeMissing
     private val planName: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("plan_custom_fields")
-    @ExcludeMissing
-    private val planCustomFields: JsonField<PlanCustomFields> = JsonMissing.of(),
-    @JsonProperty("contract_id")
-    @ExcludeMissing
-    private val contractId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("contract_custom_fields")
-    @ExcludeMissing
-    private val contractCustomFields: JsonField<ContractCustomFields> = JsonMissing.of(),
-    @JsonProperty("amendment_id")
-    @ExcludeMissing
-    private val amendmentId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("correction_record")
-    @ExcludeMissing
-    private val correctionRecord: JsonField<CorrectionRecord> = JsonMissing.of(),
     @JsonProperty("reseller_royalty")
     @ExcludeMissing
     private val resellerRoyalty: JsonField<ResellerRoyalty> = JsonMissing.of(),
-    @JsonProperty("custom_fields")
+    @JsonProperty("salesforce_opportunity_id")
     @ExcludeMissing
-    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
-    @JsonProperty("billable_status")
+    private val salesforceOpportunityId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("start_timestamp")
     @ExcludeMissing
-    private val billableStatus: JsonField<BillableStatus> = JsonMissing.of(),
+    private val startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("subtotal")
+    @ExcludeMissing
+    private val subtotal: JsonField<Double> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun id(): String = id.getRequired("id")
 
-    fun customerId(): String = customerId.getRequired("customer_id")
-
-    fun customerCustomFields(): Optional<CustomerCustomFields> =
-        Optional.ofNullable(customerCustomFields.getNullable("customer_custom_fields"))
-
-    /** This field's availability is dependent on your client's configuration. */
-    fun netsuiteSalesOrderId(): Optional<String> =
-        Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
-
-    /** This field's availability is dependent on your client's configuration. */
-    fun salesforceOpportunityId(): Optional<String> =
-        Optional.ofNullable(salesforceOpportunityId.getNullable("salesforce_opportunity_id"))
-
-    fun netPaymentTermsDays(): Optional<Double> =
-        Optional.ofNullable(netPaymentTermsDays.getNullable("net_payment_terms_days"))
-
     fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
-    fun invoiceAdjustments(): Optional<List<InvoiceAdjustment>> =
-        Optional.ofNullable(invoiceAdjustments.getNullable("invoice_adjustments"))
+    fun customerId(): String = customerId.getRequired("customer_id")
 
     fun lineItems(): List<LineItem> = lineItems.getRequired("line_items")
 
-    /** Beginning of the usage period this invoice covers (UTC) */
-    fun startTimestamp(): Optional<OffsetDateTime> =
-        Optional.ofNullable(startTimestamp.getNullable("start_timestamp"))
-
-    /** End of the usage period this invoice covers (UTC) */
-    fun endTimestamp(): Optional<OffsetDateTime> =
-        Optional.ofNullable(endTimestamp.getNullable("end_timestamp"))
-
-    /** When the invoice was issued (UTC) */
-    fun issuedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(issuedAt.getNullable("issued_at"))
-
-    /** When the invoice was created (UTC). This field is present for correction invoices only. */
-    fun createdAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(createdAt.getNullable("created_at"))
-
     fun status(): String = status.getRequired("status")
-
-    fun subtotal(): Optional<Double> = Optional.ofNullable(subtotal.getNullable("subtotal"))
 
     fun total(): Double = total.getRequired("total")
 
     fun type(): String = type.getRequired("type")
 
-    fun externalInvoice(): Optional<ExternalInvoice> =
-        Optional.ofNullable(externalInvoice.getNullable("external_invoice"))
-
-    fun planId(): Optional<String> = Optional.ofNullable(planId.getNullable("plan_id"))
-
-    fun planName(): Optional<String> = Optional.ofNullable(planName.getNullable("plan_name"))
-
-    fun planCustomFields(): Optional<PlanCustomFields> =
-        Optional.ofNullable(planCustomFields.getNullable("plan_custom_fields"))
-
-    fun contractId(): Optional<String> = Optional.ofNullable(contractId.getNullable("contract_id"))
-
-    fun contractCustomFields(): Optional<ContractCustomFields> =
-        Optional.ofNullable(contractCustomFields.getNullable("contract_custom_fields"))
-
     fun amendmentId(): Optional<String> =
         Optional.ofNullable(amendmentId.getNullable("amendment_id"))
-
-    fun correctionRecord(): Optional<CorrectionRecord> =
-        Optional.ofNullable(correctionRecord.getNullable("correction_record"))
-
-    /** only present for beta contract invoices with reseller royalties */
-    fun resellerRoyalty(): Optional<ResellerRoyalty> =
-        Optional.ofNullable(resellerRoyalty.getNullable("reseller_royalty"))
-
-    fun customFields(): Optional<CustomFields> =
-        Optional.ofNullable(customFields.getNullable("custom_fields"))
 
     /** This field's availability is dependent on your client's configuration. */
     fun billableStatus(): Optional<BillableStatus> =
         Optional.ofNullable(billableStatus.getNullable("billable_status"))
 
+    fun contractCustomFields(): Optional<ContractCustomFields> =
+        Optional.ofNullable(contractCustomFields.getNullable("contract_custom_fields"))
+
+    fun contractId(): Optional<String> = Optional.ofNullable(contractId.getNullable("contract_id"))
+
+    fun correctionRecord(): Optional<CorrectionRecord> =
+        Optional.ofNullable(correctionRecord.getNullable("correction_record"))
+
+    /** When the invoice was created (UTC). This field is present for correction invoices only. */
+    fun createdAt(): Optional<OffsetDateTime> =
+        Optional.ofNullable(createdAt.getNullable("created_at"))
+
+    fun customFields(): Optional<CustomFields> =
+        Optional.ofNullable(customFields.getNullable("custom_fields"))
+
+    fun customerCustomFields(): Optional<CustomerCustomFields> =
+        Optional.ofNullable(customerCustomFields.getNullable("customer_custom_fields"))
+
+    /** End of the usage period this invoice covers (UTC) */
+    fun endTimestamp(): Optional<OffsetDateTime> =
+        Optional.ofNullable(endTimestamp.getNullable("end_timestamp"))
+
+    fun externalInvoice(): Optional<ExternalInvoice> =
+        Optional.ofNullable(externalInvoice.getNullable("external_invoice"))
+
+    fun invoiceAdjustments(): Optional<List<InvoiceAdjustment>> =
+        Optional.ofNullable(invoiceAdjustments.getNullable("invoice_adjustments"))
+
+    /** When the invoice was issued (UTC) */
+    fun issuedAt(): Optional<OffsetDateTime> =
+        Optional.ofNullable(issuedAt.getNullable("issued_at"))
+
+    fun netPaymentTermsDays(): Optional<Double> =
+        Optional.ofNullable(netPaymentTermsDays.getNullable("net_payment_terms_days"))
+
+    /** This field's availability is dependent on your client's configuration. */
+    fun netsuiteSalesOrderId(): Optional<String> =
+        Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
+
+    fun planCustomFields(): Optional<PlanCustomFields> =
+        Optional.ofNullable(planCustomFields.getNullable("plan_custom_fields"))
+
+    fun planId(): Optional<String> = Optional.ofNullable(planId.getNullable("plan_id"))
+
+    fun planName(): Optional<String> = Optional.ofNullable(planName.getNullable("plan_name"))
+
+    /** only present for beta contract invoices with reseller royalties */
+    fun resellerRoyalty(): Optional<ResellerRoyalty> =
+        Optional.ofNullable(resellerRoyalty.getNullable("reseller_royalty"))
+
+    /** This field's availability is dependent on your client's configuration. */
+    fun salesforceOpportunityId(): Optional<String> =
+        Optional.ofNullable(salesforceOpportunityId.getNullable("salesforce_opportunity_id"))
+
+    /** Beginning of the usage period this invoice covers (UTC) */
+    fun startTimestamp(): Optional<OffsetDateTime> =
+        Optional.ofNullable(startTimestamp.getNullable("start_timestamp"))
+
+    fun subtotal(): Optional<Double> = Optional.ofNullable(subtotal.getNullable("subtotal"))
+
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
+    @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+
     @JsonProperty("customer_id") @ExcludeMissing fun _customerId() = customerId
+
+    @JsonProperty("line_items") @ExcludeMissing fun _lineItems() = lineItems
+
+    @JsonProperty("status") @ExcludeMissing fun _status() = status
+
+    @JsonProperty("total") @ExcludeMissing fun _total() = total
+
+    @JsonProperty("type") @ExcludeMissing fun _type() = type
+
+    @JsonProperty("amendment_id") @ExcludeMissing fun _amendmentId() = amendmentId
+
+    /** This field's availability is dependent on your client's configuration. */
+    @JsonProperty("billable_status") @ExcludeMissing fun _billableStatus() = billableStatus
+
+    @JsonProperty("contract_custom_fields")
+    @ExcludeMissing
+    fun _contractCustomFields() = contractCustomFields
+
+    @JsonProperty("contract_id") @ExcludeMissing fun _contractId() = contractId
+
+    @JsonProperty("correction_record") @ExcludeMissing fun _correctionRecord() = correctionRecord
+
+    /** When the invoice was created (UTC). This field is present for correction invoices only. */
+    @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
+
+    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
 
     @JsonProperty("customer_custom_fields")
     @ExcludeMissing
     fun _customerCustomFields() = customerCustomFields
+
+    /** End of the usage period this invoice covers (UTC) */
+    @JsonProperty("end_timestamp") @ExcludeMissing fun _endTimestamp() = endTimestamp
+
+    @JsonProperty("external_invoice") @ExcludeMissing fun _externalInvoice() = externalInvoice
+
+    @JsonProperty("invoice_adjustments")
+    @ExcludeMissing
+    fun _invoiceAdjustments() = invoiceAdjustments
+
+    /** When the invoice was issued (UTC) */
+    @JsonProperty("issued_at") @ExcludeMissing fun _issuedAt() = issuedAt
+
+    @JsonProperty("net_payment_terms_days")
+    @ExcludeMissing
+    fun _netPaymentTermsDays() = netPaymentTermsDays
 
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("netsuite_sales_order_id")
     @ExcludeMissing
     fun _netsuiteSalesOrderId() = netsuiteSalesOrderId
 
-    /** This field's availability is dependent on your client's configuration. */
-    @JsonProperty("salesforce_opportunity_id")
-    @ExcludeMissing
-    fun _salesforceOpportunityId() = salesforceOpportunityId
-
-    @JsonProperty("net_payment_terms_days")
-    @ExcludeMissing
-    fun _netPaymentTermsDays() = netPaymentTermsDays
-
-    @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
-
-    @JsonProperty("invoice_adjustments")
-    @ExcludeMissing
-    fun _invoiceAdjustments() = invoiceAdjustments
-
-    @JsonProperty("line_items") @ExcludeMissing fun _lineItems() = lineItems
-
-    /** Beginning of the usage period this invoice covers (UTC) */
-    @JsonProperty("start_timestamp") @ExcludeMissing fun _startTimestamp() = startTimestamp
-
-    /** End of the usage period this invoice covers (UTC) */
-    @JsonProperty("end_timestamp") @ExcludeMissing fun _endTimestamp() = endTimestamp
-
-    /** When the invoice was issued (UTC) */
-    @JsonProperty("issued_at") @ExcludeMissing fun _issuedAt() = issuedAt
-
-    /** When the invoice was created (UTC). This field is present for correction invoices only. */
-    @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
-
-    @JsonProperty("status") @ExcludeMissing fun _status() = status
-
-    @JsonProperty("subtotal") @ExcludeMissing fun _subtotal() = subtotal
-
-    @JsonProperty("total") @ExcludeMissing fun _total() = total
-
-    @JsonProperty("type") @ExcludeMissing fun _type() = type
-
-    @JsonProperty("external_invoice") @ExcludeMissing fun _externalInvoice() = externalInvoice
+    @JsonProperty("plan_custom_fields") @ExcludeMissing fun _planCustomFields() = planCustomFields
 
     @JsonProperty("plan_id") @ExcludeMissing fun _planId() = planId
 
     @JsonProperty("plan_name") @ExcludeMissing fun _planName() = planName
 
-    @JsonProperty("plan_custom_fields") @ExcludeMissing fun _planCustomFields() = planCustomFields
-
-    @JsonProperty("contract_id") @ExcludeMissing fun _contractId() = contractId
-
-    @JsonProperty("contract_custom_fields")
-    @ExcludeMissing
-    fun _contractCustomFields() = contractCustomFields
-
-    @JsonProperty("amendment_id") @ExcludeMissing fun _amendmentId() = amendmentId
-
-    @JsonProperty("correction_record") @ExcludeMissing fun _correctionRecord() = correctionRecord
-
     /** only present for beta contract invoices with reseller royalties */
     @JsonProperty("reseller_royalty") @ExcludeMissing fun _resellerRoyalty() = resellerRoyalty
 
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
-
     /** This field's availability is dependent on your client's configuration. */
-    @JsonProperty("billable_status") @ExcludeMissing fun _billableStatus() = billableStatus
+    @JsonProperty("salesforce_opportunity_id")
+    @ExcludeMissing
+    fun _salesforceOpportunityId() = salesforceOpportunityId
+
+    /** Beginning of the usage period this invoice covers (UTC) */
+    @JsonProperty("start_timestamp") @ExcludeMissing fun _startTimestamp() = startTimestamp
+
+    @JsonProperty("subtotal") @ExcludeMissing fun _subtotal() = subtotal
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -270,33 +270,33 @@ private constructor(
     fun validate(): Invoice = apply {
         if (!validated) {
             id()
-            customerId()
-            customerCustomFields().map { it.validate() }
-            netsuiteSalesOrderId()
-            salesforceOpportunityId()
-            netPaymentTermsDays()
             creditType().validate()
-            invoiceAdjustments().map { it.forEach { it.validate() } }
+            customerId()
             lineItems().forEach { it.validate() }
-            startTimestamp()
-            endTimestamp()
-            issuedAt()
-            createdAt()
             status()
-            subtotal()
             total()
             type()
+            amendmentId()
+            billableStatus()
+            contractCustomFields().map { it.validate() }
+            contractId()
+            correctionRecord().map { it.validate() }
+            createdAt()
+            customFields().map { it.validate() }
+            customerCustomFields().map { it.validate() }
+            endTimestamp()
             externalInvoice().map { it.validate() }
+            invoiceAdjustments().map { it.forEach { it.validate() } }
+            issuedAt()
+            netPaymentTermsDays()
+            netsuiteSalesOrderId()
+            planCustomFields().map { it.validate() }
             planId()
             planName()
-            planCustomFields().map { it.validate() }
-            contractId()
-            contractCustomFields().map { it.validate() }
-            amendmentId()
-            correctionRecord().map { it.validate() }
             resellerRoyalty().map { it.validate() }
-            customFields().map { it.validate() }
-            billableStatus()
+            salesforceOpportunityId()
+            startTimestamp()
+            subtotal()
             validated = true
         }
     }
@@ -311,65 +311,65 @@ private constructor(
     class Builder {
 
         private var id: JsonField<String> = JsonMissing.of()
-        private var customerId: JsonField<String> = JsonMissing.of()
-        private var customerCustomFields: JsonField<CustomerCustomFields> = JsonMissing.of()
-        private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
-        private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
-        private var netPaymentTermsDays: JsonField<Double> = JsonMissing.of()
         private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
-        private var invoiceAdjustments: JsonField<List<InvoiceAdjustment>> = JsonMissing.of()
+        private var customerId: JsonField<String> = JsonMissing.of()
         private var lineItems: JsonField<List<LineItem>> = JsonMissing.of()
-        private var startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var issuedAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var status: JsonField<String> = JsonMissing.of()
-        private var subtotal: JsonField<Double> = JsonMissing.of()
         private var total: JsonField<Double> = JsonMissing.of()
         private var type: JsonField<String> = JsonMissing.of()
+        private var amendmentId: JsonField<String> = JsonMissing.of()
+        private var billableStatus: JsonField<BillableStatus> = JsonMissing.of()
+        private var contractCustomFields: JsonField<ContractCustomFields> = JsonMissing.of()
+        private var contractId: JsonField<String> = JsonMissing.of()
+        private var correctionRecord: JsonField<CorrectionRecord> = JsonMissing.of()
+        private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var customFields: JsonField<CustomFields> = JsonMissing.of()
+        private var customerCustomFields: JsonField<CustomerCustomFields> = JsonMissing.of()
+        private var endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
         private var externalInvoice: JsonField<ExternalInvoice> = JsonMissing.of()
+        private var invoiceAdjustments: JsonField<List<InvoiceAdjustment>> = JsonMissing.of()
+        private var issuedAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var netPaymentTermsDays: JsonField<Double> = JsonMissing.of()
+        private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
+        private var planCustomFields: JsonField<PlanCustomFields> = JsonMissing.of()
         private var planId: JsonField<String> = JsonMissing.of()
         private var planName: JsonField<String> = JsonMissing.of()
-        private var planCustomFields: JsonField<PlanCustomFields> = JsonMissing.of()
-        private var contractId: JsonField<String> = JsonMissing.of()
-        private var contractCustomFields: JsonField<ContractCustomFields> = JsonMissing.of()
-        private var amendmentId: JsonField<String> = JsonMissing.of()
-        private var correctionRecord: JsonField<CorrectionRecord> = JsonMissing.of()
         private var resellerRoyalty: JsonField<ResellerRoyalty> = JsonMissing.of()
-        private var customFields: JsonField<CustomFields> = JsonMissing.of()
-        private var billableStatus: JsonField<BillableStatus> = JsonMissing.of()
+        private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
+        private var startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var subtotal: JsonField<Double> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(invoice: Invoice) = apply {
             id = invoice.id
-            customerId = invoice.customerId
-            customerCustomFields = invoice.customerCustomFields
-            netsuiteSalesOrderId = invoice.netsuiteSalesOrderId
-            salesforceOpportunityId = invoice.salesforceOpportunityId
-            netPaymentTermsDays = invoice.netPaymentTermsDays
             creditType = invoice.creditType
-            invoiceAdjustments = invoice.invoiceAdjustments
+            customerId = invoice.customerId
             lineItems = invoice.lineItems
-            startTimestamp = invoice.startTimestamp
-            endTimestamp = invoice.endTimestamp
-            issuedAt = invoice.issuedAt
-            createdAt = invoice.createdAt
             status = invoice.status
-            subtotal = invoice.subtotal
             total = invoice.total
             type = invoice.type
+            amendmentId = invoice.amendmentId
+            billableStatus = invoice.billableStatus
+            contractCustomFields = invoice.contractCustomFields
+            contractId = invoice.contractId
+            correctionRecord = invoice.correctionRecord
+            createdAt = invoice.createdAt
+            customFields = invoice.customFields
+            customerCustomFields = invoice.customerCustomFields
+            endTimestamp = invoice.endTimestamp
             externalInvoice = invoice.externalInvoice
+            invoiceAdjustments = invoice.invoiceAdjustments
+            issuedAt = invoice.issuedAt
+            netPaymentTermsDays = invoice.netPaymentTermsDays
+            netsuiteSalesOrderId = invoice.netsuiteSalesOrderId
+            planCustomFields = invoice.planCustomFields
             planId = invoice.planId
             planName = invoice.planName
-            planCustomFields = invoice.planCustomFields
-            contractId = invoice.contractId
-            contractCustomFields = invoice.contractCustomFields
-            amendmentId = invoice.amendmentId
-            correctionRecord = invoice.correctionRecord
             resellerRoyalty = invoice.resellerRoyalty
-            customFields = invoice.customFields
-            billableStatus = invoice.billableStatus
+            salesforceOpportunityId = invoice.salesforceOpportunityId
+            startTimestamp = invoice.startTimestamp
+            subtotal = invoice.subtotal
             additionalProperties = invoice.additionalProperties.toMutableMap()
         }
 
@@ -377,81 +377,62 @@ private constructor(
 
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        fun customerId(customerId: String) = customerId(JsonField.of(customerId))
-
-        fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
-
-        fun customerCustomFields(customerCustomFields: CustomerCustomFields) =
-            customerCustomFields(JsonField.of(customerCustomFields))
-
-        fun customerCustomFields(customerCustomFields: JsonField<CustomerCustomFields>) = apply {
-            this.customerCustomFields = customerCustomFields
-        }
-
-        /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
-            netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
-
-        /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
-            this.netsuiteSalesOrderId = netsuiteSalesOrderId
-        }
-
-        /** This field's availability is dependent on your client's configuration. */
-        fun salesforceOpportunityId(salesforceOpportunityId: String) =
-            salesforceOpportunityId(JsonField.of(salesforceOpportunityId))
-
-        /** This field's availability is dependent on your client's configuration. */
-        fun salesforceOpportunityId(salesforceOpportunityId: JsonField<String>) = apply {
-            this.salesforceOpportunityId = salesforceOpportunityId
-        }
-
-        fun netPaymentTermsDays(netPaymentTermsDays: Double) =
-            netPaymentTermsDays(JsonField.of(netPaymentTermsDays))
-
-        fun netPaymentTermsDays(netPaymentTermsDays: JsonField<Double>) = apply {
-            this.netPaymentTermsDays = netPaymentTermsDays
-        }
-
         fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
         fun creditType(creditType: JsonField<CreditTypeData>) = apply {
             this.creditType = creditType
         }
 
-        fun invoiceAdjustments(invoiceAdjustments: List<InvoiceAdjustment>) =
-            invoiceAdjustments(JsonField.of(invoiceAdjustments))
+        fun customerId(customerId: String) = customerId(JsonField.of(customerId))
 
-        fun invoiceAdjustments(invoiceAdjustments: JsonField<List<InvoiceAdjustment>>) = apply {
-            this.invoiceAdjustments = invoiceAdjustments
-        }
+        fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
         fun lineItems(lineItems: List<LineItem>) = lineItems(JsonField.of(lineItems))
 
         fun lineItems(lineItems: JsonField<List<LineItem>>) = apply { this.lineItems = lineItems }
 
-        /** Beginning of the usage period this invoice covers (UTC) */
-        fun startTimestamp(startTimestamp: OffsetDateTime) =
-            startTimestamp(JsonField.of(startTimestamp))
+        fun status(status: String) = status(JsonField.of(status))
 
-        /** Beginning of the usage period this invoice covers (UTC) */
-        fun startTimestamp(startTimestamp: JsonField<OffsetDateTime>) = apply {
-            this.startTimestamp = startTimestamp
+        fun status(status: JsonField<String>) = apply { this.status = status }
+
+        fun total(total: Double) = total(JsonField.of(total))
+
+        fun total(total: JsonField<Double>) = apply { this.total = total }
+
+        fun type(type: String) = type(JsonField.of(type))
+
+        fun type(type: JsonField<String>) = apply { this.type = type }
+
+        fun amendmentId(amendmentId: String) = amendmentId(JsonField.of(amendmentId))
+
+        fun amendmentId(amendmentId: JsonField<String>) = apply { this.amendmentId = amendmentId }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun billableStatus(billableStatus: BillableStatus) =
+            billableStatus(JsonField.of(billableStatus))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun billableStatus(billableStatus: JsonField<BillableStatus>) = apply {
+            this.billableStatus = billableStatus
         }
 
-        /** End of the usage period this invoice covers (UTC) */
-        fun endTimestamp(endTimestamp: OffsetDateTime) = endTimestamp(JsonField.of(endTimestamp))
+        fun contractCustomFields(contractCustomFields: ContractCustomFields) =
+            contractCustomFields(JsonField.of(contractCustomFields))
 
-        /** End of the usage period this invoice covers (UTC) */
-        fun endTimestamp(endTimestamp: JsonField<OffsetDateTime>) = apply {
-            this.endTimestamp = endTimestamp
+        fun contractCustomFields(contractCustomFields: JsonField<ContractCustomFields>) = apply {
+            this.contractCustomFields = contractCustomFields
         }
 
-        /** When the invoice was issued (UTC) */
-        fun issuedAt(issuedAt: OffsetDateTime) = issuedAt(JsonField.of(issuedAt))
+        fun contractId(contractId: String) = contractId(JsonField.of(contractId))
 
-        /** When the invoice was issued (UTC) */
-        fun issuedAt(issuedAt: JsonField<OffsetDateTime>) = apply { this.issuedAt = issuedAt }
+        fun contractId(contractId: JsonField<String>) = apply { this.contractId = contractId }
+
+        fun correctionRecord(correctionRecord: CorrectionRecord) =
+            correctionRecord(JsonField.of(correctionRecord))
+
+        fun correctionRecord(correctionRecord: JsonField<CorrectionRecord>) = apply {
+            this.correctionRecord = correctionRecord
+        }
 
         /**
          * When the invoice was created (UTC). This field is present for correction invoices only.
@@ -463,27 +444,68 @@ private constructor(
          */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
-        fun status(status: String) = status(JsonField.of(status))
+        fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
-        fun status(status: JsonField<String>) = apply { this.status = status }
+        fun customFields(customFields: JsonField<CustomFields>) = apply {
+            this.customFields = customFields
+        }
 
-        fun subtotal(subtotal: Double) = subtotal(JsonField.of(subtotal))
+        fun customerCustomFields(customerCustomFields: CustomerCustomFields) =
+            customerCustomFields(JsonField.of(customerCustomFields))
 
-        fun subtotal(subtotal: JsonField<Double>) = apply { this.subtotal = subtotal }
+        fun customerCustomFields(customerCustomFields: JsonField<CustomerCustomFields>) = apply {
+            this.customerCustomFields = customerCustomFields
+        }
 
-        fun total(total: Double) = total(JsonField.of(total))
+        /** End of the usage period this invoice covers (UTC) */
+        fun endTimestamp(endTimestamp: OffsetDateTime) = endTimestamp(JsonField.of(endTimestamp))
 
-        fun total(total: JsonField<Double>) = apply { this.total = total }
-
-        fun type(type: String) = type(JsonField.of(type))
-
-        fun type(type: JsonField<String>) = apply { this.type = type }
+        /** End of the usage period this invoice covers (UTC) */
+        fun endTimestamp(endTimestamp: JsonField<OffsetDateTime>) = apply {
+            this.endTimestamp = endTimestamp
+        }
 
         fun externalInvoice(externalInvoice: ExternalInvoice) =
             externalInvoice(JsonField.of(externalInvoice))
 
         fun externalInvoice(externalInvoice: JsonField<ExternalInvoice>) = apply {
             this.externalInvoice = externalInvoice
+        }
+
+        fun invoiceAdjustments(invoiceAdjustments: List<InvoiceAdjustment>) =
+            invoiceAdjustments(JsonField.of(invoiceAdjustments))
+
+        fun invoiceAdjustments(invoiceAdjustments: JsonField<List<InvoiceAdjustment>>) = apply {
+            this.invoiceAdjustments = invoiceAdjustments
+        }
+
+        /** When the invoice was issued (UTC) */
+        fun issuedAt(issuedAt: OffsetDateTime) = issuedAt(JsonField.of(issuedAt))
+
+        /** When the invoice was issued (UTC) */
+        fun issuedAt(issuedAt: JsonField<OffsetDateTime>) = apply { this.issuedAt = issuedAt }
+
+        fun netPaymentTermsDays(netPaymentTermsDays: Double) =
+            netPaymentTermsDays(JsonField.of(netPaymentTermsDays))
+
+        fun netPaymentTermsDays(netPaymentTermsDays: JsonField<Double>) = apply {
+            this.netPaymentTermsDays = netPaymentTermsDays
+        }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
+            netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
+            this.netsuiteSalesOrderId = netsuiteSalesOrderId
+        }
+
+        fun planCustomFields(planCustomFields: PlanCustomFields) =
+            planCustomFields(JsonField.of(planCustomFields))
+
+        fun planCustomFields(planCustomFields: JsonField<PlanCustomFields>) = apply {
+            this.planCustomFields = planCustomFields
         }
 
         fun planId(planId: String) = planId(JsonField.of(planId))
@@ -494,35 +516,6 @@ private constructor(
 
         fun planName(planName: JsonField<String>) = apply { this.planName = planName }
 
-        fun planCustomFields(planCustomFields: PlanCustomFields) =
-            planCustomFields(JsonField.of(planCustomFields))
-
-        fun planCustomFields(planCustomFields: JsonField<PlanCustomFields>) = apply {
-            this.planCustomFields = planCustomFields
-        }
-
-        fun contractId(contractId: String) = contractId(JsonField.of(contractId))
-
-        fun contractId(contractId: JsonField<String>) = apply { this.contractId = contractId }
-
-        fun contractCustomFields(contractCustomFields: ContractCustomFields) =
-            contractCustomFields(JsonField.of(contractCustomFields))
-
-        fun contractCustomFields(contractCustomFields: JsonField<ContractCustomFields>) = apply {
-            this.contractCustomFields = contractCustomFields
-        }
-
-        fun amendmentId(amendmentId: String) = amendmentId(JsonField.of(amendmentId))
-
-        fun amendmentId(amendmentId: JsonField<String>) = apply { this.amendmentId = amendmentId }
-
-        fun correctionRecord(correctionRecord: CorrectionRecord) =
-            correctionRecord(JsonField.of(correctionRecord))
-
-        fun correctionRecord(correctionRecord: JsonField<CorrectionRecord>) = apply {
-            this.correctionRecord = correctionRecord
-        }
-
         /** only present for beta contract invoices with reseller royalties */
         fun resellerRoyalty(resellerRoyalty: ResellerRoyalty) =
             resellerRoyalty(JsonField.of(resellerRoyalty))
@@ -532,20 +525,27 @@ private constructor(
             this.resellerRoyalty = resellerRoyalty
         }
 
-        fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
-
-        fun customFields(customFields: JsonField<CustomFields>) = apply {
-            this.customFields = customFields
-        }
+        /** This field's availability is dependent on your client's configuration. */
+        fun salesforceOpportunityId(salesforceOpportunityId: String) =
+            salesforceOpportunityId(JsonField.of(salesforceOpportunityId))
 
         /** This field's availability is dependent on your client's configuration. */
-        fun billableStatus(billableStatus: BillableStatus) =
-            billableStatus(JsonField.of(billableStatus))
-
-        /** This field's availability is dependent on your client's configuration. */
-        fun billableStatus(billableStatus: JsonField<BillableStatus>) = apply {
-            this.billableStatus = billableStatus
+        fun salesforceOpportunityId(salesforceOpportunityId: JsonField<String>) = apply {
+            this.salesforceOpportunityId = salesforceOpportunityId
         }
+
+        /** Beginning of the usage period this invoice covers (UTC) */
+        fun startTimestamp(startTimestamp: OffsetDateTime) =
+            startTimestamp(JsonField.of(startTimestamp))
+
+        /** Beginning of the usage period this invoice covers (UTC) */
+        fun startTimestamp(startTimestamp: JsonField<OffsetDateTime>) = apply {
+            this.startTimestamp = startTimestamp
+        }
+
+        fun subtotal(subtotal: Double) = subtotal(JsonField.of(subtotal))
+
+        fun subtotal(subtotal: JsonField<Double>) = apply { this.subtotal = subtotal }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -569,33 +569,33 @@ private constructor(
         fun build(): Invoice =
             Invoice(
                 id,
-                customerId,
-                customerCustomFields,
-                netsuiteSalesOrderId,
-                salesforceOpportunityId,
-                netPaymentTermsDays,
                 creditType,
-                invoiceAdjustments.map { it.toImmutable() },
+                customerId,
                 lineItems.map { it.toImmutable() },
-                startTimestamp,
-                endTimestamp,
-                issuedAt,
-                createdAt,
                 status,
-                subtotal,
                 total,
                 type,
+                amendmentId,
+                billableStatus,
+                contractCustomFields,
+                contractId,
+                correctionRecord,
+                createdAt,
+                customFields,
+                customerCustomFields,
+                endTimestamp,
                 externalInvoice,
+                invoiceAdjustments.map { it.toImmutable() },
+                issuedAt,
+                netPaymentTermsDays,
+                netsuiteSalesOrderId,
+                planCustomFields,
                 planId,
                 planName,
-                planCustomFields,
-                contractId,
-                contractCustomFields,
-                amendmentId,
-                correctionRecord,
                 resellerRoyalty,
-                customFields,
-                billableStatus,
+                salesforceOpportunityId,
+                startTimestamp,
+                subtotal,
                 additionalProperties.toImmutable(),
             )
     }
@@ -604,170 +604,123 @@ private constructor(
     class LineItem
     @JsonCreator
     private constructor(
-        @JsonProperty("name")
-        @ExcludeMissing
-        private val name: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("group_key")
-        @ExcludeMissing
-        private val groupKey: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("group_value")
-        @ExcludeMissing
-        private val groupValue: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("quantity")
-        @ExcludeMissing
-        private val quantity: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("total")
-        @ExcludeMissing
-        private val total: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("unit_price")
-        @ExcludeMissing
-        private val unitPrice: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("list_price")
-        @ExcludeMissing
-        private val listPrice: JsonField<Rate> = JsonMissing.of(),
-        @JsonProperty("product_id")
-        @ExcludeMissing
-        private val productId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("product_custom_fields")
-        @ExcludeMissing
-        private val productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of(),
-        @JsonProperty("product_type")
-        @ExcludeMissing
-        private val productType: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("netsuite_item_id")
-        @ExcludeMissing
-        private val netsuiteItemId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("is_prorated")
-        @ExcludeMissing
-        private val isProrated: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("credit_type")
         @ExcludeMissing
         private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
-        @JsonProperty("starting_at")
+        @JsonProperty("name")
         @ExcludeMissing
-        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("ending_before")
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("total")
         @ExcludeMissing
-        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("commit_id")
-        @ExcludeMissing
-        private val commitId: JsonField<String> = JsonMissing.of(),
+        private val total: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("applied_commit_or_credit")
         @ExcludeMissing
         private val appliedCommitOrCredit: JsonField<AppliedCommitOrCredit> = JsonMissing.of(),
         @JsonProperty("commit_custom_fields")
         @ExcludeMissing
         private val commitCustomFields: JsonField<CommitCustomFields> = JsonMissing.of(),
+        @JsonProperty("commit_id")
+        @ExcludeMissing
+        private val commitId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("commit_netsuite_item_id")
+        @ExcludeMissing
+        private val commitNetsuiteItemId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("commit_netsuite_sales_order_id")
+        @ExcludeMissing
+        private val commitNetsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("commit_segment_id")
         @ExcludeMissing
         private val commitSegmentId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("commit_type")
         @ExcludeMissing
         private val commitType: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("commit_netsuite_sales_order_id")
-        @ExcludeMissing
-        private val commitNetsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("commit_netsuite_item_id")
-        @ExcludeMissing
-        private val commitNetsuiteItemId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("postpaid_commit")
-        @ExcludeMissing
-        private val postpaidCommit: JsonField<PostpaidCommit> = JsonMissing.of(),
-        @JsonProperty("reseller_type")
-        @ExcludeMissing
-        private val resellerType: JsonField<ResellerType> = JsonMissing.of(),
-        @JsonProperty("sub_line_items")
-        @ExcludeMissing
-        private val subLineItems: JsonField<List<SubLineItem>> = JsonMissing.of(),
         @JsonProperty("custom_fields")
         @ExcludeMissing
         private val customFields: JsonField<CustomFields> = JsonMissing.of(),
-        @JsonProperty("pricing_group_values")
+        @JsonProperty("ending_before")
         @ExcludeMissing
-        private val pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of(),
-        @JsonProperty("presentation_group_values")
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("group_key")
         @ExcludeMissing
-        private val presentationGroupValues: JsonField<PresentationGroupValues> = JsonMissing.of(),
+        private val groupKey: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("group_value")
+        @ExcludeMissing
+        private val groupValue: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("is_prorated")
+        @ExcludeMissing
+        private val isProrated: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("list_price")
+        @ExcludeMissing
+        private val listPrice: JsonField<Rate> = JsonMissing.of(),
         @JsonProperty("metadata")
         @ExcludeMissing
         private val metadata: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("netsuite_invoice_billing_start")
-        @ExcludeMissing
-        private val netsuiteInvoiceBillingStart: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("netsuite_invoice_billing_end")
         @ExcludeMissing
         private val netsuiteInvoiceBillingEnd: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("professional_service_id")
+        @JsonProperty("netsuite_invoice_billing_start")
         @ExcludeMissing
-        private val professionalServiceId: JsonField<String> = JsonMissing.of(),
+        private val netsuiteInvoiceBillingStart: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("netsuite_item_id")
+        @ExcludeMissing
+        private val netsuiteItemId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("postpaid_commit")
+        @ExcludeMissing
+        private val postpaidCommit: JsonField<PostpaidCommit> = JsonMissing.of(),
+        @JsonProperty("presentation_group_values")
+        @ExcludeMissing
+        private val presentationGroupValues: JsonField<PresentationGroupValues> = JsonMissing.of(),
+        @JsonProperty("pricing_group_values")
+        @ExcludeMissing
+        private val pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of(),
+        @JsonProperty("product_custom_fields")
+        @ExcludeMissing
+        private val productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of(),
+        @JsonProperty("product_id")
+        @ExcludeMissing
+        private val productId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("product_type")
+        @ExcludeMissing
+        private val productType: JsonField<String> = JsonMissing.of(),
         @JsonProperty("professional_service_custom_fields")
         @ExcludeMissing
         private val professionalServiceCustomFields: JsonField<ProfessionalServiceCustomFields> =
             JsonMissing.of(),
-        @JsonProperty("scheduled_charge_id")
+        @JsonProperty("professional_service_id")
         @ExcludeMissing
-        private val scheduledChargeId: JsonField<String> = JsonMissing.of(),
+        private val professionalServiceId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("quantity")
+        @ExcludeMissing
+        private val quantity: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("reseller_type")
+        @ExcludeMissing
+        private val resellerType: JsonField<ResellerType> = JsonMissing.of(),
         @JsonProperty("scheduled_charge_custom_fields")
         @ExcludeMissing
         private val scheduledChargeCustomFields: JsonField<ScheduledChargeCustomFields> =
             JsonMissing.of(),
+        @JsonProperty("scheduled_charge_id")
+        @ExcludeMissing
+        private val scheduledChargeId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("sub_line_items")
+        @ExcludeMissing
+        private val subLineItems: JsonField<List<SubLineItem>> = JsonMissing.of(),
         @JsonProperty("tier") @ExcludeMissing private val tier: JsonField<Tier> = JsonMissing.of(),
+        @JsonProperty("unit_price")
+        @ExcludeMissing
+        private val unitPrice: JsonField<Double> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        fun name(): String = name.getRequired("name")
-
-        fun groupKey(): Optional<String> = Optional.ofNullable(groupKey.getNullable("group_key"))
-
-        fun groupValue(): Optional<String> =
-            Optional.ofNullable(groupValue.getNullable("group_value"))
-
-        fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
-
-        fun total(): Double = total.getRequired("total")
-
-        /** only present for beta contract invoices */
-        fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice.getNullable("unit_price"))
-
-        /**
-         * Only present for contract invoices and when the include_list_prices query parameter is
-         * set to true. This will include the list rate for the charge if applicable. Only present
-         * for usage and subscription line items.
-         */
-        fun listPrice(): Optional<Rate> = Optional.ofNullable(listPrice.getNullable("list_price"))
-
-        fun productId(): Optional<String> = Optional.ofNullable(productId.getNullable("product_id"))
-
-        fun productCustomFields(): Optional<ProductCustomFields> =
-            Optional.ofNullable(productCustomFields.getNullable("product_custom_fields"))
-
-        fun productType(): Optional<String> =
-            Optional.ofNullable(productType.getNullable("product_type"))
-
-        /**
-         * only present for beta contract invoices. This field's availability is dependent on your
-         * client's configuration.
-         */
-        fun netsuiteItemId(): Optional<String> =
-            Optional.ofNullable(netsuiteItemId.getNullable("netsuite_item_id"))
-
-        /** only present for beta contract invoices */
-        fun isProrated(): Optional<Boolean> =
-            Optional.ofNullable(isProrated.getNullable("is_prorated"))
-
         fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
-        /** only present for beta contract invoices */
-        fun startingAt(): Optional<OffsetDateTime> =
-            Optional.ofNullable(startingAt.getNullable("starting_at"))
+        fun name(): String = name.getRequired("name")
 
-        /** only present for beta contract invoices */
-        fun endingBefore(): Optional<OffsetDateTime> =
-            Optional.ofNullable(endingBefore.getNullable("ending_before"))
-
-        /** only present for beta contract invoices */
-        fun commitId(): Optional<String> = Optional.ofNullable(commitId.getNullable("commit_id"))
+        fun total(): Double = total.getRequired("total")
 
         /** only present for beta contract invoices */
         fun appliedCommitOrCredit(): Optional<AppliedCommitOrCredit> =
@@ -778,12 +731,14 @@ private constructor(
             Optional.ofNullable(commitCustomFields.getNullable("commit_custom_fields"))
 
         /** only present for beta contract invoices */
-        fun commitSegmentId(): Optional<String> =
-            Optional.ofNullable(commitSegmentId.getNullable("commit_segment_id"))
+        fun commitId(): Optional<String> = Optional.ofNullable(commitId.getNullable("commit_id"))
 
-        /** only present for beta contract invoices */
-        fun commitType(): Optional<String> =
-            Optional.ofNullable(commitType.getNullable("commit_type"))
+        /**
+         * only present for beta contract invoices. This field's availability is dependent on your
+         * client's configuration.
+         */
+        fun commitNetsuiteItemId(): Optional<String> =
+            Optional.ofNullable(commitNetsuiteItemId.getNullable("commit_netsuite_item_id"))
 
         /**
          * only present for beta contract invoices. This field's availability is dependent on your
@@ -794,29 +749,61 @@ private constructor(
                 commitNetsuiteSalesOrderId.getNullable("commit_netsuite_sales_order_id")
             )
 
-        /**
-         * only present for beta contract invoices. This field's availability is dependent on your
-         * client's configuration.
-         */
-        fun commitNetsuiteItemId(): Optional<String> =
-            Optional.ofNullable(commitNetsuiteItemId.getNullable("commit_netsuite_item_id"))
+        /** only present for beta contract invoices */
+        fun commitSegmentId(): Optional<String> =
+            Optional.ofNullable(commitSegmentId.getNullable("commit_segment_id"))
 
         /** only present for beta contract invoices */
-        fun postpaidCommit(): Optional<PostpaidCommit> =
-            Optional.ofNullable(postpaidCommit.getNullable("postpaid_commit"))
-
-        fun resellerType(): Optional<ResellerType> =
-            Optional.ofNullable(resellerType.getNullable("reseller_type"))
-
-        fun subLineItems(): Optional<List<SubLineItem>> =
-            Optional.ofNullable(subLineItems.getNullable("sub_line_items"))
+        fun commitType(): Optional<String> =
+            Optional.ofNullable(commitType.getNullable("commit_type"))
 
         fun customFields(): Optional<CustomFields> =
             Optional.ofNullable(customFields.getNullable("custom_fields"))
 
-        /** if pricing groups are used, this will contain the values used to calculate the price */
-        fun pricingGroupValues(): Optional<PricingGroupValues> =
-            Optional.ofNullable(pricingGroupValues.getNullable("pricing_group_values"))
+        /** only present for beta contract invoices */
+        fun endingBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+        fun groupKey(): Optional<String> = Optional.ofNullable(groupKey.getNullable("group_key"))
+
+        fun groupValue(): Optional<String> =
+            Optional.ofNullable(groupValue.getNullable("group_value"))
+
+        /** only present for beta contract invoices */
+        fun isProrated(): Optional<Boolean> =
+            Optional.ofNullable(isProrated.getNullable("is_prorated"))
+
+        /**
+         * Only present for contract invoices and when the include_list_prices query parameter is
+         * set to true. This will include the list rate for the charge if applicable. Only present
+         * for usage and subscription line items.
+         */
+        fun listPrice(): Optional<Rate> = Optional.ofNullable(listPrice.getNullable("list_price"))
+
+        fun metadata(): Optional<String> = Optional.ofNullable(metadata.getNullable("metadata"))
+
+        /** The end date for the billing period on the invoice. */
+        fun netsuiteInvoiceBillingEnd(): Optional<OffsetDateTime> =
+            Optional.ofNullable(
+                netsuiteInvoiceBillingEnd.getNullable("netsuite_invoice_billing_end")
+            )
+
+        /** The start date for the billing period on the invoice. */
+        fun netsuiteInvoiceBillingStart(): Optional<OffsetDateTime> =
+            Optional.ofNullable(
+                netsuiteInvoiceBillingStart.getNullable("netsuite_invoice_billing_start")
+            )
+
+        /**
+         * only present for beta contract invoices. This field's availability is dependent on your
+         * client's configuration.
+         */
+        fun netsuiteItemId(): Optional<String> =
+            Optional.ofNullable(netsuiteItemId.getNullable("netsuite_item_id"))
+
+        /** only present for beta contract invoices */
+        fun postpaidCommit(): Optional<PostpaidCommit> =
+            Optional.ofNullable(postpaidCommit.getNullable("postpaid_commit"))
 
         /**
          * if presentation groups are used, this will contain the values used to break down the line
@@ -825,23 +812,17 @@ private constructor(
         fun presentationGroupValues(): Optional<PresentationGroupValues> =
             Optional.ofNullable(presentationGroupValues.getNullable("presentation_group_values"))
 
-        fun metadata(): Optional<String> = Optional.ofNullable(metadata.getNullable("metadata"))
+        /** if pricing groups are used, this will contain the values used to calculate the price */
+        fun pricingGroupValues(): Optional<PricingGroupValues> =
+            Optional.ofNullable(pricingGroupValues.getNullable("pricing_group_values"))
 
-        /** The start date for the billing period on the invoice. */
-        fun netsuiteInvoiceBillingStart(): Optional<OffsetDateTime> =
-            Optional.ofNullable(
-                netsuiteInvoiceBillingStart.getNullable("netsuite_invoice_billing_start")
-            )
+        fun productCustomFields(): Optional<ProductCustomFields> =
+            Optional.ofNullable(productCustomFields.getNullable("product_custom_fields"))
 
-        /** The end date for the billing period on the invoice. */
-        fun netsuiteInvoiceBillingEnd(): Optional<OffsetDateTime> =
-            Optional.ofNullable(
-                netsuiteInvoiceBillingEnd.getNullable("netsuite_invoice_billing_end")
-            )
+        fun productId(): Optional<String> = Optional.ofNullable(productId.getNullable("product_id"))
 
-        /** only present for beta contract invoices */
-        fun professionalServiceId(): Optional<String> =
-            Optional.ofNullable(professionalServiceId.getNullable("professional_service_id"))
+        fun productType(): Optional<String> =
+            Optional.ofNullable(productType.getNullable("product_type"))
 
         /** only present for beta contract invoices */
         fun professionalServiceCustomFields(): Optional<ProfessionalServiceCustomFields> =
@@ -850,63 +831,40 @@ private constructor(
             )
 
         /** only present for beta contract invoices */
-        fun scheduledChargeId(): Optional<String> =
-            Optional.ofNullable(scheduledChargeId.getNullable("scheduled_charge_id"))
+        fun professionalServiceId(): Optional<String> =
+            Optional.ofNullable(professionalServiceId.getNullable("professional_service_id"))
+
+        fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
+
+        fun resellerType(): Optional<ResellerType> =
+            Optional.ofNullable(resellerType.getNullable("reseller_type"))
 
         fun scheduledChargeCustomFields(): Optional<ScheduledChargeCustomFields> =
             Optional.ofNullable(
                 scheduledChargeCustomFields.getNullable("scheduled_charge_custom_fields")
             )
 
+        /** only present for beta contract invoices */
+        fun scheduledChargeId(): Optional<String> =
+            Optional.ofNullable(scheduledChargeId.getNullable("scheduled_charge_id"))
+
+        /** only present for beta contract invoices */
+        fun startingAt(): Optional<OffsetDateTime> =
+            Optional.ofNullable(startingAt.getNullable("starting_at"))
+
+        fun subLineItems(): Optional<List<SubLineItem>> =
+            Optional.ofNullable(subLineItems.getNullable("sub_line_items"))
+
         fun tier(): Optional<Tier> = Optional.ofNullable(tier.getNullable("tier"))
 
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
-
-        @JsonProperty("group_key") @ExcludeMissing fun _groupKey() = groupKey
-
-        @JsonProperty("group_value") @ExcludeMissing fun _groupValue() = groupValue
-
-        @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
-
-        @JsonProperty("total") @ExcludeMissing fun _total() = total
-
         /** only present for beta contract invoices */
-        @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice() = unitPrice
-
-        /**
-         * Only present for contract invoices and when the include_list_prices query parameter is
-         * set to true. This will include the list rate for the charge if applicable. Only present
-         * for usage and subscription line items.
-         */
-        @JsonProperty("list_price") @ExcludeMissing fun _listPrice() = listPrice
-
-        @JsonProperty("product_id") @ExcludeMissing fun _productId() = productId
-
-        @JsonProperty("product_custom_fields")
-        @ExcludeMissing
-        fun _productCustomFields() = productCustomFields
-
-        @JsonProperty("product_type") @ExcludeMissing fun _productType() = productType
-
-        /**
-         * only present for beta contract invoices. This field's availability is dependent on your
-         * client's configuration.
-         */
-        @JsonProperty("netsuite_item_id") @ExcludeMissing fun _netsuiteItemId() = netsuiteItemId
-
-        /** only present for beta contract invoices */
-        @JsonProperty("is_prorated") @ExcludeMissing fun _isProrated() = isProrated
+        fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice.getNullable("unit_price"))
 
         @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
 
-        /** only present for beta contract invoices */
-        @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+        @JsonProperty("name") @ExcludeMissing fun _name() = name
 
-        /** only present for beta contract invoices */
-        @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
-
-        /** only present for beta contract invoices */
-        @JsonProperty("commit_id") @ExcludeMissing fun _commitId() = commitId
+        @JsonProperty("total") @ExcludeMissing fun _total() = total
 
         /** only present for beta contract invoices */
         @JsonProperty("applied_commit_or_credit")
@@ -919,18 +877,7 @@ private constructor(
         fun _commitCustomFields() = commitCustomFields
 
         /** only present for beta contract invoices */
-        @JsonProperty("commit_segment_id") @ExcludeMissing fun _commitSegmentId() = commitSegmentId
-
-        /** only present for beta contract invoices */
-        @JsonProperty("commit_type") @ExcludeMissing fun _commitType() = commitType
-
-        /**
-         * only present for beta contract invoices. This field's availability is dependent on your
-         * client's configuration.
-         */
-        @JsonProperty("commit_netsuite_sales_order_id")
-        @ExcludeMissing
-        fun _commitNetsuiteSalesOrderId() = commitNetsuiteSalesOrderId
+        @JsonProperty("commit_id") @ExcludeMissing fun _commitId() = commitId
 
         /**
          * only present for beta contract invoices. This field's availability is dependent on your
@@ -940,19 +887,59 @@ private constructor(
         @ExcludeMissing
         fun _commitNetsuiteItemId() = commitNetsuiteItemId
 
+        /**
+         * only present for beta contract invoices. This field's availability is dependent on your
+         * client's configuration.
+         */
+        @JsonProperty("commit_netsuite_sales_order_id")
+        @ExcludeMissing
+        fun _commitNetsuiteSalesOrderId() = commitNetsuiteSalesOrderId
+
         /** only present for beta contract invoices */
-        @JsonProperty("postpaid_commit") @ExcludeMissing fun _postpaidCommit() = postpaidCommit
+        @JsonProperty("commit_segment_id") @ExcludeMissing fun _commitSegmentId() = commitSegmentId
 
-        @JsonProperty("reseller_type") @ExcludeMissing fun _resellerType() = resellerType
-
-        @JsonProperty("sub_line_items") @ExcludeMissing fun _subLineItems() = subLineItems
+        /** only present for beta contract invoices */
+        @JsonProperty("commit_type") @ExcludeMissing fun _commitType() = commitType
 
         @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
 
-        /** if pricing groups are used, this will contain the values used to calculate the price */
-        @JsonProperty("pricing_group_values")
+        /** only present for beta contract invoices */
+        @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
+
+        @JsonProperty("group_key") @ExcludeMissing fun _groupKey() = groupKey
+
+        @JsonProperty("group_value") @ExcludeMissing fun _groupValue() = groupValue
+
+        /** only present for beta contract invoices */
+        @JsonProperty("is_prorated") @ExcludeMissing fun _isProrated() = isProrated
+
+        /**
+         * Only present for contract invoices and when the include_list_prices query parameter is
+         * set to true. This will include the list rate for the charge if applicable. Only present
+         * for usage and subscription line items.
+         */
+        @JsonProperty("list_price") @ExcludeMissing fun _listPrice() = listPrice
+
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
+
+        /** The end date for the billing period on the invoice. */
+        @JsonProperty("netsuite_invoice_billing_end")
         @ExcludeMissing
-        fun _pricingGroupValues() = pricingGroupValues
+        fun _netsuiteInvoiceBillingEnd() = netsuiteInvoiceBillingEnd
+
+        /** The start date for the billing period on the invoice. */
+        @JsonProperty("netsuite_invoice_billing_start")
+        @ExcludeMissing
+        fun _netsuiteInvoiceBillingStart() = netsuiteInvoiceBillingStart
+
+        /**
+         * only present for beta contract invoices. This field's availability is dependent on your
+         * client's configuration.
+         */
+        @JsonProperty("netsuite_item_id") @ExcludeMissing fun _netsuiteItemId() = netsuiteItemId
+
+        /** only present for beta contract invoices */
+        @JsonProperty("postpaid_commit") @ExcludeMissing fun _postpaidCommit() = postpaidCommit
 
         /**
          * if presentation groups are used, this will contain the values used to break down the line
@@ -962,22 +949,18 @@ private constructor(
         @ExcludeMissing
         fun _presentationGroupValues() = presentationGroupValues
 
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
-
-        /** The start date for the billing period on the invoice. */
-        @JsonProperty("netsuite_invoice_billing_start")
+        /** if pricing groups are used, this will contain the values used to calculate the price */
+        @JsonProperty("pricing_group_values")
         @ExcludeMissing
-        fun _netsuiteInvoiceBillingStart() = netsuiteInvoiceBillingStart
+        fun _pricingGroupValues() = pricingGroupValues
 
-        /** The end date for the billing period on the invoice. */
-        @JsonProperty("netsuite_invoice_billing_end")
+        @JsonProperty("product_custom_fields")
         @ExcludeMissing
-        fun _netsuiteInvoiceBillingEnd() = netsuiteInvoiceBillingEnd
+        fun _productCustomFields() = productCustomFields
 
-        /** only present for beta contract invoices */
-        @JsonProperty("professional_service_id")
-        @ExcludeMissing
-        fun _professionalServiceId() = professionalServiceId
+        @JsonProperty("product_id") @ExcludeMissing fun _productId() = productId
+
+        @JsonProperty("product_type") @ExcludeMissing fun _productType() = productType
 
         /** only present for beta contract invoices */
         @JsonProperty("professional_service_custom_fields")
@@ -985,15 +968,32 @@ private constructor(
         fun _professionalServiceCustomFields() = professionalServiceCustomFields
 
         /** only present for beta contract invoices */
-        @JsonProperty("scheduled_charge_id")
+        @JsonProperty("professional_service_id")
         @ExcludeMissing
-        fun _scheduledChargeId() = scheduledChargeId
+        fun _professionalServiceId() = professionalServiceId
+
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+
+        @JsonProperty("reseller_type") @ExcludeMissing fun _resellerType() = resellerType
 
         @JsonProperty("scheduled_charge_custom_fields")
         @ExcludeMissing
         fun _scheduledChargeCustomFields() = scheduledChargeCustomFields
 
+        /** only present for beta contract invoices */
+        @JsonProperty("scheduled_charge_id")
+        @ExcludeMissing
+        fun _scheduledChargeId() = scheduledChargeId
+
+        /** only present for beta contract invoices */
+        @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+
+        @JsonProperty("sub_line_items") @ExcludeMissing fun _subLineItems() = subLineItems
+
         @JsonProperty("tier") @ExcludeMissing fun _tier() = tier
+
+        /** only present for beta contract invoices */
+        @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice() = unitPrice
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1003,42 +1003,42 @@ private constructor(
 
         fun validate(): LineItem = apply {
             if (!validated) {
-                name()
-                groupKey()
-                groupValue()
-                quantity()
-                total()
-                unitPrice()
-                listPrice().map { it.validate() }
-                productId()
-                productCustomFields().map { it.validate() }
-                productType()
-                netsuiteItemId()
-                isProrated()
                 creditType().validate()
-                startingAt()
-                endingBefore()
-                commitId()
+                name()
+                total()
                 appliedCommitOrCredit().map { it.validate() }
                 commitCustomFields().map { it.validate() }
+                commitId()
+                commitNetsuiteItemId()
+                commitNetsuiteSalesOrderId()
                 commitSegmentId()
                 commitType()
-                commitNetsuiteSalesOrderId()
-                commitNetsuiteItemId()
-                postpaidCommit().map { it.validate() }
-                resellerType()
-                subLineItems().map { it.forEach { it.validate() } }
                 customFields().map { it.validate() }
-                pricingGroupValues().map { it.validate() }
-                presentationGroupValues().map { it.validate() }
+                endingBefore()
+                groupKey()
+                groupValue()
+                isProrated()
+                listPrice().map { it.validate() }
                 metadata()
-                netsuiteInvoiceBillingStart()
                 netsuiteInvoiceBillingEnd()
-                professionalServiceId()
+                netsuiteInvoiceBillingStart()
+                netsuiteItemId()
+                postpaidCommit().map { it.validate() }
+                presentationGroupValues().map { it.validate() }
+                pricingGroupValues().map { it.validate() }
+                productCustomFields().map { it.validate() }
+                productId()
+                productType()
                 professionalServiceCustomFields().map { it.validate() }
-                scheduledChargeId()
+                professionalServiceId()
+                quantity()
+                resellerType()
                 scheduledChargeCustomFields().map { it.validate() }
+                scheduledChargeId()
+                startingAt()
+                subLineItems().map { it.forEach { it.validate() } }
                 tier().map { it.validate() }
+                unitPrice()
                 validated = true
             }
         }
@@ -1052,166 +1052,88 @@ private constructor(
 
         class Builder {
 
-            private var name: JsonField<String> = JsonMissing.of()
-            private var groupKey: JsonField<String> = JsonMissing.of()
-            private var groupValue: JsonField<String> = JsonMissing.of()
-            private var quantity: JsonField<Double> = JsonMissing.of()
-            private var total: JsonField<Double> = JsonMissing.of()
-            private var unitPrice: JsonField<Double> = JsonMissing.of()
-            private var listPrice: JsonField<Rate> = JsonMissing.of()
-            private var productId: JsonField<String> = JsonMissing.of()
-            private var productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of()
-            private var productType: JsonField<String> = JsonMissing.of()
-            private var netsuiteItemId: JsonField<String> = JsonMissing.of()
-            private var isProrated: JsonField<Boolean> = JsonMissing.of()
             private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
-            private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var commitId: JsonField<String> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
+            private var total: JsonField<Double> = JsonMissing.of()
             private var appliedCommitOrCredit: JsonField<AppliedCommitOrCredit> = JsonMissing.of()
             private var commitCustomFields: JsonField<CommitCustomFields> = JsonMissing.of()
+            private var commitId: JsonField<String> = JsonMissing.of()
+            private var commitNetsuiteItemId: JsonField<String> = JsonMissing.of()
+            private var commitNetsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
             private var commitSegmentId: JsonField<String> = JsonMissing.of()
             private var commitType: JsonField<String> = JsonMissing.of()
-            private var commitNetsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
-            private var commitNetsuiteItemId: JsonField<String> = JsonMissing.of()
-            private var postpaidCommit: JsonField<PostpaidCommit> = JsonMissing.of()
-            private var resellerType: JsonField<ResellerType> = JsonMissing.of()
-            private var subLineItems: JsonField<List<SubLineItem>> = JsonMissing.of()
             private var customFields: JsonField<CustomFields> = JsonMissing.of()
-            private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
+            private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var groupKey: JsonField<String> = JsonMissing.of()
+            private var groupValue: JsonField<String> = JsonMissing.of()
+            private var isProrated: JsonField<Boolean> = JsonMissing.of()
+            private var listPrice: JsonField<Rate> = JsonMissing.of()
+            private var metadata: JsonField<String> = JsonMissing.of()
+            private var netsuiteInvoiceBillingEnd: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var netsuiteInvoiceBillingStart: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var netsuiteItemId: JsonField<String> = JsonMissing.of()
+            private var postpaidCommit: JsonField<PostpaidCommit> = JsonMissing.of()
             private var presentationGroupValues: JsonField<PresentationGroupValues> =
                 JsonMissing.of()
-            private var metadata: JsonField<String> = JsonMissing.of()
-            private var netsuiteInvoiceBillingStart: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var netsuiteInvoiceBillingEnd: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var professionalServiceId: JsonField<String> = JsonMissing.of()
+            private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
+            private var productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of()
+            private var productId: JsonField<String> = JsonMissing.of()
+            private var productType: JsonField<String> = JsonMissing.of()
             private var professionalServiceCustomFields:
                 JsonField<ProfessionalServiceCustomFields> =
                 JsonMissing.of()
-            private var scheduledChargeId: JsonField<String> = JsonMissing.of()
+            private var professionalServiceId: JsonField<String> = JsonMissing.of()
+            private var quantity: JsonField<Double> = JsonMissing.of()
+            private var resellerType: JsonField<ResellerType> = JsonMissing.of()
             private var scheduledChargeCustomFields: JsonField<ScheduledChargeCustomFields> =
                 JsonMissing.of()
+            private var scheduledChargeId: JsonField<String> = JsonMissing.of()
+            private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var subLineItems: JsonField<List<SubLineItem>> = JsonMissing.of()
             private var tier: JsonField<Tier> = JsonMissing.of()
+            private var unitPrice: JsonField<Double> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(lineItem: LineItem) = apply {
-                name = lineItem.name
-                groupKey = lineItem.groupKey
-                groupValue = lineItem.groupValue
-                quantity = lineItem.quantity
-                total = lineItem.total
-                unitPrice = lineItem.unitPrice
-                listPrice = lineItem.listPrice
-                productId = lineItem.productId
-                productCustomFields = lineItem.productCustomFields
-                productType = lineItem.productType
-                netsuiteItemId = lineItem.netsuiteItemId
-                isProrated = lineItem.isProrated
                 creditType = lineItem.creditType
-                startingAt = lineItem.startingAt
-                endingBefore = lineItem.endingBefore
-                commitId = lineItem.commitId
+                name = lineItem.name
+                total = lineItem.total
                 appliedCommitOrCredit = lineItem.appliedCommitOrCredit
                 commitCustomFields = lineItem.commitCustomFields
+                commitId = lineItem.commitId
+                commitNetsuiteItemId = lineItem.commitNetsuiteItemId
+                commitNetsuiteSalesOrderId = lineItem.commitNetsuiteSalesOrderId
                 commitSegmentId = lineItem.commitSegmentId
                 commitType = lineItem.commitType
-                commitNetsuiteSalesOrderId = lineItem.commitNetsuiteSalesOrderId
-                commitNetsuiteItemId = lineItem.commitNetsuiteItemId
-                postpaidCommit = lineItem.postpaidCommit
-                resellerType = lineItem.resellerType
-                subLineItems = lineItem.subLineItems
                 customFields = lineItem.customFields
-                pricingGroupValues = lineItem.pricingGroupValues
-                presentationGroupValues = lineItem.presentationGroupValues
+                endingBefore = lineItem.endingBefore
+                groupKey = lineItem.groupKey
+                groupValue = lineItem.groupValue
+                isProrated = lineItem.isProrated
+                listPrice = lineItem.listPrice
                 metadata = lineItem.metadata
-                netsuiteInvoiceBillingStart = lineItem.netsuiteInvoiceBillingStart
                 netsuiteInvoiceBillingEnd = lineItem.netsuiteInvoiceBillingEnd
-                professionalServiceId = lineItem.professionalServiceId
+                netsuiteInvoiceBillingStart = lineItem.netsuiteInvoiceBillingStart
+                netsuiteItemId = lineItem.netsuiteItemId
+                postpaidCommit = lineItem.postpaidCommit
+                presentationGroupValues = lineItem.presentationGroupValues
+                pricingGroupValues = lineItem.pricingGroupValues
+                productCustomFields = lineItem.productCustomFields
+                productId = lineItem.productId
+                productType = lineItem.productType
                 professionalServiceCustomFields = lineItem.professionalServiceCustomFields
-                scheduledChargeId = lineItem.scheduledChargeId
+                professionalServiceId = lineItem.professionalServiceId
+                quantity = lineItem.quantity
+                resellerType = lineItem.resellerType
                 scheduledChargeCustomFields = lineItem.scheduledChargeCustomFields
+                scheduledChargeId = lineItem.scheduledChargeId
+                startingAt = lineItem.startingAt
+                subLineItems = lineItem.subLineItems
                 tier = lineItem.tier
+                unitPrice = lineItem.unitPrice
                 additionalProperties = lineItem.additionalProperties.toMutableMap()
             }
-
-            fun name(name: String) = name(JsonField.of(name))
-
-            fun name(name: JsonField<String>) = apply { this.name = name }
-
-            fun groupKey(groupKey: String) = groupKey(JsonField.of(groupKey))
-
-            fun groupKey(groupKey: JsonField<String>) = apply { this.groupKey = groupKey }
-
-            fun groupValue(groupValue: String) = groupValue(JsonField.of(groupValue))
-
-            fun groupValue(groupValue: JsonField<String>) = apply { this.groupValue = groupValue }
-
-            fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
-
-            fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
-
-            fun total(total: Double) = total(JsonField.of(total))
-
-            fun total(total: JsonField<Double>) = apply { this.total = total }
-
-            /** only present for beta contract invoices */
-            fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
-
-            /** only present for beta contract invoices */
-            fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
-
-            /**
-             * Only present for contract invoices and when the include_list_prices query parameter
-             * is set to true. This will include the list rate for the charge if applicable. Only
-             * present for usage and subscription line items.
-             */
-            fun listPrice(listPrice: Rate) = listPrice(JsonField.of(listPrice))
-
-            /**
-             * Only present for contract invoices and when the include_list_prices query parameter
-             * is set to true. This will include the list rate for the charge if applicable. Only
-             * present for usage and subscription line items.
-             */
-            fun listPrice(listPrice: JsonField<Rate>) = apply { this.listPrice = listPrice }
-
-            fun productId(productId: String) = productId(JsonField.of(productId))
-
-            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
-
-            fun productCustomFields(productCustomFields: ProductCustomFields) =
-                productCustomFields(JsonField.of(productCustomFields))
-
-            fun productCustomFields(productCustomFields: JsonField<ProductCustomFields>) = apply {
-                this.productCustomFields = productCustomFields
-            }
-
-            fun productType(productType: String) = productType(JsonField.of(productType))
-
-            fun productType(productType: JsonField<String>) = apply {
-                this.productType = productType
-            }
-
-            /**
-             * only present for beta contract invoices. This field's availability is dependent on
-             * your client's configuration.
-             */
-            fun netsuiteItemId(netsuiteItemId: String) =
-                netsuiteItemId(JsonField.of(netsuiteItemId))
-
-            /**
-             * only present for beta contract invoices. This field's availability is dependent on
-             * your client's configuration.
-             */
-            fun netsuiteItemId(netsuiteItemId: JsonField<String>) = apply {
-                this.netsuiteItemId = netsuiteItemId
-            }
-
-            /** only present for beta contract invoices */
-            fun isProrated(isProrated: Boolean) = isProrated(JsonField.of(isProrated))
-
-            /** only present for beta contract invoices */
-            fun isProrated(isProrated: JsonField<Boolean>) = apply { this.isProrated = isProrated }
 
             fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
@@ -1219,28 +1141,13 @@ private constructor(
                 this.creditType = creditType
             }
 
-            /** only present for beta contract invoices */
-            fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
+            fun name(name: String) = name(JsonField.of(name))
 
-            /** only present for beta contract invoices */
-            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
-                this.startingAt = startingAt
-            }
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
-            /** only present for beta contract invoices */
-            fun endingBefore(endingBefore: OffsetDateTime) =
-                endingBefore(JsonField.of(endingBefore))
+            fun total(total: Double) = total(JsonField.of(total))
 
-            /** only present for beta contract invoices */
-            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
-                this.endingBefore = endingBefore
-            }
-
-            /** only present for beta contract invoices */
-            fun commitId(commitId: String) = commitId(JsonField.of(commitId))
-
-            /** only present for beta contract invoices */
-            fun commitId(commitId: JsonField<String>) = apply { this.commitId = commitId }
+            fun total(total: JsonField<Double>) = apply { this.total = total }
 
             /** only present for beta contract invoices */
             fun appliedCommitOrCredit(appliedCommitOrCredit: AppliedCommitOrCredit) =
@@ -1262,34 +1169,10 @@ private constructor(
             }
 
             /** only present for beta contract invoices */
-            fun commitSegmentId(commitSegmentId: String) =
-                commitSegmentId(JsonField.of(commitSegmentId))
+            fun commitId(commitId: String) = commitId(JsonField.of(commitId))
 
             /** only present for beta contract invoices */
-            fun commitSegmentId(commitSegmentId: JsonField<String>) = apply {
-                this.commitSegmentId = commitSegmentId
-            }
-
-            /** only present for beta contract invoices */
-            fun commitType(commitType: String) = commitType(JsonField.of(commitType))
-
-            /** only present for beta contract invoices */
-            fun commitType(commitType: JsonField<String>) = apply { this.commitType = commitType }
-
-            /**
-             * only present for beta contract invoices. This field's availability is dependent on
-             * your client's configuration.
-             */
-            fun commitNetsuiteSalesOrderId(commitNetsuiteSalesOrderId: String) =
-                commitNetsuiteSalesOrderId(JsonField.of(commitNetsuiteSalesOrderId))
-
-            /**
-             * only present for beta contract invoices. This field's availability is dependent on
-             * your client's configuration.
-             */
-            fun commitNetsuiteSalesOrderId(commitNetsuiteSalesOrderId: JsonField<String>) = apply {
-                this.commitNetsuiteSalesOrderId = commitNetsuiteSalesOrderId
-            }
+            fun commitId(commitId: JsonField<String>) = apply { this.commitId = commitId }
 
             /**
              * only present for beta contract invoices. This field's availability is dependent on
@@ -1306,27 +1189,35 @@ private constructor(
                 this.commitNetsuiteItemId = commitNetsuiteItemId
             }
 
+            /**
+             * only present for beta contract invoices. This field's availability is dependent on
+             * your client's configuration.
+             */
+            fun commitNetsuiteSalesOrderId(commitNetsuiteSalesOrderId: String) =
+                commitNetsuiteSalesOrderId(JsonField.of(commitNetsuiteSalesOrderId))
+
+            /**
+             * only present for beta contract invoices. This field's availability is dependent on
+             * your client's configuration.
+             */
+            fun commitNetsuiteSalesOrderId(commitNetsuiteSalesOrderId: JsonField<String>) = apply {
+                this.commitNetsuiteSalesOrderId = commitNetsuiteSalesOrderId
+            }
+
             /** only present for beta contract invoices */
-            fun postpaidCommit(postpaidCommit: PostpaidCommit) =
-                postpaidCommit(JsonField.of(postpaidCommit))
+            fun commitSegmentId(commitSegmentId: String) =
+                commitSegmentId(JsonField.of(commitSegmentId))
 
             /** only present for beta contract invoices */
-            fun postpaidCommit(postpaidCommit: JsonField<PostpaidCommit>) = apply {
-                this.postpaidCommit = postpaidCommit
+            fun commitSegmentId(commitSegmentId: JsonField<String>) = apply {
+                this.commitSegmentId = commitSegmentId
             }
 
-            fun resellerType(resellerType: ResellerType) = resellerType(JsonField.of(resellerType))
+            /** only present for beta contract invoices */
+            fun commitType(commitType: String) = commitType(JsonField.of(commitType))
 
-            fun resellerType(resellerType: JsonField<ResellerType>) = apply {
-                this.resellerType = resellerType
-            }
-
-            fun subLineItems(subLineItems: List<SubLineItem>) =
-                subLineItems(JsonField.of(subLineItems))
-
-            fun subLineItems(subLineItems: JsonField<List<SubLineItem>>) = apply {
-                this.subLineItems = subLineItems
-            }
+            /** only present for beta contract invoices */
+            fun commitType(commitType: JsonField<String>) = apply { this.commitType = commitType }
 
             fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
@@ -1334,17 +1225,88 @@ private constructor(
                 this.customFields = customFields
             }
 
-            /**
-             * if pricing groups are used, this will contain the values used to calculate the price
-             */
-            fun pricingGroupValues(pricingGroupValues: PricingGroupValues) =
-                pricingGroupValues(JsonField.of(pricingGroupValues))
+            /** only present for beta contract invoices */
+            fun endingBefore(endingBefore: OffsetDateTime) =
+                endingBefore(JsonField.of(endingBefore))
+
+            /** only present for beta contract invoices */
+            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+                this.endingBefore = endingBefore
+            }
+
+            fun groupKey(groupKey: String) = groupKey(JsonField.of(groupKey))
+
+            fun groupKey(groupKey: JsonField<String>) = apply { this.groupKey = groupKey }
+
+            fun groupValue(groupValue: String) = groupValue(JsonField.of(groupValue))
+
+            fun groupValue(groupValue: JsonField<String>) = apply { this.groupValue = groupValue }
+
+            /** only present for beta contract invoices */
+            fun isProrated(isProrated: Boolean) = isProrated(JsonField.of(isProrated))
+
+            /** only present for beta contract invoices */
+            fun isProrated(isProrated: JsonField<Boolean>) = apply { this.isProrated = isProrated }
 
             /**
-             * if pricing groups are used, this will contain the values used to calculate the price
+             * Only present for contract invoices and when the include_list_prices query parameter
+             * is set to true. This will include the list rate for the charge if applicable. Only
+             * present for usage and subscription line items.
              */
-            fun pricingGroupValues(pricingGroupValues: JsonField<PricingGroupValues>) = apply {
-                this.pricingGroupValues = pricingGroupValues
+            fun listPrice(listPrice: Rate) = listPrice(JsonField.of(listPrice))
+
+            /**
+             * Only present for contract invoices and when the include_list_prices query parameter
+             * is set to true. This will include the list rate for the charge if applicable. Only
+             * present for usage and subscription line items.
+             */
+            fun listPrice(listPrice: JsonField<Rate>) = apply { this.listPrice = listPrice }
+
+            fun metadata(metadata: String) = metadata(JsonField.of(metadata))
+
+            fun metadata(metadata: JsonField<String>) = apply { this.metadata = metadata }
+
+            /** The end date for the billing period on the invoice. */
+            fun netsuiteInvoiceBillingEnd(netsuiteInvoiceBillingEnd: OffsetDateTime) =
+                netsuiteInvoiceBillingEnd(JsonField.of(netsuiteInvoiceBillingEnd))
+
+            /** The end date for the billing period on the invoice. */
+            fun netsuiteInvoiceBillingEnd(netsuiteInvoiceBillingEnd: JsonField<OffsetDateTime>) =
+                apply {
+                    this.netsuiteInvoiceBillingEnd = netsuiteInvoiceBillingEnd
+                }
+
+            /** The start date for the billing period on the invoice. */
+            fun netsuiteInvoiceBillingStart(netsuiteInvoiceBillingStart: OffsetDateTime) =
+                netsuiteInvoiceBillingStart(JsonField.of(netsuiteInvoiceBillingStart))
+
+            /** The start date for the billing period on the invoice. */
+            fun netsuiteInvoiceBillingStart(
+                netsuiteInvoiceBillingStart: JsonField<OffsetDateTime>
+            ) = apply { this.netsuiteInvoiceBillingStart = netsuiteInvoiceBillingStart }
+
+            /**
+             * only present for beta contract invoices. This field's availability is dependent on
+             * your client's configuration.
+             */
+            fun netsuiteItemId(netsuiteItemId: String) =
+                netsuiteItemId(JsonField.of(netsuiteItemId))
+
+            /**
+             * only present for beta contract invoices. This field's availability is dependent on
+             * your client's configuration.
+             */
+            fun netsuiteItemId(netsuiteItemId: JsonField<String>) = apply {
+                this.netsuiteItemId = netsuiteItemId
+            }
+
+            /** only present for beta contract invoices */
+            fun postpaidCommit(postpaidCommit: PostpaidCommit) =
+                postpaidCommit(JsonField.of(postpaidCommit))
+
+            /** only present for beta contract invoices */
+            fun postpaidCommit(postpaidCommit: JsonField<PostpaidCommit>) = apply {
+                this.postpaidCommit = postpaidCommit
             }
 
             /**
@@ -1362,36 +1324,34 @@ private constructor(
                 presentationGroupValues: JsonField<PresentationGroupValues>
             ) = apply { this.presentationGroupValues = presentationGroupValues }
 
-            fun metadata(metadata: String) = metadata(JsonField.of(metadata))
+            /**
+             * if pricing groups are used, this will contain the values used to calculate the price
+             */
+            fun pricingGroupValues(pricingGroupValues: PricingGroupValues) =
+                pricingGroupValues(JsonField.of(pricingGroupValues))
 
-            fun metadata(metadata: JsonField<String>) = apply { this.metadata = metadata }
+            /**
+             * if pricing groups are used, this will contain the values used to calculate the price
+             */
+            fun pricingGroupValues(pricingGroupValues: JsonField<PricingGroupValues>) = apply {
+                this.pricingGroupValues = pricingGroupValues
+            }
 
-            /** The start date for the billing period on the invoice. */
-            fun netsuiteInvoiceBillingStart(netsuiteInvoiceBillingStart: OffsetDateTime) =
-                netsuiteInvoiceBillingStart(JsonField.of(netsuiteInvoiceBillingStart))
+            fun productCustomFields(productCustomFields: ProductCustomFields) =
+                productCustomFields(JsonField.of(productCustomFields))
 
-            /** The start date for the billing period on the invoice. */
-            fun netsuiteInvoiceBillingStart(
-                netsuiteInvoiceBillingStart: JsonField<OffsetDateTime>
-            ) = apply { this.netsuiteInvoiceBillingStart = netsuiteInvoiceBillingStart }
+            fun productCustomFields(productCustomFields: JsonField<ProductCustomFields>) = apply {
+                this.productCustomFields = productCustomFields
+            }
 
-            /** The end date for the billing period on the invoice. */
-            fun netsuiteInvoiceBillingEnd(netsuiteInvoiceBillingEnd: OffsetDateTime) =
-                netsuiteInvoiceBillingEnd(JsonField.of(netsuiteInvoiceBillingEnd))
+            fun productId(productId: String) = productId(JsonField.of(productId))
 
-            /** The end date for the billing period on the invoice. */
-            fun netsuiteInvoiceBillingEnd(netsuiteInvoiceBillingEnd: JsonField<OffsetDateTime>) =
-                apply {
-                    this.netsuiteInvoiceBillingEnd = netsuiteInvoiceBillingEnd
-                }
+            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
-            /** only present for beta contract invoices */
-            fun professionalServiceId(professionalServiceId: String) =
-                professionalServiceId(JsonField.of(professionalServiceId))
+            fun productType(productType: String) = productType(JsonField.of(productType))
 
-            /** only present for beta contract invoices */
-            fun professionalServiceId(professionalServiceId: JsonField<String>) = apply {
-                this.professionalServiceId = professionalServiceId
+            fun productType(productType: JsonField<String>) = apply {
+                this.productType = productType
             }
 
             /** only present for beta contract invoices */
@@ -1405,12 +1365,22 @@ private constructor(
             ) = apply { this.professionalServiceCustomFields = professionalServiceCustomFields }
 
             /** only present for beta contract invoices */
-            fun scheduledChargeId(scheduledChargeId: String) =
-                scheduledChargeId(JsonField.of(scheduledChargeId))
+            fun professionalServiceId(professionalServiceId: String) =
+                professionalServiceId(JsonField.of(professionalServiceId))
 
             /** only present for beta contract invoices */
-            fun scheduledChargeId(scheduledChargeId: JsonField<String>) = apply {
-                this.scheduledChargeId = scheduledChargeId
+            fun professionalServiceId(professionalServiceId: JsonField<String>) = apply {
+                this.professionalServiceId = professionalServiceId
+            }
+
+            fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+
+            fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
+
+            fun resellerType(resellerType: ResellerType) = resellerType(JsonField.of(resellerType))
+
+            fun resellerType(resellerType: JsonField<ResellerType>) = apply {
+                this.resellerType = resellerType
             }
 
             fun scheduledChargeCustomFields(
@@ -1421,9 +1391,39 @@ private constructor(
                 scheduledChargeCustomFields: JsonField<ScheduledChargeCustomFields>
             ) = apply { this.scheduledChargeCustomFields = scheduledChargeCustomFields }
 
+            /** only present for beta contract invoices */
+            fun scheduledChargeId(scheduledChargeId: String) =
+                scheduledChargeId(JsonField.of(scheduledChargeId))
+
+            /** only present for beta contract invoices */
+            fun scheduledChargeId(scheduledChargeId: JsonField<String>) = apply {
+                this.scheduledChargeId = scheduledChargeId
+            }
+
+            /** only present for beta contract invoices */
+            fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
+
+            /** only present for beta contract invoices */
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                this.startingAt = startingAt
+            }
+
+            fun subLineItems(subLineItems: List<SubLineItem>) =
+                subLineItems(JsonField.of(subLineItems))
+
+            fun subLineItems(subLineItems: JsonField<List<SubLineItem>>) = apply {
+                this.subLineItems = subLineItems
+            }
+
             fun tier(tier: Tier) = tier(JsonField.of(tier))
 
             fun tier(tier: JsonField<Tier>) = apply { this.tier = tier }
+
+            /** only present for beta contract invoices */
+            fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
+
+            /** only present for beta contract invoices */
+            fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1446,42 +1446,42 @@ private constructor(
 
             fun build(): LineItem =
                 LineItem(
-                    name,
-                    groupKey,
-                    groupValue,
-                    quantity,
-                    total,
-                    unitPrice,
-                    listPrice,
-                    productId,
-                    productCustomFields,
-                    productType,
-                    netsuiteItemId,
-                    isProrated,
                     creditType,
-                    startingAt,
-                    endingBefore,
-                    commitId,
+                    name,
+                    total,
                     appliedCommitOrCredit,
                     commitCustomFields,
+                    commitId,
+                    commitNetsuiteItemId,
+                    commitNetsuiteSalesOrderId,
                     commitSegmentId,
                     commitType,
-                    commitNetsuiteSalesOrderId,
-                    commitNetsuiteItemId,
-                    postpaidCommit,
-                    resellerType,
-                    subLineItems.map { it.toImmutable() },
                     customFields,
-                    pricingGroupValues,
-                    presentationGroupValues,
+                    endingBefore,
+                    groupKey,
+                    groupValue,
+                    isProrated,
+                    listPrice,
                     metadata,
-                    netsuiteInvoiceBillingStart,
                     netsuiteInvoiceBillingEnd,
-                    professionalServiceId,
+                    netsuiteInvoiceBillingStart,
+                    netsuiteItemId,
+                    postpaidCommit,
+                    presentationGroupValues,
+                    pricingGroupValues,
+                    productCustomFields,
+                    productId,
+                    productType,
                     professionalServiceCustomFields,
-                    scheduledChargeId,
+                    professionalServiceId,
+                    quantity,
+                    resellerType,
                     scheduledChargeCustomFields,
+                    scheduledChargeId,
+                    startingAt,
+                    subLineItems.map { it.toImmutable() },
                     tier,
+                    unitPrice,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -2400,12 +2400,12 @@ private constructor(
         class SubLineItem
         @JsonCreator
         private constructor(
+            @JsonProperty("custom_fields")
+            @ExcludeMissing
+            private val customFields: JsonField<CustomFields> = JsonMissing.of(),
             @JsonProperty("name")
             @ExcludeMissing
             private val name: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("price")
-            @ExcludeMissing
-            private val price: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("quantity")
             @ExcludeMissing
             private val quantity: JsonField<Double> = JsonMissing.of(),
@@ -2418,32 +2418,28 @@ private constructor(
             @JsonProperty("credit_grant_id")
             @ExcludeMissing
             private val creditGrantId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("end_date")
+            @ExcludeMissing
+            private val endDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("price")
+            @ExcludeMissing
+            private val price: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("start_date")
+            @ExcludeMissing
+            private val startDate: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("tier_period")
             @ExcludeMissing
             private val tierPeriod: JsonField<TierPeriod> = JsonMissing.of(),
             @JsonProperty("tiers")
             @ExcludeMissing
             private val tiers: JsonField<List<Tier>> = JsonMissing.of(),
-            @JsonProperty("custom_fields")
-            @ExcludeMissing
-            private val customFields: JsonField<CustomFields> = JsonMissing.of(),
-            @JsonProperty("start_date")
-            @ExcludeMissing
-            private val startDate: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("end_date")
-            @ExcludeMissing
-            private val endDate: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            fun name(): String = name.getRequired("name")
+            fun customFields(): CustomFields = customFields.getRequired("custom_fields")
 
-            /**
-             * the unit price for this charge, present only if the charge is not tiered and the
-             * quantity is nonzero
-             */
-            fun price(): Optional<Double> = Optional.ofNullable(price.getNullable("price"))
+            fun name(): String = name.getRequired("name")
 
             fun quantity(): Double = quantity.getRequired("quantity")
 
@@ -2455,29 +2451,29 @@ private constructor(
             fun creditGrantId(): Optional<String> =
                 Optional.ofNullable(creditGrantId.getNullable("credit_grant_id"))
 
+            /** The end date for the charge (for seats charges only). */
+            fun endDate(): Optional<OffsetDateTime> =
+                Optional.ofNullable(endDate.getNullable("end_date"))
+
+            /**
+             * the unit price for this charge, present only if the charge is not tiered and the
+             * quantity is nonzero
+             */
+            fun price(): Optional<Double> = Optional.ofNullable(price.getNullable("price"))
+
+            /** The start date for the charge (for seats charges only). */
+            fun startDate(): Optional<OffsetDateTime> =
+                Optional.ofNullable(startDate.getNullable("start_date"))
+
             /** when the current tier started and ends (for tiered charges only) */
             fun tierPeriod(): Optional<TierPeriod> =
                 Optional.ofNullable(tierPeriod.getNullable("tier_period"))
 
             fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers.getNullable("tiers"))
 
-            fun customFields(): CustomFields = customFields.getRequired("custom_fields")
-
-            /** The start date for the charge (for seats charges only). */
-            fun startDate(): Optional<OffsetDateTime> =
-                Optional.ofNullable(startDate.getNullable("start_date"))
-
-            /** The end date for the charge (for seats charges only). */
-            fun endDate(): Optional<OffsetDateTime> =
-                Optional.ofNullable(endDate.getNullable("end_date"))
+            @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
 
             @JsonProperty("name") @ExcludeMissing fun _name() = name
-
-            /**
-             * the unit price for this charge, present only if the charge is not tiered and the
-             * quantity is nonzero
-             */
-            @JsonProperty("price") @ExcludeMissing fun _price() = price
 
             @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
 
@@ -2487,18 +2483,22 @@ private constructor(
 
             @JsonProperty("credit_grant_id") @ExcludeMissing fun _creditGrantId() = creditGrantId
 
-            /** when the current tier started and ends (for tiered charges only) */
-            @JsonProperty("tier_period") @ExcludeMissing fun _tierPeriod() = tierPeriod
+            /** The end date for the charge (for seats charges only). */
+            @JsonProperty("end_date") @ExcludeMissing fun _endDate() = endDate
 
-            @JsonProperty("tiers") @ExcludeMissing fun _tiers() = tiers
-
-            @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+            /**
+             * the unit price for this charge, present only if the charge is not tiered and the
+             * quantity is nonzero
+             */
+            @JsonProperty("price") @ExcludeMissing fun _price() = price
 
             /** The start date for the charge (for seats charges only). */
             @JsonProperty("start_date") @ExcludeMissing fun _startDate() = startDate
 
-            /** The end date for the charge (for seats charges only). */
-            @JsonProperty("end_date") @ExcludeMissing fun _endDate() = endDate
+            /** when the current tier started and ends (for tiered charges only) */
+            @JsonProperty("tier_period") @ExcludeMissing fun _tierPeriod() = tierPeriod
+
+            @JsonProperty("tiers") @ExcludeMissing fun _tiers() = tiers
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -2508,17 +2508,17 @@ private constructor(
 
             fun validate(): SubLineItem = apply {
                 if (!validated) {
+                    customFields().validate()
                     name()
-                    price()
                     quantity()
                     subtotal()
                     chargeId()
                     creditGrantId()
+                    endDate()
+                    price()
+                    startDate()
                     tierPeriod().map { it.validate() }
                     tiers().map { it.forEach { it.validate() } }
-                    customFields().validate()
-                    startDate()
-                    endDate()
                     validated = true
                 }
             }
@@ -2532,50 +2532,45 @@ private constructor(
 
             class Builder {
 
+                private var customFields: JsonField<CustomFields> = JsonMissing.of()
                 private var name: JsonField<String> = JsonMissing.of()
-                private var price: JsonField<Double> = JsonMissing.of()
                 private var quantity: JsonField<Double> = JsonMissing.of()
                 private var subtotal: JsonField<Double> = JsonMissing.of()
                 private var chargeId: JsonField<String> = JsonMissing.of()
                 private var creditGrantId: JsonField<String> = JsonMissing.of()
+                private var endDate: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var price: JsonField<Double> = JsonMissing.of()
+                private var startDate: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var tierPeriod: JsonField<TierPeriod> = JsonMissing.of()
                 private var tiers: JsonField<List<Tier>> = JsonMissing.of()
-                private var customFields: JsonField<CustomFields> = JsonMissing.of()
-                private var startDate: JsonField<OffsetDateTime> = JsonMissing.of()
-                private var endDate: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(subLineItem: SubLineItem) = apply {
+                    customFields = subLineItem.customFields
                     name = subLineItem.name
-                    price = subLineItem.price
                     quantity = subLineItem.quantity
                     subtotal = subLineItem.subtotal
                     chargeId = subLineItem.chargeId
                     creditGrantId = subLineItem.creditGrantId
+                    endDate = subLineItem.endDate
+                    price = subLineItem.price
+                    startDate = subLineItem.startDate
                     tierPeriod = subLineItem.tierPeriod
                     tiers = subLineItem.tiers
-                    customFields = subLineItem.customFields
-                    startDate = subLineItem.startDate
-                    endDate = subLineItem.endDate
                     additionalProperties = subLineItem.additionalProperties.toMutableMap()
+                }
+
+                fun customFields(customFields: CustomFields) =
+                    customFields(JsonField.of(customFields))
+
+                fun customFields(customFields: JsonField<CustomFields>) = apply {
+                    this.customFields = customFields
                 }
 
                 fun name(name: String) = name(JsonField.of(name))
 
                 fun name(name: JsonField<String>) = apply { this.name = name }
-
-                /**
-                 * the unit price for this charge, present only if the charge is not tiered and the
-                 * quantity is nonzero
-                 */
-                fun price(price: Double) = price(JsonField.of(price))
-
-                /**
-                 * the unit price for this charge, present only if the charge is not tiered and the
-                 * quantity is nonzero
-                 */
-                fun price(price: JsonField<Double>) = apply { this.price = price }
 
                 fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
@@ -2596,6 +2591,32 @@ private constructor(
                     this.creditGrantId = creditGrantId
                 }
 
+                /** The end date for the charge (for seats charges only). */
+                fun endDate(endDate: OffsetDateTime) = endDate(JsonField.of(endDate))
+
+                /** The end date for the charge (for seats charges only). */
+                fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
+
+                /**
+                 * the unit price for this charge, present only if the charge is not tiered and the
+                 * quantity is nonzero
+                 */
+                fun price(price: Double) = price(JsonField.of(price))
+
+                /**
+                 * the unit price for this charge, present only if the charge is not tiered and the
+                 * quantity is nonzero
+                 */
+                fun price(price: JsonField<Double>) = apply { this.price = price }
+
+                /** The start date for the charge (for seats charges only). */
+                fun startDate(startDate: OffsetDateTime) = startDate(JsonField.of(startDate))
+
+                /** The start date for the charge (for seats charges only). */
+                fun startDate(startDate: JsonField<OffsetDateTime>) = apply {
+                    this.startDate = startDate
+                }
+
                 /** when the current tier started and ends (for tiered charges only) */
                 fun tierPeriod(tierPeriod: TierPeriod) = tierPeriod(JsonField.of(tierPeriod))
 
@@ -2607,27 +2628,6 @@ private constructor(
                 fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
                 fun tiers(tiers: JsonField<List<Tier>>) = apply { this.tiers = tiers }
-
-                fun customFields(customFields: CustomFields) =
-                    customFields(JsonField.of(customFields))
-
-                fun customFields(customFields: JsonField<CustomFields>) = apply {
-                    this.customFields = customFields
-                }
-
-                /** The start date for the charge (for seats charges only). */
-                fun startDate(startDate: OffsetDateTime) = startDate(JsonField.of(startDate))
-
-                /** The start date for the charge (for seats charges only). */
-                fun startDate(startDate: JsonField<OffsetDateTime>) = apply {
-                    this.startDate = startDate
-                }
-
-                /** The end date for the charge (for seats charges only). */
-                fun endDate(endDate: OffsetDateTime) = endDate(JsonField.of(endDate))
-
-                /** The end date for the charge (for seats charges only). */
-                fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -2653,17 +2653,17 @@ private constructor(
 
                 fun build(): SubLineItem =
                     SubLineItem(
+                        customFields,
                         name,
-                        price,
                         quantity,
                         subtotal,
                         chargeId,
                         creditGrantId,
+                        endDate,
+                        price,
+                        startDate,
                         tierPeriod,
                         tiers.map { it.toImmutable() },
-                        customFields,
-                        startDate,
-                        endDate,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -2870,15 +2870,15 @@ private constructor(
             class Tier
             @JsonCreator
             private constructor(
-                @JsonProperty("starting_at")
-                @ExcludeMissing
-                private val startingAt: JsonField<Double> = JsonMissing.of(),
-                @JsonProperty("quantity")
-                @ExcludeMissing
-                private val quantity: JsonField<Double> = JsonMissing.of(),
                 @JsonProperty("price")
                 @ExcludeMissing
                 private val price: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                private val quantity: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                private val startingAt: JsonField<Double> = JsonMissing.of(),
                 @JsonProperty("subtotal")
                 @ExcludeMissing
                 private val subtotal: JsonField<Double> = JsonMissing.of(),
@@ -2886,21 +2886,21 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /** at what metric amount this tier begins */
-                fun startingAt(): Double = startingAt.getRequired("starting_at")
+                fun price(): Double = price.getRequired("price")
 
                 fun quantity(): Double = quantity.getRequired("quantity")
 
-                fun price(): Double = price.getRequired("price")
+                /** at what metric amount this tier begins */
+                fun startingAt(): Double = startingAt.getRequired("starting_at")
 
                 fun subtotal(): Double = subtotal.getRequired("subtotal")
 
-                /** at what metric amount this tier begins */
-                @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+                @JsonProperty("price") @ExcludeMissing fun _price() = price
 
                 @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
 
-                @JsonProperty("price") @ExcludeMissing fun _price() = price
+                /** at what metric amount this tier begins */
+                @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
 
                 @JsonProperty("subtotal") @ExcludeMissing fun _subtotal() = subtotal
 
@@ -2912,9 +2912,9 @@ private constructor(
 
                 fun validate(): Tier = apply {
                     if (!validated) {
-                        startingAt()
-                        quantity()
                         price()
+                        quantity()
+                        startingAt()
                         subtotal()
                         validated = true
                     }
@@ -2929,20 +2929,28 @@ private constructor(
 
                 class Builder {
 
-                    private var startingAt: JsonField<Double> = JsonMissing.of()
-                    private var quantity: JsonField<Double> = JsonMissing.of()
                     private var price: JsonField<Double> = JsonMissing.of()
+                    private var quantity: JsonField<Double> = JsonMissing.of()
+                    private var startingAt: JsonField<Double> = JsonMissing.of()
                     private var subtotal: JsonField<Double> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(tier: Tier) = apply {
-                        startingAt = tier.startingAt
-                        quantity = tier.quantity
                         price = tier.price
+                        quantity = tier.quantity
+                        startingAt = tier.startingAt
                         subtotal = tier.subtotal
                         additionalProperties = tier.additionalProperties.toMutableMap()
                     }
+
+                    fun price(price: Double) = price(JsonField.of(price))
+
+                    fun price(price: JsonField<Double>) = apply { this.price = price }
+
+                    fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+
+                    fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                     /** at what metric amount this tier begins */
                     fun startingAt(startingAt: Double) = startingAt(JsonField.of(startingAt))
@@ -2951,14 +2959,6 @@ private constructor(
                     fun startingAt(startingAt: JsonField<Double>) = apply {
                         this.startingAt = startingAt
                     }
-
-                    fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
-
-                    fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
-
-                    fun price(price: Double) = price(JsonField.of(price))
-
-                    fun price(price: JsonField<Double>) = apply { this.price = price }
 
                     fun subtotal(subtotal: Double) = subtotal(JsonField.of(subtotal))
 
@@ -2988,9 +2988,9 @@ private constructor(
 
                     fun build(): Tier =
                         Tier(
-                            startingAt,
-                            quantity,
                             price,
+                            quantity,
+                            startingAt,
                             subtotal,
                             additionalProperties.toImmutable(),
                         )
@@ -3001,17 +3001,17 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Tier && startingAt == other.startingAt && quantity == other.quantity && price == other.price && subtotal == other.subtotal && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is Tier && price == other.price && quantity == other.quantity && startingAt == other.startingAt && subtotal == other.subtotal && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(startingAt, quantity, price, subtotal, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(price, quantity, startingAt, subtotal, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "Tier{startingAt=$startingAt, quantity=$quantity, price=$price, subtotal=$subtotal, additionalProperties=$additionalProperties}"
+                    "Tier{price=$price, quantity=$quantity, startingAt=$startingAt, subtotal=$subtotal, additionalProperties=$additionalProperties}"
             }
 
             override fun equals(other: Any?): Boolean {
@@ -3019,47 +3019,47 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is SubLineItem && name == other.name && price == other.price && quantity == other.quantity && subtotal == other.subtotal && chargeId == other.chargeId && creditGrantId == other.creditGrantId && tierPeriod == other.tierPeriod && tiers == other.tiers && customFields == other.customFields && startDate == other.startDate && endDate == other.endDate && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is SubLineItem && customFields == other.customFields && name == other.name && quantity == other.quantity && subtotal == other.subtotal && chargeId == other.chargeId && creditGrantId == other.creditGrantId && endDate == other.endDate && price == other.price && startDate == other.startDate && tierPeriod == other.tierPeriod && tiers == other.tiers && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(name, price, quantity, subtotal, chargeId, creditGrantId, tierPeriod, tiers, customFields, startDate, endDate, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(customFields, name, quantity, subtotal, chargeId, creditGrantId, endDate, price, startDate, tierPeriod, tiers, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "SubLineItem{name=$name, price=$price, quantity=$quantity, subtotal=$subtotal, chargeId=$chargeId, creditGrantId=$creditGrantId, tierPeriod=$tierPeriod, tiers=$tiers, customFields=$customFields, startDate=$startDate, endDate=$endDate, additionalProperties=$additionalProperties}"
+                "SubLineItem{customFields=$customFields, name=$name, quantity=$quantity, subtotal=$subtotal, chargeId=$chargeId, creditGrantId=$creditGrantId, endDate=$endDate, price=$price, startDate=$startDate, tierPeriod=$tierPeriod, tiers=$tiers, additionalProperties=$additionalProperties}"
         }
 
         @NoAutoDetect
         class Tier
         @JsonCreator
         private constructor(
-            @JsonProperty("size")
-            @ExcludeMissing
-            private val size: JsonField<String> = JsonMissing.of(),
             @JsonProperty("level")
             @ExcludeMissing
             private val level: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("starting_at")
             @ExcludeMissing
             private val startingAt: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("size")
+            @ExcludeMissing
+            private val size: JsonField<String> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
-
-            fun size(): Optional<String> = Optional.ofNullable(size.getNullable("size"))
 
             fun level(): Double = level.getRequired("level")
 
             fun startingAt(): String = startingAt.getRequired("starting_at")
 
-            @JsonProperty("size") @ExcludeMissing fun _size() = size
+            fun size(): Optional<String> = Optional.ofNullable(size.getNullable("size"))
 
             @JsonProperty("level") @ExcludeMissing fun _level() = level
 
             @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+
+            @JsonProperty("size") @ExcludeMissing fun _size() = size
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -3069,9 +3069,9 @@ private constructor(
 
             fun validate(): Tier = apply {
                 if (!validated) {
-                    size()
                     level()
                     startingAt()
+                    size()
                     validated = true
                 }
             }
@@ -3085,22 +3085,18 @@ private constructor(
 
             class Builder {
 
-                private var size: JsonField<String> = JsonMissing.of()
                 private var level: JsonField<Double> = JsonMissing.of()
                 private var startingAt: JsonField<String> = JsonMissing.of()
+                private var size: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(tier: Tier) = apply {
-                    size = tier.size
                     level = tier.level
                     startingAt = tier.startingAt
+                    size = tier.size
                     additionalProperties = tier.additionalProperties.toMutableMap()
                 }
-
-                fun size(size: String) = size(JsonField.of(size))
-
-                fun size(size: JsonField<String>) = apply { this.size = size }
 
                 fun level(level: Double) = level(JsonField.of(level))
 
@@ -3111,6 +3107,10 @@ private constructor(
                 fun startingAt(startingAt: JsonField<String>) = apply {
                     this.startingAt = startingAt
                 }
+
+                fun size(size: String) = size(JsonField.of(size))
+
+                fun size(size: JsonField<String>) = apply { this.size = size }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -3136,9 +3136,9 @@ private constructor(
 
                 fun build(): Tier =
                     Tier(
-                        size,
                         level,
                         startingAt,
+                        size,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -3148,17 +3148,17 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Tier && size == other.size && level == other.level && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Tier && level == other.level && startingAt == other.startingAt && size == other.size && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(size, level, startingAt, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(level, startingAt, size, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Tier{size=$size, level=$level, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+                "Tier{level=$level, startingAt=$startingAt, size=$size, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -3166,17 +3166,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is LineItem && name == other.name && groupKey == other.groupKey && groupValue == other.groupValue && quantity == other.quantity && total == other.total && unitPrice == other.unitPrice && listPrice == other.listPrice && productId == other.productId && productCustomFields == other.productCustomFields && productType == other.productType && netsuiteItemId == other.netsuiteItemId && isProrated == other.isProrated && creditType == other.creditType && startingAt == other.startingAt && endingBefore == other.endingBefore && commitId == other.commitId && appliedCommitOrCredit == other.appliedCommitOrCredit && commitCustomFields == other.commitCustomFields && commitSegmentId == other.commitSegmentId && commitType == other.commitType && commitNetsuiteSalesOrderId == other.commitNetsuiteSalesOrderId && commitNetsuiteItemId == other.commitNetsuiteItemId && postpaidCommit == other.postpaidCommit && resellerType == other.resellerType && subLineItems == other.subLineItems && customFields == other.customFields && pricingGroupValues == other.pricingGroupValues && presentationGroupValues == other.presentationGroupValues && metadata == other.metadata && netsuiteInvoiceBillingStart == other.netsuiteInvoiceBillingStart && netsuiteInvoiceBillingEnd == other.netsuiteInvoiceBillingEnd && professionalServiceId == other.professionalServiceId && professionalServiceCustomFields == other.professionalServiceCustomFields && scheduledChargeId == other.scheduledChargeId && scheduledChargeCustomFields == other.scheduledChargeCustomFields && tier == other.tier && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is LineItem && creditType == other.creditType && name == other.name && total == other.total && appliedCommitOrCredit == other.appliedCommitOrCredit && commitCustomFields == other.commitCustomFields && commitId == other.commitId && commitNetsuiteItemId == other.commitNetsuiteItemId && commitNetsuiteSalesOrderId == other.commitNetsuiteSalesOrderId && commitSegmentId == other.commitSegmentId && commitType == other.commitType && customFields == other.customFields && endingBefore == other.endingBefore && groupKey == other.groupKey && groupValue == other.groupValue && isProrated == other.isProrated && listPrice == other.listPrice && metadata == other.metadata && netsuiteInvoiceBillingEnd == other.netsuiteInvoiceBillingEnd && netsuiteInvoiceBillingStart == other.netsuiteInvoiceBillingStart && netsuiteItemId == other.netsuiteItemId && postpaidCommit == other.postpaidCommit && presentationGroupValues == other.presentationGroupValues && pricingGroupValues == other.pricingGroupValues && productCustomFields == other.productCustomFields && productId == other.productId && productType == other.productType && professionalServiceCustomFields == other.professionalServiceCustomFields && professionalServiceId == other.professionalServiceId && quantity == other.quantity && resellerType == other.resellerType && scheduledChargeCustomFields == other.scheduledChargeCustomFields && scheduledChargeId == other.scheduledChargeId && startingAt == other.startingAt && subLineItems == other.subLineItems && tier == other.tier && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(name, groupKey, groupValue, quantity, total, unitPrice, listPrice, productId, productCustomFields, productType, netsuiteItemId, isProrated, creditType, startingAt, endingBefore, commitId, appliedCommitOrCredit, commitCustomFields, commitSegmentId, commitType, commitNetsuiteSalesOrderId, commitNetsuiteItemId, postpaidCommit, resellerType, subLineItems, customFields, pricingGroupValues, presentationGroupValues, metadata, netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd, professionalServiceId, professionalServiceCustomFields, scheduledChargeId, scheduledChargeCustomFields, tier, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(creditType, name, total, appliedCommitOrCredit, commitCustomFields, commitId, commitNetsuiteItemId, commitNetsuiteSalesOrderId, commitSegmentId, commitType, customFields, endingBefore, groupKey, groupValue, isProrated, listPrice, metadata, netsuiteInvoiceBillingEnd, netsuiteInvoiceBillingStart, netsuiteItemId, postpaidCommit, presentationGroupValues, pricingGroupValues, productCustomFields, productId, productType, professionalServiceCustomFields, professionalServiceId, quantity, resellerType, scheduledChargeCustomFields, scheduledChargeId, startingAt, subLineItems, tier, unitPrice, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "LineItem{name=$name, groupKey=$groupKey, groupValue=$groupValue, quantity=$quantity, total=$total, unitPrice=$unitPrice, listPrice=$listPrice, productId=$productId, productCustomFields=$productCustomFields, productType=$productType, netsuiteItemId=$netsuiteItemId, isProrated=$isProrated, creditType=$creditType, startingAt=$startingAt, endingBefore=$endingBefore, commitId=$commitId, appliedCommitOrCredit=$appliedCommitOrCredit, commitCustomFields=$commitCustomFields, commitSegmentId=$commitSegmentId, commitType=$commitType, commitNetsuiteSalesOrderId=$commitNetsuiteSalesOrderId, commitNetsuiteItemId=$commitNetsuiteItemId, postpaidCommit=$postpaidCommit, resellerType=$resellerType, subLineItems=$subLineItems, customFields=$customFields, pricingGroupValues=$pricingGroupValues, presentationGroupValues=$presentationGroupValues, metadata=$metadata, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, professionalServiceId=$professionalServiceId, professionalServiceCustomFields=$professionalServiceCustomFields, scheduledChargeId=$scheduledChargeId, scheduledChargeCustomFields=$scheduledChargeCustomFields, tier=$tier, additionalProperties=$additionalProperties}"
+            "LineItem{creditType=$creditType, name=$name, total=$total, appliedCommitOrCredit=$appliedCommitOrCredit, commitCustomFields=$commitCustomFields, commitId=$commitId, commitNetsuiteItemId=$commitNetsuiteItemId, commitNetsuiteSalesOrderId=$commitNetsuiteSalesOrderId, commitSegmentId=$commitSegmentId, commitType=$commitType, customFields=$customFields, endingBefore=$endingBefore, groupKey=$groupKey, groupValue=$groupValue, isProrated=$isProrated, listPrice=$listPrice, metadata=$metadata, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteItemId=$netsuiteItemId, postpaidCommit=$postpaidCommit, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productCustomFields=$productCustomFields, productId=$productId, productType=$productType, professionalServiceCustomFields=$professionalServiceCustomFields, professionalServiceId=$professionalServiceId, quantity=$quantity, resellerType=$resellerType, scheduledChargeCustomFields=$scheduledChargeCustomFields, scheduledChargeId=$scheduledChargeId, startingAt=$startingAt, subLineItems=$subLineItems, tier=$tier, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
     }
 
     class BillableStatus
@@ -3316,15 +3316,15 @@ private constructor(
     class CorrectionRecord
     @JsonCreator
     private constructor(
-        @JsonProperty("reason")
-        @ExcludeMissing
-        private val reason: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("memo")
-        @ExcludeMissing
-        private val memo: JsonField<String> = JsonMissing.of(),
         @JsonProperty("corrected_invoice_id")
         @ExcludeMissing
         private val correctedInvoiceId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("memo")
+        @ExcludeMissing
+        private val memo: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("reason")
+        @ExcludeMissing
+        private val reason: JsonField<String> = JsonMissing.of(),
         @JsonProperty("corrected_external_invoice")
         @ExcludeMissing
         private val correctedExternalInvoice: JsonField<CorrectedExternalInvoice> =
@@ -3333,22 +3333,22 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        fun reason(): String = reason.getRequired("reason")
+        fun correctedInvoiceId(): String = correctedInvoiceId.getRequired("corrected_invoice_id")
 
         fun memo(): String = memo.getRequired("memo")
 
-        fun correctedInvoiceId(): String = correctedInvoiceId.getRequired("corrected_invoice_id")
+        fun reason(): String = reason.getRequired("reason")
 
         fun correctedExternalInvoice(): Optional<CorrectedExternalInvoice> =
             Optional.ofNullable(correctedExternalInvoice.getNullable("corrected_external_invoice"))
 
-        @JsonProperty("reason") @ExcludeMissing fun _reason() = reason
-
-        @JsonProperty("memo") @ExcludeMissing fun _memo() = memo
-
         @JsonProperty("corrected_invoice_id")
         @ExcludeMissing
         fun _correctedInvoiceId() = correctedInvoiceId
+
+        @JsonProperty("memo") @ExcludeMissing fun _memo() = memo
+
+        @JsonProperty("reason") @ExcludeMissing fun _reason() = reason
 
         @JsonProperty("corrected_external_invoice")
         @ExcludeMissing
@@ -3362,9 +3362,9 @@ private constructor(
 
         fun validate(): CorrectionRecord = apply {
             if (!validated) {
-                reason()
-                memo()
                 correctedInvoiceId()
+                memo()
+                reason()
                 correctedExternalInvoice().map { it.validate() }
                 validated = true
             }
@@ -3379,29 +3379,21 @@ private constructor(
 
         class Builder {
 
-            private var reason: JsonField<String> = JsonMissing.of()
-            private var memo: JsonField<String> = JsonMissing.of()
             private var correctedInvoiceId: JsonField<String> = JsonMissing.of()
+            private var memo: JsonField<String> = JsonMissing.of()
+            private var reason: JsonField<String> = JsonMissing.of()
             private var correctedExternalInvoice: JsonField<CorrectedExternalInvoice> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(correctionRecord: CorrectionRecord) = apply {
-                reason = correctionRecord.reason
-                memo = correctionRecord.memo
                 correctedInvoiceId = correctionRecord.correctedInvoiceId
+                memo = correctionRecord.memo
+                reason = correctionRecord.reason
                 correctedExternalInvoice = correctionRecord.correctedExternalInvoice
                 additionalProperties = correctionRecord.additionalProperties.toMutableMap()
             }
-
-            fun reason(reason: String) = reason(JsonField.of(reason))
-
-            fun reason(reason: JsonField<String>) = apply { this.reason = reason }
-
-            fun memo(memo: String) = memo(JsonField.of(memo))
-
-            fun memo(memo: JsonField<String>) = apply { this.memo = memo }
 
             fun correctedInvoiceId(correctedInvoiceId: String) =
                 correctedInvoiceId(JsonField.of(correctedInvoiceId))
@@ -3409,6 +3401,14 @@ private constructor(
             fun correctedInvoiceId(correctedInvoiceId: JsonField<String>) = apply {
                 this.correctedInvoiceId = correctedInvoiceId
             }
+
+            fun memo(memo: String) = memo(JsonField.of(memo))
+
+            fun memo(memo: JsonField<String>) = apply { this.memo = memo }
+
+            fun reason(reason: String) = reason(JsonField.of(reason))
+
+            fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
             fun correctedExternalInvoice(correctedExternalInvoice: CorrectedExternalInvoice) =
                 correctedExternalInvoice(JsonField.of(correctedExternalInvoice))
@@ -3438,9 +3438,9 @@ private constructor(
 
             fun build(): CorrectionRecord =
                 CorrectionRecord(
-                    reason,
-                    memo,
                     correctedInvoiceId,
+                    memo,
+                    reason,
                     correctedExternalInvoice,
                     additionalProperties.toImmutable(),
                 )
@@ -3453,15 +3453,15 @@ private constructor(
             @JsonProperty("billing_provider_type")
             @ExcludeMissing
             private val billingProviderType: JsonField<BillingProviderType> = JsonMissing.of(),
+            @JsonProperty("external_status")
+            @ExcludeMissing
+            private val externalStatus: JsonField<ExternalStatus> = JsonMissing.of(),
             @JsonProperty("invoice_id")
             @ExcludeMissing
             private val invoiceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("issued_at_timestamp")
             @ExcludeMissing
             private val issuedAtTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("external_status")
-            @ExcludeMissing
-            private val externalStatus: JsonField<ExternalStatus> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
@@ -3469,26 +3469,26 @@ private constructor(
             fun billingProviderType(): BillingProviderType =
                 billingProviderType.getRequired("billing_provider_type")
 
+            fun externalStatus(): Optional<ExternalStatus> =
+                Optional.ofNullable(externalStatus.getNullable("external_status"))
+
             fun invoiceId(): Optional<String> =
                 Optional.ofNullable(invoiceId.getNullable("invoice_id"))
 
             fun issuedAtTimestamp(): Optional<OffsetDateTime> =
                 Optional.ofNullable(issuedAtTimestamp.getNullable("issued_at_timestamp"))
 
-            fun externalStatus(): Optional<ExternalStatus> =
-                Optional.ofNullable(externalStatus.getNullable("external_status"))
-
             @JsonProperty("billing_provider_type")
             @ExcludeMissing
             fun _billingProviderType() = billingProviderType
+
+            @JsonProperty("external_status") @ExcludeMissing fun _externalStatus() = externalStatus
 
             @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
 
             @JsonProperty("issued_at_timestamp")
             @ExcludeMissing
             fun _issuedAtTimestamp() = issuedAtTimestamp
-
-            @JsonProperty("external_status") @ExcludeMissing fun _externalStatus() = externalStatus
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -3499,9 +3499,9 @@ private constructor(
             fun validate(): CorrectedExternalInvoice = apply {
                 if (!validated) {
                     billingProviderType()
+                    externalStatus()
                     invoiceId()
                     issuedAtTimestamp()
-                    externalStatus()
                     validated = true
                 }
             }
@@ -3516,17 +3516,17 @@ private constructor(
             class Builder {
 
                 private var billingProviderType: JsonField<BillingProviderType> = JsonMissing.of()
+                private var externalStatus: JsonField<ExternalStatus> = JsonMissing.of()
                 private var invoiceId: JsonField<String> = JsonMissing.of()
                 private var issuedAtTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-                private var externalStatus: JsonField<ExternalStatus> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(correctedExternalInvoice: CorrectedExternalInvoice) = apply {
                     billingProviderType = correctedExternalInvoice.billingProviderType
+                    externalStatus = correctedExternalInvoice.externalStatus
                     invoiceId = correctedExternalInvoice.invoiceId
                     issuedAtTimestamp = correctedExternalInvoice.issuedAtTimestamp
-                    externalStatus = correctedExternalInvoice.externalStatus
                     additionalProperties =
                         correctedExternalInvoice.additionalProperties.toMutableMap()
                 }
@@ -3539,6 +3539,13 @@ private constructor(
                         this.billingProviderType = billingProviderType
                     }
 
+                fun externalStatus(externalStatus: ExternalStatus) =
+                    externalStatus(JsonField.of(externalStatus))
+
+                fun externalStatus(externalStatus: JsonField<ExternalStatus>) = apply {
+                    this.externalStatus = externalStatus
+                }
+
                 fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
 
                 fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
@@ -3548,13 +3555,6 @@ private constructor(
 
                 fun issuedAtTimestamp(issuedAtTimestamp: JsonField<OffsetDateTime>) = apply {
                     this.issuedAtTimestamp = issuedAtTimestamp
-                }
-
-                fun externalStatus(externalStatus: ExternalStatus) =
-                    externalStatus(JsonField.of(externalStatus))
-
-                fun externalStatus(externalStatus: JsonField<ExternalStatus>) = apply {
-                    this.externalStatus = externalStatus
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -3582,9 +3582,9 @@ private constructor(
                 fun build(): CorrectedExternalInvoice =
                     CorrectedExternalInvoice(
                         billingProviderType,
+                        externalStatus,
                         invoiceId,
                         issuedAtTimestamp,
-                        externalStatus,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -3802,17 +3802,17 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is CorrectedExternalInvoice && billingProviderType == other.billingProviderType && invoiceId == other.invoiceId && issuedAtTimestamp == other.issuedAtTimestamp && externalStatus == other.externalStatus && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is CorrectedExternalInvoice && billingProviderType == other.billingProviderType && externalStatus == other.externalStatus && invoiceId == other.invoiceId && issuedAtTimestamp == other.issuedAtTimestamp && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(billingProviderType, invoiceId, issuedAtTimestamp, externalStatus, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(billingProviderType, externalStatus, invoiceId, issuedAtTimestamp, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "CorrectedExternalInvoice{billingProviderType=$billingProviderType, invoiceId=$invoiceId, issuedAtTimestamp=$issuedAtTimestamp, externalStatus=$externalStatus, additionalProperties=$additionalProperties}"
+                "CorrectedExternalInvoice{billingProviderType=$billingProviderType, externalStatus=$externalStatus, invoiceId=$invoiceId, issuedAtTimestamp=$issuedAtTimestamp, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -3820,17 +3820,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CorrectionRecord && reason == other.reason && memo == other.memo && correctedInvoiceId == other.correctedInvoiceId && correctedExternalInvoice == other.correctedExternalInvoice && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CorrectionRecord && correctedInvoiceId == other.correctedInvoiceId && memo == other.memo && reason == other.reason && correctedExternalInvoice == other.correctedExternalInvoice && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(reason, memo, correctedInvoiceId, correctedExternalInvoice, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(correctedInvoiceId, memo, reason, correctedExternalInvoice, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CorrectionRecord{reason=$reason, memo=$memo, correctedInvoiceId=$correctedInvoiceId, correctedExternalInvoice=$correctedExternalInvoice, additionalProperties=$additionalProperties}"
+            "CorrectionRecord{correctedInvoiceId=$correctedInvoiceId, memo=$memo, reason=$reason, correctedExternalInvoice=$correctedExternalInvoice, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -3991,15 +3991,15 @@ private constructor(
         @JsonProperty("billing_provider_type")
         @ExcludeMissing
         private val billingProviderType: JsonField<BillingProviderType> = JsonMissing.of(),
+        @JsonProperty("external_status")
+        @ExcludeMissing
+        private val externalStatus: JsonField<ExternalStatus> = JsonMissing.of(),
         @JsonProperty("invoice_id")
         @ExcludeMissing
         private val invoiceId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("issued_at_timestamp")
         @ExcludeMissing
         private val issuedAtTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("external_status")
-        @ExcludeMissing
-        private val externalStatus: JsonField<ExternalStatus> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -4007,25 +4007,25 @@ private constructor(
         fun billingProviderType(): BillingProviderType =
             billingProviderType.getRequired("billing_provider_type")
 
+        fun externalStatus(): Optional<ExternalStatus> =
+            Optional.ofNullable(externalStatus.getNullable("external_status"))
+
         fun invoiceId(): Optional<String> = Optional.ofNullable(invoiceId.getNullable("invoice_id"))
 
         fun issuedAtTimestamp(): Optional<OffsetDateTime> =
             Optional.ofNullable(issuedAtTimestamp.getNullable("issued_at_timestamp"))
 
-        fun externalStatus(): Optional<ExternalStatus> =
-            Optional.ofNullable(externalStatus.getNullable("external_status"))
-
         @JsonProperty("billing_provider_type")
         @ExcludeMissing
         fun _billingProviderType() = billingProviderType
+
+        @JsonProperty("external_status") @ExcludeMissing fun _externalStatus() = externalStatus
 
         @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
 
         @JsonProperty("issued_at_timestamp")
         @ExcludeMissing
         fun _issuedAtTimestamp() = issuedAtTimestamp
-
-        @JsonProperty("external_status") @ExcludeMissing fun _externalStatus() = externalStatus
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -4036,9 +4036,9 @@ private constructor(
         fun validate(): ExternalInvoice = apply {
             if (!validated) {
                 billingProviderType()
+                externalStatus()
                 invoiceId()
                 issuedAtTimestamp()
-                externalStatus()
                 validated = true
             }
         }
@@ -4053,17 +4053,17 @@ private constructor(
         class Builder {
 
             private var billingProviderType: JsonField<BillingProviderType> = JsonMissing.of()
+            private var externalStatus: JsonField<ExternalStatus> = JsonMissing.of()
             private var invoiceId: JsonField<String> = JsonMissing.of()
             private var issuedAtTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var externalStatus: JsonField<ExternalStatus> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(externalInvoice: ExternalInvoice) = apply {
                 billingProviderType = externalInvoice.billingProviderType
+                externalStatus = externalInvoice.externalStatus
                 invoiceId = externalInvoice.invoiceId
                 issuedAtTimestamp = externalInvoice.issuedAtTimestamp
-                externalStatus = externalInvoice.externalStatus
                 additionalProperties = externalInvoice.additionalProperties.toMutableMap()
             }
 
@@ -4072,6 +4072,13 @@ private constructor(
 
             fun billingProviderType(billingProviderType: JsonField<BillingProviderType>) = apply {
                 this.billingProviderType = billingProviderType
+            }
+
+            fun externalStatus(externalStatus: ExternalStatus) =
+                externalStatus(JsonField.of(externalStatus))
+
+            fun externalStatus(externalStatus: JsonField<ExternalStatus>) = apply {
+                this.externalStatus = externalStatus
             }
 
             fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
@@ -4083,13 +4090,6 @@ private constructor(
 
             fun issuedAtTimestamp(issuedAtTimestamp: JsonField<OffsetDateTime>) = apply {
                 this.issuedAtTimestamp = issuedAtTimestamp
-            }
-
-            fun externalStatus(externalStatus: ExternalStatus) =
-                externalStatus(JsonField.of(externalStatus))
-
-            fun externalStatus(externalStatus: JsonField<ExternalStatus>) = apply {
-                this.externalStatus = externalStatus
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -4114,9 +4114,9 @@ private constructor(
             fun build(): ExternalInvoice =
                 ExternalInvoice(
                     billingProviderType,
+                    externalStatus,
                     invoiceId,
                     issuedAtTimestamp,
-                    externalStatus,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -4331,65 +4331,65 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ExternalInvoice && billingProviderType == other.billingProviderType && invoiceId == other.invoiceId && issuedAtTimestamp == other.issuedAtTimestamp && externalStatus == other.externalStatus && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ExternalInvoice && billingProviderType == other.billingProviderType && externalStatus == other.externalStatus && invoiceId == other.invoiceId && issuedAtTimestamp == other.issuedAtTimestamp && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(billingProviderType, invoiceId, issuedAtTimestamp, externalStatus, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(billingProviderType, externalStatus, invoiceId, issuedAtTimestamp, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ExternalInvoice{billingProviderType=$billingProviderType, invoiceId=$invoiceId, issuedAtTimestamp=$issuedAtTimestamp, externalStatus=$externalStatus, additionalProperties=$additionalProperties}"
+            "ExternalInvoice{billingProviderType=$billingProviderType, externalStatus=$externalStatus, invoiceId=$invoiceId, issuedAtTimestamp=$issuedAtTimestamp, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
     class InvoiceAdjustment
     @JsonCreator
     private constructor(
+        @JsonProperty("credit_type")
+        @ExcludeMissing
+        private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
         @JsonProperty("name")
         @ExcludeMissing
         private val name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("total")
         @ExcludeMissing
         private val total: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("credit_type")
-        @ExcludeMissing
-        private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
-        @JsonProperty("credit_grant_id")
-        @ExcludeMissing
-        private val creditGrantId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("credit_grant_custom_fields")
         @ExcludeMissing
         private val creditGrantCustomFields: JsonField<CreditGrantCustomFields> = JsonMissing.of(),
+        @JsonProperty("credit_grant_id")
+        @ExcludeMissing
+        private val creditGrantId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
+
+        fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
         fun name(): String = name.getRequired("name")
 
         fun total(): Double = total.getRequired("total")
 
-        fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
+        fun creditGrantCustomFields(): Optional<CreditGrantCustomFields> =
+            Optional.ofNullable(creditGrantCustomFields.getNullable("credit_grant_custom_fields"))
 
         fun creditGrantId(): Optional<String> =
             Optional.ofNullable(creditGrantId.getNullable("credit_grant_id"))
 
-        fun creditGrantCustomFields(): Optional<CreditGrantCustomFields> =
-            Optional.ofNullable(creditGrantCustomFields.getNullable("credit_grant_custom_fields"))
+        @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
 
         @JsonProperty("name") @ExcludeMissing fun _name() = name
 
         @JsonProperty("total") @ExcludeMissing fun _total() = total
 
-        @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
-
-        @JsonProperty("credit_grant_id") @ExcludeMissing fun _creditGrantId() = creditGrantId
-
         @JsonProperty("credit_grant_custom_fields")
         @ExcludeMissing
         fun _creditGrantCustomFields() = creditGrantCustomFields
+
+        @JsonProperty("credit_grant_id") @ExcludeMissing fun _creditGrantId() = creditGrantId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -4399,11 +4399,11 @@ private constructor(
 
         fun validate(): InvoiceAdjustment = apply {
             if (!validated) {
+                creditType().validate()
                 name()
                 total()
-                creditType().validate()
-                creditGrantId()
                 creditGrantCustomFields().map { it.validate() }
+                creditGrantId()
                 validated = true
             }
         }
@@ -4417,22 +4417,28 @@ private constructor(
 
         class Builder {
 
+            private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var total: JsonField<Double> = JsonMissing.of()
-            private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
-            private var creditGrantId: JsonField<String> = JsonMissing.of()
             private var creditGrantCustomFields: JsonField<CreditGrantCustomFields> =
                 JsonMissing.of()
+            private var creditGrantId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(invoiceAdjustment: InvoiceAdjustment) = apply {
+                creditType = invoiceAdjustment.creditType
                 name = invoiceAdjustment.name
                 total = invoiceAdjustment.total
-                creditType = invoiceAdjustment.creditType
-                creditGrantId = invoiceAdjustment.creditGrantId
                 creditGrantCustomFields = invoiceAdjustment.creditGrantCustomFields
+                creditGrantId = invoiceAdjustment.creditGrantId
                 additionalProperties = invoiceAdjustment.additionalProperties.toMutableMap()
+            }
+
+            fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
+
+            fun creditType(creditType: JsonField<CreditTypeData>) = apply {
+                this.creditType = creditType
             }
 
             fun name(name: String) = name(JsonField.of(name))
@@ -4443,24 +4449,18 @@ private constructor(
 
             fun total(total: JsonField<Double>) = apply { this.total = total }
 
-            fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
-
-            fun creditType(creditType: JsonField<CreditTypeData>) = apply {
-                this.creditType = creditType
-            }
-
-            fun creditGrantId(creditGrantId: String) = creditGrantId(JsonField.of(creditGrantId))
-
-            fun creditGrantId(creditGrantId: JsonField<String>) = apply {
-                this.creditGrantId = creditGrantId
-            }
-
             fun creditGrantCustomFields(creditGrantCustomFields: CreditGrantCustomFields) =
                 creditGrantCustomFields(JsonField.of(creditGrantCustomFields))
 
             fun creditGrantCustomFields(
                 creditGrantCustomFields: JsonField<CreditGrantCustomFields>
             ) = apply { this.creditGrantCustomFields = creditGrantCustomFields }
+
+            fun creditGrantId(creditGrantId: String) = creditGrantId(JsonField.of(creditGrantId))
+
+            fun creditGrantId(creditGrantId: JsonField<String>) = apply {
+                this.creditGrantId = creditGrantId
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -4483,11 +4483,11 @@ private constructor(
 
             fun build(): InvoiceAdjustment =
                 InvoiceAdjustment(
+                    creditType,
                     name,
                     total,
-                    creditType,
-                    creditGrantId,
                     creditGrantCustomFields,
+                    creditGrantId,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -4578,17 +4578,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is InvoiceAdjustment && name == other.name && total == other.total && creditType == other.creditType && creditGrantId == other.creditGrantId && creditGrantCustomFields == other.creditGrantCustomFields && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is InvoiceAdjustment && creditType == other.creditType && name == other.name && total == other.total && creditGrantCustomFields == other.creditGrantCustomFields && creditGrantId == other.creditGrantId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(name, total, creditType, creditGrantId, creditGrantCustomFields, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(creditType, name, total, creditGrantCustomFields, creditGrantId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "InvoiceAdjustment{name=$name, total=$total, creditType=$creditType, creditGrantId=$creditGrantId, creditGrantCustomFields=$creditGrantCustomFields, additionalProperties=$additionalProperties}"
+            "InvoiceAdjustment{creditType=$creditType, name=$name, total=$total, creditGrantCustomFields=$creditGrantCustomFields, creditGrantId=$creditGrantId, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -4671,15 +4671,15 @@ private constructor(
     class ResellerRoyalty
     @JsonCreator
     private constructor(
-        @JsonProperty("reseller_type")
-        @ExcludeMissing
-        private val resellerType: JsonField<ResellerType> = JsonMissing.of(),
-        @JsonProperty("netsuite_reseller_id")
-        @ExcludeMissing
-        private val netsuiteResellerId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("fraction")
         @ExcludeMissing
         private val fraction: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("netsuite_reseller_id")
+        @ExcludeMissing
+        private val netsuiteResellerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("reseller_type")
+        @ExcludeMissing
+        private val resellerType: JsonField<ResellerType> = JsonMissing.of(),
         @JsonProperty("aws_options")
         @ExcludeMissing
         private val awsOptions: JsonField<AwsOptions> = JsonMissing.of(),
@@ -4690,11 +4690,11 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        fun resellerType(): ResellerType = resellerType.getRequired("reseller_type")
+        fun fraction(): String = fraction.getRequired("fraction")
 
         fun netsuiteResellerId(): String = netsuiteResellerId.getRequired("netsuite_reseller_id")
 
-        fun fraction(): String = fraction.getRequired("fraction")
+        fun resellerType(): ResellerType = resellerType.getRequired("reseller_type")
 
         fun awsOptions(): Optional<AwsOptions> =
             Optional.ofNullable(awsOptions.getNullable("aws_options"))
@@ -4702,13 +4702,13 @@ private constructor(
         fun gcpOptions(): Optional<GcpOptions> =
             Optional.ofNullable(gcpOptions.getNullable("gcp_options"))
 
-        @JsonProperty("reseller_type") @ExcludeMissing fun _resellerType() = resellerType
+        @JsonProperty("fraction") @ExcludeMissing fun _fraction() = fraction
 
         @JsonProperty("netsuite_reseller_id")
         @ExcludeMissing
         fun _netsuiteResellerId() = netsuiteResellerId
 
-        @JsonProperty("fraction") @ExcludeMissing fun _fraction() = fraction
+        @JsonProperty("reseller_type") @ExcludeMissing fun _resellerType() = resellerType
 
         @JsonProperty("aws_options") @ExcludeMissing fun _awsOptions() = awsOptions
 
@@ -4722,9 +4722,9 @@ private constructor(
 
         fun validate(): ResellerRoyalty = apply {
             if (!validated) {
-                resellerType()
-                netsuiteResellerId()
                 fraction()
+                netsuiteResellerId()
+                resellerType()
                 awsOptions().map { it.validate() }
                 gcpOptions().map { it.validate() }
                 validated = true
@@ -4740,28 +4740,26 @@ private constructor(
 
         class Builder {
 
-            private var resellerType: JsonField<ResellerType> = JsonMissing.of()
-            private var netsuiteResellerId: JsonField<String> = JsonMissing.of()
             private var fraction: JsonField<String> = JsonMissing.of()
+            private var netsuiteResellerId: JsonField<String> = JsonMissing.of()
+            private var resellerType: JsonField<ResellerType> = JsonMissing.of()
             private var awsOptions: JsonField<AwsOptions> = JsonMissing.of()
             private var gcpOptions: JsonField<GcpOptions> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(resellerRoyalty: ResellerRoyalty) = apply {
-                resellerType = resellerRoyalty.resellerType
-                netsuiteResellerId = resellerRoyalty.netsuiteResellerId
                 fraction = resellerRoyalty.fraction
+                netsuiteResellerId = resellerRoyalty.netsuiteResellerId
+                resellerType = resellerRoyalty.resellerType
                 awsOptions = resellerRoyalty.awsOptions
                 gcpOptions = resellerRoyalty.gcpOptions
                 additionalProperties = resellerRoyalty.additionalProperties.toMutableMap()
             }
 
-            fun resellerType(resellerType: ResellerType) = resellerType(JsonField.of(resellerType))
+            fun fraction(fraction: String) = fraction(JsonField.of(fraction))
 
-            fun resellerType(resellerType: JsonField<ResellerType>) = apply {
-                this.resellerType = resellerType
-            }
+            fun fraction(fraction: JsonField<String>) = apply { this.fraction = fraction }
 
             fun netsuiteResellerId(netsuiteResellerId: String) =
                 netsuiteResellerId(JsonField.of(netsuiteResellerId))
@@ -4770,9 +4768,11 @@ private constructor(
                 this.netsuiteResellerId = netsuiteResellerId
             }
 
-            fun fraction(fraction: String) = fraction(JsonField.of(fraction))
+            fun resellerType(resellerType: ResellerType) = resellerType(JsonField.of(resellerType))
 
-            fun fraction(fraction: JsonField<String>) = apply { this.fraction = fraction }
+            fun resellerType(resellerType: JsonField<ResellerType>) = apply {
+                this.resellerType = resellerType
+            }
 
             fun awsOptions(awsOptions: AwsOptions) = awsOptions(JsonField.of(awsOptions))
 
@@ -4807,9 +4807,9 @@ private constructor(
 
             fun build(): ResellerRoyalty =
                 ResellerRoyalty(
-                    resellerType,
-                    netsuiteResellerId,
                     fraction,
+                    netsuiteResellerId,
+                    resellerType,
                     awsOptions,
                     gcpOptions,
                     additionalProperties.toImmutable(),
@@ -4892,12 +4892,12 @@ private constructor(
             @JsonProperty("aws_account_number")
             @ExcludeMissing
             private val awsAccountNumber: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("aws_payer_reference_id")
-            @ExcludeMissing
-            private val awsPayerReferenceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("aws_offer_id")
             @ExcludeMissing
             private val awsOfferId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("aws_payer_reference_id")
+            @ExcludeMissing
+            private val awsPayerReferenceId: JsonField<String> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
@@ -4905,21 +4905,21 @@ private constructor(
             fun awsAccountNumber(): Optional<String> =
                 Optional.ofNullable(awsAccountNumber.getNullable("aws_account_number"))
 
-            fun awsPayerReferenceId(): Optional<String> =
-                Optional.ofNullable(awsPayerReferenceId.getNullable("aws_payer_reference_id"))
-
             fun awsOfferId(): Optional<String> =
                 Optional.ofNullable(awsOfferId.getNullable("aws_offer_id"))
+
+            fun awsPayerReferenceId(): Optional<String> =
+                Optional.ofNullable(awsPayerReferenceId.getNullable("aws_payer_reference_id"))
 
             @JsonProperty("aws_account_number")
             @ExcludeMissing
             fun _awsAccountNumber() = awsAccountNumber
 
+            @JsonProperty("aws_offer_id") @ExcludeMissing fun _awsOfferId() = awsOfferId
+
             @JsonProperty("aws_payer_reference_id")
             @ExcludeMissing
             fun _awsPayerReferenceId() = awsPayerReferenceId
-
-            @JsonProperty("aws_offer_id") @ExcludeMissing fun _awsOfferId() = awsOfferId
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -4930,8 +4930,8 @@ private constructor(
             fun validate(): AwsOptions = apply {
                 if (!validated) {
                     awsAccountNumber()
-                    awsPayerReferenceId()
                     awsOfferId()
+                    awsPayerReferenceId()
                     validated = true
                 }
             }
@@ -4946,15 +4946,15 @@ private constructor(
             class Builder {
 
                 private var awsAccountNumber: JsonField<String> = JsonMissing.of()
-                private var awsPayerReferenceId: JsonField<String> = JsonMissing.of()
                 private var awsOfferId: JsonField<String> = JsonMissing.of()
+                private var awsPayerReferenceId: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(awsOptions: AwsOptions) = apply {
                     awsAccountNumber = awsOptions.awsAccountNumber
-                    awsPayerReferenceId = awsOptions.awsPayerReferenceId
                     awsOfferId = awsOptions.awsOfferId
+                    awsPayerReferenceId = awsOptions.awsPayerReferenceId
                     additionalProperties = awsOptions.additionalProperties.toMutableMap()
                 }
 
@@ -4965,17 +4965,17 @@ private constructor(
                     this.awsAccountNumber = awsAccountNumber
                 }
 
+                fun awsOfferId(awsOfferId: String) = awsOfferId(JsonField.of(awsOfferId))
+
+                fun awsOfferId(awsOfferId: JsonField<String>) = apply {
+                    this.awsOfferId = awsOfferId
+                }
+
                 fun awsPayerReferenceId(awsPayerReferenceId: String) =
                     awsPayerReferenceId(JsonField.of(awsPayerReferenceId))
 
                 fun awsPayerReferenceId(awsPayerReferenceId: JsonField<String>) = apply {
                     this.awsPayerReferenceId = awsPayerReferenceId
-                }
-
-                fun awsOfferId(awsOfferId: String) = awsOfferId(JsonField.of(awsOfferId))
-
-                fun awsOfferId(awsOfferId: JsonField<String>) = apply {
-                    this.awsOfferId = awsOfferId
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -5003,8 +5003,8 @@ private constructor(
                 fun build(): AwsOptions =
                     AwsOptions(
                         awsAccountNumber,
-                        awsPayerReferenceId,
                         awsOfferId,
+                        awsPayerReferenceId,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -5014,17 +5014,17 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is AwsOptions && awsAccountNumber == other.awsAccountNumber && awsPayerReferenceId == other.awsPayerReferenceId && awsOfferId == other.awsOfferId && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is AwsOptions && awsAccountNumber == other.awsAccountNumber && awsOfferId == other.awsOfferId && awsPayerReferenceId == other.awsPayerReferenceId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(awsAccountNumber, awsPayerReferenceId, awsOfferId, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(awsAccountNumber, awsOfferId, awsPayerReferenceId, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AwsOptions{awsAccountNumber=$awsAccountNumber, awsPayerReferenceId=$awsPayerReferenceId, awsOfferId=$awsOfferId, additionalProperties=$additionalProperties}"
+                "AwsOptions{awsAccountNumber=$awsAccountNumber, awsOfferId=$awsOfferId, awsPayerReferenceId=$awsPayerReferenceId, additionalProperties=$additionalProperties}"
         }
 
         @NoAutoDetect
@@ -5150,17 +5150,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ResellerRoyalty && resellerType == other.resellerType && netsuiteResellerId == other.netsuiteResellerId && fraction == other.fraction && awsOptions == other.awsOptions && gcpOptions == other.gcpOptions && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ResellerRoyalty && fraction == other.fraction && netsuiteResellerId == other.netsuiteResellerId && resellerType == other.resellerType && awsOptions == other.awsOptions && gcpOptions == other.gcpOptions && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(resellerType, netsuiteResellerId, fraction, awsOptions, gcpOptions, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(fraction, netsuiteResellerId, resellerType, awsOptions, gcpOptions, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ResellerRoyalty{resellerType=$resellerType, netsuiteResellerId=$netsuiteResellerId, fraction=$fraction, awsOptions=$awsOptions, gcpOptions=$gcpOptions, additionalProperties=$additionalProperties}"
+            "ResellerRoyalty{fraction=$fraction, netsuiteResellerId=$netsuiteResellerId, resellerType=$resellerType, awsOptions=$awsOptions, gcpOptions=$gcpOptions, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -5168,15 +5168,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Invoice && id == other.id && customerId == other.customerId && customerCustomFields == other.customerCustomFields && netsuiteSalesOrderId == other.netsuiteSalesOrderId && salesforceOpportunityId == other.salesforceOpportunityId && netPaymentTermsDays == other.netPaymentTermsDays && creditType == other.creditType && invoiceAdjustments == other.invoiceAdjustments && lineItems == other.lineItems && startTimestamp == other.startTimestamp && endTimestamp == other.endTimestamp && issuedAt == other.issuedAt && createdAt == other.createdAt && status == other.status && subtotal == other.subtotal && total == other.total && type == other.type && externalInvoice == other.externalInvoice && planId == other.planId && planName == other.planName && planCustomFields == other.planCustomFields && contractId == other.contractId && contractCustomFields == other.contractCustomFields && amendmentId == other.amendmentId && correctionRecord == other.correctionRecord && resellerRoyalty == other.resellerRoyalty && customFields == other.customFields && billableStatus == other.billableStatus && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Invoice && id == other.id && creditType == other.creditType && customerId == other.customerId && lineItems == other.lineItems && status == other.status && total == other.total && type == other.type && amendmentId == other.amendmentId && billableStatus == other.billableStatus && contractCustomFields == other.contractCustomFields && contractId == other.contractId && correctionRecord == other.correctionRecord && createdAt == other.createdAt && customFields == other.customFields && customerCustomFields == other.customerCustomFields && endTimestamp == other.endTimestamp && externalInvoice == other.externalInvoice && invoiceAdjustments == other.invoiceAdjustments && issuedAt == other.issuedAt && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && planCustomFields == other.planCustomFields && planId == other.planId && planName == other.planName && resellerRoyalty == other.resellerRoyalty && salesforceOpportunityId == other.salesforceOpportunityId && startTimestamp == other.startTimestamp && subtotal == other.subtotal && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, customerId, customerCustomFields, netsuiteSalesOrderId, salesforceOpportunityId, netPaymentTermsDays, creditType, invoiceAdjustments, lineItems, startTimestamp, endTimestamp, issuedAt, createdAt, status, subtotal, total, type, externalInvoice, planId, planName, planCustomFields, contractId, contractCustomFields, amendmentId, correctionRecord, resellerRoyalty, customFields, billableStatus, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, creditType, customerId, lineItems, status, total, type, amendmentId, billableStatus, contractCustomFields, contractId, correctionRecord, createdAt, customFields, customerCustomFields, endTimestamp, externalInvoice, invoiceAdjustments, issuedAt, netPaymentTermsDays, netsuiteSalesOrderId, planCustomFields, planId, planName, resellerRoyalty, salesforceOpportunityId, startTimestamp, subtotal, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Invoice{id=$id, customerId=$customerId, customerCustomFields=$customerCustomFields, netsuiteSalesOrderId=$netsuiteSalesOrderId, salesforceOpportunityId=$salesforceOpportunityId, netPaymentTermsDays=$netPaymentTermsDays, creditType=$creditType, invoiceAdjustments=$invoiceAdjustments, lineItems=$lineItems, startTimestamp=$startTimestamp, endTimestamp=$endTimestamp, issuedAt=$issuedAt, createdAt=$createdAt, status=$status, subtotal=$subtotal, total=$total, type=$type, externalInvoice=$externalInvoice, planId=$planId, planName=$planName, planCustomFields=$planCustomFields, contractId=$contractId, contractCustomFields=$contractCustomFields, amendmentId=$amendmentId, correctionRecord=$correctionRecord, resellerRoyalty=$resellerRoyalty, customFields=$customFields, billableStatus=$billableStatus, additionalProperties=$additionalProperties}"
+        "Invoice{id=$id, creditType=$creditType, customerId=$customerId, lineItems=$lineItems, status=$status, total=$total, type=$type, amendmentId=$amendmentId, billableStatus=$billableStatus, contractCustomFields=$contractCustomFields, contractId=$contractId, correctionRecord=$correctionRecord, createdAt=$createdAt, customFields=$customFields, customerCustomFields=$customerCustomFields, endTimestamp=$endTimestamp, externalInvoice=$externalInvoice, invoiceAdjustments=$invoiceAdjustments, issuedAt=$issuedAt, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, planCustomFields=$planCustomFields, planId=$planId, planName=$planName, resellerRoyalty=$resellerRoyalty, salesforceOpportunityId=$salesforceOpportunityId, startTimestamp=$startTimestamp, subtotal=$subtotal, additionalProperties=$additionalProperties}"
 }

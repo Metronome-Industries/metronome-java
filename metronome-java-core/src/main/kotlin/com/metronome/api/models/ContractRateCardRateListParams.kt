@@ -363,14 +363,30 @@ constructor(
     class Selector
     @JsonCreator
     private constructor(
-        @JsonProperty("product_id") private val productId: String?,
-        @JsonProperty("product_tags") private val productTags: List<String>?,
-        @JsonProperty("pricing_group_values") private val pricingGroupValues: PricingGroupValues?,
         @JsonProperty("partial_pricing_group_values")
         private val partialPricingGroupValues: PartialPricingGroupValues?,
+        @JsonProperty("pricing_group_values") private val pricingGroupValues: PricingGroupValues?,
+        @JsonProperty("product_id") private val productId: String?,
+        @JsonProperty("product_tags") private val productTags: List<String>?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
+
+        /**
+         * List of pricing group key value pairs, rates containing the matching key / value pairs
+         * will be included in the response.
+         */
+        @JsonProperty("partial_pricing_group_values")
+        fun partialPricingGroupValues(): Optional<PartialPricingGroupValues> =
+            Optional.ofNullable(partialPricingGroupValues)
+
+        /**
+         * List of pricing group key value pairs, rates matching all of the key / value pairs will
+         * be included in the response.
+         */
+        @JsonProperty("pricing_group_values")
+        fun pricingGroupValues(): Optional<PricingGroupValues> =
+            Optional.ofNullable(pricingGroupValues)
 
         /** Rates matching the product id will be included in the response. */
         @JsonProperty("product_id")
@@ -381,22 +397,6 @@ constructor(
          */
         @JsonProperty("product_tags")
         fun productTags(): Optional<List<String>> = Optional.ofNullable(productTags)
-
-        /**
-         * List of pricing group key value pairs, rates matching all of the key / value pairs will
-         * be included in the response.
-         */
-        @JsonProperty("pricing_group_values")
-        fun pricingGroupValues(): Optional<PricingGroupValues> =
-            Optional.ofNullable(pricingGroupValues)
-
-        /**
-         * List of pricing group key value pairs, rates containing the matching key / value pairs
-         * will be included in the response.
-         */
-        @JsonProperty("partial_pricing_group_values")
-        fun partialPricingGroupValues(): Optional<PartialPricingGroupValues> =
-            Optional.ofNullable(partialPricingGroupValues)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -411,19 +411,36 @@ constructor(
 
         class Builder {
 
+            private var partialPricingGroupValues: PartialPricingGroupValues? = null
+            private var pricingGroupValues: PricingGroupValues? = null
             private var productId: String? = null
             private var productTags: MutableList<String>? = null
-            private var pricingGroupValues: PricingGroupValues? = null
-            private var partialPricingGroupValues: PartialPricingGroupValues? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(selector: Selector) = apply {
+                partialPricingGroupValues = selector.partialPricingGroupValues
+                pricingGroupValues = selector.pricingGroupValues
                 productId = selector.productId
                 productTags = selector.productTags?.toMutableList()
-                pricingGroupValues = selector.pricingGroupValues
-                partialPricingGroupValues = selector.partialPricingGroupValues
                 additionalProperties = selector.additionalProperties.toMutableMap()
+            }
+
+            /**
+             * List of pricing group key value pairs, rates containing the matching key / value
+             * pairs will be included in the response.
+             */
+            fun partialPricingGroupValues(partialPricingGroupValues: PartialPricingGroupValues) =
+                apply {
+                    this.partialPricingGroupValues = partialPricingGroupValues
+                }
+
+            /**
+             * List of pricing group key value pairs, rates matching all of the key / value pairs
+             * will be included in the response.
+             */
+            fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
+                this.pricingGroupValues = pricingGroupValues
             }
 
             /** Rates matching the product id will be included in the response. */
@@ -444,23 +461,6 @@ constructor(
             fun addProductTag(productTag: String) = apply {
                 productTags = (productTags ?: mutableListOf()).apply { add(productTag) }
             }
-
-            /**
-             * List of pricing group key value pairs, rates matching all of the key / value pairs
-             * will be included in the response.
-             */
-            fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
-                this.pricingGroupValues = pricingGroupValues
-            }
-
-            /**
-             * List of pricing group key value pairs, rates containing the matching key / value
-             * pairs will be included in the response.
-             */
-            fun partialPricingGroupValues(partialPricingGroupValues: PartialPricingGroupValues) =
-                apply {
-                    this.partialPricingGroupValues = partialPricingGroupValues
-                }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -483,10 +483,10 @@ constructor(
 
             fun build(): Selector =
                 Selector(
+                    partialPricingGroupValues,
+                    pricingGroupValues,
                     productId,
                     productTags?.toImmutable(),
-                    pricingGroupValues,
-                    partialPricingGroupValues,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -649,17 +649,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Selector && productId == other.productId && productTags == other.productTags && pricingGroupValues == other.pricingGroupValues && partialPricingGroupValues == other.partialPricingGroupValues && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Selector && partialPricingGroupValues == other.partialPricingGroupValues && pricingGroupValues == other.pricingGroupValues && productId == other.productId && productTags == other.productTags && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(productId, productTags, pricingGroupValues, partialPricingGroupValues, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(partialPricingGroupValues, pricingGroupValues, productId, productTags, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Selector{productId=$productId, productTags=$productTags, pricingGroupValues=$pricingGroupValues, partialPricingGroupValues=$partialPricingGroupValues, additionalProperties=$additionalProperties}"
+            "Selector{partialPricingGroupValues=$partialPricingGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

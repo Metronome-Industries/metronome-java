@@ -30,18 +30,15 @@ import java.util.Optional
 class QuantityConversion
 @JsonCreator
 private constructor(
-    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
     @JsonProperty("conversion_factor")
     @ExcludeMissing
     private val conversionFactor: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("operation")
     @ExcludeMissing
     private val operation: JsonField<Operation> = JsonMissing.of(),
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
-
-    /** Optional name for this conversion. */
-    fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
 
     /** The factor to multiply or divide the quantity by. */
     fun conversionFactor(): Double = conversionFactor.getRequired("conversion_factor")
@@ -50,13 +47,16 @@ private constructor(
     fun operation(): Operation = operation.getRequired("operation")
 
     /** Optional name for this conversion. */
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
 
     /** The factor to multiply or divide the quantity by. */
     @JsonProperty("conversion_factor") @ExcludeMissing fun _conversionFactor() = conversionFactor
 
     /** The operation to perform on the quantity */
     @JsonProperty("operation") @ExcludeMissing fun _operation() = operation
+
+    /** Optional name for this conversion. */
+    @JsonProperty("name") @ExcludeMissing fun _name() = name
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -66,9 +66,9 @@ private constructor(
 
     fun validate(): QuantityConversion = apply {
         if (!validated) {
-            name()
             conversionFactor()
             operation()
+            name()
             validated = true
         }
     }
@@ -82,24 +82,18 @@ private constructor(
 
     class Builder {
 
-        private var name: JsonField<String> = JsonMissing.of()
         private var conversionFactor: JsonField<Double> = JsonMissing.of()
         private var operation: JsonField<Operation> = JsonMissing.of()
+        private var name: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(quantityConversion: QuantityConversion) = apply {
-            name = quantityConversion.name
             conversionFactor = quantityConversion.conversionFactor
             operation = quantityConversion.operation
+            name = quantityConversion.name
             additionalProperties = quantityConversion.additionalProperties.toMutableMap()
         }
-
-        /** Optional name for this conversion. */
-        fun name(name: String) = name(JsonField.of(name))
-
-        /** Optional name for this conversion. */
-        fun name(name: JsonField<String>) = apply { this.name = name }
 
         /** The factor to multiply or divide the quantity by. */
         fun conversionFactor(conversionFactor: Double) =
@@ -115,6 +109,12 @@ private constructor(
 
         /** The operation to perform on the quantity */
         fun operation(operation: JsonField<Operation>) = apply { this.operation = operation }
+
+        /** Optional name for this conversion. */
+        fun name(name: String) = name(JsonField.of(name))
+
+        /** Optional name for this conversion. */
+        fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -137,9 +137,9 @@ private constructor(
 
         fun build(): QuantityConversion =
             QuantityConversion(
-                name,
                 conversionFactor,
                 operation,
+                name,
                 additionalProperties.toImmutable(),
             )
     }
@@ -206,15 +206,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is QuantityConversion && name == other.name && conversionFactor == other.conversionFactor && operation == other.operation && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is QuantityConversion && conversionFactor == other.conversionFactor && operation == other.operation && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(name, conversionFactor, operation, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(conversionFactor, operation, name, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "QuantityConversion{name=$name, conversionFactor=$conversionFactor, operation=$operation, additionalProperties=$additionalProperties}"
+        "QuantityConversion{conversionFactor=$conversionFactor, operation=$operation, name=$name, additionalProperties=$additionalProperties}"
 }

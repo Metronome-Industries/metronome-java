@@ -28,15 +28,15 @@ private constructor(
     @JsonProperty("charge_type")
     @ExcludeMissing
     private val chargeType: JsonField<ChargeType> = JsonMissing.of(),
+    @JsonProperty("prices")
+    @ExcludeMissing
+    private val prices: JsonField<List<Price>> = JsonMissing.of(),
     @JsonProperty("start_period")
     @ExcludeMissing
     private val startPeriod: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("quantity")
     @ExcludeMissing
     private val quantity: JsonField<Double> = JsonMissing.of(),
-    @JsonProperty("prices")
-    @ExcludeMissing
-    private val prices: JsonField<List<Price>> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
@@ -44,21 +44,21 @@ private constructor(
 
     fun chargeType(): ChargeType = chargeType.getRequired("charge_type")
 
+    fun prices(): List<Price> = prices.getRequired("prices")
+
     fun startPeriod(): Double = startPeriod.getRequired("start_period")
 
     fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
-
-    fun prices(): List<Price> = prices.getRequired("prices")
 
     @JsonProperty("charge_id") @ExcludeMissing fun _chargeId() = chargeId
 
     @JsonProperty("charge_type") @ExcludeMissing fun _chargeType() = chargeType
 
+    @JsonProperty("prices") @ExcludeMissing fun _prices() = prices
+
     @JsonProperty("start_period") @ExcludeMissing fun _startPeriod() = startPeriod
 
     @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
-
-    @JsonProperty("prices") @ExcludeMissing fun _prices() = prices
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -70,9 +70,9 @@ private constructor(
         if (!validated) {
             chargeId()
             chargeType()
+            prices().forEach { it.validate() }
             startPeriod()
             quantity()
-            prices().forEach { it.validate() }
             validated = true
         }
     }
@@ -88,9 +88,9 @@ private constructor(
 
         private var chargeId: JsonField<String> = JsonMissing.of()
         private var chargeType: JsonField<ChargeType> = JsonMissing.of()
+        private var prices: JsonField<List<Price>> = JsonMissing.of()
         private var startPeriod: JsonField<Double> = JsonMissing.of()
         private var quantity: JsonField<Double> = JsonMissing.of()
-        private var prices: JsonField<List<Price>> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -99,9 +99,9 @@ private constructor(
         ) = apply {
             chargeId = customerPlanListPriceAdjustmentsResponse.chargeId
             chargeType = customerPlanListPriceAdjustmentsResponse.chargeType
+            prices = customerPlanListPriceAdjustmentsResponse.prices
             startPeriod = customerPlanListPriceAdjustmentsResponse.startPeriod
             quantity = customerPlanListPriceAdjustmentsResponse.quantity
-            prices = customerPlanListPriceAdjustmentsResponse.prices
             additionalProperties =
                 customerPlanListPriceAdjustmentsResponse.additionalProperties.toMutableMap()
         }
@@ -114,6 +114,10 @@ private constructor(
 
         fun chargeType(chargeType: JsonField<ChargeType>) = apply { this.chargeType = chargeType }
 
+        fun prices(prices: List<Price>) = prices(JsonField.of(prices))
+
+        fun prices(prices: JsonField<List<Price>>) = apply { this.prices = prices }
+
         fun startPeriod(startPeriod: Double) = startPeriod(JsonField.of(startPeriod))
 
         fun startPeriod(startPeriod: JsonField<Double>) = apply { this.startPeriod = startPeriod }
@@ -121,10 +125,6 @@ private constructor(
         fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
         fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
-
-        fun prices(prices: List<Price>) = prices(JsonField.of(prices))
-
-        fun prices(prices: JsonField<List<Price>>) = apply { this.prices = prices }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -149,9 +149,9 @@ private constructor(
             CustomerPlanListPriceAdjustmentsResponse(
                 chargeId,
                 chargeType,
+                prices.map { it.toImmutable() },
                 startPeriod,
                 quantity,
-                prices.map { it.toImmutable() },
                 additionalProperties.toImmutable(),
             )
     }
@@ -238,12 +238,12 @@ private constructor(
         @JsonProperty("adjustment_type")
         @ExcludeMissing
         private val adjustmentType: JsonField<AdjustmentType> = JsonMissing.of(),
-        @JsonProperty("value")
-        @ExcludeMissing
-        private val value: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("tier")
         @ExcludeMissing
         private val tier: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("value")
+        @ExcludeMissing
+        private val value: JsonField<Double> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -251,18 +251,18 @@ private constructor(
         /** Determines how the value will be applied. */
         fun adjustmentType(): AdjustmentType = adjustmentType.getRequired("adjustment_type")
 
-        fun value(): Optional<Double> = Optional.ofNullable(value.getNullable("value"))
-
         /** Used in pricing tiers. Indicates at what metric value the price applies. */
         fun tier(): Optional<Double> = Optional.ofNullable(tier.getNullable("tier"))
+
+        fun value(): Optional<Double> = Optional.ofNullable(value.getNullable("value"))
 
         /** Determines how the value will be applied. */
         @JsonProperty("adjustment_type") @ExcludeMissing fun _adjustmentType() = adjustmentType
 
-        @JsonProperty("value") @ExcludeMissing fun _value() = value
-
         /** Used in pricing tiers. Indicates at what metric value the price applies. */
         @JsonProperty("tier") @ExcludeMissing fun _tier() = tier
+
+        @JsonProperty("value") @ExcludeMissing fun _value() = value
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -273,8 +273,8 @@ private constructor(
         fun validate(): Price = apply {
             if (!validated) {
                 adjustmentType()
-                value()
                 tier()
+                value()
                 validated = true
             }
         }
@@ -289,15 +289,15 @@ private constructor(
         class Builder {
 
             private var adjustmentType: JsonField<AdjustmentType> = JsonMissing.of()
-            private var value: JsonField<Double> = JsonMissing.of()
             private var tier: JsonField<Double> = JsonMissing.of()
+            private var value: JsonField<Double> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(price: Price) = apply {
                 adjustmentType = price.adjustmentType
-                value = price.value
                 tier = price.tier
+                value = price.value
                 additionalProperties = price.additionalProperties.toMutableMap()
             }
 
@@ -310,15 +310,15 @@ private constructor(
                 this.adjustmentType = adjustmentType
             }
 
-            fun value(value: Double) = value(JsonField.of(value))
-
-            fun value(value: JsonField<Double>) = apply { this.value = value }
-
             /** Used in pricing tiers. Indicates at what metric value the price applies. */
             fun tier(tier: Double) = tier(JsonField.of(tier))
 
             /** Used in pricing tiers. Indicates at what metric value the price applies. */
             fun tier(tier: JsonField<Double>) = apply { this.tier = tier }
+
+            fun value(value: Double) = value(JsonField.of(value))
+
+            fun value(value: JsonField<Double>) = apply { this.value = value }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -342,8 +342,8 @@ private constructor(
             fun build(): Price =
                 Price(
                     adjustmentType,
-                    value,
                     tier,
+                    value,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -422,17 +422,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Price && adjustmentType == other.adjustmentType && value == other.value && tier == other.tier && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Price && adjustmentType == other.adjustmentType && tier == other.tier && value == other.value && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(adjustmentType, value, tier, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(adjustmentType, tier, value, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Price{adjustmentType=$adjustmentType, value=$value, tier=$tier, additionalProperties=$additionalProperties}"
+            "Price{adjustmentType=$adjustmentType, tier=$tier, value=$value, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -440,15 +440,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerPlanListPriceAdjustmentsResponse && chargeId == other.chargeId && chargeType == other.chargeType && startPeriod == other.startPeriod && quantity == other.quantity && prices == other.prices && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerPlanListPriceAdjustmentsResponse && chargeId == other.chargeId && chargeType == other.chargeType && prices == other.prices && startPeriod == other.startPeriod && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(chargeId, chargeType, startPeriod, quantity, prices, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(chargeId, chargeType, prices, startPeriod, quantity, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CustomerPlanListPriceAdjustmentsResponse{chargeId=$chargeId, chargeType=$chargeType, startPeriod=$startPeriod, quantity=$quantity, prices=$prices, additionalProperties=$additionalProperties}"
+        "CustomerPlanListPriceAdjustmentsResponse{chargeId=$chargeId, chargeType=$chargeType, prices=$prices, startPeriod=$startPeriod, quantity=$quantity, additionalProperties=$additionalProperties}"
 }

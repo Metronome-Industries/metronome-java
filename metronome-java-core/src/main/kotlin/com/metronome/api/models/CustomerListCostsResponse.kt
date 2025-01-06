@@ -20,29 +20,29 @@ import java.util.Objects
 class CustomerListCostsResponse
 @JsonCreator
 private constructor(
-    @JsonProperty("start_timestamp")
-    @ExcludeMissing
-    private val startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("end_timestamp")
-    @ExcludeMissing
-    private val endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonProperty("credit_types")
     @ExcludeMissing
     private val creditTypes: JsonField<CreditTypes> = JsonMissing.of(),
+    @JsonProperty("end_timestamp")
+    @ExcludeMissing
+    private val endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("start_timestamp")
+    @ExcludeMissing
+    private val startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    fun startTimestamp(): OffsetDateTime = startTimestamp.getRequired("start_timestamp")
+    fun creditTypes(): CreditTypes = creditTypes.getRequired("credit_types")
 
     fun endTimestamp(): OffsetDateTime = endTimestamp.getRequired("end_timestamp")
 
-    fun creditTypes(): CreditTypes = creditTypes.getRequired("credit_types")
+    fun startTimestamp(): OffsetDateTime = startTimestamp.getRequired("start_timestamp")
 
-    @JsonProperty("start_timestamp") @ExcludeMissing fun _startTimestamp() = startTimestamp
+    @JsonProperty("credit_types") @ExcludeMissing fun _creditTypes() = creditTypes
 
     @JsonProperty("end_timestamp") @ExcludeMissing fun _endTimestamp() = endTimestamp
 
-    @JsonProperty("credit_types") @ExcludeMissing fun _creditTypes() = creditTypes
+    @JsonProperty("start_timestamp") @ExcludeMissing fun _startTimestamp() = startTimestamp
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -52,9 +52,9 @@ private constructor(
 
     fun validate(): CustomerListCostsResponse = apply {
         if (!validated) {
-            startTimestamp()
-            endTimestamp()
             creditTypes().validate()
+            endTimestamp()
+            startTimestamp()
             validated = true
         }
     }
@@ -68,24 +68,23 @@ private constructor(
 
     class Builder {
 
-        private var startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
         private var creditTypes: JsonField<CreditTypes> = JsonMissing.of()
+        private var endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerListCostsResponse: CustomerListCostsResponse) = apply {
-            startTimestamp = customerListCostsResponse.startTimestamp
-            endTimestamp = customerListCostsResponse.endTimestamp
             creditTypes = customerListCostsResponse.creditTypes
+            endTimestamp = customerListCostsResponse.endTimestamp
+            startTimestamp = customerListCostsResponse.startTimestamp
             additionalProperties = customerListCostsResponse.additionalProperties.toMutableMap()
         }
 
-        fun startTimestamp(startTimestamp: OffsetDateTime) =
-            startTimestamp(JsonField.of(startTimestamp))
+        fun creditTypes(creditTypes: CreditTypes) = creditTypes(JsonField.of(creditTypes))
 
-        fun startTimestamp(startTimestamp: JsonField<OffsetDateTime>) = apply {
-            this.startTimestamp = startTimestamp
+        fun creditTypes(creditTypes: JsonField<CreditTypes>) = apply {
+            this.creditTypes = creditTypes
         }
 
         fun endTimestamp(endTimestamp: OffsetDateTime) = endTimestamp(JsonField.of(endTimestamp))
@@ -94,10 +93,11 @@ private constructor(
             this.endTimestamp = endTimestamp
         }
 
-        fun creditTypes(creditTypes: CreditTypes) = creditTypes(JsonField.of(creditTypes))
+        fun startTimestamp(startTimestamp: OffsetDateTime) =
+            startTimestamp(JsonField.of(startTimestamp))
 
-        fun creditTypes(creditTypes: JsonField<CreditTypes>) = apply {
-            this.creditTypes = creditTypes
+        fun startTimestamp(startTimestamp: JsonField<OffsetDateTime>) = apply {
+            this.startTimestamp = startTimestamp
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -121,9 +121,9 @@ private constructor(
 
         fun build(): CustomerListCostsResponse =
             CustomerListCostsResponse(
-                startTimestamp,
-                endTimestamp,
                 creditTypes,
+                endTimestamp,
+                startTimestamp,
                 additionalProperties.toImmutable(),
             )
     }
@@ -208,15 +208,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerListCostsResponse && startTimestamp == other.startTimestamp && endTimestamp == other.endTimestamp && creditTypes == other.creditTypes && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerListCostsResponse && creditTypes == other.creditTypes && endTimestamp == other.endTimestamp && startTimestamp == other.startTimestamp && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(startTimestamp, endTimestamp, creditTypes, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(creditTypes, endTimestamp, startTimestamp, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CustomerListCostsResponse{startTimestamp=$startTimestamp, endTimestamp=$endTimestamp, creditTypes=$creditTypes, additionalProperties=$additionalProperties}"
+        "CustomerListCostsResponse{creditTypes=$creditTypes, endTimestamp=$endTimestamp, startTimestamp=$startTimestamp, additionalProperties=$additionalProperties}"
 }

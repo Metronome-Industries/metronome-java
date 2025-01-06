@@ -625,17 +625,17 @@ constructor(
     class AccessSchedule
     @JsonCreator
     private constructor(
-        @JsonProperty("credit_type_id") private val creditTypeId: String?,
         @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>,
+        @JsonProperty("credit_type_id") private val creditTypeId: String?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem> = scheduleItems
+
         /** Defaults to USD (cents) if not passed */
         @JsonProperty("credit_type_id")
         fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
-
-        @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem> = scheduleItems
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -650,19 +650,16 @@ constructor(
 
         class Builder {
 
-            private var creditTypeId: String? = null
             private var scheduleItems: MutableList<ScheduleItem>? = null
+            private var creditTypeId: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(accessSchedule: AccessSchedule) = apply {
-                creditTypeId = accessSchedule.creditTypeId
                 scheduleItems = accessSchedule.scheduleItems.toMutableList()
+                creditTypeId = accessSchedule.creditTypeId
                 additionalProperties = accessSchedule.additionalProperties.toMutableMap()
             }
-
-            /** Defaults to USD (cents) if not passed */
-            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
             fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
                 this.scheduleItems = scheduleItems.toMutableList()
@@ -671,6 +668,9 @@ constructor(
             fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
                 scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
             }
+
+            /** Defaults to USD (cents) if not passed */
+            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -693,9 +693,9 @@ constructor(
 
             fun build(): AccessSchedule =
                 AccessSchedule(
-                    creditTypeId,
                     checkNotNull(scheduleItems) { "`scheduleItems` is required but was not set" }
                         .toImmutable(),
+                    creditTypeId,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -705,19 +705,19 @@ constructor(
         @JsonCreator
         private constructor(
             @JsonProperty("amount") private val amount: Double,
-            @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
             @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
+            @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonProperty("amount") fun amount(): Double = amount
 
-            /** RFC 3339 timestamp (inclusive) */
-            @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
-
             /** RFC 3339 timestamp (exclusive) */
             @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
+
+            /** RFC 3339 timestamp (inclusive) */
+            @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -733,27 +733,27 @@ constructor(
             class Builder {
 
                 private var amount: Double? = null
-                private var startingAt: OffsetDateTime? = null
                 private var endingBefore: OffsetDateTime? = null
+                private var startingAt: OffsetDateTime? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(scheduleItem: ScheduleItem) = apply {
                     amount = scheduleItem.amount
-                    startingAt = scheduleItem.startingAt
                     endingBefore = scheduleItem.endingBefore
+                    startingAt = scheduleItem.startingAt
                     additionalProperties = scheduleItem.additionalProperties.toMutableMap()
                 }
 
                 fun amount(amount: Double) = apply { this.amount = amount }
 
-                /** RFC 3339 timestamp (inclusive) */
-                fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
-
                 /** RFC 3339 timestamp (exclusive) */
                 fun endingBefore(endingBefore: OffsetDateTime) = apply {
                     this.endingBefore = endingBefore
                 }
+
+                /** RFC 3339 timestamp (inclusive) */
+                fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -780,8 +780,8 @@ constructor(
                 fun build(): ScheduleItem =
                     ScheduleItem(
                         checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                         checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
+                        checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -791,17 +791,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ScheduleItem && amount == other.amount && startingAt == other.startingAt && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is ScheduleItem && amount == other.amount && endingBefore == other.endingBefore && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(amount, startingAt, endingBefore, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(amount, endingBefore, startingAt, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "ScheduleItem{amount=$amount, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
+                "ScheduleItem{amount=$amount, endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -809,17 +809,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is AccessSchedule && creditTypeId == other.creditTypeId && scheduleItems == other.scheduleItems && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is AccessSchedule && scheduleItems == other.scheduleItems && creditTypeId == other.creditTypeId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(creditTypeId, scheduleItems, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(scheduleItems, creditTypeId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "AccessSchedule{creditTypeId=$creditTypeId, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
+            "AccessSchedule{scheduleItems=$scheduleItems, creditTypeId=$creditTypeId, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect

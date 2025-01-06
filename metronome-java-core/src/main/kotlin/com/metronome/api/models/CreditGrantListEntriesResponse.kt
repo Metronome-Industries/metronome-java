@@ -206,9 +206,6 @@ private constructor(
             @JsonProperty("credit_type")
             @ExcludeMissing
             private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
-            @JsonProperty("starting_balance")
-            @ExcludeMissing
-            private val startingBalance: JsonField<StartingBalance> = JsonMissing.of(),
             @JsonProperty("ending_balance")
             @ExcludeMissing
             private val endingBalance: JsonField<EndingBalance> = JsonMissing.of(),
@@ -218,13 +215,14 @@ private constructor(
             @JsonProperty("pending_entries")
             @ExcludeMissing
             private val pendingEntries: JsonField<List<CreditLedgerEntry>> = JsonMissing.of(),
+            @JsonProperty("starting_balance")
+            @ExcludeMissing
+            private val startingBalance: JsonField<StartingBalance> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
-
-            fun startingBalance(): StartingBalance = startingBalance.getRequired("starting_balance")
 
             /** the effective balances at the end of the specified time window */
             fun endingBalance(): EndingBalance = endingBalance.getRequired("ending_balance")
@@ -234,11 +232,9 @@ private constructor(
             fun pendingEntries(): List<CreditLedgerEntry> =
                 pendingEntries.getRequired("pending_entries")
 
-            @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+            fun startingBalance(): StartingBalance = startingBalance.getRequired("starting_balance")
 
-            @JsonProperty("starting_balance")
-            @ExcludeMissing
-            fun _startingBalance() = startingBalance
+            @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
 
             /** the effective balances at the end of the specified time window */
             @JsonProperty("ending_balance") @ExcludeMissing fun _endingBalance() = endingBalance
@@ -246,6 +242,10 @@ private constructor(
             @JsonProperty("entries") @ExcludeMissing fun _entries() = entries
 
             @JsonProperty("pending_entries") @ExcludeMissing fun _pendingEntries() = pendingEntries
+
+            @JsonProperty("starting_balance")
+            @ExcludeMissing
+            fun _startingBalance() = startingBalance
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -256,10 +256,10 @@ private constructor(
             fun validate(): Ledger = apply {
                 if (!validated) {
                     creditType().validate()
-                    startingBalance().validate()
                     endingBalance().validate()
                     entries().forEach { it.validate() }
                     pendingEntries().forEach { it.validate() }
+                    startingBalance().validate()
                     validated = true
                 }
             }
@@ -274,19 +274,19 @@ private constructor(
             class Builder {
 
                 private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
-                private var startingBalance: JsonField<StartingBalance> = JsonMissing.of()
                 private var endingBalance: JsonField<EndingBalance> = JsonMissing.of()
                 private var entries: JsonField<List<CreditLedgerEntry>> = JsonMissing.of()
                 private var pendingEntries: JsonField<List<CreditLedgerEntry>> = JsonMissing.of()
+                private var startingBalance: JsonField<StartingBalance> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(ledger: Ledger) = apply {
                     creditType = ledger.creditType
-                    startingBalance = ledger.startingBalance
                     endingBalance = ledger.endingBalance
                     entries = ledger.entries
                     pendingEntries = ledger.pendingEntries
+                    startingBalance = ledger.startingBalance
                     additionalProperties = ledger.additionalProperties.toMutableMap()
                 }
 
@@ -294,13 +294,6 @@ private constructor(
 
                 fun creditType(creditType: JsonField<CreditTypeData>) = apply {
                     this.creditType = creditType
-                }
-
-                fun startingBalance(startingBalance: StartingBalance) =
-                    startingBalance(JsonField.of(startingBalance))
-
-                fun startingBalance(startingBalance: JsonField<StartingBalance>) = apply {
-                    this.startingBalance = startingBalance
                 }
 
                 /** the effective balances at the end of the specified time window */
@@ -323,6 +316,13 @@ private constructor(
 
                 fun pendingEntries(pendingEntries: JsonField<List<CreditLedgerEntry>>) = apply {
                     this.pendingEntries = pendingEntries
+                }
+
+                fun startingBalance(startingBalance: StartingBalance) =
+                    startingBalance(JsonField.of(startingBalance))
+
+                fun startingBalance(startingBalance: JsonField<StartingBalance>) = apply {
+                    this.startingBalance = startingBalance
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -350,10 +350,10 @@ private constructor(
                 fun build(): Ledger =
                     Ledger(
                         creditType,
-                        startingBalance,
                         endingBalance,
                         entries.map { it.toImmutable() },
                         pendingEntries.map { it.toImmutable() },
+                        startingBalance,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -363,18 +363,24 @@ private constructor(
             class EndingBalance
             @JsonCreator
             private constructor(
+                @JsonProperty("effective_at")
+                @ExcludeMissing
+                private val effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonProperty("excluding_pending")
                 @ExcludeMissing
                 private val excludingPending: JsonField<Double> = JsonMissing.of(),
                 @JsonProperty("including_pending")
                 @ExcludeMissing
                 private val includingPending: JsonField<Double> = JsonMissing.of(),
-                @JsonProperty("effective_at")
-                @ExcludeMissing
-                private val effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
+
+                /**
+                 * the ending_before request parameter (if supplied) or the current billing period's
+                 * end date
+                 */
+                fun effectiveAt(): OffsetDateTime = effectiveAt.getRequired("effective_at")
 
                 /**
                  * the ending balance, including the balance of all grants that have not expired
@@ -393,7 +399,7 @@ private constructor(
                  * the ending_before request parameter (if supplied) or the current billing period's
                  * end date
                  */
-                fun effectiveAt(): OffsetDateTime = effectiveAt.getRequired("effective_at")
+                @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
 
                 /**
                  * the ending balance, including the balance of all grants that have not expired
@@ -412,12 +418,6 @@ private constructor(
                 @ExcludeMissing
                 fun _includingPending() = includingPending
 
-                /**
-                 * the ending_before request parameter (if supplied) or the current billing period's
-                 * end date
-                 */
-                @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -426,9 +426,9 @@ private constructor(
 
                 fun validate(): EndingBalance = apply {
                     if (!validated) {
+                        effectiveAt()
                         excludingPending()
                         includingPending()
-                        effectiveAt()
                         validated = true
                     }
                 }
@@ -442,17 +442,32 @@ private constructor(
 
                 class Builder {
 
+                    private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
                     private var excludingPending: JsonField<Double> = JsonMissing.of()
                     private var includingPending: JsonField<Double> = JsonMissing.of()
-                    private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(endingBalance: EndingBalance) = apply {
+                        effectiveAt = endingBalance.effectiveAt
                         excludingPending = endingBalance.excludingPending
                         includingPending = endingBalance.includingPending
-                        effectiveAt = endingBalance.effectiveAt
                         additionalProperties = endingBalance.additionalProperties.toMutableMap()
+                    }
+
+                    /**
+                     * the ending_before request parameter (if supplied) or the current billing
+                     * period's end date
+                     */
+                    fun effectiveAt(effectiveAt: OffsetDateTime) =
+                        effectiveAt(JsonField.of(effectiveAt))
+
+                    /**
+                     * the ending_before request parameter (if supplied) or the current billing
+                     * period's end date
+                     */
+                    fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
+                        this.effectiveAt = effectiveAt
                     }
 
                     /**
@@ -485,21 +500,6 @@ private constructor(
                      */
                     fun includingPending(includingPending: JsonField<Double>) = apply {
                         this.includingPending = includingPending
-                    }
-
-                    /**
-                     * the ending_before request parameter (if supplied) or the current billing
-                     * period's end date
-                     */
-                    fun effectiveAt(effectiveAt: OffsetDateTime) =
-                        effectiveAt(JsonField.of(effectiveAt))
-
-                    /**
-                     * the ending_before request parameter (if supplied) or the current billing
-                     * period's end date
-                     */
-                    fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
-                        this.effectiveAt = effectiveAt
                     }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -526,9 +526,9 @@ private constructor(
 
                     fun build(): EndingBalance =
                         EndingBalance(
+                            effectiveAt,
                             excludingPending,
                             includingPending,
-                            effectiveAt,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -538,35 +538,41 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is EndingBalance && excludingPending == other.excludingPending && includingPending == other.includingPending && effectiveAt == other.effectiveAt && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is EndingBalance && effectiveAt == other.effectiveAt && excludingPending == other.excludingPending && includingPending == other.includingPending && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(excludingPending, includingPending, effectiveAt, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(effectiveAt, excludingPending, includingPending, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "EndingBalance{excludingPending=$excludingPending, includingPending=$includingPending, effectiveAt=$effectiveAt, additionalProperties=$additionalProperties}"
+                    "EndingBalance{effectiveAt=$effectiveAt, excludingPending=$excludingPending, includingPending=$includingPending, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class StartingBalance
             @JsonCreator
             private constructor(
+                @JsonProperty("effective_at")
+                @ExcludeMissing
+                private val effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonProperty("excluding_pending")
                 @ExcludeMissing
                 private val excludingPending: JsonField<Double> = JsonMissing.of(),
                 @JsonProperty("including_pending")
                 @ExcludeMissing
                 private val includingPending: JsonField<Double> = JsonMissing.of(),
-                @JsonProperty("effective_at")
-                @ExcludeMissing
-                private val effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
+
+                /**
+                 * the starting_on request parameter (if supplied) or the first credit grant's
+                 * effective_at date
+                 */
+                fun effectiveAt(): OffsetDateTime = effectiveAt.getRequired("effective_at")
 
                 /**
                  * the starting balance, including all posted grants, deductions, and expirations
@@ -584,7 +590,7 @@ private constructor(
                  * the starting_on request parameter (if supplied) or the first credit grant's
                  * effective_at date
                  */
-                fun effectiveAt(): OffsetDateTime = effectiveAt.getRequired("effective_at")
+                @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
 
                 /**
                  * the starting balance, including all posted grants, deductions, and expirations
@@ -602,12 +608,6 @@ private constructor(
                 @ExcludeMissing
                 fun _includingPending() = includingPending
 
-                /**
-                 * the starting_on request parameter (if supplied) or the first credit grant's
-                 * effective_at date
-                 */
-                @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -616,9 +616,9 @@ private constructor(
 
                 fun validate(): StartingBalance = apply {
                     if (!validated) {
+                        effectiveAt()
                         excludingPending()
                         includingPending()
-                        effectiveAt()
                         validated = true
                     }
                 }
@@ -632,17 +632,32 @@ private constructor(
 
                 class Builder {
 
+                    private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
                     private var excludingPending: JsonField<Double> = JsonMissing.of()
                     private var includingPending: JsonField<Double> = JsonMissing.of()
-                    private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(startingBalance: StartingBalance) = apply {
+                        effectiveAt = startingBalance.effectiveAt
                         excludingPending = startingBalance.excludingPending
                         includingPending = startingBalance.includingPending
-                        effectiveAt = startingBalance.effectiveAt
                         additionalProperties = startingBalance.additionalProperties.toMutableMap()
+                    }
+
+                    /**
+                     * the starting_on request parameter (if supplied) or the first credit grant's
+                     * effective_at date
+                     */
+                    fun effectiveAt(effectiveAt: OffsetDateTime) =
+                        effectiveAt(JsonField.of(effectiveAt))
+
+                    /**
+                     * the starting_on request parameter (if supplied) or the first credit grant's
+                     * effective_at date
+                     */
+                    fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
+                        this.effectiveAt = effectiveAt
                     }
 
                     /**
@@ -675,21 +690,6 @@ private constructor(
                         this.includingPending = includingPending
                     }
 
-                    /**
-                     * the starting_on request parameter (if supplied) or the first credit grant's
-                     * effective_at date
-                     */
-                    fun effectiveAt(effectiveAt: OffsetDateTime) =
-                        effectiveAt(JsonField.of(effectiveAt))
-
-                    /**
-                     * the starting_on request parameter (if supplied) or the first credit grant's
-                     * effective_at date
-                     */
-                    fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
-                        this.effectiveAt = effectiveAt
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         putAllAdditionalProperties(additionalProperties)
@@ -714,9 +714,9 @@ private constructor(
 
                     fun build(): StartingBalance =
                         StartingBalance(
+                            effectiveAt,
                             excludingPending,
                             includingPending,
-                            effectiveAt,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -726,17 +726,17 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is StartingBalance && excludingPending == other.excludingPending && includingPending == other.includingPending && effectiveAt == other.effectiveAt && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is StartingBalance && effectiveAt == other.effectiveAt && excludingPending == other.excludingPending && includingPending == other.includingPending && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(excludingPending, includingPending, effectiveAt, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(effectiveAt, excludingPending, includingPending, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "StartingBalance{excludingPending=$excludingPending, includingPending=$includingPending, effectiveAt=$effectiveAt, additionalProperties=$additionalProperties}"
+                    "StartingBalance{effectiveAt=$effectiveAt, excludingPending=$excludingPending, includingPending=$includingPending, additionalProperties=$additionalProperties}"
             }
 
             override fun equals(other: Any?): Boolean {
@@ -744,17 +744,17 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Ledger && creditType == other.creditType && startingBalance == other.startingBalance && endingBalance == other.endingBalance && entries == other.entries && pendingEntries == other.pendingEntries && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Ledger && creditType == other.creditType && endingBalance == other.endingBalance && entries == other.entries && pendingEntries == other.pendingEntries && startingBalance == other.startingBalance && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(creditType, startingBalance, endingBalance, entries, pendingEntries, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(creditType, endingBalance, entries, pendingEntries, startingBalance, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Ledger{creditType=$creditType, startingBalance=$startingBalance, endingBalance=$endingBalance, entries=$entries, pendingEntries=$pendingEntries, additionalProperties=$additionalProperties}"
+                "Ledger{creditType=$creditType, endingBalance=$endingBalance, entries=$entries, pendingEntries=$pendingEntries, startingBalance=$startingBalance, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {

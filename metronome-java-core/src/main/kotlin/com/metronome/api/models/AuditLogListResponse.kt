@@ -27,22 +27,22 @@ private constructor(
     @JsonProperty("timestamp")
     @ExcludeMissing
     private val timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("actor") @ExcludeMissing private val actor: JsonField<Actor> = JsonMissing.of(),
-    @JsonProperty("resource_type")
-    @ExcludeMissing
-    private val resourceType: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("resource_id")
-    @ExcludeMissing
-    private val resourceId: JsonField<String> = JsonMissing.of(),
     @JsonProperty("action")
     @ExcludeMissing
     private val action: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("status")
-    @ExcludeMissing
-    private val status: JsonField<Status> = JsonMissing.of(),
+    @JsonProperty("actor") @ExcludeMissing private val actor: JsonField<Actor> = JsonMissing.of(),
     @JsonProperty("description")
     @ExcludeMissing
     private val description: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("resource_id")
+    @ExcludeMissing
+    private val resourceId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("resource_type")
+    @ExcludeMissing
+    private val resourceType: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("status")
+    @ExcludeMissing
+    private val status: JsonField<Status> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
@@ -50,35 +50,35 @@ private constructor(
 
     fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
 
+    fun action(): Optional<String> = Optional.ofNullable(action.getNullable("action"))
+
     fun actor(): Optional<Actor> = Optional.ofNullable(actor.getNullable("actor"))
+
+    fun description(): Optional<String> =
+        Optional.ofNullable(description.getNullable("description"))
+
+    fun resourceId(): Optional<String> = Optional.ofNullable(resourceId.getNullable("resource_id"))
 
     fun resourceType(): Optional<String> =
         Optional.ofNullable(resourceType.getNullable("resource_type"))
 
-    fun resourceId(): Optional<String> = Optional.ofNullable(resourceId.getNullable("resource_id"))
-
-    fun action(): Optional<String> = Optional.ofNullable(action.getNullable("action"))
-
     fun status(): Optional<Status> = Optional.ofNullable(status.getNullable("status"))
-
-    fun description(): Optional<String> =
-        Optional.ofNullable(description.getNullable("description"))
 
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
     @JsonProperty("timestamp") @ExcludeMissing fun _timestamp() = timestamp
 
+    @JsonProperty("action") @ExcludeMissing fun _action() = action
+
     @JsonProperty("actor") @ExcludeMissing fun _actor() = actor
 
-    @JsonProperty("resource_type") @ExcludeMissing fun _resourceType() = resourceType
+    @JsonProperty("description") @ExcludeMissing fun _description() = description
 
     @JsonProperty("resource_id") @ExcludeMissing fun _resourceId() = resourceId
 
-    @JsonProperty("action") @ExcludeMissing fun _action() = action
+    @JsonProperty("resource_type") @ExcludeMissing fun _resourceType() = resourceType
 
     @JsonProperty("status") @ExcludeMissing fun _status() = status
-
-    @JsonProperty("description") @ExcludeMissing fun _description() = description
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -90,12 +90,12 @@ private constructor(
         if (!validated) {
             id()
             timestamp()
-            actor().map { it.validate() }
-            resourceType()
-            resourceId()
             action()
-            status()
+            actor().map { it.validate() }
             description()
+            resourceId()
+            resourceType()
+            status()
             validated = true
         }
     }
@@ -111,24 +111,24 @@ private constructor(
 
         private var id: JsonField<String> = JsonMissing.of()
         private var timestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var actor: JsonField<Actor> = JsonMissing.of()
-        private var resourceType: JsonField<String> = JsonMissing.of()
-        private var resourceId: JsonField<String> = JsonMissing.of()
         private var action: JsonField<String> = JsonMissing.of()
-        private var status: JsonField<Status> = JsonMissing.of()
+        private var actor: JsonField<Actor> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
+        private var resourceId: JsonField<String> = JsonMissing.of()
+        private var resourceType: JsonField<String> = JsonMissing.of()
+        private var status: JsonField<Status> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(auditLogListResponse: AuditLogListResponse) = apply {
             id = auditLogListResponse.id
             timestamp = auditLogListResponse.timestamp
-            actor = auditLogListResponse.actor
-            resourceType = auditLogListResponse.resourceType
-            resourceId = auditLogListResponse.resourceId
             action = auditLogListResponse.action
-            status = auditLogListResponse.status
+            actor = auditLogListResponse.actor
             description = auditLogListResponse.description
+            resourceId = auditLogListResponse.resourceId
+            resourceType = auditLogListResponse.resourceType
+            status = auditLogListResponse.status
             additionalProperties = auditLogListResponse.additionalProperties.toMutableMap()
         }
 
@@ -140,9 +140,21 @@ private constructor(
 
         fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply { this.timestamp = timestamp }
 
+        fun action(action: String) = action(JsonField.of(action))
+
+        fun action(action: JsonField<String>) = apply { this.action = action }
+
         fun actor(actor: Actor) = actor(JsonField.of(actor))
 
         fun actor(actor: JsonField<Actor>) = apply { this.actor = actor }
+
+        fun description(description: String) = description(JsonField.of(description))
+
+        fun description(description: JsonField<String>) = apply { this.description = description }
+
+        fun resourceId(resourceId: String) = resourceId(JsonField.of(resourceId))
+
+        fun resourceId(resourceId: JsonField<String>) = apply { this.resourceId = resourceId }
 
         fun resourceType(resourceType: String) = resourceType(JsonField.of(resourceType))
 
@@ -150,21 +162,9 @@ private constructor(
             this.resourceType = resourceType
         }
 
-        fun resourceId(resourceId: String) = resourceId(JsonField.of(resourceId))
-
-        fun resourceId(resourceId: JsonField<String>) = apply { this.resourceId = resourceId }
-
-        fun action(action: String) = action(JsonField.of(action))
-
-        fun action(action: JsonField<String>) = apply { this.action = action }
-
         fun status(status: Status) = status(JsonField.of(status))
 
         fun status(status: JsonField<Status>) = apply { this.status = status }
-
-        fun description(description: String) = description(JsonField.of(description))
-
-        fun description(description: JsonField<String>) = apply { this.description = description }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -189,12 +189,12 @@ private constructor(
             AuditLogListResponse(
                 id,
                 timestamp,
-                actor,
-                resourceType,
-                resourceId,
                 action,
-                status,
+                actor,
                 description,
+                resourceId,
+                resourceType,
+                status,
                 additionalProperties.toImmutable(),
             )
     }
@@ -204,27 +204,27 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("email")
-        @ExcludeMissing
-        private val email: JsonField<String> = JsonMissing.of(),
         @JsonProperty("name")
         @ExcludeMissing
         private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("email")
+        @ExcludeMissing
+        private val email: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun id(): String = id.getRequired("id")
 
-        fun email(): Optional<String> = Optional.ofNullable(email.getNullable("email"))
-
         fun name(): String = name.getRequired("name")
+
+        fun email(): Optional<String> = Optional.ofNullable(email.getNullable("email"))
 
         @JsonProperty("id") @ExcludeMissing fun _id() = id
 
-        @JsonProperty("email") @ExcludeMissing fun _email() = email
-
         @JsonProperty("name") @ExcludeMissing fun _name() = name
+
+        @JsonProperty("email") @ExcludeMissing fun _email() = email
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -235,8 +235,8 @@ private constructor(
         fun validate(): Actor = apply {
             if (!validated) {
                 id()
-                email()
                 name()
+                email()
                 validated = true
             }
         }
@@ -251,15 +251,15 @@ private constructor(
         class Builder {
 
             private var id: JsonField<String> = JsonMissing.of()
-            private var email: JsonField<String> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
+            private var email: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(actor: Actor) = apply {
                 id = actor.id
-                email = actor.email
                 name = actor.name
+                email = actor.email
                 additionalProperties = actor.additionalProperties.toMutableMap()
             }
 
@@ -267,13 +267,13 @@ private constructor(
 
             fun id(id: JsonField<String>) = apply { this.id = id }
 
-            fun email(email: String) = email(JsonField.of(email))
-
-            fun email(email: JsonField<String>) = apply { this.email = email }
-
             fun name(name: String) = name(JsonField.of(name))
 
             fun name(name: JsonField<String>) = apply { this.name = name }
+
+            fun email(email: String) = email(JsonField.of(email))
+
+            fun email(email: JsonField<String>) = apply { this.email = email }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -297,8 +297,8 @@ private constructor(
             fun build(): Actor =
                 Actor(
                     id,
-                    email,
                     name,
+                    email,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -308,17 +308,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Actor && id == other.id && email == other.email && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Actor && id == other.id && name == other.name && email == other.email && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, email, name, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, name, email, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Actor{id=$id, email=$email, name=$name, additionalProperties=$additionalProperties}"
+            "Actor{id=$id, name=$name, email=$email, additionalProperties=$additionalProperties}"
     }
 
     class Status
@@ -389,15 +389,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is AuditLogListResponse && id == other.id && timestamp == other.timestamp && actor == other.actor && resourceType == other.resourceType && resourceId == other.resourceId && action == other.action && status == other.status && description == other.description && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is AuditLogListResponse && id == other.id && timestamp == other.timestamp && action == other.action && actor == other.actor && description == other.description && resourceId == other.resourceId && resourceType == other.resourceType && status == other.status && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, timestamp, actor, resourceType, resourceId, action, status, description, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, timestamp, action, actor, description, resourceId, resourceType, status, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "AuditLogListResponse{id=$id, timestamp=$timestamp, actor=$actor, resourceType=$resourceType, resourceId=$resourceId, action=$action, status=$status, description=$description, additionalProperties=$additionalProperties}"
+        "AuditLogListResponse{id=$id, timestamp=$timestamp, action=$action, actor=$actor, description=$description, resourceId=$resourceId, resourceType=$resourceType, status=$status, additionalProperties=$additionalProperties}"
 }

@@ -19,18 +19,18 @@ import java.util.Objects
 class CreditTypeData
 @JsonCreator
 private constructor(
-    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    fun name(): String = name.getRequired("name")
-
     fun id(): String = id.getRequired("id")
 
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    fun name(): String = name.getRequired("name")
 
     @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+    @JsonProperty("name") @ExcludeMissing fun _name() = name
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -40,8 +40,8 @@ private constructor(
 
     fun validate(): CreditTypeData = apply {
         if (!validated) {
-            name()
             id()
+            name()
             validated = true
         }
     }
@@ -55,24 +55,24 @@ private constructor(
 
     class Builder {
 
-        private var name: JsonField<String> = JsonMissing.of()
         private var id: JsonField<String> = JsonMissing.of()
+        private var name: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(creditTypeData: CreditTypeData) = apply {
-            name = creditTypeData.name
             id = creditTypeData.id
+            name = creditTypeData.name
             additionalProperties = creditTypeData.additionalProperties.toMutableMap()
         }
-
-        fun name(name: String) = name(JsonField.of(name))
-
-        fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun id(id: String) = id(JsonField.of(id))
 
         fun id(id: JsonField<String>) = apply { this.id = id }
+
+        fun name(name: String) = name(JsonField.of(name))
+
+        fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -95,8 +95,8 @@ private constructor(
 
         fun build(): CreditTypeData =
             CreditTypeData(
-                name,
                 id,
+                name,
                 additionalProperties.toImmutable(),
             )
     }
@@ -106,15 +106,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditTypeData && name == other.name && id == other.id && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CreditTypeData && id == other.id && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(name, id, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, name, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CreditTypeData{name=$name, id=$id, additionalProperties=$additionalProperties}"
+        "CreditTypeData{id=$id, name=$name, additionalProperties=$additionalProperties}"
 }

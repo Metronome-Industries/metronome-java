@@ -100,10 +100,10 @@ private constructor(
     class Data
     @JsonCreator
     private constructor(
-        @JsonProperty("value") @ExcludeMissing private val value: JsonValue = JsonMissing.of(),
         @JsonProperty("starting_at")
         @ExcludeMissing
         private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("value") @ExcludeMissing private val value: JsonValue = JsonMissing.of(),
         @JsonProperty("ending_before")
         @ExcludeMissing
         private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -116,9 +116,9 @@ private constructor(
         fun endingBefore(): Optional<OffsetDateTime> =
             Optional.ofNullable(endingBefore.getNullable("ending_before"))
 
-        @JsonProperty("value") @ExcludeMissing fun _value() = value
-
         @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+
+        @JsonProperty("value") @ExcludeMissing fun _value() = value
 
         @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
 
@@ -145,26 +145,26 @@ private constructor(
 
         class Builder {
 
-            private var value: JsonValue = JsonMissing.of()
             private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var value: JsonValue = JsonMissing.of()
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(data: Data) = apply {
-                value = data.value
                 startingAt = data.startingAt
+                value = data.value
                 endingBefore = data.endingBefore
                 additionalProperties = data.additionalProperties.toMutableMap()
             }
-
-            fun value(value: JsonValue) = apply { this.value = value }
 
             fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
             fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                 this.startingAt = startingAt
             }
+
+            fun value(value: JsonValue) = apply { this.value = value }
 
             fun endingBefore(endingBefore: OffsetDateTime) =
                 endingBefore(JsonField.of(endingBefore))
@@ -194,8 +194,8 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    value,
                     startingAt,
+                    value,
                     endingBefore,
                     additionalProperties.toImmutable(),
                 )
@@ -206,17 +206,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && value == other.value && startingAt == other.startingAt && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && startingAt == other.startingAt && value == other.value && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(value, startingAt, endingBefore, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(startingAt, value, endingBefore, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Data{value=$value, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
+            "Data{startingAt=$startingAt, value=$value, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

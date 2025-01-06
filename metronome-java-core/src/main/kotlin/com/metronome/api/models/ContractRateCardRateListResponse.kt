@@ -23,6 +23,12 @@ import java.util.Optional
 class ContractRateCardRateListResponse
 @JsonCreator
 private constructor(
+    @JsonProperty("entitled")
+    @ExcludeMissing
+    private val entitled: JsonField<Boolean> = JsonMissing.of(),
+    @JsonProperty("product_custom_fields")
+    @ExcludeMissing
+    private val productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of(),
     @JsonProperty("product_id")
     @ExcludeMissing
     private val productId: JsonField<String> = JsonMissing.of(),
@@ -32,27 +38,26 @@ private constructor(
     @JsonProperty("product_tags")
     @ExcludeMissing
     private val productTags: JsonField<List<String>> = JsonMissing.of(),
-    @JsonProperty("product_custom_fields")
-    @ExcludeMissing
-    private val productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of(),
-    @JsonProperty("pricing_group_values")
-    @ExcludeMissing
-    private val pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of(),
+    @JsonProperty("rate") @ExcludeMissing private val rate: JsonField<Rate> = JsonMissing.of(),
     @JsonProperty("starting_at")
     @ExcludeMissing
     private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("ending_before")
-    @ExcludeMissing
-    private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("entitled")
-    @ExcludeMissing
-    private val entitled: JsonField<Boolean> = JsonMissing.of(),
-    @JsonProperty("rate") @ExcludeMissing private val rate: JsonField<Rate> = JsonMissing.of(),
     @JsonProperty("commit_rate")
     @ExcludeMissing
     private val commitRate: JsonField<CommitRate> = JsonMissing.of(),
+    @JsonProperty("ending_before")
+    @ExcludeMissing
+    private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("pricing_group_values")
+    @ExcludeMissing
+    private val pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
+
+    fun entitled(): Boolean = entitled.getRequired("entitled")
+
+    fun productCustomFields(): ProductCustomFields =
+        productCustomFields.getRequired("product_custom_fields")
 
     fun productId(): String = productId.getRequired("product_id")
 
@@ -60,20 +65,9 @@ private constructor(
 
     fun productTags(): List<String> = productTags.getRequired("product_tags")
 
-    fun productCustomFields(): ProductCustomFields =
-        productCustomFields.getRequired("product_custom_fields")
-
-    fun pricingGroupValues(): Optional<PricingGroupValues> =
-        Optional.ofNullable(pricingGroupValues.getNullable("pricing_group_values"))
+    fun rate(): Rate = rate.getRequired("rate")
 
     fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
-
-    fun endingBefore(): Optional<OffsetDateTime> =
-        Optional.ofNullable(endingBefore.getNullable("ending_before"))
-
-    fun entitled(): Boolean = entitled.getRequired("entitled")
-
-    fun rate(): Rate = rate.getRequired("rate")
 
     /**
      * A distinct rate on the rate card. You can choose to use this rate rather than list rate when
@@ -82,33 +76,39 @@ private constructor(
     fun commitRate(): Optional<CommitRate> =
         Optional.ofNullable(commitRate.getNullable("commit_rate"))
 
+    fun endingBefore(): Optional<OffsetDateTime> =
+        Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+    fun pricingGroupValues(): Optional<PricingGroupValues> =
+        Optional.ofNullable(pricingGroupValues.getNullable("pricing_group_values"))
+
+    @JsonProperty("entitled") @ExcludeMissing fun _entitled() = entitled
+
+    @JsonProperty("product_custom_fields")
+    @ExcludeMissing
+    fun _productCustomFields() = productCustomFields
+
     @JsonProperty("product_id") @ExcludeMissing fun _productId() = productId
 
     @JsonProperty("product_name") @ExcludeMissing fun _productName() = productName
 
     @JsonProperty("product_tags") @ExcludeMissing fun _productTags() = productTags
 
-    @JsonProperty("product_custom_fields")
-    @ExcludeMissing
-    fun _productCustomFields() = productCustomFields
-
-    @JsonProperty("pricing_group_values")
-    @ExcludeMissing
-    fun _pricingGroupValues() = pricingGroupValues
+    @JsonProperty("rate") @ExcludeMissing fun _rate() = rate
 
     @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
-
-    @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
-
-    @JsonProperty("entitled") @ExcludeMissing fun _entitled() = entitled
-
-    @JsonProperty("rate") @ExcludeMissing fun _rate() = rate
 
     /**
      * A distinct rate on the rate card. You can choose to use this rate rather than list rate when
      * consuming a credit or commit.
      */
     @JsonProperty("commit_rate") @ExcludeMissing fun _commitRate() = commitRate
+
+    @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
+
+    @JsonProperty("pricing_group_values")
+    @ExcludeMissing
+    fun _pricingGroupValues() = pricingGroupValues
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -118,16 +118,16 @@ private constructor(
 
     fun validate(): ContractRateCardRateListResponse = apply {
         if (!validated) {
+            entitled()
+            productCustomFields().validate()
             productId()
             productName()
             productTags()
-            productCustomFields().validate()
-            pricingGroupValues().map { it.validate() }
-            startingAt()
-            endingBefore()
-            entitled()
             rate().validate()
+            startingAt()
             commitRate().map { it.validate() }
+            endingBefore()
+            pricingGroupValues().map { it.validate() }
             validated = true
         }
     }
@@ -141,34 +141,45 @@ private constructor(
 
     class Builder {
 
+        private var entitled: JsonField<Boolean> = JsonMissing.of()
+        private var productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of()
         private var productId: JsonField<String> = JsonMissing.of()
         private var productName: JsonField<String> = JsonMissing.of()
         private var productTags: JsonField<List<String>> = JsonMissing.of()
-        private var productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of()
-        private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
-        private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var entitled: JsonField<Boolean> = JsonMissing.of()
         private var rate: JsonField<Rate> = JsonMissing.of()
+        private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var commitRate: JsonField<CommitRate> = JsonMissing.of()
+        private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractRateCardRateListResponse: ContractRateCardRateListResponse) =
             apply {
+                entitled = contractRateCardRateListResponse.entitled
+                productCustomFields = contractRateCardRateListResponse.productCustomFields
                 productId = contractRateCardRateListResponse.productId
                 productName = contractRateCardRateListResponse.productName
                 productTags = contractRateCardRateListResponse.productTags
-                productCustomFields = contractRateCardRateListResponse.productCustomFields
-                pricingGroupValues = contractRateCardRateListResponse.pricingGroupValues
-                startingAt = contractRateCardRateListResponse.startingAt
-                endingBefore = contractRateCardRateListResponse.endingBefore
-                entitled = contractRateCardRateListResponse.entitled
                 rate = contractRateCardRateListResponse.rate
+                startingAt = contractRateCardRateListResponse.startingAt
                 commitRate = contractRateCardRateListResponse.commitRate
+                endingBefore = contractRateCardRateListResponse.endingBefore
+                pricingGroupValues = contractRateCardRateListResponse.pricingGroupValues
                 additionalProperties =
                     contractRateCardRateListResponse.additionalProperties.toMutableMap()
             }
+
+        fun entitled(entitled: Boolean) = entitled(JsonField.of(entitled))
+
+        fun entitled(entitled: JsonField<Boolean>) = apply { this.entitled = entitled }
+
+        fun productCustomFields(productCustomFields: ProductCustomFields) =
+            productCustomFields(JsonField.of(productCustomFields))
+
+        fun productCustomFields(productCustomFields: JsonField<ProductCustomFields>) = apply {
+            this.productCustomFields = productCustomFields
+        }
 
         fun productId(productId: String) = productId(JsonField.of(productId))
 
@@ -184,39 +195,15 @@ private constructor(
             this.productTags = productTags
         }
 
-        fun productCustomFields(productCustomFields: ProductCustomFields) =
-            productCustomFields(JsonField.of(productCustomFields))
+        fun rate(rate: Rate) = rate(JsonField.of(rate))
 
-        fun productCustomFields(productCustomFields: JsonField<ProductCustomFields>) = apply {
-            this.productCustomFields = productCustomFields
-        }
-
-        fun pricingGroupValues(pricingGroupValues: PricingGroupValues) =
-            pricingGroupValues(JsonField.of(pricingGroupValues))
-
-        fun pricingGroupValues(pricingGroupValues: JsonField<PricingGroupValues>) = apply {
-            this.pricingGroupValues = pricingGroupValues
-        }
+        fun rate(rate: JsonField<Rate>) = apply { this.rate = rate }
 
         fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
         fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
             this.startingAt = startingAt
         }
-
-        fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
-
-        fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
-            this.endingBefore = endingBefore
-        }
-
-        fun entitled(entitled: Boolean) = entitled(JsonField.of(entitled))
-
-        fun entitled(entitled: JsonField<Boolean>) = apply { this.entitled = entitled }
-
-        fun rate(rate: Rate) = rate(JsonField.of(rate))
-
-        fun rate(rate: JsonField<Rate>) = apply { this.rate = rate }
 
         /**
          * A distinct rate on the rate card. You can choose to use this rate rather than list rate
@@ -229,6 +216,19 @@ private constructor(
          * when consuming a credit or commit.
          */
         fun commitRate(commitRate: JsonField<CommitRate>) = apply { this.commitRate = commitRate }
+
+        fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
+
+        fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+            this.endingBefore = endingBefore
+        }
+
+        fun pricingGroupValues(pricingGroupValues: PricingGroupValues) =
+            pricingGroupValues(JsonField.of(pricingGroupValues))
+
+        fun pricingGroupValues(pricingGroupValues: JsonField<PricingGroupValues>) = apply {
+            this.pricingGroupValues = pricingGroupValues
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -251,16 +251,16 @@ private constructor(
 
         fun build(): ContractRateCardRateListResponse =
             ContractRateCardRateListResponse(
+                entitled,
+                productCustomFields,
                 productId,
                 productName,
                 productTags.map { it.toImmutable() },
-                productCustomFields,
-                pricingGroupValues,
-                startingAt,
-                endingBefore,
-                entitled,
                 rate,
+                startingAt,
                 commitRate,
+                endingBefore,
+                pricingGroupValues,
                 additionalProperties.toImmutable(),
             )
     }
@@ -662,15 +662,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardRateListResponse && productId == other.productId && productName == other.productName && productTags == other.productTags && productCustomFields == other.productCustomFields && pricingGroupValues == other.pricingGroupValues && startingAt == other.startingAt && endingBefore == other.endingBefore && entitled == other.entitled && rate == other.rate && commitRate == other.commitRate && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardRateListResponse && entitled == other.entitled && productCustomFields == other.productCustomFields && productId == other.productId && productName == other.productName && productTags == other.productTags && rate == other.rate && startingAt == other.startingAt && commitRate == other.commitRate && endingBefore == other.endingBefore && pricingGroupValues == other.pricingGroupValues && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(productId, productName, productTags, productCustomFields, pricingGroupValues, startingAt, endingBefore, entitled, rate, commitRate, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(entitled, productCustomFields, productId, productName, productTags, rate, startingAt, commitRate, endingBefore, pricingGroupValues, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ContractRateCardRateListResponse{productId=$productId, productName=$productName, productTags=$productTags, productCustomFields=$productCustomFields, pricingGroupValues=$pricingGroupValues, startingAt=$startingAt, endingBefore=$endingBefore, entitled=$entitled, rate=$rate, commitRate=$commitRate, additionalProperties=$additionalProperties}"
+        "ContractRateCardRateListResponse{entitled=$entitled, productCustomFields=$productCustomFields, productId=$productId, productName=$productName, productTags=$productTags, rate=$rate, startingAt=$startingAt, commitRate=$commitRate, endingBefore=$endingBefore, pricingGroupValues=$pricingGroupValues, additionalProperties=$additionalProperties}"
 }

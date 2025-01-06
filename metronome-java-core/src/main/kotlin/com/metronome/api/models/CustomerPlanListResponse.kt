@@ -22,15 +22,18 @@ class CustomerPlanListResponse
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+    @JsonProperty("plan_description")
+    @ExcludeMissing
+    private val planDescription: JsonField<String> = JsonMissing.of(),
     @JsonProperty("plan_id")
     @ExcludeMissing
     private val planId: JsonField<String> = JsonMissing.of(),
     @JsonProperty("plan_name")
     @ExcludeMissing
     private val planName: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("plan_description")
-    @ExcludeMissing
-    private val planDescription: JsonField<String> = JsonMissing.of(),
     @JsonProperty("starting_on")
     @ExcludeMissing
     private val startingOn: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -43,21 +46,20 @@ private constructor(
     @JsonProperty("trial_info")
     @ExcludeMissing
     private val trialInfo: JsonField<TrialInfo> = JsonMissing.of(),
-    @JsonProperty("custom_fields")
-    @ExcludeMissing
-    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     /** the ID of the customer plan */
     fun id(): String = id.getRequired("id")
 
+    fun customFields(): CustomFields = customFields.getRequired("custom_fields")
+
+    fun planDescription(): String = planDescription.getRequired("plan_description")
+
     /** the ID of the plan */
     fun planId(): String = planId.getRequired("plan_id")
 
     fun planName(): String = planName.getRequired("plan_name")
-
-    fun planDescription(): String = planDescription.getRequired("plan_description")
 
     fun startingOn(): OffsetDateTime = startingOn.getRequired("starting_on")
 
@@ -69,17 +71,17 @@ private constructor(
 
     fun trialInfo(): Optional<TrialInfo> = Optional.ofNullable(trialInfo.getNullable("trial_info"))
 
-    fun customFields(): CustomFields = customFields.getRequired("custom_fields")
-
     /** the ID of the customer plan */
     @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+
+    @JsonProperty("plan_description") @ExcludeMissing fun _planDescription() = planDescription
 
     /** the ID of the plan */
     @JsonProperty("plan_id") @ExcludeMissing fun _planId() = planId
 
     @JsonProperty("plan_name") @ExcludeMissing fun _planName() = planName
-
-    @JsonProperty("plan_description") @ExcludeMissing fun _planDescription() = planDescription
 
     @JsonProperty("starting_on") @ExcludeMissing fun _startingOn() = startingOn
 
@@ -91,8 +93,6 @@ private constructor(
 
     @JsonProperty("trial_info") @ExcludeMissing fun _trialInfo() = trialInfo
 
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
-
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -102,14 +102,14 @@ private constructor(
     fun validate(): CustomerPlanListResponse = apply {
         if (!validated) {
             id()
+            customFields().validate()
+            planDescription()
             planId()
             planName()
-            planDescription()
             startingOn()
             endingBefore()
             netPaymentTermsDays()
             trialInfo().map { it.validate() }
-            customFields().validate()
             validated = true
         }
     }
@@ -124,27 +124,27 @@ private constructor(
     class Builder {
 
         private var id: JsonField<String> = JsonMissing.of()
+        private var customFields: JsonField<CustomFields> = JsonMissing.of()
+        private var planDescription: JsonField<String> = JsonMissing.of()
         private var planId: JsonField<String> = JsonMissing.of()
         private var planName: JsonField<String> = JsonMissing.of()
-        private var planDescription: JsonField<String> = JsonMissing.of()
         private var startingOn: JsonField<OffsetDateTime> = JsonMissing.of()
         private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
         private var netPaymentTermsDays: JsonField<Double> = JsonMissing.of()
         private var trialInfo: JsonField<TrialInfo> = JsonMissing.of()
-        private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerPlanListResponse: CustomerPlanListResponse) = apply {
             id = customerPlanListResponse.id
+            customFields = customerPlanListResponse.customFields
+            planDescription = customerPlanListResponse.planDescription
             planId = customerPlanListResponse.planId
             planName = customerPlanListResponse.planName
-            planDescription = customerPlanListResponse.planDescription
             startingOn = customerPlanListResponse.startingOn
             endingBefore = customerPlanListResponse.endingBefore
             netPaymentTermsDays = customerPlanListResponse.netPaymentTermsDays
             trialInfo = customerPlanListResponse.trialInfo
-            customFields = customerPlanListResponse.customFields
             additionalProperties = customerPlanListResponse.additionalProperties.toMutableMap()
         }
 
@@ -153,6 +153,19 @@ private constructor(
 
         /** the ID of the customer plan */
         fun id(id: JsonField<String>) = apply { this.id = id }
+
+        fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+
+        fun customFields(customFields: JsonField<CustomFields>) = apply {
+            this.customFields = customFields
+        }
+
+        fun planDescription(planDescription: String) =
+            planDescription(JsonField.of(planDescription))
+
+        fun planDescription(planDescription: JsonField<String>) = apply {
+            this.planDescription = planDescription
+        }
 
         /** the ID of the plan */
         fun planId(planId: String) = planId(JsonField.of(planId))
@@ -163,13 +176,6 @@ private constructor(
         fun planName(planName: String) = planName(JsonField.of(planName))
 
         fun planName(planName: JsonField<String>) = apply { this.planName = planName }
-
-        fun planDescription(planDescription: String) =
-            planDescription(JsonField.of(planDescription))
-
-        fun planDescription(planDescription: JsonField<String>) = apply {
-            this.planDescription = planDescription
-        }
 
         fun startingOn(startingOn: OffsetDateTime) = startingOn(JsonField.of(startingOn))
 
@@ -194,12 +200,6 @@ private constructor(
 
         fun trialInfo(trialInfo: JsonField<TrialInfo>) = apply { this.trialInfo = trialInfo }
 
-        fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
-
-        fun customFields(customFields: JsonField<CustomFields>) = apply {
-            this.customFields = customFields
-        }
-
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -222,14 +222,14 @@ private constructor(
         fun build(): CustomerPlanListResponse =
             CustomerPlanListResponse(
                 id,
+                customFields,
+                planDescription,
                 planId,
                 planName,
-                planDescription,
                 startingOn,
                 endingBefore,
                 netPaymentTermsDays,
                 trialInfo,
-                customFields,
                 additionalProperties.toImmutable(),
             )
     }
@@ -410,32 +410,32 @@ private constructor(
         class SpendingCap
         @JsonCreator
         private constructor(
-            @JsonProperty("credit_type")
-            @ExcludeMissing
-            private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
             @JsonProperty("amount")
             @ExcludeMissing
             private val amount: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("amount_remaining")
             @ExcludeMissing
             private val amountRemaining: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("credit_type")
+            @ExcludeMissing
+            private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
-
-            fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
             fun amount(): Double = amount.getRequired("amount")
 
             fun amountRemaining(): Double = amountRemaining.getRequired("amount_remaining")
 
-            @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+            fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
             @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
 
             @JsonProperty("amount_remaining")
             @ExcludeMissing
             fun _amountRemaining() = amountRemaining
+
+            @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -445,9 +445,9 @@ private constructor(
 
             fun validate(): SpendingCap = apply {
                 if (!validated) {
-                    creditType().validate()
                     amount()
                     amountRemaining()
+                    creditType().validate()
                     validated = true
                 }
             }
@@ -461,23 +461,17 @@ private constructor(
 
             class Builder {
 
-                private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
                 private var amount: JsonField<Double> = JsonMissing.of()
                 private var amountRemaining: JsonField<Double> = JsonMissing.of()
+                private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(spendingCap: SpendingCap) = apply {
-                    creditType = spendingCap.creditType
                     amount = spendingCap.amount
                     amountRemaining = spendingCap.amountRemaining
+                    creditType = spendingCap.creditType
                     additionalProperties = spendingCap.additionalProperties.toMutableMap()
-                }
-
-                fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
-
-                fun creditType(creditType: JsonField<CreditTypeData>) = apply {
-                    this.creditType = creditType
                 }
 
                 fun amount(amount: Double) = amount(JsonField.of(amount))
@@ -489,6 +483,12 @@ private constructor(
 
                 fun amountRemaining(amountRemaining: JsonField<Double>) = apply {
                     this.amountRemaining = amountRemaining
+                }
+
+                fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
+
+                fun creditType(creditType: JsonField<CreditTypeData>) = apply {
+                    this.creditType = creditType
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -515,9 +515,9 @@ private constructor(
 
                 fun build(): SpendingCap =
                     SpendingCap(
-                        creditType,
                         amount,
                         amountRemaining,
+                        creditType,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -527,17 +527,17 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is SpendingCap && creditType == other.creditType && amount == other.amount && amountRemaining == other.amountRemaining && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is SpendingCap && amount == other.amount && amountRemaining == other.amountRemaining && creditType == other.creditType && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(creditType, amount, amountRemaining, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(amount, amountRemaining, creditType, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "SpendingCap{creditType=$creditType, amount=$amount, amountRemaining=$amountRemaining, additionalProperties=$additionalProperties}"
+                "SpendingCap{amount=$amount, amountRemaining=$amountRemaining, creditType=$creditType, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -563,15 +563,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerPlanListResponse && id == other.id && planId == other.planId && planName == other.planName && planDescription == other.planDescription && startingOn == other.startingOn && endingBefore == other.endingBefore && netPaymentTermsDays == other.netPaymentTermsDays && trialInfo == other.trialInfo && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerPlanListResponse && id == other.id && customFields == other.customFields && planDescription == other.planDescription && planId == other.planId && planName == other.planName && startingOn == other.startingOn && endingBefore == other.endingBefore && netPaymentTermsDays == other.netPaymentTermsDays && trialInfo == other.trialInfo && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, planId, planName, planDescription, startingOn, endingBefore, netPaymentTermsDays, trialInfo, customFields, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, customFields, planDescription, planId, planName, startingOn, endingBefore, netPaymentTermsDays, trialInfo, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CustomerPlanListResponse{id=$id, planId=$planId, planName=$planName, planDescription=$planDescription, startingOn=$startingOn, endingBefore=$endingBefore, netPaymentTermsDays=$netPaymentTermsDays, trialInfo=$trialInfo, customFields=$customFields, additionalProperties=$additionalProperties}"
+        "CustomerPlanListResponse{id=$id, customFields=$customFields, planDescription=$planDescription, planId=$planId, planName=$planName, startingOn=$startingOn, endingBefore=$endingBefore, netPaymentTermsDays=$netPaymentTermsDays, trialInfo=$trialInfo, additionalProperties=$additionalProperties}"
 }

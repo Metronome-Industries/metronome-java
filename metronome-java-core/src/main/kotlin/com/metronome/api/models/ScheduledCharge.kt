@@ -27,13 +27,13 @@ private constructor(
     @JsonProperty("schedule")
     @ExcludeMissing
     private val schedule: JsonField<SchedulePointInTime> = JsonMissing.of(),
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
     @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
     @JsonProperty("netsuite_sales_order_id")
     @ExcludeMissing
     private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("custom_fields")
-    @ExcludeMissing
-    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
@@ -43,6 +43,9 @@ private constructor(
 
     fun schedule(): SchedulePointInTime = schedule.getRequired("schedule")
 
+    fun customFields(): Optional<CustomFields> =
+        Optional.ofNullable(customFields.getNullable("custom_fields"))
+
     /** displayed on invoices */
     fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
 
@@ -50,14 +53,13 @@ private constructor(
     fun netsuiteSalesOrderId(): Optional<String> =
         Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
 
-    fun customFields(): Optional<CustomFields> =
-        Optional.ofNullable(customFields.getNullable("custom_fields"))
-
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
     @JsonProperty("product") @ExcludeMissing fun _product() = product
 
     @JsonProperty("schedule") @ExcludeMissing fun _schedule() = schedule
+
+    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
 
     /** displayed on invoices */
     @JsonProperty("name") @ExcludeMissing fun _name() = name
@@ -66,8 +68,6 @@ private constructor(
     @JsonProperty("netsuite_sales_order_id")
     @ExcludeMissing
     fun _netsuiteSalesOrderId() = netsuiteSalesOrderId
-
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -80,9 +80,9 @@ private constructor(
             id()
             product().validate()
             schedule().validate()
+            customFields().map { it.validate() }
             name()
             netsuiteSalesOrderId()
-            customFields().map { it.validate() }
             validated = true
         }
     }
@@ -99,9 +99,9 @@ private constructor(
         private var id: JsonField<String> = JsonMissing.of()
         private var product: JsonField<Product> = JsonMissing.of()
         private var schedule: JsonField<SchedulePointInTime> = JsonMissing.of()
+        private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
         private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
-        private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -109,9 +109,9 @@ private constructor(
             id = scheduledCharge.id
             product = scheduledCharge.product
             schedule = scheduledCharge.schedule
+            customFields = scheduledCharge.customFields
             name = scheduledCharge.name
             netsuiteSalesOrderId = scheduledCharge.netsuiteSalesOrderId
-            customFields = scheduledCharge.customFields
             additionalProperties = scheduledCharge.additionalProperties.toMutableMap()
         }
 
@@ -127,6 +127,12 @@ private constructor(
 
         fun schedule(schedule: JsonField<SchedulePointInTime>) = apply { this.schedule = schedule }
 
+        fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+
+        fun customFields(customFields: JsonField<CustomFields>) = apply {
+            this.customFields = customFields
+        }
+
         /** displayed on invoices */
         fun name(name: String) = name(JsonField.of(name))
 
@@ -140,12 +146,6 @@ private constructor(
         /** This field's availability is dependent on your client's configuration. */
         fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
             this.netsuiteSalesOrderId = netsuiteSalesOrderId
-        }
-
-        fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
-
-        fun customFields(customFields: JsonField<CustomFields>) = apply {
-            this.customFields = customFields
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -172,9 +172,9 @@ private constructor(
                 id,
                 product,
                 schedule,
+                customFields,
                 name,
                 netsuiteSalesOrderId,
-                customFields,
                 additionalProperties.toImmutable(),
             )
     }
@@ -366,15 +366,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ScheduledCharge && id == other.id && product == other.product && schedule == other.schedule && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ScheduledCharge && id == other.id && product == other.product && schedule == other.schedule && customFields == other.customFields && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, product, schedule, name, netsuiteSalesOrderId, customFields, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, product, schedule, customFields, name, netsuiteSalesOrderId, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ScheduledCharge{id=$id, product=$product, schedule=$schedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, customFields=$customFields, additionalProperties=$additionalProperties}"
+        "ScheduledCharge{id=$id, product=$product, schedule=$schedule, customFields=$customFields, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, additionalProperties=$additionalProperties}"
 }

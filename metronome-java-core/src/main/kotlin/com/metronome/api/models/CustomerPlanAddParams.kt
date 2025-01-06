@@ -631,25 +631,24 @@ constructor(
     class PriceAdjustment
     @JsonCreator
     private constructor(
-        @JsonProperty("charge_id") private val chargeId: String,
         @JsonProperty("adjustment_type") private val adjustmentType: AdjustmentType,
-        @JsonProperty("value") private val value: Double?,
+        @JsonProperty("charge_id") private val chargeId: String,
+        @JsonProperty("start_period") private val startPeriod: Double,
         @JsonProperty("quantity") private val quantity: Double?,
         @JsonProperty("tier") private val tier: Double?,
-        @JsonProperty("start_period") private val startPeriod: Double,
+        @JsonProperty("value") private val value: Double?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("charge_id") fun chargeId(): String = chargeId
-
         @JsonProperty("adjustment_type") fun adjustmentType(): AdjustmentType = adjustmentType
 
+        @JsonProperty("charge_id") fun chargeId(): String = chargeId
+
         /**
-         * The amount of change to a price. Percentage and fixed adjustments can be positive or
-         * negative. Percentage-based adjustments should be decimals, e.g. -0.05 for a 5% discount.
+         * Used in price ramps. Indicates how many billing periods pass before the charge applies.
          */
-        @JsonProperty("value") fun value(): Optional<Double> = Optional.ofNullable(value)
+        @JsonProperty("start_period") fun startPeriod(): Double = startPeriod
 
         /** the overridden quantity for a fixed charge */
         @JsonProperty("quantity") fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
@@ -658,9 +657,10 @@ constructor(
         @JsonProperty("tier") fun tier(): Optional<Double> = Optional.ofNullable(tier)
 
         /**
-         * Used in price ramps. Indicates how many billing periods pass before the charge applies.
+         * The amount of change to a price. Percentage and fixed adjustments can be positive or
+         * negative. Percentage-based adjustments should be decimals, e.g. -0.05 for a 5% discount.
          */
-        @JsonProperty("start_period") fun startPeriod(): Double = startPeriod
+        @JsonProperty("value") fun value(): Optional<Double> = Optional.ofNullable(value)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -675,37 +675,36 @@ constructor(
 
         class Builder {
 
-            private var chargeId: String? = null
             private var adjustmentType: AdjustmentType? = null
-            private var value: Double? = null
+            private var chargeId: String? = null
+            private var startPeriod: Double? = null
             private var quantity: Double? = null
             private var tier: Double? = null
-            private var startPeriod: Double? = null
+            private var value: Double? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(priceAdjustment: PriceAdjustment) = apply {
-                chargeId = priceAdjustment.chargeId
                 adjustmentType = priceAdjustment.adjustmentType
-                value = priceAdjustment.value
+                chargeId = priceAdjustment.chargeId
+                startPeriod = priceAdjustment.startPeriod
                 quantity = priceAdjustment.quantity
                 tier = priceAdjustment.tier
-                startPeriod = priceAdjustment.startPeriod
+                value = priceAdjustment.value
                 additionalProperties = priceAdjustment.additionalProperties.toMutableMap()
             }
-
-            fun chargeId(chargeId: String) = apply { this.chargeId = chargeId }
 
             fun adjustmentType(adjustmentType: AdjustmentType) = apply {
                 this.adjustmentType = adjustmentType
             }
 
+            fun chargeId(chargeId: String) = apply { this.chargeId = chargeId }
+
             /**
-             * The amount of change to a price. Percentage and fixed adjustments can be positive or
-             * negative. Percentage-based adjustments should be decimals, e.g. -0.05 for a 5%
-             * discount.
+             * Used in price ramps. Indicates how many billing periods pass before the charge
+             * applies.
              */
-            fun value(value: Double) = apply { this.value = value }
+            fun startPeriod(startPeriod: Double) = apply { this.startPeriod = startPeriod }
 
             /** the overridden quantity for a fixed charge */
             fun quantity(quantity: Double) = apply { this.quantity = quantity }
@@ -714,10 +713,11 @@ constructor(
             fun tier(tier: Double) = apply { this.tier = tier }
 
             /**
-             * Used in price ramps. Indicates how many billing periods pass before the charge
-             * applies.
+             * The amount of change to a price. Percentage and fixed adjustments can be positive or
+             * negative. Percentage-based adjustments should be decimals, e.g. -0.05 for a 5%
+             * discount.
              */
-            fun startPeriod(startPeriod: Double) = apply { this.startPeriod = startPeriod }
+            fun value(value: Double) = apply { this.value = value }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -740,12 +740,12 @@ constructor(
 
             fun build(): PriceAdjustment =
                 PriceAdjustment(
-                    checkNotNull(chargeId) { "`chargeId` is required but was not set" },
                     checkNotNull(adjustmentType) { "`adjustmentType` is required but was not set" },
-                    value,
+                    checkNotNull(chargeId) { "`chargeId` is required but was not set" },
+                    checkNotNull(startPeriod) { "`startPeriod` is required but was not set" },
                     quantity,
                     tier,
-                    checkNotNull(startPeriod) { "`startPeriod` is required but was not set" },
+                    value,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -824,17 +824,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is PriceAdjustment && chargeId == other.chargeId && adjustmentType == other.adjustmentType && value == other.value && quantity == other.quantity && tier == other.tier && startPeriod == other.startPeriod && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is PriceAdjustment && adjustmentType == other.adjustmentType && chargeId == other.chargeId && startPeriod == other.startPeriod && quantity == other.quantity && tier == other.tier && value == other.value && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(chargeId, adjustmentType, value, quantity, tier, startPeriod, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(adjustmentType, chargeId, startPeriod, quantity, tier, value, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "PriceAdjustment{chargeId=$chargeId, adjustmentType=$adjustmentType, value=$value, quantity=$quantity, tier=$tier, startPeriod=$startPeriod, additionalProperties=$additionalProperties}"
+            "PriceAdjustment{adjustmentType=$adjustmentType, chargeId=$chargeId, startPeriod=$startPeriod, quantity=$quantity, tier=$tier, value=$value, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -918,19 +918,19 @@ constructor(
         class SpendingCap
         @JsonCreator
         private constructor(
-            @JsonProperty("credit_type_id") private val creditTypeId: String,
             @JsonProperty("amount") private val amount: Double,
+            @JsonProperty("credit_type_id") private val creditTypeId: String,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
-
-            /** The credit type ID for the spending cap. */
-            @JsonProperty("credit_type_id") fun creditTypeId(): String = creditTypeId
 
             /**
              * The credit amount in the given denomination based on the credit type, e.g. US cents.
              */
             @JsonProperty("amount") fun amount(): Double = amount
+
+            /** The credit type ID for the spending cap. */
+            @JsonProperty("credit_type_id") fun creditTypeId(): String = creditTypeId
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -945,25 +945,25 @@ constructor(
 
             class Builder {
 
-                private var creditTypeId: String? = null
                 private var amount: Double? = null
+                private var creditTypeId: String? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(spendingCap: SpendingCap) = apply {
-                    creditTypeId = spendingCap.creditTypeId
                     amount = spendingCap.amount
+                    creditTypeId = spendingCap.creditTypeId
                     additionalProperties = spendingCap.additionalProperties.toMutableMap()
                 }
-
-                /** The credit type ID for the spending cap. */
-                fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
                 /**
                  * The credit amount in the given denomination based on the credit type, e.g. US
                  * cents.
                  */
                 fun amount(amount: Double) = apply { this.amount = amount }
+
+                /** The credit type ID for the spending cap. */
+                fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -989,8 +989,8 @@ constructor(
 
                 fun build(): SpendingCap =
                     SpendingCap(
-                        checkNotNull(creditTypeId) { "`creditTypeId` is required but was not set" },
                         checkNotNull(amount) { "`amount` is required but was not set" },
+                        checkNotNull(creditTypeId) { "`creditTypeId` is required but was not set" },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -1000,17 +1000,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is SpendingCap && creditTypeId == other.creditTypeId && amount == other.amount && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is SpendingCap && amount == other.amount && creditTypeId == other.creditTypeId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(creditTypeId, amount, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(amount, creditTypeId, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "SpendingCap{creditTypeId=$creditTypeId, amount=$amount, additionalProperties=$additionalProperties}"
+                "SpendingCap{amount=$amount, creditTypeId=$creditTypeId, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {

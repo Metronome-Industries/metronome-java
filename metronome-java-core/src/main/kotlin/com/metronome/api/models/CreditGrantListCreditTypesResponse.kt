@@ -20,25 +20,25 @@ import java.util.Optional
 class CreditGrantListCreditTypesResponse
 @JsonCreator
 private constructor(
-    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
     @JsonProperty("is_currency")
     @ExcludeMissing
     private val isCurrency: JsonField<Boolean> = JsonMissing.of(),
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
-
-    fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
 
     fun id(): Optional<String> = Optional.ofNullable(id.getNullable("id"))
 
     fun isCurrency(): Optional<Boolean> = Optional.ofNullable(isCurrency.getNullable("is_currency"))
 
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
 
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
     @JsonProperty("is_currency") @ExcludeMissing fun _isCurrency() = isCurrency
+
+    @JsonProperty("name") @ExcludeMissing fun _name() = name
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -48,9 +48,9 @@ private constructor(
 
     fun validate(): CreditGrantListCreditTypesResponse = apply {
         if (!validated) {
-            name()
             id()
             isCurrency()
+            name()
             validated = true
         }
     }
@@ -64,24 +64,20 @@ private constructor(
 
     class Builder {
 
-        private var name: JsonField<String> = JsonMissing.of()
         private var id: JsonField<String> = JsonMissing.of()
         private var isCurrency: JsonField<Boolean> = JsonMissing.of()
+        private var name: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(creditGrantListCreditTypesResponse: CreditGrantListCreditTypesResponse) =
             apply {
-                name = creditGrantListCreditTypesResponse.name
                 id = creditGrantListCreditTypesResponse.id
                 isCurrency = creditGrantListCreditTypesResponse.isCurrency
+                name = creditGrantListCreditTypesResponse.name
                 additionalProperties =
                     creditGrantListCreditTypesResponse.additionalProperties.toMutableMap()
             }
-
-        fun name(name: String) = name(JsonField.of(name))
-
-        fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun id(id: String) = id(JsonField.of(id))
 
@@ -90,6 +86,10 @@ private constructor(
         fun isCurrency(isCurrency: Boolean) = isCurrency(JsonField.of(isCurrency))
 
         fun isCurrency(isCurrency: JsonField<Boolean>) = apply { this.isCurrency = isCurrency }
+
+        fun name(name: String) = name(JsonField.of(name))
+
+        fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -112,9 +112,9 @@ private constructor(
 
         fun build(): CreditGrantListCreditTypesResponse =
             CreditGrantListCreditTypesResponse(
-                name,
                 id,
                 isCurrency,
+                name,
                 additionalProperties.toImmutable(),
             )
     }
@@ -124,15 +124,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditGrantListCreditTypesResponse && name == other.name && id == other.id && isCurrency == other.isCurrency && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CreditGrantListCreditTypesResponse && id == other.id && isCurrency == other.isCurrency && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(name, id, isCurrency, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, isCurrency, name, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CreditGrantListCreditTypesResponse{name=$name, id=$id, isCurrency=$isCurrency, additionalProperties=$additionalProperties}"
+        "CreditGrantListCreditTypesResponse{id=$id, isCurrency=$isCurrency, name=$name, additionalProperties=$additionalProperties}"
 }

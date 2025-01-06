@@ -567,34 +567,28 @@ constructor(
     class Commit
     @JsonCreator
     private constructor(
-        @JsonProperty("type") private val type: Type,
-        @JsonProperty("rate_type") private val rateType: RateType?,
-        @JsonProperty("name") private val name: String?,
         @JsonProperty("product_id") private val productId: String,
+        @JsonProperty("type") private val type: Type,
         @JsonProperty("access_schedule") private val accessSchedule: AccessSchedule?,
-        @JsonProperty("invoice_schedule") private val invoiceSchedule: InvoiceSchedule?,
         @JsonProperty("amount") private val amount: Double?,
-        @JsonProperty("description") private val description: String?,
-        @JsonProperty("rollover_fraction") private val rolloverFraction: Double?,
-        @JsonProperty("priority") private val priority: Double?,
         @JsonProperty("applicable_product_ids") private val applicableProductIds: List<String>?,
         @JsonProperty("applicable_product_tags") private val applicableProductTags: List<String>?,
-        @JsonProperty("netsuite_sales_order_id") private val netsuiteSalesOrderId: String?,
         @JsonProperty("custom_fields") private val customFields: CustomFields?,
+        @JsonProperty("description") private val description: String?,
+        @JsonProperty("invoice_schedule") private val invoiceSchedule: InvoiceSchedule?,
+        @JsonProperty("name") private val name: String?,
+        @JsonProperty("netsuite_sales_order_id") private val netsuiteSalesOrderId: String?,
+        @JsonProperty("priority") private val priority: Double?,
+        @JsonProperty("rate_type") private val rateType: RateType?,
+        @JsonProperty("rollover_fraction") private val rolloverFraction: Double?,
         @JsonProperty("temporary_id") private val temporaryId: String?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("type") fun type(): Type = type
-
-        @JsonProperty("rate_type")
-        fun rateType(): Optional<RateType> = Optional.ofNullable(rateType)
-
-        /** displayed on invoices */
-        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
-
         @JsonProperty("product_id") fun productId(): String = productId
+
+        @JsonProperty("type") fun type(): Type = type
 
         /**
          * Required: Schedule for distributing the commit to the customer. For "POSTPAID" commits
@@ -603,28 +597,8 @@ constructor(
         @JsonProperty("access_schedule")
         fun accessSchedule(): Optional<AccessSchedule> = Optional.ofNullable(accessSchedule)
 
-        /**
-         * Required for "POSTPAID" commits: the true up invoice will be generated at this time and
-         * only one schedule item is allowed; the total must match access_schedule amount. Optional
-         * for "PREPAID" commits: if not provided, this will be a "complimentary" commit with no
-         * invoice.
-         */
-        @JsonProperty("invoice_schedule")
-        fun invoiceSchedule(): Optional<InvoiceSchedule> = Optional.ofNullable(invoiceSchedule)
-
         /** (DEPRECATED) Use access_schedule and invoice_schedule instead. */
         @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
-
-        /** Used only in UI/API. It is not exposed to end customers. */
-        @JsonProperty("description")
-        fun description(): Optional<String> = Optional.ofNullable(description)
-
-        /** Fraction of unused segments that will be rolled over. Must be between 0 and 1. */
-        @JsonProperty("rollover_fraction")
-        fun rolloverFraction(): Optional<Double> = Optional.ofNullable(rolloverFraction)
-
-        /** If multiple commits are applicable, the one with the lower priority will apply first. */
-        @JsonProperty("priority") fun priority(): Optional<Double> = Optional.ofNullable(priority)
 
         /**
          * Which products the commit applies to. If both applicable_product_ids and
@@ -642,12 +616,38 @@ constructor(
         fun applicableProductTags(): Optional<List<String>> =
             Optional.ofNullable(applicableProductTags)
 
+        @JsonProperty("custom_fields")
+        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+
+        /** Used only in UI/API. It is not exposed to end customers. */
+        @JsonProperty("description")
+        fun description(): Optional<String> = Optional.ofNullable(description)
+
+        /**
+         * Required for "POSTPAID" commits: the true up invoice will be generated at this time and
+         * only one schedule item is allowed; the total must match access_schedule amount. Optional
+         * for "PREPAID" commits: if not provided, this will be a "complimentary" commit with no
+         * invoice.
+         */
+        @JsonProperty("invoice_schedule")
+        fun invoiceSchedule(): Optional<InvoiceSchedule> = Optional.ofNullable(invoiceSchedule)
+
+        /** displayed on invoices */
+        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
+
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_sales_order_id")
         fun netsuiteSalesOrderId(): Optional<String> = Optional.ofNullable(netsuiteSalesOrderId)
 
-        @JsonProperty("custom_fields")
-        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+        /** If multiple commits are applicable, the one with the lower priority will apply first. */
+        @JsonProperty("priority") fun priority(): Optional<Double> = Optional.ofNullable(priority)
+
+        @JsonProperty("rate_type")
+        fun rateType(): Optional<RateType> = Optional.ofNullable(rateType)
+
+        /** Fraction of unused segments that will be rolled over. Must be between 0 and 1. */
+        @JsonProperty("rollover_fraction")
+        fun rolloverFraction(): Optional<Double> = Optional.ofNullable(rolloverFraction)
 
         /**
          * A temporary ID for the commit that can be used to reference the commit for commit
@@ -669,51 +669,46 @@ constructor(
 
         class Builder {
 
-            private var type: Type? = null
-            private var rateType: RateType? = null
-            private var name: String? = null
             private var productId: String? = null
+            private var type: Type? = null
             private var accessSchedule: AccessSchedule? = null
-            private var invoiceSchedule: InvoiceSchedule? = null
             private var amount: Double? = null
-            private var description: String? = null
-            private var rolloverFraction: Double? = null
-            private var priority: Double? = null
             private var applicableProductIds: MutableList<String>? = null
             private var applicableProductTags: MutableList<String>? = null
-            private var netsuiteSalesOrderId: String? = null
             private var customFields: CustomFields? = null
+            private var description: String? = null
+            private var invoiceSchedule: InvoiceSchedule? = null
+            private var name: String? = null
+            private var netsuiteSalesOrderId: String? = null
+            private var priority: Double? = null
+            private var rateType: RateType? = null
+            private var rolloverFraction: Double? = null
             private var temporaryId: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(commit: Commit) = apply {
-                type = commit.type
-                rateType = commit.rateType
-                name = commit.name
                 productId = commit.productId
+                type = commit.type
                 accessSchedule = commit.accessSchedule
-                invoiceSchedule = commit.invoiceSchedule
                 amount = commit.amount
-                description = commit.description
-                rolloverFraction = commit.rolloverFraction
-                priority = commit.priority
                 applicableProductIds = commit.applicableProductIds?.toMutableList()
                 applicableProductTags = commit.applicableProductTags?.toMutableList()
-                netsuiteSalesOrderId = commit.netsuiteSalesOrderId
                 customFields = commit.customFields
+                description = commit.description
+                invoiceSchedule = commit.invoiceSchedule
+                name = commit.name
+                netsuiteSalesOrderId = commit.netsuiteSalesOrderId
+                priority = commit.priority
+                rateType = commit.rateType
+                rolloverFraction = commit.rolloverFraction
                 temporaryId = commit.temporaryId
                 additionalProperties = commit.additionalProperties.toMutableMap()
             }
 
-            fun type(type: Type) = apply { this.type = type }
-
-            fun rateType(rateType: RateType) = apply { this.rateType = rateType }
-
-            /** displayed on invoices */
-            fun name(name: String) = apply { this.name = name }
-
             fun productId(productId: String) = apply { this.productId = productId }
+
+            fun type(type: Type) = apply { this.type = type }
 
             /**
              * Required: Schedule for distributing the commit to the customer. For "POSTPAID"
@@ -724,31 +719,8 @@ constructor(
                 this.accessSchedule = accessSchedule
             }
 
-            /**
-             * Required for "POSTPAID" commits: the true up invoice will be generated at this time
-             * and only one schedule item is allowed; the total must match access_schedule amount.
-             * Optional for "PREPAID" commits: if not provided, this will be a "complimentary"
-             * commit with no invoice.
-             */
-            fun invoiceSchedule(invoiceSchedule: InvoiceSchedule) = apply {
-                this.invoiceSchedule = invoiceSchedule
-            }
-
             /** (DEPRECATED) Use access_schedule and invoice_schedule instead. */
             fun amount(amount: Double) = apply { this.amount = amount }
-
-            /** Used only in UI/API. It is not exposed to end customers. */
-            fun description(description: String) = apply { this.description = description }
-
-            /** Fraction of unused segments that will be rolled over. Must be between 0 and 1. */
-            fun rolloverFraction(rolloverFraction: Double) = apply {
-                this.rolloverFraction = rolloverFraction
-            }
-
-            /**
-             * If multiple commits are applicable, the one with the lower priority will apply first.
-             */
-            fun priority(priority: Double) = apply { this.priority = priority }
 
             /**
              * Which products the commit applies to. If both applicable_product_ids and
@@ -784,13 +756,41 @@ constructor(
                     (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
             }
 
+            fun customFields(customFields: CustomFields) = apply {
+                this.customFields = customFields
+            }
+
+            /** Used only in UI/API. It is not exposed to end customers. */
+            fun description(description: String) = apply { this.description = description }
+
+            /**
+             * Required for "POSTPAID" commits: the true up invoice will be generated at this time
+             * and only one schedule item is allowed; the total must match access_schedule amount.
+             * Optional for "PREPAID" commits: if not provided, this will be a "complimentary"
+             * commit with no invoice.
+             */
+            fun invoiceSchedule(invoiceSchedule: InvoiceSchedule) = apply {
+                this.invoiceSchedule = invoiceSchedule
+            }
+
+            /** displayed on invoices */
+            fun name(name: String) = apply { this.name = name }
+
             /** This field's availability is dependent on your client's configuration. */
             fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
 
-            fun customFields(customFields: CustomFields) = apply {
-                this.customFields = customFields
+            /**
+             * If multiple commits are applicable, the one with the lower priority will apply first.
+             */
+            fun priority(priority: Double) = apply { this.priority = priority }
+
+            fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+
+            /** Fraction of unused segments that will be rolled over. Must be between 0 and 1. */
+            fun rolloverFraction(rolloverFraction: Double) = apply {
+                this.rolloverFraction = rolloverFraction
             }
 
             /**
@@ -820,20 +820,20 @@ constructor(
 
             fun build(): Commit =
                 Commit(
-                    checkNotNull(type) { "`type` is required but was not set" },
-                    rateType,
-                    name,
                     checkNotNull(productId) { "`productId` is required but was not set" },
+                    checkNotNull(type) { "`type` is required but was not set" },
                     accessSchedule,
-                    invoiceSchedule,
                     amount,
-                    description,
-                    rolloverFraction,
-                    priority,
                     applicableProductIds?.toImmutable(),
                     applicableProductTags?.toImmutable(),
-                    netsuiteSalesOrderId,
                     customFields,
+                    description,
+                    invoiceSchedule,
+                    name,
+                    netsuiteSalesOrderId,
+                    priority,
+                    rateType,
+                    rolloverFraction,
                     temporaryId,
                     additionalProperties.toImmutable(),
                 )
@@ -904,17 +904,17 @@ constructor(
         class AccessSchedule
         @JsonCreator
         private constructor(
-            @JsonProperty("credit_type_id") private val creditTypeId: String?,
             @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>,
+            @JsonProperty("credit_type_id") private val creditTypeId: String?,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem> = scheduleItems
+
             /** Defaults to USD (cents) if not passed */
             @JsonProperty("credit_type_id")
             fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
-
-            @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem> = scheduleItems
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -929,19 +929,16 @@ constructor(
 
             class Builder {
 
-                private var creditTypeId: String? = null
                 private var scheduleItems: MutableList<ScheduleItem>? = null
+                private var creditTypeId: String? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(accessSchedule: AccessSchedule) = apply {
-                    creditTypeId = accessSchedule.creditTypeId
                     scheduleItems = accessSchedule.scheduleItems.toMutableList()
+                    creditTypeId = accessSchedule.creditTypeId
                     additionalProperties = accessSchedule.additionalProperties.toMutableMap()
                 }
-
-                /** Defaults to USD (cents) if not passed */
-                fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
                 fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
                     this.scheduleItems = scheduleItems.toMutableList()
@@ -950,6 +947,9 @@ constructor(
                 fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
                     scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
                 }
+
+                /** Defaults to USD (cents) if not passed */
+                fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -975,11 +975,11 @@ constructor(
 
                 fun build(): AccessSchedule =
                     AccessSchedule(
-                        creditTypeId,
                         checkNotNull(scheduleItems) {
                                 "`scheduleItems` is required but was not set"
                             }
                             .toImmutable(),
+                        creditTypeId,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -989,19 +989,19 @@ constructor(
             @JsonCreator
             private constructor(
                 @JsonProperty("amount") private val amount: Double,
-                @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
                 @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
+                @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
                 @JsonProperty("amount") fun amount(): Double = amount
 
-                /** RFC 3339 timestamp (inclusive) */
-                @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
-
                 /** RFC 3339 timestamp (exclusive) */
                 @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
+
+                /** RFC 3339 timestamp (inclusive) */
+                @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -1017,28 +1017,28 @@ constructor(
                 class Builder {
 
                     private var amount: Double? = null
-                    private var startingAt: OffsetDateTime? = null
                     private var endingBefore: OffsetDateTime? = null
+                    private var startingAt: OffsetDateTime? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(scheduleItem: ScheduleItem) = apply {
                         amount = scheduleItem.amount
-                        startingAt = scheduleItem.startingAt
                         endingBefore = scheduleItem.endingBefore
+                        startingAt = scheduleItem.startingAt
                         additionalProperties = scheduleItem.additionalProperties.toMutableMap()
                     }
 
                     fun amount(amount: Double) = apply { this.amount = amount }
 
-                    /** RFC 3339 timestamp (inclusive) */
-                    fun startingAt(startingAt: OffsetDateTime) = apply {
-                        this.startingAt = startingAt
-                    }
-
                     /** RFC 3339 timestamp (exclusive) */
                     fun endingBefore(endingBefore: OffsetDateTime) = apply {
                         this.endingBefore = endingBefore
+                    }
+
+                    /** RFC 3339 timestamp (inclusive) */
+                    fun startingAt(startingAt: OffsetDateTime) = apply {
+                        this.startingAt = startingAt
                     }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1066,10 +1066,10 @@ constructor(
                     fun build(): ScheduleItem =
                         ScheduleItem(
                             checkNotNull(amount) { "`amount` is required but was not set" },
-                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                             checkNotNull(endingBefore) {
                                 "`endingBefore` is required but was not set"
                             },
+                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -1079,17 +1079,17 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is ScheduleItem && amount == other.amount && startingAt == other.startingAt && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is ScheduleItem && amount == other.amount && endingBefore == other.endingBefore && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(amount, startingAt, endingBefore, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(amount, endingBefore, startingAt, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "ScheduleItem{amount=$amount, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
+                    "ScheduleItem{amount=$amount, endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
             }
 
             override fun equals(other: Any?): Boolean {
@@ -1097,17 +1097,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is AccessSchedule && creditTypeId == other.creditTypeId && scheduleItems == other.scheduleItems && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is AccessSchedule && scheduleItems == other.scheduleItems && creditTypeId == other.creditTypeId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(creditTypeId, scheduleItems, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(scheduleItems, creditTypeId, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AccessSchedule{creditTypeId=$creditTypeId, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
+                "AccessSchedule{scheduleItems=$scheduleItems, creditTypeId=$creditTypeId, additionalProperties=$additionalProperties}"
         }
 
         @NoAutoDetect
@@ -1191,8 +1191,8 @@ constructor(
         @JsonCreator
         private constructor(
             @JsonProperty("credit_type_id") private val creditTypeId: String?,
-            @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>?,
             @JsonProperty("recurring_schedule") private val recurringSchedule: RecurringSchedule?,
+            @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>?,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
@@ -1200,10 +1200,6 @@ constructor(
             /** Defaults to USD (cents) if not passed. */
             @JsonProperty("credit_type_id")
             fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
-
-            /** Either provide amount or provide both unit_price and quantity. */
-            @JsonProperty("schedule_items")
-            fun scheduleItems(): Optional<List<ScheduleItem>> = Optional.ofNullable(scheduleItems)
 
             /**
              * Enter the unit price and quantity for the charge or instead only send the amount. If
@@ -1213,6 +1209,10 @@ constructor(
             @JsonProperty("recurring_schedule")
             fun recurringSchedule(): Optional<RecurringSchedule> =
                 Optional.ofNullable(recurringSchedule)
+
+            /** Either provide amount or provide both unit_price and quantity. */
+            @JsonProperty("schedule_items")
+            fun scheduleItems(): Optional<List<ScheduleItem>> = Optional.ofNullable(scheduleItems)
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1228,20 +1228,29 @@ constructor(
             class Builder {
 
                 private var creditTypeId: String? = null
-                private var scheduleItems: MutableList<ScheduleItem>? = null
                 private var recurringSchedule: RecurringSchedule? = null
+                private var scheduleItems: MutableList<ScheduleItem>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(invoiceSchedule: InvoiceSchedule) = apply {
                     creditTypeId = invoiceSchedule.creditTypeId
-                    scheduleItems = invoiceSchedule.scheduleItems?.toMutableList()
                     recurringSchedule = invoiceSchedule.recurringSchedule
+                    scheduleItems = invoiceSchedule.scheduleItems?.toMutableList()
                     additionalProperties = invoiceSchedule.additionalProperties.toMutableMap()
                 }
 
                 /** Defaults to USD (cents) if not passed. */
                 fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+
+                /**
+                 * Enter the unit price and quantity for the charge or instead only send the amount.
+                 * If amount is sent, the unit price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                fun recurringSchedule(recurringSchedule: RecurringSchedule) = apply {
+                    this.recurringSchedule = recurringSchedule
+                }
 
                 /** Either provide amount or provide both unit_price and quantity. */
                 fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
@@ -1251,15 +1260,6 @@ constructor(
                 /** Either provide amount or provide both unit_price and quantity. */
                 fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
                     scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
-                }
-
-                /**
-                 * Enter the unit price and quantity for the charge or instead only send the amount.
-                 * If amount is sent, the unit price is assumed to be the amount and quantity is
-                 * inferred to be 1.
-                 */
-                fun recurringSchedule(recurringSchedule: RecurringSchedule) = apply {
-                    this.recurringSchedule = recurringSchedule
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1287,8 +1287,8 @@ constructor(
                 fun build(): InvoiceSchedule =
                     InvoiceSchedule(
                         creditTypeId,
-                        scheduleItems?.toImmutable(),
                         recurringSchedule,
+                        scheduleItems?.toImmutable(),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -1302,32 +1302,35 @@ constructor(
             class RecurringSchedule
             @JsonCreator
             private constructor(
-                @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
-                @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
-                @JsonProperty("frequency") private val frequency: Frequency,
-                @JsonProperty("unit_price") private val unitPrice: Double?,
-                @JsonProperty("quantity") private val quantity: Double?,
-                @JsonProperty("amount") private val amount: Double?,
                 @JsonProperty("amount_distribution")
                 private val amountDistribution: AmountDistribution,
+                @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
+                @JsonProperty("frequency") private val frequency: Frequency,
+                @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
+                @JsonProperty("amount") private val amount: Double?,
+                @JsonProperty("quantity") private val quantity: Double?,
+                @JsonProperty("unit_price") private val unitPrice: Double?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /** RFC 3339 timestamp (inclusive). */
-                @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+                @JsonProperty("amount_distribution")
+                fun amountDistribution(): AmountDistribution = amountDistribution
 
                 /** RFC 3339 timestamp (exclusive). */
                 @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
 
                 @JsonProperty("frequency") fun frequency(): Frequency = frequency
 
+                /** RFC 3339 timestamp (inclusive). */
+                @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+
                 /**
-                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
-                 * and must be specified with quantity. If specified amount cannot be provided.
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
                  */
-                @JsonProperty("unit_price")
-                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
+                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
 
                 /**
                  * Quantity for the charge. Will be multiplied by unit_price to determine the amount
@@ -1337,14 +1340,11 @@ constructor(
                 fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
                 /**
-                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                 * amount is sent, the unit_price is assumed to be the amount and quantity is
-                 * inferred to be 1.
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
                  */
-                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
-
-                @JsonProperty("amount_distribution")
-                fun amountDistribution(): AmountDistribution = amountDistribution
+                @JsonProperty("unit_price")
+                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -1359,30 +1359,29 @@ constructor(
 
                 class Builder {
 
-                    private var startingAt: OffsetDateTime? = null
+                    private var amountDistribution: AmountDistribution? = null
                     private var endingBefore: OffsetDateTime? = null
                     private var frequency: Frequency? = null
-                    private var unitPrice: Double? = null
-                    private var quantity: Double? = null
+                    private var startingAt: OffsetDateTime? = null
                     private var amount: Double? = null
-                    private var amountDistribution: AmountDistribution? = null
+                    private var quantity: Double? = null
+                    private var unitPrice: Double? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(recurringSchedule: RecurringSchedule) = apply {
-                        startingAt = recurringSchedule.startingAt
+                        amountDistribution = recurringSchedule.amountDistribution
                         endingBefore = recurringSchedule.endingBefore
                         frequency = recurringSchedule.frequency
-                        unitPrice = recurringSchedule.unitPrice
-                        quantity = recurringSchedule.quantity
+                        startingAt = recurringSchedule.startingAt
                         amount = recurringSchedule.amount
-                        amountDistribution = recurringSchedule.amountDistribution
+                        quantity = recurringSchedule.quantity
+                        unitPrice = recurringSchedule.unitPrice
                         additionalProperties = recurringSchedule.additionalProperties.toMutableMap()
                     }
 
-                    /** RFC 3339 timestamp (inclusive). */
-                    fun startingAt(startingAt: OffsetDateTime) = apply {
-                        this.startingAt = startingAt
+                    fun amountDistribution(amountDistribution: AmountDistribution) = apply {
+                        this.amountDistribution = amountDistribution
                     }
 
                     /** RFC 3339 timestamp (exclusive). */
@@ -1392,12 +1391,17 @@ constructor(
 
                     fun frequency(frequency: Frequency) = apply { this.frequency = frequency }
 
+                    /** RFC 3339 timestamp (inclusive). */
+                    fun startingAt(startingAt: OffsetDateTime) = apply {
+                        this.startingAt = startingAt
+                    }
+
                     /**
-                     * Unit price for the charge. Will be multiplied by quantity to determine the
-                     * amount and must be specified with quantity. If specified amount cannot be
-                     * provided.
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
                      */
-                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+                    fun amount(amount: Double) = apply { this.amount = amount }
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
@@ -1407,15 +1411,11 @@ constructor(
                     fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
                     /**
-                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                     * amount is sent, the unit_price is assumed to be the amount and quantity is
-                     * inferred to be 1.
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
                      */
-                    fun amount(amount: Double) = apply { this.amount = amount }
-
-                    fun amountDistribution(amountDistribution: AmountDistribution) = apply {
-                        this.amountDistribution = amountDistribution
-                    }
+                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -1441,17 +1441,17 @@ constructor(
 
                     fun build(): RecurringSchedule =
                         RecurringSchedule(
-                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                            checkNotNull(amountDistribution) {
+                                "`amountDistribution` is required but was not set"
+                            },
                             checkNotNull(endingBefore) {
                                 "`endingBefore` is required but was not set"
                             },
                             checkNotNull(frequency) { "`frequency` is required but was not set" },
-                            unitPrice,
-                            quantity,
+                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                             amount,
-                            checkNotNull(amountDistribution) {
-                                "`amountDistribution` is required but was not set"
-                            },
+                            quantity,
+                            unitPrice,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -1598,37 +1598,40 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is RecurringSchedule && startingAt == other.startingAt && endingBefore == other.endingBefore && frequency == other.frequency && unitPrice == other.unitPrice && quantity == other.quantity && amount == other.amount && amountDistribution == other.amountDistribution && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is RecurringSchedule && amountDistribution == other.amountDistribution && endingBefore == other.endingBefore && frequency == other.frequency && startingAt == other.startingAt && amount == other.amount && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(startingAt, endingBefore, frequency, unitPrice, quantity, amount, amountDistribution, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(amountDistribution, endingBefore, frequency, startingAt, amount, quantity, unitPrice, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "RecurringSchedule{startingAt=$startingAt, endingBefore=$endingBefore, frequency=$frequency, unitPrice=$unitPrice, quantity=$quantity, amount=$amount, amountDistribution=$amountDistribution, additionalProperties=$additionalProperties}"
+                    "RecurringSchedule{amountDistribution=$amountDistribution, endingBefore=$endingBefore, frequency=$frequency, startingAt=$startingAt, amount=$amount, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class ScheduleItem
             @JsonCreator
             private constructor(
-                @JsonProperty("unit_price") private val unitPrice: Double?,
-                @JsonProperty("quantity") private val quantity: Double?,
-                @JsonProperty("amount") private val amount: Double?,
                 @JsonProperty("timestamp") private val timestamp: OffsetDateTime,
+                @JsonProperty("amount") private val amount: Double?,
+                @JsonProperty("quantity") private val quantity: Double?,
+                @JsonProperty("unit_price") private val unitPrice: Double?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                /** timestamp of the scheduled event */
+                @JsonProperty("timestamp") fun timestamp(): OffsetDateTime = timestamp
+
                 /**
-                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
-                 * and must be specified with quantity. If specified amount cannot be provided.
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
                  */
-                @JsonProperty("unit_price")
-                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
+                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
 
                 /**
                  * Quantity for the charge. Will be multiplied by unit_price to determine the amount
@@ -1638,14 +1641,11 @@ constructor(
                 fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
                 /**
-                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                 * amount is sent, the unit_price is assumed to be the amount and quantity is
-                 * inferred to be 1.
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
                  */
-                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
-
-                /** timestamp of the scheduled event */
-                @JsonProperty("timestamp") fun timestamp(): OffsetDateTime = timestamp
+                @JsonProperty("unit_price")
+                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -1660,27 +1660,30 @@ constructor(
 
                 class Builder {
 
-                    private var unitPrice: Double? = null
-                    private var quantity: Double? = null
-                    private var amount: Double? = null
                     private var timestamp: OffsetDateTime? = null
+                    private var amount: Double? = null
+                    private var quantity: Double? = null
+                    private var unitPrice: Double? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(scheduleItem: ScheduleItem) = apply {
-                        unitPrice = scheduleItem.unitPrice
-                        quantity = scheduleItem.quantity
-                        amount = scheduleItem.amount
                         timestamp = scheduleItem.timestamp
+                        amount = scheduleItem.amount
+                        quantity = scheduleItem.quantity
+                        unitPrice = scheduleItem.unitPrice
                         additionalProperties = scheduleItem.additionalProperties.toMutableMap()
                     }
 
+                    /** timestamp of the scheduled event */
+                    fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
+
                     /**
-                     * Unit price for the charge. Will be multiplied by quantity to determine the
-                     * amount and must be specified with quantity. If specified amount cannot be
-                     * provided.
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
                      */
-                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+                    fun amount(amount: Double) = apply { this.amount = amount }
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
@@ -1690,14 +1693,11 @@ constructor(
                     fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
                     /**
-                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                     * amount is sent, the unit_price is assumed to be the amount and quantity is
-                     * inferred to be 1.
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
                      */
-                    fun amount(amount: Double) = apply { this.amount = amount }
-
-                    /** timestamp of the scheduled event */
-                    fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
+                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -1723,10 +1723,10 @@ constructor(
 
                     fun build(): ScheduleItem =
                         ScheduleItem(
-                            unitPrice,
-                            quantity,
-                            amount,
                             checkNotNull(timestamp) { "`timestamp` is required but was not set" },
+                            amount,
+                            quantity,
+                            unitPrice,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -1736,17 +1736,17 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is ScheduleItem && unitPrice == other.unitPrice && quantity == other.quantity && amount == other.amount && timestamp == other.timestamp && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is ScheduleItem && timestamp == other.timestamp && amount == other.amount && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(unitPrice, quantity, amount, timestamp, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(timestamp, amount, quantity, unitPrice, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "ScheduleItem{unitPrice=$unitPrice, quantity=$quantity, amount=$amount, timestamp=$timestamp, additionalProperties=$additionalProperties}"
+                    "ScheduleItem{timestamp=$timestamp, amount=$amount, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
             }
 
             override fun equals(other: Any?): Boolean {
@@ -1754,17 +1754,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is InvoiceSchedule && creditTypeId == other.creditTypeId && scheduleItems == other.scheduleItems && recurringSchedule == other.recurringSchedule && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is InvoiceSchedule && creditTypeId == other.creditTypeId && recurringSchedule == other.recurringSchedule && scheduleItems == other.scheduleItems && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(creditTypeId, scheduleItems, recurringSchedule, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(creditTypeId, recurringSchedule, scheduleItems, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "InvoiceSchedule{creditTypeId=$creditTypeId, scheduleItems=$scheduleItems, recurringSchedule=$recurringSchedule, additionalProperties=$additionalProperties}"
+                "InvoiceSchedule{creditTypeId=$creditTypeId, recurringSchedule=$recurringSchedule, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
         }
 
         class RateType
@@ -1841,48 +1841,41 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Commit && type == other.type && rateType == other.rateType && name == other.name && productId == other.productId && accessSchedule == other.accessSchedule && invoiceSchedule == other.invoiceSchedule && amount == other.amount && description == other.description && rolloverFraction == other.rolloverFraction && priority == other.priority && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && netsuiteSalesOrderId == other.netsuiteSalesOrderId && customFields == other.customFields && temporaryId == other.temporaryId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Commit && productId == other.productId && type == other.type && accessSchedule == other.accessSchedule && amount == other.amount && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && customFields == other.customFields && description == other.description && invoiceSchedule == other.invoiceSchedule && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && priority == other.priority && rateType == other.rateType && rolloverFraction == other.rolloverFraction && temporaryId == other.temporaryId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(type, rateType, name, productId, accessSchedule, invoiceSchedule, amount, description, rolloverFraction, priority, applicableProductIds, applicableProductTags, netsuiteSalesOrderId, customFields, temporaryId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(productId, type, accessSchedule, amount, applicableProductIds, applicableProductTags, customFields, description, invoiceSchedule, name, netsuiteSalesOrderId, priority, rateType, rolloverFraction, temporaryId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Commit{type=$type, rateType=$rateType, name=$name, productId=$productId, accessSchedule=$accessSchedule, invoiceSchedule=$invoiceSchedule, amount=$amount, description=$description, rolloverFraction=$rolloverFraction, priority=$priority, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, netsuiteSalesOrderId=$netsuiteSalesOrderId, customFields=$customFields, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+            "Commit{productId=$productId, type=$type, accessSchedule=$accessSchedule, amount=$amount, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, rolloverFraction=$rolloverFraction, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
     class Credit
     @JsonCreator
     private constructor(
-        @JsonProperty("name") private val name: String?,
-        @JsonProperty("product_id") private val productId: String,
         @JsonProperty("access_schedule") private val accessSchedule: AccessSchedule,
-        @JsonProperty("description") private val description: String?,
+        @JsonProperty("product_id") private val productId: String,
         @JsonProperty("applicable_product_ids") private val applicableProductIds: List<String>?,
         @JsonProperty("applicable_product_tags") private val applicableProductTags: List<String>?,
+        @JsonProperty("custom_fields") private val customFields: CustomFields?,
+        @JsonProperty("description") private val description: String?,
+        @JsonProperty("name") private val name: String?,
         @JsonProperty("netsuite_sales_order_id") private val netsuiteSalesOrderId: String?,
         @JsonProperty("priority") private val priority: Double?,
-        @JsonProperty("custom_fields") private val customFields: CustomFields?,
         @JsonProperty("rate_type") private val rateType: RateType?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** displayed on invoices */
-        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
-
-        @JsonProperty("product_id") fun productId(): String = productId
-
         /** Schedule for distributing the credit to the customer. */
         @JsonProperty("access_schedule") fun accessSchedule(): AccessSchedule = accessSchedule
 
-        /** Used only in UI/API. It is not exposed to end customers. */
-        @JsonProperty("description")
-        fun description(): Optional<String> = Optional.ofNullable(description)
+        @JsonProperty("product_id") fun productId(): String = productId
 
         /**
          * Which products the credit applies to. If both applicable_product_ids and
@@ -1900,15 +1893,22 @@ constructor(
         fun applicableProductTags(): Optional<List<String>> =
             Optional.ofNullable(applicableProductTags)
 
+        @JsonProperty("custom_fields")
+        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+
+        /** Used only in UI/API. It is not exposed to end customers. */
+        @JsonProperty("description")
+        fun description(): Optional<String> = Optional.ofNullable(description)
+
+        /** displayed on invoices */
+        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
+
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_sales_order_id")
         fun netsuiteSalesOrderId(): Optional<String> = Optional.ofNullable(netsuiteSalesOrderId)
 
         /** If multiple credits are applicable, the one with the lower priority will apply first. */
         @JsonProperty("priority") fun priority(): Optional<Double> = Optional.ofNullable(priority)
-
-        @JsonProperty("custom_fields")
-        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
 
         @JsonProperty("rate_type")
         fun rateType(): Optional<RateType> = Optional.ofNullable(rateType)
@@ -1926,45 +1926,39 @@ constructor(
 
         class Builder {
 
-            private var name: String? = null
-            private var productId: String? = null
             private var accessSchedule: AccessSchedule? = null
-            private var description: String? = null
+            private var productId: String? = null
             private var applicableProductIds: MutableList<String>? = null
             private var applicableProductTags: MutableList<String>? = null
+            private var customFields: CustomFields? = null
+            private var description: String? = null
+            private var name: String? = null
             private var netsuiteSalesOrderId: String? = null
             private var priority: Double? = null
-            private var customFields: CustomFields? = null
             private var rateType: RateType? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(credit: Credit) = apply {
-                name = credit.name
-                productId = credit.productId
                 accessSchedule = credit.accessSchedule
-                description = credit.description
+                productId = credit.productId
                 applicableProductIds = credit.applicableProductIds?.toMutableList()
                 applicableProductTags = credit.applicableProductTags?.toMutableList()
+                customFields = credit.customFields
+                description = credit.description
+                name = credit.name
                 netsuiteSalesOrderId = credit.netsuiteSalesOrderId
                 priority = credit.priority
-                customFields = credit.customFields
                 rateType = credit.rateType
                 additionalProperties = credit.additionalProperties.toMutableMap()
             }
-
-            /** displayed on invoices */
-            fun name(name: String) = apply { this.name = name }
-
-            fun productId(productId: String) = apply { this.productId = productId }
 
             /** Schedule for distributing the credit to the customer. */
             fun accessSchedule(accessSchedule: AccessSchedule) = apply {
                 this.accessSchedule = accessSchedule
             }
 
-            /** Used only in UI/API. It is not exposed to end customers. */
-            fun description(description: String) = apply { this.description = description }
+            fun productId(productId: String) = apply { this.productId = productId }
 
             /**
              * Which products the credit applies to. If both applicable_product_ids and
@@ -2000,6 +1994,16 @@ constructor(
                     (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
             }
 
+            fun customFields(customFields: CustomFields) = apply {
+                this.customFields = customFields
+            }
+
+            /** Used only in UI/API. It is not exposed to end customers. */
+            fun description(description: String) = apply { this.description = description }
+
+            /** displayed on invoices */
+            fun name(name: String) = apply { this.name = name }
+
             /** This field's availability is dependent on your client's configuration. */
             fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
@@ -2009,10 +2013,6 @@ constructor(
              * If multiple credits are applicable, the one with the lower priority will apply first.
              */
             fun priority(priority: Double) = apply { this.priority = priority }
-
-            fun customFields(customFields: CustomFields) = apply {
-                this.customFields = customFields
-            }
 
             fun rateType(rateType: RateType) = apply { this.rateType = rateType }
 
@@ -2037,15 +2037,15 @@ constructor(
 
             fun build(): Credit =
                 Credit(
-                    name,
-                    checkNotNull(productId) { "`productId` is required but was not set" },
                     checkNotNull(accessSchedule) { "`accessSchedule` is required but was not set" },
-                    description,
+                    checkNotNull(productId) { "`productId` is required but was not set" },
                     applicableProductIds?.toImmutable(),
                     applicableProductTags?.toImmutable(),
+                    customFields,
+                    description,
+                    name,
                     netsuiteSalesOrderId,
                     priority,
-                    customFields,
                     rateType,
                     additionalProperties.toImmutable(),
                 )
@@ -2056,17 +2056,17 @@ constructor(
         class AccessSchedule
         @JsonCreator
         private constructor(
-            @JsonProperty("credit_type_id") private val creditTypeId: String?,
             @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>,
+            @JsonProperty("credit_type_id") private val creditTypeId: String?,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem> = scheduleItems
+
             /** Defaults to USD (cents) if not passed */
             @JsonProperty("credit_type_id")
             fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
-
-            @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem> = scheduleItems
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -2081,19 +2081,16 @@ constructor(
 
             class Builder {
 
-                private var creditTypeId: String? = null
                 private var scheduleItems: MutableList<ScheduleItem>? = null
+                private var creditTypeId: String? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(accessSchedule: AccessSchedule) = apply {
-                    creditTypeId = accessSchedule.creditTypeId
                     scheduleItems = accessSchedule.scheduleItems.toMutableList()
+                    creditTypeId = accessSchedule.creditTypeId
                     additionalProperties = accessSchedule.additionalProperties.toMutableMap()
                 }
-
-                /** Defaults to USD (cents) if not passed */
-                fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
                 fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
                     this.scheduleItems = scheduleItems.toMutableList()
@@ -2102,6 +2099,9 @@ constructor(
                 fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
                     scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
                 }
+
+                /** Defaults to USD (cents) if not passed */
+                fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -2127,11 +2127,11 @@ constructor(
 
                 fun build(): AccessSchedule =
                     AccessSchedule(
-                        creditTypeId,
                         checkNotNull(scheduleItems) {
                                 "`scheduleItems` is required but was not set"
                             }
                             .toImmutable(),
+                        creditTypeId,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -2141,19 +2141,19 @@ constructor(
             @JsonCreator
             private constructor(
                 @JsonProperty("amount") private val amount: Double,
-                @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
                 @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
+                @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
                 @JsonProperty("amount") fun amount(): Double = amount
 
-                /** RFC 3339 timestamp (inclusive) */
-                @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
-
                 /** RFC 3339 timestamp (exclusive) */
                 @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
+
+                /** RFC 3339 timestamp (inclusive) */
+                @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -2169,28 +2169,28 @@ constructor(
                 class Builder {
 
                     private var amount: Double? = null
-                    private var startingAt: OffsetDateTime? = null
                     private var endingBefore: OffsetDateTime? = null
+                    private var startingAt: OffsetDateTime? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(scheduleItem: ScheduleItem) = apply {
                         amount = scheduleItem.amount
-                        startingAt = scheduleItem.startingAt
                         endingBefore = scheduleItem.endingBefore
+                        startingAt = scheduleItem.startingAt
                         additionalProperties = scheduleItem.additionalProperties.toMutableMap()
                     }
 
                     fun amount(amount: Double) = apply { this.amount = amount }
 
-                    /** RFC 3339 timestamp (inclusive) */
-                    fun startingAt(startingAt: OffsetDateTime) = apply {
-                        this.startingAt = startingAt
-                    }
-
                     /** RFC 3339 timestamp (exclusive) */
                     fun endingBefore(endingBefore: OffsetDateTime) = apply {
                         this.endingBefore = endingBefore
+                    }
+
+                    /** RFC 3339 timestamp (inclusive) */
+                    fun startingAt(startingAt: OffsetDateTime) = apply {
+                        this.startingAt = startingAt
                     }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -2218,10 +2218,10 @@ constructor(
                     fun build(): ScheduleItem =
                         ScheduleItem(
                             checkNotNull(amount) { "`amount` is required but was not set" },
-                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                             checkNotNull(endingBefore) {
                                 "`endingBefore` is required but was not set"
                             },
+                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -2231,17 +2231,17 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is ScheduleItem && amount == other.amount && startingAt == other.startingAt && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is ScheduleItem && amount == other.amount && endingBefore == other.endingBefore && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(amount, startingAt, endingBefore, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(amount, endingBefore, startingAt, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "ScheduleItem{amount=$amount, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
+                    "ScheduleItem{amount=$amount, endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
             }
 
             override fun equals(other: Any?): Boolean {
@@ -2249,17 +2249,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is AccessSchedule && creditTypeId == other.creditTypeId && scheduleItems == other.scheduleItems && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is AccessSchedule && scheduleItems == other.scheduleItems && creditTypeId == other.creditTypeId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(creditTypeId, scheduleItems, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(scheduleItems, creditTypeId, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AccessSchedule{creditTypeId=$creditTypeId, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
+                "AccessSchedule{scheduleItems=$scheduleItems, creditTypeId=$creditTypeId, additionalProperties=$additionalProperties}"
         }
 
         @NoAutoDetect
@@ -2406,17 +2406,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Credit && name == other.name && productId == other.productId && accessSchedule == other.accessSchedule && description == other.description && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && netsuiteSalesOrderId == other.netsuiteSalesOrderId && priority == other.priority && customFields == other.customFields && rateType == other.rateType && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Credit && accessSchedule == other.accessSchedule && productId == other.productId && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && customFields == other.customFields && description == other.description && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && priority == other.priority && rateType == other.rateType && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(name, productId, accessSchedule, description, applicableProductIds, applicableProductTags, netsuiteSalesOrderId, priority, customFields, rateType, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(accessSchedule, productId, applicableProductIds, applicableProductTags, customFields, description, name, netsuiteSalesOrderId, priority, rateType, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Credit{name=$name, productId=$productId, accessSchedule=$accessSchedule, description=$description, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, customFields=$customFields, rateType=$rateType, additionalProperties=$additionalProperties}"
+            "Credit{accessSchedule=$accessSchedule, productId=$productId, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -2491,8 +2491,8 @@ constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("product_id") private val productId: String,
-        @JsonProperty("name") private val name: String?,
         @JsonProperty("schedule") private val schedule: Schedule,
+        @JsonProperty("name") private val name: String?,
         @JsonProperty("netsuite_sales_order_id") private val netsuiteSalesOrderId: String?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
@@ -2500,11 +2500,11 @@ constructor(
 
         @JsonProperty("product_id") fun productId(): String = productId
 
-        /** displayed on invoices */
-        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
-
         /** Must provide either schedule_items or recurring_schedule. */
         @JsonProperty("schedule") fun schedule(): Schedule = schedule
+
+        /** displayed on invoices */
+        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_sales_order_id")
@@ -2524,27 +2524,27 @@ constructor(
         class Builder {
 
             private var productId: String? = null
-            private var name: String? = null
             private var schedule: Schedule? = null
+            private var name: String? = null
             private var netsuiteSalesOrderId: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(discount: Discount) = apply {
                 productId = discount.productId
-                name = discount.name
                 schedule = discount.schedule
+                name = discount.name
                 netsuiteSalesOrderId = discount.netsuiteSalesOrderId
                 additionalProperties = discount.additionalProperties.toMutableMap()
             }
 
             fun productId(productId: String) = apply { this.productId = productId }
 
-            /** displayed on invoices */
-            fun name(name: String) = apply { this.name = name }
-
             /** Must provide either schedule_items or recurring_schedule. */
             fun schedule(schedule: Schedule) = apply { this.schedule = schedule }
+
+            /** displayed on invoices */
+            fun name(name: String) = apply { this.name = name }
 
             /** This field's availability is dependent on your client's configuration. */
             fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
@@ -2573,8 +2573,8 @@ constructor(
             fun build(): Discount =
                 Discount(
                     checkNotNull(productId) { "`productId` is required but was not set" },
-                    name,
                     checkNotNull(schedule) { "`schedule` is required but was not set" },
+                    name,
                     netsuiteSalesOrderId,
                     additionalProperties.toImmutable(),
                 )
@@ -2586,8 +2586,8 @@ constructor(
         @JsonCreator
         private constructor(
             @JsonProperty("credit_type_id") private val creditTypeId: String?,
-            @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>?,
             @JsonProperty("recurring_schedule") private val recurringSchedule: RecurringSchedule?,
+            @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>?,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
@@ -2595,10 +2595,6 @@ constructor(
             /** Defaults to USD (cents) if not passed. */
             @JsonProperty("credit_type_id")
             fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
-
-            /** Either provide amount or provide both unit_price and quantity. */
-            @JsonProperty("schedule_items")
-            fun scheduleItems(): Optional<List<ScheduleItem>> = Optional.ofNullable(scheduleItems)
 
             /**
              * Enter the unit price and quantity for the charge or instead only send the amount. If
@@ -2608,6 +2604,10 @@ constructor(
             @JsonProperty("recurring_schedule")
             fun recurringSchedule(): Optional<RecurringSchedule> =
                 Optional.ofNullable(recurringSchedule)
+
+            /** Either provide amount or provide both unit_price and quantity. */
+            @JsonProperty("schedule_items")
+            fun scheduleItems(): Optional<List<ScheduleItem>> = Optional.ofNullable(scheduleItems)
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -2623,20 +2623,29 @@ constructor(
             class Builder {
 
                 private var creditTypeId: String? = null
-                private var scheduleItems: MutableList<ScheduleItem>? = null
                 private var recurringSchedule: RecurringSchedule? = null
+                private var scheduleItems: MutableList<ScheduleItem>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(schedule: Schedule) = apply {
                     creditTypeId = schedule.creditTypeId
-                    scheduleItems = schedule.scheduleItems?.toMutableList()
                     recurringSchedule = schedule.recurringSchedule
+                    scheduleItems = schedule.scheduleItems?.toMutableList()
                     additionalProperties = schedule.additionalProperties.toMutableMap()
                 }
 
                 /** Defaults to USD (cents) if not passed. */
                 fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+
+                /**
+                 * Enter the unit price and quantity for the charge or instead only send the amount.
+                 * If amount is sent, the unit price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                fun recurringSchedule(recurringSchedule: RecurringSchedule) = apply {
+                    this.recurringSchedule = recurringSchedule
+                }
 
                 /** Either provide amount or provide both unit_price and quantity. */
                 fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
@@ -2646,15 +2655,6 @@ constructor(
                 /** Either provide amount or provide both unit_price and quantity. */
                 fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
                     scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
-                }
-
-                /**
-                 * Enter the unit price and quantity for the charge or instead only send the amount.
-                 * If amount is sent, the unit price is assumed to be the amount and quantity is
-                 * inferred to be 1.
-                 */
-                fun recurringSchedule(recurringSchedule: RecurringSchedule) = apply {
-                    this.recurringSchedule = recurringSchedule
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -2682,8 +2682,8 @@ constructor(
                 fun build(): Schedule =
                     Schedule(
                         creditTypeId,
-                        scheduleItems?.toImmutable(),
                         recurringSchedule,
+                        scheduleItems?.toImmutable(),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -2697,32 +2697,35 @@ constructor(
             class RecurringSchedule
             @JsonCreator
             private constructor(
-                @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
-                @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
-                @JsonProperty("frequency") private val frequency: Frequency,
-                @JsonProperty("unit_price") private val unitPrice: Double?,
-                @JsonProperty("quantity") private val quantity: Double?,
-                @JsonProperty("amount") private val amount: Double?,
                 @JsonProperty("amount_distribution")
                 private val amountDistribution: AmountDistribution,
+                @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
+                @JsonProperty("frequency") private val frequency: Frequency,
+                @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
+                @JsonProperty("amount") private val amount: Double?,
+                @JsonProperty("quantity") private val quantity: Double?,
+                @JsonProperty("unit_price") private val unitPrice: Double?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /** RFC 3339 timestamp (inclusive). */
-                @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+                @JsonProperty("amount_distribution")
+                fun amountDistribution(): AmountDistribution = amountDistribution
 
                 /** RFC 3339 timestamp (exclusive). */
                 @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
 
                 @JsonProperty("frequency") fun frequency(): Frequency = frequency
 
+                /** RFC 3339 timestamp (inclusive). */
+                @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+
                 /**
-                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
-                 * and must be specified with quantity. If specified amount cannot be provided.
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
                  */
-                @JsonProperty("unit_price")
-                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
+                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
 
                 /**
                  * Quantity for the charge. Will be multiplied by unit_price to determine the amount
@@ -2732,14 +2735,11 @@ constructor(
                 fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
                 /**
-                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                 * amount is sent, the unit_price is assumed to be the amount and quantity is
-                 * inferred to be 1.
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
                  */
-                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
-
-                @JsonProperty("amount_distribution")
-                fun amountDistribution(): AmountDistribution = amountDistribution
+                @JsonProperty("unit_price")
+                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -2754,30 +2754,29 @@ constructor(
 
                 class Builder {
 
-                    private var startingAt: OffsetDateTime? = null
+                    private var amountDistribution: AmountDistribution? = null
                     private var endingBefore: OffsetDateTime? = null
                     private var frequency: Frequency? = null
-                    private var unitPrice: Double? = null
-                    private var quantity: Double? = null
+                    private var startingAt: OffsetDateTime? = null
                     private var amount: Double? = null
-                    private var amountDistribution: AmountDistribution? = null
+                    private var quantity: Double? = null
+                    private var unitPrice: Double? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(recurringSchedule: RecurringSchedule) = apply {
-                        startingAt = recurringSchedule.startingAt
+                        amountDistribution = recurringSchedule.amountDistribution
                         endingBefore = recurringSchedule.endingBefore
                         frequency = recurringSchedule.frequency
-                        unitPrice = recurringSchedule.unitPrice
-                        quantity = recurringSchedule.quantity
+                        startingAt = recurringSchedule.startingAt
                         amount = recurringSchedule.amount
-                        amountDistribution = recurringSchedule.amountDistribution
+                        quantity = recurringSchedule.quantity
+                        unitPrice = recurringSchedule.unitPrice
                         additionalProperties = recurringSchedule.additionalProperties.toMutableMap()
                     }
 
-                    /** RFC 3339 timestamp (inclusive). */
-                    fun startingAt(startingAt: OffsetDateTime) = apply {
-                        this.startingAt = startingAt
+                    fun amountDistribution(amountDistribution: AmountDistribution) = apply {
+                        this.amountDistribution = amountDistribution
                     }
 
                     /** RFC 3339 timestamp (exclusive). */
@@ -2787,12 +2786,17 @@ constructor(
 
                     fun frequency(frequency: Frequency) = apply { this.frequency = frequency }
 
+                    /** RFC 3339 timestamp (inclusive). */
+                    fun startingAt(startingAt: OffsetDateTime) = apply {
+                        this.startingAt = startingAt
+                    }
+
                     /**
-                     * Unit price for the charge. Will be multiplied by quantity to determine the
-                     * amount and must be specified with quantity. If specified amount cannot be
-                     * provided.
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
                      */
-                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+                    fun amount(amount: Double) = apply { this.amount = amount }
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
@@ -2802,15 +2806,11 @@ constructor(
                     fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
                     /**
-                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                     * amount is sent, the unit_price is assumed to be the amount and quantity is
-                     * inferred to be 1.
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
                      */
-                    fun amount(amount: Double) = apply { this.amount = amount }
-
-                    fun amountDistribution(amountDistribution: AmountDistribution) = apply {
-                        this.amountDistribution = amountDistribution
-                    }
+                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -2836,17 +2836,17 @@ constructor(
 
                     fun build(): RecurringSchedule =
                         RecurringSchedule(
-                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                            checkNotNull(amountDistribution) {
+                                "`amountDistribution` is required but was not set"
+                            },
                             checkNotNull(endingBefore) {
                                 "`endingBefore` is required but was not set"
                             },
                             checkNotNull(frequency) { "`frequency` is required but was not set" },
-                            unitPrice,
-                            quantity,
+                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                             amount,
-                            checkNotNull(amountDistribution) {
-                                "`amountDistribution` is required but was not set"
-                            },
+                            quantity,
+                            unitPrice,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -2993,37 +2993,40 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is RecurringSchedule && startingAt == other.startingAt && endingBefore == other.endingBefore && frequency == other.frequency && unitPrice == other.unitPrice && quantity == other.quantity && amount == other.amount && amountDistribution == other.amountDistribution && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is RecurringSchedule && amountDistribution == other.amountDistribution && endingBefore == other.endingBefore && frequency == other.frequency && startingAt == other.startingAt && amount == other.amount && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(startingAt, endingBefore, frequency, unitPrice, quantity, amount, amountDistribution, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(amountDistribution, endingBefore, frequency, startingAt, amount, quantity, unitPrice, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "RecurringSchedule{startingAt=$startingAt, endingBefore=$endingBefore, frequency=$frequency, unitPrice=$unitPrice, quantity=$quantity, amount=$amount, amountDistribution=$amountDistribution, additionalProperties=$additionalProperties}"
+                    "RecurringSchedule{amountDistribution=$amountDistribution, endingBefore=$endingBefore, frequency=$frequency, startingAt=$startingAt, amount=$amount, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class ScheduleItem
             @JsonCreator
             private constructor(
-                @JsonProperty("unit_price") private val unitPrice: Double?,
-                @JsonProperty("quantity") private val quantity: Double?,
-                @JsonProperty("amount") private val amount: Double?,
                 @JsonProperty("timestamp") private val timestamp: OffsetDateTime,
+                @JsonProperty("amount") private val amount: Double?,
+                @JsonProperty("quantity") private val quantity: Double?,
+                @JsonProperty("unit_price") private val unitPrice: Double?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                /** timestamp of the scheduled event */
+                @JsonProperty("timestamp") fun timestamp(): OffsetDateTime = timestamp
+
                 /**
-                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
-                 * and must be specified with quantity. If specified amount cannot be provided.
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
                  */
-                @JsonProperty("unit_price")
-                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
+                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
 
                 /**
                  * Quantity for the charge. Will be multiplied by unit_price to determine the amount
@@ -3033,14 +3036,11 @@ constructor(
                 fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
                 /**
-                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                 * amount is sent, the unit_price is assumed to be the amount and quantity is
-                 * inferred to be 1.
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
                  */
-                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
-
-                /** timestamp of the scheduled event */
-                @JsonProperty("timestamp") fun timestamp(): OffsetDateTime = timestamp
+                @JsonProperty("unit_price")
+                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -3055,27 +3055,30 @@ constructor(
 
                 class Builder {
 
-                    private var unitPrice: Double? = null
-                    private var quantity: Double? = null
-                    private var amount: Double? = null
                     private var timestamp: OffsetDateTime? = null
+                    private var amount: Double? = null
+                    private var quantity: Double? = null
+                    private var unitPrice: Double? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(scheduleItem: ScheduleItem) = apply {
-                        unitPrice = scheduleItem.unitPrice
-                        quantity = scheduleItem.quantity
-                        amount = scheduleItem.amount
                         timestamp = scheduleItem.timestamp
+                        amount = scheduleItem.amount
+                        quantity = scheduleItem.quantity
+                        unitPrice = scheduleItem.unitPrice
                         additionalProperties = scheduleItem.additionalProperties.toMutableMap()
                     }
 
+                    /** timestamp of the scheduled event */
+                    fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
+
                     /**
-                     * Unit price for the charge. Will be multiplied by quantity to determine the
-                     * amount and must be specified with quantity. If specified amount cannot be
-                     * provided.
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
                      */
-                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+                    fun amount(amount: Double) = apply { this.amount = amount }
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
@@ -3085,14 +3088,11 @@ constructor(
                     fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
                     /**
-                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                     * amount is sent, the unit_price is assumed to be the amount and quantity is
-                     * inferred to be 1.
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
                      */
-                    fun amount(amount: Double) = apply { this.amount = amount }
-
-                    /** timestamp of the scheduled event */
-                    fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
+                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -3118,10 +3118,10 @@ constructor(
 
                     fun build(): ScheduleItem =
                         ScheduleItem(
-                            unitPrice,
-                            quantity,
-                            amount,
                             checkNotNull(timestamp) { "`timestamp` is required but was not set" },
+                            amount,
+                            quantity,
+                            unitPrice,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -3131,17 +3131,17 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is ScheduleItem && unitPrice == other.unitPrice && quantity == other.quantity && amount == other.amount && timestamp == other.timestamp && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is ScheduleItem && timestamp == other.timestamp && amount == other.amount && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(unitPrice, quantity, amount, timestamp, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(timestamp, amount, quantity, unitPrice, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "ScheduleItem{unitPrice=$unitPrice, quantity=$quantity, amount=$amount, timestamp=$timestamp, additionalProperties=$additionalProperties}"
+                    "ScheduleItem{timestamp=$timestamp, amount=$amount, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
             }
 
             override fun equals(other: Any?): Boolean {
@@ -3149,17 +3149,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Schedule && creditTypeId == other.creditTypeId && scheduleItems == other.scheduleItems && recurringSchedule == other.recurringSchedule && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Schedule && creditTypeId == other.creditTypeId && recurringSchedule == other.recurringSchedule && scheduleItems == other.scheduleItems && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(creditTypeId, scheduleItems, recurringSchedule, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(creditTypeId, recurringSchedule, scheduleItems, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Schedule{creditTypeId=$creditTypeId, scheduleItems=$scheduleItems, recurringSchedule=$recurringSchedule, additionalProperties=$additionalProperties}"
+                "Schedule{creditTypeId=$creditTypeId, recurringSchedule=$recurringSchedule, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -3167,17 +3167,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Discount && productId == other.productId && name == other.name && schedule == other.schedule && netsuiteSalesOrderId == other.netsuiteSalesOrderId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Discount && productId == other.productId && schedule == other.schedule && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(productId, name, schedule, netsuiteSalesOrderId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(productId, schedule, name, netsuiteSalesOrderId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Discount{productId=$productId, name=$name, schedule=$schedule, netsuiteSalesOrderId=$netsuiteSalesOrderId, additionalProperties=$additionalProperties}"
+            "Discount{productId=$productId, schedule=$schedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -3185,56 +3185,25 @@ constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
+        @JsonProperty("applicable_product_tags") private val applicableProductTags: List<String>?,
         @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
         @JsonProperty("entitled") private val entitled: Boolean?,
-        @JsonProperty("type") private val type: Type?,
+        @JsonProperty("is_commit_specific") private val isCommitSpecific: Boolean?,
         @JsonProperty("multiplier") private val multiplier: Double?,
-        @JsonProperty("priority") private val priority: Double?,
-        @JsonProperty("overwrite_rate") private val overwriteRate: OverwriteRate?,
-        @JsonProperty("product_id") private val productId: String?,
-        @JsonProperty("applicable_product_tags") private val applicableProductTags: List<String>?,
         @JsonProperty("override_specifiers")
         private val overrideSpecifiers: List<OverrideSpecifier>?,
-        @JsonProperty("tiers") private val tiers: List<Tier>?,
-        @JsonProperty("is_commit_specific") private val isCommitSpecific: Boolean?,
+        @JsonProperty("overwrite_rate") private val overwriteRate: OverwriteRate?,
+        @JsonProperty("priority") private val priority: Double?,
+        @JsonProperty("product_id") private val productId: String?,
         @JsonProperty("target") private val target: Target?,
+        @JsonProperty("tiers") private val tiers: List<Tier>?,
+        @JsonProperty("type") private val type: Type?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** RFC 3339 timestamp indicating when the override will start applying (inclusive) */
         @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
-
-        /** RFC 3339 timestamp indicating when the override will stop applying (exclusive) */
-        @JsonProperty("ending_before")
-        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
-
-        @JsonProperty("entitled") fun entitled(): Optional<Boolean> = Optional.ofNullable(entitled)
-
-        /** Overwrites are prioritized over multipliers and tiered overrides. */
-        @JsonProperty("type") fun type(): Optional<Type> = Optional.ofNullable(type)
-
-        /** Required for MULTIPLIER type. Must be >=0. */
-        @JsonProperty("multiplier")
-        fun multiplier(): Optional<Double> = Optional.ofNullable(multiplier)
-
-        /**
-         * Required for EXPLICIT multiplier prioritization scheme and all TIERED overrides. Under
-         * EXPLICIT prioritization, overwrites are prioritized first, and then tiered and multiplier
-         * overrides are prioritized by their priority value (lowest first). Must be > 0.
-         */
-        @JsonProperty("priority") fun priority(): Optional<Double> = Optional.ofNullable(priority)
-
-        /** Required for OVERWRITE type. */
-        @JsonProperty("overwrite_rate")
-        fun overwriteRate(): Optional<OverwriteRate> = Optional.ofNullable(overwriteRate)
-
-        /**
-         * ID of the product whose rate is being overridden. Cannot be used in conjunction with
-         * override_specifiers.
-         */
-        @JsonProperty("product_id")
-        fun productId(): Optional<String> = Optional.ofNullable(productId)
 
         /**
          * tags identifying products whose rates are being overridden. Cannot be used in conjunction
@@ -3244,16 +3213,11 @@ constructor(
         fun applicableProductTags(): Optional<List<String>> =
             Optional.ofNullable(applicableProductTags)
 
-        /**
-         * Cannot be used in conjunction with product_id or applicable_product_tags. If provided,
-         * the override will apply to all products with the specified specifiers.
-         */
-        @JsonProperty("override_specifiers")
-        fun overrideSpecifiers(): Optional<List<OverrideSpecifier>> =
-            Optional.ofNullable(overrideSpecifiers)
+        /** RFC 3339 timestamp indicating when the override will stop applying (exclusive) */
+        @JsonProperty("ending_before")
+        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
-        /** Required for TIERED type. Must have at least one tier. */
-        @JsonProperty("tiers") fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers)
+        @JsonProperty("entitled") fun entitled(): Optional<Boolean> = Optional.ofNullable(entitled)
 
         /**
          * Indicates whether the override should only apply to commits. Defaults to `false`. If
@@ -3264,11 +3228,47 @@ constructor(
         @JsonProperty("is_commit_specific")
         fun isCommitSpecific(): Optional<Boolean> = Optional.ofNullable(isCommitSpecific)
 
+        /** Required for MULTIPLIER type. Must be >=0. */
+        @JsonProperty("multiplier")
+        fun multiplier(): Optional<Double> = Optional.ofNullable(multiplier)
+
+        /**
+         * Cannot be used in conjunction with product_id or applicable_product_tags. If provided,
+         * the override will apply to all products with the specified specifiers.
+         */
+        @JsonProperty("override_specifiers")
+        fun overrideSpecifiers(): Optional<List<OverrideSpecifier>> =
+            Optional.ofNullable(overrideSpecifiers)
+
+        /** Required for OVERWRITE type. */
+        @JsonProperty("overwrite_rate")
+        fun overwriteRate(): Optional<OverwriteRate> = Optional.ofNullable(overwriteRate)
+
+        /**
+         * Required for EXPLICIT multiplier prioritization scheme and all TIERED overrides. Under
+         * EXPLICIT prioritization, overwrites are prioritized first, and then tiered and multiplier
+         * overrides are prioritized by their priority value (lowest first). Must be > 0.
+         */
+        @JsonProperty("priority") fun priority(): Optional<Double> = Optional.ofNullable(priority)
+
+        /**
+         * ID of the product whose rate is being overridden. Cannot be used in conjunction with
+         * override_specifiers.
+         */
+        @JsonProperty("product_id")
+        fun productId(): Optional<String> = Optional.ofNullable(productId)
+
         /**
          * Indicates whether the override applies to commit rates or list rates. Can only be used
          * for overrides that have `is_commit_specific` set to `true`. Defaults to `"LIST_RATE"`.
          */
         @JsonProperty("target") fun target(): Optional<Target> = Optional.ofNullable(target)
+
+        /** Required for TIERED type. Must have at least one tier. */
+        @JsonProperty("tiers") fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers)
+
+        /** Overwrites are prioritized over multipliers and tiered overrides. */
+        @JsonProperty("type") fun type(): Optional<Type> = Optional.ofNullable(type)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -3284,72 +3284,40 @@ constructor(
         class Builder {
 
             private var startingAt: OffsetDateTime? = null
+            private var applicableProductTags: MutableList<String>? = null
             private var endingBefore: OffsetDateTime? = null
             private var entitled: Boolean? = null
-            private var type: Type? = null
-            private var multiplier: Double? = null
-            private var priority: Double? = null
-            private var overwriteRate: OverwriteRate? = null
-            private var productId: String? = null
-            private var applicableProductTags: MutableList<String>? = null
-            private var overrideSpecifiers: MutableList<OverrideSpecifier>? = null
-            private var tiers: MutableList<Tier>? = null
             private var isCommitSpecific: Boolean? = null
+            private var multiplier: Double? = null
+            private var overrideSpecifiers: MutableList<OverrideSpecifier>? = null
+            private var overwriteRate: OverwriteRate? = null
+            private var priority: Double? = null
+            private var productId: String? = null
             private var target: Target? = null
+            private var tiers: MutableList<Tier>? = null
+            private var type: Type? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(override: Override) = apply {
                 startingAt = override.startingAt
+                applicableProductTags = override.applicableProductTags?.toMutableList()
                 endingBefore = override.endingBefore
                 entitled = override.entitled
-                type = override.type
-                multiplier = override.multiplier
-                priority = override.priority
-                overwriteRate = override.overwriteRate
-                productId = override.productId
-                applicableProductTags = override.applicableProductTags?.toMutableList()
-                overrideSpecifiers = override.overrideSpecifiers?.toMutableList()
-                tiers = override.tiers?.toMutableList()
                 isCommitSpecific = override.isCommitSpecific
+                multiplier = override.multiplier
+                overrideSpecifiers = override.overrideSpecifiers?.toMutableList()
+                overwriteRate = override.overwriteRate
+                priority = override.priority
+                productId = override.productId
                 target = override.target
+                tiers = override.tiers?.toMutableList()
+                type = override.type
                 additionalProperties = override.additionalProperties.toMutableMap()
             }
 
             /** RFC 3339 timestamp indicating when the override will start applying (inclusive) */
             fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
-
-            /** RFC 3339 timestamp indicating when the override will stop applying (exclusive) */
-            fun endingBefore(endingBefore: OffsetDateTime) = apply {
-                this.endingBefore = endingBefore
-            }
-
-            fun entitled(entitled: Boolean) = apply { this.entitled = entitled }
-
-            /** Overwrites are prioritized over multipliers and tiered overrides. */
-            fun type(type: Type) = apply { this.type = type }
-
-            /** Required for MULTIPLIER type. Must be >=0. */
-            fun multiplier(multiplier: Double) = apply { this.multiplier = multiplier }
-
-            /**
-             * Required for EXPLICIT multiplier prioritization scheme and all TIERED overrides.
-             * Under EXPLICIT prioritization, overwrites are prioritized first, and then tiered and
-             * multiplier overrides are prioritized by their priority value (lowest first). Must
-             * be > 0.
-             */
-            fun priority(priority: Double) = apply { this.priority = priority }
-
-            /** Required for OVERWRITE type. */
-            fun overwriteRate(overwriteRate: OverwriteRate) = apply {
-                this.overwriteRate = overwriteRate
-            }
-
-            /**
-             * ID of the product whose rate is being overridden. Cannot be used in conjunction with
-             * override_specifiers.
-             */
-            fun productId(productId: String) = apply { this.productId = productId }
 
             /**
              * tags identifying products whose rates are being overridden. Cannot be used in
@@ -3368,6 +3336,26 @@ constructor(
                     (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
             }
 
+            /** RFC 3339 timestamp indicating when the override will stop applying (exclusive) */
+            fun endingBefore(endingBefore: OffsetDateTime) = apply {
+                this.endingBefore = endingBefore
+            }
+
+            fun entitled(entitled: Boolean) = apply { this.entitled = entitled }
+
+            /**
+             * Indicates whether the override should only apply to commits. Defaults to `false`. If
+             * `true`, you can specify relevant commits in `override_specifiers` by passing
+             * `commit_ids`. if you do not specify `commit_ids`, then the override will apply when
+             * consuming any prepaid or postpaid commit.
+             */
+            fun isCommitSpecific(isCommitSpecific: Boolean) = apply {
+                this.isCommitSpecific = isCommitSpecific
+            }
+
+            /** Required for MULTIPLIER type. Must be >=0. */
+            fun multiplier(multiplier: Double) = apply { this.multiplier = multiplier }
+
             /**
              * Cannot be used in conjunction with product_id or applicable_product_tags. If
              * provided, the override will apply to all products with the specified specifiers.
@@ -3385,6 +3373,32 @@ constructor(
                     (overrideSpecifiers ?: mutableListOf()).apply { add(overrideSpecifier) }
             }
 
+            /** Required for OVERWRITE type. */
+            fun overwriteRate(overwriteRate: OverwriteRate) = apply {
+                this.overwriteRate = overwriteRate
+            }
+
+            /**
+             * Required for EXPLICIT multiplier prioritization scheme and all TIERED overrides.
+             * Under EXPLICIT prioritization, overwrites are prioritized first, and then tiered and
+             * multiplier overrides are prioritized by their priority value (lowest first). Must
+             * be > 0.
+             */
+            fun priority(priority: Double) = apply { this.priority = priority }
+
+            /**
+             * ID of the product whose rate is being overridden. Cannot be used in conjunction with
+             * override_specifiers.
+             */
+            fun productId(productId: String) = apply { this.productId = productId }
+
+            /**
+             * Indicates whether the override applies to commit rates or list rates. Can only be
+             * used for overrides that have `is_commit_specific` set to `true`. Defaults to
+             * `"LIST_RATE"`.
+             */
+            fun target(target: Target) = apply { this.target = target }
+
             /** Required for TIERED type. Must have at least one tier. */
             fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
 
@@ -3393,22 +3407,8 @@ constructor(
                 tiers = (tiers ?: mutableListOf()).apply { add(tier) }
             }
 
-            /**
-             * Indicates whether the override should only apply to commits. Defaults to `false`. If
-             * `true`, you can specify relevant commits in `override_specifiers` by passing
-             * `commit_ids`. if you do not specify `commit_ids`, then the override will apply when
-             * consuming any prepaid or postpaid commit.
-             */
-            fun isCommitSpecific(isCommitSpecific: Boolean) = apply {
-                this.isCommitSpecific = isCommitSpecific
-            }
-
-            /**
-             * Indicates whether the override applies to commit rates or list rates. Can only be
-             * used for overrides that have `is_commit_specific` set to `true`. Defaults to
-             * `"LIST_RATE"`.
-             */
-            fun target(target: Target) = apply { this.target = target }
+            /** Overwrites are prioritized over multipliers and tiered overrides. */
+            fun type(type: Type) = apply { this.type = type }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -3432,18 +3432,18 @@ constructor(
             fun build(): Override =
                 Override(
                     checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                    applicableProductTags?.toImmutable(),
                     endingBefore,
                     entitled,
-                    type,
-                    multiplier,
-                    priority,
-                    overwriteRate,
-                    productId,
-                    applicableProductTags?.toImmutable(),
-                    overrideSpecifiers?.toImmutable(),
-                    tiers?.toImmutable(),
                     isCommitSpecific,
+                    multiplier,
+                    overrideSpecifiers?.toImmutable(),
+                    overwriteRate,
+                    priority,
+                    productId,
                     target,
+                    tiers?.toImmutable(),
+                    type,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -3453,12 +3453,12 @@ constructor(
         @JsonCreator
         private constructor(
             @JsonProperty("commit_ids") private val commitIds: List<String>?,
-            @JsonProperty("product_id") private val productId: String?,
-            @JsonProperty("product_tags") private val productTags: List<String>?,
-            @JsonProperty("pricing_group_values")
-            private val pricingGroupValues: PricingGroupValues?,
             @JsonProperty("presentation_group_values")
             private val presentationGroupValues: PresentationGroupValues?,
+            @JsonProperty("pricing_group_values")
+            private val pricingGroupValues: PricingGroupValues?,
+            @JsonProperty("product_id") private val productId: String?,
+            @JsonProperty("product_tags") private val productTags: List<String>?,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
@@ -3472,15 +3472,13 @@ constructor(
             @JsonProperty("commit_ids")
             fun commitIds(): Optional<List<String>> = Optional.ofNullable(commitIds)
 
-            /** If provided, the override will only apply to the product with the specified ID. */
-            @JsonProperty("product_id")
-            fun productId(): Optional<String> = Optional.ofNullable(productId)
-
             /**
-             * If provided, the override will only apply to products with all the specified tags.
+             * A map of group names to values. The override will only apply to line items with the
+             * specified presentation group values. Can only be used for multiplier overrides.
              */
-            @JsonProperty("product_tags")
-            fun productTags(): Optional<List<String>> = Optional.ofNullable(productTags)
+            @JsonProperty("presentation_group_values")
+            fun presentationGroupValues(): Optional<PresentationGroupValues> =
+                Optional.ofNullable(presentationGroupValues)
 
             /**
              * A map of pricing group names to values. The override will only apply to products with
@@ -3490,13 +3488,15 @@ constructor(
             fun pricingGroupValues(): Optional<PricingGroupValues> =
                 Optional.ofNullable(pricingGroupValues)
 
+            /** If provided, the override will only apply to the product with the specified ID. */
+            @JsonProperty("product_id")
+            fun productId(): Optional<String> = Optional.ofNullable(productId)
+
             /**
-             * A map of group names to values. The override will only apply to line items with the
-             * specified presentation group values. Can only be used for multiplier overrides.
+             * If provided, the override will only apply to products with all the specified tags.
              */
-            @JsonProperty("presentation_group_values")
-            fun presentationGroupValues(): Optional<PresentationGroupValues> =
-                Optional.ofNullable(presentationGroupValues)
+            @JsonProperty("product_tags")
+            fun productTags(): Optional<List<String>> = Optional.ofNullable(productTags)
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -3512,19 +3512,19 @@ constructor(
             class Builder {
 
                 private var commitIds: MutableList<String>? = null
+                private var presentationGroupValues: PresentationGroupValues? = null
+                private var pricingGroupValues: PricingGroupValues? = null
                 private var productId: String? = null
                 private var productTags: MutableList<String>? = null
-                private var pricingGroupValues: PricingGroupValues? = null
-                private var presentationGroupValues: PresentationGroupValues? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(overrideSpecifier: OverrideSpecifier) = apply {
                     commitIds = overrideSpecifier.commitIds?.toMutableList()
+                    presentationGroupValues = overrideSpecifier.presentationGroupValues
+                    pricingGroupValues = overrideSpecifier.pricingGroupValues
                     productId = overrideSpecifier.productId
                     productTags = overrideSpecifier.productTags?.toMutableList()
-                    pricingGroupValues = overrideSpecifier.pricingGroupValues
-                    presentationGroupValues = overrideSpecifier.presentationGroupValues
                     additionalProperties = overrideSpecifier.additionalProperties.toMutableMap()
                 }
 
@@ -3549,6 +3549,24 @@ constructor(
                 }
 
                 /**
+                 * A map of group names to values. The override will only apply to line items with
+                 * the specified presentation group values. Can only be used for multiplier
+                 * overrides.
+                 */
+                fun presentationGroupValues(presentationGroupValues: PresentationGroupValues) =
+                    apply {
+                        this.presentationGroupValues = presentationGroupValues
+                    }
+
+                /**
+                 * A map of pricing group names to values. The override will only apply to products
+                 * with the specified pricing group values.
+                 */
+                fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
+                    this.pricingGroupValues = pricingGroupValues
+                }
+
+                /**
                  * If provided, the override will only apply to the product with the specified ID.
                  */
                 fun productId(productId: String) = apply { this.productId = productId }
@@ -3568,24 +3586,6 @@ constructor(
                 fun addProductTag(productTag: String) = apply {
                     productTags = (productTags ?: mutableListOf()).apply { add(productTag) }
                 }
-
-                /**
-                 * A map of pricing group names to values. The override will only apply to products
-                 * with the specified pricing group values.
-                 */
-                fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
-                    this.pricingGroupValues = pricingGroupValues
-                }
-
-                /**
-                 * A map of group names to values. The override will only apply to line items with
-                 * the specified presentation group values. Can only be used for multiplier
-                 * overrides.
-                 */
-                fun presentationGroupValues(presentationGroupValues: PresentationGroupValues) =
-                    apply {
-                        this.presentationGroupValues = presentationGroupValues
-                    }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -3612,10 +3612,10 @@ constructor(
                 fun build(): OverrideSpecifier =
                     OverrideSpecifier(
                         commitIds?.toImmutable(),
+                        presentationGroupValues,
+                        pricingGroupValues,
                         productId,
                         productTags?.toImmutable(),
-                        pricingGroupValues,
-                        presentationGroupValues,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -3779,17 +3779,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is OverrideSpecifier && commitIds == other.commitIds && productId == other.productId && productTags == other.productTags && pricingGroupValues == other.pricingGroupValues && presentationGroupValues == other.presentationGroupValues && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is OverrideSpecifier && commitIds == other.commitIds && presentationGroupValues == other.presentationGroupValues && pricingGroupValues == other.pricingGroupValues && productId == other.productId && productTags == other.productTags && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(commitIds, productId, productTags, pricingGroupValues, presentationGroupValues, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(commitIds, presentationGroupValues, pricingGroupValues, productId, productTags, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "OverrideSpecifier{commitIds=$commitIds, productId=$productId, productTags=$productTags, pricingGroupValues=$pricingGroupValues, presentationGroupValues=$presentationGroupValues, additionalProperties=$additionalProperties}"
+                "OverrideSpecifier{commitIds=$commitIds, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, additionalProperties=$additionalProperties}"
         }
 
         /** Required for OVERWRITE type. */
@@ -3798,17 +3798,33 @@ constructor(
         @JsonCreator
         private constructor(
             @JsonProperty("rate_type") private val rateType: RateType,
+            @JsonProperty("credit_type_id") private val creditTypeId: String?,
+            @JsonProperty("custom_rate") private val customRate: CustomRate?,
+            @JsonProperty("is_prorated") private val isProrated: Boolean?,
             @JsonProperty("price") private val price: Double?,
             @JsonProperty("quantity") private val quantity: Double?,
-            @JsonProperty("is_prorated") private val isProrated: Boolean?,
             @JsonProperty("tiers") private val tiers: List<Tier>?,
-            @JsonProperty("custom_rate") private val customRate: CustomRate?,
-            @JsonProperty("credit_type_id") private val creditTypeId: String?,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonProperty("rate_type") fun rateType(): RateType = rateType
+
+            @JsonProperty("credit_type_id")
+            fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
+
+            /**
+             * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
+             */
+            @JsonProperty("custom_rate")
+            fun customRate(): Optional<CustomRate> = Optional.ofNullable(customRate)
+
+            /**
+             * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
+             * to true.
+             */
+            @JsonProperty("is_prorated")
+            fun isProrated(): Optional<Boolean> = Optional.ofNullable(isProrated)
 
             /**
              * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this
@@ -3820,24 +3836,8 @@ constructor(
             @JsonProperty("quantity")
             fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
-            /**
-             * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
-             * to true.
-             */
-            @JsonProperty("is_prorated")
-            fun isProrated(): Optional<Boolean> = Optional.ofNullable(isProrated)
-
             /** Only set for TIERED rate_type. */
             @JsonProperty("tiers") fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers)
-
-            /**
-             * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
-             */
-            @JsonProperty("custom_rate")
-            fun customRate(): Optional<CustomRate> = Optional.ofNullable(customRate)
-
-            @JsonProperty("credit_type_id")
-            fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -3853,27 +3853,41 @@ constructor(
             class Builder {
 
                 private var rateType: RateType? = null
+                private var creditTypeId: String? = null
+                private var customRate: CustomRate? = null
+                private var isProrated: Boolean? = null
                 private var price: Double? = null
                 private var quantity: Double? = null
-                private var isProrated: Boolean? = null
                 private var tiers: MutableList<Tier>? = null
-                private var customRate: CustomRate? = null
-                private var creditTypeId: String? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(overwriteRate: OverwriteRate) = apply {
                     rateType = overwriteRate.rateType
+                    creditTypeId = overwriteRate.creditTypeId
+                    customRate = overwriteRate.customRate
+                    isProrated = overwriteRate.isProrated
                     price = overwriteRate.price
                     quantity = overwriteRate.quantity
-                    isProrated = overwriteRate.isProrated
                     tiers = overwriteRate.tiers?.toMutableList()
-                    customRate = overwriteRate.customRate
-                    creditTypeId = overwriteRate.creditTypeId
                     additionalProperties = overwriteRate.additionalProperties.toMutableMap()
                 }
 
                 fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+
+                fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+
+                /**
+                 * Only set for CUSTOM rate_type. This field is interpreted by custom rate
+                 * processors.
+                 */
+                fun customRate(customRate: CustomRate) = apply { this.customRate = customRate }
+
+                /**
+                 * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be
+                 * set to true.
+                 */
+                fun isProrated(isProrated: Boolean) = apply { this.isProrated = isProrated }
 
                 /**
                  * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type,
@@ -3884,12 +3898,6 @@ constructor(
                 /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
                 fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
-                /**
-                 * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be
-                 * set to true.
-                 */
-                fun isProrated(isProrated: Boolean) = apply { this.isProrated = isProrated }
-
                 /** Only set for TIERED rate_type. */
                 fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
 
@@ -3897,14 +3905,6 @@ constructor(
                 fun addTier(tier: Tier) = apply {
                     tiers = (tiers ?: mutableListOf()).apply { add(tier) }
                 }
-
-                /**
-                 * Only set for CUSTOM rate_type. This field is interpreted by custom rate
-                 * processors.
-                 */
-                fun customRate(customRate: CustomRate) = apply { this.customRate = customRate }
-
-                fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -3931,12 +3931,12 @@ constructor(
                 fun build(): OverwriteRate =
                     OverwriteRate(
                         checkNotNull(rateType) { "`rateType` is required but was not set" },
+                        creditTypeId,
+                        customRate,
+                        isProrated,
                         price,
                         quantity,
-                        isProrated,
                         tiers?.toImmutable(),
-                        customRate,
-                        creditTypeId,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -4094,17 +4094,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is OverwriteRate && rateType == other.rateType && price == other.price && quantity == other.quantity && isProrated == other.isProrated && tiers == other.tiers && customRate == other.customRate && creditTypeId == other.creditTypeId && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is OverwriteRate && rateType == other.rateType && creditTypeId == other.creditTypeId && customRate == other.customRate && isProrated == other.isProrated && price == other.price && quantity == other.quantity && tiers == other.tiers && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(rateType, price, quantity, isProrated, tiers, customRate, creditTypeId, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(rateType, creditTypeId, customRate, isProrated, price, quantity, tiers, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "OverwriteRate{rateType=$rateType, price=$price, quantity=$quantity, isProrated=$isProrated, tiers=$tiers, customRate=$customRate, creditTypeId=$creditTypeId, additionalProperties=$additionalProperties}"
+                "OverwriteRate{rateType=$rateType, creditTypeId=$creditTypeId, customRate=$customRate, isProrated=$isProrated, price=$price, quantity=$quantity, tiers=$tiers, additionalProperties=$additionalProperties}"
         }
 
         class Target
@@ -4180,15 +4180,15 @@ constructor(
         class Tier
         @JsonCreator
         private constructor(
-            @JsonProperty("size") private val size: Double?,
             @JsonProperty("multiplier") private val multiplier: Double,
+            @JsonProperty("size") private val size: Double?,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            @JsonProperty("size") fun size(): Optional<Double> = Optional.ofNullable(size)
-
             @JsonProperty("multiplier") fun multiplier(): Double = multiplier
+
+            @JsonProperty("size") fun size(): Optional<Double> = Optional.ofNullable(size)
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -4203,20 +4203,20 @@ constructor(
 
             class Builder {
 
-                private var size: Double? = null
                 private var multiplier: Double? = null
+                private var size: Double? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(tier: Tier) = apply {
-                    size = tier.size
                     multiplier = tier.multiplier
+                    size = tier.size
                     additionalProperties = tier.additionalProperties.toMutableMap()
                 }
 
-                fun size(size: Double) = apply { this.size = size }
-
                 fun multiplier(multiplier: Double) = apply { this.multiplier = multiplier }
+
+                fun size(size: Double) = apply { this.size = size }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -4242,8 +4242,8 @@ constructor(
 
                 fun build(): Tier =
                     Tier(
-                        size,
                         checkNotNull(multiplier) { "`multiplier` is required but was not set" },
+                        size,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -4253,17 +4253,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Tier && size == other.size && multiplier == other.multiplier && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Tier && multiplier == other.multiplier && size == other.size && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(size, multiplier, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(multiplier, size, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Tier{size=$size, multiplier=$multiplier, additionalProperties=$additionalProperties}"
+                "Tier{multiplier=$multiplier, size=$size, additionalProperties=$additionalProperties}"
         }
 
         class Type
@@ -4334,42 +4334,41 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Override && startingAt == other.startingAt && endingBefore == other.endingBefore && entitled == other.entitled && type == other.type && multiplier == other.multiplier && priority == other.priority && overwriteRate == other.overwriteRate && productId == other.productId && applicableProductTags == other.applicableProductTags && overrideSpecifiers == other.overrideSpecifiers && tiers == other.tiers && isCommitSpecific == other.isCommitSpecific && target == other.target && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Override && startingAt == other.startingAt && applicableProductTags == other.applicableProductTags && endingBefore == other.endingBefore && entitled == other.entitled && isCommitSpecific == other.isCommitSpecific && multiplier == other.multiplier && overrideSpecifiers == other.overrideSpecifiers && overwriteRate == other.overwriteRate && priority == other.priority && productId == other.productId && target == other.target && tiers == other.tiers && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(startingAt, endingBefore, entitled, type, multiplier, priority, overwriteRate, productId, applicableProductTags, overrideSpecifiers, tiers, isCommitSpecific, target, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(startingAt, applicableProductTags, endingBefore, entitled, isCommitSpecific, multiplier, overrideSpecifiers, overwriteRate, priority, productId, target, tiers, type, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Override{startingAt=$startingAt, endingBefore=$endingBefore, entitled=$entitled, type=$type, multiplier=$multiplier, priority=$priority, overwriteRate=$overwriteRate, productId=$productId, applicableProductTags=$applicableProductTags, overrideSpecifiers=$overrideSpecifiers, tiers=$tiers, isCommitSpecific=$isCommitSpecific, target=$target, additionalProperties=$additionalProperties}"
+            "Override{startingAt=$startingAt, applicableProductTags=$applicableProductTags, endingBefore=$endingBefore, entitled=$entitled, isCommitSpecific=$isCommitSpecific, multiplier=$multiplier, overrideSpecifiers=$overrideSpecifiers, overwriteRate=$overwriteRate, priority=$priority, productId=$productId, target=$target, tiers=$tiers, type=$type, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
     class ProfessionalService
     @JsonCreator
     private constructor(
-        @JsonProperty("description") private val description: String?,
-        @JsonProperty("product_id") private val productId: String,
-        @JsonProperty("netsuite_sales_order_id") private val netsuiteSalesOrderId: String?,
-        @JsonProperty("unit_price") private val unitPrice: Double,
-        @JsonProperty("quantity") private val quantity: Double,
         @JsonProperty("max_amount") private val maxAmount: Double,
+        @JsonProperty("product_id") private val productId: String,
+        @JsonProperty("quantity") private val quantity: Double,
+        @JsonProperty("unit_price") private val unitPrice: Double,
         @JsonProperty("custom_fields") private val customFields: CustomFields?,
+        @JsonProperty("description") private val description: String?,
+        @JsonProperty("netsuite_sales_order_id") private val netsuiteSalesOrderId: String?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("description")
-        fun description(): Optional<String> = Optional.ofNullable(description)
+        /** Maximum amount for the term. */
+        @JsonProperty("max_amount") fun maxAmount(): Double = maxAmount
 
         @JsonProperty("product_id") fun productId(): String = productId
 
-        /** This field's availability is dependent on your client's configuration. */
-        @JsonProperty("netsuite_sales_order_id")
-        fun netsuiteSalesOrderId(): Optional<String> = Optional.ofNullable(netsuiteSalesOrderId)
+        /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
+        @JsonProperty("quantity") fun quantity(): Double = quantity
 
         /**
          * Unit price for the charge. Will be multiplied by quantity to determine the amount and
@@ -4377,14 +4376,15 @@ constructor(
          */
         @JsonProperty("unit_price") fun unitPrice(): Double = unitPrice
 
-        /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
-        @JsonProperty("quantity") fun quantity(): Double = quantity
-
-        /** Maximum amount for the term. */
-        @JsonProperty("max_amount") fun maxAmount(): Double = maxAmount
-
         @JsonProperty("custom_fields")
         fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+
+        @JsonProperty("description")
+        fun description(): Optional<String> = Optional.ofNullable(description)
+
+        /** This field's availability is dependent on your client's configuration. */
+        @JsonProperty("netsuite_sales_order_id")
+        fun netsuiteSalesOrderId(): Optional<String> = Optional.ofNullable(netsuiteSalesOrderId)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -4399,35 +4399,36 @@ constructor(
 
         class Builder {
 
-            private var description: String? = null
-            private var productId: String? = null
-            private var netsuiteSalesOrderId: String? = null
-            private var unitPrice: Double? = null
-            private var quantity: Double? = null
             private var maxAmount: Double? = null
+            private var productId: String? = null
+            private var quantity: Double? = null
+            private var unitPrice: Double? = null
             private var customFields: CustomFields? = null
+            private var description: String? = null
+            private var netsuiteSalesOrderId: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(professionalService: ProfessionalService) = apply {
-                description = professionalService.description
-                productId = professionalService.productId
-                netsuiteSalesOrderId = professionalService.netsuiteSalesOrderId
-                unitPrice = professionalService.unitPrice
-                quantity = professionalService.quantity
                 maxAmount = professionalService.maxAmount
+                productId = professionalService.productId
+                quantity = professionalService.quantity
+                unitPrice = professionalService.unitPrice
                 customFields = professionalService.customFields
+                description = professionalService.description
+                netsuiteSalesOrderId = professionalService.netsuiteSalesOrderId
                 additionalProperties = professionalService.additionalProperties.toMutableMap()
             }
 
-            fun description(description: String) = apply { this.description = description }
+            /** Maximum amount for the term. */
+            fun maxAmount(maxAmount: Double) = apply { this.maxAmount = maxAmount }
 
             fun productId(productId: String) = apply { this.productId = productId }
 
-            /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
-                this.netsuiteSalesOrderId = netsuiteSalesOrderId
-            }
+            /**
+             * Quantity for the charge. Will be multiplied by unit_price to determine the amount.
+             */
+            fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
             /**
              * Unit price for the charge. Will be multiplied by quantity to determine the amount and
@@ -4435,16 +4436,15 @@ constructor(
              */
             fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
 
-            /**
-             * Quantity for the charge. Will be multiplied by unit_price to determine the amount.
-             */
-            fun quantity(quantity: Double) = apply { this.quantity = quantity }
-
-            /** Maximum amount for the term. */
-            fun maxAmount(maxAmount: Double) = apply { this.maxAmount = maxAmount }
-
             fun customFields(customFields: CustomFields) = apply {
                 this.customFields = customFields
+            }
+
+            fun description(description: String) = apply { this.description = description }
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
+                this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -4468,13 +4468,13 @@ constructor(
 
             fun build(): ProfessionalService =
                 ProfessionalService(
-                    description,
-                    checkNotNull(productId) { "`productId` is required but was not set" },
-                    netsuiteSalesOrderId,
-                    checkNotNull(unitPrice) { "`unitPrice` is required but was not set" },
-                    checkNotNull(quantity) { "`quantity` is required but was not set" },
                     checkNotNull(maxAmount) { "`maxAmount` is required but was not set" },
+                    checkNotNull(productId) { "`productId` is required but was not set" },
+                    checkNotNull(quantity) { "`quantity` is required but was not set" },
+                    checkNotNull(unitPrice) { "`unitPrice` is required but was not set" },
                     customFields,
+                    description,
+                    netsuiteSalesOrderId,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -4554,17 +4554,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ProfessionalService && description == other.description && productId == other.productId && netsuiteSalesOrderId == other.netsuiteSalesOrderId && unitPrice == other.unitPrice && quantity == other.quantity && maxAmount == other.maxAmount && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ProfessionalService && maxAmount == other.maxAmount && productId == other.productId && quantity == other.quantity && unitPrice == other.unitPrice && customFields == other.customFields && description == other.description && netsuiteSalesOrderId == other.netsuiteSalesOrderId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(description, productId, netsuiteSalesOrderId, unitPrice, quantity, maxAmount, customFields, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(maxAmount, productId, quantity, unitPrice, customFields, description, netsuiteSalesOrderId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ProfessionalService{description=$description, productId=$productId, netsuiteSalesOrderId=$netsuiteSalesOrderId, unitPrice=$unitPrice, quantity=$quantity, maxAmount=$maxAmount, customFields=$customFields, additionalProperties=$additionalProperties}"
+            "ProfessionalService{maxAmount=$maxAmount, productId=$productId, quantity=$quantity, unitPrice=$unitPrice, customFields=$customFields, description=$description, netsuiteSalesOrderId=$netsuiteSalesOrderId, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -4572,25 +4572,20 @@ constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("reseller_type") private val resellerType: ResellerType,
-        @JsonProperty("fraction") private val fraction: Double?,
-        @JsonProperty("netsuite_reseller_id") private val netsuiteResellerId: String?,
         @JsonProperty("applicable_product_ids") private val applicableProductIds: List<String>?,
         @JsonProperty("applicable_product_tags") private val applicableProductTags: List<String>?,
-        @JsonProperty("starting_at") private val startingAt: OffsetDateTime?,
-        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
-        @JsonProperty("reseller_contract_value") private val resellerContractValue: Double?,
         @JsonProperty("aws_options") private val awsOptions: AwsOptions?,
+        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
+        @JsonProperty("fraction") private val fraction: Double?,
         @JsonProperty("gcp_options") private val gcpOptions: GcpOptions?,
+        @JsonProperty("netsuite_reseller_id") private val netsuiteResellerId: String?,
+        @JsonProperty("reseller_contract_value") private val resellerContractValue: Double?,
+        @JsonProperty("starting_at") private val startingAt: OffsetDateTime?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("reseller_type") fun resellerType(): ResellerType = resellerType
-
-        @JsonProperty("fraction") fun fraction(): Optional<Double> = Optional.ofNullable(fraction)
-
-        @JsonProperty("netsuite_reseller_id")
-        fun netsuiteResellerId(): Optional<String> = Optional.ofNullable(netsuiteResellerId)
 
         /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
         @JsonProperty("applicable_product_ids")
@@ -4602,21 +4597,26 @@ constructor(
         fun applicableProductTags(): Optional<List<String>> =
             Optional.ofNullable(applicableProductTags)
 
-        @JsonProperty("starting_at")
-        fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
+        @JsonProperty("aws_options")
+        fun awsOptions(): Optional<AwsOptions> = Optional.ofNullable(awsOptions)
 
         /** Use null to indicate that the existing end timestamp should be removed. */
         @JsonProperty("ending_before")
         fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
-        @JsonProperty("reseller_contract_value")
-        fun resellerContractValue(): Optional<Double> = Optional.ofNullable(resellerContractValue)
-
-        @JsonProperty("aws_options")
-        fun awsOptions(): Optional<AwsOptions> = Optional.ofNullable(awsOptions)
+        @JsonProperty("fraction") fun fraction(): Optional<Double> = Optional.ofNullable(fraction)
 
         @JsonProperty("gcp_options")
         fun gcpOptions(): Optional<GcpOptions> = Optional.ofNullable(gcpOptions)
+
+        @JsonProperty("netsuite_reseller_id")
+        fun netsuiteResellerId(): Optional<String> = Optional.ofNullable(netsuiteResellerId)
+
+        @JsonProperty("reseller_contract_value")
+        fun resellerContractValue(): Optional<Double> = Optional.ofNullable(resellerContractValue)
+
+        @JsonProperty("starting_at")
+        fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -4632,40 +4632,34 @@ constructor(
         class Builder {
 
             private var resellerType: ResellerType? = null
-            private var fraction: Double? = null
-            private var netsuiteResellerId: String? = null
             private var applicableProductIds: MutableList<String>? = null
             private var applicableProductTags: MutableList<String>? = null
-            private var startingAt: OffsetDateTime? = null
-            private var endingBefore: OffsetDateTime? = null
-            private var resellerContractValue: Double? = null
             private var awsOptions: AwsOptions? = null
+            private var endingBefore: OffsetDateTime? = null
+            private var fraction: Double? = null
             private var gcpOptions: GcpOptions? = null
+            private var netsuiteResellerId: String? = null
+            private var resellerContractValue: Double? = null
+            private var startingAt: OffsetDateTime? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(resellerRoyalty: ResellerRoyalty) = apply {
                 resellerType = resellerRoyalty.resellerType
-                fraction = resellerRoyalty.fraction
-                netsuiteResellerId = resellerRoyalty.netsuiteResellerId
                 applicableProductIds = resellerRoyalty.applicableProductIds?.toMutableList()
                 applicableProductTags = resellerRoyalty.applicableProductTags?.toMutableList()
-                startingAt = resellerRoyalty.startingAt
-                endingBefore = resellerRoyalty.endingBefore
-                resellerContractValue = resellerRoyalty.resellerContractValue
                 awsOptions = resellerRoyalty.awsOptions
+                endingBefore = resellerRoyalty.endingBefore
+                fraction = resellerRoyalty.fraction
                 gcpOptions = resellerRoyalty.gcpOptions
+                netsuiteResellerId = resellerRoyalty.netsuiteResellerId
+                resellerContractValue = resellerRoyalty.resellerContractValue
+                startingAt = resellerRoyalty.startingAt
                 additionalProperties = resellerRoyalty.additionalProperties.toMutableMap()
             }
 
             fun resellerType(resellerType: ResellerType) = apply {
                 this.resellerType = resellerType
-            }
-
-            fun fraction(fraction: Double) = apply { this.fraction = fraction }
-
-            fun netsuiteResellerId(netsuiteResellerId: String) = apply {
-                this.netsuiteResellerId = netsuiteResellerId
             }
 
             /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
@@ -4690,20 +4684,26 @@ constructor(
                     (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
             }
 
-            fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+            fun awsOptions(awsOptions: AwsOptions) = apply { this.awsOptions = awsOptions }
 
             /** Use null to indicate that the existing end timestamp should be removed. */
             fun endingBefore(endingBefore: OffsetDateTime) = apply {
                 this.endingBefore = endingBefore
             }
 
+            fun fraction(fraction: Double) = apply { this.fraction = fraction }
+
+            fun gcpOptions(gcpOptions: GcpOptions) = apply { this.gcpOptions = gcpOptions }
+
+            fun netsuiteResellerId(netsuiteResellerId: String) = apply {
+                this.netsuiteResellerId = netsuiteResellerId
+            }
+
             fun resellerContractValue(resellerContractValue: Double) = apply {
                 this.resellerContractValue = resellerContractValue
             }
 
-            fun awsOptions(awsOptions: AwsOptions) = apply { this.awsOptions = awsOptions }
-
-            fun gcpOptions(gcpOptions: GcpOptions) = apply { this.gcpOptions = gcpOptions }
+            fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -4727,15 +4727,15 @@ constructor(
             fun build(): ResellerRoyalty =
                 ResellerRoyalty(
                     checkNotNull(resellerType) { "`resellerType` is required but was not set" },
-                    fraction,
-                    netsuiteResellerId,
                     applicableProductIds?.toImmutable(),
                     applicableProductTags?.toImmutable(),
-                    startingAt,
-                    endingBefore,
-                    resellerContractValue,
                     awsOptions,
+                    endingBefore,
+                    fraction,
                     gcpOptions,
+                    netsuiteResellerId,
+                    resellerContractValue,
+                    startingAt,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -4814,8 +4814,8 @@ constructor(
         @JsonCreator
         private constructor(
             @JsonProperty("aws_account_number") private val awsAccountNumber: String?,
-            @JsonProperty("aws_payer_reference_id") private val awsPayerReferenceId: String?,
             @JsonProperty("aws_offer_id") private val awsOfferId: String?,
+            @JsonProperty("aws_payer_reference_id") private val awsPayerReferenceId: String?,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
@@ -4823,11 +4823,11 @@ constructor(
             @JsonProperty("aws_account_number")
             fun awsAccountNumber(): Optional<String> = Optional.ofNullable(awsAccountNumber)
 
-            @JsonProperty("aws_payer_reference_id")
-            fun awsPayerReferenceId(): Optional<String> = Optional.ofNullable(awsPayerReferenceId)
-
             @JsonProperty("aws_offer_id")
             fun awsOfferId(): Optional<String> = Optional.ofNullable(awsOfferId)
+
+            @JsonProperty("aws_payer_reference_id")
+            fun awsPayerReferenceId(): Optional<String> = Optional.ofNullable(awsPayerReferenceId)
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -4843,15 +4843,15 @@ constructor(
             class Builder {
 
                 private var awsAccountNumber: String? = null
-                private var awsPayerReferenceId: String? = null
                 private var awsOfferId: String? = null
+                private var awsPayerReferenceId: String? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(awsOptions: AwsOptions) = apply {
                     awsAccountNumber = awsOptions.awsAccountNumber
-                    awsPayerReferenceId = awsOptions.awsPayerReferenceId
                     awsOfferId = awsOptions.awsOfferId
+                    awsPayerReferenceId = awsOptions.awsPayerReferenceId
                     additionalProperties = awsOptions.additionalProperties.toMutableMap()
                 }
 
@@ -4859,11 +4859,11 @@ constructor(
                     this.awsAccountNumber = awsAccountNumber
                 }
 
+                fun awsOfferId(awsOfferId: String) = apply { this.awsOfferId = awsOfferId }
+
                 fun awsPayerReferenceId(awsPayerReferenceId: String) = apply {
                     this.awsPayerReferenceId = awsPayerReferenceId
                 }
-
-                fun awsOfferId(awsOfferId: String) = apply { this.awsOfferId = awsOfferId }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -4890,8 +4890,8 @@ constructor(
                 fun build(): AwsOptions =
                     AwsOptions(
                         awsAccountNumber,
-                        awsPayerReferenceId,
                         awsOfferId,
+                        awsPayerReferenceId,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -4901,17 +4901,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is AwsOptions && awsAccountNumber == other.awsAccountNumber && awsPayerReferenceId == other.awsPayerReferenceId && awsOfferId == other.awsOfferId && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is AwsOptions && awsAccountNumber == other.awsAccountNumber && awsOfferId == other.awsOfferId && awsPayerReferenceId == other.awsPayerReferenceId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(awsAccountNumber, awsPayerReferenceId, awsOfferId, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(awsAccountNumber, awsOfferId, awsPayerReferenceId, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AwsOptions{awsAccountNumber=$awsAccountNumber, awsPayerReferenceId=$awsPayerReferenceId, awsOfferId=$awsOfferId, additionalProperties=$additionalProperties}"
+                "AwsOptions{awsAccountNumber=$awsAccountNumber, awsOfferId=$awsOfferId, awsPayerReferenceId=$awsPayerReferenceId, additionalProperties=$additionalProperties}"
         }
 
         @NoAutoDetect
@@ -5011,17 +5011,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ResellerRoyalty && resellerType == other.resellerType && fraction == other.fraction && netsuiteResellerId == other.netsuiteResellerId && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && startingAt == other.startingAt && endingBefore == other.endingBefore && resellerContractValue == other.resellerContractValue && awsOptions == other.awsOptions && gcpOptions == other.gcpOptions && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ResellerRoyalty && resellerType == other.resellerType && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && awsOptions == other.awsOptions && endingBefore == other.endingBefore && fraction == other.fraction && gcpOptions == other.gcpOptions && netsuiteResellerId == other.netsuiteResellerId && resellerContractValue == other.resellerContractValue && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(resellerType, fraction, netsuiteResellerId, applicableProductIds, applicableProductTags, startingAt, endingBefore, resellerContractValue, awsOptions, gcpOptions, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(resellerType, applicableProductIds, applicableProductTags, awsOptions, endingBefore, fraction, gcpOptions, netsuiteResellerId, resellerContractValue, startingAt, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ResellerRoyalty{resellerType=$resellerType, fraction=$fraction, netsuiteResellerId=$netsuiteResellerId, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, startingAt=$startingAt, endingBefore=$endingBefore, resellerContractValue=$resellerContractValue, awsOptions=$awsOptions, gcpOptions=$gcpOptions, additionalProperties=$additionalProperties}"
+            "ResellerRoyalty{resellerType=$resellerType, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, awsOptions=$awsOptions, endingBefore=$endingBefore, fraction=$fraction, gcpOptions=$gcpOptions, netsuiteResellerId=$netsuiteResellerId, resellerContractValue=$resellerContractValue, startingAt=$startingAt, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -5029,8 +5029,8 @@ constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("product_id") private val productId: String,
-        @JsonProperty("name") private val name: String?,
         @JsonProperty("schedule") private val schedule: Schedule,
+        @JsonProperty("name") private val name: String?,
         @JsonProperty("netsuite_sales_order_id") private val netsuiteSalesOrderId: String?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
@@ -5038,11 +5038,11 @@ constructor(
 
         @JsonProperty("product_id") fun productId(): String = productId
 
-        /** displayed on invoices */
-        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
-
         /** Must provide either schedule_items or recurring_schedule. */
         @JsonProperty("schedule") fun schedule(): Schedule = schedule
+
+        /** displayed on invoices */
+        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_sales_order_id")
@@ -5062,27 +5062,27 @@ constructor(
         class Builder {
 
             private var productId: String? = null
-            private var name: String? = null
             private var schedule: Schedule? = null
+            private var name: String? = null
             private var netsuiteSalesOrderId: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(scheduledCharge: ScheduledCharge) = apply {
                 productId = scheduledCharge.productId
-                name = scheduledCharge.name
                 schedule = scheduledCharge.schedule
+                name = scheduledCharge.name
                 netsuiteSalesOrderId = scheduledCharge.netsuiteSalesOrderId
                 additionalProperties = scheduledCharge.additionalProperties.toMutableMap()
             }
 
             fun productId(productId: String) = apply { this.productId = productId }
 
-            /** displayed on invoices */
-            fun name(name: String) = apply { this.name = name }
-
             /** Must provide either schedule_items or recurring_schedule. */
             fun schedule(schedule: Schedule) = apply { this.schedule = schedule }
+
+            /** displayed on invoices */
+            fun name(name: String) = apply { this.name = name }
 
             /** This field's availability is dependent on your client's configuration. */
             fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
@@ -5111,8 +5111,8 @@ constructor(
             fun build(): ScheduledCharge =
                 ScheduledCharge(
                     checkNotNull(productId) { "`productId` is required but was not set" },
-                    name,
                     checkNotNull(schedule) { "`schedule` is required but was not set" },
+                    name,
                     netsuiteSalesOrderId,
                     additionalProperties.toImmutable(),
                 )
@@ -5124,8 +5124,8 @@ constructor(
         @JsonCreator
         private constructor(
             @JsonProperty("credit_type_id") private val creditTypeId: String?,
-            @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>?,
             @JsonProperty("recurring_schedule") private val recurringSchedule: RecurringSchedule?,
+            @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>?,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
@@ -5133,10 +5133,6 @@ constructor(
             /** Defaults to USD (cents) if not passed. */
             @JsonProperty("credit_type_id")
             fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
-
-            /** Either provide amount or provide both unit_price and quantity. */
-            @JsonProperty("schedule_items")
-            fun scheduleItems(): Optional<List<ScheduleItem>> = Optional.ofNullable(scheduleItems)
 
             /**
              * Enter the unit price and quantity for the charge or instead only send the amount. If
@@ -5146,6 +5142,10 @@ constructor(
             @JsonProperty("recurring_schedule")
             fun recurringSchedule(): Optional<RecurringSchedule> =
                 Optional.ofNullable(recurringSchedule)
+
+            /** Either provide amount or provide both unit_price and quantity. */
+            @JsonProperty("schedule_items")
+            fun scheduleItems(): Optional<List<ScheduleItem>> = Optional.ofNullable(scheduleItems)
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -5161,20 +5161,29 @@ constructor(
             class Builder {
 
                 private var creditTypeId: String? = null
-                private var scheduleItems: MutableList<ScheduleItem>? = null
                 private var recurringSchedule: RecurringSchedule? = null
+                private var scheduleItems: MutableList<ScheduleItem>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(schedule: Schedule) = apply {
                     creditTypeId = schedule.creditTypeId
-                    scheduleItems = schedule.scheduleItems?.toMutableList()
                     recurringSchedule = schedule.recurringSchedule
+                    scheduleItems = schedule.scheduleItems?.toMutableList()
                     additionalProperties = schedule.additionalProperties.toMutableMap()
                 }
 
                 /** Defaults to USD (cents) if not passed. */
                 fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+
+                /**
+                 * Enter the unit price and quantity for the charge or instead only send the amount.
+                 * If amount is sent, the unit price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                fun recurringSchedule(recurringSchedule: RecurringSchedule) = apply {
+                    this.recurringSchedule = recurringSchedule
+                }
 
                 /** Either provide amount or provide both unit_price and quantity. */
                 fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
@@ -5184,15 +5193,6 @@ constructor(
                 /** Either provide amount or provide both unit_price and quantity. */
                 fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
                     scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
-                }
-
-                /**
-                 * Enter the unit price and quantity for the charge or instead only send the amount.
-                 * If amount is sent, the unit price is assumed to be the amount and quantity is
-                 * inferred to be 1.
-                 */
-                fun recurringSchedule(recurringSchedule: RecurringSchedule) = apply {
-                    this.recurringSchedule = recurringSchedule
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -5220,8 +5220,8 @@ constructor(
                 fun build(): Schedule =
                     Schedule(
                         creditTypeId,
-                        scheduleItems?.toImmutable(),
                         recurringSchedule,
+                        scheduleItems?.toImmutable(),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -5235,32 +5235,35 @@ constructor(
             class RecurringSchedule
             @JsonCreator
             private constructor(
-                @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
-                @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
-                @JsonProperty("frequency") private val frequency: Frequency,
-                @JsonProperty("unit_price") private val unitPrice: Double?,
-                @JsonProperty("quantity") private val quantity: Double?,
-                @JsonProperty("amount") private val amount: Double?,
                 @JsonProperty("amount_distribution")
                 private val amountDistribution: AmountDistribution,
+                @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
+                @JsonProperty("frequency") private val frequency: Frequency,
+                @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
+                @JsonProperty("amount") private val amount: Double?,
+                @JsonProperty("quantity") private val quantity: Double?,
+                @JsonProperty("unit_price") private val unitPrice: Double?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /** RFC 3339 timestamp (inclusive). */
-                @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+                @JsonProperty("amount_distribution")
+                fun amountDistribution(): AmountDistribution = amountDistribution
 
                 /** RFC 3339 timestamp (exclusive). */
                 @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
 
                 @JsonProperty("frequency") fun frequency(): Frequency = frequency
 
+                /** RFC 3339 timestamp (inclusive). */
+                @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+
                 /**
-                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
-                 * and must be specified with quantity. If specified amount cannot be provided.
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
                  */
-                @JsonProperty("unit_price")
-                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
+                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
 
                 /**
                  * Quantity for the charge. Will be multiplied by unit_price to determine the amount
@@ -5270,14 +5273,11 @@ constructor(
                 fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
                 /**
-                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                 * amount is sent, the unit_price is assumed to be the amount and quantity is
-                 * inferred to be 1.
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
                  */
-                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
-
-                @JsonProperty("amount_distribution")
-                fun amountDistribution(): AmountDistribution = amountDistribution
+                @JsonProperty("unit_price")
+                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -5292,30 +5292,29 @@ constructor(
 
                 class Builder {
 
-                    private var startingAt: OffsetDateTime? = null
+                    private var amountDistribution: AmountDistribution? = null
                     private var endingBefore: OffsetDateTime? = null
                     private var frequency: Frequency? = null
-                    private var unitPrice: Double? = null
-                    private var quantity: Double? = null
+                    private var startingAt: OffsetDateTime? = null
                     private var amount: Double? = null
-                    private var amountDistribution: AmountDistribution? = null
+                    private var quantity: Double? = null
+                    private var unitPrice: Double? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(recurringSchedule: RecurringSchedule) = apply {
-                        startingAt = recurringSchedule.startingAt
+                        amountDistribution = recurringSchedule.amountDistribution
                         endingBefore = recurringSchedule.endingBefore
                         frequency = recurringSchedule.frequency
-                        unitPrice = recurringSchedule.unitPrice
-                        quantity = recurringSchedule.quantity
+                        startingAt = recurringSchedule.startingAt
                         amount = recurringSchedule.amount
-                        amountDistribution = recurringSchedule.amountDistribution
+                        quantity = recurringSchedule.quantity
+                        unitPrice = recurringSchedule.unitPrice
                         additionalProperties = recurringSchedule.additionalProperties.toMutableMap()
                     }
 
-                    /** RFC 3339 timestamp (inclusive). */
-                    fun startingAt(startingAt: OffsetDateTime) = apply {
-                        this.startingAt = startingAt
+                    fun amountDistribution(amountDistribution: AmountDistribution) = apply {
+                        this.amountDistribution = amountDistribution
                     }
 
                     /** RFC 3339 timestamp (exclusive). */
@@ -5325,12 +5324,17 @@ constructor(
 
                     fun frequency(frequency: Frequency) = apply { this.frequency = frequency }
 
+                    /** RFC 3339 timestamp (inclusive). */
+                    fun startingAt(startingAt: OffsetDateTime) = apply {
+                        this.startingAt = startingAt
+                    }
+
                     /**
-                     * Unit price for the charge. Will be multiplied by quantity to determine the
-                     * amount and must be specified with quantity. If specified amount cannot be
-                     * provided.
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
                      */
-                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+                    fun amount(amount: Double) = apply { this.amount = amount }
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
@@ -5340,15 +5344,11 @@ constructor(
                     fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
                     /**
-                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                     * amount is sent, the unit_price is assumed to be the amount and quantity is
-                     * inferred to be 1.
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
                      */
-                    fun amount(amount: Double) = apply { this.amount = amount }
-
-                    fun amountDistribution(amountDistribution: AmountDistribution) = apply {
-                        this.amountDistribution = amountDistribution
-                    }
+                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -5374,17 +5374,17 @@ constructor(
 
                     fun build(): RecurringSchedule =
                         RecurringSchedule(
-                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                            checkNotNull(amountDistribution) {
+                                "`amountDistribution` is required but was not set"
+                            },
                             checkNotNull(endingBefore) {
                                 "`endingBefore` is required but was not set"
                             },
                             checkNotNull(frequency) { "`frequency` is required but was not set" },
-                            unitPrice,
-                            quantity,
+                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                             amount,
-                            checkNotNull(amountDistribution) {
-                                "`amountDistribution` is required but was not set"
-                            },
+                            quantity,
+                            unitPrice,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -5531,37 +5531,40 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is RecurringSchedule && startingAt == other.startingAt && endingBefore == other.endingBefore && frequency == other.frequency && unitPrice == other.unitPrice && quantity == other.quantity && amount == other.amount && amountDistribution == other.amountDistribution && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is RecurringSchedule && amountDistribution == other.amountDistribution && endingBefore == other.endingBefore && frequency == other.frequency && startingAt == other.startingAt && amount == other.amount && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(startingAt, endingBefore, frequency, unitPrice, quantity, amount, amountDistribution, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(amountDistribution, endingBefore, frequency, startingAt, amount, quantity, unitPrice, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "RecurringSchedule{startingAt=$startingAt, endingBefore=$endingBefore, frequency=$frequency, unitPrice=$unitPrice, quantity=$quantity, amount=$amount, amountDistribution=$amountDistribution, additionalProperties=$additionalProperties}"
+                    "RecurringSchedule{amountDistribution=$amountDistribution, endingBefore=$endingBefore, frequency=$frequency, startingAt=$startingAt, amount=$amount, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class ScheduleItem
             @JsonCreator
             private constructor(
-                @JsonProperty("unit_price") private val unitPrice: Double?,
-                @JsonProperty("quantity") private val quantity: Double?,
-                @JsonProperty("amount") private val amount: Double?,
                 @JsonProperty("timestamp") private val timestamp: OffsetDateTime,
+                @JsonProperty("amount") private val amount: Double?,
+                @JsonProperty("quantity") private val quantity: Double?,
+                @JsonProperty("unit_price") private val unitPrice: Double?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                /** timestamp of the scheduled event */
+                @JsonProperty("timestamp") fun timestamp(): OffsetDateTime = timestamp
+
                 /**
-                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
-                 * and must be specified with quantity. If specified amount cannot be provided.
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
                  */
-                @JsonProperty("unit_price")
-                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
+                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
 
                 /**
                  * Quantity for the charge. Will be multiplied by unit_price to determine the amount
@@ -5571,14 +5574,11 @@ constructor(
                 fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
 
                 /**
-                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                 * amount is sent, the unit_price is assumed to be the amount and quantity is
-                 * inferred to be 1.
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
                  */
-                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
-
-                /** timestamp of the scheduled event */
-                @JsonProperty("timestamp") fun timestamp(): OffsetDateTime = timestamp
+                @JsonProperty("unit_price")
+                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -5593,27 +5593,30 @@ constructor(
 
                 class Builder {
 
-                    private var unitPrice: Double? = null
-                    private var quantity: Double? = null
-                    private var amount: Double? = null
                     private var timestamp: OffsetDateTime? = null
+                    private var amount: Double? = null
+                    private var quantity: Double? = null
+                    private var unitPrice: Double? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(scheduleItem: ScheduleItem) = apply {
-                        unitPrice = scheduleItem.unitPrice
-                        quantity = scheduleItem.quantity
-                        amount = scheduleItem.amount
                         timestamp = scheduleItem.timestamp
+                        amount = scheduleItem.amount
+                        quantity = scheduleItem.quantity
+                        unitPrice = scheduleItem.unitPrice
                         additionalProperties = scheduleItem.additionalProperties.toMutableMap()
                     }
 
+                    /** timestamp of the scheduled event */
+                    fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
+
                     /**
-                     * Unit price for the charge. Will be multiplied by quantity to determine the
-                     * amount and must be specified with quantity. If specified amount cannot be
-                     * provided.
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
                      */
-                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+                    fun amount(amount: Double) = apply { this.amount = amount }
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
@@ -5623,14 +5626,11 @@ constructor(
                     fun quantity(quantity: Double) = apply { this.quantity = quantity }
 
                     /**
-                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                     * amount is sent, the unit_price is assumed to be the amount and quantity is
-                     * inferred to be 1.
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
                      */
-                    fun amount(amount: Double) = apply { this.amount = amount }
-
-                    /** timestamp of the scheduled event */
-                    fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
+                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -5656,10 +5656,10 @@ constructor(
 
                     fun build(): ScheduleItem =
                         ScheduleItem(
-                            unitPrice,
-                            quantity,
-                            amount,
                             checkNotNull(timestamp) { "`timestamp` is required but was not set" },
+                            amount,
+                            quantity,
+                            unitPrice,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -5669,17 +5669,17 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is ScheduleItem && unitPrice == other.unitPrice && quantity == other.quantity && amount == other.amount && timestamp == other.timestamp && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is ScheduleItem && timestamp == other.timestamp && amount == other.amount && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(unitPrice, quantity, amount, timestamp, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(timestamp, amount, quantity, unitPrice, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "ScheduleItem{unitPrice=$unitPrice, quantity=$quantity, amount=$amount, timestamp=$timestamp, additionalProperties=$additionalProperties}"
+                    "ScheduleItem{timestamp=$timestamp, amount=$amount, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
             }
 
             override fun equals(other: Any?): Boolean {
@@ -5687,17 +5687,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Schedule && creditTypeId == other.creditTypeId && scheduleItems == other.scheduleItems && recurringSchedule == other.recurringSchedule && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Schedule && creditTypeId == other.creditTypeId && recurringSchedule == other.recurringSchedule && scheduleItems == other.scheduleItems && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(creditTypeId, scheduleItems, recurringSchedule, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(creditTypeId, recurringSchedule, scheduleItems, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Schedule{creditTypeId=$creditTypeId, scheduleItems=$scheduleItems, recurringSchedule=$recurringSchedule, additionalProperties=$additionalProperties}"
+                "Schedule{creditTypeId=$creditTypeId, recurringSchedule=$recurringSchedule, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -5705,17 +5705,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ScheduledCharge && productId == other.productId && name == other.name && schedule == other.schedule && netsuiteSalesOrderId == other.netsuiteSalesOrderId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ScheduledCharge && productId == other.productId && schedule == other.schedule && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(productId, name, schedule, netsuiteSalesOrderId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(productId, schedule, name, netsuiteSalesOrderId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ScheduledCharge{productId=$productId, name=$name, schedule=$schedule, netsuiteSalesOrderId=$netsuiteSalesOrderId, additionalProperties=$additionalProperties}"
+            "ScheduledCharge{productId=$productId, schedule=$schedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

@@ -295,51 +295,40 @@ constructor(
     class Rate
     @JsonCreator
     private constructor(
-        @JsonProperty("product_id") private val productId: String,
-        @JsonProperty("pricing_group_values") private val pricingGroupValues: PricingGroupValues?,
-        @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
-        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
         @JsonProperty("entitled") private val entitled: Boolean,
+        @JsonProperty("product_id") private val productId: String,
         @JsonProperty("rate_type") private val rateType: RateType,
-        @JsonProperty("price") private val price: Double?,
-        @JsonProperty("credit_type_id") private val creditTypeId: String?,
-        @JsonProperty("quantity") private val quantity: Double?,
-        @JsonProperty("is_prorated") private val isProrated: Boolean?,
-        @JsonProperty("use_list_prices") private val useListPrices: Boolean?,
-        @JsonProperty("tiers") private val tiers: List<Tier>?,
-        @JsonProperty("custom_rate") private val customRate: CustomRate?,
+        @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
         @JsonProperty("commit_rate") private val commitRate: CommitRate?,
+        @JsonProperty("credit_type_id") private val creditTypeId: String?,
+        @JsonProperty("custom_rate") private val customRate: CustomRate?,
+        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
+        @JsonProperty("is_prorated") private val isProrated: Boolean?,
+        @JsonProperty("price") private val price: Double?,
+        @JsonProperty("pricing_group_values") private val pricingGroupValues: PricingGroupValues?,
+        @JsonProperty("quantity") private val quantity: Double?,
+        @JsonProperty("tiers") private val tiers: List<Tier>?,
+        @JsonProperty("use_list_prices") private val useListPrices: Boolean?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        @JsonProperty("entitled") fun entitled(): Boolean = entitled
+
         /** ID of the product to add a rate for */
         @JsonProperty("product_id") fun productId(): String = productId
 
-        /**
-         * Optional. List of pricing group key value pairs which will be used to calculate the
-         * price.
-         */
-        @JsonProperty("pricing_group_values")
-        fun pricingGroupValues(): Optional<PricingGroupValues> =
-            Optional.ofNullable(pricingGroupValues)
+        @JsonProperty("rate_type") fun rateType(): RateType = rateType
 
         /** inclusive effective date */
         @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
 
-        /** exclusive end date */
-        @JsonProperty("ending_before")
-        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
-
-        @JsonProperty("entitled") fun entitled(): Boolean = entitled
-
-        @JsonProperty("rate_type") fun rateType(): RateType = rateType
-
         /**
-         * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
-         * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+         * A distinct rate on the rate card. You can choose to use this rate rather than list rate
+         * when consuming a credit or commit.
          */
-        @JsonProperty("price") fun price(): Optional<Double> = Optional.ofNullable(price)
+        @JsonProperty("commit_rate")
+        fun commitRate(): Optional<CommitRate> = Optional.ofNullable(commitRate)
 
         /**
          * "The Metronome ID of the credit type to associate with price, defaults to USD (cents) if
@@ -349,8 +338,13 @@ constructor(
         @JsonProperty("credit_type_id")
         fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
 
-        /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-        @JsonProperty("quantity") fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
+        /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
+        @JsonProperty("custom_rate")
+        fun customRate(): Optional<CustomRate> = Optional.ofNullable(customRate)
+
+        /** exclusive end date */
+        @JsonProperty("ending_before")
+        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
         /**
          * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
@@ -360,25 +354,31 @@ constructor(
         fun isProrated(): Optional<Boolean> = Optional.ofNullable(isProrated)
 
         /**
+         * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
+         * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+         */
+        @JsonProperty("price") fun price(): Optional<Double> = Optional.ofNullable(price)
+
+        /**
+         * Optional. List of pricing group key value pairs which will be used to calculate the
+         * price.
+         */
+        @JsonProperty("pricing_group_values")
+        fun pricingGroupValues(): Optional<PricingGroupValues> =
+            Optional.ofNullable(pricingGroupValues)
+
+        /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+        @JsonProperty("quantity") fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
+
+        /** Only set for TIERED rate_type. */
+        @JsonProperty("tiers") fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers)
+
+        /**
          * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
          * list prices rather than the standard rates for this product on the contract.
          */
         @JsonProperty("use_list_prices")
         fun useListPrices(): Optional<Boolean> = Optional.ofNullable(useListPrices)
-
-        /** Only set for TIERED rate_type. */
-        @JsonProperty("tiers") fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers)
-
-        /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
-        @JsonProperty("custom_rate")
-        fun customRate(): Optional<CustomRate> = Optional.ofNullable(customRate)
-
-        /**
-         * A distinct rate on the rate card. You can choose to use this rate rather than list rate
-         * when consuming a credit or commit.
-         */
-        @JsonProperty("commit_rate")
-        fun commitRate(): Optional<CommitRate> = Optional.ofNullable(commitRate)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -393,63 +393,79 @@ constructor(
 
         class Builder {
 
-            private var productId: String? = null
-            private var pricingGroupValues: PricingGroupValues? = null
-            private var startingAt: OffsetDateTime? = null
-            private var endingBefore: OffsetDateTime? = null
             private var entitled: Boolean? = null
+            private var productId: String? = null
             private var rateType: RateType? = null
-            private var price: Double? = null
-            private var creditTypeId: String? = null
-            private var quantity: Double? = null
-            private var isProrated: Boolean? = null
-            private var useListPrices: Boolean? = null
-            private var tiers: MutableList<Tier>? = null
-            private var customRate: CustomRate? = null
+            private var startingAt: OffsetDateTime? = null
             private var commitRate: CommitRate? = null
+            private var creditTypeId: String? = null
+            private var customRate: CustomRate? = null
+            private var endingBefore: OffsetDateTime? = null
+            private var isProrated: Boolean? = null
+            private var price: Double? = null
+            private var pricingGroupValues: PricingGroupValues? = null
+            private var quantity: Double? = null
+            private var tiers: MutableList<Tier>? = null
+            private var useListPrices: Boolean? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(rate: Rate) = apply {
-                productId = rate.productId
-                pricingGroupValues = rate.pricingGroupValues
-                startingAt = rate.startingAt
-                endingBefore = rate.endingBefore
                 entitled = rate.entitled
+                productId = rate.productId
                 rateType = rate.rateType
-                price = rate.price
-                creditTypeId = rate.creditTypeId
-                quantity = rate.quantity
-                isProrated = rate.isProrated
-                useListPrices = rate.useListPrices
-                tiers = rate.tiers?.toMutableList()
-                customRate = rate.customRate
+                startingAt = rate.startingAt
                 commitRate = rate.commitRate
+                creditTypeId = rate.creditTypeId
+                customRate = rate.customRate
+                endingBefore = rate.endingBefore
+                isProrated = rate.isProrated
+                price = rate.price
+                pricingGroupValues = rate.pricingGroupValues
+                quantity = rate.quantity
+                tiers = rate.tiers?.toMutableList()
+                useListPrices = rate.useListPrices
                 additionalProperties = rate.additionalProperties.toMutableMap()
             }
+
+            fun entitled(entitled: Boolean) = apply { this.entitled = entitled }
 
             /** ID of the product to add a rate for */
             fun productId(productId: String) = apply { this.productId = productId }
 
-            /**
-             * Optional. List of pricing group key value pairs which will be used to calculate the
-             * price.
-             */
-            fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
-                this.pricingGroupValues = pricingGroupValues
-            }
+            fun rateType(rateType: RateType) = apply { this.rateType = rateType }
 
             /** inclusive effective date */
             fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+
+            /**
+             * A distinct rate on the rate card. You can choose to use this rate rather than list
+             * rate when consuming a credit or commit.
+             */
+            fun commitRate(commitRate: CommitRate) = apply { this.commitRate = commitRate }
+
+            /**
+             * "The Metronome ID of the credit type to associate with price, defaults to USD (cents)
+             * if not passed. Used by all rate_types except type PERCENTAGE. PERCENTAGE rates use
+             * the credit type of associated rates."
+             */
+            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+
+            /**
+             * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
+             */
+            fun customRate(customRate: CustomRate) = apply { this.customRate = customRate }
 
             /** exclusive end date */
             fun endingBefore(endingBefore: OffsetDateTime) = apply {
                 this.endingBefore = endingBefore
             }
 
-            fun entitled(entitled: Boolean) = apply { this.entitled = entitled }
-
-            fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+            /**
+             * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
+             * to true.
+             */
+            fun isProrated(isProrated: Boolean) = apply { this.isProrated = isProrated }
 
             /**
              * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
@@ -459,26 +475,15 @@ constructor(
             fun price(price: Double) = apply { this.price = price }
 
             /**
-             * "The Metronome ID of the credit type to associate with price, defaults to USD (cents)
-             * if not passed. Used by all rate_types except type PERCENTAGE. PERCENTAGE rates use
-             * the credit type of associated rates."
+             * Optional. List of pricing group key value pairs which will be used to calculate the
+             * price.
              */
-            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+            fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
+                this.pricingGroupValues = pricingGroupValues
+            }
 
             /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
             fun quantity(quantity: Double) = apply { this.quantity = quantity }
-
-            /**
-             * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
-             * to true.
-             */
-            fun isProrated(isProrated: Boolean) = apply { this.isProrated = isProrated }
-
-            /**
-             * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
-             * list prices rather than the standard rates for this product on the contract.
-             */
-            fun useListPrices(useListPrices: Boolean) = apply { this.useListPrices = useListPrices }
 
             /** Only set for TIERED rate_type. */
             fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
@@ -489,15 +494,10 @@ constructor(
             }
 
             /**
-             * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
+             * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
+             * list prices rather than the standard rates for this product on the contract.
              */
-            fun customRate(customRate: CustomRate) = apply { this.customRate = customRate }
-
-            /**
-             * A distinct rate on the rate card. You can choose to use this rate rather than list
-             * rate when consuming a credit or commit.
-             */
-            fun commitRate(commitRate: CommitRate) = apply { this.commitRate = commitRate }
+            fun useListPrices(useListPrices: Boolean) = apply { this.useListPrices = useListPrices }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -520,20 +520,20 @@ constructor(
 
             fun build(): Rate =
                 Rate(
-                    checkNotNull(productId) { "`productId` is required but was not set" },
-                    pricingGroupValues,
-                    checkNotNull(startingAt) { "`startingAt` is required but was not set" },
-                    endingBefore,
                     checkNotNull(entitled) { "`entitled` is required but was not set" },
+                    checkNotNull(productId) { "`productId` is required but was not set" },
                     checkNotNull(rateType) { "`rateType` is required but was not set" },
-                    price,
-                    creditTypeId,
-                    quantity,
-                    isProrated,
-                    useListPrices,
-                    tiers?.toImmutable(),
-                    customRate,
+                    checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                     commitRate,
+                    creditTypeId,
+                    customRate,
+                    endingBefore,
+                    isProrated,
+                    price,
+                    pricingGroupValues,
+                    quantity,
+                    tiers?.toImmutable(),
+                    useListPrices,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -981,17 +981,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Rate && productId == other.productId && pricingGroupValues == other.pricingGroupValues && startingAt == other.startingAt && endingBefore == other.endingBefore && entitled == other.entitled && rateType == other.rateType && price == other.price && creditTypeId == other.creditTypeId && quantity == other.quantity && isProrated == other.isProrated && useListPrices == other.useListPrices && tiers == other.tiers && customRate == other.customRate && commitRate == other.commitRate && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Rate && entitled == other.entitled && productId == other.productId && rateType == other.rateType && startingAt == other.startingAt && commitRate == other.commitRate && creditTypeId == other.creditTypeId && customRate == other.customRate && endingBefore == other.endingBefore && isProrated == other.isProrated && price == other.price && pricingGroupValues == other.pricingGroupValues && quantity == other.quantity && tiers == other.tiers && useListPrices == other.useListPrices && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(productId, pricingGroupValues, startingAt, endingBefore, entitled, rateType, price, creditTypeId, quantity, isProrated, useListPrices, tiers, customRate, commitRate, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(entitled, productId, rateType, startingAt, commitRate, creditTypeId, customRate, endingBefore, isProrated, price, pricingGroupValues, quantity, tiers, useListPrices, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Rate{productId=$productId, pricingGroupValues=$pricingGroupValues, startingAt=$startingAt, endingBefore=$endingBefore, entitled=$entitled, rateType=$rateType, price=$price, creditTypeId=$creditTypeId, quantity=$quantity, isProrated=$isProrated, useListPrices=$useListPrices, tiers=$tiers, customRate=$customRate, commitRate=$commitRate, additionalProperties=$additionalProperties}"
+            "Rate{entitled=$entitled, productId=$productId, rateType=$rateType, startingAt=$startingAt, commitRate=$commitRate, creditTypeId=$creditTypeId, customRate=$customRate, endingBefore=$endingBefore, isProrated=$isProrated, price=$price, pricingGroupValues=$pricingGroupValues, quantity=$quantity, tiers=$tiers, useListPrices=$useListPrices, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

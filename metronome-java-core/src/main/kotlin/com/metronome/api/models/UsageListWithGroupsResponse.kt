@@ -21,9 +21,6 @@ import java.util.Optional
 class UsageListWithGroupsResponse
 @JsonCreator
 private constructor(
-    @JsonProperty("starting_on")
-    @ExcludeMissing
-    private val startingOn: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonProperty("ending_before")
     @ExcludeMissing
     private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -33,11 +30,12 @@ private constructor(
     @JsonProperty("group_value")
     @ExcludeMissing
     private val groupValue: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("starting_on")
+    @ExcludeMissing
+    private val startingOn: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonProperty("value") @ExcludeMissing private val value: JsonField<Double> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
-
-    fun startingOn(): OffsetDateTime = startingOn.getRequired("starting_on")
 
     fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
 
@@ -45,15 +43,17 @@ private constructor(
 
     fun groupValue(): Optional<String> = Optional.ofNullable(groupValue.getNullable("group_value"))
 
-    fun value(): Optional<Double> = Optional.ofNullable(value.getNullable("value"))
+    fun startingOn(): OffsetDateTime = startingOn.getRequired("starting_on")
 
-    @JsonProperty("starting_on") @ExcludeMissing fun _startingOn() = startingOn
+    fun value(): Optional<Double> = Optional.ofNullable(value.getNullable("value"))
 
     @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
 
     @JsonProperty("group_key") @ExcludeMissing fun _groupKey() = groupKey
 
     @JsonProperty("group_value") @ExcludeMissing fun _groupValue() = groupValue
+
+    @JsonProperty("starting_on") @ExcludeMissing fun _startingOn() = startingOn
 
     @JsonProperty("value") @ExcludeMissing fun _value() = value
 
@@ -65,10 +65,10 @@ private constructor(
 
     fun validate(): UsageListWithGroupsResponse = apply {
         if (!validated) {
-            startingOn()
             endingBefore()
             groupKey()
             groupValue()
+            startingOn()
             value()
             validated = true
         }
@@ -83,27 +83,21 @@ private constructor(
 
     class Builder {
 
-        private var startingOn: JsonField<OffsetDateTime> = JsonMissing.of()
         private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
         private var groupKey: JsonField<String> = JsonMissing.of()
         private var groupValue: JsonField<String> = JsonMissing.of()
+        private var startingOn: JsonField<OffsetDateTime> = JsonMissing.of()
         private var value: JsonField<Double> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(usageListWithGroupsResponse: UsageListWithGroupsResponse) = apply {
-            startingOn = usageListWithGroupsResponse.startingOn
             endingBefore = usageListWithGroupsResponse.endingBefore
             groupKey = usageListWithGroupsResponse.groupKey
             groupValue = usageListWithGroupsResponse.groupValue
+            startingOn = usageListWithGroupsResponse.startingOn
             value = usageListWithGroupsResponse.value
             additionalProperties = usageListWithGroupsResponse.additionalProperties.toMutableMap()
-        }
-
-        fun startingOn(startingOn: OffsetDateTime) = startingOn(JsonField.of(startingOn))
-
-        fun startingOn(startingOn: JsonField<OffsetDateTime>) = apply {
-            this.startingOn = startingOn
         }
 
         fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
@@ -119,6 +113,12 @@ private constructor(
         fun groupValue(groupValue: String) = groupValue(JsonField.of(groupValue))
 
         fun groupValue(groupValue: JsonField<String>) = apply { this.groupValue = groupValue }
+
+        fun startingOn(startingOn: OffsetDateTime) = startingOn(JsonField.of(startingOn))
+
+        fun startingOn(startingOn: JsonField<OffsetDateTime>) = apply {
+            this.startingOn = startingOn
+        }
 
         fun value(value: Double) = value(JsonField.of(value))
 
@@ -145,10 +145,10 @@ private constructor(
 
         fun build(): UsageListWithGroupsResponse =
             UsageListWithGroupsResponse(
-                startingOn,
                 endingBefore,
                 groupKey,
                 groupValue,
+                startingOn,
                 value,
                 additionalProperties.toImmutable(),
             )
@@ -159,15 +159,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is UsageListWithGroupsResponse && startingOn == other.startingOn && endingBefore == other.endingBefore && groupKey == other.groupKey && groupValue == other.groupValue && value == other.value && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is UsageListWithGroupsResponse && endingBefore == other.endingBefore && groupKey == other.groupKey && groupValue == other.groupValue && startingOn == other.startingOn && value == other.value && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(startingOn, endingBefore, groupKey, groupValue, value, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(endingBefore, groupKey, groupValue, startingOn, value, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "UsageListWithGroupsResponse{startingOn=$startingOn, endingBefore=$endingBefore, groupKey=$groupKey, groupValue=$groupValue, value=$value, additionalProperties=$additionalProperties}"
+        "UsageListWithGroupsResponse{endingBefore=$endingBefore, groupKey=$groupKey, groupValue=$groupValue, startingOn=$startingOn, value=$value, additionalProperties=$additionalProperties}"
 }

@@ -94,41 +94,49 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("name")
-        @ExcludeMissing
-        private val name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("created_at")
         @ExcludeMissing
         private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("created_by")
         @ExcludeMissing
         private val createdBy: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("aliases")
+        @ExcludeMissing
+        private val aliases: JsonField<List<Alias>> = JsonMissing.of(),
+        @JsonProperty("credit_type_conversions")
+        @ExcludeMissing
+        private val creditTypeConversions: JsonField<List<CreditTypeConversion>> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
         @JsonProperty("description")
         @ExcludeMissing
         private val description: JsonField<String> = JsonMissing.of(),
         @JsonProperty("fiat_credit_type")
         @ExcludeMissing
         private val fiatCreditType: JsonField<CreditTypeData> = JsonMissing.of(),
-        @JsonProperty("credit_type_conversions")
-        @ExcludeMissing
-        private val creditTypeConversions: JsonField<List<CreditTypeConversion>> = JsonMissing.of(),
-        @JsonProperty("aliases")
-        @ExcludeMissing
-        private val aliases: JsonField<List<Alias>> = JsonMissing.of(),
-        @JsonProperty("custom_fields")
-        @ExcludeMissing
-        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun id(): String = id.getRequired("id")
 
-        fun name(): String = name.getRequired("name")
-
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun createdBy(): String = createdBy.getRequired("created_by")
+
+        fun name(): String = name.getRequired("name")
+
+        fun aliases(): Optional<List<Alias>> = Optional.ofNullable(aliases.getNullable("aliases"))
+
+        fun creditTypeConversions(): Optional<List<CreditTypeConversion>> =
+            Optional.ofNullable(creditTypeConversions.getNullable("credit_type_conversions"))
+
+        fun customFields(): Optional<CustomFields> =
+            Optional.ofNullable(customFields.getNullable("custom_fields"))
 
         fun description(): Optional<String> =
             Optional.ofNullable(description.getNullable("description"))
@@ -136,33 +144,25 @@ private constructor(
         fun fiatCreditType(): Optional<CreditTypeData> =
             Optional.ofNullable(fiatCreditType.getNullable("fiat_credit_type"))
 
-        fun creditTypeConversions(): Optional<List<CreditTypeConversion>> =
-            Optional.ofNullable(creditTypeConversions.getNullable("credit_type_conversions"))
-
-        fun aliases(): Optional<List<Alias>> = Optional.ofNullable(aliases.getNullable("aliases"))
-
-        fun customFields(): Optional<CustomFields> =
-            Optional.ofNullable(customFields.getNullable("custom_fields"))
-
         @JsonProperty("id") @ExcludeMissing fun _id() = id
-
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
 
         @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
 
         @JsonProperty("created_by") @ExcludeMissing fun _createdBy() = createdBy
 
-        @JsonProperty("description") @ExcludeMissing fun _description() = description
+        @JsonProperty("name") @ExcludeMissing fun _name() = name
 
-        @JsonProperty("fiat_credit_type") @ExcludeMissing fun _fiatCreditType() = fiatCreditType
+        @JsonProperty("aliases") @ExcludeMissing fun _aliases() = aliases
 
         @JsonProperty("credit_type_conversions")
         @ExcludeMissing
         fun _creditTypeConversions() = creditTypeConversions
 
-        @JsonProperty("aliases") @ExcludeMissing fun _aliases() = aliases
-
         @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+
+        @JsonProperty("description") @ExcludeMissing fun _description() = description
+
+        @JsonProperty("fiat_credit_type") @ExcludeMissing fun _fiatCreditType() = fiatCreditType
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -173,14 +173,14 @@ private constructor(
         fun validate(): Data = apply {
             if (!validated) {
                 id()
-                name()
                 createdAt()
                 createdBy()
+                name()
+                aliases().map { it.forEach { it.validate() } }
+                creditTypeConversions().map { it.forEach { it.validate() } }
+                customFields().map { it.validate() }
                 description()
                 fiatCreditType().map { it.validate() }
-                creditTypeConversions().map { it.forEach { it.validate() } }
-                aliases().map { it.forEach { it.validate() } }
-                customFields().map { it.validate() }
                 validated = true
             }
         }
@@ -195,38 +195,34 @@ private constructor(
         class Builder {
 
             private var id: JsonField<String> = JsonMissing.of()
-            private var name: JsonField<String> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var createdBy: JsonField<String> = JsonMissing.of()
-            private var description: JsonField<String> = JsonMissing.of()
-            private var fiatCreditType: JsonField<CreditTypeData> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
+            private var aliases: JsonField<List<Alias>> = JsonMissing.of()
             private var creditTypeConversions: JsonField<List<CreditTypeConversion>> =
                 JsonMissing.of()
-            private var aliases: JsonField<List<Alias>> = JsonMissing.of()
             private var customFields: JsonField<CustomFields> = JsonMissing.of()
+            private var description: JsonField<String> = JsonMissing.of()
+            private var fiatCreditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(data: Data) = apply {
                 id = data.id
-                name = data.name
                 createdAt = data.createdAt
                 createdBy = data.createdBy
+                name = data.name
+                aliases = data.aliases
+                creditTypeConversions = data.creditTypeConversions
+                customFields = data.customFields
                 description = data.description
                 fiatCreditType = data.fiatCreditType
-                creditTypeConversions = data.creditTypeConversions
-                aliases = data.aliases
-                customFields = data.customFields
                 additionalProperties = data.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
 
             fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun name(name: String) = name(JsonField.of(name))
-
-            fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
@@ -237,6 +233,27 @@ private constructor(
             fun createdBy(createdBy: String) = createdBy(JsonField.of(createdBy))
 
             fun createdBy(createdBy: JsonField<String>) = apply { this.createdBy = createdBy }
+
+            fun name(name: String) = name(JsonField.of(name))
+
+            fun name(name: JsonField<String>) = apply { this.name = name }
+
+            fun aliases(aliases: List<Alias>) = aliases(JsonField.of(aliases))
+
+            fun aliases(aliases: JsonField<List<Alias>>) = apply { this.aliases = aliases }
+
+            fun creditTypeConversions(creditTypeConversions: List<CreditTypeConversion>) =
+                creditTypeConversions(JsonField.of(creditTypeConversions))
+
+            fun creditTypeConversions(
+                creditTypeConversions: JsonField<List<CreditTypeConversion>>
+            ) = apply { this.creditTypeConversions = creditTypeConversions }
+
+            fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+
+            fun customFields(customFields: JsonField<CustomFields>) = apply {
+                this.customFields = customFields
+            }
 
             fun description(description: String) = description(JsonField.of(description))
 
@@ -249,23 +266,6 @@ private constructor(
 
             fun fiatCreditType(fiatCreditType: JsonField<CreditTypeData>) = apply {
                 this.fiatCreditType = fiatCreditType
-            }
-
-            fun creditTypeConversions(creditTypeConversions: List<CreditTypeConversion>) =
-                creditTypeConversions(JsonField.of(creditTypeConversions))
-
-            fun creditTypeConversions(
-                creditTypeConversions: JsonField<List<CreditTypeConversion>>
-            ) = apply { this.creditTypeConversions = creditTypeConversions }
-
-            fun aliases(aliases: List<Alias>) = aliases(JsonField.of(aliases))
-
-            fun aliases(aliases: JsonField<List<Alias>>) = apply { this.aliases = aliases }
-
-            fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
-
-            fun customFields(customFields: JsonField<CustomFields>) = apply {
-                this.customFields = customFields
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -290,14 +290,14 @@ private constructor(
             fun build(): Data =
                 Data(
                     id,
-                    name,
                     createdAt,
                     createdBy,
+                    name,
+                    aliases.map { it.toImmutable() },
+                    creditTypeConversions.map { it.toImmutable() },
+                    customFields,
                     description,
                     fiatCreditType,
-                    creditTypeConversions.map { it.toImmutable() },
-                    aliases.map { it.toImmutable() },
-                    customFields,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -309,29 +309,29 @@ private constructor(
             @JsonProperty("name")
             @ExcludeMissing
             private val name: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("starting_at")
-            @ExcludeMissing
-            private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("ending_before")
             @ExcludeMissing
             private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("starting_at")
+            @ExcludeMissing
+            private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun name(): String = name.getRequired("name")
 
-            fun startingAt(): Optional<OffsetDateTime> =
-                Optional.ofNullable(startingAt.getNullable("starting_at"))
-
             fun endingBefore(): Optional<OffsetDateTime> =
                 Optional.ofNullable(endingBefore.getNullable("ending_before"))
 
+            fun startingAt(): Optional<OffsetDateTime> =
+                Optional.ofNullable(startingAt.getNullable("starting_at"))
+
             @JsonProperty("name") @ExcludeMissing fun _name() = name
 
-            @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
-
             @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
+
+            @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -342,8 +342,8 @@ private constructor(
             fun validate(): Alias = apply {
                 if (!validated) {
                     name()
-                    startingAt()
                     endingBefore()
+                    startingAt()
                     validated = true
                 }
             }
@@ -358,15 +358,15 @@ private constructor(
             class Builder {
 
                 private var name: JsonField<String> = JsonMissing.of()
-                private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(alias: Alias) = apply {
                     name = alias.name
-                    startingAt = alias.startingAt
                     endingBefore = alias.endingBefore
+                    startingAt = alias.startingAt
                     additionalProperties = alias.additionalProperties.toMutableMap()
                 }
 
@@ -374,17 +374,17 @@ private constructor(
 
                 fun name(name: JsonField<String>) = apply { this.name = name }
 
-                fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
-
-                fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
-                    this.startingAt = startingAt
-                }
-
                 fun endingBefore(endingBefore: OffsetDateTime) =
                     endingBefore(JsonField.of(endingBefore))
 
                 fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                     this.endingBefore = endingBefore
+                }
+
+                fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
+
+                fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                    this.startingAt = startingAt
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -412,8 +412,8 @@ private constructor(
                 fun build(): Alias =
                     Alias(
                         name,
-                        startingAt,
                         endingBefore,
+                        startingAt,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -423,46 +423,46 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Alias && name == other.name && startingAt == other.startingAt && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Alias && name == other.name && endingBefore == other.endingBefore && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(name, startingAt, endingBefore, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(name, endingBefore, startingAt, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Alias{name=$name, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
+                "Alias{name=$name, endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
         }
 
         @NoAutoDetect
         class CreditTypeConversion
         @JsonCreator
         private constructor(
-            @JsonProperty("fiat_per_custom_credit")
-            @ExcludeMissing
-            private val fiatPerCustomCredit: JsonField<String> = JsonMissing.of(),
             @JsonProperty("custom_credit_type")
             @ExcludeMissing
             private val customCreditType: JsonField<CreditTypeData> = JsonMissing.of(),
+            @JsonProperty("fiat_per_custom_credit")
+            @ExcludeMissing
+            private val fiatPerCustomCredit: JsonField<String> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            fun fiatPerCustomCredit(): String =
-                fiatPerCustomCredit.getRequired("fiat_per_custom_credit")
-
             fun customCreditType(): CreditTypeData =
                 customCreditType.getRequired("custom_credit_type")
 
-            @JsonProperty("fiat_per_custom_credit")
-            @ExcludeMissing
-            fun _fiatPerCustomCredit() = fiatPerCustomCredit
+            fun fiatPerCustomCredit(): String =
+                fiatPerCustomCredit.getRequired("fiat_per_custom_credit")
 
             @JsonProperty("custom_credit_type")
             @ExcludeMissing
             fun _customCreditType() = customCreditType
+
+            @JsonProperty("fiat_per_custom_credit")
+            @ExcludeMissing
+            fun _fiatPerCustomCredit() = fiatPerCustomCredit
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -472,8 +472,8 @@ private constructor(
 
             fun validate(): CreditTypeConversion = apply {
                 if (!validated) {
-                    fiatPerCustomCredit()
                     customCreditType().validate()
+                    fiatPerCustomCredit()
                     validated = true
                 }
             }
@@ -487,22 +487,15 @@ private constructor(
 
             class Builder {
 
-                private var fiatPerCustomCredit: JsonField<String> = JsonMissing.of()
                 private var customCreditType: JsonField<CreditTypeData> = JsonMissing.of()
+                private var fiatPerCustomCredit: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(creditTypeConversion: CreditTypeConversion) = apply {
-                    fiatPerCustomCredit = creditTypeConversion.fiatPerCustomCredit
                     customCreditType = creditTypeConversion.customCreditType
+                    fiatPerCustomCredit = creditTypeConversion.fiatPerCustomCredit
                     additionalProperties = creditTypeConversion.additionalProperties.toMutableMap()
-                }
-
-                fun fiatPerCustomCredit(fiatPerCustomCredit: String) =
-                    fiatPerCustomCredit(JsonField.of(fiatPerCustomCredit))
-
-                fun fiatPerCustomCredit(fiatPerCustomCredit: JsonField<String>) = apply {
-                    this.fiatPerCustomCredit = fiatPerCustomCredit
                 }
 
                 fun customCreditType(customCreditType: CreditTypeData) =
@@ -510,6 +503,13 @@ private constructor(
 
                 fun customCreditType(customCreditType: JsonField<CreditTypeData>) = apply {
                     this.customCreditType = customCreditType
+                }
+
+                fun fiatPerCustomCredit(fiatPerCustomCredit: String) =
+                    fiatPerCustomCredit(JsonField.of(fiatPerCustomCredit))
+
+                fun fiatPerCustomCredit(fiatPerCustomCredit: JsonField<String>) = apply {
+                    this.fiatPerCustomCredit = fiatPerCustomCredit
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -536,8 +536,8 @@ private constructor(
 
                 fun build(): CreditTypeConversion =
                     CreditTypeConversion(
-                        fiatPerCustomCredit,
                         customCreditType,
+                        fiatPerCustomCredit,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -547,17 +547,17 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is CreditTypeConversion && fiatPerCustomCredit == other.fiatPerCustomCredit && customCreditType == other.customCreditType && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is CreditTypeConversion && customCreditType == other.customCreditType && fiatPerCustomCredit == other.fiatPerCustomCredit && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(fiatPerCustomCredit, customCreditType, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(customCreditType, fiatPerCustomCredit, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "CreditTypeConversion{fiatPerCustomCredit=$fiatPerCustomCredit, customCreditType=$customCreditType, additionalProperties=$additionalProperties}"
+                "CreditTypeConversion{customCreditType=$customCreditType, fiatPerCustomCredit=$fiatPerCustomCredit, additionalProperties=$additionalProperties}"
         }
 
         @NoAutoDetect
@@ -643,17 +643,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && id == other.id && name == other.name && createdAt == other.createdAt && createdBy == other.createdBy && description == other.description && fiatCreditType == other.fiatCreditType && creditTypeConversions == other.creditTypeConversions && aliases == other.aliases && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && id == other.id && createdAt == other.createdAt && createdBy == other.createdBy && name == other.name && aliases == other.aliases && creditTypeConversions == other.creditTypeConversions && customFields == other.customFields && description == other.description && fiatCreditType == other.fiatCreditType && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, name, createdAt, createdBy, description, fiatCreditType, creditTypeConversions, aliases, customFields, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, createdAt, createdBy, name, aliases, creditTypeConversions, customFields, description, fiatCreditType, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Data{id=$id, name=$name, createdAt=$createdAt, createdBy=$createdBy, description=$description, fiatCreditType=$fiatCreditType, creditTypeConversions=$creditTypeConversions, aliases=$aliases, customFields=$customFields, additionalProperties=$additionalProperties}"
+            "Data{id=$id, createdAt=$createdAt, createdBy=$createdBy, name=$name, aliases=$aliases, creditTypeConversions=$creditTypeConversions, customFields=$customFields, description=$description, fiatCreditType=$fiatCreditType, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

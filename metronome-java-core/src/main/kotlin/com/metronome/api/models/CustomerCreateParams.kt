@@ -363,31 +363,31 @@ constructor(
     class BillingConfig
     @JsonCreator
     private constructor(
-        @JsonProperty("billing_provider_type") private val billingProviderType: BillingProviderType,
         @JsonProperty("billing_provider_customer_id") private val billingProviderCustomerId: String,
-        @JsonProperty("stripe_collection_method")
-        private val stripeCollectionMethod: StripeCollectionMethod?,
+        @JsonProperty("billing_provider_type") private val billingProviderType: BillingProviderType,
         @JsonProperty("aws_product_code") private val awsProductCode: String?,
         @JsonProperty("aws_region") private val awsRegion: AwsRegion?,
+        @JsonProperty("stripe_collection_method")
+        private val stripeCollectionMethod: StripeCollectionMethod?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("billing_provider_type")
-        fun billingProviderType(): BillingProviderType = billingProviderType
-
         @JsonProperty("billing_provider_customer_id")
         fun billingProviderCustomerId(): String = billingProviderCustomerId
 
-        @JsonProperty("stripe_collection_method")
-        fun stripeCollectionMethod(): Optional<StripeCollectionMethod> =
-            Optional.ofNullable(stripeCollectionMethod)
+        @JsonProperty("billing_provider_type")
+        fun billingProviderType(): BillingProviderType = billingProviderType
 
         @JsonProperty("aws_product_code")
         fun awsProductCode(): Optional<String> = Optional.ofNullable(awsProductCode)
 
         @JsonProperty("aws_region")
         fun awsRegion(): Optional<AwsRegion> = Optional.ofNullable(awsRegion)
+
+        @JsonProperty("stripe_collection_method")
+        fun stripeCollectionMethod(): Optional<StripeCollectionMethod> =
+            Optional.ofNullable(stripeCollectionMethod)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -402,33 +402,29 @@ constructor(
 
         class Builder {
 
-            private var billingProviderType: BillingProviderType? = null
             private var billingProviderCustomerId: String? = null
-            private var stripeCollectionMethod: StripeCollectionMethod? = null
+            private var billingProviderType: BillingProviderType? = null
             private var awsProductCode: String? = null
             private var awsRegion: AwsRegion? = null
+            private var stripeCollectionMethod: StripeCollectionMethod? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(billingConfig: BillingConfig) = apply {
-                billingProviderType = billingConfig.billingProviderType
                 billingProviderCustomerId = billingConfig.billingProviderCustomerId
-                stripeCollectionMethod = billingConfig.stripeCollectionMethod
+                billingProviderType = billingConfig.billingProviderType
                 awsProductCode = billingConfig.awsProductCode
                 awsRegion = billingConfig.awsRegion
+                stripeCollectionMethod = billingConfig.stripeCollectionMethod
                 additionalProperties = billingConfig.additionalProperties.toMutableMap()
-            }
-
-            fun billingProviderType(billingProviderType: BillingProviderType) = apply {
-                this.billingProviderType = billingProviderType
             }
 
             fun billingProviderCustomerId(billingProviderCustomerId: String) = apply {
                 this.billingProviderCustomerId = billingProviderCustomerId
             }
 
-            fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) = apply {
-                this.stripeCollectionMethod = stripeCollectionMethod
+            fun billingProviderType(billingProviderType: BillingProviderType) = apply {
+                this.billingProviderType = billingProviderType
             }
 
             fun awsProductCode(awsProductCode: String) = apply {
@@ -436,6 +432,10 @@ constructor(
             }
 
             fun awsRegion(awsRegion: AwsRegion) = apply { this.awsRegion = awsRegion }
+
+            fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) = apply {
+                this.stripeCollectionMethod = stripeCollectionMethod
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -458,15 +458,15 @@ constructor(
 
             fun build(): BillingConfig =
                 BillingConfig(
-                    checkNotNull(billingProviderType) {
-                        "`billingProviderType` is required but was not set"
-                    },
                     checkNotNull(billingProviderCustomerId) {
                         "`billingProviderCustomerId` is required but was not set"
                     },
-                    stripeCollectionMethod,
+                    checkNotNull(billingProviderType) {
+                        "`billingProviderType` is required but was not set"
+                    },
                     awsProductCode,
                     awsRegion,
+                    stripeCollectionMethod,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -825,17 +825,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is BillingConfig && billingProviderType == other.billingProviderType && billingProviderCustomerId == other.billingProviderCustomerId && stripeCollectionMethod == other.stripeCollectionMethod && awsProductCode == other.awsProductCode && awsRegion == other.awsRegion && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is BillingConfig && billingProviderCustomerId == other.billingProviderCustomerId && billingProviderType == other.billingProviderType && awsProductCode == other.awsProductCode && awsRegion == other.awsRegion && stripeCollectionMethod == other.stripeCollectionMethod && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(billingProviderType, billingProviderCustomerId, stripeCollectionMethod, awsProductCode, awsRegion, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(billingProviderCustomerId, billingProviderType, awsProductCode, awsRegion, stripeCollectionMethod, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "BillingConfig{billingProviderType=$billingProviderType, billingProviderCustomerId=$billingProviderCustomerId, stripeCollectionMethod=$stripeCollectionMethod, awsProductCode=$awsProductCode, awsRegion=$awsRegion, additionalProperties=$additionalProperties}"
+            "BillingConfig{billingProviderCustomerId=$billingProviderCustomerId, billingProviderType=$billingProviderType, awsProductCode=$awsProductCode, awsRegion=$awsRegion, stripeCollectionMethod=$stripeCollectionMethod, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect

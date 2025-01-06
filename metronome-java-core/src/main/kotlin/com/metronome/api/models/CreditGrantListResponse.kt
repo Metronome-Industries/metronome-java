@@ -22,67 +22,104 @@ class CreditGrantListResponse
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("balance")
+    @ExcludeMissing
+    private val balance: JsonField<Balance> = JsonMissing.of(),
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
     @JsonProperty("customer_id")
     @ExcludeMissing
     private val customerId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("invoice_id")
+    @JsonProperty("deductions")
     @ExcludeMissing
-    private val invoiceId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("uniqueness_key")
-    @ExcludeMissing
-    private val uniquenessKey: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("reason")
-    @ExcludeMissing
-    private val reason: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("credit_grant_type")
-    @ExcludeMissing
-    private val creditGrantType: JsonField<String> = JsonMissing.of(),
+    private val deductions: JsonField<List<CreditLedgerEntry>> = JsonMissing.of(),
     @JsonProperty("effective_at")
     @ExcludeMissing
     private val effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonProperty("expires_at")
     @ExcludeMissing
     private val expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("priority")
-    @ExcludeMissing
-    private val priority: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("grant_amount")
     @ExcludeMissing
     private val grantAmount: JsonField<GrantAmount> = JsonMissing.of(),
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
     @JsonProperty("paid_amount")
     @ExcludeMissing
     private val paidAmount: JsonField<PaidAmount> = JsonMissing.of(),
-    @JsonProperty("balance")
-    @ExcludeMissing
-    private val balance: JsonField<Balance> = JsonMissing.of(),
-    @JsonProperty("deductions")
-    @ExcludeMissing
-    private val deductions: JsonField<List<CreditLedgerEntry>> = JsonMissing.of(),
     @JsonProperty("pending_deductions")
     @ExcludeMissing
     private val pendingDeductions: JsonField<List<CreditLedgerEntry>> = JsonMissing.of(),
+    @JsonProperty("priority")
+    @ExcludeMissing
+    private val priority: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("credit_grant_type")
+    @ExcludeMissing
+    private val creditGrantType: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("invoice_id")
+    @ExcludeMissing
+    private val invoiceId: JsonField<String> = JsonMissing.of(),
     @JsonProperty("products")
     @ExcludeMissing
     private val products: JsonField<List<Product>> = JsonMissing.of(),
-    @JsonProperty("custom_fields")
+    @JsonProperty("reason")
     @ExcludeMissing
-    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+    private val reason: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("uniqueness_key")
+    @ExcludeMissing
+    private val uniquenessKey: JsonField<String> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     /** the Metronome ID of the credit grant */
     fun id(): String = id.getRequired("id")
 
-    fun name(): String = name.getRequired("name")
+    /**
+     * The effective balance of the grant as of the end of the customer's current billing period.
+     * Expiration deductions will be included only if the grant expires before the end of the
+     * current billing period.
+     */
+    fun balance(): Balance = balance.getRequired("balance")
+
+    fun customFields(): CustomFields = customFields.getRequired("custom_fields")
 
     /** the Metronome ID of the customer */
     fun customerId(): String = customerId.getRequired("customer_id")
+
+    fun deductions(): List<CreditLedgerEntry> = deductions.getRequired("deductions")
+
+    fun effectiveAt(): OffsetDateTime = effectiveAt.getRequired("effective_at")
+
+    fun expiresAt(): OffsetDateTime = expiresAt.getRequired("expires_at")
+
+    /** the amount of credits initially granted */
+    fun grantAmount(): GrantAmount = grantAmount.getRequired("grant_amount")
+
+    fun name(): String = name.getRequired("name")
+
+    /** the amount paid for this credit grant */
+    fun paidAmount(): PaidAmount = paidAmount.getRequired("paid_amount")
+
+    fun pendingDeductions(): List<CreditLedgerEntry> =
+        pendingDeductions.getRequired("pending_deductions")
+
+    fun priority(): Double = priority.getRequired("priority")
+
+    fun creditGrantType(): Optional<String> =
+        Optional.ofNullable(creditGrantType.getNullable("credit_grant_type"))
 
     /**
      * the Metronome ID of the invoice with the purchase charge for this credit grant, if applicable
      */
     fun invoiceId(): Optional<String> = Optional.ofNullable(invoiceId.getNullable("invoice_id"))
+
+    /**
+     * The products which these credits will be applied to. (If unspecified, the credits will be
+     * applied to charges for all products.)
+     */
+    fun products(): Optional<List<Product>> = Optional.ofNullable(products.getNullable("products"))
+
+    fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
 
     /**
      * Prevents the creation of duplicates. If a request to create a record is made with a
@@ -92,78 +129,8 @@ private constructor(
     fun uniquenessKey(): Optional<String> =
         Optional.ofNullable(uniquenessKey.getNullable("uniqueness_key"))
 
-    fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
-
-    fun creditGrantType(): Optional<String> =
-        Optional.ofNullable(creditGrantType.getNullable("credit_grant_type"))
-
-    fun effectiveAt(): OffsetDateTime = effectiveAt.getRequired("effective_at")
-
-    fun expiresAt(): OffsetDateTime = expiresAt.getRequired("expires_at")
-
-    fun priority(): Double = priority.getRequired("priority")
-
-    /** the amount of credits initially granted */
-    fun grantAmount(): GrantAmount = grantAmount.getRequired("grant_amount")
-
-    /** the amount paid for this credit grant */
-    fun paidAmount(): PaidAmount = paidAmount.getRequired("paid_amount")
-
-    /**
-     * The effective balance of the grant as of the end of the customer's current billing period.
-     * Expiration deductions will be included only if the grant expires before the end of the
-     * current billing period.
-     */
-    fun balance(): Balance = balance.getRequired("balance")
-
-    fun deductions(): List<CreditLedgerEntry> = deductions.getRequired("deductions")
-
-    fun pendingDeductions(): List<CreditLedgerEntry> =
-        pendingDeductions.getRequired("pending_deductions")
-
-    /**
-     * The products which these credits will be applied to. (If unspecified, the credits will be
-     * applied to charges for all products.)
-     */
-    fun products(): Optional<List<Product>> = Optional.ofNullable(products.getNullable("products"))
-
-    fun customFields(): CustomFields = customFields.getRequired("custom_fields")
-
     /** the Metronome ID of the credit grant */
     @JsonProperty("id") @ExcludeMissing fun _id() = id
-
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
-
-    /** the Metronome ID of the customer */
-    @JsonProperty("customer_id") @ExcludeMissing fun _customerId() = customerId
-
-    /**
-     * the Metronome ID of the invoice with the purchase charge for this credit grant, if applicable
-     */
-    @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
-
-    /**
-     * Prevents the creation of duplicates. If a request to create a record is made with a
-     * previously used uniqueness key, a new record will not be created and the request will fail
-     * with a 409 error.
-     */
-    @JsonProperty("uniqueness_key") @ExcludeMissing fun _uniquenessKey() = uniquenessKey
-
-    @JsonProperty("reason") @ExcludeMissing fun _reason() = reason
-
-    @JsonProperty("credit_grant_type") @ExcludeMissing fun _creditGrantType() = creditGrantType
-
-    @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
-
-    @JsonProperty("expires_at") @ExcludeMissing fun _expiresAt() = expiresAt
-
-    @JsonProperty("priority") @ExcludeMissing fun _priority() = priority
-
-    /** the amount of credits initially granted */
-    @JsonProperty("grant_amount") @ExcludeMissing fun _grantAmount() = grantAmount
-
-    /** the amount paid for this credit grant */
-    @JsonProperty("paid_amount") @ExcludeMissing fun _paidAmount() = paidAmount
 
     /**
      * The effective balance of the grant as of the end of the customer's current billing period.
@@ -172,9 +139,35 @@ private constructor(
      */
     @JsonProperty("balance") @ExcludeMissing fun _balance() = balance
 
+    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+
+    /** the Metronome ID of the customer */
+    @JsonProperty("customer_id") @ExcludeMissing fun _customerId() = customerId
+
     @JsonProperty("deductions") @ExcludeMissing fun _deductions() = deductions
 
+    @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
+
+    @JsonProperty("expires_at") @ExcludeMissing fun _expiresAt() = expiresAt
+
+    /** the amount of credits initially granted */
+    @JsonProperty("grant_amount") @ExcludeMissing fun _grantAmount() = grantAmount
+
+    @JsonProperty("name") @ExcludeMissing fun _name() = name
+
+    /** the amount paid for this credit grant */
+    @JsonProperty("paid_amount") @ExcludeMissing fun _paidAmount() = paidAmount
+
     @JsonProperty("pending_deductions") @ExcludeMissing fun _pendingDeductions() = pendingDeductions
+
+    @JsonProperty("priority") @ExcludeMissing fun _priority() = priority
+
+    @JsonProperty("credit_grant_type") @ExcludeMissing fun _creditGrantType() = creditGrantType
+
+    /**
+     * the Metronome ID of the invoice with the purchase charge for this credit grant, if applicable
+     */
+    @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
 
     /**
      * The products which these credits will be applied to. (If unspecified, the credits will be
@@ -182,7 +175,14 @@ private constructor(
      */
     @JsonProperty("products") @ExcludeMissing fun _products() = products
 
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+    @JsonProperty("reason") @ExcludeMissing fun _reason() = reason
+
+    /**
+     * Prevents the creation of duplicates. If a request to create a record is made with a
+     * previously used uniqueness key, a new record will not be created and the request will fail
+     * with a 409 error.
+     */
+    @JsonProperty("uniqueness_key") @ExcludeMissing fun _uniquenessKey() = uniquenessKey
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -193,22 +193,22 @@ private constructor(
     fun validate(): CreditGrantListResponse = apply {
         if (!validated) {
             id()
-            name()
+            balance().validate()
+            customFields().validate()
             customerId()
-            invoiceId()
-            uniquenessKey()
-            reason()
-            creditGrantType()
+            deductions().forEach { it.validate() }
             effectiveAt()
             expiresAt()
-            priority()
             grantAmount().validate()
+            name()
             paidAmount().validate()
-            balance().validate()
-            deductions().forEach { it.validate() }
             pendingDeductions().forEach { it.validate() }
+            priority()
+            creditGrantType()
+            invoiceId()
             products().map { it.forEach { it.validate() } }
-            customFields().validate()
+            reason()
+            uniquenessKey()
             validated = true
         }
     }
@@ -223,43 +223,43 @@ private constructor(
     class Builder {
 
         private var id: JsonField<String> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
+        private var balance: JsonField<Balance> = JsonMissing.of()
+        private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var customerId: JsonField<String> = JsonMissing.of()
-        private var invoiceId: JsonField<String> = JsonMissing.of()
-        private var uniquenessKey: JsonField<String> = JsonMissing.of()
-        private var reason: JsonField<String> = JsonMissing.of()
-        private var creditGrantType: JsonField<String> = JsonMissing.of()
+        private var deductions: JsonField<List<CreditLedgerEntry>> = JsonMissing.of()
         private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var priority: JsonField<Double> = JsonMissing.of()
         private var grantAmount: JsonField<GrantAmount> = JsonMissing.of()
+        private var name: JsonField<String> = JsonMissing.of()
         private var paidAmount: JsonField<PaidAmount> = JsonMissing.of()
-        private var balance: JsonField<Balance> = JsonMissing.of()
-        private var deductions: JsonField<List<CreditLedgerEntry>> = JsonMissing.of()
         private var pendingDeductions: JsonField<List<CreditLedgerEntry>> = JsonMissing.of()
+        private var priority: JsonField<Double> = JsonMissing.of()
+        private var creditGrantType: JsonField<String> = JsonMissing.of()
+        private var invoiceId: JsonField<String> = JsonMissing.of()
         private var products: JsonField<List<Product>> = JsonMissing.of()
-        private var customFields: JsonField<CustomFields> = JsonMissing.of()
+        private var reason: JsonField<String> = JsonMissing.of()
+        private var uniquenessKey: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(creditGrantListResponse: CreditGrantListResponse) = apply {
             id = creditGrantListResponse.id
-            name = creditGrantListResponse.name
+            balance = creditGrantListResponse.balance
+            customFields = creditGrantListResponse.customFields
             customerId = creditGrantListResponse.customerId
-            invoiceId = creditGrantListResponse.invoiceId
-            uniquenessKey = creditGrantListResponse.uniquenessKey
-            reason = creditGrantListResponse.reason
-            creditGrantType = creditGrantListResponse.creditGrantType
+            deductions = creditGrantListResponse.deductions
             effectiveAt = creditGrantListResponse.effectiveAt
             expiresAt = creditGrantListResponse.expiresAt
-            priority = creditGrantListResponse.priority
             grantAmount = creditGrantListResponse.grantAmount
+            name = creditGrantListResponse.name
             paidAmount = creditGrantListResponse.paidAmount
-            balance = creditGrantListResponse.balance
-            deductions = creditGrantListResponse.deductions
             pendingDeductions = creditGrantListResponse.pendingDeductions
+            priority = creditGrantListResponse.priority
+            creditGrantType = creditGrantListResponse.creditGrantType
+            invoiceId = creditGrantListResponse.invoiceId
             products = creditGrantListResponse.products
-            customFields = creditGrantListResponse.customFields
+            reason = creditGrantListResponse.reason
+            uniquenessKey = creditGrantListResponse.uniquenessKey
             additionalProperties = creditGrantListResponse.additionalProperties.toMutableMap()
         }
 
@@ -268,83 +268,6 @@ private constructor(
 
         /** the Metronome ID of the credit grant */
         fun id(id: JsonField<String>) = apply { this.id = id }
-
-        fun name(name: String) = name(JsonField.of(name))
-
-        fun name(name: JsonField<String>) = apply { this.name = name }
-
-        /** the Metronome ID of the customer */
-        fun customerId(customerId: String) = customerId(JsonField.of(customerId))
-
-        /** the Metronome ID of the customer */
-        fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
-
-        /**
-         * the Metronome ID of the invoice with the purchase charge for this credit grant, if
-         * applicable
-         */
-        fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
-
-        /**
-         * the Metronome ID of the invoice with the purchase charge for this credit grant, if
-         * applicable
-         */
-        fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
-
-        /**
-         * Prevents the creation of duplicates. If a request to create a record is made with a
-         * previously used uniqueness key, a new record will not be created and the request will
-         * fail with a 409 error.
-         */
-        fun uniquenessKey(uniquenessKey: String) = uniquenessKey(JsonField.of(uniquenessKey))
-
-        /**
-         * Prevents the creation of duplicates. If a request to create a record is made with a
-         * previously used uniqueness key, a new record will not be created and the request will
-         * fail with a 409 error.
-         */
-        fun uniquenessKey(uniquenessKey: JsonField<String>) = apply {
-            this.uniquenessKey = uniquenessKey
-        }
-
-        fun reason(reason: String) = reason(JsonField.of(reason))
-
-        fun reason(reason: JsonField<String>) = apply { this.reason = reason }
-
-        fun creditGrantType(creditGrantType: String) =
-            creditGrantType(JsonField.of(creditGrantType))
-
-        fun creditGrantType(creditGrantType: JsonField<String>) = apply {
-            this.creditGrantType = creditGrantType
-        }
-
-        fun effectiveAt(effectiveAt: OffsetDateTime) = effectiveAt(JsonField.of(effectiveAt))
-
-        fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
-            this.effectiveAt = effectiveAt
-        }
-
-        fun expiresAt(expiresAt: OffsetDateTime) = expiresAt(JsonField.of(expiresAt))
-
-        fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply { this.expiresAt = expiresAt }
-
-        fun priority(priority: Double) = priority(JsonField.of(priority))
-
-        fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
-
-        /** the amount of credits initially granted */
-        fun grantAmount(grantAmount: GrantAmount) = grantAmount(JsonField.of(grantAmount))
-
-        /** the amount of credits initially granted */
-        fun grantAmount(grantAmount: JsonField<GrantAmount>) = apply {
-            this.grantAmount = grantAmount
-        }
-
-        /** the amount paid for this credit grant */
-        fun paidAmount(paidAmount: PaidAmount) = paidAmount(JsonField.of(paidAmount))
-
-        /** the amount paid for this credit grant */
-        fun paidAmount(paidAmount: JsonField<PaidAmount>) = apply { this.paidAmount = paidAmount }
 
         /**
          * The effective balance of the grant as of the end of the customer's current billing
@@ -360,11 +283,51 @@ private constructor(
          */
         fun balance(balance: JsonField<Balance>) = apply { this.balance = balance }
 
+        fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+
+        fun customFields(customFields: JsonField<CustomFields>) = apply {
+            this.customFields = customFields
+        }
+
+        /** the Metronome ID of the customer */
+        fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+        /** the Metronome ID of the customer */
+        fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
+
         fun deductions(deductions: List<CreditLedgerEntry>) = deductions(JsonField.of(deductions))
 
         fun deductions(deductions: JsonField<List<CreditLedgerEntry>>) = apply {
             this.deductions = deductions
         }
+
+        fun effectiveAt(effectiveAt: OffsetDateTime) = effectiveAt(JsonField.of(effectiveAt))
+
+        fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
+            this.effectiveAt = effectiveAt
+        }
+
+        fun expiresAt(expiresAt: OffsetDateTime) = expiresAt(JsonField.of(expiresAt))
+
+        fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply { this.expiresAt = expiresAt }
+
+        /** the amount of credits initially granted */
+        fun grantAmount(grantAmount: GrantAmount) = grantAmount(JsonField.of(grantAmount))
+
+        /** the amount of credits initially granted */
+        fun grantAmount(grantAmount: JsonField<GrantAmount>) = apply {
+            this.grantAmount = grantAmount
+        }
+
+        fun name(name: String) = name(JsonField.of(name))
+
+        fun name(name: JsonField<String>) = apply { this.name = name }
+
+        /** the amount paid for this credit grant */
+        fun paidAmount(paidAmount: PaidAmount) = paidAmount(JsonField.of(paidAmount))
+
+        /** the amount paid for this credit grant */
+        fun paidAmount(paidAmount: JsonField<PaidAmount>) = apply { this.paidAmount = paidAmount }
 
         fun pendingDeductions(pendingDeductions: List<CreditLedgerEntry>) =
             pendingDeductions(JsonField.of(pendingDeductions))
@@ -372,6 +335,29 @@ private constructor(
         fun pendingDeductions(pendingDeductions: JsonField<List<CreditLedgerEntry>>) = apply {
             this.pendingDeductions = pendingDeductions
         }
+
+        fun priority(priority: Double) = priority(JsonField.of(priority))
+
+        fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
+
+        fun creditGrantType(creditGrantType: String) =
+            creditGrantType(JsonField.of(creditGrantType))
+
+        fun creditGrantType(creditGrantType: JsonField<String>) = apply {
+            this.creditGrantType = creditGrantType
+        }
+
+        /**
+         * the Metronome ID of the invoice with the purchase charge for this credit grant, if
+         * applicable
+         */
+        fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
+
+        /**
+         * the Metronome ID of the invoice with the purchase charge for this credit grant, if
+         * applicable
+         */
+        fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
 
         /**
          * The products which these credits will be applied to. (If unspecified, the credits will be
@@ -385,10 +371,24 @@ private constructor(
          */
         fun products(products: JsonField<List<Product>>) = apply { this.products = products }
 
-        fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+        fun reason(reason: String) = reason(JsonField.of(reason))
 
-        fun customFields(customFields: JsonField<CustomFields>) = apply {
-            this.customFields = customFields
+        fun reason(reason: JsonField<String>) = apply { this.reason = reason }
+
+        /**
+         * Prevents the creation of duplicates. If a request to create a record is made with a
+         * previously used uniqueness key, a new record will not be created and the request will
+         * fail with a 409 error.
+         */
+        fun uniquenessKey(uniquenessKey: String) = uniquenessKey(JsonField.of(uniquenessKey))
+
+        /**
+         * Prevents the creation of duplicates. If a request to create a record is made with a
+         * previously used uniqueness key, a new record will not be created and the request will
+         * fail with a 409 error.
+         */
+        fun uniquenessKey(uniquenessKey: JsonField<String>) = apply {
+            this.uniquenessKey = uniquenessKey
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -413,22 +413,22 @@ private constructor(
         fun build(): CreditGrantListResponse =
             CreditGrantListResponse(
                 id,
-                name,
+                balance,
+                customFields,
                 customerId,
-                invoiceId,
-                uniquenessKey,
-                reason,
-                creditGrantType,
+                deductions.map { it.toImmutable() },
                 effectiveAt,
                 expiresAt,
-                priority,
                 grantAmount,
+                name,
                 paidAmount,
-                balance,
-                deductions.map { it.toImmutable() },
                 pendingDeductions.map { it.toImmutable() },
+                priority,
+                creditGrantType,
+                invoiceId,
                 products.map { it.toImmutable() },
-                customFields,
+                reason,
+                uniquenessKey,
                 additionalProperties.toImmutable(),
             )
     }
@@ -442,18 +442,21 @@ private constructor(
     class Balance
     @JsonCreator
     private constructor(
+        @JsonProperty("effective_at")
+        @ExcludeMissing
+        private val effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("excluding_pending")
         @ExcludeMissing
         private val excludingPending: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("including_pending")
         @ExcludeMissing
         private val includingPending: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("effective_at")
-        @ExcludeMissing
-        private val effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
+
+        /** The end_date of the customer's current billing period. */
+        fun effectiveAt(): OffsetDateTime = effectiveAt.getRequired("effective_at")
 
         /**
          * The grant's current balance including all posted deductions. If the grant has expired,
@@ -468,7 +471,7 @@ private constructor(
         fun includingPending(): Double = includingPending.getRequired("including_pending")
 
         /** The end_date of the customer's current billing period. */
-        fun effectiveAt(): OffsetDateTime = effectiveAt.getRequired("effective_at")
+        @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
 
         /**
          * The grant's current balance including all posted deductions. If the grant has expired,
@@ -486,9 +489,6 @@ private constructor(
         @ExcludeMissing
         fun _includingPending() = includingPending
 
-        /** The end_date of the customer's current billing period. */
-        @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -497,9 +497,9 @@ private constructor(
 
         fun validate(): Balance = apply {
             if (!validated) {
+                effectiveAt()
                 excludingPending()
                 includingPending()
-                effectiveAt()
                 validated = true
             }
         }
@@ -513,17 +513,25 @@ private constructor(
 
         class Builder {
 
+            private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var excludingPending: JsonField<Double> = JsonMissing.of()
             private var includingPending: JsonField<Double> = JsonMissing.of()
-            private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(balance: Balance) = apply {
+                effectiveAt = balance.effectiveAt
                 excludingPending = balance.excludingPending
                 includingPending = balance.includingPending
-                effectiveAt = balance.effectiveAt
                 additionalProperties = balance.additionalProperties.toMutableMap()
+            }
+
+            /** The end_date of the customer's current billing period. */
+            fun effectiveAt(effectiveAt: OffsetDateTime) = effectiveAt(JsonField.of(effectiveAt))
+
+            /** The end_date of the customer's current billing period. */
+            fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
+                this.effectiveAt = effectiveAt
             }
 
             /**
@@ -558,14 +566,6 @@ private constructor(
                 this.includingPending = includingPending
             }
 
-            /** The end_date of the customer's current billing period. */
-            fun effectiveAt(effectiveAt: OffsetDateTime) = effectiveAt(JsonField.of(effectiveAt))
-
-            /** The end_date of the customer's current billing period. */
-            fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
-                this.effectiveAt = effectiveAt
-            }
-
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -587,9 +587,9 @@ private constructor(
 
             fun build(): Balance =
                 Balance(
+                    effectiveAt,
                     excludingPending,
                     includingPending,
-                    effectiveAt,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -599,17 +599,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Balance && excludingPending == other.excludingPending && includingPending == other.includingPending && effectiveAt == other.effectiveAt && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Balance && effectiveAt == other.effectiveAt && excludingPending == other.excludingPending && includingPending == other.includingPending && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(excludingPending, includingPending, effectiveAt, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(effectiveAt, excludingPending, includingPending, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Balance{excludingPending=$excludingPending, includingPending=$includingPending, effectiveAt=$effectiveAt, additionalProperties=$additionalProperties}"
+            "Balance{effectiveAt=$effectiveAt, excludingPending=$excludingPending, includingPending=$includingPending, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -1031,15 +1031,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditGrantListResponse && id == other.id && name == other.name && customerId == other.customerId && invoiceId == other.invoiceId && uniquenessKey == other.uniquenessKey && reason == other.reason && creditGrantType == other.creditGrantType && effectiveAt == other.effectiveAt && expiresAt == other.expiresAt && priority == other.priority && grantAmount == other.grantAmount && paidAmount == other.paidAmount && balance == other.balance && deductions == other.deductions && pendingDeductions == other.pendingDeductions && products == other.products && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CreditGrantListResponse && id == other.id && balance == other.balance && customFields == other.customFields && customerId == other.customerId && deductions == other.deductions && effectiveAt == other.effectiveAt && expiresAt == other.expiresAt && grantAmount == other.grantAmount && name == other.name && paidAmount == other.paidAmount && pendingDeductions == other.pendingDeductions && priority == other.priority && creditGrantType == other.creditGrantType && invoiceId == other.invoiceId && products == other.products && reason == other.reason && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, name, customerId, invoiceId, uniquenessKey, reason, creditGrantType, effectiveAt, expiresAt, priority, grantAmount, paidAmount, balance, deductions, pendingDeductions, products, customFields, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, balance, customFields, customerId, deductions, effectiveAt, expiresAt, grantAmount, name, paidAmount, pendingDeductions, priority, creditGrantType, invoiceId, products, reason, uniquenessKey, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CreditGrantListResponse{id=$id, name=$name, customerId=$customerId, invoiceId=$invoiceId, uniquenessKey=$uniquenessKey, reason=$reason, creditGrantType=$creditGrantType, effectiveAt=$effectiveAt, expiresAt=$expiresAt, priority=$priority, grantAmount=$grantAmount, paidAmount=$paidAmount, balance=$balance, deductions=$deductions, pendingDeductions=$pendingDeductions, products=$products, customFields=$customFields, additionalProperties=$additionalProperties}"
+        "CreditGrantListResponse{id=$id, balance=$balance, customFields=$customFields, customerId=$customerId, deductions=$deductions, effectiveAt=$effectiveAt, expiresAt=$expiresAt, grantAmount=$grantAmount, name=$name, paidAmount=$paidAmount, pendingDeductions=$pendingDeductions, priority=$priority, creditGrantType=$creditGrantType, invoiceId=$invoiceId, products=$products, reason=$reason, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
 }

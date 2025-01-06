@@ -23,10 +23,19 @@ class PlanListChargesResponse
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
     @JsonProperty("charge_type")
     @ExcludeMissing
     private val chargeType: JsonField<ChargeType> = JsonMissing.of(),
+    @JsonProperty("credit_type")
+    @ExcludeMissing
+    private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("prices")
+    @ExcludeMissing
+    private val prices: JsonField<List<Price>> = JsonMissing.of(),
     @JsonProperty("product_id")
     @ExcludeMissing
     private val productId: JsonField<String> = JsonMissing.of(),
@@ -42,26 +51,23 @@ private constructor(
     @JsonProperty("tier_reset_frequency")
     @ExcludeMissing
     private val tierResetFrequency: JsonField<Double> = JsonMissing.of(),
-    @JsonProperty("credit_type")
-    @ExcludeMissing
-    private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
     @JsonProperty("unit_conversion")
     @ExcludeMissing
     private val unitConversion: JsonField<UnitConversion> = JsonMissing.of(),
-    @JsonProperty("prices")
-    @ExcludeMissing
-    private val prices: JsonField<List<Price>> = JsonMissing.of(),
-    @JsonProperty("custom_fields")
-    @ExcludeMissing
-    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun id(): String = id.getRequired("id")
 
+    fun chargeType(): ChargeType = chargeType.getRequired("charge_type")
+
+    fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
+
+    fun customFields(): CustomFields = customFields.getRequired("custom_fields")
+
     fun name(): String = name.getRequired("name")
 
-    fun chargeType(): ChargeType = chargeType.getRequired("charge_type")
+    fun prices(): List<Price> = prices.getRequired("prices")
 
     fun productId(): String = productId.getRequired("product_id")
 
@@ -80,21 +86,21 @@ private constructor(
     fun tierResetFrequency(): Optional<Double> =
         Optional.ofNullable(tierResetFrequency.getNullable("tier_reset_frequency"))
 
-    fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
-
     /** Specifies how quantities for usage based charges will be converted. */
     fun unitConversion(): Optional<UnitConversion> =
         Optional.ofNullable(unitConversion.getNullable("unit_conversion"))
 
-    fun prices(): List<Price> = prices.getRequired("prices")
-
-    fun customFields(): CustomFields = customFields.getRequired("custom_fields")
-
     @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+    @JsonProperty("charge_type") @ExcludeMissing fun _chargeType() = chargeType
+
+    @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+
+    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
 
     @JsonProperty("name") @ExcludeMissing fun _name() = name
 
-    @JsonProperty("charge_type") @ExcludeMissing fun _chargeType() = chargeType
+    @JsonProperty("prices") @ExcludeMissing fun _prices() = prices
 
     @JsonProperty("product_id") @ExcludeMissing fun _productId() = productId
 
@@ -113,14 +119,8 @@ private constructor(
     @ExcludeMissing
     fun _tierResetFrequency() = tierResetFrequency
 
-    @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
-
     /** Specifies how quantities for usage based charges will be converted. */
     @JsonProperty("unit_conversion") @ExcludeMissing fun _unitConversion() = unitConversion
-
-    @JsonProperty("prices") @ExcludeMissing fun _prices() = prices
-
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -131,17 +131,17 @@ private constructor(
     fun validate(): PlanListChargesResponse = apply {
         if (!validated) {
             id()
-            name()
             chargeType()
+            creditType().validate()
+            customFields().validate()
+            name()
+            prices().forEach { it.validate() }
             productId()
             productName()
             quantity()
             startPeriod()
             tierResetFrequency()
-            creditType().validate()
             unitConversion().map { it.validate() }
-            prices().forEach { it.validate() }
-            customFields().validate()
             validated = true
         }
     }
@@ -156,33 +156,33 @@ private constructor(
     class Builder {
 
         private var id: JsonField<String> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
         private var chargeType: JsonField<ChargeType> = JsonMissing.of()
+        private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
+        private var customFields: JsonField<CustomFields> = JsonMissing.of()
+        private var name: JsonField<String> = JsonMissing.of()
+        private var prices: JsonField<List<Price>> = JsonMissing.of()
         private var productId: JsonField<String> = JsonMissing.of()
         private var productName: JsonField<String> = JsonMissing.of()
         private var quantity: JsonField<Double> = JsonMissing.of()
         private var startPeriod: JsonField<Double> = JsonMissing.of()
         private var tierResetFrequency: JsonField<Double> = JsonMissing.of()
-        private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
         private var unitConversion: JsonField<UnitConversion> = JsonMissing.of()
-        private var prices: JsonField<List<Price>> = JsonMissing.of()
-        private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(planListChargesResponse: PlanListChargesResponse) = apply {
             id = planListChargesResponse.id
-            name = planListChargesResponse.name
             chargeType = planListChargesResponse.chargeType
+            creditType = planListChargesResponse.creditType
+            customFields = planListChargesResponse.customFields
+            name = planListChargesResponse.name
+            prices = planListChargesResponse.prices
             productId = planListChargesResponse.productId
             productName = planListChargesResponse.productName
             quantity = planListChargesResponse.quantity
             startPeriod = planListChargesResponse.startPeriod
             tierResetFrequency = planListChargesResponse.tierResetFrequency
-            creditType = planListChargesResponse.creditType
             unitConversion = planListChargesResponse.unitConversion
-            prices = planListChargesResponse.prices
-            customFields = planListChargesResponse.customFields
             additionalProperties = planListChargesResponse.additionalProperties.toMutableMap()
         }
 
@@ -190,13 +190,29 @@ private constructor(
 
         fun id(id: JsonField<String>) = apply { this.id = id }
 
+        fun chargeType(chargeType: ChargeType) = chargeType(JsonField.of(chargeType))
+
+        fun chargeType(chargeType: JsonField<ChargeType>) = apply { this.chargeType = chargeType }
+
+        fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
+
+        fun creditType(creditType: JsonField<CreditTypeData>) = apply {
+            this.creditType = creditType
+        }
+
+        fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+
+        fun customFields(customFields: JsonField<CustomFields>) = apply {
+            this.customFields = customFields
+        }
+
         fun name(name: String) = name(JsonField.of(name))
 
         fun name(name: JsonField<String>) = apply { this.name = name }
 
-        fun chargeType(chargeType: ChargeType) = chargeType(JsonField.of(chargeType))
+        fun prices(prices: List<Price>) = prices(JsonField.of(prices))
 
-        fun chargeType(chargeType: JsonField<ChargeType>) = apply { this.chargeType = chargeType }
+        fun prices(prices: JsonField<List<Price>>) = apply { this.prices = prices }
 
         fun productId(productId: String) = productId(JsonField.of(productId))
 
@@ -235,12 +251,6 @@ private constructor(
             this.tierResetFrequency = tierResetFrequency
         }
 
-        fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
-
-        fun creditType(creditType: JsonField<CreditTypeData>) = apply {
-            this.creditType = creditType
-        }
-
         /** Specifies how quantities for usage based charges will be converted. */
         fun unitConversion(unitConversion: UnitConversion) =
             unitConversion(JsonField.of(unitConversion))
@@ -248,16 +258,6 @@ private constructor(
         /** Specifies how quantities for usage based charges will be converted. */
         fun unitConversion(unitConversion: JsonField<UnitConversion>) = apply {
             this.unitConversion = unitConversion
-        }
-
-        fun prices(prices: List<Price>) = prices(JsonField.of(prices))
-
-        fun prices(prices: JsonField<List<Price>>) = apply { this.prices = prices }
-
-        fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
-
-        fun customFields(customFields: JsonField<CustomFields>) = apply {
-            this.customFields = customFields
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -282,17 +282,17 @@ private constructor(
         fun build(): PlanListChargesResponse =
             PlanListChargesResponse(
                 id,
-                name,
                 chargeType,
+                creditType,
+                customFields,
+                name,
+                prices.map { it.toImmutable() },
                 productId,
                 productName,
                 quantity,
                 startPeriod,
                 tierResetFrequency,
-                creditType,
                 unitConversion,
-                prices.map { it.toImmutable() },
-                customFields,
                 additionalProperties.toImmutable(),
             )
     }
@@ -451,52 +451,52 @@ private constructor(
     class Price
     @JsonCreator
     private constructor(
-        @JsonProperty("value")
-        @ExcludeMissing
-        private val value: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("tier")
         @ExcludeMissing
         private val tier: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("quantity")
+        @JsonProperty("value")
         @ExcludeMissing
-        private val quantity: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("collection_schedule")
-        @ExcludeMissing
-        private val collectionSchedule: JsonField<String> = JsonMissing.of(),
+        private val value: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("collection_interval")
         @ExcludeMissing
         private val collectionInterval: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("collection_schedule")
+        @ExcludeMissing
+        private val collectionSchedule: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("quantity")
+        @ExcludeMissing
+        private val quantity: JsonField<Double> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        fun value(): Double = value.getRequired("value")
-
         /** Used in pricing tiers. Indicates at what metric value the price applies. */
         fun tier(): Double = tier.getRequired("tier")
 
-        fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
-
-        fun collectionSchedule(): Optional<String> =
-            Optional.ofNullable(collectionSchedule.getNullable("collection_schedule"))
+        fun value(): Double = value.getRequired("value")
 
         fun collectionInterval(): Optional<Double> =
             Optional.ofNullable(collectionInterval.getNullable("collection_interval"))
 
-        @JsonProperty("value") @ExcludeMissing fun _value() = value
+        fun collectionSchedule(): Optional<String> =
+            Optional.ofNullable(collectionSchedule.getNullable("collection_schedule"))
+
+        fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
 
         /** Used in pricing tiers. Indicates at what metric value the price applies. */
         @JsonProperty("tier") @ExcludeMissing fun _tier() = tier
 
-        @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+        @JsonProperty("value") @ExcludeMissing fun _value() = value
+
+        @JsonProperty("collection_interval")
+        @ExcludeMissing
+        fun _collectionInterval() = collectionInterval
 
         @JsonProperty("collection_schedule")
         @ExcludeMissing
         fun _collectionSchedule() = collectionSchedule
 
-        @JsonProperty("collection_interval")
-        @ExcludeMissing
-        fun _collectionInterval() = collectionInterval
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -506,11 +506,11 @@ private constructor(
 
         fun validate(): Price = apply {
             if (!validated) {
-                value()
                 tier()
-                quantity()
-                collectionSchedule()
+                value()
                 collectionInterval()
+                collectionSchedule()
+                quantity()
                 validated = true
             }
         }
@@ -524,26 +524,22 @@ private constructor(
 
         class Builder {
 
-            private var value: JsonField<Double> = JsonMissing.of()
             private var tier: JsonField<Double> = JsonMissing.of()
-            private var quantity: JsonField<Double> = JsonMissing.of()
-            private var collectionSchedule: JsonField<String> = JsonMissing.of()
+            private var value: JsonField<Double> = JsonMissing.of()
             private var collectionInterval: JsonField<Double> = JsonMissing.of()
+            private var collectionSchedule: JsonField<String> = JsonMissing.of()
+            private var quantity: JsonField<Double> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(price: Price) = apply {
-                value = price.value
                 tier = price.tier
-                quantity = price.quantity
-                collectionSchedule = price.collectionSchedule
+                value = price.value
                 collectionInterval = price.collectionInterval
+                collectionSchedule = price.collectionSchedule
+                quantity = price.quantity
                 additionalProperties = price.additionalProperties.toMutableMap()
             }
-
-            fun value(value: Double) = value(JsonField.of(value))
-
-            fun value(value: JsonField<Double>) = apply { this.value = value }
 
             /** Used in pricing tiers. Indicates at what metric value the price applies. */
             fun tier(tier: Double) = tier(JsonField.of(tier))
@@ -551,9 +547,16 @@ private constructor(
             /** Used in pricing tiers. Indicates at what metric value the price applies. */
             fun tier(tier: JsonField<Double>) = apply { this.tier = tier }
 
-            fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+            fun value(value: Double) = value(JsonField.of(value))
 
-            fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
+            fun value(value: JsonField<Double>) = apply { this.value = value }
+
+            fun collectionInterval(collectionInterval: Double) =
+                collectionInterval(JsonField.of(collectionInterval))
+
+            fun collectionInterval(collectionInterval: JsonField<Double>) = apply {
+                this.collectionInterval = collectionInterval
+            }
 
             fun collectionSchedule(collectionSchedule: String) =
                 collectionSchedule(JsonField.of(collectionSchedule))
@@ -562,12 +565,9 @@ private constructor(
                 this.collectionSchedule = collectionSchedule
             }
 
-            fun collectionInterval(collectionInterval: Double) =
-                collectionInterval(JsonField.of(collectionInterval))
+            fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-            fun collectionInterval(collectionInterval: JsonField<Double>) = apply {
-                this.collectionInterval = collectionInterval
-            }
+            fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -590,11 +590,11 @@ private constructor(
 
             fun build(): Price =
                 Price(
-                    value,
                     tier,
-                    quantity,
-                    collectionSchedule,
+                    value,
                     collectionInterval,
+                    collectionSchedule,
+                    quantity,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -604,17 +604,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Price && value == other.value && tier == other.tier && quantity == other.quantity && collectionSchedule == other.collectionSchedule && collectionInterval == other.collectionInterval && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Price && tier == other.tier && value == other.value && collectionInterval == other.collectionInterval && collectionSchedule == other.collectionSchedule && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(value, tier, quantity, collectionSchedule, collectionInterval, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(tier, value, collectionInterval, collectionSchedule, quantity, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Price{value=$value, tier=$tier, quantity=$quantity, collectionSchedule=$collectionSchedule, collectionInterval=$collectionInterval, additionalProperties=$additionalProperties}"
+            "Price{tier=$tier, value=$value, collectionInterval=$collectionInterval, collectionSchedule=$collectionSchedule, quantity=$quantity, additionalProperties=$additionalProperties}"
     }
 
     /** Specifies how quantities for usage based charges will be converted. */
@@ -818,15 +818,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is PlanListChargesResponse && id == other.id && name == other.name && chargeType == other.chargeType && productId == other.productId && productName == other.productName && quantity == other.quantity && startPeriod == other.startPeriod && tierResetFrequency == other.tierResetFrequency && creditType == other.creditType && unitConversion == other.unitConversion && prices == other.prices && customFields == other.customFields && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is PlanListChargesResponse && id == other.id && chargeType == other.chargeType && creditType == other.creditType && customFields == other.customFields && name == other.name && prices == other.prices && productId == other.productId && productName == other.productName && quantity == other.quantity && startPeriod == other.startPeriod && tierResetFrequency == other.tierResetFrequency && unitConversion == other.unitConversion && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, name, chargeType, productId, productName, quantity, startPeriod, tierResetFrequency, creditType, unitConversion, prices, customFields, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, chargeType, creditType, customFields, name, prices, productId, productName, quantity, startPeriod, tierResetFrequency, unitConversion, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PlanListChargesResponse{id=$id, name=$name, chargeType=$chargeType, productId=$productId, productName=$productName, quantity=$quantity, startPeriod=$startPeriod, tierResetFrequency=$tierResetFrequency, creditType=$creditType, unitConversion=$unitConversion, prices=$prices, customFields=$customFields, additionalProperties=$additionalProperties}"
+        "PlanListChargesResponse{id=$id, chargeType=$chargeType, creditType=$creditType, customFields=$customFields, name=$name, prices=$prices, productId=$productId, productName=$productName, quantity=$quantity, startPeriod=$startPeriod, tierResetFrequency=$tierResetFrequency, unitConversion=$unitConversion, additionalProperties=$additionalProperties}"
 }

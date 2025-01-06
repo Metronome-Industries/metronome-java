@@ -22,262 +22,262 @@ class CustomerInvoiceListBreakdownsResponse
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("customer_id")
-    @ExcludeMissing
-    private val customerId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("customer_custom_fields")
-    @ExcludeMissing
-    private val customerCustomFields: JsonField<Invoice.CustomerCustomFields> = JsonMissing.of(),
-    @JsonProperty("netsuite_sales_order_id")
-    @ExcludeMissing
-    private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("salesforce_opportunity_id")
-    @ExcludeMissing
-    private val salesforceOpportunityId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("net_payment_terms_days")
-    @ExcludeMissing
-    private val netPaymentTermsDays: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("credit_type")
     @ExcludeMissing
     private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
-    @JsonProperty("invoice_adjustments")
+    @JsonProperty("customer_id")
     @ExcludeMissing
-    private val invoiceAdjustments: JsonField<List<Invoice.InvoiceAdjustment>> = JsonMissing.of(),
+    private val customerId: JsonField<String> = JsonMissing.of(),
     @JsonProperty("line_items")
     @ExcludeMissing
     private val lineItems: JsonField<List<Invoice.LineItem>> = JsonMissing.of(),
-    @JsonProperty("start_timestamp")
-    @ExcludeMissing
-    private val startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("end_timestamp")
-    @ExcludeMissing
-    private val endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("issued_at")
-    @ExcludeMissing
-    private val issuedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("created_at")
-    @ExcludeMissing
-    private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonProperty("status")
     @ExcludeMissing
     private val status: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("subtotal")
-    @ExcludeMissing
-    private val subtotal: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("total") @ExcludeMissing private val total: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("type") @ExcludeMissing private val type: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("amendment_id")
+    @ExcludeMissing
+    private val amendmentId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("billable_status")
+    @ExcludeMissing
+    private val billableStatus: JsonField<Invoice.BillableStatus> = JsonMissing.of(),
+    @JsonProperty("contract_custom_fields")
+    @ExcludeMissing
+    private val contractCustomFields: JsonField<Invoice.ContractCustomFields> = JsonMissing.of(),
+    @JsonProperty("contract_id")
+    @ExcludeMissing
+    private val contractId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("correction_record")
+    @ExcludeMissing
+    private val correctionRecord: JsonField<Invoice.CorrectionRecord> = JsonMissing.of(),
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    private val customFields: JsonField<Invoice.CustomFields> = JsonMissing.of(),
+    @JsonProperty("customer_custom_fields")
+    @ExcludeMissing
+    private val customerCustomFields: JsonField<Invoice.CustomerCustomFields> = JsonMissing.of(),
+    @JsonProperty("end_timestamp")
+    @ExcludeMissing
+    private val endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonProperty("external_invoice")
     @ExcludeMissing
     private val externalInvoice: JsonField<Invoice.ExternalInvoice> = JsonMissing.of(),
+    @JsonProperty("invoice_adjustments")
+    @ExcludeMissing
+    private val invoiceAdjustments: JsonField<List<Invoice.InvoiceAdjustment>> = JsonMissing.of(),
+    @JsonProperty("issued_at")
+    @ExcludeMissing
+    private val issuedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("net_payment_terms_days")
+    @ExcludeMissing
+    private val netPaymentTermsDays: JsonField<Double> = JsonMissing.of(),
+    @JsonProperty("netsuite_sales_order_id")
+    @ExcludeMissing
+    private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("plan_custom_fields")
+    @ExcludeMissing
+    private val planCustomFields: JsonField<Invoice.PlanCustomFields> = JsonMissing.of(),
     @JsonProperty("plan_id")
     @ExcludeMissing
     private val planId: JsonField<String> = JsonMissing.of(),
     @JsonProperty("plan_name")
     @ExcludeMissing
     private val planName: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("plan_custom_fields")
-    @ExcludeMissing
-    private val planCustomFields: JsonField<Invoice.PlanCustomFields> = JsonMissing.of(),
-    @JsonProperty("contract_id")
-    @ExcludeMissing
-    private val contractId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("contract_custom_fields")
-    @ExcludeMissing
-    private val contractCustomFields: JsonField<Invoice.ContractCustomFields> = JsonMissing.of(),
-    @JsonProperty("amendment_id")
-    @ExcludeMissing
-    private val amendmentId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("correction_record")
-    @ExcludeMissing
-    private val correctionRecord: JsonField<Invoice.CorrectionRecord> = JsonMissing.of(),
     @JsonProperty("reseller_royalty")
     @ExcludeMissing
     private val resellerRoyalty: JsonField<Invoice.ResellerRoyalty> = JsonMissing.of(),
-    @JsonProperty("custom_fields")
+    @JsonProperty("salesforce_opportunity_id")
     @ExcludeMissing
-    private val customFields: JsonField<Invoice.CustomFields> = JsonMissing.of(),
-    @JsonProperty("billable_status")
+    private val salesforceOpportunityId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("start_timestamp")
     @ExcludeMissing
-    private val billableStatus: JsonField<Invoice.BillableStatus> = JsonMissing.of(),
-    @JsonProperty("breakdown_start_timestamp")
+    private val startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("subtotal")
     @ExcludeMissing
-    private val breakdownStartTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+    private val subtotal: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("breakdown_end_timestamp")
     @ExcludeMissing
     private val breakdownEndTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("breakdown_start_timestamp")
+    @ExcludeMissing
+    private val breakdownStartTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun id(): String = id.getRequired("id")
 
-    fun customerId(): String = customerId.getRequired("customer_id")
-
-    fun customerCustomFields(): Optional<Invoice.CustomerCustomFields> =
-        Optional.ofNullable(customerCustomFields.getNullable("customer_custom_fields"))
-
-    /** This field's availability is dependent on your client's configuration. */
-    fun netsuiteSalesOrderId(): Optional<String> =
-        Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
-
-    /** This field's availability is dependent on your client's configuration. */
-    fun salesforceOpportunityId(): Optional<String> =
-        Optional.ofNullable(salesforceOpportunityId.getNullable("salesforce_opportunity_id"))
-
-    fun netPaymentTermsDays(): Optional<Double> =
-        Optional.ofNullable(netPaymentTermsDays.getNullable("net_payment_terms_days"))
-
     fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
-    fun invoiceAdjustments(): Optional<List<Invoice.InvoiceAdjustment>> =
-        Optional.ofNullable(invoiceAdjustments.getNullable("invoice_adjustments"))
+    fun customerId(): String = customerId.getRequired("customer_id")
 
     fun lineItems(): List<Invoice.LineItem> = lineItems.getRequired("line_items")
 
-    /** Beginning of the usage period this invoice covers (UTC) */
-    fun startTimestamp(): Optional<OffsetDateTime> =
-        Optional.ofNullable(startTimestamp.getNullable("start_timestamp"))
-
-    /** End of the usage period this invoice covers (UTC) */
-    fun endTimestamp(): Optional<OffsetDateTime> =
-        Optional.ofNullable(endTimestamp.getNullable("end_timestamp"))
-
-    /** When the invoice was issued (UTC) */
-    fun issuedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(issuedAt.getNullable("issued_at"))
-
-    /** When the invoice was created (UTC). This field is present for correction invoices only. */
-    fun createdAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(createdAt.getNullable("created_at"))
-
     fun status(): String = status.getRequired("status")
-
-    fun subtotal(): Optional<Double> = Optional.ofNullable(subtotal.getNullable("subtotal"))
 
     fun total(): Double = total.getRequired("total")
 
     fun type(): String = type.getRequired("type")
 
-    fun externalInvoice(): Optional<Invoice.ExternalInvoice> =
-        Optional.ofNullable(externalInvoice.getNullable("external_invoice"))
-
-    fun planId(): Optional<String> = Optional.ofNullable(planId.getNullable("plan_id"))
-
-    fun planName(): Optional<String> = Optional.ofNullable(planName.getNullable("plan_name"))
-
-    fun planCustomFields(): Optional<Invoice.PlanCustomFields> =
-        Optional.ofNullable(planCustomFields.getNullable("plan_custom_fields"))
-
-    fun contractId(): Optional<String> = Optional.ofNullable(contractId.getNullable("contract_id"))
-
-    fun contractCustomFields(): Optional<Invoice.ContractCustomFields> =
-        Optional.ofNullable(contractCustomFields.getNullable("contract_custom_fields"))
-
     fun amendmentId(): Optional<String> =
         Optional.ofNullable(amendmentId.getNullable("amendment_id"))
-
-    fun correctionRecord(): Optional<Invoice.CorrectionRecord> =
-        Optional.ofNullable(correctionRecord.getNullable("correction_record"))
-
-    /** only present for beta contract invoices with reseller royalties */
-    fun resellerRoyalty(): Optional<Invoice.ResellerRoyalty> =
-        Optional.ofNullable(resellerRoyalty.getNullable("reseller_royalty"))
-
-    fun customFields(): Optional<Invoice.CustomFields> =
-        Optional.ofNullable(customFields.getNullable("custom_fields"))
 
     /** This field's availability is dependent on your client's configuration. */
     fun billableStatus(): Optional<Invoice.BillableStatus> =
         Optional.ofNullable(billableStatus.getNullable("billable_status"))
 
-    fun breakdownStartTimestamp(): OffsetDateTime =
-        breakdownStartTimestamp.getRequired("breakdown_start_timestamp")
+    fun contractCustomFields(): Optional<Invoice.ContractCustomFields> =
+        Optional.ofNullable(contractCustomFields.getNullable("contract_custom_fields"))
+
+    fun contractId(): Optional<String> = Optional.ofNullable(contractId.getNullable("contract_id"))
+
+    fun correctionRecord(): Optional<Invoice.CorrectionRecord> =
+        Optional.ofNullable(correctionRecord.getNullable("correction_record"))
+
+    /** When the invoice was created (UTC). This field is present for correction invoices only. */
+    fun createdAt(): Optional<OffsetDateTime> =
+        Optional.ofNullable(createdAt.getNullable("created_at"))
+
+    fun customFields(): Optional<Invoice.CustomFields> =
+        Optional.ofNullable(customFields.getNullable("custom_fields"))
+
+    fun customerCustomFields(): Optional<Invoice.CustomerCustomFields> =
+        Optional.ofNullable(customerCustomFields.getNullable("customer_custom_fields"))
+
+    /** End of the usage period this invoice covers (UTC) */
+    fun endTimestamp(): Optional<OffsetDateTime> =
+        Optional.ofNullable(endTimestamp.getNullable("end_timestamp"))
+
+    fun externalInvoice(): Optional<Invoice.ExternalInvoice> =
+        Optional.ofNullable(externalInvoice.getNullable("external_invoice"))
+
+    fun invoiceAdjustments(): Optional<List<Invoice.InvoiceAdjustment>> =
+        Optional.ofNullable(invoiceAdjustments.getNullable("invoice_adjustments"))
+
+    /** When the invoice was issued (UTC) */
+    fun issuedAt(): Optional<OffsetDateTime> =
+        Optional.ofNullable(issuedAt.getNullable("issued_at"))
+
+    fun netPaymentTermsDays(): Optional<Double> =
+        Optional.ofNullable(netPaymentTermsDays.getNullable("net_payment_terms_days"))
+
+    /** This field's availability is dependent on your client's configuration. */
+    fun netsuiteSalesOrderId(): Optional<String> =
+        Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
+
+    fun planCustomFields(): Optional<Invoice.PlanCustomFields> =
+        Optional.ofNullable(planCustomFields.getNullable("plan_custom_fields"))
+
+    fun planId(): Optional<String> = Optional.ofNullable(planId.getNullable("plan_id"))
+
+    fun planName(): Optional<String> = Optional.ofNullable(planName.getNullable("plan_name"))
+
+    /** only present for beta contract invoices with reseller royalties */
+    fun resellerRoyalty(): Optional<Invoice.ResellerRoyalty> =
+        Optional.ofNullable(resellerRoyalty.getNullable("reseller_royalty"))
+
+    /** This field's availability is dependent on your client's configuration. */
+    fun salesforceOpportunityId(): Optional<String> =
+        Optional.ofNullable(salesforceOpportunityId.getNullable("salesforce_opportunity_id"))
+
+    /** Beginning of the usage period this invoice covers (UTC) */
+    fun startTimestamp(): Optional<OffsetDateTime> =
+        Optional.ofNullable(startTimestamp.getNullable("start_timestamp"))
+
+    fun subtotal(): Optional<Double> = Optional.ofNullable(subtotal.getNullable("subtotal"))
 
     fun breakdownEndTimestamp(): OffsetDateTime =
         breakdownEndTimestamp.getRequired("breakdown_end_timestamp")
 
+    fun breakdownStartTimestamp(): OffsetDateTime =
+        breakdownStartTimestamp.getRequired("breakdown_start_timestamp")
+
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
+    @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+
     @JsonProperty("customer_id") @ExcludeMissing fun _customerId() = customerId
+
+    @JsonProperty("line_items") @ExcludeMissing fun _lineItems() = lineItems
+
+    @JsonProperty("status") @ExcludeMissing fun _status() = status
+
+    @JsonProperty("total") @ExcludeMissing fun _total() = total
+
+    @JsonProperty("type") @ExcludeMissing fun _type() = type
+
+    @JsonProperty("amendment_id") @ExcludeMissing fun _amendmentId() = amendmentId
+
+    /** This field's availability is dependent on your client's configuration. */
+    @JsonProperty("billable_status") @ExcludeMissing fun _billableStatus() = billableStatus
+
+    @JsonProperty("contract_custom_fields")
+    @ExcludeMissing
+    fun _contractCustomFields() = contractCustomFields
+
+    @JsonProperty("contract_id") @ExcludeMissing fun _contractId() = contractId
+
+    @JsonProperty("correction_record") @ExcludeMissing fun _correctionRecord() = correctionRecord
+
+    /** When the invoice was created (UTC). This field is present for correction invoices only. */
+    @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
+
+    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
 
     @JsonProperty("customer_custom_fields")
     @ExcludeMissing
     fun _customerCustomFields() = customerCustomFields
+
+    /** End of the usage period this invoice covers (UTC) */
+    @JsonProperty("end_timestamp") @ExcludeMissing fun _endTimestamp() = endTimestamp
+
+    @JsonProperty("external_invoice") @ExcludeMissing fun _externalInvoice() = externalInvoice
+
+    @JsonProperty("invoice_adjustments")
+    @ExcludeMissing
+    fun _invoiceAdjustments() = invoiceAdjustments
+
+    /** When the invoice was issued (UTC) */
+    @JsonProperty("issued_at") @ExcludeMissing fun _issuedAt() = issuedAt
+
+    @JsonProperty("net_payment_terms_days")
+    @ExcludeMissing
+    fun _netPaymentTermsDays() = netPaymentTermsDays
 
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("netsuite_sales_order_id")
     @ExcludeMissing
     fun _netsuiteSalesOrderId() = netsuiteSalesOrderId
 
-    /** This field's availability is dependent on your client's configuration. */
-    @JsonProperty("salesforce_opportunity_id")
-    @ExcludeMissing
-    fun _salesforceOpportunityId() = salesforceOpportunityId
-
-    @JsonProperty("net_payment_terms_days")
-    @ExcludeMissing
-    fun _netPaymentTermsDays() = netPaymentTermsDays
-
-    @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
-
-    @JsonProperty("invoice_adjustments")
-    @ExcludeMissing
-    fun _invoiceAdjustments() = invoiceAdjustments
-
-    @JsonProperty("line_items") @ExcludeMissing fun _lineItems() = lineItems
-
-    /** Beginning of the usage period this invoice covers (UTC) */
-    @JsonProperty("start_timestamp") @ExcludeMissing fun _startTimestamp() = startTimestamp
-
-    /** End of the usage period this invoice covers (UTC) */
-    @JsonProperty("end_timestamp") @ExcludeMissing fun _endTimestamp() = endTimestamp
-
-    /** When the invoice was issued (UTC) */
-    @JsonProperty("issued_at") @ExcludeMissing fun _issuedAt() = issuedAt
-
-    /** When the invoice was created (UTC). This field is present for correction invoices only. */
-    @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
-
-    @JsonProperty("status") @ExcludeMissing fun _status() = status
-
-    @JsonProperty("subtotal") @ExcludeMissing fun _subtotal() = subtotal
-
-    @JsonProperty("total") @ExcludeMissing fun _total() = total
-
-    @JsonProperty("type") @ExcludeMissing fun _type() = type
-
-    @JsonProperty("external_invoice") @ExcludeMissing fun _externalInvoice() = externalInvoice
+    @JsonProperty("plan_custom_fields") @ExcludeMissing fun _planCustomFields() = planCustomFields
 
     @JsonProperty("plan_id") @ExcludeMissing fun _planId() = planId
 
     @JsonProperty("plan_name") @ExcludeMissing fun _planName() = planName
 
-    @JsonProperty("plan_custom_fields") @ExcludeMissing fun _planCustomFields() = planCustomFields
-
-    @JsonProperty("contract_id") @ExcludeMissing fun _contractId() = contractId
-
-    @JsonProperty("contract_custom_fields")
-    @ExcludeMissing
-    fun _contractCustomFields() = contractCustomFields
-
-    @JsonProperty("amendment_id") @ExcludeMissing fun _amendmentId() = amendmentId
-
-    @JsonProperty("correction_record") @ExcludeMissing fun _correctionRecord() = correctionRecord
-
     /** only present for beta contract invoices with reseller royalties */
     @JsonProperty("reseller_royalty") @ExcludeMissing fun _resellerRoyalty() = resellerRoyalty
 
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
-
     /** This field's availability is dependent on your client's configuration. */
-    @JsonProperty("billable_status") @ExcludeMissing fun _billableStatus() = billableStatus
-
-    @JsonProperty("breakdown_start_timestamp")
+    @JsonProperty("salesforce_opportunity_id")
     @ExcludeMissing
-    fun _breakdownStartTimestamp() = breakdownStartTimestamp
+    fun _salesforceOpportunityId() = salesforceOpportunityId
+
+    /** Beginning of the usage period this invoice covers (UTC) */
+    @JsonProperty("start_timestamp") @ExcludeMissing fun _startTimestamp() = startTimestamp
+
+    @JsonProperty("subtotal") @ExcludeMissing fun _subtotal() = subtotal
 
     @JsonProperty("breakdown_end_timestamp")
     @ExcludeMissing
     fun _breakdownEndTimestamp() = breakdownEndTimestamp
+
+    @JsonProperty("breakdown_start_timestamp")
+    @ExcludeMissing
+    fun _breakdownStartTimestamp() = breakdownStartTimestamp
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -286,33 +286,33 @@ private constructor(
     fun toInvoice(): Invoice =
         Invoice.builder()
             .id(id)
-            .customerId(customerId)
-            .customerCustomFields(customerCustomFields)
-            .netsuiteSalesOrderId(netsuiteSalesOrderId)
-            .salesforceOpportunityId(salesforceOpportunityId)
-            .netPaymentTermsDays(netPaymentTermsDays)
             .creditType(creditType)
-            .invoiceAdjustments(invoiceAdjustments)
+            .customerId(customerId)
             .lineItems(lineItems)
-            .startTimestamp(startTimestamp)
-            .endTimestamp(endTimestamp)
-            .issuedAt(issuedAt)
-            .createdAt(createdAt)
             .status(status)
-            .subtotal(subtotal)
             .total(total)
             .type(type)
+            .amendmentId(amendmentId)
+            .billableStatus(billableStatus)
+            .contractCustomFields(contractCustomFields)
+            .contractId(contractId)
+            .correctionRecord(correctionRecord)
+            .createdAt(createdAt)
+            .customFields(customFields)
+            .customerCustomFields(customerCustomFields)
+            .endTimestamp(endTimestamp)
             .externalInvoice(externalInvoice)
+            .invoiceAdjustments(invoiceAdjustments)
+            .issuedAt(issuedAt)
+            .netPaymentTermsDays(netPaymentTermsDays)
+            .netsuiteSalesOrderId(netsuiteSalesOrderId)
+            .planCustomFields(planCustomFields)
             .planId(planId)
             .planName(planName)
-            .planCustomFields(planCustomFields)
-            .contractId(contractId)
-            .contractCustomFields(contractCustomFields)
-            .amendmentId(amendmentId)
-            .correctionRecord(correctionRecord)
             .resellerRoyalty(resellerRoyalty)
-            .customFields(customFields)
-            .billableStatus(billableStatus)
+            .salesforceOpportunityId(salesforceOpportunityId)
+            .startTimestamp(startTimestamp)
+            .subtotal(subtotal)
             .build()
 
     private var validated: Boolean = false
@@ -320,35 +320,35 @@ private constructor(
     fun validate(): CustomerInvoiceListBreakdownsResponse = apply {
         if (!validated) {
             id()
-            customerId()
-            customerCustomFields().map { it.validate() }
-            netsuiteSalesOrderId()
-            salesforceOpportunityId()
-            netPaymentTermsDays()
             creditType().validate()
-            invoiceAdjustments().map { it.forEach { it.validate() } }
+            customerId()
             lineItems().forEach { it.validate() }
-            startTimestamp()
-            endTimestamp()
-            issuedAt()
-            createdAt()
             status()
-            subtotal()
             total()
             type()
+            amendmentId()
+            billableStatus()
+            contractCustomFields().map { it.validate() }
+            contractId()
+            correctionRecord().map { it.validate() }
+            createdAt()
+            customFields().map { it.validate() }
+            customerCustomFields().map { it.validate() }
+            endTimestamp()
             externalInvoice().map { it.validate() }
+            invoiceAdjustments().map { it.forEach { it.validate() } }
+            issuedAt()
+            netPaymentTermsDays()
+            netsuiteSalesOrderId()
+            planCustomFields().map { it.validate() }
             planId()
             planName()
-            planCustomFields().map { it.validate() }
-            contractId()
-            contractCustomFields().map { it.validate() }
-            amendmentId()
-            correctionRecord().map { it.validate() }
             resellerRoyalty().map { it.validate() }
-            customFields().map { it.validate() }
-            billableStatus()
-            breakdownStartTimestamp()
+            salesforceOpportunityId()
+            startTimestamp()
+            subtotal()
             breakdownEndTimestamp()
+            breakdownStartTimestamp()
             validated = true
         }
     }
@@ -363,36 +363,36 @@ private constructor(
     class Builder {
 
         private var id: JsonField<String> = JsonMissing.of()
-        private var customerId: JsonField<String> = JsonMissing.of()
-        private var customerCustomFields: JsonField<Invoice.CustomerCustomFields> = JsonMissing.of()
-        private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
-        private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
-        private var netPaymentTermsDays: JsonField<Double> = JsonMissing.of()
         private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
-        private var invoiceAdjustments: JsonField<List<Invoice.InvoiceAdjustment>> =
-            JsonMissing.of()
+        private var customerId: JsonField<String> = JsonMissing.of()
         private var lineItems: JsonField<List<Invoice.LineItem>> = JsonMissing.of()
-        private var startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var issuedAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var status: JsonField<String> = JsonMissing.of()
-        private var subtotal: JsonField<Double> = JsonMissing.of()
         private var total: JsonField<Double> = JsonMissing.of()
         private var type: JsonField<String> = JsonMissing.of()
+        private var amendmentId: JsonField<String> = JsonMissing.of()
+        private var billableStatus: JsonField<Invoice.BillableStatus> = JsonMissing.of()
+        private var contractCustomFields: JsonField<Invoice.ContractCustomFields> = JsonMissing.of()
+        private var contractId: JsonField<String> = JsonMissing.of()
+        private var correctionRecord: JsonField<Invoice.CorrectionRecord> = JsonMissing.of()
+        private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var customFields: JsonField<Invoice.CustomFields> = JsonMissing.of()
+        private var customerCustomFields: JsonField<Invoice.CustomerCustomFields> = JsonMissing.of()
+        private var endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
         private var externalInvoice: JsonField<Invoice.ExternalInvoice> = JsonMissing.of()
+        private var invoiceAdjustments: JsonField<List<Invoice.InvoiceAdjustment>> =
+            JsonMissing.of()
+        private var issuedAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var netPaymentTermsDays: JsonField<Double> = JsonMissing.of()
+        private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
+        private var planCustomFields: JsonField<Invoice.PlanCustomFields> = JsonMissing.of()
         private var planId: JsonField<String> = JsonMissing.of()
         private var planName: JsonField<String> = JsonMissing.of()
-        private var planCustomFields: JsonField<Invoice.PlanCustomFields> = JsonMissing.of()
-        private var contractId: JsonField<String> = JsonMissing.of()
-        private var contractCustomFields: JsonField<Invoice.ContractCustomFields> = JsonMissing.of()
-        private var amendmentId: JsonField<String> = JsonMissing.of()
-        private var correctionRecord: JsonField<Invoice.CorrectionRecord> = JsonMissing.of()
         private var resellerRoyalty: JsonField<Invoice.ResellerRoyalty> = JsonMissing.of()
-        private var customFields: JsonField<Invoice.CustomFields> = JsonMissing.of()
-        private var billableStatus: JsonField<Invoice.BillableStatus> = JsonMissing.of()
-        private var breakdownStartTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
+        private var startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var subtotal: JsonField<Double> = JsonMissing.of()
         private var breakdownEndTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var breakdownStartTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -400,35 +400,35 @@ private constructor(
             customerInvoiceListBreakdownsResponse: CustomerInvoiceListBreakdownsResponse
         ) = apply {
             id = customerInvoiceListBreakdownsResponse.id
-            customerId = customerInvoiceListBreakdownsResponse.customerId
-            customerCustomFields = customerInvoiceListBreakdownsResponse.customerCustomFields
-            netsuiteSalesOrderId = customerInvoiceListBreakdownsResponse.netsuiteSalesOrderId
-            salesforceOpportunityId = customerInvoiceListBreakdownsResponse.salesforceOpportunityId
-            netPaymentTermsDays = customerInvoiceListBreakdownsResponse.netPaymentTermsDays
             creditType = customerInvoiceListBreakdownsResponse.creditType
-            invoiceAdjustments = customerInvoiceListBreakdownsResponse.invoiceAdjustments
+            customerId = customerInvoiceListBreakdownsResponse.customerId
             lineItems = customerInvoiceListBreakdownsResponse.lineItems
-            startTimestamp = customerInvoiceListBreakdownsResponse.startTimestamp
-            endTimestamp = customerInvoiceListBreakdownsResponse.endTimestamp
-            issuedAt = customerInvoiceListBreakdownsResponse.issuedAt
-            createdAt = customerInvoiceListBreakdownsResponse.createdAt
             status = customerInvoiceListBreakdownsResponse.status
-            subtotal = customerInvoiceListBreakdownsResponse.subtotal
             total = customerInvoiceListBreakdownsResponse.total
             type = customerInvoiceListBreakdownsResponse.type
+            amendmentId = customerInvoiceListBreakdownsResponse.amendmentId
+            billableStatus = customerInvoiceListBreakdownsResponse.billableStatus
+            contractCustomFields = customerInvoiceListBreakdownsResponse.contractCustomFields
+            contractId = customerInvoiceListBreakdownsResponse.contractId
+            correctionRecord = customerInvoiceListBreakdownsResponse.correctionRecord
+            createdAt = customerInvoiceListBreakdownsResponse.createdAt
+            customFields = customerInvoiceListBreakdownsResponse.customFields
+            customerCustomFields = customerInvoiceListBreakdownsResponse.customerCustomFields
+            endTimestamp = customerInvoiceListBreakdownsResponse.endTimestamp
             externalInvoice = customerInvoiceListBreakdownsResponse.externalInvoice
+            invoiceAdjustments = customerInvoiceListBreakdownsResponse.invoiceAdjustments
+            issuedAt = customerInvoiceListBreakdownsResponse.issuedAt
+            netPaymentTermsDays = customerInvoiceListBreakdownsResponse.netPaymentTermsDays
+            netsuiteSalesOrderId = customerInvoiceListBreakdownsResponse.netsuiteSalesOrderId
+            planCustomFields = customerInvoiceListBreakdownsResponse.planCustomFields
             planId = customerInvoiceListBreakdownsResponse.planId
             planName = customerInvoiceListBreakdownsResponse.planName
-            planCustomFields = customerInvoiceListBreakdownsResponse.planCustomFields
-            contractId = customerInvoiceListBreakdownsResponse.contractId
-            contractCustomFields = customerInvoiceListBreakdownsResponse.contractCustomFields
-            amendmentId = customerInvoiceListBreakdownsResponse.amendmentId
-            correctionRecord = customerInvoiceListBreakdownsResponse.correctionRecord
             resellerRoyalty = customerInvoiceListBreakdownsResponse.resellerRoyalty
-            customFields = customerInvoiceListBreakdownsResponse.customFields
-            billableStatus = customerInvoiceListBreakdownsResponse.billableStatus
-            breakdownStartTimestamp = customerInvoiceListBreakdownsResponse.breakdownStartTimestamp
+            salesforceOpportunityId = customerInvoiceListBreakdownsResponse.salesforceOpportunityId
+            startTimestamp = customerInvoiceListBreakdownsResponse.startTimestamp
+            subtotal = customerInvoiceListBreakdownsResponse.subtotal
             breakdownEndTimestamp = customerInvoiceListBreakdownsResponse.breakdownEndTimestamp
+            breakdownStartTimestamp = customerInvoiceListBreakdownsResponse.breakdownStartTimestamp
             additionalProperties =
                 customerInvoiceListBreakdownsResponse.additionalProperties.toMutableMap()
         }
@@ -437,56 +437,15 @@ private constructor(
 
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        fun customerId(customerId: String) = customerId(JsonField.of(customerId))
-
-        fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
-
-        fun customerCustomFields(customerCustomFields: Invoice.CustomerCustomFields) =
-            customerCustomFields(JsonField.of(customerCustomFields))
-
-        fun customerCustomFields(customerCustomFields: JsonField<Invoice.CustomerCustomFields>) =
-            apply {
-                this.customerCustomFields = customerCustomFields
-            }
-
-        /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
-            netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
-
-        /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
-            this.netsuiteSalesOrderId = netsuiteSalesOrderId
-        }
-
-        /** This field's availability is dependent on your client's configuration. */
-        fun salesforceOpportunityId(salesforceOpportunityId: String) =
-            salesforceOpportunityId(JsonField.of(salesforceOpportunityId))
-
-        /** This field's availability is dependent on your client's configuration. */
-        fun salesforceOpportunityId(salesforceOpportunityId: JsonField<String>) = apply {
-            this.salesforceOpportunityId = salesforceOpportunityId
-        }
-
-        fun netPaymentTermsDays(netPaymentTermsDays: Double) =
-            netPaymentTermsDays(JsonField.of(netPaymentTermsDays))
-
-        fun netPaymentTermsDays(netPaymentTermsDays: JsonField<Double>) = apply {
-            this.netPaymentTermsDays = netPaymentTermsDays
-        }
-
         fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
         fun creditType(creditType: JsonField<CreditTypeData>) = apply {
             this.creditType = creditType
         }
 
-        fun invoiceAdjustments(invoiceAdjustments: List<Invoice.InvoiceAdjustment>) =
-            invoiceAdjustments(JsonField.of(invoiceAdjustments))
+        fun customerId(customerId: String) = customerId(JsonField.of(customerId))
 
-        fun invoiceAdjustments(invoiceAdjustments: JsonField<List<Invoice.InvoiceAdjustment>>) =
-            apply {
-                this.invoiceAdjustments = invoiceAdjustments
-            }
+        fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
         fun lineItems(lineItems: List<Invoice.LineItem>) = lineItems(JsonField.of(lineItems))
 
@@ -494,28 +453,49 @@ private constructor(
             this.lineItems = lineItems
         }
 
-        /** Beginning of the usage period this invoice covers (UTC) */
-        fun startTimestamp(startTimestamp: OffsetDateTime) =
-            startTimestamp(JsonField.of(startTimestamp))
+        fun status(status: String) = status(JsonField.of(status))
 
-        /** Beginning of the usage period this invoice covers (UTC) */
-        fun startTimestamp(startTimestamp: JsonField<OffsetDateTime>) = apply {
-            this.startTimestamp = startTimestamp
+        fun status(status: JsonField<String>) = apply { this.status = status }
+
+        fun total(total: Double) = total(JsonField.of(total))
+
+        fun total(total: JsonField<Double>) = apply { this.total = total }
+
+        fun type(type: String) = type(JsonField.of(type))
+
+        fun type(type: JsonField<String>) = apply { this.type = type }
+
+        fun amendmentId(amendmentId: String) = amendmentId(JsonField.of(amendmentId))
+
+        fun amendmentId(amendmentId: JsonField<String>) = apply { this.amendmentId = amendmentId }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun billableStatus(billableStatus: Invoice.BillableStatus) =
+            billableStatus(JsonField.of(billableStatus))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun billableStatus(billableStatus: JsonField<Invoice.BillableStatus>) = apply {
+            this.billableStatus = billableStatus
         }
 
-        /** End of the usage period this invoice covers (UTC) */
-        fun endTimestamp(endTimestamp: OffsetDateTime) = endTimestamp(JsonField.of(endTimestamp))
+        fun contractCustomFields(contractCustomFields: Invoice.ContractCustomFields) =
+            contractCustomFields(JsonField.of(contractCustomFields))
 
-        /** End of the usage period this invoice covers (UTC) */
-        fun endTimestamp(endTimestamp: JsonField<OffsetDateTime>) = apply {
-            this.endTimestamp = endTimestamp
+        fun contractCustomFields(contractCustomFields: JsonField<Invoice.ContractCustomFields>) =
+            apply {
+                this.contractCustomFields = contractCustomFields
+            }
+
+        fun contractId(contractId: String) = contractId(JsonField.of(contractId))
+
+        fun contractId(contractId: JsonField<String>) = apply { this.contractId = contractId }
+
+        fun correctionRecord(correctionRecord: Invoice.CorrectionRecord) =
+            correctionRecord(JsonField.of(correctionRecord))
+
+        fun correctionRecord(correctionRecord: JsonField<Invoice.CorrectionRecord>) = apply {
+            this.correctionRecord = correctionRecord
         }
-
-        /** When the invoice was issued (UTC) */
-        fun issuedAt(issuedAt: OffsetDateTime) = issuedAt(JsonField.of(issuedAt))
-
-        /** When the invoice was issued (UTC) */
-        fun issuedAt(issuedAt: JsonField<OffsetDateTime>) = apply { this.issuedAt = issuedAt }
 
         /**
          * When the invoice was created (UTC). This field is present for correction invoices only.
@@ -527,27 +507,71 @@ private constructor(
          */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
-        fun status(status: String) = status(JsonField.of(status))
+        fun customFields(customFields: Invoice.CustomFields) =
+            customFields(JsonField.of(customFields))
 
-        fun status(status: JsonField<String>) = apply { this.status = status }
+        fun customFields(customFields: JsonField<Invoice.CustomFields>) = apply {
+            this.customFields = customFields
+        }
 
-        fun subtotal(subtotal: Double) = subtotal(JsonField.of(subtotal))
+        fun customerCustomFields(customerCustomFields: Invoice.CustomerCustomFields) =
+            customerCustomFields(JsonField.of(customerCustomFields))
 
-        fun subtotal(subtotal: JsonField<Double>) = apply { this.subtotal = subtotal }
+        fun customerCustomFields(customerCustomFields: JsonField<Invoice.CustomerCustomFields>) =
+            apply {
+                this.customerCustomFields = customerCustomFields
+            }
 
-        fun total(total: Double) = total(JsonField.of(total))
+        /** End of the usage period this invoice covers (UTC) */
+        fun endTimestamp(endTimestamp: OffsetDateTime) = endTimestamp(JsonField.of(endTimestamp))
 
-        fun total(total: JsonField<Double>) = apply { this.total = total }
-
-        fun type(type: String) = type(JsonField.of(type))
-
-        fun type(type: JsonField<String>) = apply { this.type = type }
+        /** End of the usage period this invoice covers (UTC) */
+        fun endTimestamp(endTimestamp: JsonField<OffsetDateTime>) = apply {
+            this.endTimestamp = endTimestamp
+        }
 
         fun externalInvoice(externalInvoice: Invoice.ExternalInvoice) =
             externalInvoice(JsonField.of(externalInvoice))
 
         fun externalInvoice(externalInvoice: JsonField<Invoice.ExternalInvoice>) = apply {
             this.externalInvoice = externalInvoice
+        }
+
+        fun invoiceAdjustments(invoiceAdjustments: List<Invoice.InvoiceAdjustment>) =
+            invoiceAdjustments(JsonField.of(invoiceAdjustments))
+
+        fun invoiceAdjustments(invoiceAdjustments: JsonField<List<Invoice.InvoiceAdjustment>>) =
+            apply {
+                this.invoiceAdjustments = invoiceAdjustments
+            }
+
+        /** When the invoice was issued (UTC) */
+        fun issuedAt(issuedAt: OffsetDateTime) = issuedAt(JsonField.of(issuedAt))
+
+        /** When the invoice was issued (UTC) */
+        fun issuedAt(issuedAt: JsonField<OffsetDateTime>) = apply { this.issuedAt = issuedAt }
+
+        fun netPaymentTermsDays(netPaymentTermsDays: Double) =
+            netPaymentTermsDays(JsonField.of(netPaymentTermsDays))
+
+        fun netPaymentTermsDays(netPaymentTermsDays: JsonField<Double>) = apply {
+            this.netPaymentTermsDays = netPaymentTermsDays
+        }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
+            netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
+            this.netsuiteSalesOrderId = netsuiteSalesOrderId
+        }
+
+        fun planCustomFields(planCustomFields: Invoice.PlanCustomFields) =
+            planCustomFields(JsonField.of(planCustomFields))
+
+        fun planCustomFields(planCustomFields: JsonField<Invoice.PlanCustomFields>) = apply {
+            this.planCustomFields = planCustomFields
         }
 
         fun planId(planId: String) = planId(JsonField.of(planId))
@@ -558,36 +582,6 @@ private constructor(
 
         fun planName(planName: JsonField<String>) = apply { this.planName = planName }
 
-        fun planCustomFields(planCustomFields: Invoice.PlanCustomFields) =
-            planCustomFields(JsonField.of(planCustomFields))
-
-        fun planCustomFields(planCustomFields: JsonField<Invoice.PlanCustomFields>) = apply {
-            this.planCustomFields = planCustomFields
-        }
-
-        fun contractId(contractId: String) = contractId(JsonField.of(contractId))
-
-        fun contractId(contractId: JsonField<String>) = apply { this.contractId = contractId }
-
-        fun contractCustomFields(contractCustomFields: Invoice.ContractCustomFields) =
-            contractCustomFields(JsonField.of(contractCustomFields))
-
-        fun contractCustomFields(contractCustomFields: JsonField<Invoice.ContractCustomFields>) =
-            apply {
-                this.contractCustomFields = contractCustomFields
-            }
-
-        fun amendmentId(amendmentId: String) = amendmentId(JsonField.of(amendmentId))
-
-        fun amendmentId(amendmentId: JsonField<String>) = apply { this.amendmentId = amendmentId }
-
-        fun correctionRecord(correctionRecord: Invoice.CorrectionRecord) =
-            correctionRecord(JsonField.of(correctionRecord))
-
-        fun correctionRecord(correctionRecord: JsonField<Invoice.CorrectionRecord>) = apply {
-            this.correctionRecord = correctionRecord
-        }
-
         /** only present for beta contract invoices with reseller royalties */
         fun resellerRoyalty(resellerRoyalty: Invoice.ResellerRoyalty) =
             resellerRoyalty(JsonField.of(resellerRoyalty))
@@ -597,20 +591,33 @@ private constructor(
             this.resellerRoyalty = resellerRoyalty
         }
 
-        fun customFields(customFields: Invoice.CustomFields) =
-            customFields(JsonField.of(customFields))
+        /** This field's availability is dependent on your client's configuration. */
+        fun salesforceOpportunityId(salesforceOpportunityId: String) =
+            salesforceOpportunityId(JsonField.of(salesforceOpportunityId))
 
-        fun customFields(customFields: JsonField<Invoice.CustomFields>) = apply {
-            this.customFields = customFields
+        /** This field's availability is dependent on your client's configuration. */
+        fun salesforceOpportunityId(salesforceOpportunityId: JsonField<String>) = apply {
+            this.salesforceOpportunityId = salesforceOpportunityId
         }
 
-        /** This field's availability is dependent on your client's configuration. */
-        fun billableStatus(billableStatus: Invoice.BillableStatus) =
-            billableStatus(JsonField.of(billableStatus))
+        /** Beginning of the usage period this invoice covers (UTC) */
+        fun startTimestamp(startTimestamp: OffsetDateTime) =
+            startTimestamp(JsonField.of(startTimestamp))
 
-        /** This field's availability is dependent on your client's configuration. */
-        fun billableStatus(billableStatus: JsonField<Invoice.BillableStatus>) = apply {
-            this.billableStatus = billableStatus
+        /** Beginning of the usage period this invoice covers (UTC) */
+        fun startTimestamp(startTimestamp: JsonField<OffsetDateTime>) = apply {
+            this.startTimestamp = startTimestamp
+        }
+
+        fun subtotal(subtotal: Double) = subtotal(JsonField.of(subtotal))
+
+        fun subtotal(subtotal: JsonField<Double>) = apply { this.subtotal = subtotal }
+
+        fun breakdownEndTimestamp(breakdownEndTimestamp: OffsetDateTime) =
+            breakdownEndTimestamp(JsonField.of(breakdownEndTimestamp))
+
+        fun breakdownEndTimestamp(breakdownEndTimestamp: JsonField<OffsetDateTime>) = apply {
+            this.breakdownEndTimestamp = breakdownEndTimestamp
         }
 
         fun breakdownStartTimestamp(breakdownStartTimestamp: OffsetDateTime) =
@@ -618,13 +625,6 @@ private constructor(
 
         fun breakdownStartTimestamp(breakdownStartTimestamp: JsonField<OffsetDateTime>) = apply {
             this.breakdownStartTimestamp = breakdownStartTimestamp
-        }
-
-        fun breakdownEndTimestamp(breakdownEndTimestamp: OffsetDateTime) =
-            breakdownEndTimestamp(JsonField.of(breakdownEndTimestamp))
-
-        fun breakdownEndTimestamp(breakdownEndTimestamp: JsonField<OffsetDateTime>) = apply {
-            this.breakdownEndTimestamp = breakdownEndTimestamp
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -649,35 +649,35 @@ private constructor(
         fun build(): CustomerInvoiceListBreakdownsResponse =
             CustomerInvoiceListBreakdownsResponse(
                 id,
-                customerId,
-                customerCustomFields,
-                netsuiteSalesOrderId,
-                salesforceOpportunityId,
-                netPaymentTermsDays,
                 creditType,
-                invoiceAdjustments.map { it.toImmutable() },
+                customerId,
                 lineItems.map { it.toImmutable() },
-                startTimestamp,
-                endTimestamp,
-                issuedAt,
-                createdAt,
                 status,
-                subtotal,
                 total,
                 type,
+                amendmentId,
+                billableStatus,
+                contractCustomFields,
+                contractId,
+                correctionRecord,
+                createdAt,
+                customFields,
+                customerCustomFields,
+                endTimestamp,
                 externalInvoice,
+                invoiceAdjustments.map { it.toImmutable() },
+                issuedAt,
+                netPaymentTermsDays,
+                netsuiteSalesOrderId,
+                planCustomFields,
                 planId,
                 planName,
-                planCustomFields,
-                contractId,
-                contractCustomFields,
-                amendmentId,
-                correctionRecord,
                 resellerRoyalty,
-                customFields,
-                billableStatus,
-                breakdownStartTimestamp,
+                salesforceOpportunityId,
+                startTimestamp,
+                subtotal,
                 breakdownEndTimestamp,
+                breakdownStartTimestamp,
                 additionalProperties.toImmutable(),
             )
     }
@@ -687,15 +687,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerInvoiceListBreakdownsResponse && id == other.id && customerId == other.customerId && customerCustomFields == other.customerCustomFields && netsuiteSalesOrderId == other.netsuiteSalesOrderId && salesforceOpportunityId == other.salesforceOpportunityId && netPaymentTermsDays == other.netPaymentTermsDays && creditType == other.creditType && invoiceAdjustments == other.invoiceAdjustments && lineItems == other.lineItems && startTimestamp == other.startTimestamp && endTimestamp == other.endTimestamp && issuedAt == other.issuedAt && createdAt == other.createdAt && status == other.status && subtotal == other.subtotal && total == other.total && type == other.type && externalInvoice == other.externalInvoice && planId == other.planId && planName == other.planName && planCustomFields == other.planCustomFields && contractId == other.contractId && contractCustomFields == other.contractCustomFields && amendmentId == other.amendmentId && correctionRecord == other.correctionRecord && resellerRoyalty == other.resellerRoyalty && customFields == other.customFields && billableStatus == other.billableStatus && breakdownStartTimestamp == other.breakdownStartTimestamp && breakdownEndTimestamp == other.breakdownEndTimestamp && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerInvoiceListBreakdownsResponse && id == other.id && creditType == other.creditType && customerId == other.customerId && lineItems == other.lineItems && status == other.status && total == other.total && type == other.type && amendmentId == other.amendmentId && billableStatus == other.billableStatus && contractCustomFields == other.contractCustomFields && contractId == other.contractId && correctionRecord == other.correctionRecord && createdAt == other.createdAt && customFields == other.customFields && customerCustomFields == other.customerCustomFields && endTimestamp == other.endTimestamp && externalInvoice == other.externalInvoice && invoiceAdjustments == other.invoiceAdjustments && issuedAt == other.issuedAt && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && planCustomFields == other.planCustomFields && planId == other.planId && planName == other.planName && resellerRoyalty == other.resellerRoyalty && salesforceOpportunityId == other.salesforceOpportunityId && startTimestamp == other.startTimestamp && subtotal == other.subtotal && breakdownEndTimestamp == other.breakdownEndTimestamp && breakdownStartTimestamp == other.breakdownStartTimestamp && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, customerId, customerCustomFields, netsuiteSalesOrderId, salesforceOpportunityId, netPaymentTermsDays, creditType, invoiceAdjustments, lineItems, startTimestamp, endTimestamp, issuedAt, createdAt, status, subtotal, total, type, externalInvoice, planId, planName, planCustomFields, contractId, contractCustomFields, amendmentId, correctionRecord, resellerRoyalty, customFields, billableStatus, breakdownStartTimestamp, breakdownEndTimestamp, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, creditType, customerId, lineItems, status, total, type, amendmentId, billableStatus, contractCustomFields, contractId, correctionRecord, createdAt, customFields, customerCustomFields, endTimestamp, externalInvoice, invoiceAdjustments, issuedAt, netPaymentTermsDays, netsuiteSalesOrderId, planCustomFields, planId, planName, resellerRoyalty, salesforceOpportunityId, startTimestamp, subtotal, breakdownEndTimestamp, breakdownStartTimestamp, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CustomerInvoiceListBreakdownsResponse{id=$id, customerId=$customerId, customerCustomFields=$customerCustomFields, netsuiteSalesOrderId=$netsuiteSalesOrderId, salesforceOpportunityId=$salesforceOpportunityId, netPaymentTermsDays=$netPaymentTermsDays, creditType=$creditType, invoiceAdjustments=$invoiceAdjustments, lineItems=$lineItems, startTimestamp=$startTimestamp, endTimestamp=$endTimestamp, issuedAt=$issuedAt, createdAt=$createdAt, status=$status, subtotal=$subtotal, total=$total, type=$type, externalInvoice=$externalInvoice, planId=$planId, planName=$planName, planCustomFields=$planCustomFields, contractId=$contractId, contractCustomFields=$contractCustomFields, amendmentId=$amendmentId, correctionRecord=$correctionRecord, resellerRoyalty=$resellerRoyalty, customFields=$customFields, billableStatus=$billableStatus, breakdownStartTimestamp=$breakdownStartTimestamp, breakdownEndTimestamp=$breakdownEndTimestamp, additionalProperties=$additionalProperties}"
+        "CustomerInvoiceListBreakdownsResponse{id=$id, creditType=$creditType, customerId=$customerId, lineItems=$lineItems, status=$status, total=$total, type=$type, amendmentId=$amendmentId, billableStatus=$billableStatus, contractCustomFields=$contractCustomFields, contractId=$contractId, correctionRecord=$correctionRecord, createdAt=$createdAt, customFields=$customFields, customerCustomFields=$customerCustomFields, endTimestamp=$endTimestamp, externalInvoice=$externalInvoice, invoiceAdjustments=$invoiceAdjustments, issuedAt=$issuedAt, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, planCustomFields=$planCustomFields, planId=$planId, planName=$planName, resellerRoyalty=$resellerRoyalty, salesforceOpportunityId=$salesforceOpportunityId, startTimestamp=$startTimestamp, subtotal=$subtotal, breakdownEndTimestamp=$breakdownEndTimestamp, breakdownStartTimestamp=$breakdownStartTimestamp, additionalProperties=$additionalProperties}"
 }

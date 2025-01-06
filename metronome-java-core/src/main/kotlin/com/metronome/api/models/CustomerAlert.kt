@@ -23,15 +23,17 @@ import java.util.Optional
 class CustomerAlert
 @JsonCreator
 private constructor(
+    @JsonProperty("alert") @ExcludeMissing private val alert: JsonField<Alert> = JsonMissing.of(),
     @JsonProperty("customer_status")
     @ExcludeMissing
     private val customerStatus: JsonField<CustomerStatus> = JsonMissing.of(),
     @JsonProperty("triggered_by")
     @ExcludeMissing
     private val triggeredBy: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("alert") @ExcludeMissing private val alert: JsonField<Alert> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
+
+    fun alert(): Alert = alert.getRequired("alert")
 
     /** The status of the customer alert. If the alert is archived, null will be returned. */
     fun customerStatus(): Optional<CustomerStatus> =
@@ -41,15 +43,13 @@ private constructor(
     fun triggeredBy(): Optional<String> =
         Optional.ofNullable(triggeredBy.getNullable("triggered_by"))
 
-    fun alert(): Alert = alert.getRequired("alert")
+    @JsonProperty("alert") @ExcludeMissing fun _alert() = alert
 
     /** The status of the customer alert. If the alert is archived, null will be returned. */
     @JsonProperty("customer_status") @ExcludeMissing fun _customerStatus() = customerStatus
 
     /** If present, indicates the reason the alert was triggered. */
     @JsonProperty("triggered_by") @ExcludeMissing fun _triggeredBy() = triggeredBy
-
-    @JsonProperty("alert") @ExcludeMissing fun _alert() = alert
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -59,9 +59,9 @@ private constructor(
 
     fun validate(): CustomerAlert = apply {
         if (!validated) {
+            alert().validate()
             customerStatus()
             triggeredBy()
-            alert().validate()
             validated = true
         }
     }
@@ -75,18 +75,22 @@ private constructor(
 
     class Builder {
 
+        private var alert: JsonField<Alert> = JsonMissing.of()
         private var customerStatus: JsonField<CustomerStatus> = JsonMissing.of()
         private var triggeredBy: JsonField<String> = JsonMissing.of()
-        private var alert: JsonField<Alert> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customerAlert: CustomerAlert) = apply {
+            alert = customerAlert.alert
             customerStatus = customerAlert.customerStatus
             triggeredBy = customerAlert.triggeredBy
-            alert = customerAlert.alert
             additionalProperties = customerAlert.additionalProperties.toMutableMap()
         }
+
+        fun alert(alert: Alert) = alert(JsonField.of(alert))
+
+        fun alert(alert: JsonField<Alert>) = apply { this.alert = alert }
 
         /** The status of the customer alert. If the alert is archived, null will be returned. */
         fun customerStatus(customerStatus: CustomerStatus) =
@@ -102,10 +106,6 @@ private constructor(
 
         /** If present, indicates the reason the alert was triggered. */
         fun triggeredBy(triggeredBy: JsonField<String>) = apply { this.triggeredBy = triggeredBy }
-
-        fun alert(alert: Alert) = alert(JsonField.of(alert))
-
-        fun alert(alert: JsonField<Alert>) = apply { this.alert = alert }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -128,9 +128,9 @@ private constructor(
 
         fun build(): CustomerAlert =
             CustomerAlert(
+                alert,
                 customerStatus,
                 triggeredBy,
-                alert,
                 additionalProperties.toImmutable(),
             )
     }
@@ -143,25 +143,22 @@ private constructor(
         @JsonProperty("name")
         @ExcludeMissing
         private val name: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("uniqueness_key")
-        @ExcludeMissing
-        private val uniquenessKey: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
         @JsonProperty("status")
         @ExcludeMissing
         private val status: JsonField<Status> = JsonMissing.of(),
-        @JsonProperty("credit_type")
-        @ExcludeMissing
-        private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
         @JsonProperty("threshold")
         @ExcludeMissing
         private val threshold: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
         @JsonProperty("updated_at")
         @ExcludeMissing
         private val updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("credit_grant_type_filters")
         @ExcludeMissing
         private val creditGrantTypeFilters: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("credit_type")
+        @ExcludeMissing
+        private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
         @JsonProperty("custom_field_filters")
         @ExcludeMissing
         private val customFieldFilters: JsonField<List<CustomFieldFilter>> = JsonMissing.of(),
@@ -171,6 +168,9 @@ private constructor(
         @JsonProperty("invoice_types_filter")
         @ExcludeMissing
         private val invoiceTypesFilter: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("uniqueness_key")
+        @ExcludeMissing
+        private val uniquenessKey: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -181,25 +181,14 @@ private constructor(
         /** Name of the alert */
         fun name(): String = name.getRequired("name")
 
-        /**
-         * Prevents the creation of duplicates. If a request to create a record is made with a
-         * previously used uniqueness key, a new record will not be created and the request will
-         * fail with a 409 error.
-         */
-        fun uniquenessKey(): Optional<String> =
-            Optional.ofNullable(uniquenessKey.getNullable("uniqueness_key"))
-
-        /** Type of the alert */
-        fun type(): Type = type.getRequired("type")
-
         /** Status of the alert */
         fun status(): Status = status.getRequired("status")
 
-        fun creditType(): Optional<CreditTypeData> =
-            Optional.ofNullable(creditType.getNullable("credit_type"))
-
         /** Threshold value of the alert policy */
         fun threshold(): Double = threshold.getRequired("threshold")
+
+        /** Type of the alert */
+        fun type(): Type = type.getRequired("type")
 
         /** Timestamp for when the alert was last updated */
         fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
@@ -211,6 +200,9 @@ private constructor(
          */
         fun creditGrantTypeFilters(): Optional<List<String>> =
             Optional.ofNullable(creditGrantTypeFilters.getNullable("credit_grant_type_filters"))
+
+        fun creditType(): Optional<CreditTypeData> =
+            Optional.ofNullable(creditType.getNullable("credit_type"))
 
         /** A list of custom field filters for alert types that support advanced filtering */
         fun customFieldFilters(): Optional<List<CustomFieldFilter>> =
@@ -227,29 +219,28 @@ private constructor(
         fun invoiceTypesFilter(): Optional<List<String>> =
             Optional.ofNullable(invoiceTypesFilter.getNullable("invoice_types_filter"))
 
+        /**
+         * Prevents the creation of duplicates. If a request to create a record is made with a
+         * previously used uniqueness key, a new record will not be created and the request will
+         * fail with a 409 error.
+         */
+        fun uniquenessKey(): Optional<String> =
+            Optional.ofNullable(uniquenessKey.getNullable("uniqueness_key"))
+
         /** the Metronome ID of the alert */
         @JsonProperty("id") @ExcludeMissing fun _id() = id
 
         /** Name of the alert */
         @JsonProperty("name") @ExcludeMissing fun _name() = name
 
-        /**
-         * Prevents the creation of duplicates. If a request to create a record is made with a
-         * previously used uniqueness key, a new record will not be created and the request will
-         * fail with a 409 error.
-         */
-        @JsonProperty("uniqueness_key") @ExcludeMissing fun _uniquenessKey() = uniquenessKey
-
-        /** Type of the alert */
-        @JsonProperty("type") @ExcludeMissing fun _type() = type
-
         /** Status of the alert */
         @JsonProperty("status") @ExcludeMissing fun _status() = status
 
-        @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
-
         /** Threshold value of the alert policy */
         @JsonProperty("threshold") @ExcludeMissing fun _threshold() = threshold
+
+        /** Type of the alert */
+        @JsonProperty("type") @ExcludeMissing fun _type() = type
 
         /** Timestamp for when the alert was last updated */
         @JsonProperty("updated_at") @ExcludeMissing fun _updatedAt() = updatedAt
@@ -262,6 +253,8 @@ private constructor(
         @JsonProperty("credit_grant_type_filters")
         @ExcludeMissing
         fun _creditGrantTypeFilters() = creditGrantTypeFilters
+
+        @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
 
         /** A list of custom field filters for alert types that support advanced filtering */
         @JsonProperty("custom_field_filters")
@@ -279,6 +272,13 @@ private constructor(
         @ExcludeMissing
         fun _invoiceTypesFilter() = invoiceTypesFilter
 
+        /**
+         * Prevents the creation of duplicates. If a request to create a record is made with a
+         * previously used uniqueness key, a new record will not be created and the request will
+         * fail with a 409 error.
+         */
+        @JsonProperty("uniqueness_key") @ExcludeMissing fun _uniquenessKey() = uniquenessKey
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -289,16 +289,16 @@ private constructor(
             if (!validated) {
                 id()
                 name()
-                uniquenessKey()
-                type()
                 status()
-                creditType().map { it.validate() }
                 threshold()
+                type()
                 updatedAt()
                 creditGrantTypeFilters()
+                creditType().map { it.validate() }
                 customFieldFilters().map { it.forEach { it.validate() } }
                 groupKeyFilter().map { it.validate() }
                 invoiceTypesFilter()
+                uniquenessKey()
                 validated = true
             }
         }
@@ -314,32 +314,32 @@ private constructor(
 
             private var id: JsonField<String> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
-            private var uniquenessKey: JsonField<String> = JsonMissing.of()
-            private var type: JsonField<Type> = JsonMissing.of()
             private var status: JsonField<Status> = JsonMissing.of()
-            private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var threshold: JsonField<Double> = JsonMissing.of()
+            private var type: JsonField<Type> = JsonMissing.of()
             private var updatedAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var creditGrantTypeFilters: JsonField<List<String>> = JsonMissing.of()
+            private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var customFieldFilters: JsonField<List<CustomFieldFilter>> = JsonMissing.of()
             private var groupKeyFilter: JsonField<GroupKeyFilter> = JsonMissing.of()
             private var invoiceTypesFilter: JsonField<List<String>> = JsonMissing.of()
+            private var uniquenessKey: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(alert: Alert) = apply {
                 id = alert.id
                 name = alert.name
-                uniquenessKey = alert.uniquenessKey
-                type = alert.type
                 status = alert.status
-                creditType = alert.creditType
                 threshold = alert.threshold
+                type = alert.type
                 updatedAt = alert.updatedAt
                 creditGrantTypeFilters = alert.creditGrantTypeFilters
+                creditType = alert.creditType
                 customFieldFilters = alert.customFieldFilters
                 groupKeyFilter = alert.groupKeyFilter
                 invoiceTypesFilter = alert.invoiceTypesFilter
+                uniquenessKey = alert.uniquenessKey
                 additionalProperties = alert.additionalProperties.toMutableMap()
             }
 
@@ -355,45 +355,23 @@ private constructor(
             /** Name of the alert */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
-            /**
-             * Prevents the creation of duplicates. If a request to create a record is made with a
-             * previously used uniqueness key, a new record will not be created and the request will
-             * fail with a 409 error.
-             */
-            fun uniquenessKey(uniquenessKey: String) = uniquenessKey(JsonField.of(uniquenessKey))
-
-            /**
-             * Prevents the creation of duplicates. If a request to create a record is made with a
-             * previously used uniqueness key, a new record will not be created and the request will
-             * fail with a 409 error.
-             */
-            fun uniquenessKey(uniquenessKey: JsonField<String>) = apply {
-                this.uniquenessKey = uniquenessKey
-            }
-
-            /** Type of the alert */
-            fun type(type: Type) = type(JsonField.of(type))
-
-            /** Type of the alert */
-            fun type(type: JsonField<Type>) = apply { this.type = type }
-
             /** Status of the alert */
             fun status(status: Status) = status(JsonField.of(status))
 
             /** Status of the alert */
             fun status(status: JsonField<Status>) = apply { this.status = status }
 
-            fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
-
-            fun creditType(creditType: JsonField<CreditTypeData>) = apply {
-                this.creditType = creditType
-            }
-
             /** Threshold value of the alert policy */
             fun threshold(threshold: Double) = threshold(JsonField.of(threshold))
 
             /** Threshold value of the alert policy */
             fun threshold(threshold: JsonField<Double>) = apply { this.threshold = threshold }
+
+            /** Type of the alert */
+            fun type(type: Type) = type(JsonField.of(type))
+
+            /** Type of the alert */
+            fun type(type: JsonField<Type>) = apply { this.type = type }
 
             /** Timestamp for when the alert was last updated */
             fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
@@ -418,6 +396,12 @@ private constructor(
              */
             fun creditGrantTypeFilters(creditGrantTypeFilters: JsonField<List<String>>) = apply {
                 this.creditGrantTypeFilters = creditGrantTypeFilters
+            }
+
+            fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
+
+            fun creditType(creditType: JsonField<CreditTypeData>) = apply {
+                this.creditType = creditType
             }
 
             /** A list of custom field filters for alert types that support advanced filtering */
@@ -457,6 +441,22 @@ private constructor(
                 this.invoiceTypesFilter = invoiceTypesFilter
             }
 
+            /**
+             * Prevents the creation of duplicates. If a request to create a record is made with a
+             * previously used uniqueness key, a new record will not be created and the request will
+             * fail with a 409 error.
+             */
+            fun uniquenessKey(uniquenessKey: String) = uniquenessKey(JsonField.of(uniquenessKey))
+
+            /**
+             * Prevents the creation of duplicates. If a request to create a record is made with a
+             * previously used uniqueness key, a new record will not be created and the request will
+             * fail with a 409 error.
+             */
+            fun uniquenessKey(uniquenessKey: JsonField<String>) = apply {
+                this.uniquenessKey = uniquenessKey
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -480,16 +480,16 @@ private constructor(
                 Alert(
                     id,
                     name,
-                    uniquenessKey,
-                    type,
                     status,
-                    creditType,
                     threshold,
+                    type,
                     updatedAt,
                     creditGrantTypeFilters.map { it.toImmutable() },
+                    creditType,
                     customFieldFilters.map { it.toImmutable() },
                     groupKeyFilter,
                     invoiceTypesFilter.map { it.toImmutable() },
+                    uniquenessKey,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -1034,17 +1034,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Alert && id == other.id && name == other.name && uniquenessKey == other.uniquenessKey && type == other.type && status == other.status && creditType == other.creditType && threshold == other.threshold && updatedAt == other.updatedAt && creditGrantTypeFilters == other.creditGrantTypeFilters && customFieldFilters == other.customFieldFilters && groupKeyFilter == other.groupKeyFilter && invoiceTypesFilter == other.invoiceTypesFilter && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Alert && id == other.id && name == other.name && status == other.status && threshold == other.threshold && type == other.type && updatedAt == other.updatedAt && creditGrantTypeFilters == other.creditGrantTypeFilters && creditType == other.creditType && customFieldFilters == other.customFieldFilters && groupKeyFilter == other.groupKeyFilter && invoiceTypesFilter == other.invoiceTypesFilter && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, name, uniquenessKey, type, status, creditType, threshold, updatedAt, creditGrantTypeFilters, customFieldFilters, groupKeyFilter, invoiceTypesFilter, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, name, status, threshold, type, updatedAt, creditGrantTypeFilters, creditType, customFieldFilters, groupKeyFilter, invoiceTypesFilter, uniquenessKey, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Alert{id=$id, name=$name, uniquenessKey=$uniquenessKey, type=$type, status=$status, creditType=$creditType, threshold=$threshold, updatedAt=$updatedAt, creditGrantTypeFilters=$creditGrantTypeFilters, customFieldFilters=$customFieldFilters, groupKeyFilter=$groupKeyFilter, invoiceTypesFilter=$invoiceTypesFilter, additionalProperties=$additionalProperties}"
+            "Alert{id=$id, name=$name, status=$status, threshold=$threshold, type=$type, updatedAt=$updatedAt, creditGrantTypeFilters=$creditGrantTypeFilters, creditType=$creditType, customFieldFilters=$customFieldFilters, groupKeyFilter=$groupKeyFilter, invoiceTypesFilter=$invoiceTypesFilter, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
     }
 
     class CustomerStatus
@@ -1115,15 +1115,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerAlert && customerStatus == other.customerStatus && triggeredBy == other.triggeredBy && alert == other.alert && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerAlert && alert == other.alert && customerStatus == other.customerStatus && triggeredBy == other.triggeredBy && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(customerStatus, triggeredBy, alert, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(alert, customerStatus, triggeredBy, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CustomerAlert{customerStatus=$customerStatus, triggeredBy=$triggeredBy, alert=$alert, additionalProperties=$additionalProperties}"
+        "CustomerAlert{alert=$alert, customerStatus=$customerStatus, triggeredBy=$triggeredBy, additionalProperties=$additionalProperties}"
 }

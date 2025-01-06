@@ -172,16 +172,14 @@ constructor(
     class Usage
     @JsonCreator
     private constructor(
-        @JsonProperty("transaction_id") private val transactionId: String,
         @JsonProperty("customer_id") private val customerId: String,
         @JsonProperty("event_type") private val eventType: String,
         @JsonProperty("timestamp") private val timestamp: String,
+        @JsonProperty("transaction_id") private val transactionId: String,
         @JsonProperty("properties") private val properties: Properties?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
-
-        @JsonProperty("transaction_id") fun transactionId(): String = transactionId
 
         @JsonProperty("customer_id") fun customerId(): String = customerId
 
@@ -189,6 +187,8 @@ constructor(
 
         /** RFC 3339 formatted */
         @JsonProperty("timestamp") fun timestamp(): String = timestamp
+
+        @JsonProperty("transaction_id") fun transactionId(): String = transactionId
 
         @JsonProperty("properties")
         fun properties(): Optional<Properties> = Optional.ofNullable(properties)
@@ -206,24 +206,22 @@ constructor(
 
         class Builder {
 
-            private var transactionId: String? = null
             private var customerId: String? = null
             private var eventType: String? = null
             private var timestamp: String? = null
+            private var transactionId: String? = null
             private var properties: Properties? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(usage: Usage) = apply {
-                transactionId = usage.transactionId
                 customerId = usage.customerId
                 eventType = usage.eventType
                 timestamp = usage.timestamp
+                transactionId = usage.transactionId
                 properties = usage.properties
                 additionalProperties = usage.additionalProperties.toMutableMap()
             }
-
-            fun transactionId(transactionId: String) = apply { this.transactionId = transactionId }
 
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
@@ -231,6 +229,8 @@ constructor(
 
             /** RFC 3339 formatted */
             fun timestamp(timestamp: String) = apply { this.timestamp = timestamp }
+
+            fun transactionId(transactionId: String) = apply { this.transactionId = transactionId }
 
             fun properties(properties: Properties) = apply { this.properties = properties }
 
@@ -255,10 +255,10 @@ constructor(
 
             fun build(): Usage =
                 Usage(
-                    checkNotNull(transactionId) { "`transactionId` is required but was not set" },
                     checkNotNull(customerId) { "`customerId` is required but was not set" },
                     checkNotNull(eventType) { "`eventType` is required but was not set" },
                     checkNotNull(timestamp) { "`timestamp` is required but was not set" },
+                    checkNotNull(transactionId) { "`transactionId` is required but was not set" },
                     properties,
                     additionalProperties.toImmutable(),
                 )
@@ -339,17 +339,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Usage && transactionId == other.transactionId && customerId == other.customerId && eventType == other.eventType && timestamp == other.timestamp && properties == other.properties && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Usage && customerId == other.customerId && eventType == other.eventType && timestamp == other.timestamp && transactionId == other.transactionId && properties == other.properties && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(transactionId, customerId, eventType, timestamp, properties, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(customerId, eventType, timestamp, transactionId, properties, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Usage{transactionId=$transactionId, customerId=$customerId, eventType=$eventType, timestamp=$timestamp, properties=$properties, additionalProperties=$additionalProperties}"
+            "Usage{customerId=$customerId, eventType=$eventType, timestamp=$timestamp, transactionId=$transactionId, properties=$properties, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
