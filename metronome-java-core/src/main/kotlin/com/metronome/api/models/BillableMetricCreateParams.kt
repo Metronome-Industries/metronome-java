@@ -177,32 +177,58 @@ constructor(
              * Specifies the type of aggregation performed on matching events. Required if `sql` is
              * not provided.
              */
-            fun aggregationKey(aggregationKey: String) = apply {
+            fun aggregationKey(aggregationKey: String?) = apply {
                 this.aggregationKey = aggregationKey
             }
 
+            /**
+             * Specifies the type of aggregation performed on matching events. Required if `sql` is
+             * not provided.
+             */
+            fun aggregationKey(aggregationKey: Optional<String>) =
+                aggregationKey(aggregationKey.orElse(null))
+
             /** Specifies the type of aggregation performed on matching events. */
-            fun aggregationType(aggregationType: AggregationType) = apply {
+            fun aggregationType(aggregationType: AggregationType?) = apply {
                 this.aggregationType = aggregationType
             }
 
+            /** Specifies the type of aggregation performed on matching events. */
+            fun aggregationType(aggregationType: Optional<AggregationType>) =
+                aggregationType(aggregationType.orElse(null))
+
             /** Custom fields to attach to the billable metric. */
-            fun customFields(customFields: CustomFields) = apply {
+            fun customFields(customFields: CustomFields?) = apply {
                 this.customFields = customFields
             }
 
+            /** Custom fields to attach to the billable metric. */
+            fun customFields(customFields: Optional<CustomFields>) =
+                customFields(customFields.orElse(null))
+
             /** An optional filtering rule to match the 'event_type' property of an event. */
-            fun eventTypeFilter(eventTypeFilter: EventTypeFilter) = apply {
+            fun eventTypeFilter(eventTypeFilter: EventTypeFilter?) = apply {
                 this.eventTypeFilter = eventTypeFilter
+            }
+
+            /** An optional filtering rule to match the 'event_type' property of an event. */
+            fun eventTypeFilter(eventTypeFilter: Optional<EventTypeFilter>) =
+                eventTypeFilter(eventTypeFilter.orElse(null))
+
+            /**
+             * Property names that are used to group usage costs on an invoice. Each entry
+             * represents a set of properties used to slice events into distinct buckets.
+             */
+            fun groupKeys(groupKeys: List<List<String>>?) = apply {
+                this.groupKeys = groupKeys?.toMutableList()
             }
 
             /**
              * Property names that are used to group usage costs on an invoice. Each entry
              * represents a set of properties used to slice events into distinct buckets.
              */
-            fun groupKeys(groupKeys: List<List<String>>) = apply {
-                this.groupKeys = groupKeys.toMutableList()
-            }
+            fun groupKeys(groupKeys: Optional<List<List<String>>>) =
+                groupKeys(groupKeys.orElse(null))
 
             /**
              * Property names that are used to group usage costs on an invoice. Each entry
@@ -216,9 +242,16 @@ constructor(
              * A list of filters to match events to this billable metric. Each filter defines a rule
              * on an event property. All rules must pass for the event to match the billable metric.
              */
-            fun propertyFilters(propertyFilters: List<PropertyFilter>) = apply {
-                this.propertyFilters = propertyFilters.toMutableList()
+            fun propertyFilters(propertyFilters: List<PropertyFilter>?) = apply {
+                this.propertyFilters = propertyFilters?.toMutableList()
             }
+
+            /**
+             * A list of filters to match events to this billable metric. Each filter defines a rule
+             * on an event property. All rules must pass for the event to match the billable metric.
+             */
+            fun propertyFilters(propertyFilters: Optional<List<PropertyFilter>>) =
+                propertyFilters(propertyFilters.orElse(null))
 
             /**
              * A list of filters to match events to this billable metric. Each filter defines a rule
@@ -233,7 +266,14 @@ constructor(
              * with aggregation_type, event_type_filter, property_filters, aggregation_key, and
              * group_keys. If provided, these other fields must be omitted.
              */
-            fun sql(sql: String) = apply { this.sql = sql }
+            fun sql(sql: String?) = apply { this.sql = sql }
+
+            /**
+             * The SQL query associated with the billable metric. This field is mutually exclusive
+             * with aggregation_type, event_type_filter, property_filters, aggregation_key, and
+             * group_keys. If provided, these other fields must be omitted.
+             */
+            fun sql(sql: Optional<String>) = sql(sql.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -314,26 +354,51 @@ constructor(
          * Specifies the type of aggregation performed on matching events. Required if `sql` is not
          * provided.
          */
-        fun aggregationKey(aggregationKey: String) = apply { body.aggregationKey(aggregationKey) }
+        fun aggregationKey(aggregationKey: String?) = apply { body.aggregationKey(aggregationKey) }
+
+        /**
+         * Specifies the type of aggregation performed on matching events. Required if `sql` is not
+         * provided.
+         */
+        fun aggregationKey(aggregationKey: Optional<String>) =
+            aggregationKey(aggregationKey.orElse(null))
 
         /** Specifies the type of aggregation performed on matching events. */
-        fun aggregationType(aggregationType: AggregationType) = apply {
+        fun aggregationType(aggregationType: AggregationType?) = apply {
             body.aggregationType(aggregationType)
         }
 
+        /** Specifies the type of aggregation performed on matching events. */
+        fun aggregationType(aggregationType: Optional<AggregationType>) =
+            aggregationType(aggregationType.orElse(null))
+
         /** Custom fields to attach to the billable metric. */
-        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
+        fun customFields(customFields: CustomFields?) = apply { body.customFields(customFields) }
+
+        /** Custom fields to attach to the billable metric. */
+        fun customFields(customFields: Optional<CustomFields>) =
+            customFields(customFields.orElse(null))
 
         /** An optional filtering rule to match the 'event_type' property of an event. */
-        fun eventTypeFilter(eventTypeFilter: EventTypeFilter) = apply {
+        fun eventTypeFilter(eventTypeFilter: EventTypeFilter?) = apply {
             body.eventTypeFilter(eventTypeFilter)
         }
+
+        /** An optional filtering rule to match the 'event_type' property of an event. */
+        fun eventTypeFilter(eventTypeFilter: Optional<EventTypeFilter>) =
+            eventTypeFilter(eventTypeFilter.orElse(null))
 
         /**
          * Property names that are used to group usage costs on an invoice. Each entry represents a
          * set of properties used to slice events into distinct buckets.
          */
-        fun groupKeys(groupKeys: List<List<String>>) = apply { body.groupKeys(groupKeys) }
+        fun groupKeys(groupKeys: List<List<String>>?) = apply { body.groupKeys(groupKeys) }
+
+        /**
+         * Property names that are used to group usage costs on an invoice. Each entry represents a
+         * set of properties used to slice events into distinct buckets.
+         */
+        fun groupKeys(groupKeys: Optional<List<List<String>>>) = groupKeys(groupKeys.orElse(null))
 
         /**
          * Property names that are used to group usage costs on an invoice. Each entry represents a
@@ -345,9 +410,16 @@ constructor(
          * A list of filters to match events to this billable metric. Each filter defines a rule on
          * an event property. All rules must pass for the event to match the billable metric.
          */
-        fun propertyFilters(propertyFilters: List<PropertyFilter>) = apply {
+        fun propertyFilters(propertyFilters: List<PropertyFilter>?) = apply {
             body.propertyFilters(propertyFilters)
         }
+
+        /**
+         * A list of filters to match events to this billable metric. Each filter defines a rule on
+         * an event property. All rules must pass for the event to match the billable metric.
+         */
+        fun propertyFilters(propertyFilters: Optional<List<PropertyFilter>>) =
+            propertyFilters(propertyFilters.orElse(null))
 
         /**
          * A list of filters to match events to this billable metric. Each filter defines a rule on
@@ -362,7 +434,14 @@ constructor(
          * aggregation_type, event_type_filter, property_filters, aggregation_key, and group_keys.
          * If provided, these other fields must be omitted.
          */
-        fun sql(sql: String) = apply { body.sql(sql) }
+        fun sql(sql: String?) = apply { body.sql(sql) }
+
+        /**
+         * The SQL query associated with the billable metric. This field is mutually exclusive with
+         * aggregation_type, event_type_filter, property_filters, aggregation_key, and group_keys.
+         * If provided, these other fields must be omitted.
+         */
+        fun sql(sql: Optional<String>) = sql(sql.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

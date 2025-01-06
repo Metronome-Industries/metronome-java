@@ -78,9 +78,18 @@ constructor(
         fun invoiceId(invoiceId: String) = apply { this.invoiceId = invoiceId }
 
         /** If set, all zero quantity line items will be filtered out of the response */
-        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Boolean) = apply {
+        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Boolean?) = apply {
             this.skipZeroQtyLineItems = skipZeroQtyLineItems
         }
+
+        /** If set, all zero quantity line items will be filtered out of the response */
+        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Boolean) =
+            skipZeroQtyLineItems(skipZeroQtyLineItems as Boolean?)
+
+        /** If set, all zero quantity line items will be filtered out of the response */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Optional<Boolean>) =
+            skipZeroQtyLineItems(skipZeroQtyLineItems.orElse(null) as Boolean?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

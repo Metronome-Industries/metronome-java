@@ -141,36 +141,77 @@ constructor(
         fun customerId(customerId: String) = apply { this.customerId = customerId }
 
         /** Only return invoices for the specified credit type */
-        fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+        fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+
+        /** Only return invoices for the specified credit type */
+        fun creditTypeId(creditTypeId: Optional<String>) = creditTypeId(creditTypeId.orElse(null))
 
         /**
          * RFC 3339 timestamp (exclusive). Invoices will only be returned for billing periods that
          * end before this time.
          */
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { this.endingBefore = endingBefore }
+        fun endingBefore(endingBefore: OffsetDateTime?) = apply { this.endingBefore = endingBefore }
+
+        /**
+         * RFC 3339 timestamp (exclusive). Invoices will only be returned for billing periods that
+         * end before this time.
+         */
+        fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+            endingBefore(endingBefore.orElse(null))
 
         /** Max number of results that should be returned */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /** Max number of results that should be returned */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Max number of results that should be returned */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+
+        /** Cursor that indicates where the next page of results should start. */
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         /** If set, all zero quantity line items will be filtered out of the response */
-        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Boolean) = apply {
+        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Boolean?) = apply {
             this.skipZeroQtyLineItems = skipZeroQtyLineItems
         }
 
+        /** If set, all zero quantity line items will be filtered out of the response */
+        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Boolean) =
+            skipZeroQtyLineItems(skipZeroQtyLineItems as Boolean?)
+
+        /** If set, all zero quantity line items will be filtered out of the response */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Optional<Boolean>) =
+            skipZeroQtyLineItems(skipZeroQtyLineItems.orElse(null) as Boolean?)
+
         /** Invoice sort order by issued_at, e.g. date_asc or date_desc. Defaults to date_asc. */
-        fun sort(sort: Sort) = apply { this.sort = sort }
+        fun sort(sort: Sort?) = apply { this.sort = sort }
+
+        /** Invoice sort order by issued_at, e.g. date_asc or date_desc. Defaults to date_asc. */
+        fun sort(sort: Optional<Sort>) = sort(sort.orElse(null))
 
         /**
          * RFC 3339 timestamp (inclusive). Invoices will only be returned for billing periods that
          * start at or after this time.
          */
-        fun startingOn(startingOn: OffsetDateTime) = apply { this.startingOn = startingOn }
+        fun startingOn(startingOn: OffsetDateTime?) = apply { this.startingOn = startingOn }
+
+        /**
+         * RFC 3339 timestamp (inclusive). Invoices will only be returned for billing periods that
+         * start at or after this time.
+         */
+        fun startingOn(startingOn: Optional<OffsetDateTime>) = startingOn(startingOn.orElse(null))
 
         /** Invoice status, e.g. DRAFT, FINALIZED, or VOID */
-        fun status(status: String) = apply { this.status = status }
+        fun status(status: String?) = apply { this.status = status }
+
+        /** Invoice status, e.g. DRAFT, FINALIZED, or VOID */
+        fun status(status: Optional<String>) = status(status.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

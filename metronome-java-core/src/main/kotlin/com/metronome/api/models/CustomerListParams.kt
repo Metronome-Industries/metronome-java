@@ -94,9 +94,12 @@ constructor(
         }
 
         /** Filter the customer list by customer_id. Up to 100 ids can be provided. */
-        fun customerIds(customerIds: List<String>) = apply {
-            this.customerIds = customerIds.toMutableList()
+        fun customerIds(customerIds: List<String>?) = apply {
+            this.customerIds = customerIds?.toMutableList()
         }
+
+        /** Filter the customer list by customer_id. Up to 100 ids can be provided. */
+        fun customerIds(customerIds: Optional<List<String>>) = customerIds(customerIds.orElse(null))
 
         /** Filter the customer list by customer_id. Up to 100 ids can be provided. */
         fun addCustomerId(customerId: String) = apply {
@@ -104,21 +107,46 @@ constructor(
         }
 
         /** Filter the customer list by ingest_alias */
-        fun ingestAlias(ingestAlias: String) = apply { this.ingestAlias = ingestAlias }
+        fun ingestAlias(ingestAlias: String?) = apply { this.ingestAlias = ingestAlias }
+
+        /** Filter the customer list by ingest_alias */
+        fun ingestAlias(ingestAlias: Optional<String>) = ingestAlias(ingestAlias.orElse(null))
 
         /** Max number of results that should be returned */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /** Max number of results that should be returned */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Max number of results that should be returned */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+
+        /** Cursor that indicates where the next page of results should start. */
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         /** Filter the customer list by only archived customers. */
-        fun onlyArchived(onlyArchived: Boolean) = apply { this.onlyArchived = onlyArchived }
+        fun onlyArchived(onlyArchived: Boolean?) = apply { this.onlyArchived = onlyArchived }
+
+        /** Filter the customer list by only archived customers. */
+        fun onlyArchived(onlyArchived: Boolean) = onlyArchived(onlyArchived as Boolean?)
+
+        /** Filter the customer list by only archived customers. */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun onlyArchived(onlyArchived: Optional<Boolean>) =
+            onlyArchived(onlyArchived.orElse(null) as Boolean?)
 
         /** Filter the customer list by salesforce_account_id. Up to 100 ids can be provided. */
-        fun salesforceAccountIds(salesforceAccountIds: List<String>) = apply {
-            this.salesforceAccountIds = salesforceAccountIds.toMutableList()
+        fun salesforceAccountIds(salesforceAccountIds: List<String>?) = apply {
+            this.salesforceAccountIds = salesforceAccountIds?.toMutableList()
         }
+
+        /** Filter the customer list by salesforce_account_id. Up to 100 ids can be provided. */
+        fun salesforceAccountIds(salesforceAccountIds: Optional<List<String>>) =
+            salesforceAccountIds(salesforceAccountIds.orElse(null))
 
         /** Filter the customer list by salesforce_account_id. Up to 100 ids can be provided. */
         fun addSalesforceAccountId(salesforceAccountId: String) = apply {

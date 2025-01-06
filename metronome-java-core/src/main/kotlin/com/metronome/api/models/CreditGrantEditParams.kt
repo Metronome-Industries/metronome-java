@@ -106,15 +106,25 @@ constructor(
             fun id(id: String) = apply { this.id = id }
 
             /** the updated credit grant type */
-            fun creditGrantType(creditGrantType: String) = apply {
+            fun creditGrantType(creditGrantType: String?) = apply {
                 this.creditGrantType = creditGrantType
             }
 
+            /** the updated credit grant type */
+            fun creditGrantType(creditGrantType: Optional<String>) =
+                creditGrantType(creditGrantType.orElse(null))
+
             /** the updated expiration date for the credit grant */
-            fun expiresAt(expiresAt: OffsetDateTime) = apply { this.expiresAt = expiresAt }
+            fun expiresAt(expiresAt: OffsetDateTime?) = apply { this.expiresAt = expiresAt }
+
+            /** the updated expiration date for the credit grant */
+            fun expiresAt(expiresAt: Optional<OffsetDateTime>) = expiresAt(expiresAt.orElse(null))
 
             /** the updated name for the credit grant */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String?) = apply { this.name = name }
+
+            /** the updated name for the credit grant */
+            fun name(name: Optional<String>) = name(name.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -188,15 +198,25 @@ constructor(
         fun id(id: String) = apply { body.id(id) }
 
         /** the updated credit grant type */
-        fun creditGrantType(creditGrantType: String) = apply {
+        fun creditGrantType(creditGrantType: String?) = apply {
             body.creditGrantType(creditGrantType)
         }
 
+        /** the updated credit grant type */
+        fun creditGrantType(creditGrantType: Optional<String>) =
+            creditGrantType(creditGrantType.orElse(null))
+
         /** the updated expiration date for the credit grant */
-        fun expiresAt(expiresAt: OffsetDateTime) = apply { body.expiresAt(expiresAt) }
+        fun expiresAt(expiresAt: OffsetDateTime?) = apply { body.expiresAt(expiresAt) }
+
+        /** the updated expiration date for the credit grant */
+        fun expiresAt(expiresAt: Optional<OffsetDateTime>) = expiresAt(expiresAt.orElse(null))
 
         /** the updated name for the credit grant */
-        fun name(name: String) = apply { body.name(name) }
+        fun name(name: String?) = apply { body.name(name) }
+
+        /** the updated name for the credit grant */
+        fun name(name: Optional<String>) = name(name.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

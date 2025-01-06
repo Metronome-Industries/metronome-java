@@ -256,14 +256,22 @@ constructor(
             fun type(type: Type) = apply { this.type = type }
 
             /** Required for USAGE products */
-            fun billableMetricId(billableMetricId: String) = apply {
+            fun billableMetricId(billableMetricId: String?) = apply {
                 this.billableMetricId = billableMetricId
             }
 
+            /** Required for USAGE products */
+            fun billableMetricId(billableMetricId: Optional<String>) =
+                billableMetricId(billableMetricId.orElse(null))
+
             /** Required for COMPOSITE products */
-            fun compositeProductIds(compositeProductIds: List<String>) = apply {
-                this.compositeProductIds = compositeProductIds.toMutableList()
+            fun compositeProductIds(compositeProductIds: List<String>?) = apply {
+                this.compositeProductIds = compositeProductIds?.toMutableList()
             }
+
+            /** Required for COMPOSITE products */
+            fun compositeProductIds(compositeProductIds: Optional<List<String>>) =
+                compositeProductIds(compositeProductIds.orElse(null))
 
             /** Required for COMPOSITE products */
             fun addCompositeProductId(compositeProductId: String) = apply {
@@ -272,9 +280,13 @@ constructor(
             }
 
             /** Required for COMPOSITE products */
-            fun compositeTags(compositeTags: List<String>) = apply {
-                this.compositeTags = compositeTags.toMutableList()
+            fun compositeTags(compositeTags: List<String>?) = apply {
+                this.compositeTags = compositeTags?.toMutableList()
             }
+
+            /** Required for COMPOSITE products */
+            fun compositeTags(compositeTags: Optional<List<String>>) =
+                compositeTags(compositeTags.orElse(null))
 
             /** Required for COMPOSITE products */
             fun addCompositeTag(compositeTag: String) = apply {
@@ -285,24 +297,70 @@ constructor(
              * Beta feature only available for composite products. If true, products with $0 will
              * not be included when computing composite usage. Defaults to false
              */
-            fun excludeFreeUsage(excludeFreeUsage: Boolean) = apply {
+            fun excludeFreeUsage(excludeFreeUsage: Boolean?) = apply {
                 this.excludeFreeUsage = excludeFreeUsage
             }
+
+            /**
+             * Beta feature only available for composite products. If true, products with $0 will
+             * not be included when computing composite usage. Defaults to false
+             */
+            fun excludeFreeUsage(excludeFreeUsage: Boolean) =
+                excludeFreeUsage(excludeFreeUsage as Boolean?)
+
+            /**
+             * Beta feature only available for composite products. If true, products with $0 will
+             * not be included when computing composite usage. Defaults to false
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun excludeFreeUsage(excludeFreeUsage: Optional<Boolean>) =
+                excludeFreeUsage(excludeFreeUsage.orElse(null) as Boolean?)
 
             /**
              * This field's availability is dependent on your client's configuration. Defaults to
              * true.
              */
-            fun isRefundable(isRefundable: Boolean) = apply { this.isRefundable = isRefundable }
+            fun isRefundable(isRefundable: Boolean?) = apply { this.isRefundable = isRefundable }
+
+            /**
+             * This field's availability is dependent on your client's configuration. Defaults to
+             * true.
+             */
+            fun isRefundable(isRefundable: Boolean) = isRefundable(isRefundable as Boolean?)
+
+            /**
+             * This field's availability is dependent on your client's configuration. Defaults to
+             * true.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun isRefundable(isRefundable: Optional<Boolean>) =
+                isRefundable(isRefundable.orElse(null) as Boolean?)
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteInternalItemId(netsuiteInternalItemId: String) = apply {
+            fun netsuiteInternalItemId(netsuiteInternalItemId: String?) = apply {
                 this.netsuiteInternalItemId = netsuiteInternalItemId
             }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteOverageItemId(netsuiteOverageItemId: String) = apply {
+            fun netsuiteInternalItemId(netsuiteInternalItemId: Optional<String>) =
+                netsuiteInternalItemId(netsuiteInternalItemId.orElse(null))
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteOverageItemId(netsuiteOverageItemId: String?) = apply {
                 this.netsuiteOverageItemId = netsuiteOverageItemId
+            }
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteOverageItemId(netsuiteOverageItemId: Optional<String>) =
+                netsuiteOverageItemId(netsuiteOverageItemId.orElse(null))
+
+            /**
+             * For USAGE products only. Groups usage line items on invoices. The superset of values
+             * in the pricing group key and presentation group key must be set as one compound group
+             * key on the billable metric.
+             */
+            fun presentationGroupKey(presentationGroupKey: List<String>?) = apply {
+                this.presentationGroupKey = presentationGroupKey?.toMutableList()
             }
 
             /**
@@ -310,9 +368,8 @@ constructor(
              * in the pricing group key and presentation group key must be set as one compound group
              * key on the billable metric.
              */
-            fun presentationGroupKey(presentationGroupKey: List<String>) = apply {
-                this.presentationGroupKey = presentationGroupKey.toMutableList()
-            }
+            fun presentationGroupKey(presentationGroupKey: Optional<List<String>>) =
+                presentationGroupKey(presentationGroupKey.orElse(null))
 
             /**
              * For USAGE products only. Groups usage line items on invoices. The superset of values
@@ -332,9 +389,18 @@ constructor(
              * in the pricing group key and presentation group key must be set as one compound group
              * key on the billable metric.
              */
-            fun pricingGroupKey(pricingGroupKey: List<String>) = apply {
-                this.pricingGroupKey = pricingGroupKey.toMutableList()
+            fun pricingGroupKey(pricingGroupKey: List<String>?) = apply {
+                this.pricingGroupKey = pricingGroupKey?.toMutableList()
             }
+
+            /**
+             * For USAGE products only. If set, pricing for this product will be determined for each
+             * pricing_group_key value, as opposed to the product as a whole. The superset of values
+             * in the pricing group key and presentation group key must be set as one compound group
+             * key on the billable metric.
+             */
+            fun pricingGroupKey(pricingGroupKey: Optional<List<String>>) =
+                pricingGroupKey(pricingGroupKey.orElse(null))
 
             /**
              * For USAGE products only. If set, pricing for this product will be determined for each
@@ -355,8 +421,29 @@ constructor(
              * another. For example, data could be sent in MB and priced in GB. In this case, the
              * conversion factor would be 1024 and the operation would be "divide".
              */
-            fun quantityConversion(quantityConversion: QuantityConversion) = apply {
+            fun quantityConversion(quantityConversion: QuantityConversion?) = apply {
                 this.quantityConversion = quantityConversion
+            }
+
+            /**
+             * Optional. Only valid for USAGE products. If provided, the quantity will be converted
+             * using the provided conversion factor and operation. For example, if the operation is
+             * "multiply" and the conversion factor is 100, then the quantity will be multiplied
+             * by 100. This can be used in cases where data is sent in one unit and priced in
+             * another. For example, data could be sent in MB and priced in GB. In this case, the
+             * conversion factor would be 1024 and the operation would be "divide".
+             */
+            fun quantityConversion(quantityConversion: Optional<QuantityConversion>) =
+                quantityConversion(quantityConversion.orElse(null))
+
+            /**
+             * Optional. Only valid for USAGE products. If provided, the quantity will be rounded
+             * using the provided rounding method and decimal places. For example, if the method is
+             * "round up" and the decimal places is 0, then the quantity will be rounded up to the
+             * nearest integer.
+             */
+            fun quantityRounding(quantityRounding: QuantityRounding?) = apply {
+                this.quantityRounding = quantityRounding
             }
 
             /**
@@ -365,11 +452,12 @@ constructor(
              * "round up" and the decimal places is 0, then the quantity will be rounded up to the
              * nearest integer.
              */
-            fun quantityRounding(quantityRounding: QuantityRounding) = apply {
-                this.quantityRounding = quantityRounding
-            }
+            fun quantityRounding(quantityRounding: Optional<QuantityRounding>) =
+                quantityRounding(quantityRounding.orElse(null))
 
-            fun tags(tags: List<String>) = apply { this.tags = tags.toMutableList() }
+            fun tags(tags: List<String>?) = apply { this.tags = tags?.toMutableList() }
+
+            fun tags(tags: Optional<List<String>>) = tags(tags.orElse(null))
 
             fun addTag(tag: String) = apply { tags = (tags ?: mutableListOf()).apply { add(tag) } }
 
@@ -457,14 +545,22 @@ constructor(
         fun type(type: Type) = apply { body.type(type) }
 
         /** Required for USAGE products */
-        fun billableMetricId(billableMetricId: String) = apply {
+        fun billableMetricId(billableMetricId: String?) = apply {
             body.billableMetricId(billableMetricId)
         }
 
+        /** Required for USAGE products */
+        fun billableMetricId(billableMetricId: Optional<String>) =
+            billableMetricId(billableMetricId.orElse(null))
+
         /** Required for COMPOSITE products */
-        fun compositeProductIds(compositeProductIds: List<String>) = apply {
+        fun compositeProductIds(compositeProductIds: List<String>?) = apply {
             body.compositeProductIds(compositeProductIds)
         }
+
+        /** Required for COMPOSITE products */
+        fun compositeProductIds(compositeProductIds: Optional<List<String>>) =
+            compositeProductIds(compositeProductIds.orElse(null))
 
         /** Required for COMPOSITE products */
         fun addCompositeProductId(compositeProductId: String) = apply {
@@ -472,7 +568,13 @@ constructor(
         }
 
         /** Required for COMPOSITE products */
-        fun compositeTags(compositeTags: List<String>) = apply { body.compositeTags(compositeTags) }
+        fun compositeTags(compositeTags: List<String>?) = apply {
+            body.compositeTags(compositeTags)
+        }
+
+        /** Required for COMPOSITE products */
+        fun compositeTags(compositeTags: Optional<List<String>>) =
+            compositeTags(compositeTags.orElse(null))
 
         /** Required for COMPOSITE products */
         fun addCompositeTag(compositeTag: String) = apply { body.addCompositeTag(compositeTag) }
@@ -481,23 +583,67 @@ constructor(
          * Beta feature only available for composite products. If true, products with $0 will not be
          * included when computing composite usage. Defaults to false
          */
-        fun excludeFreeUsage(excludeFreeUsage: Boolean) = apply {
+        fun excludeFreeUsage(excludeFreeUsage: Boolean?) = apply {
             body.excludeFreeUsage(excludeFreeUsage)
         }
 
         /**
+         * Beta feature only available for composite products. If true, products with $0 will not be
+         * included when computing composite usage. Defaults to false
+         */
+        fun excludeFreeUsage(excludeFreeUsage: Boolean) =
+            excludeFreeUsage(excludeFreeUsage as Boolean?)
+
+        /**
+         * Beta feature only available for composite products. If true, products with $0 will not be
+         * included when computing composite usage. Defaults to false
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun excludeFreeUsage(excludeFreeUsage: Optional<Boolean>) =
+            excludeFreeUsage(excludeFreeUsage.orElse(null) as Boolean?)
+
+        /**
          * This field's availability is dependent on your client's configuration. Defaults to true.
          */
-        fun isRefundable(isRefundable: Boolean) = apply { body.isRefundable(isRefundable) }
+        fun isRefundable(isRefundable: Boolean?) = apply { body.isRefundable(isRefundable) }
+
+        /**
+         * This field's availability is dependent on your client's configuration. Defaults to true.
+         */
+        fun isRefundable(isRefundable: Boolean) = isRefundable(isRefundable as Boolean?)
+
+        /**
+         * This field's availability is dependent on your client's configuration. Defaults to true.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun isRefundable(isRefundable: Optional<Boolean>) =
+            isRefundable(isRefundable.orElse(null) as Boolean?)
 
         /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteInternalItemId(netsuiteInternalItemId: String) = apply {
+        fun netsuiteInternalItemId(netsuiteInternalItemId: String?) = apply {
             body.netsuiteInternalItemId(netsuiteInternalItemId)
         }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteOverageItemId(netsuiteOverageItemId: String) = apply {
+        fun netsuiteInternalItemId(netsuiteInternalItemId: Optional<String>) =
+            netsuiteInternalItemId(netsuiteInternalItemId.orElse(null))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteOverageItemId(netsuiteOverageItemId: String?) = apply {
             body.netsuiteOverageItemId(netsuiteOverageItemId)
+        }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteOverageItemId(netsuiteOverageItemId: Optional<String>) =
+            netsuiteOverageItemId(netsuiteOverageItemId.orElse(null))
+
+        /**
+         * For USAGE products only. Groups usage line items on invoices. The superset of values in
+         * the pricing group key and presentation group key must be set as one compound group key on
+         * the billable metric.
+         */
+        fun presentationGroupKey(presentationGroupKey: List<String>?) = apply {
+            body.presentationGroupKey(presentationGroupKey)
         }
 
         /**
@@ -505,9 +651,8 @@ constructor(
          * the pricing group key and presentation group key must be set as one compound group key on
          * the billable metric.
          */
-        fun presentationGroupKey(presentationGroupKey: List<String>) = apply {
-            body.presentationGroupKey(presentationGroupKey)
-        }
+        fun presentationGroupKey(presentationGroupKey: Optional<List<String>>) =
+            presentationGroupKey(presentationGroupKey.orElse(null))
 
         /**
          * For USAGE products only. Groups usage line items on invoices. The superset of values in
@@ -524,9 +669,18 @@ constructor(
          * the pricing group key and presentation group key must be set as one compound group key on
          * the billable metric.
          */
-        fun pricingGroupKey(pricingGroupKey: List<String>) = apply {
+        fun pricingGroupKey(pricingGroupKey: List<String>?) = apply {
             body.pricingGroupKey(pricingGroupKey)
         }
+
+        /**
+         * For USAGE products only. If set, pricing for this product will be determined for each
+         * pricing_group_key value, as opposed to the product as a whole. The superset of values in
+         * the pricing group key and presentation group key must be set as one compound group key on
+         * the billable metric.
+         */
+        fun pricingGroupKey(pricingGroupKey: Optional<List<String>>) =
+            pricingGroupKey(pricingGroupKey.orElse(null))
 
         /**
          * For USAGE products only. If set, pricing for this product will be determined for each
@@ -546,8 +700,28 @@ constructor(
          * example, data could be sent in MB and priced in GB. In this case, the conversion factor
          * would be 1024 and the operation would be "divide".
          */
-        fun quantityConversion(quantityConversion: QuantityConversion) = apply {
+        fun quantityConversion(quantityConversion: QuantityConversion?) = apply {
             body.quantityConversion(quantityConversion)
+        }
+
+        /**
+         * Optional. Only valid for USAGE products. If provided, the quantity will be converted
+         * using the provided conversion factor and operation. For example, if the operation is
+         * "multiply" and the conversion factor is 100, then the quantity will be multiplied by 100.
+         * This can be used in cases where data is sent in one unit and priced in another. For
+         * example, data could be sent in MB and priced in GB. In this case, the conversion factor
+         * would be 1024 and the operation would be "divide".
+         */
+        fun quantityConversion(quantityConversion: Optional<QuantityConversion>) =
+            quantityConversion(quantityConversion.orElse(null))
+
+        /**
+         * Optional. Only valid for USAGE products. If provided, the quantity will be rounded using
+         * the provided rounding method and decimal places. For example, if the method is "round up"
+         * and the decimal places is 0, then the quantity will be rounded up to the nearest integer.
+         */
+        fun quantityRounding(quantityRounding: QuantityRounding?) = apply {
+            body.quantityRounding(quantityRounding)
         }
 
         /**
@@ -555,11 +729,12 @@ constructor(
          * the provided rounding method and decimal places. For example, if the method is "round up"
          * and the decimal places is 0, then the quantity will be rounded up to the nearest integer.
          */
-        fun quantityRounding(quantityRounding: QuantityRounding) = apply {
-            body.quantityRounding(quantityRounding)
-        }
+        fun quantityRounding(quantityRounding: Optional<QuantityRounding>) =
+            quantityRounding(quantityRounding.orElse(null))
 
-        fun tags(tags: List<String>) = apply { body.tags(tags) }
+        fun tags(tags: List<String>?) = apply { body.tags(tags) }
+
+        fun tags(tags: Optional<List<String>>) = tags(tags.orElse(null))
 
         fun addTag(tag: String) = apply { body.addTag(tag) }
 

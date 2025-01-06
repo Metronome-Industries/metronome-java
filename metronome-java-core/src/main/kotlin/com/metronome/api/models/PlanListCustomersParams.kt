@@ -95,10 +95,20 @@ constructor(
         fun planId(planId: String) = apply { this.planId = planId }
 
         /** Max number of results that should be returned */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /** Max number of results that should be returned */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Max number of results that should be returned */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+
+        /** Cursor that indicates where the next page of results should start. */
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         /**
          * Status of customers on a given plan. Defaults to `active`.
@@ -110,7 +120,19 @@ constructor(
          * Multiple statuses can be OR'd together using commas, e.g. `active,ended`. **Note:**
          * `ended,upcoming` combination is not yet supported.
          */
-        fun status(status: Status) = apply { this.status = status }
+        fun status(status: Status?) = apply { this.status = status }
+
+        /**
+         * Status of customers on a given plan. Defaults to `active`.
+         * - `all` - Return current, past, and upcoming customers of the plan.
+         * - `active` - Return current customers of the plan.
+         * - `ended` - Return past customers of the plan.
+         * - `upcoming` - Return upcoming customers of the plan.
+         *
+         * Multiple statuses can be OR'd together using commas, e.g. `active,ended`. **Note:**
+         * `ended,upcoming` combination is not yet supported.
+         */
+        fun status(status: Optional<Status>) = status(status.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

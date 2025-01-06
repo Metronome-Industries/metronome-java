@@ -143,14 +143,22 @@ constructor(
             }
 
             /** The end date of the invoice header in Netsuite */
-            fun netsuiteInvoiceHeaderEnd(netsuiteInvoiceHeaderEnd: OffsetDateTime) = apply {
+            fun netsuiteInvoiceHeaderEnd(netsuiteInvoiceHeaderEnd: OffsetDateTime?) = apply {
                 this.netsuiteInvoiceHeaderEnd = netsuiteInvoiceHeaderEnd
             }
 
+            /** The end date of the invoice header in Netsuite */
+            fun netsuiteInvoiceHeaderEnd(netsuiteInvoiceHeaderEnd: Optional<OffsetDateTime>) =
+                netsuiteInvoiceHeaderEnd(netsuiteInvoiceHeaderEnd.orElse(null))
+
             /** The start date of the invoice header in Netsuite */
-            fun netsuiteInvoiceHeaderStart(netsuiteInvoiceHeaderStart: OffsetDateTime) = apply {
+            fun netsuiteInvoiceHeaderStart(netsuiteInvoiceHeaderStart: OffsetDateTime?) = apply {
                 this.netsuiteInvoiceHeaderStart = netsuiteInvoiceHeaderStart
             }
+
+            /** The start date of the invoice header in Netsuite */
+            fun netsuiteInvoiceHeaderStart(netsuiteInvoiceHeaderStart: Optional<OffsetDateTime>) =
+                netsuiteInvoiceHeaderStart(netsuiteInvoiceHeaderStart.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -242,14 +250,22 @@ constructor(
         fun addLineItem(lineItem: LineItem) = apply { body.addLineItem(lineItem) }
 
         /** The end date of the invoice header in Netsuite */
-        fun netsuiteInvoiceHeaderEnd(netsuiteInvoiceHeaderEnd: OffsetDateTime) = apply {
+        fun netsuiteInvoiceHeaderEnd(netsuiteInvoiceHeaderEnd: OffsetDateTime?) = apply {
             body.netsuiteInvoiceHeaderEnd(netsuiteInvoiceHeaderEnd)
         }
 
+        /** The end date of the invoice header in Netsuite */
+        fun netsuiteInvoiceHeaderEnd(netsuiteInvoiceHeaderEnd: Optional<OffsetDateTime>) =
+            netsuiteInvoiceHeaderEnd(netsuiteInvoiceHeaderEnd.orElse(null))
+
         /** The start date of the invoice header in Netsuite */
-        fun netsuiteInvoiceHeaderStart(netsuiteInvoiceHeaderStart: OffsetDateTime) = apply {
+        fun netsuiteInvoiceHeaderStart(netsuiteInvoiceHeaderStart: OffsetDateTime?) = apply {
             body.netsuiteInvoiceHeaderStart(netsuiteInvoiceHeaderStart)
         }
+
+        /** The start date of the invoice header in Netsuite */
+        fun netsuiteInvoiceHeaderStart(netsuiteInvoiceHeaderStart: Optional<OffsetDateTime>) =
+            netsuiteInvoiceHeaderStart(netsuiteInvoiceHeaderStart.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -469,34 +485,80 @@ constructor(
             }
 
             /** If the professional_service_id was added on an amendment, this is required. */
-            fun amendmentId(amendmentId: String) = apply { this.amendmentId = amendmentId }
+            fun amendmentId(amendmentId: String?) = apply { this.amendmentId = amendmentId }
+
+            /** If the professional_service_id was added on an amendment, this is required. */
+            fun amendmentId(amendmentId: Optional<String>) = amendmentId(amendmentId.orElse(null))
 
             /** Amount for the term on the new invoice. */
-            fun amount(amount: Double) = apply { this.amount = amount }
+            fun amount(amount: Double?) = apply { this.amount = amount }
+
+            /** Amount for the term on the new invoice. */
+            fun amount(amount: Double) = amount(amount as Double?)
+
+            /** Amount for the term on the new invoice. */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
 
             /** For client use. */
-            fun metadata(metadata: String) = apply { this.metadata = metadata }
+            fun metadata(metadata: String?) = apply { this.metadata = metadata }
+
+            /** For client use. */
+            fun metadata(metadata: Optional<String>) = metadata(metadata.orElse(null))
 
             /** The end date for the billing period on the invoice. */
-            fun netsuiteInvoiceBillingEnd(netsuiteInvoiceBillingEnd: OffsetDateTime) = apply {
+            fun netsuiteInvoiceBillingEnd(netsuiteInvoiceBillingEnd: OffsetDateTime?) = apply {
                 this.netsuiteInvoiceBillingEnd = netsuiteInvoiceBillingEnd
             }
 
+            /** The end date for the billing period on the invoice. */
+            fun netsuiteInvoiceBillingEnd(netsuiteInvoiceBillingEnd: Optional<OffsetDateTime>) =
+                netsuiteInvoiceBillingEnd(netsuiteInvoiceBillingEnd.orElse(null))
+
             /** The start date for the billing period on the invoice. */
-            fun netsuiteInvoiceBillingStart(netsuiteInvoiceBillingStart: OffsetDateTime) = apply {
+            fun netsuiteInvoiceBillingStart(netsuiteInvoiceBillingStart: OffsetDateTime?) = apply {
                 this.netsuiteInvoiceBillingStart = netsuiteInvoiceBillingStart
             }
+
+            /** The start date for the billing period on the invoice. */
+            fun netsuiteInvoiceBillingStart(netsuiteInvoiceBillingStart: Optional<OffsetDateTime>) =
+                netsuiteInvoiceBillingStart(netsuiteInvoiceBillingStart.orElse(null))
 
             /**
              * Quantity for the charge. Will be multiplied by unit_price to determine the amount.
              */
-            fun quantity(quantity: Double) = apply { this.quantity = quantity }
+            fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+
+            /**
+             * Quantity for the charge. Will be multiplied by unit_price to determine the amount.
+             */
+            fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+            /**
+             * Quantity for the charge. Will be multiplied by unit_price to determine the amount.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun quantity(quantity: Optional<Double>) = quantity(quantity.orElse(null) as Double?)
 
             /**
              * If specified, this overrides the unit price on the pro service term. Must also
              * provide quantity (but not amount) if providing unit_price.
              */
-            fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+            fun unitPrice(unitPrice: Double?) = apply { this.unitPrice = unitPrice }
+
+            /**
+             * If specified, this overrides the unit price on the pro service term. Must also
+             * provide quantity (but not amount) if providing unit_price.
+             */
+            fun unitPrice(unitPrice: Double) = unitPrice(unitPrice as Double?)
+
+            /**
+             * If specified, this overrides the unit price on the pro service term. Must also
+             * provide quantity (but not amount) if providing unit_price.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun unitPrice(unitPrice: Optional<Double>) =
+                unitPrice(unitPrice.orElse(null) as Double?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()

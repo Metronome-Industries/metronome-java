@@ -87,9 +87,12 @@ constructor(
             }
 
             /** Optional list of entity types to return keys for */
-            fun entities(entities: List<Entity>) = apply {
-                this.entities = entities.toMutableList()
+            fun entities(entities: List<Entity>?) = apply {
+                this.entities = entities?.toMutableList()
             }
+
+            /** Optional list of entity types to return keys for */
+            fun entities(entities: Optional<List<Entity>>) = entities(entities.orElse(null))
 
             /** Optional list of entity types to return keys for */
             fun addEntity(entity: Entity) = apply {
@@ -161,10 +164,16 @@ constructor(
         }
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+
+        /** Cursor that indicates where the next page of results should start. */
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         /** Optional list of entity types to return keys for */
-        fun entities(entities: List<Entity>) = apply { body.entities(entities) }
+        fun entities(entities: List<Entity>?) = apply { body.entities(entities) }
+
+        /** Optional list of entity types to return keys for */
+        fun entities(entities: Optional<List<Entity>>) = entities(entities.orElse(null))
 
         /** Optional list of entity types to return keys for */
         fun addEntity(entity: Entity) = apply { body.addEntity(entity) }

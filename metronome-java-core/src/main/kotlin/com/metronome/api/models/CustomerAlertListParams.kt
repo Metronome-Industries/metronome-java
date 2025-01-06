@@ -101,9 +101,15 @@ constructor(
             /**
              * Optionally filter by alert status. If absent, only enabled alerts will be returned.
              */
-            fun alertStatuses(alertStatuses: List<AlertStatus>) = apply {
-                this.alertStatuses = alertStatuses.toMutableList()
+            fun alertStatuses(alertStatuses: List<AlertStatus>?) = apply {
+                this.alertStatuses = alertStatuses?.toMutableList()
             }
+
+            /**
+             * Optionally filter by alert status. If absent, only enabled alerts will be returned.
+             */
+            fun alertStatuses(alertStatuses: Optional<List<AlertStatus>>) =
+                alertStatuses(alertStatuses.orElse(null))
 
             /**
              * Optionally filter by alert status. If absent, only enabled alerts will be returned.
@@ -181,15 +187,22 @@ constructor(
         }
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+
+        /** Cursor that indicates where the next page of results should start. */
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         /** The Metronome ID of the customer */
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /** Optionally filter by alert status. If absent, only enabled alerts will be returned. */
-        fun alertStatuses(alertStatuses: List<AlertStatus>) = apply {
+        fun alertStatuses(alertStatuses: List<AlertStatus>?) = apply {
             body.alertStatuses(alertStatuses)
         }
+
+        /** Optionally filter by alert status. If absent, only enabled alerts will be returned. */
+        fun alertStatuses(alertStatuses: Optional<List<AlertStatus>>) =
+            alertStatuses(alertStatuses.orElse(null))
 
         /** Optionally filter by alert status. If absent, only enabled alerts will be returned. */
         fun addAlertStatus(alertStatus: AlertStatus) = apply { body.addAlertStatus(alertStatus) }

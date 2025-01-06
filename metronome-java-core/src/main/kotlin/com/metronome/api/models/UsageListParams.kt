@@ -157,9 +157,16 @@ constructor(
              * A list of billable metrics to fetch usage for. If absent, all billable metrics will
              * be returned.
              */
-            fun billableMetrics(billableMetrics: List<BillableMetric>) = apply {
-                this.billableMetrics = billableMetrics.toMutableList()
+            fun billableMetrics(billableMetrics: List<BillableMetric>?) = apply {
+                this.billableMetrics = billableMetrics?.toMutableList()
             }
+
+            /**
+             * A list of billable metrics to fetch usage for. If absent, all billable metrics will
+             * be returned.
+             */
+            fun billableMetrics(billableMetrics: Optional<List<BillableMetric>>) =
+                billableMetrics(billableMetrics.orElse(null))
 
             /**
              * A list of billable metrics to fetch usage for. If absent, all billable metrics will
@@ -173,9 +180,16 @@ constructor(
              * A list of Metronome customer IDs to fetch usage for. If absent, usage for all
              * customers will be returned.
              */
-            fun customerIds(customerIds: List<String>) = apply {
-                this.customerIds = customerIds.toMutableList()
+            fun customerIds(customerIds: List<String>?) = apply {
+                this.customerIds = customerIds?.toMutableList()
             }
+
+            /**
+             * A list of Metronome customer IDs to fetch usage for. If absent, usage for all
+             * customers will be returned.
+             */
+            fun customerIds(customerIds: Optional<List<String>>) =
+                customerIds(customerIds.orElse(null))
 
             /**
              * A list of Metronome customer IDs to fetch usage for. If absent, usage for all
@@ -257,7 +271,10 @@ constructor(
         }
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+
+        /** Cursor that indicates where the next page of results should start. */
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
 
@@ -274,9 +291,16 @@ constructor(
          * A list of billable metrics to fetch usage for. If absent, all billable metrics will be
          * returned.
          */
-        fun billableMetrics(billableMetrics: List<BillableMetric>) = apply {
+        fun billableMetrics(billableMetrics: List<BillableMetric>?) = apply {
             body.billableMetrics(billableMetrics)
         }
+
+        /**
+         * A list of billable metrics to fetch usage for. If absent, all billable metrics will be
+         * returned.
+         */
+        fun billableMetrics(billableMetrics: Optional<List<BillableMetric>>) =
+            billableMetrics(billableMetrics.orElse(null))
 
         /**
          * A list of billable metrics to fetch usage for. If absent, all billable metrics will be
@@ -290,7 +314,13 @@ constructor(
          * A list of Metronome customer IDs to fetch usage for. If absent, usage for all customers
          * will be returned.
          */
-        fun customerIds(customerIds: List<String>) = apply { body.customerIds(customerIds) }
+        fun customerIds(customerIds: List<String>?) = apply { body.customerIds(customerIds) }
+
+        /**
+         * A list of Metronome customer IDs to fetch usage for. If absent, usage for all customers
+         * will be returned.
+         */
+        fun customerIds(customerIds: Optional<List<String>>) = customerIds(customerIds.orElse(null))
 
         /**
          * A list of Metronome customer IDs to fetch usage for. If absent, usage for all customers
@@ -527,7 +557,9 @@ constructor(
 
             fun id(id: String) = apply { this.id = id }
 
-            fun groupBy(groupBy: GroupBy) = apply { this.groupBy = groupBy }
+            fun groupBy(groupBy: GroupBy?) = apply { this.groupBy = groupBy }
+
+            fun groupBy(groupBy: Optional<GroupBy>) = groupBy(groupBy.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -607,7 +639,13 @@ constructor(
                  * Values of the group_by key to return in the query. If this field is omitted, all
                  * available values will be returned, up to a maximum of 200.
                  */
-                fun values(values: List<String>) = apply { this.values = values.toMutableList() }
+                fun values(values: List<String>?) = apply { this.values = values?.toMutableList() }
+
+                /**
+                 * Values of the group_by key to return in the query. If this field is omitted, all
+                 * available values will be returned, up to a maximum of 200.
+                 */
+                fun values(values: Optional<List<String>>) = values(values.orElse(null))
 
                 /**
                  * Values of the group_by key to return in the query. If this field is omitted, all

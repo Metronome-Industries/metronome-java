@@ -92,9 +92,13 @@ constructor(
             }
 
             /** Filter options for the product list */
-            fun archiveFilter(archiveFilter: ArchiveFilter) = apply {
+            fun archiveFilter(archiveFilter: ArchiveFilter?) = apply {
                 this.archiveFilter = archiveFilter
             }
+
+            /** Filter options for the product list */
+            fun archiveFilter(archiveFilter: Optional<ArchiveFilter>) =
+                archiveFilter(archiveFilter.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -163,15 +167,29 @@ constructor(
         }
 
         /** Max number of results that should be returned */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /** Max number of results that should be returned */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Max number of results that should be returned */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+
+        /** Cursor that indicates where the next page of results should start. */
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         /** Filter options for the product list */
-        fun archiveFilter(archiveFilter: ArchiveFilter) = apply {
+        fun archiveFilter(archiveFilter: ArchiveFilter?) = apply {
             body.archiveFilter(archiveFilter)
         }
+
+        /** Filter options for the product list */
+        fun archiveFilter(archiveFilter: Optional<ArchiveFilter>) =
+            archiveFilter(archiveFilter.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

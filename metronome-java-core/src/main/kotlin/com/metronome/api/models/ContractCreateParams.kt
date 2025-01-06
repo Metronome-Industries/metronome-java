@@ -319,29 +319,44 @@ constructor(
 
             /** The billing provider configuration associated with a contract. */
             fun billingProviderConfiguration(
-                billingProviderConfiguration: BillingProviderConfiguration
+                billingProviderConfiguration: BillingProviderConfiguration?
             ) = apply { this.billingProviderConfiguration = billingProviderConfiguration }
 
-            fun commits(commits: List<Commit>) = apply { this.commits = commits.toMutableList() }
+            /** The billing provider configuration associated with a contract. */
+            fun billingProviderConfiguration(
+                billingProviderConfiguration: Optional<BillingProviderConfiguration>
+            ) = billingProviderConfiguration(billingProviderConfiguration.orElse(null))
+
+            fun commits(commits: List<Commit>?) = apply { this.commits = commits?.toMutableList() }
+
+            fun commits(commits: Optional<List<Commit>>) = commits(commits.orElse(null))
 
             fun addCommit(commit: Commit) = apply {
                 commits = (commits ?: mutableListOf()).apply { add(commit) }
             }
 
-            fun credits(credits: List<Credit>) = apply { this.credits = credits.toMutableList() }
+            fun credits(credits: List<Credit>?) = apply { this.credits = credits?.toMutableList() }
+
+            fun credits(credits: Optional<List<Credit>>) = credits(credits.orElse(null))
 
             fun addCredit(credit: Credit) = apply {
                 credits = (credits ?: mutableListOf()).apply { add(credit) }
             }
 
-            fun customFields(customFields: CustomFields) = apply {
+            fun customFields(customFields: CustomFields?) = apply {
                 this.customFields = customFields
             }
 
+            fun customFields(customFields: Optional<CustomFields>) =
+                customFields(customFields.orElse(null))
+
             /** This field's availability is dependent on your client's configuration. */
-            fun discounts(discounts: List<Discount>) = apply {
-                this.discounts = discounts.toMutableList()
+            fun discounts(discounts: List<Discount>?) = apply {
+                this.discounts = discounts?.toMutableList()
             }
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun discounts(discounts: Optional<List<Discount>>) = discounts(discounts.orElse(null))
 
             /** This field's availability is dependent on your client's configuration. */
             fun addDiscount(discount: Discount) = apply {
@@ -349,9 +364,13 @@ constructor(
             }
 
             /** exclusive contract end time */
-            fun endingBefore(endingBefore: OffsetDateTime) = apply {
+            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
                 this.endingBefore = endingBefore
             }
+
+            /** exclusive contract end time */
+            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+                endingBefore(endingBefore.orElse(null))
 
             /**
              * Defaults to LOWEST_MULTIPLIER, which applies the greatest discount to list prices
@@ -360,32 +379,61 @@ constructor(
              * tiered overrides are used, prioritization must be explicit.
              */
             fun multiplierOverridePrioritization(
-                multiplierOverridePrioritization: MultiplierOverridePrioritization
+                multiplierOverridePrioritization: MultiplierOverridePrioritization?
             ) = apply { this.multiplierOverridePrioritization = multiplierOverridePrioritization }
 
-            fun name(name: String) = apply { this.name = name }
+            /**
+             * Defaults to LOWEST_MULTIPLIER, which applies the greatest discount to list prices
+             * automatically. EXPLICIT prioritization requires specifying priorities for each
+             * multiplier; the one with the lowest priority value will be prioritized first. If
+             * tiered overrides are used, prioritization must be explicit.
+             */
+            fun multiplierOverridePrioritization(
+                multiplierOverridePrioritization: Optional<MultiplierOverridePrioritization>
+            ) = multiplierOverridePrioritization(multiplierOverridePrioritization.orElse(null))
 
-            fun netPaymentTermsDays(netPaymentTermsDays: Double) = apply {
+            fun name(name: String?) = apply { this.name = name }
+
+            fun name(name: Optional<String>) = name(name.orElse(null))
+
+            fun netPaymentTermsDays(netPaymentTermsDays: Double?) = apply {
                 this.netPaymentTermsDays = netPaymentTermsDays
             }
 
+            fun netPaymentTermsDays(netPaymentTermsDays: Double) =
+                netPaymentTermsDays(netPaymentTermsDays as Double?)
+
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun netPaymentTermsDays(netPaymentTermsDays: Optional<Double>) =
+                netPaymentTermsDays(netPaymentTermsDays.orElse(null) as Double?)
+
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
 
-            fun overrides(overrides: List<Override>) = apply {
-                this.overrides = overrides.toMutableList()
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
+                netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
+
+            fun overrides(overrides: List<Override>?) = apply {
+                this.overrides = overrides?.toMutableList()
             }
+
+            fun overrides(overrides: Optional<List<Override>>) = overrides(overrides.orElse(null))
 
             fun addOverride(override: Override) = apply {
                 overrides = (overrides ?: mutableListOf()).apply { add(override) }
             }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun professionalServices(professionalServices: List<ProfessionalService>) = apply {
-                this.professionalServices = professionalServices.toMutableList()
+            fun professionalServices(professionalServices: List<ProfessionalService>?) = apply {
+                this.professionalServices = professionalServices?.toMutableList()
             }
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun professionalServices(professionalServices: Optional<List<ProfessionalService>>) =
+                professionalServices(professionalServices.orElse(null))
 
             /** This field's availability is dependent on your client's configuration. */
             fun addProfessionalService(professionalService: ProfessionalService) = apply {
@@ -396,14 +444,26 @@ constructor(
             /**
              * Selects the rate card linked to the specified alias as of the contract's start date.
              */
-            fun rateCardAlias(rateCardAlias: String) = apply { this.rateCardAlias = rateCardAlias }
+            fun rateCardAlias(rateCardAlias: String?) = apply { this.rateCardAlias = rateCardAlias }
 
-            fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
+            /**
+             * Selects the rate card linked to the specified alias as of the contract's start date.
+             */
+            fun rateCardAlias(rateCardAlias: Optional<String>) =
+                rateCardAlias(rateCardAlias.orElse(null))
+
+            fun rateCardId(rateCardId: String?) = apply { this.rateCardId = rateCardId }
+
+            fun rateCardId(rateCardId: Optional<String>) = rateCardId(rateCardId.orElse(null))
 
             /** This field's availability is dependent on your client's configuration. */
-            fun resellerRoyalties(resellerRoyalties: List<ResellerRoyalty>) = apply {
-                this.resellerRoyalties = resellerRoyalties.toMutableList()
+            fun resellerRoyalties(resellerRoyalties: List<ResellerRoyalty>?) = apply {
+                this.resellerRoyalties = resellerRoyalties?.toMutableList()
             }
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun resellerRoyalties(resellerRoyalties: Optional<List<ResellerRoyalty>>) =
+                resellerRoyalties(resellerRoyalties.orElse(null))
 
             /** This field's availability is dependent on your client's configuration. */
             fun addResellerRoyalty(resellerRoyalty: ResellerRoyalty) = apply {
@@ -412,13 +472,20 @@ constructor(
             }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun salesforceOpportunityId(salesforceOpportunityId: String) = apply {
+            fun salesforceOpportunityId(salesforceOpportunityId: String?) = apply {
                 this.salesforceOpportunityId = salesforceOpportunityId
             }
 
-            fun scheduledCharges(scheduledCharges: List<ScheduledCharge>) = apply {
-                this.scheduledCharges = scheduledCharges.toMutableList()
+            /** This field's availability is dependent on your client's configuration. */
+            fun salesforceOpportunityId(salesforceOpportunityId: Optional<String>) =
+                salesforceOpportunityId(salesforceOpportunityId.orElse(null))
+
+            fun scheduledCharges(scheduledCharges: List<ScheduledCharge>?) = apply {
+                this.scheduledCharges = scheduledCharges?.toMutableList()
             }
+
+            fun scheduledCharges(scheduledCharges: Optional<List<ScheduledCharge>>) =
+                scheduledCharges(scheduledCharges.orElse(null))
 
             fun addScheduledCharge(scheduledCharge: ScheduledCharge) = apply {
                 scheduledCharges =
@@ -426,24 +493,51 @@ constructor(
             }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun totalContractValue(totalContractValue: Double) = apply {
+            fun totalContractValue(totalContractValue: Double?) = apply {
                 this.totalContractValue = totalContractValue
             }
 
-            fun transition(transition: Transition) = apply { this.transition = transition }
+            /** This field's availability is dependent on your client's configuration. */
+            fun totalContractValue(totalContractValue: Double) =
+                totalContractValue(totalContractValue as Double?)
+
+            /** This field's availability is dependent on your client's configuration. */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun totalContractValue(totalContractValue: Optional<Double>) =
+                totalContractValue(totalContractValue.orElse(null) as Double?)
+
+            fun transition(transition: Transition?) = apply { this.transition = transition }
+
+            fun transition(transition: Optional<Transition>) = transition(transition.orElse(null))
 
             /**
              * Prevents the creation of duplicates. If a request to create a record is made with a
              * previously used uniqueness key, a new record will not be created and the request will
              * fail with a 409 error.
              */
-            fun uniquenessKey(uniquenessKey: String) = apply { this.uniquenessKey = uniquenessKey }
+            fun uniquenessKey(uniquenessKey: String?) = apply { this.uniquenessKey = uniquenessKey }
 
-            fun usageFilter(usageFilter: BaseUsageFilter) = apply { this.usageFilter = usageFilter }
+            /**
+             * Prevents the creation of duplicates. If a request to create a record is made with a
+             * previously used uniqueness key, a new record will not be created and the request will
+             * fail with a 409 error.
+             */
+            fun uniquenessKey(uniquenessKey: Optional<String>) =
+                uniquenessKey(uniquenessKey.orElse(null))
 
-            fun usageStatementSchedule(usageStatementSchedule: UsageStatementSchedule) = apply {
+            fun usageFilter(usageFilter: BaseUsageFilter?) = apply {
+                this.usageFilter = usageFilter
+            }
+
+            fun usageFilter(usageFilter: Optional<BaseUsageFilter>) =
+                usageFilter(usageFilter.orElse(null))
+
+            fun usageStatementSchedule(usageStatementSchedule: UsageStatementSchedule?) = apply {
                 this.usageStatementSchedule = usageStatementSchedule
             }
+
+            fun usageStatementSchedule(usageStatementSchedule: Optional<UsageStatementSchedule>) =
+                usageStatementSchedule(usageStatementSchedule.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -540,27 +634,46 @@ constructor(
 
         /** The billing provider configuration associated with a contract. */
         fun billingProviderConfiguration(
-            billingProviderConfiguration: BillingProviderConfiguration
+            billingProviderConfiguration: BillingProviderConfiguration?
         ) = apply { body.billingProviderConfiguration(billingProviderConfiguration) }
 
-        fun commits(commits: List<Commit>) = apply { body.commits(commits) }
+        /** The billing provider configuration associated with a contract. */
+        fun billingProviderConfiguration(
+            billingProviderConfiguration: Optional<BillingProviderConfiguration>
+        ) = billingProviderConfiguration(billingProviderConfiguration.orElse(null))
+
+        fun commits(commits: List<Commit>?) = apply { body.commits(commits) }
+
+        fun commits(commits: Optional<List<Commit>>) = commits(commits.orElse(null))
 
         fun addCommit(commit: Commit) = apply { body.addCommit(commit) }
 
-        fun credits(credits: List<Credit>) = apply { body.credits(credits) }
+        fun credits(credits: List<Credit>?) = apply { body.credits(credits) }
+
+        fun credits(credits: Optional<List<Credit>>) = credits(credits.orElse(null))
 
         fun addCredit(credit: Credit) = apply { body.addCredit(credit) }
 
-        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
+        fun customFields(customFields: CustomFields?) = apply { body.customFields(customFields) }
+
+        fun customFields(customFields: Optional<CustomFields>) =
+            customFields(customFields.orElse(null))
 
         /** This field's availability is dependent on your client's configuration. */
-        fun discounts(discounts: List<Discount>) = apply { body.discounts(discounts) }
+        fun discounts(discounts: List<Discount>?) = apply { body.discounts(discounts) }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun discounts(discounts: Optional<List<Discount>>) = discounts(discounts.orElse(null))
 
         /** This field's availability is dependent on your client's configuration. */
         fun addDiscount(discount: Discount) = apply { body.addDiscount(discount) }
 
         /** exclusive contract end time */
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
+        fun endingBefore(endingBefore: OffsetDateTime?) = apply { body.endingBefore(endingBefore) }
+
+        /** exclusive contract end time */
+        fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+            endingBefore(endingBefore.orElse(null))
 
         /**
          * Defaults to LOWEST_MULTIPLIER, which applies the greatest discount to list prices
@@ -569,28 +682,57 @@ constructor(
          * overrides are used, prioritization must be explicit.
          */
         fun multiplierOverridePrioritization(
-            multiplierOverridePrioritization: MultiplierOverridePrioritization
+            multiplierOverridePrioritization: MultiplierOverridePrioritization?
         ) = apply { body.multiplierOverridePrioritization(multiplierOverridePrioritization) }
 
-        fun name(name: String) = apply { body.name(name) }
+        /**
+         * Defaults to LOWEST_MULTIPLIER, which applies the greatest discount to list prices
+         * automatically. EXPLICIT prioritization requires specifying priorities for each
+         * multiplier; the one with the lowest priority value will be prioritized first. If tiered
+         * overrides are used, prioritization must be explicit.
+         */
+        fun multiplierOverridePrioritization(
+            multiplierOverridePrioritization: Optional<MultiplierOverridePrioritization>
+        ) = multiplierOverridePrioritization(multiplierOverridePrioritization.orElse(null))
 
-        fun netPaymentTermsDays(netPaymentTermsDays: Double) = apply {
+        fun name(name: String?) = apply { body.name(name) }
+
+        fun name(name: Optional<String>) = name(name.orElse(null))
+
+        fun netPaymentTermsDays(netPaymentTermsDays: Double?) = apply {
             body.netPaymentTermsDays(netPaymentTermsDays)
         }
 
+        fun netPaymentTermsDays(netPaymentTermsDays: Double) =
+            netPaymentTermsDays(netPaymentTermsDays as Double?)
+
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun netPaymentTermsDays(netPaymentTermsDays: Optional<Double>) =
+            netPaymentTermsDays(netPaymentTermsDays.orElse(null) as Double?)
+
         /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
             body.netsuiteSalesOrderId(netsuiteSalesOrderId)
         }
 
-        fun overrides(overrides: List<Override>) = apply { body.overrides(overrides) }
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
+            netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
+
+        fun overrides(overrides: List<Override>?) = apply { body.overrides(overrides) }
+
+        fun overrides(overrides: Optional<List<Override>>) = overrides(overrides.orElse(null))
 
         fun addOverride(override: Override) = apply { body.addOverride(override) }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun professionalServices(professionalServices: List<ProfessionalService>) = apply {
+        fun professionalServices(professionalServices: List<ProfessionalService>?) = apply {
             body.professionalServices(professionalServices)
         }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun professionalServices(professionalServices: Optional<List<ProfessionalService>>) =
+            professionalServices(professionalServices.orElse(null))
 
         /** This field's availability is dependent on your client's configuration. */
         fun addProfessionalService(professionalService: ProfessionalService) = apply {
@@ -598,14 +740,24 @@ constructor(
         }
 
         /** Selects the rate card linked to the specified alias as of the contract's start date. */
-        fun rateCardAlias(rateCardAlias: String) = apply { body.rateCardAlias(rateCardAlias) }
+        fun rateCardAlias(rateCardAlias: String?) = apply { body.rateCardAlias(rateCardAlias) }
 
-        fun rateCardId(rateCardId: String) = apply { body.rateCardId(rateCardId) }
+        /** Selects the rate card linked to the specified alias as of the contract's start date. */
+        fun rateCardAlias(rateCardAlias: Optional<String>) =
+            rateCardAlias(rateCardAlias.orElse(null))
+
+        fun rateCardId(rateCardId: String?) = apply { body.rateCardId(rateCardId) }
+
+        fun rateCardId(rateCardId: Optional<String>) = rateCardId(rateCardId.orElse(null))
 
         /** This field's availability is dependent on your client's configuration. */
-        fun resellerRoyalties(resellerRoyalties: List<ResellerRoyalty>) = apply {
+        fun resellerRoyalties(resellerRoyalties: List<ResellerRoyalty>?) = apply {
             body.resellerRoyalties(resellerRoyalties)
         }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun resellerRoyalties(resellerRoyalties: Optional<List<ResellerRoyalty>>) =
+            resellerRoyalties(resellerRoyalties.orElse(null))
 
         /** This field's availability is dependent on your client's configuration. */
         fun addResellerRoyalty(resellerRoyalty: ResellerRoyalty) = apply {
@@ -613,37 +765,69 @@ constructor(
         }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun salesforceOpportunityId(salesforceOpportunityId: String) = apply {
+        fun salesforceOpportunityId(salesforceOpportunityId: String?) = apply {
             body.salesforceOpportunityId(salesforceOpportunityId)
         }
 
-        fun scheduledCharges(scheduledCharges: List<ScheduledCharge>) = apply {
+        /** This field's availability is dependent on your client's configuration. */
+        fun salesforceOpportunityId(salesforceOpportunityId: Optional<String>) =
+            salesforceOpportunityId(salesforceOpportunityId.orElse(null))
+
+        fun scheduledCharges(scheduledCharges: List<ScheduledCharge>?) = apply {
             body.scheduledCharges(scheduledCharges)
         }
+
+        fun scheduledCharges(scheduledCharges: Optional<List<ScheduledCharge>>) =
+            scheduledCharges(scheduledCharges.orElse(null))
 
         fun addScheduledCharge(scheduledCharge: ScheduledCharge) = apply {
             body.addScheduledCharge(scheduledCharge)
         }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun totalContractValue(totalContractValue: Double) = apply {
+        fun totalContractValue(totalContractValue: Double?) = apply {
             body.totalContractValue(totalContractValue)
         }
 
-        fun transition(transition: Transition) = apply { body.transition(transition) }
+        /** This field's availability is dependent on your client's configuration. */
+        fun totalContractValue(totalContractValue: Double) =
+            totalContractValue(totalContractValue as Double?)
+
+        /** This field's availability is dependent on your client's configuration. */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun totalContractValue(totalContractValue: Optional<Double>) =
+            totalContractValue(totalContractValue.orElse(null) as Double?)
+
+        fun transition(transition: Transition?) = apply { body.transition(transition) }
+
+        fun transition(transition: Optional<Transition>) = transition(transition.orElse(null))
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
          * previously used uniqueness key, a new record will not be created and the request will
          * fail with a 409 error.
          */
-        fun uniquenessKey(uniquenessKey: String) = apply { body.uniquenessKey(uniquenessKey) }
+        fun uniquenessKey(uniquenessKey: String?) = apply { body.uniquenessKey(uniquenessKey) }
 
-        fun usageFilter(usageFilter: BaseUsageFilter) = apply { body.usageFilter(usageFilter) }
+        /**
+         * Prevents the creation of duplicates. If a request to create a record is made with a
+         * previously used uniqueness key, a new record will not be created and the request will
+         * fail with a 409 error.
+         */
+        fun uniquenessKey(uniquenessKey: Optional<String>) =
+            uniquenessKey(uniquenessKey.orElse(null))
 
-        fun usageStatementSchedule(usageStatementSchedule: UsageStatementSchedule) = apply {
+        fun usageFilter(usageFilter: BaseUsageFilter?) = apply { body.usageFilter(usageFilter) }
+
+        fun usageFilter(usageFilter: Optional<BaseUsageFilter>) =
+            usageFilter(usageFilter.orElse(null))
+
+        fun usageStatementSchedule(usageStatementSchedule: UsageStatementSchedule?) = apply {
             body.usageStatementSchedule(usageStatementSchedule)
         }
+
+        fun usageStatementSchedule(usageStatementSchedule: Optional<UsageStatementSchedule>) =
+            usageStatementSchedule(usageStatementSchedule.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -822,18 +1006,28 @@ constructor(
                     billingProviderConfiguration.additionalProperties.toMutableMap()
             }
 
-            fun billingProvider(billingProvider: BillingProvider) = apply {
+            fun billingProvider(billingProvider: BillingProvider?) = apply {
                 this.billingProvider = billingProvider
             }
 
+            fun billingProvider(billingProvider: Optional<BillingProvider>) =
+                billingProvider(billingProvider.orElse(null))
+
             /** The Metronome ID of the billing provider configuration */
-            fun billingProviderConfigurationId(billingProviderConfigurationId: String) = apply {
+            fun billingProviderConfigurationId(billingProviderConfigurationId: String?) = apply {
                 this.billingProviderConfigurationId = billingProviderConfigurationId
             }
 
-            fun deliveryMethod(deliveryMethod: DeliveryMethod) = apply {
+            /** The Metronome ID of the billing provider configuration */
+            fun billingProviderConfigurationId(billingProviderConfigurationId: Optional<String>) =
+                billingProviderConfigurationId(billingProviderConfigurationId.orElse(null))
+
+            fun deliveryMethod(deliveryMethod: DeliveryMethod?) = apply {
                 this.deliveryMethod = deliveryMethod
             }
+
+            fun deliveryMethod(deliveryMethod: Optional<DeliveryMethod>) =
+                deliveryMethod(deliveryMethod.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1177,20 +1371,42 @@ constructor(
              * commits only one schedule item is allowed and amount must match invoice_schedule
              * total.
              */
-            fun accessSchedule(accessSchedule: AccessSchedule) = apply {
+            fun accessSchedule(accessSchedule: AccessSchedule?) = apply {
                 this.accessSchedule = accessSchedule
             }
 
+            /**
+             * Required: Schedule for distributing the commit to the customer. For "POSTPAID"
+             * commits only one schedule item is allowed and amount must match invoice_schedule
+             * total.
+             */
+            fun accessSchedule(accessSchedule: Optional<AccessSchedule>) =
+                accessSchedule(accessSchedule.orElse(null))
+
             /** (DEPRECATED) Use access_schedule and invoice_schedule instead. */
-            fun amount(amount: Double) = apply { this.amount = amount }
+            fun amount(amount: Double?) = apply { this.amount = amount }
+
+            /** (DEPRECATED) Use access_schedule and invoice_schedule instead. */
+            fun amount(amount: Double) = amount(amount as Double?)
+
+            /** (DEPRECATED) Use access_schedule and invoice_schedule instead. */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
 
             /**
              * Which products the commit applies to. If both applicable_product_ids and
              * applicable_product_tags are not provided, the commit applies to all products.
              */
-            fun applicableProductIds(applicableProductIds: List<String>) = apply {
-                this.applicableProductIds = applicableProductIds.toMutableList()
+            fun applicableProductIds(applicableProductIds: List<String>?) = apply {
+                this.applicableProductIds = applicableProductIds?.toMutableList()
             }
+
+            /**
+             * Which products the commit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the commit applies to all products.
+             */
+            fun applicableProductIds(applicableProductIds: Optional<List<String>>) =
+                applicableProductIds(applicableProductIds.orElse(null))
 
             /**
              * Which products the commit applies to. If both applicable_product_ids and
@@ -1205,9 +1421,16 @@ constructor(
              * Which tags the commit applies to. If both applicable_product_ids and
              * applicable_product_tags are not provided, the commit applies to all products.
              */
-            fun applicableProductTags(applicableProductTags: List<String>) = apply {
-                this.applicableProductTags = applicableProductTags.toMutableList()
+            fun applicableProductTags(applicableProductTags: List<String>?) = apply {
+                this.applicableProductTags = applicableProductTags?.toMutableList()
             }
+
+            /**
+             * Which tags the commit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the commit applies to all products.
+             */
+            fun applicableProductTags(applicableProductTags: Optional<List<String>>) =
+                applicableProductTags(applicableProductTags.orElse(null))
 
             /**
              * Which tags the commit applies to. If both applicable_product_ids and
@@ -1218,12 +1441,18 @@ constructor(
                     (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
             }
 
-            fun customFields(customFields: CustomFields) = apply {
+            fun customFields(customFields: CustomFields?) = apply {
                 this.customFields = customFields
             }
 
+            fun customFields(customFields: Optional<CustomFields>) =
+                customFields(customFields.orElse(null))
+
             /** Used only in UI/API. It is not exposed to end customers. */
-            fun description(description: String) = apply { this.description = description }
+            fun description(description: String?) = apply { this.description = description }
+
+            /** Used only in UI/API. It is not exposed to end customers. */
+            fun description(description: Optional<String>) = description(description.orElse(null))
 
             /**
              * Required for "POSTPAID" commits: the true up invoice will be generated at this time
@@ -1231,35 +1460,79 @@ constructor(
              * Optional for "PREPAID" commits: if not provided, this will be a "complimentary"
              * commit with no invoice.
              */
-            fun invoiceSchedule(invoiceSchedule: InvoiceSchedule) = apply {
+            fun invoiceSchedule(invoiceSchedule: InvoiceSchedule?) = apply {
                 this.invoiceSchedule = invoiceSchedule
             }
 
+            /**
+             * Required for "POSTPAID" commits: the true up invoice will be generated at this time
+             * and only one schedule item is allowed; the total must match access_schedule amount.
+             * Optional for "PREPAID" commits: if not provided, this will be a "complimentary"
+             * commit with no invoice.
+             */
+            fun invoiceSchedule(invoiceSchedule: Optional<InvoiceSchedule>) =
+                invoiceSchedule(invoiceSchedule.orElse(null))
+
             /** displayed on invoices */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String?) = apply { this.name = name }
+
+            /** displayed on invoices */
+            fun name(name: Optional<String>) = name(name.orElse(null))
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
+                netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
 
             /**
              * If multiple commits are applicable, the one with the lower priority will apply first.
              */
-            fun priority(priority: Double) = apply { this.priority = priority }
+            fun priority(priority: Double?) = apply { this.priority = priority }
 
-            fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+            /**
+             * If multiple commits are applicable, the one with the lower priority will apply first.
+             */
+            fun priority(priority: Double) = priority(priority as Double?)
+
+            /**
+             * If multiple commits are applicable, the one with the lower priority will apply first.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun priority(priority: Optional<Double>) = priority(priority.orElse(null) as Double?)
+
+            fun rateType(rateType: RateType?) = apply { this.rateType = rateType }
+
+            fun rateType(rateType: Optional<RateType>) = rateType(rateType.orElse(null))
 
             /** Fraction of unused segments that will be rolled over. Must be between 0 and 1. */
-            fun rolloverFraction(rolloverFraction: Double) = apply {
+            fun rolloverFraction(rolloverFraction: Double?) = apply {
                 this.rolloverFraction = rolloverFraction
             }
+
+            /** Fraction of unused segments that will be rolled over. Must be between 0 and 1. */
+            fun rolloverFraction(rolloverFraction: Double) =
+                rolloverFraction(rolloverFraction as Double?)
+
+            /** Fraction of unused segments that will be rolled over. Must be between 0 and 1. */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun rolloverFraction(rolloverFraction: Optional<Double>) =
+                rolloverFraction(rolloverFraction.orElse(null) as Double?)
 
             /**
              * A temporary ID for the commit that can be used to reference the commit for commit
              * specific overrides.
              */
-            fun temporaryId(temporaryId: String) = apply { this.temporaryId = temporaryId }
+            fun temporaryId(temporaryId: String?) = apply { this.temporaryId = temporaryId }
+
+            /**
+             * A temporary ID for the commit that can be used to reference the commit for commit
+             * specific overrides.
+             */
+            fun temporaryId(temporaryId: Optional<String>) = temporaryId(temporaryId.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1411,7 +1684,11 @@ constructor(
                 }
 
                 /** Defaults to USD (cents) if not passed */
-                fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+                fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+
+                /** Defaults to USD (cents) if not passed */
+                fun creditTypeId(creditTypeId: Optional<String>) =
+                    creditTypeId(creditTypeId.orElse(null))
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -1703,21 +1980,37 @@ constructor(
                 }
 
                 /** Defaults to USD (cents) if not passed. */
-                fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+                fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+
+                /** Defaults to USD (cents) if not passed. */
+                fun creditTypeId(creditTypeId: Optional<String>) =
+                    creditTypeId(creditTypeId.orElse(null))
 
                 /**
                  * Enter the unit price and quantity for the charge or instead only send the amount.
                  * If amount is sent, the unit price is assumed to be the amount and quantity is
                  * inferred to be 1.
                  */
-                fun recurringSchedule(recurringSchedule: RecurringSchedule) = apply {
+                fun recurringSchedule(recurringSchedule: RecurringSchedule?) = apply {
                     this.recurringSchedule = recurringSchedule
                 }
 
+                /**
+                 * Enter the unit price and quantity for the charge or instead only send the amount.
+                 * If amount is sent, the unit price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                fun recurringSchedule(recurringSchedule: Optional<RecurringSchedule>) =
+                    recurringSchedule(recurringSchedule.orElse(null))
+
                 /** Either provide amount or provide both unit_price and quantity. */
-                fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
-                    this.scheduleItems = scheduleItems.toMutableList()
+                fun scheduleItems(scheduleItems: List<ScheduleItem>?) = apply {
+                    this.scheduleItems = scheduleItems?.toMutableList()
                 }
+
+                /** Either provide amount or provide both unit_price and quantity. */
+                fun scheduleItems(scheduleItems: Optional<List<ScheduleItem>>) =
+                    scheduleItems(scheduleItems.orElse(null))
 
                 /** Either provide amount or provide both unit_price and quantity. */
                 fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
@@ -1863,21 +2156,68 @@ constructor(
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double) = apply { this.amount = amount }
+                    fun amount(amount: Double?) = apply { this.amount = amount }
+
+                    /**
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
+                     */
+                    fun amount(amount: Double) = amount(amount as Double?)
+
+                    /**
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double) = apply { this.quantity = quantity }
+                    fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+
+                    /**
+                     * Quantity for the charge. Will be multiplied by unit_price to determine the
+                     * amount and must be specified with unit_price. If specified amount cannot be
+                     * provided.
+                     */
+                    fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+                    /**
+                     * Quantity for the charge. Will be multiplied by unit_price to determine the
+                     * amount and must be specified with unit_price. If specified amount cannot be
+                     * provided.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun quantity(quantity: Optional<Double>) =
+                        quantity(quantity.orElse(null) as Double?)
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+                    fun unitPrice(unitPrice: Double?) = apply { this.unitPrice = unitPrice }
+
+                    /**
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
+                     */
+                    fun unitPrice(unitPrice: Double) = unitPrice(unitPrice as Double?)
+
+                    /**
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun unitPrice(unitPrice: Optional<Double>) =
+                        unitPrice(unitPrice.orElse(null) as Double?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -2145,21 +2485,68 @@ constructor(
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double) = apply { this.amount = amount }
+                    fun amount(amount: Double?) = apply { this.amount = amount }
+
+                    /**
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
+                     */
+                    fun amount(amount: Double) = amount(amount as Double?)
+
+                    /**
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double) = apply { this.quantity = quantity }
+                    fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+
+                    /**
+                     * Quantity for the charge. Will be multiplied by unit_price to determine the
+                     * amount and must be specified with unit_price. If specified amount cannot be
+                     * provided.
+                     */
+                    fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+                    /**
+                     * Quantity for the charge. Will be multiplied by unit_price to determine the
+                     * amount and must be specified with unit_price. If specified amount cannot be
+                     * provided.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun quantity(quantity: Optional<Double>) =
+                        quantity(quantity.orElse(null) as Double?)
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+                    fun unitPrice(unitPrice: Double?) = apply { this.unitPrice = unitPrice }
+
+                    /**
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
+                     */
+                    fun unitPrice(unitPrice: Double) = unitPrice(unitPrice as Double?)
+
+                    /**
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun unitPrice(unitPrice: Optional<Double>) =
+                        unitPrice(unitPrice.orElse(null) as Double?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -2426,9 +2813,16 @@ constructor(
              * Which products the credit applies to. If both applicable_product_ids and
              * applicable_product_tags are not provided, the credit applies to all products.
              */
-            fun applicableProductIds(applicableProductIds: List<String>) = apply {
-                this.applicableProductIds = applicableProductIds.toMutableList()
+            fun applicableProductIds(applicableProductIds: List<String>?) = apply {
+                this.applicableProductIds = applicableProductIds?.toMutableList()
             }
+
+            /**
+             * Which products the credit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the credit applies to all products.
+             */
+            fun applicableProductIds(applicableProductIds: Optional<List<String>>) =
+                applicableProductIds(applicableProductIds.orElse(null))
 
             /**
              * Which products the credit applies to. If both applicable_product_ids and
@@ -2443,9 +2837,16 @@ constructor(
              * Which tags the credit applies to. If both applicable_product_ids and
              * applicable_product_tags are not provided, the credit applies to all products.
              */
-            fun applicableProductTags(applicableProductTags: List<String>) = apply {
-                this.applicableProductTags = applicableProductTags.toMutableList()
+            fun applicableProductTags(applicableProductTags: List<String>?) = apply {
+                this.applicableProductTags = applicableProductTags?.toMutableList()
             }
+
+            /**
+             * Which tags the credit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the credit applies to all products.
+             */
+            fun applicableProductTags(applicableProductTags: Optional<List<String>>) =
+                applicableProductTags(applicableProductTags.orElse(null))
 
             /**
              * Which tags the credit applies to. If both applicable_product_ids and
@@ -2456,27 +2857,53 @@ constructor(
                     (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
             }
 
-            fun customFields(customFields: CustomFields) = apply {
+            fun customFields(customFields: CustomFields?) = apply {
                 this.customFields = customFields
             }
 
+            fun customFields(customFields: Optional<CustomFields>) =
+                customFields(customFields.orElse(null))
+
             /** Used only in UI/API. It is not exposed to end customers. */
-            fun description(description: String) = apply { this.description = description }
+            fun description(description: String?) = apply { this.description = description }
+
+            /** Used only in UI/API. It is not exposed to end customers. */
+            fun description(description: Optional<String>) = description(description.orElse(null))
 
             /** displayed on invoices */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String?) = apply { this.name = name }
+
+            /** displayed on invoices */
+            fun name(name: Optional<String>) = name(name.orElse(null))
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
+                netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
 
             /**
              * If multiple credits are applicable, the one with the lower priority will apply first.
              */
-            fun priority(priority: Double) = apply { this.priority = priority }
+            fun priority(priority: Double?) = apply { this.priority = priority }
 
-            fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+            /**
+             * If multiple credits are applicable, the one with the lower priority will apply first.
+             */
+            fun priority(priority: Double) = priority(priority as Double?)
+
+            /**
+             * If multiple credits are applicable, the one with the lower priority will apply first.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun priority(priority: Optional<Double>) = priority(priority.orElse(null) as Double?)
+
+            fun rateType(rateType: RateType?) = apply { this.rateType = rateType }
+
+            fun rateType(rateType: Optional<RateType>) = rateType(rateType.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -2563,7 +2990,11 @@ constructor(
                 }
 
                 /** Defaults to USD (cents) if not passed */
-                fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+                fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+
+                /** Defaults to USD (cents) if not passed */
+                fun creditTypeId(creditTypeId: Optional<String>) =
+                    creditTypeId(creditTypeId.orElse(null))
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -3006,12 +3437,19 @@ constructor(
             fun schedule(schedule: Schedule) = apply { this.schedule = schedule }
 
             /** displayed on invoices */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String?) = apply { this.name = name }
+
+            /** displayed on invoices */
+            fun name(name: Optional<String>) = name(name.orElse(null))
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
+                netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -3098,21 +3536,37 @@ constructor(
                 }
 
                 /** Defaults to USD (cents) if not passed. */
-                fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+                fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+
+                /** Defaults to USD (cents) if not passed. */
+                fun creditTypeId(creditTypeId: Optional<String>) =
+                    creditTypeId(creditTypeId.orElse(null))
 
                 /**
                  * Enter the unit price and quantity for the charge or instead only send the amount.
                  * If amount is sent, the unit price is assumed to be the amount and quantity is
                  * inferred to be 1.
                  */
-                fun recurringSchedule(recurringSchedule: RecurringSchedule) = apply {
+                fun recurringSchedule(recurringSchedule: RecurringSchedule?) = apply {
                     this.recurringSchedule = recurringSchedule
                 }
 
+                /**
+                 * Enter the unit price and quantity for the charge or instead only send the amount.
+                 * If amount is sent, the unit price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                fun recurringSchedule(recurringSchedule: Optional<RecurringSchedule>) =
+                    recurringSchedule(recurringSchedule.orElse(null))
+
                 /** Either provide amount or provide both unit_price and quantity. */
-                fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
-                    this.scheduleItems = scheduleItems.toMutableList()
+                fun scheduleItems(scheduleItems: List<ScheduleItem>?) = apply {
+                    this.scheduleItems = scheduleItems?.toMutableList()
                 }
+
+                /** Either provide amount or provide both unit_price and quantity. */
+                fun scheduleItems(scheduleItems: Optional<List<ScheduleItem>>) =
+                    scheduleItems(scheduleItems.orElse(null))
 
                 /** Either provide amount or provide both unit_price and quantity. */
                 fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
@@ -3258,21 +3712,68 @@ constructor(
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double) = apply { this.amount = amount }
+                    fun amount(amount: Double?) = apply { this.amount = amount }
+
+                    /**
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
+                     */
+                    fun amount(amount: Double) = amount(amount as Double?)
+
+                    /**
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double) = apply { this.quantity = quantity }
+                    fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+
+                    /**
+                     * Quantity for the charge. Will be multiplied by unit_price to determine the
+                     * amount and must be specified with unit_price. If specified amount cannot be
+                     * provided.
+                     */
+                    fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+                    /**
+                     * Quantity for the charge. Will be multiplied by unit_price to determine the
+                     * amount and must be specified with unit_price. If specified amount cannot be
+                     * provided.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun quantity(quantity: Optional<Double>) =
+                        quantity(quantity.orElse(null) as Double?)
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+                    fun unitPrice(unitPrice: Double?) = apply { this.unitPrice = unitPrice }
+
+                    /**
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
+                     */
+                    fun unitPrice(unitPrice: Double) = unitPrice(unitPrice as Double?)
+
+                    /**
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun unitPrice(unitPrice: Optional<Double>) =
+                        unitPrice(unitPrice.orElse(null) as Double?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -3540,21 +4041,68 @@ constructor(
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double) = apply { this.amount = amount }
+                    fun amount(amount: Double?) = apply { this.amount = amount }
+
+                    /**
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
+                     */
+                    fun amount(amount: Double) = amount(amount as Double?)
+
+                    /**
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double) = apply { this.quantity = quantity }
+                    fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+
+                    /**
+                     * Quantity for the charge. Will be multiplied by unit_price to determine the
+                     * amount and must be specified with unit_price. If specified amount cannot be
+                     * provided.
+                     */
+                    fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+                    /**
+                     * Quantity for the charge. Will be multiplied by unit_price to determine the
+                     * amount and must be specified with unit_price. If specified amount cannot be
+                     * provided.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun quantity(quantity: Optional<Double>) =
+                        quantity(quantity.orElse(null) as Double?)
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+                    fun unitPrice(unitPrice: Double?) = apply { this.unitPrice = unitPrice }
+
+                    /**
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
+                     */
+                    fun unitPrice(unitPrice: Double) = unitPrice(unitPrice as Double?)
+
+                    /**
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun unitPrice(unitPrice: Optional<Double>) =
+                        unitPrice(unitPrice.orElse(null) as Double?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -3845,9 +4393,16 @@ constructor(
              * tags identifying products whose rates are being overridden. Cannot be used in
              * conjunction with override_specifiers.
              */
-            fun applicableProductTags(applicableProductTags: List<String>) = apply {
-                this.applicableProductTags = applicableProductTags.toMutableList()
+            fun applicableProductTags(applicableProductTags: List<String>?) = apply {
+                this.applicableProductTags = applicableProductTags?.toMutableList()
             }
+
+            /**
+             * tags identifying products whose rates are being overridden. Cannot be used in
+             * conjunction with override_specifiers.
+             */
+            fun applicableProductTags(applicableProductTags: Optional<List<String>>) =
+                applicableProductTags(applicableProductTags.orElse(null))
 
             /**
              * tags identifying products whose rates are being overridden. Cannot be used in
@@ -3859,11 +4414,20 @@ constructor(
             }
 
             /** RFC 3339 timestamp indicating when the override will stop applying (exclusive) */
-            fun endingBefore(endingBefore: OffsetDateTime) = apply {
+            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
                 this.endingBefore = endingBefore
             }
 
-            fun entitled(entitled: Boolean) = apply { this.entitled = entitled }
+            /** RFC 3339 timestamp indicating when the override will stop applying (exclusive) */
+            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+                endingBefore(endingBefore.orElse(null))
+
+            fun entitled(entitled: Boolean?) = apply { this.entitled = entitled }
+
+            fun entitled(entitled: Boolean) = entitled(entitled as Boolean?)
+
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun entitled(entitled: Optional<Boolean>) = entitled(entitled.orElse(null) as Boolean?)
 
             /**
              * Indicates whether the override should only apply to commits. Defaults to `false`. If
@@ -3871,20 +4435,54 @@ constructor(
              * `commit_ids`. if you do not specify `commit_ids`, then the override will apply when
              * consuming any prepaid or postpaid commit.
              */
-            fun isCommitSpecific(isCommitSpecific: Boolean) = apply {
+            fun isCommitSpecific(isCommitSpecific: Boolean?) = apply {
                 this.isCommitSpecific = isCommitSpecific
             }
 
+            /**
+             * Indicates whether the override should only apply to commits. Defaults to `false`. If
+             * `true`, you can specify relevant commits in `override_specifiers` by passing
+             * `commit_ids`. if you do not specify `commit_ids`, then the override will apply when
+             * consuming any prepaid or postpaid commit.
+             */
+            fun isCommitSpecific(isCommitSpecific: Boolean) =
+                isCommitSpecific(isCommitSpecific as Boolean?)
+
+            /**
+             * Indicates whether the override should only apply to commits. Defaults to `false`. If
+             * `true`, you can specify relevant commits in `override_specifiers` by passing
+             * `commit_ids`. if you do not specify `commit_ids`, then the override will apply when
+             * consuming any prepaid or postpaid commit.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun isCommitSpecific(isCommitSpecific: Optional<Boolean>) =
+                isCommitSpecific(isCommitSpecific.orElse(null) as Boolean?)
+
             /** Required for MULTIPLIER type. Must be >=0. */
-            fun multiplier(multiplier: Double) = apply { this.multiplier = multiplier }
+            fun multiplier(multiplier: Double?) = apply { this.multiplier = multiplier }
+
+            /** Required for MULTIPLIER type. Must be >=0. */
+            fun multiplier(multiplier: Double) = multiplier(multiplier as Double?)
+
+            /** Required for MULTIPLIER type. Must be >=0. */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun multiplier(multiplier: Optional<Double>) =
+                multiplier(multiplier.orElse(null) as Double?)
 
             /**
              * Cannot be used in conjunction with product_id or applicable_product_tags. If
              * provided, the override will apply to all products with the specified specifiers.
              */
-            fun overrideSpecifiers(overrideSpecifiers: List<OverrideSpecifier>) = apply {
-                this.overrideSpecifiers = overrideSpecifiers.toMutableList()
+            fun overrideSpecifiers(overrideSpecifiers: List<OverrideSpecifier>?) = apply {
+                this.overrideSpecifiers = overrideSpecifiers?.toMutableList()
             }
+
+            /**
+             * Cannot be used in conjunction with product_id or applicable_product_tags. If
+             * provided, the override will apply to all products with the specified specifiers.
+             */
+            fun overrideSpecifiers(overrideSpecifiers: Optional<List<OverrideSpecifier>>) =
+                overrideSpecifiers(overrideSpecifiers.orElse(null))
 
             /**
              * Cannot be used in conjunction with product_id or applicable_product_tags. If
@@ -3896,9 +4494,13 @@ constructor(
             }
 
             /** Required for OVERWRITE type. */
-            fun overwriteRate(overwriteRate: OverwriteRate) = apply {
+            fun overwriteRate(overwriteRate: OverwriteRate?) = apply {
                 this.overwriteRate = overwriteRate
             }
+
+            /** Required for OVERWRITE type. */
+            fun overwriteRate(overwriteRate: Optional<OverwriteRate>) =
+                overwriteRate(overwriteRate.orElse(null))
 
             /**
              * Required for EXPLICIT multiplier prioritization scheme and all TIERED overrides.
@@ -3906,23 +4508,56 @@ constructor(
              * multiplier overrides are prioritized by their priority value (lowest first). Must
              * be > 0.
              */
-            fun priority(priority: Double) = apply { this.priority = priority }
+            fun priority(priority: Double?) = apply { this.priority = priority }
+
+            /**
+             * Required for EXPLICIT multiplier prioritization scheme and all TIERED overrides.
+             * Under EXPLICIT prioritization, overwrites are prioritized first, and then tiered and
+             * multiplier overrides are prioritized by their priority value (lowest first). Must
+             * be > 0.
+             */
+            fun priority(priority: Double) = priority(priority as Double?)
+
+            /**
+             * Required for EXPLICIT multiplier prioritization scheme and all TIERED overrides.
+             * Under EXPLICIT prioritization, overwrites are prioritized first, and then tiered and
+             * multiplier overrides are prioritized by their priority value (lowest first). Must
+             * be > 0.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun priority(priority: Optional<Double>) = priority(priority.orElse(null) as Double?)
 
             /**
              * ID of the product whose rate is being overridden. Cannot be used in conjunction with
              * override_specifiers.
              */
-            fun productId(productId: String) = apply { this.productId = productId }
+            fun productId(productId: String?) = apply { this.productId = productId }
+
+            /**
+             * ID of the product whose rate is being overridden. Cannot be used in conjunction with
+             * override_specifiers.
+             */
+            fun productId(productId: Optional<String>) = productId(productId.orElse(null))
 
             /**
              * Indicates whether the override applies to commit rates or list rates. Can only be
              * used for overrides that have `is_commit_specific` set to `true`. Defaults to
              * `"LIST_RATE"`.
              */
-            fun target(target: Target) = apply { this.target = target }
+            fun target(target: Target?) = apply { this.target = target }
+
+            /**
+             * Indicates whether the override applies to commit rates or list rates. Can only be
+             * used for overrides that have `is_commit_specific` set to `true`. Defaults to
+             * `"LIST_RATE"`.
+             */
+            fun target(target: Optional<Target>) = target(target.orElse(null))
 
             /** Required for TIERED type. Must have at least one tier. */
-            fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+            fun tiers(tiers: List<Tier>?) = apply { this.tiers = tiers?.toMutableList() }
+
+            /** Required for TIERED type. Must have at least one tier. */
+            fun tiers(tiers: Optional<List<Tier>>) = tiers(tiers.orElse(null))
 
             /** Required for TIERED type. Must have at least one tier. */
             fun addTier(tier: Tier) = apply {
@@ -3930,7 +4565,10 @@ constructor(
             }
 
             /** Overwrites are prioritized over multipliers and tiered overrides. */
-            fun type(type: Type) = apply { this.type = type }
+            fun type(type: Type?) = apply { this.type = type }
+
+            /** Overwrites are prioritized over multipliers and tiered overrides. */
+            fun type(type: Optional<Type>) = type(type.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -4056,9 +4694,17 @@ constructor(
                  * presentation_group_values. If provided, the override will only apply to the
                  * specified commits. If not provided, the override will apply to all commits.
                  */
-                fun commitIds(commitIds: List<String>) = apply {
-                    this.commitIds = commitIds.toMutableList()
+                fun commitIds(commitIds: List<String>?) = apply {
+                    this.commitIds = commitIds?.toMutableList()
                 }
+
+                /**
+                 * Can only be used for commit specific overrides. Must be used in conjunction with
+                 * one of product_id, product_tags, pricing_group_values, or
+                 * presentation_group_values. If provided, the override will only apply to the
+                 * specified commits. If not provided, the override will apply to all commits.
+                 */
+                fun commitIds(commitIds: Optional<List<String>>) = commitIds(commitIds.orElse(null))
 
                 /**
                  * Can only be used for commit specific overrides. Must be used in conjunction with
@@ -4075,31 +4721,59 @@ constructor(
                  * the specified presentation group values. Can only be used for multiplier
                  * overrides.
                  */
-                fun presentationGroupValues(presentationGroupValues: PresentationGroupValues) =
+                fun presentationGroupValues(presentationGroupValues: PresentationGroupValues?) =
                     apply {
                         this.presentationGroupValues = presentationGroupValues
                     }
 
                 /**
+                 * A map of group names to values. The override will only apply to line items with
+                 * the specified presentation group values. Can only be used for multiplier
+                 * overrides.
+                 */
+                fun presentationGroupValues(
+                    presentationGroupValues: Optional<PresentationGroupValues>
+                ) = presentationGroupValues(presentationGroupValues.orElse(null))
+
+                /**
                  * A map of pricing group names to values. The override will only apply to products
                  * with the specified pricing group values.
                  */
-                fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
+                fun pricingGroupValues(pricingGroupValues: PricingGroupValues?) = apply {
                     this.pricingGroupValues = pricingGroupValues
                 }
 
                 /**
+                 * A map of pricing group names to values. The override will only apply to products
+                 * with the specified pricing group values.
+                 */
+                fun pricingGroupValues(pricingGroupValues: Optional<PricingGroupValues>) =
+                    pricingGroupValues(pricingGroupValues.orElse(null))
+
+                /**
                  * If provided, the override will only apply to the product with the specified ID.
                  */
-                fun productId(productId: String) = apply { this.productId = productId }
+                fun productId(productId: String?) = apply { this.productId = productId }
+
+                /**
+                 * If provided, the override will only apply to the product with the specified ID.
+                 */
+                fun productId(productId: Optional<String>) = productId(productId.orElse(null))
 
                 /**
                  * If provided, the override will only apply to products with all the specified
                  * tags.
                  */
-                fun productTags(productTags: List<String>) = apply {
-                    this.productTags = productTags.toMutableList()
+                fun productTags(productTags: List<String>?) = apply {
+                    this.productTags = productTags?.toMutableList()
                 }
+
+                /**
+                 * If provided, the override will only apply to products with all the specified
+                 * tags.
+                 */
+                fun productTags(productTags: Optional<List<String>>) =
+                    productTags(productTags.orElse(null))
 
                 /**
                  * If provided, the override will only apply to products with all the specified
@@ -4397,31 +5071,79 @@ constructor(
 
                 fun rateType(rateType: RateType) = apply { this.rateType = rateType }
 
-                fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+                fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+
+                fun creditTypeId(creditTypeId: Optional<String>) =
+                    creditTypeId(creditTypeId.orElse(null))
 
                 /**
                  * Only set for CUSTOM rate_type. This field is interpreted by custom rate
                  * processors.
                  */
-                fun customRate(customRate: CustomRate) = apply { this.customRate = customRate }
+                fun customRate(customRate: CustomRate?) = apply { this.customRate = customRate }
+
+                /**
+                 * Only set for CUSTOM rate_type. This field is interpreted by custom rate
+                 * processors.
+                 */
+                fun customRate(customRate: Optional<CustomRate>) =
+                    customRate(customRate.orElse(null))
 
                 /**
                  * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be
                  * set to true.
                  */
-                fun isProrated(isProrated: Boolean) = apply { this.isProrated = isProrated }
+                fun isProrated(isProrated: Boolean?) = apply { this.isProrated = isProrated }
+
+                /**
+                 * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be
+                 * set to true.
+                 */
+                fun isProrated(isProrated: Boolean) = isProrated(isProrated as Boolean?)
+
+                /**
+                 * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be
+                 * set to true.
+                 */
+                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                fun isProrated(isProrated: Optional<Boolean>) =
+                    isProrated(isProrated.orElse(null) as Boolean?)
 
                 /**
                  * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type,
                  * this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
                  */
-                fun price(price: Double) = apply { this.price = price }
+                fun price(price: Double?) = apply { this.price = price }
+
+                /**
+                 * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type,
+                 * this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+                 */
+                fun price(price: Double) = price(price as Double?)
+
+                /**
+                 * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type,
+                 * this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+                 */
+                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                fun price(price: Optional<Double>) = price(price.orElse(null) as Double?)
 
                 /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-                fun quantity(quantity: Double) = apply { this.quantity = quantity }
+                fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+
+                /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+                fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+                /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                fun quantity(quantity: Optional<Double>) =
+                    quantity(quantity.orElse(null) as Double?)
 
                 /** Only set for TIERED rate_type. */
-                fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+                fun tiers(tiers: List<Tier>?) = apply { this.tiers = tiers?.toMutableList() }
+
+                /** Only set for TIERED rate_type. */
+                fun tiers(tiers: Optional<List<Tier>>) = tiers(tiers.orElse(null))
 
                 /** Only set for TIERED rate_type. */
                 fun addTier(tier: Tier) = apply {
@@ -4738,7 +5460,12 @@ constructor(
 
                 fun multiplier(multiplier: Double) = apply { this.multiplier = multiplier }
 
-                fun size(size: Double) = apply { this.size = size }
+                fun size(size: Double?) = apply { this.size = size }
+
+                fun size(size: Double) = size(size as Double?)
+
+                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                fun size(size: Optional<Double>) = size(size.orElse(null) as Double?)
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -4958,16 +5685,25 @@ constructor(
              */
             fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
 
-            fun customFields(customFields: CustomFields) = apply {
+            fun customFields(customFields: CustomFields?) = apply {
                 this.customFields = customFields
             }
 
-            fun description(description: String) = apply { this.description = description }
+            fun customFields(customFields: Optional<CustomFields>) =
+                customFields(customFields.orElse(null))
+
+            fun description(description: String?) = apply { this.description = description }
+
+            fun description(description: Optional<String>) = description(description.orElse(null))
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
+                netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -5190,9 +5926,13 @@ constructor(
             fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
 
             /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
-            fun applicableProductIds(applicableProductIds: List<String>) = apply {
-                this.applicableProductIds = applicableProductIds.toMutableList()
+            fun applicableProductIds(applicableProductIds: List<String>?) = apply {
+                this.applicableProductIds = applicableProductIds?.toMutableList()
             }
+
+            /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
+            fun applicableProductIds(applicableProductIds: Optional<List<String>>) =
+                applicableProductIds(applicableProductIds.orElse(null))
 
             /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
             fun addApplicableProductId(applicableProductId: String) = apply {
@@ -5201,9 +5941,13 @@ constructor(
             }
 
             /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
-            fun applicableProductTags(applicableProductTags: List<String>) = apply {
-                this.applicableProductTags = applicableProductTags.toMutableList()
+            fun applicableProductTags(applicableProductTags: List<String>?) = apply {
+                this.applicableProductTags = applicableProductTags?.toMutableList()
             }
+
+            /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
+            fun applicableProductTags(applicableProductTags: Optional<List<String>>) =
+                applicableProductTags(applicableProductTags.orElse(null))
 
             /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
             fun addApplicableProductTag(applicableProductTag: String) = apply {
@@ -5211,17 +5955,31 @@ constructor(
                     (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
             }
 
-            fun awsOptions(awsOptions: AwsOptions) = apply { this.awsOptions = awsOptions }
+            fun awsOptions(awsOptions: AwsOptions?) = apply { this.awsOptions = awsOptions }
 
-            fun endingBefore(endingBefore: OffsetDateTime) = apply {
+            fun awsOptions(awsOptions: Optional<AwsOptions>) = awsOptions(awsOptions.orElse(null))
+
+            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
                 this.endingBefore = endingBefore
             }
 
-            fun gcpOptions(gcpOptions: GcpOptions) = apply { this.gcpOptions = gcpOptions }
+            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+                endingBefore(endingBefore.orElse(null))
 
-            fun resellerContractValue(resellerContractValue: Double) = apply {
+            fun gcpOptions(gcpOptions: GcpOptions?) = apply { this.gcpOptions = gcpOptions }
+
+            fun gcpOptions(gcpOptions: Optional<GcpOptions>) = gcpOptions(gcpOptions.orElse(null))
+
+            fun resellerContractValue(resellerContractValue: Double?) = apply {
                 this.resellerContractValue = resellerContractValue
             }
+
+            fun resellerContractValue(resellerContractValue: Double) =
+                resellerContractValue(resellerContractValue as Double?)
+
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun resellerContractValue(resellerContractValue: Optional<Double>) =
+                resellerContractValue(resellerContractValue.orElse(null) as Double?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -5375,15 +6133,23 @@ constructor(
                     additionalProperties = awsOptions.additionalProperties.toMutableMap()
                 }
 
-                fun awsAccountNumber(awsAccountNumber: String) = apply {
+                fun awsAccountNumber(awsAccountNumber: String?) = apply {
                     this.awsAccountNumber = awsAccountNumber
                 }
 
-                fun awsOfferId(awsOfferId: String) = apply { this.awsOfferId = awsOfferId }
+                fun awsAccountNumber(awsAccountNumber: Optional<String>) =
+                    awsAccountNumber(awsAccountNumber.orElse(null))
 
-                fun awsPayerReferenceId(awsPayerReferenceId: String) = apply {
+                fun awsOfferId(awsOfferId: String?) = apply { this.awsOfferId = awsOfferId }
+
+                fun awsOfferId(awsOfferId: Optional<String>) = awsOfferId(awsOfferId.orElse(null))
+
+                fun awsPayerReferenceId(awsPayerReferenceId: String?) = apply {
                     this.awsPayerReferenceId = awsPayerReferenceId
                 }
+
+                fun awsPayerReferenceId(awsPayerReferenceId: Optional<String>) =
+                    awsPayerReferenceId(awsPayerReferenceId.orElse(null))
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -5474,9 +6240,14 @@ constructor(
                     additionalProperties = gcpOptions.additionalProperties.toMutableMap()
                 }
 
-                fun gcpAccountId(gcpAccountId: String) = apply { this.gcpAccountId = gcpAccountId }
+                fun gcpAccountId(gcpAccountId: String?) = apply { this.gcpAccountId = gcpAccountId }
 
-                fun gcpOfferId(gcpOfferId: String) = apply { this.gcpOfferId = gcpOfferId }
+                fun gcpAccountId(gcpAccountId: Optional<String>) =
+                    gcpAccountId(gcpAccountId.orElse(null))
+
+                fun gcpOfferId(gcpOfferId: String?) = apply { this.gcpOfferId = gcpOfferId }
+
+                fun gcpOfferId(gcpOfferId: Optional<String>) = gcpOfferId(gcpOfferId.orElse(null))
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -5602,12 +6373,19 @@ constructor(
             fun schedule(schedule: Schedule) = apply { this.schedule = schedule }
 
             /** displayed on invoices */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String?) = apply { this.name = name }
+
+            /** displayed on invoices */
+            fun name(name: Optional<String>) = name(name.orElse(null))
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
+                netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -5694,21 +6472,37 @@ constructor(
                 }
 
                 /** Defaults to USD (cents) if not passed. */
-                fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+                fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+
+                /** Defaults to USD (cents) if not passed. */
+                fun creditTypeId(creditTypeId: Optional<String>) =
+                    creditTypeId(creditTypeId.orElse(null))
 
                 /**
                  * Enter the unit price and quantity for the charge or instead only send the amount.
                  * If amount is sent, the unit price is assumed to be the amount and quantity is
                  * inferred to be 1.
                  */
-                fun recurringSchedule(recurringSchedule: RecurringSchedule) = apply {
+                fun recurringSchedule(recurringSchedule: RecurringSchedule?) = apply {
                     this.recurringSchedule = recurringSchedule
                 }
 
+                /**
+                 * Enter the unit price and quantity for the charge or instead only send the amount.
+                 * If amount is sent, the unit price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                fun recurringSchedule(recurringSchedule: Optional<RecurringSchedule>) =
+                    recurringSchedule(recurringSchedule.orElse(null))
+
                 /** Either provide amount or provide both unit_price and quantity. */
-                fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
-                    this.scheduleItems = scheduleItems.toMutableList()
+                fun scheduleItems(scheduleItems: List<ScheduleItem>?) = apply {
+                    this.scheduleItems = scheduleItems?.toMutableList()
                 }
+
+                /** Either provide amount or provide both unit_price and quantity. */
+                fun scheduleItems(scheduleItems: Optional<List<ScheduleItem>>) =
+                    scheduleItems(scheduleItems.orElse(null))
 
                 /** Either provide amount or provide both unit_price and quantity. */
                 fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
@@ -5854,21 +6648,68 @@ constructor(
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double) = apply { this.amount = amount }
+                    fun amount(amount: Double?) = apply { this.amount = amount }
+
+                    /**
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
+                     */
+                    fun amount(amount: Double) = amount(amount as Double?)
+
+                    /**
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double) = apply { this.quantity = quantity }
+                    fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+
+                    /**
+                     * Quantity for the charge. Will be multiplied by unit_price to determine the
+                     * amount and must be specified with unit_price. If specified amount cannot be
+                     * provided.
+                     */
+                    fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+                    /**
+                     * Quantity for the charge. Will be multiplied by unit_price to determine the
+                     * amount and must be specified with unit_price. If specified amount cannot be
+                     * provided.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun quantity(quantity: Optional<Double>) =
+                        quantity(quantity.orElse(null) as Double?)
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+                    fun unitPrice(unitPrice: Double?) = apply { this.unitPrice = unitPrice }
+
+                    /**
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
+                     */
+                    fun unitPrice(unitPrice: Double) = unitPrice(unitPrice as Double?)
+
+                    /**
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun unitPrice(unitPrice: Optional<Double>) =
+                        unitPrice(unitPrice.orElse(null) as Double?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -6136,21 +6977,68 @@ constructor(
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double) = apply { this.amount = amount }
+                    fun amount(amount: Double?) = apply { this.amount = amount }
+
+                    /**
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
+                     */
+                    fun amount(amount: Double) = amount(amount as Double?)
+
+                    /**
+                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                     * amount is sent, the unit_price is assumed to be the amount and quantity is
+                     * inferred to be 1.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double) = apply { this.quantity = quantity }
+                    fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+
+                    /**
+                     * Quantity for the charge. Will be multiplied by unit_price to determine the
+                     * amount and must be specified with unit_price. If specified amount cannot be
+                     * provided.
+                     */
+                    fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+                    /**
+                     * Quantity for the charge. Will be multiplied by unit_price to determine the
+                     * amount and must be specified with unit_price. If specified amount cannot be
+                     * provided.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun quantity(quantity: Optional<Double>) =
+                        quantity(quantity.orElse(null) as Double?)
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+                    fun unitPrice(unitPrice: Double?) = apply { this.unitPrice = unitPrice }
+
+                    /**
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
+                     */
+                    fun unitPrice(unitPrice: Double) = unitPrice(unitPrice as Double?)
+
+                    /**
+                     * Unit price for the charge. Will be multiplied by quantity to determine the
+                     * amount and must be specified with quantity. If specified amount cannot be
+                     * provided.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun unitPrice(unitPrice: Optional<Double>) =
+                        unitPrice(unitPrice.orElse(null) as Double?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -6292,9 +7180,12 @@ constructor(
             /** This field's available values may vary based on your client's configuration. */
             fun type(type: Type) = apply { this.type = type }
 
-            fun futureInvoiceBehavior(futureInvoiceBehavior: FutureInvoiceBehavior) = apply {
+            fun futureInvoiceBehavior(futureInvoiceBehavior: FutureInvoiceBehavior?) = apply {
                 this.futureInvoiceBehavior = futureInvoiceBehavior
             }
+
+            fun futureInvoiceBehavior(futureInvoiceBehavior: Optional<FutureInvoiceBehavior>) =
+                futureInvoiceBehavior(futureInvoiceBehavior.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -6422,7 +7313,13 @@ constructor(
                  * Controls whether future trueup invoices are billed or removed. Default behavior
                  * is AS_IS if not specified.
                  */
-                fun trueup(trueup: Trueup) = apply { this.trueup = trueup }
+                fun trueup(trueup: Trueup?) = apply { this.trueup = trueup }
+
+                /**
+                 * Controls whether future trueup invoices are billed or removed. Default behavior
+                 * is AS_IS if not specified.
+                 */
+                fun trueup(trueup: Optional<Trueup>) = trueup(trueup.orElse(null))
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -6618,12 +7515,25 @@ constructor(
              * MONTHLY frequency, the first usage statement will cover 09-15 to 10-10. Subsequent
              * statements will follow the 10th of each month.
              */
-            fun billingAnchorDate(billingAnchorDate: OffsetDateTime) = apply {
+            fun billingAnchorDate(billingAnchorDate: OffsetDateTime?) = apply {
                 this.billingAnchorDate = billingAnchorDate
             }
 
+            /**
+             * Required when using CUSTOM_DATE. This option lets you set a historical billing anchor
+             * date, aligning future billing cycles with a chosen cadence. For example, if a
+             * contract starts on 2024-09-15 and you set the anchor date to 2024-09-10 with a
+             * MONTHLY frequency, the first usage statement will cover 09-15 to 10-10. Subsequent
+             * statements will follow the 10th of each month.
+             */
+            fun billingAnchorDate(billingAnchorDate: Optional<OffsetDateTime>) =
+                billingAnchorDate(billingAnchorDate.orElse(null))
+
             /** If not provided, defaults to the first day of the month. */
-            fun day(day: Day) = apply { this.day = day }
+            fun day(day: Day?) = apply { this.day = day }
+
+            /** If not provided, defaults to the first day of the month. */
+            fun day(day: Optional<Day>) = day(day.orElse(null))
 
             /**
              * The date Metronome should start generating usage invoices. If unspecified, contract
@@ -6631,9 +7541,18 @@ constructor(
              * invoices via our 'Create Historical Invoices' API rather than having Metronome
              * automatically generate them.
              */
-            fun invoiceGenerationStartingAt(invoiceGenerationStartingAt: OffsetDateTime) = apply {
+            fun invoiceGenerationStartingAt(invoiceGenerationStartingAt: OffsetDateTime?) = apply {
                 this.invoiceGenerationStartingAt = invoiceGenerationStartingAt
             }
+
+            /**
+             * The date Metronome should start generating usage invoices. If unspecified, contract
+             * start date will be used. This is useful to set if you want to import historical
+             * invoices via our 'Create Historical Invoices' API rather than having Metronome
+             * automatically generate them.
+             */
+            fun invoiceGenerationStartingAt(invoiceGenerationStartingAt: Optional<OffsetDateTime>) =
+                invoiceGenerationStartingAt(invoiceGenerationStartingAt.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()

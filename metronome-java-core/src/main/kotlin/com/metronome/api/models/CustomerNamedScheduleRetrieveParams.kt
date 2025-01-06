@@ -111,9 +111,16 @@ constructor(
              * If provided, at most one schedule segment will be returned (the one that covers this
              * date). If not provided, all segments will be returned.
              */
-            fun coveringDate(coveringDate: OffsetDateTime) = apply {
+            fun coveringDate(coveringDate: OffsetDateTime?) = apply {
                 this.coveringDate = coveringDate
             }
+
+            /**
+             * If provided, at most one schedule segment will be returned (the one that covers this
+             * date). If not provided, all segments will be returned.
+             */
+            fun coveringDate(coveringDate: Optional<OffsetDateTime>) =
+                coveringDate(coveringDate.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -196,7 +203,14 @@ constructor(
          * If provided, at most one schedule segment will be returned (the one that covers this
          * date). If not provided, all segments will be returned.
          */
-        fun coveringDate(coveringDate: OffsetDateTime) = apply { body.coveringDate(coveringDate) }
+        fun coveringDate(coveringDate: OffsetDateTime?) = apply { body.coveringDate(coveringDate) }
+
+        /**
+         * If provided, at most one schedule segment will be returned (the one that covers this
+         * date). If not provided, all segments will be returned.
+         */
+        fun coveringDate(coveringDate: Optional<OffsetDateTime>) =
+            coveringDate(coveringDate.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

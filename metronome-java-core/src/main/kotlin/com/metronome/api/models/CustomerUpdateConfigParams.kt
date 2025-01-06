@@ -105,14 +105,33 @@ constructor(
              * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
              * client-level config if unset, which defaults to true if unset.
              */
-            fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean) = apply {
+            fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean?) = apply {
                 this.leaveStripeInvoicesInDraft = leaveStripeInvoicesInDraft
             }
 
+            /**
+             * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
+             * client-level config if unset, which defaults to true if unset.
+             */
+            fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean) =
+                leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft as Boolean?)
+
+            /**
+             * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
+             * client-level config if unset, which defaults to true if unset.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Optional<Boolean>) =
+                leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft.orElse(null) as Boolean?)
+
             /** The Salesforce account ID for the customer */
-            fun salesforceAccountId(salesforceAccountId: String) = apply {
+            fun salesforceAccountId(salesforceAccountId: String?) = apply {
                 this.salesforceAccountId = salesforceAccountId
             }
+
+            /** The Salesforce account ID for the customer */
+            fun salesforceAccountId(salesforceAccountId: Optional<String>) =
+                salesforceAccountId(salesforceAccountId.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -188,14 +207,33 @@ constructor(
          * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
          * client-level config if unset, which defaults to true if unset.
          */
-        fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean) = apply {
+        fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean?) = apply {
             body.leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft)
         }
 
+        /**
+         * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
+         * client-level config if unset, which defaults to true if unset.
+         */
+        fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean) =
+            leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft as Boolean?)
+
+        /**
+         * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
+         * client-level config if unset, which defaults to true if unset.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Optional<Boolean>) =
+            leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft.orElse(null) as Boolean?)
+
         /** The Salesforce account ID for the customer */
-        fun salesforceAccountId(salesforceAccountId: String) = apply {
+        fun salesforceAccountId(salesforceAccountId: String?) = apply {
             body.salesforceAccountId(salesforceAccountId)
         }
+
+        /** The Salesforce account ID for the customer */
+        fun salesforceAccountId(salesforceAccountId: Optional<String>) =
+            salesforceAccountId(salesforceAccountId.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

@@ -108,9 +108,16 @@ constructor(
              * RFC 3339 timestamp indicating when the contract will end (exclusive). If not
              * provided, the contract will be updated to be open-ended.
              */
-            fun endingBefore(endingBefore: OffsetDateTime) = apply {
+            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
                 this.endingBefore = endingBefore
             }
+
+            /**
+             * RFC 3339 timestamp indicating when the contract will end (exclusive). If not
+             * provided, the contract will be updated to be open-ended.
+             */
+            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+                endingBefore(endingBefore.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -189,7 +196,14 @@ constructor(
          * RFC 3339 timestamp indicating when the contract will end (exclusive). If not provided,
          * the contract will be updated to be open-ended.
          */
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
+        fun endingBefore(endingBefore: OffsetDateTime?) = apply { body.endingBefore(endingBefore) }
+
+        /**
+         * RFC 3339 timestamp indicating when the contract will end (exclusive). If not provided,
+         * the contract will be updated to be open-ended.
+         */
+        fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+            endingBefore(endingBefore.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

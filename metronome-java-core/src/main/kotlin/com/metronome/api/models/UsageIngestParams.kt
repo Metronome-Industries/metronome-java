@@ -232,7 +232,9 @@ constructor(
 
             fun transactionId(transactionId: String) = apply { this.transactionId = transactionId }
 
-            fun properties(properties: Properties) = apply { this.properties = properties }
+            fun properties(properties: Properties?) = apply { this.properties = properties }
+
+            fun properties(properties: Optional<Properties>) = properties(properties.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()

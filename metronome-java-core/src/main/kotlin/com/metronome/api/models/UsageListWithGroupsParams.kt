@@ -172,15 +172,41 @@ constructor(
              * if the customer is currently uncontracted or starting_on and ending_before are
              * specified when this is true.
              */
-            fun currentPeriod(currentPeriod: Boolean) = apply { this.currentPeriod = currentPeriod }
+            fun currentPeriod(currentPeriod: Boolean?) = apply {
+                this.currentPeriod = currentPeriod
+            }
 
-            fun endingBefore(endingBefore: OffsetDateTime) = apply {
+            /**
+             * If true, will return the usage for the current billing period. Will return an error
+             * if the customer is currently uncontracted or starting_on and ending_before are
+             * specified when this is true.
+             */
+            fun currentPeriod(currentPeriod: Boolean) = currentPeriod(currentPeriod as Boolean?)
+
+            /**
+             * If true, will return the usage for the current billing period. Will return an error
+             * if the customer is currently uncontracted or starting_on and ending_before are
+             * specified when this is true.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun currentPeriod(currentPeriod: Optional<Boolean>) =
+                currentPeriod(currentPeriod.orElse(null) as Boolean?)
+
+            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
                 this.endingBefore = endingBefore
             }
 
-            fun groupBy(groupBy: GroupBy) = apply { this.groupBy = groupBy }
+            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+                endingBefore(endingBefore.orElse(null))
 
-            fun startingOn(startingOn: OffsetDateTime) = apply { this.startingOn = startingOn }
+            fun groupBy(groupBy: GroupBy?) = apply { this.groupBy = groupBy }
+
+            fun groupBy(groupBy: Optional<GroupBy>) = groupBy(groupBy.orElse(null))
+
+            fun startingOn(startingOn: OffsetDateTime?) = apply { this.startingOn = startingOn }
+
+            fun startingOn(startingOn: Optional<OffsetDateTime>) =
+                startingOn(startingOn.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -260,10 +286,20 @@ constructor(
         }
 
         /** Max number of results that should be returned */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /** Max number of results that should be returned */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Max number of results that should be returned */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+
+        /** Cursor that indicates where the next page of results should start. */
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         fun billableMetricId(billableMetricId: String) = apply {
             body.billableMetricId(billableMetricId)
@@ -283,13 +319,36 @@ constructor(
          * the customer is currently uncontracted or starting_on and ending_before are specified
          * when this is true.
          */
-        fun currentPeriod(currentPeriod: Boolean) = apply { body.currentPeriod(currentPeriod) }
+        fun currentPeriod(currentPeriod: Boolean?) = apply { body.currentPeriod(currentPeriod) }
 
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
+        /**
+         * If true, will return the usage for the current billing period. Will return an error if
+         * the customer is currently uncontracted or starting_on and ending_before are specified
+         * when this is true.
+         */
+        fun currentPeriod(currentPeriod: Boolean) = currentPeriod(currentPeriod as Boolean?)
 
-        fun groupBy(groupBy: GroupBy) = apply { body.groupBy(groupBy) }
+        /**
+         * If true, will return the usage for the current billing period. Will return an error if
+         * the customer is currently uncontracted or starting_on and ending_before are specified
+         * when this is true.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun currentPeriod(currentPeriod: Optional<Boolean>) =
+            currentPeriod(currentPeriod.orElse(null) as Boolean?)
 
-        fun startingOn(startingOn: OffsetDateTime) = apply { body.startingOn(startingOn) }
+        fun endingBefore(endingBefore: OffsetDateTime?) = apply { body.endingBefore(endingBefore) }
+
+        fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+            endingBefore(endingBefore.orElse(null))
+
+        fun groupBy(groupBy: GroupBy?) = apply { body.groupBy(groupBy) }
+
+        fun groupBy(groupBy: Optional<GroupBy>) = groupBy(groupBy.orElse(null))
+
+        fun startingOn(startingOn: OffsetDateTime?) = apply { body.startingOn(startingOn) }
+
+        fun startingOn(startingOn: Optional<OffsetDateTime>) = startingOn(startingOn.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -531,7 +590,13 @@ constructor(
              * Values of the group_by key to return in the query. Omit this if you'd like all values
              * for the key returned.
              */
-            fun values(values: List<String>) = apply { this.values = values.toMutableList() }
+            fun values(values: List<String>?) = apply { this.values = values?.toMutableList() }
+
+            /**
+             * Values of the group_by key to return in the query. Omit this if you'd like all values
+             * for the key returned.
+             */
+            fun values(values: Optional<List<String>>) = values(values.orElse(null))
 
             /**
              * Values of the group_by key to return in the query. Omit this if you'd like all values

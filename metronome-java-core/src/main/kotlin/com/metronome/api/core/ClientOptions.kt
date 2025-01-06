@@ -9,6 +9,7 @@ import com.metronome.api.core.http.PhantomReachableClosingHttpClient
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.http.RetryingHttpClient
 import java.time.Clock
+import java.util.Optional
 
 class ClientOptions
 private constructor(
@@ -159,7 +160,10 @@ private constructor(
 
         fun bearerToken(bearerToken: String) = apply { this.bearerToken = bearerToken }
 
-        fun webhookSecret(webhookSecret: String) = apply { this.webhookSecret = webhookSecret }
+        fun webhookSecret(webhookSecret: String?) = apply { this.webhookSecret = webhookSecret }
+
+        fun webhookSecret(webhookSecret: Optional<String>) =
+            webhookSecret(webhookSecret.orElse(null))
 
         fun fromEnv() = apply {
             System.getenv("METRONOME_BEARER_TOKEN")?.let { bearerToken(it) }

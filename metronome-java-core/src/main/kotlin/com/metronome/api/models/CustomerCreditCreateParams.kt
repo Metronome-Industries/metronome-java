@@ -251,9 +251,16 @@ constructor(
              * Which contract the credit applies to. If not provided, the credit applies to all
              * contracts.
              */
-            fun applicableContractIds(applicableContractIds: List<String>) = apply {
-                this.applicableContractIds = applicableContractIds.toMutableList()
+            fun applicableContractIds(applicableContractIds: List<String>?) = apply {
+                this.applicableContractIds = applicableContractIds?.toMutableList()
             }
+
+            /**
+             * Which contract the credit applies to. If not provided, the credit applies to all
+             * contracts.
+             */
+            fun applicableContractIds(applicableContractIds: Optional<List<String>>) =
+                applicableContractIds(applicableContractIds.orElse(null))
 
             /**
              * Which contract the credit applies to. If not provided, the credit applies to all
@@ -268,9 +275,16 @@ constructor(
              * Which products the credit applies to. If both applicable_product_ids and
              * applicable_product_tags are not provided, the credit applies to all products.
              */
-            fun applicableProductIds(applicableProductIds: List<String>) = apply {
-                this.applicableProductIds = applicableProductIds.toMutableList()
+            fun applicableProductIds(applicableProductIds: List<String>?) = apply {
+                this.applicableProductIds = applicableProductIds?.toMutableList()
             }
+
+            /**
+             * Which products the credit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the credit applies to all products.
+             */
+            fun applicableProductIds(applicableProductIds: Optional<List<String>>) =
+                applicableProductIds(applicableProductIds.orElse(null))
 
             /**
              * Which products the credit applies to. If both applicable_product_ids and
@@ -285,9 +299,16 @@ constructor(
              * Which tags the credit applies to. If both applicable_product_ids and
              * applicable_product_tags are not provided, the credit applies to all products.
              */
-            fun applicableProductTags(applicableProductTags: List<String>) = apply {
-                this.applicableProductTags = applicableProductTags.toMutableList()
+            fun applicableProductTags(applicableProductTags: List<String>?) = apply {
+                this.applicableProductTags = applicableProductTags?.toMutableList()
             }
+
+            /**
+             * Which tags the credit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the credit applies to all products.
+             */
+            fun applicableProductTags(applicableProductTags: Optional<List<String>>) =
+                applicableProductTags(applicableProductTags.orElse(null))
 
             /**
              * Which tags the credit applies to. If both applicable_product_ids and
@@ -298,34 +319,61 @@ constructor(
                     (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
             }
 
-            fun customFields(customFields: CustomFields) = apply {
+            fun customFields(customFields: CustomFields?) = apply {
                 this.customFields = customFields
             }
 
+            fun customFields(customFields: Optional<CustomFields>) =
+                customFields(customFields.orElse(null))
+
             /** Used only in UI/API. It is not exposed to end customers. */
-            fun description(description: String) = apply { this.description = description }
+            fun description(description: String?) = apply { this.description = description }
+
+            /** Used only in UI/API. It is not exposed to end customers. */
+            fun description(description: Optional<String>) = description(description.orElse(null))
 
             /** displayed on invoices */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String?) = apply { this.name = name }
+
+            /** displayed on invoices */
+            fun name(name: Optional<String>) = name(name.orElse(null))
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
 
-            fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
+                netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
+
+            fun rateType(rateType: RateType?) = apply { this.rateType = rateType }
+
+            fun rateType(rateType: Optional<RateType>) = rateType(rateType.orElse(null))
 
             /** This field's availability is dependent on your client's configuration. */
-            fun salesforceOpportunityId(salesforceOpportunityId: String) = apply {
+            fun salesforceOpportunityId(salesforceOpportunityId: String?) = apply {
                 this.salesforceOpportunityId = salesforceOpportunityId
             }
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun salesforceOpportunityId(salesforceOpportunityId: Optional<String>) =
+                salesforceOpportunityId(salesforceOpportunityId.orElse(null))
 
             /**
              * Prevents the creation of duplicates. If a request to create a commit or credit is
              * made with a uniqueness key that was previously used to create a commit or credit, a
              * new record will not be created and the request will fail with a 409 error.
              */
-            fun uniquenessKey(uniquenessKey: String) = apply { this.uniquenessKey = uniquenessKey }
+            fun uniquenessKey(uniquenessKey: String?) = apply { this.uniquenessKey = uniquenessKey }
+
+            /**
+             * Prevents the creation of duplicates. If a request to create a commit or credit is
+             * made with a uniqueness key that was previously used to create a commit or credit, a
+             * new record will not be created and the request will fail with a 409 error.
+             */
+            fun uniquenessKey(uniquenessKey: Optional<String>) =
+                uniquenessKey(uniquenessKey.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -424,9 +472,16 @@ constructor(
          * Which contract the credit applies to. If not provided, the credit applies to all
          * contracts.
          */
-        fun applicableContractIds(applicableContractIds: List<String>) = apply {
+        fun applicableContractIds(applicableContractIds: List<String>?) = apply {
             body.applicableContractIds(applicableContractIds)
         }
+
+        /**
+         * Which contract the credit applies to. If not provided, the credit applies to all
+         * contracts.
+         */
+        fun applicableContractIds(applicableContractIds: Optional<List<String>>) =
+            applicableContractIds(applicableContractIds.orElse(null))
 
         /**
          * Which contract the credit applies to. If not provided, the credit applies to all
@@ -440,9 +495,16 @@ constructor(
          * Which products the credit applies to. If both applicable_product_ids and
          * applicable_product_tags are not provided, the credit applies to all products.
          */
-        fun applicableProductIds(applicableProductIds: List<String>) = apply {
+        fun applicableProductIds(applicableProductIds: List<String>?) = apply {
             body.applicableProductIds(applicableProductIds)
         }
+
+        /**
+         * Which products the credit applies to. If both applicable_product_ids and
+         * applicable_product_tags are not provided, the credit applies to all products.
+         */
+        fun applicableProductIds(applicableProductIds: Optional<List<String>>) =
+            applicableProductIds(applicableProductIds.orElse(null))
 
         /**
          * Which products the credit applies to. If both applicable_product_ids and
@@ -456,9 +518,16 @@ constructor(
          * Which tags the credit applies to. If both applicable_product_ids and
          * applicable_product_tags are not provided, the credit applies to all products.
          */
-        fun applicableProductTags(applicableProductTags: List<String>) = apply {
+        fun applicableProductTags(applicableProductTags: List<String>?) = apply {
             body.applicableProductTags(applicableProductTags)
         }
+
+        /**
+         * Which tags the credit applies to. If both applicable_product_ids and
+         * applicable_product_tags are not provided, the credit applies to all products.
+         */
+        fun applicableProductTags(applicableProductTags: Optional<List<String>>) =
+            applicableProductTags(applicableProductTags.orElse(null))
 
         /**
          * Which tags the credit applies to. If both applicable_product_ids and
@@ -468,32 +537,59 @@ constructor(
             body.addApplicableProductTag(applicableProductTag)
         }
 
-        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
+        fun customFields(customFields: CustomFields?) = apply { body.customFields(customFields) }
+
+        fun customFields(customFields: Optional<CustomFields>) =
+            customFields(customFields.orElse(null))
 
         /** Used only in UI/API. It is not exposed to end customers. */
-        fun description(description: String) = apply { body.description(description) }
+        fun description(description: String?) = apply { body.description(description) }
+
+        /** Used only in UI/API. It is not exposed to end customers. */
+        fun description(description: Optional<String>) = description(description.orElse(null))
 
         /** displayed on invoices */
-        fun name(name: String) = apply { body.name(name) }
+        fun name(name: String?) = apply { body.name(name) }
+
+        /** displayed on invoices */
+        fun name(name: Optional<String>) = name(name.orElse(null))
 
         /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
             body.netsuiteSalesOrderId(netsuiteSalesOrderId)
         }
 
-        fun rateType(rateType: RateType) = apply { body.rateType(rateType) }
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
+            netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
+
+        fun rateType(rateType: RateType?) = apply { body.rateType(rateType) }
+
+        fun rateType(rateType: Optional<RateType>) = rateType(rateType.orElse(null))
 
         /** This field's availability is dependent on your client's configuration. */
-        fun salesforceOpportunityId(salesforceOpportunityId: String) = apply {
+        fun salesforceOpportunityId(salesforceOpportunityId: String?) = apply {
             body.salesforceOpportunityId(salesforceOpportunityId)
         }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun salesforceOpportunityId(salesforceOpportunityId: Optional<String>) =
+            salesforceOpportunityId(salesforceOpportunityId.orElse(null))
 
         /**
          * Prevents the creation of duplicates. If a request to create a commit or credit is made
          * with a uniqueness key that was previously used to create a commit or credit, a new record
          * will not be created and the request will fail with a 409 error.
          */
-        fun uniquenessKey(uniquenessKey: String) = apply { body.uniquenessKey(uniquenessKey) }
+        fun uniquenessKey(uniquenessKey: String?) = apply { body.uniquenessKey(uniquenessKey) }
+
+        /**
+         * Prevents the creation of duplicates. If a request to create a commit or credit is made
+         * with a uniqueness key that was previously used to create a commit or credit, a new record
+         * will not be created and the request will fail with a 409 error.
+         */
+        fun uniquenessKey(uniquenessKey: Optional<String>) =
+            uniquenessKey(uniquenessKey.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -670,7 +766,11 @@ constructor(
             }
 
             /** Defaults to USD (cents) if not passed */
-            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+            fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+
+            /** Defaults to USD (cents) if not passed */
+            fun creditTypeId(creditTypeId: Optional<String>) =
+                creditTypeId(creditTypeId.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()

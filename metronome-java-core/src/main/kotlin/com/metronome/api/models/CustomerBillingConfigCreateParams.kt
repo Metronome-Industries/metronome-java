@@ -129,15 +129,23 @@ constructor(
                 this.billingProviderCustomerId = billingProviderCustomerId
             }
 
-            fun awsProductCode(awsProductCode: String) = apply {
+            fun awsProductCode(awsProductCode: String?) = apply {
                 this.awsProductCode = awsProductCode
             }
 
-            fun awsRegion(awsRegion: AwsRegion) = apply { this.awsRegion = awsRegion }
+            fun awsProductCode(awsProductCode: Optional<String>) =
+                awsProductCode(awsProductCode.orElse(null))
 
-            fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) = apply {
+            fun awsRegion(awsRegion: AwsRegion?) = apply { this.awsRegion = awsRegion }
+
+            fun awsRegion(awsRegion: Optional<AwsRegion>) = awsRegion(awsRegion.orElse(null))
+
+            fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod?) = apply {
                 this.stripeCollectionMethod = stripeCollectionMethod
             }
+
+            fun stripeCollectionMethod(stripeCollectionMethod: Optional<StripeCollectionMethod>) =
+                stripeCollectionMethod(stripeCollectionMethod.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -229,13 +237,21 @@ constructor(
             body.billingProviderCustomerId(billingProviderCustomerId)
         }
 
-        fun awsProductCode(awsProductCode: String) = apply { body.awsProductCode(awsProductCode) }
+        fun awsProductCode(awsProductCode: String?) = apply { body.awsProductCode(awsProductCode) }
 
-        fun awsRegion(awsRegion: AwsRegion) = apply { body.awsRegion(awsRegion) }
+        fun awsProductCode(awsProductCode: Optional<String>) =
+            awsProductCode(awsProductCode.orElse(null))
 
-        fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) = apply {
+        fun awsRegion(awsRegion: AwsRegion?) = apply { body.awsRegion(awsRegion) }
+
+        fun awsRegion(awsRegion: Optional<AwsRegion>) = awsRegion(awsRegion.orElse(null))
+
+        fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod?) = apply {
             body.stripeCollectionMethod(stripeCollectionMethod)
         }
+
+        fun stripeCollectionMethod(stripeCollectionMethod: Optional<StripeCollectionMethod>) =
+            stripeCollectionMethod(stripeCollectionMethod.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

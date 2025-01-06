@@ -120,24 +120,40 @@ constructor(
             /** This will be truncated to 160 characters if the provided name is longer. */
             fun name(name: String) = apply { this.name = name }
 
-            fun billingConfig(billingConfig: BillingConfig) = apply {
+            fun billingConfig(billingConfig: BillingConfig?) = apply {
                 this.billingConfig = billingConfig
             }
 
-            fun customFields(customFields: CustomFields) = apply {
+            fun billingConfig(billingConfig: Optional<BillingConfig>) =
+                billingConfig(billingConfig.orElse(null))
+
+            fun customFields(customFields: CustomFields?) = apply {
                 this.customFields = customFields
             }
+
+            fun customFields(customFields: Optional<CustomFields>) =
+                customFields(customFields.orElse(null))
 
             /**
              * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
              * customer in usage events
              */
-            fun externalId(externalId: String) = apply { this.externalId = externalId }
+            fun externalId(externalId: String?) = apply { this.externalId = externalId }
+
+            /**
+             * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
+             * customer in usage events
+             */
+            fun externalId(externalId: Optional<String>) = externalId(externalId.orElse(null))
 
             /** Aliases that can be used to refer to this customer in usage events */
-            fun ingestAliases(ingestAliases: List<String>) = apply {
-                this.ingestAliases = ingestAliases.toMutableList()
+            fun ingestAliases(ingestAliases: List<String>?) = apply {
+                this.ingestAliases = ingestAliases?.toMutableList()
             }
+
+            /** Aliases that can be used to refer to this customer in usage events */
+            fun ingestAliases(ingestAliases: Optional<List<String>>) =
+                ingestAliases(ingestAliases.orElse(null))
 
             /** Aliases that can be used to refer to this customer in usage events */
             fun addIngestAlias(ingestAlias: String) = apply {
@@ -216,20 +232,38 @@ constructor(
         /** This will be truncated to 160 characters if the provided name is longer. */
         fun name(name: String) = apply { body.name(name) }
 
-        fun billingConfig(billingConfig: BillingConfig) = apply {
+        fun billingConfig(billingConfig: BillingConfig?) = apply {
             body.billingConfig(billingConfig)
         }
 
-        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
+        fun billingConfig(billingConfig: Optional<BillingConfig>) =
+            billingConfig(billingConfig.orElse(null))
+
+        fun customFields(customFields: CustomFields?) = apply { body.customFields(customFields) }
+
+        fun customFields(customFields: Optional<CustomFields>) =
+            customFields(customFields.orElse(null))
 
         /**
          * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
          * customer in usage events
          */
-        fun externalId(externalId: String) = apply { body.externalId(externalId) }
+        fun externalId(externalId: String?) = apply { body.externalId(externalId) }
+
+        /**
+         * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
+         * customer in usage events
+         */
+        fun externalId(externalId: Optional<String>) = externalId(externalId.orElse(null))
 
         /** Aliases that can be used to refer to this customer in usage events */
-        fun ingestAliases(ingestAliases: List<String>) = apply { body.ingestAliases(ingestAliases) }
+        fun ingestAliases(ingestAliases: List<String>?) = apply {
+            body.ingestAliases(ingestAliases)
+        }
+
+        /** Aliases that can be used to refer to this customer in usage events */
+        fun ingestAliases(ingestAliases: Optional<List<String>>) =
+            ingestAliases(ingestAliases.orElse(null))
 
         /** Aliases that can be used to refer to this customer in usage events */
         fun addIngestAlias(ingestAlias: String) = apply { body.addIngestAlias(ingestAlias) }
@@ -427,15 +461,23 @@ constructor(
                 this.billingProviderType = billingProviderType
             }
 
-            fun awsProductCode(awsProductCode: String) = apply {
+            fun awsProductCode(awsProductCode: String?) = apply {
                 this.awsProductCode = awsProductCode
             }
 
-            fun awsRegion(awsRegion: AwsRegion) = apply { this.awsRegion = awsRegion }
+            fun awsProductCode(awsProductCode: Optional<String>) =
+                awsProductCode(awsProductCode.orElse(null))
 
-            fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) = apply {
+            fun awsRegion(awsRegion: AwsRegion?) = apply { this.awsRegion = awsRegion }
+
+            fun awsRegion(awsRegion: Optional<AwsRegion>) = awsRegion(awsRegion.orElse(null))
+
+            fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod?) = apply {
                 this.stripeCollectionMethod = stripeCollectionMethod
             }
+
+            fun stripeCollectionMethod(stripeCollectionMethod: Optional<StripeCollectionMethod>) =
+                stripeCollectionMethod(stripeCollectionMethod.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()

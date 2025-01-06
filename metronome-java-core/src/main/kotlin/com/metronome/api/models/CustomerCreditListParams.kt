@@ -156,40 +156,89 @@ constructor(
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             /** Return only credits that have access schedules that "cover" the provided date */
-            fun coveringDate(coveringDate: OffsetDateTime) = apply {
+            fun coveringDate(coveringDate: OffsetDateTime?) = apply {
                 this.coveringDate = coveringDate
             }
 
-            fun creditId(creditId: String) = apply { this.creditId = creditId }
+            /** Return only credits that have access schedules that "cover" the provided date */
+            fun coveringDate(coveringDate: Optional<OffsetDateTime>) =
+                coveringDate(coveringDate.orElse(null))
+
+            fun creditId(creditId: String?) = apply { this.creditId = creditId }
+
+            fun creditId(creditId: Optional<String>) = creditId(creditId.orElse(null))
 
             /** Include only credits that have any access before the provided date (exclusive) */
-            fun effectiveBefore(effectiveBefore: OffsetDateTime) = apply {
+            fun effectiveBefore(effectiveBefore: OffsetDateTime?) = apply {
                 this.effectiveBefore = effectiveBefore
             }
 
+            /** Include only credits that have any access before the provided date (exclusive) */
+            fun effectiveBefore(effectiveBefore: Optional<OffsetDateTime>) =
+                effectiveBefore(effectiveBefore.orElse(null))
+
             /** Include credits from archived contracts. */
-            fun includeArchived(includeArchived: Boolean) = apply {
+            fun includeArchived(includeArchived: Boolean?) = apply {
                 this.includeArchived = includeArchived
             }
 
+            /** Include credits from archived contracts. */
+            fun includeArchived(includeArchived: Boolean) =
+                includeArchived(includeArchived as Boolean?)
+
+            /** Include credits from archived contracts. */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun includeArchived(includeArchived: Optional<Boolean>) =
+                includeArchived(includeArchived.orElse(null) as Boolean?)
+
             /** Include credits on the contract level. */
-            fun includeContractCredits(includeContractCredits: Boolean) = apply {
+            fun includeContractCredits(includeContractCredits: Boolean?) = apply {
                 this.includeContractCredits = includeContractCredits
+            }
+
+            /** Include credits on the contract level. */
+            fun includeContractCredits(includeContractCredits: Boolean) =
+                includeContractCredits(includeContractCredits as Boolean?)
+
+            /** Include credits on the contract level. */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun includeContractCredits(includeContractCredits: Optional<Boolean>) =
+                includeContractCredits(includeContractCredits.orElse(null) as Boolean?)
+
+            /**
+             * Include credit ledgers in the response. Setting this flag may cause the query to be
+             * slower.
+             */
+            fun includeLedgers(includeLedgers: Boolean?) = apply {
+                this.includeLedgers = includeLedgers
             }
 
             /**
              * Include credit ledgers in the response. Setting this flag may cause the query to be
              * slower.
              */
-            fun includeLedgers(includeLedgers: Boolean) = apply {
-                this.includeLedgers = includeLedgers
-            }
+            fun includeLedgers(includeLedgers: Boolean) = includeLedgers(includeLedgers as Boolean?)
+
+            /**
+             * Include credit ledgers in the response. Setting this flag may cause the query to be
+             * slower.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun includeLedgers(includeLedgers: Optional<Boolean>) =
+                includeLedgers(includeLedgers.orElse(null) as Boolean?)
 
             /** The next page token from a previous response. */
-            fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+            fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+
+            /** The next page token from a previous response. */
+            fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
             /** Include only credits that have any access on or after the provided date */
-            fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+            fun startingAt(startingAt: OffsetDateTime?) = apply { this.startingAt = startingAt }
+
+            /** Include only credits that have any access on or after the provided date */
+            fun startingAt(startingAt: Optional<OffsetDateTime>) =
+                startingAt(startingAt.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -267,36 +316,83 @@ constructor(
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /** Return only credits that have access schedules that "cover" the provided date */
-        fun coveringDate(coveringDate: OffsetDateTime) = apply { body.coveringDate(coveringDate) }
+        fun coveringDate(coveringDate: OffsetDateTime?) = apply { body.coveringDate(coveringDate) }
 
-        fun creditId(creditId: String) = apply { body.creditId(creditId) }
+        /** Return only credits that have access schedules that "cover" the provided date */
+        fun coveringDate(coveringDate: Optional<OffsetDateTime>) =
+            coveringDate(coveringDate.orElse(null))
+
+        fun creditId(creditId: String?) = apply { body.creditId(creditId) }
+
+        fun creditId(creditId: Optional<String>) = creditId(creditId.orElse(null))
 
         /** Include only credits that have any access before the provided date (exclusive) */
-        fun effectiveBefore(effectiveBefore: OffsetDateTime) = apply {
+        fun effectiveBefore(effectiveBefore: OffsetDateTime?) = apply {
             body.effectiveBefore(effectiveBefore)
         }
 
+        /** Include only credits that have any access before the provided date (exclusive) */
+        fun effectiveBefore(effectiveBefore: Optional<OffsetDateTime>) =
+            effectiveBefore(effectiveBefore.orElse(null))
+
         /** Include credits from archived contracts. */
-        fun includeArchived(includeArchived: Boolean) = apply {
+        fun includeArchived(includeArchived: Boolean?) = apply {
             body.includeArchived(includeArchived)
         }
 
+        /** Include credits from archived contracts. */
+        fun includeArchived(includeArchived: Boolean) = includeArchived(includeArchived as Boolean?)
+
+        /** Include credits from archived contracts. */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun includeArchived(includeArchived: Optional<Boolean>) =
+            includeArchived(includeArchived.orElse(null) as Boolean?)
+
         /** Include credits on the contract level. */
-        fun includeContractCredits(includeContractCredits: Boolean) = apply {
+        fun includeContractCredits(includeContractCredits: Boolean?) = apply {
             body.includeContractCredits(includeContractCredits)
         }
+
+        /** Include credits on the contract level. */
+        fun includeContractCredits(includeContractCredits: Boolean) =
+            includeContractCredits(includeContractCredits as Boolean?)
+
+        /** Include credits on the contract level. */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun includeContractCredits(includeContractCredits: Optional<Boolean>) =
+            includeContractCredits(includeContractCredits.orElse(null) as Boolean?)
 
         /**
          * Include credit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        fun includeLedgers(includeLedgers: Boolean) = apply { body.includeLedgers(includeLedgers) }
+        fun includeLedgers(includeLedgers: Boolean?) = apply { body.includeLedgers(includeLedgers) }
+
+        /**
+         * Include credit ledgers in the response. Setting this flag may cause the query to be
+         * slower.
+         */
+        fun includeLedgers(includeLedgers: Boolean) = includeLedgers(includeLedgers as Boolean?)
+
+        /**
+         * Include credit ledgers in the response. Setting this flag may cause the query to be
+         * slower.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun includeLedgers(includeLedgers: Optional<Boolean>) =
+            includeLedgers(includeLedgers.orElse(null) as Boolean?)
 
         /** The next page token from a previous response. */
-        fun nextPage(nextPage: String) = apply { body.nextPage(nextPage) }
+        fun nextPage(nextPage: String?) = apply { body.nextPage(nextPage) }
+
+        /** The next page token from a previous response. */
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         /** Include only credits that have any access on or after the provided date */
-        fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
+        fun startingAt(startingAt: OffsetDateTime?) = apply { body.startingAt(startingAt) }
+
+        /** Include only credits that have any access on or after the provided date */
+        fun startingAt(startingAt: Optional<OffsetDateTime>) = startingAt(startingAt.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

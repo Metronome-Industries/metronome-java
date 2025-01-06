@@ -116,7 +116,14 @@ constructor(
              * multiple rate cards, it will reference the rate card to which it was most recently
              * assigned. It is not exposed to end customers.
              */
-            fun aliases(aliases: List<Alias>) = apply { this.aliases = aliases.toMutableList() }
+            fun aliases(aliases: List<Alias>?) = apply { this.aliases = aliases?.toMutableList() }
+
+            /**
+             * Reference this alias when creating a contract. If the same alias is assigned to
+             * multiple rate cards, it will reference the rate card to which it was most recently
+             * assigned. It is not exposed to end customers.
+             */
+            fun aliases(aliases: Optional<List<Alias>>) = aliases(aliases.orElse(null))
 
             /**
              * Reference this alias when creating a contract. If the same alias is assigned to
@@ -127,10 +134,15 @@ constructor(
                 aliases = (aliases ?: mutableListOf()).apply { add(alias) }
             }
 
-            fun description(description: String) = apply { this.description = description }
+            fun description(description: String?) = apply { this.description = description }
+
+            fun description(description: Optional<String>) = description(description.orElse(null))
 
             /** Used only in UI/API. It is not exposed to end customers. */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String?) = apply { this.name = name }
+
+            /** Used only in UI/API. It is not exposed to end customers. */
+            fun name(name: Optional<String>) = name(name.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -208,7 +220,14 @@ constructor(
          * rate cards, it will reference the rate card to which it was most recently assigned. It is
          * not exposed to end customers.
          */
-        fun aliases(aliases: List<Alias>) = apply { body.aliases(aliases) }
+        fun aliases(aliases: List<Alias>?) = apply { body.aliases(aliases) }
+
+        /**
+         * Reference this alias when creating a contract. If the same alias is assigned to multiple
+         * rate cards, it will reference the rate card to which it was most recently assigned. It is
+         * not exposed to end customers.
+         */
+        fun aliases(aliases: Optional<List<Alias>>) = aliases(aliases.orElse(null))
 
         /**
          * Reference this alias when creating a contract. If the same alias is assigned to multiple
@@ -217,10 +236,15 @@ constructor(
          */
         fun addAlias(alias: Alias) = apply { body.addAlias(alias) }
 
-        fun description(description: String) = apply { body.description(description) }
+        fun description(description: String?) = apply { body.description(description) }
+
+        fun description(description: Optional<String>) = description(description.orElse(null))
 
         /** Used only in UI/API. It is not exposed to end customers. */
-        fun name(name: String) = apply { body.name(name) }
+        fun name(name: String?) = apply { body.name(name) }
+
+        /** Used only in UI/API. It is not exposed to end customers. */
+        fun name(name: Optional<String>) = name(name.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -394,11 +418,17 @@ constructor(
 
             fun name(name: String) = apply { this.name = name }
 
-            fun endingBefore(endingBefore: OffsetDateTime) = apply {
+            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
                 this.endingBefore = endingBefore
             }
 
-            fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+                endingBefore(endingBefore.orElse(null))
+
+            fun startingAt(startingAt: OffsetDateTime?) = apply { this.startingAt = startingAt }
+
+            fun startingAt(startingAt: Optional<OffsetDateTime>) =
+                startingAt(startingAt.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()

@@ -128,17 +128,32 @@ constructor(
              * longer be possible to draw it down (exclusive). If not provided, the access will not
              * be updated.
              */
-            fun accessEndingBefore(accessEndingBefore: OffsetDateTime) = apply {
+            fun accessEndingBefore(accessEndingBefore: OffsetDateTime?) = apply {
                 this.accessEndingBefore = accessEndingBefore
+            }
+
+            /**
+             * RFC 3339 timestamp indicating when access to the commit will end and it will no
+             * longer be possible to draw it down (exclusive). If not provided, the access will not
+             * be updated.
+             */
+            fun accessEndingBefore(accessEndingBefore: Optional<OffsetDateTime>) =
+                accessEndingBefore(accessEndingBefore.orElse(null))
+
+            /**
+             * RFC 3339 timestamp indicating when the commit will stop being invoiced (exclusive).
+             * If not provided, the invoice schedule will not be updated.
+             */
+            fun invoicesEndingBefore(invoicesEndingBefore: OffsetDateTime?) = apply {
+                this.invoicesEndingBefore = invoicesEndingBefore
             }
 
             /**
              * RFC 3339 timestamp indicating when the commit will stop being invoiced (exclusive).
              * If not provided, the invoice schedule will not be updated.
              */
-            fun invoicesEndingBefore(invoicesEndingBefore: OffsetDateTime) = apply {
-                this.invoicesEndingBefore = invoicesEndingBefore
-            }
+            fun invoicesEndingBefore(invoicesEndingBefore: Optional<OffsetDateTime>) =
+                invoicesEndingBefore(invoicesEndingBefore.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -221,17 +236,31 @@ constructor(
          * RFC 3339 timestamp indicating when access to the commit will end and it will no longer be
          * possible to draw it down (exclusive). If not provided, the access will not be updated.
          */
-        fun accessEndingBefore(accessEndingBefore: OffsetDateTime) = apply {
+        fun accessEndingBefore(accessEndingBefore: OffsetDateTime?) = apply {
             body.accessEndingBefore(accessEndingBefore)
+        }
+
+        /**
+         * RFC 3339 timestamp indicating when access to the commit will end and it will no longer be
+         * possible to draw it down (exclusive). If not provided, the access will not be updated.
+         */
+        fun accessEndingBefore(accessEndingBefore: Optional<OffsetDateTime>) =
+            accessEndingBefore(accessEndingBefore.orElse(null))
+
+        /**
+         * RFC 3339 timestamp indicating when the commit will stop being invoiced (exclusive). If
+         * not provided, the invoice schedule will not be updated.
+         */
+        fun invoicesEndingBefore(invoicesEndingBefore: OffsetDateTime?) = apply {
+            body.invoicesEndingBefore(invoicesEndingBefore)
         }
 
         /**
          * RFC 3339 timestamp indicating when the commit will stop being invoiced (exclusive). If
          * not provided, the invoice schedule will not be updated.
          */
-        fun invoicesEndingBefore(invoicesEndingBefore: OffsetDateTime) = apply {
-            body.invoicesEndingBefore(invoicesEndingBefore)
-        }
+        fun invoicesEndingBefore(invoicesEndingBefore: Optional<OffsetDateTime>) =
+            invoicesEndingBefore(invoicesEndingBefore.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

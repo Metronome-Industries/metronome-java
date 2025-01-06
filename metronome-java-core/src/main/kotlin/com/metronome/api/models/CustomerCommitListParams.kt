@@ -155,41 +155,90 @@ constructor(
 
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
-            fun commitId(commitId: String) = apply { this.commitId = commitId }
+            fun commitId(commitId: String?) = apply { this.commitId = commitId }
+
+            fun commitId(commitId: Optional<String>) = commitId(commitId.orElse(null))
 
             /** Include only commits that have access schedules that "cover" the provided date */
-            fun coveringDate(coveringDate: OffsetDateTime) = apply {
+            fun coveringDate(coveringDate: OffsetDateTime?) = apply {
                 this.coveringDate = coveringDate
             }
 
+            /** Include only commits that have access schedules that "cover" the provided date */
+            fun coveringDate(coveringDate: Optional<OffsetDateTime>) =
+                coveringDate(coveringDate.orElse(null))
+
             /** Include only commits that have any access before the provided date (exclusive) */
-            fun effectiveBefore(effectiveBefore: OffsetDateTime) = apply {
+            fun effectiveBefore(effectiveBefore: OffsetDateTime?) = apply {
                 this.effectiveBefore = effectiveBefore
             }
 
+            /** Include only commits that have any access before the provided date (exclusive) */
+            fun effectiveBefore(effectiveBefore: Optional<OffsetDateTime>) =
+                effectiveBefore(effectiveBefore.orElse(null))
+
             /** Include commits from archived contracts. */
-            fun includeArchived(includeArchived: Boolean) = apply {
+            fun includeArchived(includeArchived: Boolean?) = apply {
                 this.includeArchived = includeArchived
             }
 
+            /** Include commits from archived contracts. */
+            fun includeArchived(includeArchived: Boolean) =
+                includeArchived(includeArchived as Boolean?)
+
+            /** Include commits from archived contracts. */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun includeArchived(includeArchived: Optional<Boolean>) =
+                includeArchived(includeArchived.orElse(null) as Boolean?)
+
             /** Include commits on the contract level. */
-            fun includeContractCommits(includeContractCommits: Boolean) = apply {
+            fun includeContractCommits(includeContractCommits: Boolean?) = apply {
                 this.includeContractCommits = includeContractCommits
+            }
+
+            /** Include commits on the contract level. */
+            fun includeContractCommits(includeContractCommits: Boolean) =
+                includeContractCommits(includeContractCommits as Boolean?)
+
+            /** Include commits on the contract level. */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun includeContractCommits(includeContractCommits: Optional<Boolean>) =
+                includeContractCommits(includeContractCommits.orElse(null) as Boolean?)
+
+            /**
+             * Include commit ledgers in the response. Setting this flag may cause the query to be
+             * slower.
+             */
+            fun includeLedgers(includeLedgers: Boolean?) = apply {
+                this.includeLedgers = includeLedgers
             }
 
             /**
              * Include commit ledgers in the response. Setting this flag may cause the query to be
              * slower.
              */
-            fun includeLedgers(includeLedgers: Boolean) = apply {
-                this.includeLedgers = includeLedgers
-            }
+            fun includeLedgers(includeLedgers: Boolean) = includeLedgers(includeLedgers as Boolean?)
+
+            /**
+             * Include commit ledgers in the response. Setting this flag may cause the query to be
+             * slower.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun includeLedgers(includeLedgers: Optional<Boolean>) =
+                includeLedgers(includeLedgers.orElse(null) as Boolean?)
 
             /** The next page token from a previous response. */
-            fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+            fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+
+            /** The next page token from a previous response. */
+            fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
             /** Include only commits that have any access on or after the provided date */
-            fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+            fun startingAt(startingAt: OffsetDateTime?) = apply { this.startingAt = startingAt }
+
+            /** Include only commits that have any access on or after the provided date */
+            fun startingAt(startingAt: Optional<OffsetDateTime>) =
+                startingAt(startingAt.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -266,37 +315,84 @@ constructor(
 
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
-        fun commitId(commitId: String) = apply { body.commitId(commitId) }
+        fun commitId(commitId: String?) = apply { body.commitId(commitId) }
+
+        fun commitId(commitId: Optional<String>) = commitId(commitId.orElse(null))
 
         /** Include only commits that have access schedules that "cover" the provided date */
-        fun coveringDate(coveringDate: OffsetDateTime) = apply { body.coveringDate(coveringDate) }
+        fun coveringDate(coveringDate: OffsetDateTime?) = apply { body.coveringDate(coveringDate) }
+
+        /** Include only commits that have access schedules that "cover" the provided date */
+        fun coveringDate(coveringDate: Optional<OffsetDateTime>) =
+            coveringDate(coveringDate.orElse(null))
 
         /** Include only commits that have any access before the provided date (exclusive) */
-        fun effectiveBefore(effectiveBefore: OffsetDateTime) = apply {
+        fun effectiveBefore(effectiveBefore: OffsetDateTime?) = apply {
             body.effectiveBefore(effectiveBefore)
         }
 
+        /** Include only commits that have any access before the provided date (exclusive) */
+        fun effectiveBefore(effectiveBefore: Optional<OffsetDateTime>) =
+            effectiveBefore(effectiveBefore.orElse(null))
+
         /** Include commits from archived contracts. */
-        fun includeArchived(includeArchived: Boolean) = apply {
+        fun includeArchived(includeArchived: Boolean?) = apply {
             body.includeArchived(includeArchived)
         }
 
+        /** Include commits from archived contracts. */
+        fun includeArchived(includeArchived: Boolean) = includeArchived(includeArchived as Boolean?)
+
+        /** Include commits from archived contracts. */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun includeArchived(includeArchived: Optional<Boolean>) =
+            includeArchived(includeArchived.orElse(null) as Boolean?)
+
         /** Include commits on the contract level. */
-        fun includeContractCommits(includeContractCommits: Boolean) = apply {
+        fun includeContractCommits(includeContractCommits: Boolean?) = apply {
             body.includeContractCommits(includeContractCommits)
         }
+
+        /** Include commits on the contract level. */
+        fun includeContractCommits(includeContractCommits: Boolean) =
+            includeContractCommits(includeContractCommits as Boolean?)
+
+        /** Include commits on the contract level. */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun includeContractCommits(includeContractCommits: Optional<Boolean>) =
+            includeContractCommits(includeContractCommits.orElse(null) as Boolean?)
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        fun includeLedgers(includeLedgers: Boolean) = apply { body.includeLedgers(includeLedgers) }
+        fun includeLedgers(includeLedgers: Boolean?) = apply { body.includeLedgers(includeLedgers) }
+
+        /**
+         * Include commit ledgers in the response. Setting this flag may cause the query to be
+         * slower.
+         */
+        fun includeLedgers(includeLedgers: Boolean) = includeLedgers(includeLedgers as Boolean?)
+
+        /**
+         * Include commit ledgers in the response. Setting this flag may cause the query to be
+         * slower.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun includeLedgers(includeLedgers: Optional<Boolean>) =
+            includeLedgers(includeLedgers.orElse(null) as Boolean?)
 
         /** The next page token from a previous response. */
-        fun nextPage(nextPage: String) = apply { body.nextPage(nextPage) }
+        fun nextPage(nextPage: String?) = apply { body.nextPage(nextPage) }
+
+        /** The next page token from a previous response. */
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         /** Include only commits that have any access on or after the provided date */
-        fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
+        fun startingAt(startingAt: OffsetDateTime?) = apply { body.startingAt(startingAt) }
+
+        /** Include only commits that have any access on or after the provided date */
+        fun startingAt(startingAt: Optional<OffsetDateTime>) = startingAt(startingAt.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

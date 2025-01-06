@@ -272,8 +272,24 @@ constructor(
              * For alerts of type `usage_threshold_reached`, specifies which billable metric to
              * track the usage for.
              */
-            fun billableMetricId(billableMetricId: String) = apply {
+            fun billableMetricId(billableMetricId: String?) = apply {
                 this.billableMetricId = billableMetricId
+            }
+
+            /**
+             * For alerts of type `usage_threshold_reached`, specifies which billable metric to
+             * track the usage for.
+             */
+            fun billableMetricId(billableMetricId: Optional<String>) =
+                billableMetricId(billableMetricId.orElse(null))
+
+            /**
+             * An array of strings, representing a way to filter the credit grant this alert applies
+             * to, by looking at the credit_grant_type field on the credit grant. This field is only
+             * defined for CreditPercentage and CreditBalance alerts
+             */
+            fun creditGrantTypeFilters(creditGrantTypeFilters: List<String>?) = apply {
+                this.creditGrantTypeFilters = creditGrantTypeFilters?.toMutableList()
             }
 
             /**
@@ -281,9 +297,8 @@ constructor(
              * to, by looking at the credit_grant_type field on the credit grant. This field is only
              * defined for CreditPercentage and CreditBalance alerts
              */
-            fun creditGrantTypeFilters(creditGrantTypeFilters: List<String>) = apply {
-                this.creditGrantTypeFilters = creditGrantTypeFilters.toMutableList()
-            }
+            fun creditGrantTypeFilters(creditGrantTypeFilters: Optional<List<String>>) =
+                creditGrantTypeFilters(creditGrantTypeFilters.orElse(null))
 
             /**
              * An array of strings, representing a way to filter the credit grant this alert applies
@@ -295,16 +310,27 @@ constructor(
                     (creditGrantTypeFilters ?: mutableListOf()).apply { add(creditGrantTypeFilter) }
             }
 
-            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+            fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+
+            fun creditTypeId(creditTypeId: Optional<String>) =
+                creditTypeId(creditTypeId.orElse(null))
 
             /**
              * Only present for beta contract invoices. This field's availability is dependent on
              * your client's configuration. A list of custom field filters for alert types that
              * support advanced filtering
              */
-            fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>) = apply {
-                this.customFieldFilters = customFieldFilters.toMutableList()
+            fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>?) = apply {
+                this.customFieldFilters = customFieldFilters?.toMutableList()
             }
+
+            /**
+             * Only present for beta contract invoices. This field's availability is dependent on
+             * your client's configuration. A list of custom field filters for alert types that
+             * support advanced filtering
+             */
+            fun customFieldFilters(customFieldFilters: Optional<List<CustomFieldFilter>>) =
+                customFieldFilters(customFieldFilters.orElse(null))
 
             /**
              * Only present for beta contract invoices. This field's availability is dependent on
@@ -320,31 +346,67 @@ constructor(
              * If provided, will create this alert for this specific customer. To create an alert
              * for all customers, do not specify `customer_id` or `plan_id`.
              */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+            /**
+             * If provided, will create this alert for this specific customer. To create an alert
+             * for all customers, do not specify `customer_id` or `plan_id`.
+             */
+            fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
 
             /**
              * If true, the alert will evaluate immediately on customers that already meet the alert
              * threshold. If false, it will only evaluate on future customers that trigger the alert
              * threshold. Defaults to true.
              */
-            fun evaluateOnCreate(evaluateOnCreate: Boolean) = apply {
+            fun evaluateOnCreate(evaluateOnCreate: Boolean?) = apply {
                 this.evaluateOnCreate = evaluateOnCreate
+            }
+
+            /**
+             * If true, the alert will evaluate immediately on customers that already meet the alert
+             * threshold. If false, it will only evaluate on future customers that trigger the alert
+             * threshold. Defaults to true.
+             */
+            fun evaluateOnCreate(evaluateOnCreate: Boolean) =
+                evaluateOnCreate(evaluateOnCreate as Boolean?)
+
+            /**
+             * If true, the alert will evaluate immediately on customers that already meet the alert
+             * threshold. If false, it will only evaluate on future customers that trigger the alert
+             * threshold. Defaults to true.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun evaluateOnCreate(evaluateOnCreate: Optional<Boolean>) =
+                evaluateOnCreate(evaluateOnCreate.orElse(null) as Boolean?)
+
+            /**
+             * Scopes alert evaluation to a specific presentation group key on individual line
+             * items. Only present for spend alerts.
+             */
+            fun groupKeyFilter(groupKeyFilter: GroupKeyFilter?) = apply {
+                this.groupKeyFilter = groupKeyFilter
             }
 
             /**
              * Scopes alert evaluation to a specific presentation group key on individual line
              * items. Only present for spend alerts.
              */
-            fun groupKeyFilter(groupKeyFilter: GroupKeyFilter) = apply {
-                this.groupKeyFilter = groupKeyFilter
+            fun groupKeyFilter(groupKeyFilter: Optional<GroupKeyFilter>) =
+                groupKeyFilter(groupKeyFilter.orElse(null))
+
+            /**
+             * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
+             */
+            fun invoiceTypesFilter(invoiceTypesFilter: List<String>?) = apply {
+                this.invoiceTypesFilter = invoiceTypesFilter?.toMutableList()
             }
 
             /**
              * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
              */
-            fun invoiceTypesFilter(invoiceTypesFilter: List<String>) = apply {
-                this.invoiceTypesFilter = invoiceTypesFilter.toMutableList()
-            }
+            fun invoiceTypesFilter(invoiceTypesFilter: Optional<List<String>>) =
+                invoiceTypesFilter(invoiceTypesFilter.orElse(null))
 
             /**
              * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
@@ -358,14 +420,28 @@ constructor(
              * If provided, will create this alert for this specific plan. To create an alert for
              * all customers, do not specify `customer_id` or `plan_id`.
              */
-            fun planId(planId: String) = apply { this.planId = planId }
+            fun planId(planId: String?) = apply { this.planId = planId }
+
+            /**
+             * If provided, will create this alert for this specific plan. To create an alert for
+             * all customers, do not specify `customer_id` or `plan_id`.
+             */
+            fun planId(planId: Optional<String>) = planId(planId.orElse(null))
 
             /**
              * Prevents the creation of duplicates. If a request to create a record is made with a
              * previously used uniqueness key, a new record will not be created and the request will
              * fail with a 409 error.
              */
-            fun uniquenessKey(uniquenessKey: String) = apply { this.uniquenessKey = uniquenessKey }
+            fun uniquenessKey(uniquenessKey: String?) = apply { this.uniquenessKey = uniquenessKey }
+
+            /**
+             * Prevents the creation of duplicates. If a request to create a record is made with a
+             * previously used uniqueness key, a new record will not be created and the request will
+             * fail with a 409 error.
+             */
+            fun uniquenessKey(uniquenessKey: Optional<String>) =
+                uniquenessKey(uniquenessKey.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -460,8 +536,24 @@ constructor(
          * For alerts of type `usage_threshold_reached`, specifies which billable metric to track
          * the usage for.
          */
-        fun billableMetricId(billableMetricId: String) = apply {
+        fun billableMetricId(billableMetricId: String?) = apply {
             body.billableMetricId(billableMetricId)
+        }
+
+        /**
+         * For alerts of type `usage_threshold_reached`, specifies which billable metric to track
+         * the usage for.
+         */
+        fun billableMetricId(billableMetricId: Optional<String>) =
+            billableMetricId(billableMetricId.orElse(null))
+
+        /**
+         * An array of strings, representing a way to filter the credit grant this alert applies to,
+         * by looking at the credit_grant_type field on the credit grant. This field is only defined
+         * for CreditPercentage and CreditBalance alerts
+         */
+        fun creditGrantTypeFilters(creditGrantTypeFilters: List<String>?) = apply {
+            body.creditGrantTypeFilters(creditGrantTypeFilters)
         }
 
         /**
@@ -469,9 +561,8 @@ constructor(
          * by looking at the credit_grant_type field on the credit grant. This field is only defined
          * for CreditPercentage and CreditBalance alerts
          */
-        fun creditGrantTypeFilters(creditGrantTypeFilters: List<String>) = apply {
-            body.creditGrantTypeFilters(creditGrantTypeFilters)
-        }
+        fun creditGrantTypeFilters(creditGrantTypeFilters: Optional<List<String>>) =
+            creditGrantTypeFilters(creditGrantTypeFilters.orElse(null))
 
         /**
          * An array of strings, representing a way to filter the credit grant this alert applies to,
@@ -482,16 +573,26 @@ constructor(
             body.addCreditGrantTypeFilter(creditGrantTypeFilter)
         }
 
-        fun creditTypeId(creditTypeId: String) = apply { body.creditTypeId(creditTypeId) }
+        fun creditTypeId(creditTypeId: String?) = apply { body.creditTypeId(creditTypeId) }
+
+        fun creditTypeId(creditTypeId: Optional<String>) = creditTypeId(creditTypeId.orElse(null))
 
         /**
          * Only present for beta contract invoices. This field's availability is dependent on your
          * client's configuration. A list of custom field filters for alert types that support
          * advanced filtering
          */
-        fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>) = apply {
+        fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>?) = apply {
             body.customFieldFilters(customFieldFilters)
         }
+
+        /**
+         * Only present for beta contract invoices. This field's availability is dependent on your
+         * client's configuration. A list of custom field filters for alert types that support
+         * advanced filtering
+         */
+        fun customFieldFilters(customFieldFilters: Optional<List<CustomFieldFilter>>) =
+            customFieldFilters(customFieldFilters.orElse(null))
 
         /**
          * Only present for beta contract invoices. This field's availability is dependent on your
@@ -506,29 +607,63 @@ constructor(
          * If provided, will create this alert for this specific customer. To create an alert for
          * all customers, do not specify `customer_id` or `plan_id`.
          */
-        fun customerId(customerId: String) = apply { body.customerId(customerId) }
+        fun customerId(customerId: String?) = apply { body.customerId(customerId) }
+
+        /**
+         * If provided, will create this alert for this specific customer. To create an alert for
+         * all customers, do not specify `customer_id` or `plan_id`.
+         */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
 
         /**
          * If true, the alert will evaluate immediately on customers that already meet the alert
          * threshold. If false, it will only evaluate on future customers that trigger the alert
          * threshold. Defaults to true.
          */
-        fun evaluateOnCreate(evaluateOnCreate: Boolean) = apply {
+        fun evaluateOnCreate(evaluateOnCreate: Boolean?) = apply {
             body.evaluateOnCreate(evaluateOnCreate)
+        }
+
+        /**
+         * If true, the alert will evaluate immediately on customers that already meet the alert
+         * threshold. If false, it will only evaluate on future customers that trigger the alert
+         * threshold. Defaults to true.
+         */
+        fun evaluateOnCreate(evaluateOnCreate: Boolean) =
+            evaluateOnCreate(evaluateOnCreate as Boolean?)
+
+        /**
+         * If true, the alert will evaluate immediately on customers that already meet the alert
+         * threshold. If false, it will only evaluate on future customers that trigger the alert
+         * threshold. Defaults to true.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun evaluateOnCreate(evaluateOnCreate: Optional<Boolean>) =
+            evaluateOnCreate(evaluateOnCreate.orElse(null) as Boolean?)
+
+        /**
+         * Scopes alert evaluation to a specific presentation group key on individual line items.
+         * Only present for spend alerts.
+         */
+        fun groupKeyFilter(groupKeyFilter: GroupKeyFilter?) = apply {
+            body.groupKeyFilter(groupKeyFilter)
         }
 
         /**
          * Scopes alert evaluation to a specific presentation group key on individual line items.
          * Only present for spend alerts.
          */
-        fun groupKeyFilter(groupKeyFilter: GroupKeyFilter) = apply {
-            body.groupKeyFilter(groupKeyFilter)
+        fun groupKeyFilter(groupKeyFilter: Optional<GroupKeyFilter>) =
+            groupKeyFilter(groupKeyFilter.orElse(null))
+
+        /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
+        fun invoiceTypesFilter(invoiceTypesFilter: List<String>?) = apply {
+            body.invoiceTypesFilter(invoiceTypesFilter)
         }
 
         /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
-        fun invoiceTypesFilter(invoiceTypesFilter: List<String>) = apply {
-            body.invoiceTypesFilter(invoiceTypesFilter)
-        }
+        fun invoiceTypesFilter(invoiceTypesFilter: Optional<List<String>>) =
+            invoiceTypesFilter(invoiceTypesFilter.orElse(null))
 
         /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
         fun addInvoiceTypesFilter(invoiceTypesFilter: String) = apply {
@@ -539,14 +674,28 @@ constructor(
          * If provided, will create this alert for this specific plan. To create an alert for all
          * customers, do not specify `customer_id` or `plan_id`.
          */
-        fun planId(planId: String) = apply { body.planId(planId) }
+        fun planId(planId: String?) = apply { body.planId(planId) }
+
+        /**
+         * If provided, will create this alert for this specific plan. To create an alert for all
+         * customers, do not specify `customer_id` or `plan_id`.
+         */
+        fun planId(planId: Optional<String>) = planId(planId.orElse(null))
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
          * previously used uniqueness key, a new record will not be created and the request will
          * fail with a 409 error.
          */
-        fun uniquenessKey(uniquenessKey: String) = apply { body.uniquenessKey(uniquenessKey) }
+        fun uniquenessKey(uniquenessKey: String?) = apply { body.uniquenessKey(uniquenessKey) }
+
+        /**
+         * Prevents the creation of duplicates. If a request to create a record is made with a
+         * previously used uniqueness key, a new record will not be created and the request will
+         * fail with a 409 error.
+         */
+        fun uniquenessKey(uniquenessKey: Optional<String>) =
+            uniquenessKey(uniquenessKey.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

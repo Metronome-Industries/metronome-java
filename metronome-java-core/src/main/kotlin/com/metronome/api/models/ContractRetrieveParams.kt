@@ -100,9 +100,23 @@ constructor(
              * Include commit ledgers in the response. Setting this flag may cause the query to be
              * slower.
              */
-            fun includeLedgers(includeLedgers: Boolean) = apply {
+            fun includeLedgers(includeLedgers: Boolean?) = apply {
                 this.includeLedgers = includeLedgers
             }
+
+            /**
+             * Include commit ledgers in the response. Setting this flag may cause the query to be
+             * slower.
+             */
+            fun includeLedgers(includeLedgers: Boolean) = includeLedgers(includeLedgers as Boolean?)
+
+            /**
+             * Include commit ledgers in the response. Setting this flag may cause the query to be
+             * slower.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun includeLedgers(includeLedgers: Optional<Boolean>) =
+                includeLedgers(includeLedgers.orElse(null) as Boolean?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -179,7 +193,21 @@ constructor(
          * Include commit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        fun includeLedgers(includeLedgers: Boolean) = apply { body.includeLedgers(includeLedgers) }
+        fun includeLedgers(includeLedgers: Boolean?) = apply { body.includeLedgers(includeLedgers) }
+
+        /**
+         * Include commit ledgers in the response. Setting this flag may cause the query to be
+         * slower.
+         */
+        fun includeLedgers(includeLedgers: Boolean) = includeLedgers(includeLedgers as Boolean?)
+
+        /**
+         * Include commit ledgers in the response. Setting this flag may cause the query to be
+         * slower.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun includeLedgers(includeLedgers: Optional<Boolean>) =
+            includeLedgers(includeLedgers.orElse(null) as Boolean?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

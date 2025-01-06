@@ -195,26 +195,56 @@ constructor(
              * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at
              * 0:00 UTC (midnight).
              */
-            fun endingBefore(endingBefore: OffsetDateTime) = apply {
+            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
                 this.endingBefore = endingBefore
+            }
+
+            /**
+             * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at
+             * 0:00 UTC (midnight).
+             */
+            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+                endingBefore(endingBefore.orElse(null))
+
+            /**
+             * Number of days after issuance of invoice after which the invoice is due (e.g. Net
+             * 30).
+             */
+            fun netPaymentTermsDays(netPaymentTermsDays: Double?) = apply {
+                this.netPaymentTermsDays = netPaymentTermsDays
             }
 
             /**
              * Number of days after issuance of invoice after which the invoice is due (e.g. Net
              * 30).
              */
-            fun netPaymentTermsDays(netPaymentTermsDays: Double) = apply {
-                this.netPaymentTermsDays = netPaymentTermsDays
-            }
+            fun netPaymentTermsDays(netPaymentTermsDays: Double) =
+                netPaymentTermsDays(netPaymentTermsDays as Double?)
+
+            /**
+             * Number of days after issuance of invoice after which the invoice is due (e.g. Net
+             * 30).
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun netPaymentTermsDays(netPaymentTermsDays: Optional<Double>) =
+                netPaymentTermsDays(netPaymentTermsDays.orElse(null) as Double?)
 
             /**
              * An optional list of overage rates that override the rates of the original plan
              * configuration. These new rates will apply to all pricing ramps.
              */
-            fun overageRateAdjustments(overageRateAdjustments: List<OverageRateAdjustment>) =
+            fun overageRateAdjustments(overageRateAdjustments: List<OverageRateAdjustment>?) =
                 apply {
-                    this.overageRateAdjustments = overageRateAdjustments.toMutableList()
+                    this.overageRateAdjustments = overageRateAdjustments?.toMutableList()
                 }
+
+            /**
+             * An optional list of overage rates that override the rates of the original plan
+             * configuration. These new rates will apply to all pricing ramps.
+             */
+            fun overageRateAdjustments(
+                overageRateAdjustments: Optional<List<OverageRateAdjustment>>
+            ) = overageRateAdjustments(overageRateAdjustments.orElse(null))
 
             /**
              * An optional list of overage rates that override the rates of the original plan
@@ -231,9 +261,18 @@ constructor(
              * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
              * for details.
              */
-            fun priceAdjustments(priceAdjustments: List<PriceAdjustment>) = apply {
-                this.priceAdjustments = priceAdjustments.toMutableList()
+            fun priceAdjustments(priceAdjustments: List<PriceAdjustment>?) = apply {
+                this.priceAdjustments = priceAdjustments?.toMutableList()
             }
+
+            /**
+             * A list of price adjustments can be applied on top of the pricing in the plans. See
+             * the
+             * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
+             * for details.
+             */
+            fun priceAdjustments(priceAdjustments: Optional<List<PriceAdjustment>>) =
+                priceAdjustments(priceAdjustments.orElse(null))
 
             /**
              * A list of price adjustments can be applied on top of the pricing in the plans. See
@@ -251,7 +290,14 @@ constructor(
              * [trial configuration documentation](https://docs.metronome.com/provisioning/configure-trials/)
              * for details.
              */
-            fun trialSpec(trialSpec: TrialSpec) = apply { this.trialSpec = trialSpec }
+            fun trialSpec(trialSpec: TrialSpec?) = apply { this.trialSpec = trialSpec }
+
+            /**
+             * A custom trial can be set for the customer's plan. See the
+             * [trial configuration documentation](https://docs.metronome.com/provisioning/configure-trials/)
+             * for details.
+             */
+            fun trialSpec(trialSpec: Optional<TrialSpec>) = trialSpec(trialSpec.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -340,22 +386,49 @@ constructor(
          * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
          * UTC (midnight).
          */
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
+        fun endingBefore(endingBefore: OffsetDateTime?) = apply { body.endingBefore(endingBefore) }
+
+        /**
+         * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
+         * UTC (midnight).
+         */
+        fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+            endingBefore(endingBefore.orElse(null))
 
         /**
          * Number of days after issuance of invoice after which the invoice is due (e.g. Net 30).
          */
-        fun netPaymentTermsDays(netPaymentTermsDays: Double) = apply {
+        fun netPaymentTermsDays(netPaymentTermsDays: Double?) = apply {
             body.netPaymentTermsDays(netPaymentTermsDays)
+        }
+
+        /**
+         * Number of days after issuance of invoice after which the invoice is due (e.g. Net 30).
+         */
+        fun netPaymentTermsDays(netPaymentTermsDays: Double) =
+            netPaymentTermsDays(netPaymentTermsDays as Double?)
+
+        /**
+         * Number of days after issuance of invoice after which the invoice is due (e.g. Net 30).
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun netPaymentTermsDays(netPaymentTermsDays: Optional<Double>) =
+            netPaymentTermsDays(netPaymentTermsDays.orElse(null) as Double?)
+
+        /**
+         * An optional list of overage rates that override the rates of the original plan
+         * configuration. These new rates will apply to all pricing ramps.
+         */
+        fun overageRateAdjustments(overageRateAdjustments: List<OverageRateAdjustment>?) = apply {
+            body.overageRateAdjustments(overageRateAdjustments)
         }
 
         /**
          * An optional list of overage rates that override the rates of the original plan
          * configuration. These new rates will apply to all pricing ramps.
          */
-        fun overageRateAdjustments(overageRateAdjustments: List<OverageRateAdjustment>) = apply {
-            body.overageRateAdjustments(overageRateAdjustments)
-        }
+        fun overageRateAdjustments(overageRateAdjustments: Optional<List<OverageRateAdjustment>>) =
+            overageRateAdjustments(overageRateAdjustments.orElse(null))
 
         /**
          * An optional list of overage rates that override the rates of the original plan
@@ -370,9 +443,17 @@ constructor(
          * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
          * for details.
          */
-        fun priceAdjustments(priceAdjustments: List<PriceAdjustment>) = apply {
+        fun priceAdjustments(priceAdjustments: List<PriceAdjustment>?) = apply {
             body.priceAdjustments(priceAdjustments)
         }
+
+        /**
+         * A list of price adjustments can be applied on top of the pricing in the plans. See the
+         * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
+         * for details.
+         */
+        fun priceAdjustments(priceAdjustments: Optional<List<PriceAdjustment>>) =
+            priceAdjustments(priceAdjustments.orElse(null))
 
         /**
          * A list of price adjustments can be applied on top of the pricing in the plans. See the
@@ -388,7 +469,14 @@ constructor(
          * [trial configuration documentation](https://docs.metronome.com/provisioning/configure-trials/)
          * for details.
          */
-        fun trialSpec(trialSpec: TrialSpec) = apply { body.trialSpec(trialSpec) }
+        fun trialSpec(trialSpec: TrialSpec?) = apply { body.trialSpec(trialSpec) }
+
+        /**
+         * A custom trial can be set for the customer's plan. See the
+         * [trial configuration documentation](https://docs.metronome.com/provisioning/configure-trials/)
+         * for details.
+         */
+        fun trialSpec(trialSpec: Optional<TrialSpec>) = trialSpec(trialSpec.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -707,17 +795,46 @@ constructor(
             fun startPeriod(startPeriod: Double) = apply { this.startPeriod = startPeriod }
 
             /** the overridden quantity for a fixed charge */
-            fun quantity(quantity: Double) = apply { this.quantity = quantity }
+            fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+
+            /** the overridden quantity for a fixed charge */
+            fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+            /** the overridden quantity for a fixed charge */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun quantity(quantity: Optional<Double>) = quantity(quantity.orElse(null) as Double?)
 
             /** Used in pricing tiers. Indicates at what metric value the price applies. */
-            fun tier(tier: Double) = apply { this.tier = tier }
+            fun tier(tier: Double?) = apply { this.tier = tier }
+
+            /** Used in pricing tiers. Indicates at what metric value the price applies. */
+            fun tier(tier: Double) = tier(tier as Double?)
+
+            /** Used in pricing tiers. Indicates at what metric value the price applies. */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun tier(tier: Optional<Double>) = tier(tier.orElse(null) as Double?)
 
             /**
              * The amount of change to a price. Percentage and fixed adjustments can be positive or
              * negative. Percentage-based adjustments should be decimals, e.g. -0.05 for a 5%
              * discount.
              */
-            fun value(value: Double) = apply { this.value = value }
+            fun value(value: Double?) = apply { this.value = value }
+
+            /**
+             * The amount of change to a price. Percentage and fixed adjustments can be positive or
+             * negative. Percentage-based adjustments should be decimals, e.g. -0.05 for a 5%
+             * discount.
+             */
+            fun value(value: Double) = value(value as Double?)
+
+            /**
+             * The amount of change to a price. Percentage and fixed adjustments can be positive or
+             * negative. Percentage-based adjustments should be decimals, e.g. -0.05 for a 5%
+             * discount.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun value(value: Optional<Double>) = value(value.orElse(null) as Double?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -885,7 +1002,10 @@ constructor(
             /** Length of the trial period in days. */
             fun lengthInDays(lengthInDays: Double) = apply { this.lengthInDays = lengthInDays }
 
-            fun spendingCap(spendingCap: SpendingCap) = apply { this.spendingCap = spendingCap }
+            fun spendingCap(spendingCap: SpendingCap?) = apply { this.spendingCap = spendingCap }
+
+            fun spendingCap(spendingCap: Optional<SpendingCap>) =
+                spendingCap(spendingCap.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()

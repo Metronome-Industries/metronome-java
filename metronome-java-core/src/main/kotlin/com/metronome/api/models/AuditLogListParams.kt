@@ -118,33 +118,67 @@ constructor(
         }
 
         /** RFC 3339 timestamp (exclusive). Cannot be used with 'next_page'. */
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { this.endingBefore = endingBefore }
+        fun endingBefore(endingBefore: OffsetDateTime?) = apply { this.endingBefore = endingBefore }
+
+        /** RFC 3339 timestamp (exclusive). Cannot be used with 'next_page'. */
+        fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+            endingBefore(endingBefore.orElse(null))
 
         /** Max number of results that should be returned */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /** Max number of results that should be returned */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Max number of results that should be returned */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+
+        /** Cursor that indicates where the next page of results should start. */
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         /**
          * Optional parameter that can be used to filter which audit logs are returned. If you
          * specify resource_id, you must also specify resource_type.
          */
-        fun resourceId(resourceId: String) = apply { this.resourceId = resourceId }
+        fun resourceId(resourceId: String?) = apply { this.resourceId = resourceId }
+
+        /**
+         * Optional parameter that can be used to filter which audit logs are returned. If you
+         * specify resource_id, you must also specify resource_type.
+         */
+        fun resourceId(resourceId: Optional<String>) = resourceId(resourceId.orElse(null))
 
         /**
          * Optional parameter that can be used to filter which audit logs are returned. If you
          * specify resource_type, you must also specify resource_id.
          */
-        fun resourceType(resourceType: String) = apply { this.resourceType = resourceType }
+        fun resourceType(resourceType: String?) = apply { this.resourceType = resourceType }
+
+        /**
+         * Optional parameter that can be used to filter which audit logs are returned. If you
+         * specify resource_type, you must also specify resource_id.
+         */
+        fun resourceType(resourceType: Optional<String>) = resourceType(resourceType.orElse(null))
 
         /** Sort order by timestamp, e.g. date_asc or date_desc. Defaults to date_asc. */
-        fun sort(sort: Sort) = apply { this.sort = sort }
+        fun sort(sort: Sort?) = apply { this.sort = sort }
+
+        /** Sort order by timestamp, e.g. date_asc or date_desc. Defaults to date_asc. */
+        fun sort(sort: Optional<Sort>) = sort(sort.orElse(null))
 
         /**
          * RFC 3339 timestamp of the earliest audit log to return. Cannot be used with 'next_page'.
          */
-        fun startingOn(startingOn: OffsetDateTime) = apply { this.startingOn = startingOn }
+        fun startingOn(startingOn: OffsetDateTime?) = apply { this.startingOn = startingOn }
+
+        /**
+         * RFC 3339 timestamp of the earliest audit log to return. Cannot be used with 'next_page'.
+         */
+        fun startingOn(startingOn: Optional<OffsetDateTime>) = startingOn(startingOn.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

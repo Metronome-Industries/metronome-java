@@ -407,17 +407,27 @@ constructor(
             }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun billableStatus(billableStatus: BillableStatus) = apply {
+            fun billableStatus(billableStatus: BillableStatus?) = apply {
                 this.billableStatus = billableStatus
             }
 
-            fun breakdownGranularity(breakdownGranularity: BreakdownGranularity) = apply {
+            /** This field's availability is dependent on your client's configuration. */
+            fun billableStatus(billableStatus: Optional<BillableStatus>) =
+                billableStatus(billableStatus.orElse(null))
+
+            fun breakdownGranularity(breakdownGranularity: BreakdownGranularity?) = apply {
                 this.breakdownGranularity = breakdownGranularity
             }
 
-            fun customFields(customFields: CustomFields) = apply {
+            fun breakdownGranularity(breakdownGranularity: Optional<BreakdownGranularity>) =
+                breakdownGranularity(breakdownGranularity.orElse(null))
+
+            fun customFields(customFields: CustomFields?) = apply {
                 this.customFields = customFields
             }
+
+            fun customFields(customFields: Optional<CustomFields>) =
+                customFields(customFields.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -544,21 +554,38 @@ constructor(
 
                 fun productId(productId: String) = apply { this.productId = productId }
 
-                fun presentationGroupValues(presentationGroupValues: PresentationGroupValues) =
+                fun presentationGroupValues(presentationGroupValues: PresentationGroupValues?) =
                     apply {
                         this.presentationGroupValues = presentationGroupValues
                     }
 
-                fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
+                fun presentationGroupValues(
+                    presentationGroupValues: Optional<PresentationGroupValues>
+                ) = presentationGroupValues(presentationGroupValues.orElse(null))
+
+                fun pricingGroupValues(pricingGroupValues: PricingGroupValues?) = apply {
                     this.pricingGroupValues = pricingGroupValues
                 }
 
-                fun quantity(quantity: Double) = apply { this.quantity = quantity }
+                fun pricingGroupValues(pricingGroupValues: Optional<PricingGroupValues>) =
+                    pricingGroupValues(pricingGroupValues.orElse(null))
 
-                fun subtotalsWithQuantity(subtotalsWithQuantity: List<SubtotalsWithQuantity>) =
+                fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+
+                fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                fun quantity(quantity: Optional<Double>) =
+                    quantity(quantity.orElse(null) as Double?)
+
+                fun subtotalsWithQuantity(subtotalsWithQuantity: List<SubtotalsWithQuantity>?) =
                     apply {
-                        this.subtotalsWithQuantity = subtotalsWithQuantity.toMutableList()
+                        this.subtotalsWithQuantity = subtotalsWithQuantity?.toMutableList()
                     }
+
+                fun subtotalsWithQuantity(
+                    subtotalsWithQuantity: Optional<List<SubtotalsWithQuantity>>
+                ) = subtotalsWithQuantity(subtotalsWithQuantity.orElse(null))
 
                 fun addSubtotalsWithQuantity(subtotalsWithQuantity: SubtotalsWithQuantity) = apply {
                     this.subtotalsWithQuantity =

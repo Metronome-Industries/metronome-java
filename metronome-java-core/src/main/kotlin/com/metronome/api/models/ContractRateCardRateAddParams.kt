@@ -260,51 +260,120 @@ constructor(
              * A distinct rate on the rate card. You can choose to use this rate rather than list
              * rate when consuming a credit or commit.
              */
-            fun commitRate(commitRate: CommitRate) = apply { this.commitRate = commitRate }
+            fun commitRate(commitRate: CommitRate?) = apply { this.commitRate = commitRate }
+
+            /**
+             * A distinct rate on the rate card. You can choose to use this rate rather than list
+             * rate when consuming a credit or commit.
+             */
+            fun commitRate(commitRate: Optional<CommitRate>) = commitRate(commitRate.orElse(null))
 
             /**
              * The Metronome ID of the credit type to associate with price, defaults to USD (cents)
              * if not passed. Used by all rate_types except type PERCENTAGE. PERCENTAGE rates use
              * the credit type of associated rates.
              */
-            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+            fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+
+            /**
+             * The Metronome ID of the credit type to associate with price, defaults to USD (cents)
+             * if not passed. Used by all rate_types except type PERCENTAGE. PERCENTAGE rates use
+             * the credit type of associated rates.
+             */
+            fun creditTypeId(creditTypeId: Optional<String>) =
+                creditTypeId(creditTypeId.orElse(null))
 
             /**
              * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
              */
-            fun customRate(customRate: CustomRate) = apply { this.customRate = customRate }
+            fun customRate(customRate: CustomRate?) = apply { this.customRate = customRate }
+
+            /**
+             * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
+             */
+            fun customRate(customRate: Optional<CustomRate>) = customRate(customRate.orElse(null))
 
             /** exclusive end date */
-            fun endingBefore(endingBefore: OffsetDateTime) = apply {
+            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
                 this.endingBefore = endingBefore
             }
+
+            /** exclusive end date */
+            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+                endingBefore(endingBefore.orElse(null))
 
             /**
              * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
              * to true.
              */
-            fun isProrated(isProrated: Boolean) = apply { this.isProrated = isProrated }
+            fun isProrated(isProrated: Boolean?) = apply { this.isProrated = isProrated }
+
+            /**
+             * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
+             * to true.
+             */
+            fun isProrated(isProrated: Boolean) = isProrated(isProrated as Boolean?)
+
+            /**
+             * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
+             * to true.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun isProrated(isProrated: Optional<Boolean>) =
+                isProrated(isProrated.orElse(null) as Boolean?)
 
             /**
              * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
              * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and
              * <=1.
              */
-            fun price(price: Double) = apply { this.price = price }
+            fun price(price: Double?) = apply { this.price = price }
+
+            /**
+             * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
+             * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and
+             * <=1.
+             */
+            fun price(price: Double) = price(price as Double?)
+
+            /**
+             * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
+             * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and
+             * <=1.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun price(price: Optional<Double>) = price(price.orElse(null) as Double?)
 
             /**
              * Optional. List of pricing group key value pairs which will be used to calculate the
              * price.
              */
-            fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
+            fun pricingGroupValues(pricingGroupValues: PricingGroupValues?) = apply {
                 this.pricingGroupValues = pricingGroupValues
             }
 
+            /**
+             * Optional. List of pricing group key value pairs which will be used to calculate the
+             * price.
+             */
+            fun pricingGroupValues(pricingGroupValues: Optional<PricingGroupValues>) =
+                pricingGroupValues(pricingGroupValues.orElse(null))
+
             /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-            fun quantity(quantity: Double) = apply { this.quantity = quantity }
+            fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+
+            /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+            fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+            /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun quantity(quantity: Optional<Double>) = quantity(quantity.orElse(null) as Double?)
 
             /** Only set for TIERED rate_type. */
-            fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+            fun tiers(tiers: List<Tier>?) = apply { this.tiers = tiers?.toMutableList() }
+
+            /** Only set for TIERED rate_type. */
+            fun tiers(tiers: Optional<List<Tier>>) = tiers(tiers.orElse(null))
 
             /** Only set for TIERED rate_type. */
             fun addTier(tier: Tier) = apply {
@@ -315,7 +384,23 @@ constructor(
              * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
              * list prices rather than the standard rates for this product on the contract.
              */
-            fun useListPrices(useListPrices: Boolean) = apply { this.useListPrices = useListPrices }
+            fun useListPrices(useListPrices: Boolean?) = apply {
+                this.useListPrices = useListPrices
+            }
+
+            /**
+             * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
+             * list prices rather than the standard rates for this product on the contract.
+             */
+            fun useListPrices(useListPrices: Boolean) = useListPrices(useListPrices as Boolean?)
+
+            /**
+             * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
+             * list prices rather than the standard rates for this product on the contract.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun useListPrices(useListPrices: Optional<Boolean>) =
+                useListPrices(useListPrices.orElse(null) as Boolean?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -414,46 +499,110 @@ constructor(
          * A distinct rate on the rate card. You can choose to use this rate rather than list rate
          * when consuming a credit or commit.
          */
-        fun commitRate(commitRate: CommitRate) = apply { body.commitRate(commitRate) }
+        fun commitRate(commitRate: CommitRate?) = apply { body.commitRate(commitRate) }
+
+        /**
+         * A distinct rate on the rate card. You can choose to use this rate rather than list rate
+         * when consuming a credit or commit.
+         */
+        fun commitRate(commitRate: Optional<CommitRate>) = commitRate(commitRate.orElse(null))
 
         /**
          * The Metronome ID of the credit type to associate with price, defaults to USD (cents) if
          * not passed. Used by all rate_types except type PERCENTAGE. PERCENTAGE rates use the
          * credit type of associated rates.
          */
-        fun creditTypeId(creditTypeId: String) = apply { body.creditTypeId(creditTypeId) }
+        fun creditTypeId(creditTypeId: String?) = apply { body.creditTypeId(creditTypeId) }
+
+        /**
+         * The Metronome ID of the credit type to associate with price, defaults to USD (cents) if
+         * not passed. Used by all rate_types except type PERCENTAGE. PERCENTAGE rates use the
+         * credit type of associated rates.
+         */
+        fun creditTypeId(creditTypeId: Optional<String>) = creditTypeId(creditTypeId.orElse(null))
 
         /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
-        fun customRate(customRate: CustomRate) = apply { body.customRate(customRate) }
+        fun customRate(customRate: CustomRate?) = apply { body.customRate(customRate) }
+
+        /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
+        fun customRate(customRate: Optional<CustomRate>) = customRate(customRate.orElse(null))
 
         /** exclusive end date */
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
+        fun endingBefore(endingBefore: OffsetDateTime?) = apply { body.endingBefore(endingBefore) }
+
+        /** exclusive end date */
+        fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+            endingBefore(endingBefore.orElse(null))
 
         /**
          * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
          * true.
          */
-        fun isProrated(isProrated: Boolean) = apply { body.isProrated(isProrated) }
+        fun isProrated(isProrated: Boolean?) = apply { body.isProrated(isProrated) }
+
+        /**
+         * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
+         * true.
+         */
+        fun isProrated(isProrated: Boolean) = isProrated(isProrated as Boolean?)
+
+        /**
+         * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
+         * true.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun isProrated(isProrated: Optional<Boolean>) =
+            isProrated(isProrated.orElse(null) as Boolean?)
 
         /**
          * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
          * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
          */
-        fun price(price: Double) = apply { body.price(price) }
+        fun price(price: Double?) = apply { body.price(price) }
+
+        /**
+         * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
+         * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+         */
+        fun price(price: Double) = price(price as Double?)
+
+        /**
+         * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
+         * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun price(price: Optional<Double>) = price(price.orElse(null) as Double?)
 
         /**
          * Optional. List of pricing group key value pairs which will be used to calculate the
          * price.
          */
-        fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
+        fun pricingGroupValues(pricingGroupValues: PricingGroupValues?) = apply {
             body.pricingGroupValues(pricingGroupValues)
         }
 
+        /**
+         * Optional. List of pricing group key value pairs which will be used to calculate the
+         * price.
+         */
+        fun pricingGroupValues(pricingGroupValues: Optional<PricingGroupValues>) =
+            pricingGroupValues(pricingGroupValues.orElse(null))
+
         /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-        fun quantity(quantity: Double) = apply { body.quantity(quantity) }
+        fun quantity(quantity: Double?) = apply { body.quantity(quantity) }
+
+        /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+        fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+        /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun quantity(quantity: Optional<Double>) = quantity(quantity.orElse(null) as Double?)
 
         /** Only set for TIERED rate_type. */
-        fun tiers(tiers: List<Tier>) = apply { body.tiers(tiers) }
+        fun tiers(tiers: List<Tier>?) = apply { body.tiers(tiers) }
+
+        /** Only set for TIERED rate_type. */
+        fun tiers(tiers: Optional<List<Tier>>) = tiers(tiers.orElse(null))
 
         /** Only set for TIERED rate_type. */
         fun addTier(tier: Tier) = apply { body.addTier(tier) }
@@ -462,7 +611,21 @@ constructor(
          * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
          * list prices rather than the standard rates for this product on the contract.
          */
-        fun useListPrices(useListPrices: Boolean) = apply { body.useListPrices(useListPrices) }
+        fun useListPrices(useListPrices: Boolean?) = apply { body.useListPrices(useListPrices) }
+
+        /**
+         * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
+         * list prices rather than the standard rates for this product on the contract.
+         */
+        fun useListPrices(useListPrices: Boolean) = useListPrices(useListPrices as Boolean?)
+
+        /**
+         * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
+         * list prices rather than the standard rates for this product on the contract.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun useListPrices(useListPrices: Optional<Boolean>) =
+            useListPrices(useListPrices.orElse(null) as Boolean?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -716,10 +879,20 @@ constructor(
             fun rateType(rateType: RateType) = apply { this.rateType = rateType }
 
             /** Commit rate price. For FLAT rate_type, this must be >=0. */
-            fun price(price: Double) = apply { this.price = price }
+            fun price(price: Double?) = apply { this.price = price }
+
+            /** Commit rate price. For FLAT rate_type, this must be >=0. */
+            fun price(price: Double) = price(price as Double?)
+
+            /** Commit rate price. For FLAT rate_type, this must be >=0. */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun price(price: Optional<Double>) = price(price.orElse(null) as Double?)
 
             /** Only set for TIERED rate_type. */
-            fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+            fun tiers(tiers: List<Tier>?) = apply { this.tiers = tiers?.toMutableList() }
+
+            /** Only set for TIERED rate_type. */
+            fun tiers(tiers: Optional<List<Tier>>) = tiers(tiers.orElse(null))
 
             /** Only set for TIERED rate_type. */
             fun addTier(tier: Tier) = apply {

@@ -243,31 +243,55 @@ constructor(
 
             fun priority(priority: Double) = apply { this.priority = priority }
 
-            fun creditGrantType(creditGrantType: String) = apply {
+            fun creditGrantType(creditGrantType: String?) = apply {
                 this.creditGrantType = creditGrantType
             }
 
+            fun creditGrantType(creditGrantType: Optional<String>) =
+                creditGrantType(creditGrantType.orElse(null))
+
             /** Custom fields to attach to the credit grant. */
-            fun customFields(customFields: CustomFields) = apply {
+            fun customFields(customFields: CustomFields?) = apply {
                 this.customFields = customFields
             }
+
+            /** Custom fields to attach to the credit grant. */
+            fun customFields(customFields: Optional<CustomFields>) =
+                customFields(customFields.orElse(null))
 
             /**
              * The credit grant will only apply to usage or charges dated on or after this timestamp
              */
-            fun effectiveAt(effectiveAt: OffsetDateTime) = apply { this.effectiveAt = effectiveAt }
+            fun effectiveAt(effectiveAt: OffsetDateTime?) = apply { this.effectiveAt = effectiveAt }
+
+            /**
+             * The credit grant will only apply to usage or charges dated on or after this timestamp
+             */
+            fun effectiveAt(effectiveAt: Optional<OffsetDateTime>) =
+                effectiveAt(effectiveAt.orElse(null))
 
             /** The date to issue an invoice for the paid_amount. */
-            fun invoiceDate(invoiceDate: OffsetDateTime) = apply { this.invoiceDate = invoiceDate }
+            fun invoiceDate(invoiceDate: OffsetDateTime?) = apply { this.invoiceDate = invoiceDate }
+
+            /** The date to issue an invoice for the paid_amount. */
+            fun invoiceDate(invoiceDate: Optional<OffsetDateTime>) =
+                invoiceDate(invoiceDate.orElse(null))
 
             /**
              * The product(s) which these credits will be applied to. (If unspecified, the credits
              * will be applied to charges for all products.). The array ordering specified here will
              * be used to determine the order in which credits will be applied to invoice line items
              */
-            fun productIds(productIds: List<String>) = apply {
-                this.productIds = productIds.toMutableList()
+            fun productIds(productIds: List<String>?) = apply {
+                this.productIds = productIds?.toMutableList()
             }
+
+            /**
+             * The product(s) which these credits will be applied to. (If unspecified, the credits
+             * will be applied to charges for all products.). The array ordering specified here will
+             * be used to determine the order in which credits will be applied to invoice line items
+             */
+            fun productIds(productIds: Optional<List<String>>) = productIds(productIds.orElse(null))
 
             /**
              * The product(s) which these credits will be applied to. (If unspecified, the credits
@@ -278,23 +302,41 @@ constructor(
                 productIds = (productIds ?: mutableListOf()).apply { add(productId) }
             }
 
-            fun reason(reason: String) = apply { this.reason = reason }
+            fun reason(reason: String?) = apply { this.reason = reason }
+
+            fun reason(reason: Optional<String>) = reason(reason.orElse(null))
 
             /**
              * Configure a rollover for this credit grant so if it expires it rolls over a
              * configured amount to a new credit grant. This feature is currently opt-in only.
              * Contact Metronome to be added to the beta.
              */
-            fun rolloverSettings(rolloverSettings: RolloverSettings) = apply {
+            fun rolloverSettings(rolloverSettings: RolloverSettings?) = apply {
                 this.rolloverSettings = rolloverSettings
             }
+
+            /**
+             * Configure a rollover for this credit grant so if it expires it rolls over a
+             * configured amount to a new credit grant. This feature is currently opt-in only.
+             * Contact Metronome to be added to the beta.
+             */
+            fun rolloverSettings(rolloverSettings: Optional<RolloverSettings>) =
+                rolloverSettings(rolloverSettings.orElse(null))
 
             /**
              * Prevents the creation of duplicates. If a request to create a record is made with a
              * previously used uniqueness key, a new record will not be created and the request will
              * fail with a 409 error.
              */
-            fun uniquenessKey(uniquenessKey: String) = apply { this.uniquenessKey = uniquenessKey }
+            fun uniquenessKey(uniquenessKey: String?) = apply { this.uniquenessKey = uniquenessKey }
+
+            /**
+             * Prevents the creation of duplicates. If a request to create a record is made with a
+             * previously used uniqueness key, a new record will not be created and the request will
+             * fail with a 409 error.
+             */
+            fun uniquenessKey(uniquenessKey: Optional<String>) =
+                uniquenessKey(uniquenessKey.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -391,25 +433,47 @@ constructor(
 
         fun priority(priority: Double) = apply { body.priority(priority) }
 
-        fun creditGrantType(creditGrantType: String) = apply {
+        fun creditGrantType(creditGrantType: String?) = apply {
             body.creditGrantType(creditGrantType)
         }
 
+        fun creditGrantType(creditGrantType: Optional<String>) =
+            creditGrantType(creditGrantType.orElse(null))
+
         /** Custom fields to attach to the credit grant. */
-        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
+        fun customFields(customFields: CustomFields?) = apply { body.customFields(customFields) }
+
+        /** Custom fields to attach to the credit grant. */
+        fun customFields(customFields: Optional<CustomFields>) =
+            customFields(customFields.orElse(null))
 
         /** The credit grant will only apply to usage or charges dated on or after this timestamp */
-        fun effectiveAt(effectiveAt: OffsetDateTime) = apply { body.effectiveAt(effectiveAt) }
+        fun effectiveAt(effectiveAt: OffsetDateTime?) = apply { body.effectiveAt(effectiveAt) }
+
+        /** The credit grant will only apply to usage or charges dated on or after this timestamp */
+        fun effectiveAt(effectiveAt: Optional<OffsetDateTime>) =
+            effectiveAt(effectiveAt.orElse(null))
 
         /** The date to issue an invoice for the paid_amount. */
-        fun invoiceDate(invoiceDate: OffsetDateTime) = apply { body.invoiceDate(invoiceDate) }
+        fun invoiceDate(invoiceDate: OffsetDateTime?) = apply { body.invoiceDate(invoiceDate) }
+
+        /** The date to issue an invoice for the paid_amount. */
+        fun invoiceDate(invoiceDate: Optional<OffsetDateTime>) =
+            invoiceDate(invoiceDate.orElse(null))
 
         /**
          * The product(s) which these credits will be applied to. (If unspecified, the credits will
          * be applied to charges for all products.). The array ordering specified here will be used
          * to determine the order in which credits will be applied to invoice line items
          */
-        fun productIds(productIds: List<String>) = apply { body.productIds(productIds) }
+        fun productIds(productIds: List<String>?) = apply { body.productIds(productIds) }
+
+        /**
+         * The product(s) which these credits will be applied to. (If unspecified, the credits will
+         * be applied to charges for all products.). The array ordering specified here will be used
+         * to determine the order in which credits will be applied to invoice line items
+         */
+        fun productIds(productIds: Optional<List<String>>) = productIds(productIds.orElse(null))
 
         /**
          * The product(s) which these credits will be applied to. (If unspecified, the credits will
@@ -418,23 +482,41 @@ constructor(
          */
         fun addProductId(productId: String) = apply { body.addProductId(productId) }
 
-        fun reason(reason: String) = apply { body.reason(reason) }
+        fun reason(reason: String?) = apply { body.reason(reason) }
+
+        fun reason(reason: Optional<String>) = reason(reason.orElse(null))
 
         /**
          * Configure a rollover for this credit grant so if it expires it rolls over a configured
          * amount to a new credit grant. This feature is currently opt-in only. Contact Metronome to
          * be added to the beta.
          */
-        fun rolloverSettings(rolloverSettings: RolloverSettings) = apply {
+        fun rolloverSettings(rolloverSettings: RolloverSettings?) = apply {
             body.rolloverSettings(rolloverSettings)
         }
+
+        /**
+         * Configure a rollover for this credit grant so if it expires it rolls over a configured
+         * amount to a new credit grant. This feature is currently opt-in only. Contact Metronome to
+         * be added to the beta.
+         */
+        fun rolloverSettings(rolloverSettings: Optional<RolloverSettings>) =
+            rolloverSettings(rolloverSettings.orElse(null))
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
          * previously used uniqueness key, a new record will not be created and the request will
          * fail with a 409 error.
          */
-        fun uniquenessKey(uniquenessKey: String) = apply { body.uniquenessKey(uniquenessKey) }
+        fun uniquenessKey(uniquenessKey: String?) = apply { body.uniquenessKey(uniquenessKey) }
+
+        /**
+         * Prevents the creation of duplicates. If a request to create a record is made with a
+         * previously used uniqueness key, a new record will not be created and the request will
+         * fail with a 409 error.
+         */
+        fun uniquenessKey(uniquenessKey: Optional<String>) =
+            uniquenessKey(uniquenessKey.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

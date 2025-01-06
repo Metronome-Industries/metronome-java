@@ -132,24 +132,62 @@ constructor(
              * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at
              * 0:00 UTC (midnight). If not provided, the plan end date will be cleared.
              */
-            fun endingBefore(endingBefore: OffsetDateTime) = apply {
+            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
                 this.endingBefore = endingBefore
             }
+
+            /**
+             * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at
+             * 0:00 UTC (midnight). If not provided, the plan end date will be cleared.
+             */
+            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+                endingBefore(endingBefore.orElse(null))
 
             /**
              * If true, plan end date can be before the last finalized invoice date. Any invoices
              * generated after the plan end date will be voided.
              */
-            fun voidInvoices(voidInvoices: Boolean) = apply { this.voidInvoices = voidInvoices }
+            fun voidInvoices(voidInvoices: Boolean?) = apply { this.voidInvoices = voidInvoices }
+
+            /**
+             * If true, plan end date can be before the last finalized invoice date. Any invoices
+             * generated after the plan end date will be voided.
+             */
+            fun voidInvoices(voidInvoices: Boolean) = voidInvoices(voidInvoices as Boolean?)
+
+            /**
+             * If true, plan end date can be before the last finalized invoice date. Any invoices
+             * generated after the plan end date will be voided.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun voidInvoices(voidInvoices: Optional<Boolean>) =
+                voidInvoices(voidInvoices.orElse(null) as Boolean?)
 
             /**
              * Only applicable when void_invoices is set to true. If true, for every invoice that is
              * voided we will also attempt to void/delete the stripe invoice (if any). Stripe
              * invoices will be voided if finalized or deleted if still in draft state.
              */
-            fun voidStripeInvoices(voidStripeInvoices: Boolean) = apply {
+            fun voidStripeInvoices(voidStripeInvoices: Boolean?) = apply {
                 this.voidStripeInvoices = voidStripeInvoices
             }
+
+            /**
+             * Only applicable when void_invoices is set to true. If true, for every invoice that is
+             * voided we will also attempt to void/delete the stripe invoice (if any). Stripe
+             * invoices will be voided if finalized or deleted if still in draft state.
+             */
+            fun voidStripeInvoices(voidStripeInvoices: Boolean) =
+                voidStripeInvoices(voidStripeInvoices as Boolean?)
+
+            /**
+             * Only applicable when void_invoices is set to true. If true, for every invoice that is
+             * voided we will also attempt to void/delete the stripe invoice (if any). Stripe
+             * invoices will be voided if finalized or deleted if still in draft state.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun voidStripeInvoices(voidStripeInvoices: Optional<Boolean>) =
+                voidStripeInvoices(voidStripeInvoices.orElse(null) as Boolean?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -230,22 +268,60 @@ constructor(
          * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
          * UTC (midnight). If not provided, the plan end date will be cleared.
          */
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
+        fun endingBefore(endingBefore: OffsetDateTime?) = apply { body.endingBefore(endingBefore) }
+
+        /**
+         * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
+         * UTC (midnight). If not provided, the plan end date will be cleared.
+         */
+        fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+            endingBefore(endingBefore.orElse(null))
 
         /**
          * If true, plan end date can be before the last finalized invoice date. Any invoices
          * generated after the plan end date will be voided.
          */
-        fun voidInvoices(voidInvoices: Boolean) = apply { body.voidInvoices(voidInvoices) }
+        fun voidInvoices(voidInvoices: Boolean?) = apply { body.voidInvoices(voidInvoices) }
+
+        /**
+         * If true, plan end date can be before the last finalized invoice date. Any invoices
+         * generated after the plan end date will be voided.
+         */
+        fun voidInvoices(voidInvoices: Boolean) = voidInvoices(voidInvoices as Boolean?)
+
+        /**
+         * If true, plan end date can be before the last finalized invoice date. Any invoices
+         * generated after the plan end date will be voided.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun voidInvoices(voidInvoices: Optional<Boolean>) =
+            voidInvoices(voidInvoices.orElse(null) as Boolean?)
 
         /**
          * Only applicable when void_invoices is set to true. If true, for every invoice that is
          * voided we will also attempt to void/delete the stripe invoice (if any). Stripe invoices
          * will be voided if finalized or deleted if still in draft state.
          */
-        fun voidStripeInvoices(voidStripeInvoices: Boolean) = apply {
+        fun voidStripeInvoices(voidStripeInvoices: Boolean?) = apply {
             body.voidStripeInvoices(voidStripeInvoices)
         }
+
+        /**
+         * Only applicable when void_invoices is set to true. If true, for every invoice that is
+         * voided we will also attempt to void/delete the stripe invoice (if any). Stripe invoices
+         * will be voided if finalized or deleted if still in draft state.
+         */
+        fun voidStripeInvoices(voidStripeInvoices: Boolean) =
+            voidStripeInvoices(voidStripeInvoices as Boolean?)
+
+        /**
+         * Only applicable when void_invoices is set to true. If true, for every invoice that is
+         * voided we will also attempt to void/delete the stripe invoice (if any). Stripe invoices
+         * will be voided if finalized or deleted if still in draft state.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun voidStripeInvoices(voidStripeInvoices: Optional<Boolean>) =
+            voidStripeInvoices(voidStripeInvoices.orElse(null) as Boolean?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

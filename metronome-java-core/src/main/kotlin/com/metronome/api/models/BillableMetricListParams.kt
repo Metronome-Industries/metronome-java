@@ -68,15 +68,33 @@ constructor(
         }
 
         /** If true, the list of returned metrics will include archived metrics */
-        fun includeArchived(includeArchived: Boolean) = apply {
+        fun includeArchived(includeArchived: Boolean?) = apply {
             this.includeArchived = includeArchived
         }
 
+        /** If true, the list of returned metrics will include archived metrics */
+        fun includeArchived(includeArchived: Boolean) = includeArchived(includeArchived as Boolean?)
+
+        /** If true, the list of returned metrics will include archived metrics */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun includeArchived(includeArchived: Optional<Boolean>) =
+            includeArchived(includeArchived.orElse(null) as Boolean?)
+
         /** Max number of results that should be returned */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /** Max number of results that should be returned */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Max number of results that should be returned */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+
+        /** Cursor that indicates where the next page of results should start. */
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

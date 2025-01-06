@@ -124,9 +124,15 @@ constructor(
              * List of rate selectors, rates matching ANY of the selector will be included in the
              * response Passing no selectors will result in all rates being returned.
              */
-            fun selectors(selectors: List<Selector>) = apply {
-                this.selectors = selectors.toMutableList()
+            fun selectors(selectors: List<Selector>?) = apply {
+                this.selectors = selectors?.toMutableList()
             }
+
+            /**
+             * List of rate selectors, rates matching ANY of the selector will be included in the
+             * response Passing no selectors will result in all rates being returned.
+             */
+            fun selectors(selectors: Optional<List<Selector>>) = selectors(selectors.orElse(null))
 
             /**
              * List of rate selectors, rates matching ANY of the selector will be included in the
@@ -209,10 +215,20 @@ constructor(
         }
 
         /** Max number of results that should be returned */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /** Max number of results that should be returned */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Max number of results that should be returned */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+
+        /** Cursor that indicates where the next page of results should start. */
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         /** inclusive starting point for the rates schedule */
         fun at(at: OffsetDateTime) = apply { body.at(at) }
@@ -224,7 +240,13 @@ constructor(
          * List of rate selectors, rates matching ANY of the selector will be included in the
          * response Passing no selectors will result in all rates being returned.
          */
-        fun selectors(selectors: List<Selector>) = apply { body.selectors(selectors) }
+        fun selectors(selectors: List<Selector>?) = apply { body.selectors(selectors) }
+
+        /**
+         * List of rate selectors, rates matching ANY of the selector will be included in the
+         * response Passing no selectors will result in all rates being returned.
+         */
+        fun selectors(selectors: Optional<List<Selector>>) = selectors(selectors.orElse(null))
 
         /**
          * List of rate selectors, rates matching ANY of the selector will be included in the
@@ -430,29 +452,54 @@ constructor(
              * List of pricing group key value pairs, rates containing the matching key / value
              * pairs will be included in the response.
              */
-            fun partialPricingGroupValues(partialPricingGroupValues: PartialPricingGroupValues) =
+            fun partialPricingGroupValues(partialPricingGroupValues: PartialPricingGroupValues?) =
                 apply {
                     this.partialPricingGroupValues = partialPricingGroupValues
                 }
 
             /**
+             * List of pricing group key value pairs, rates containing the matching key / value
+             * pairs will be included in the response.
+             */
+            fun partialPricingGroupValues(
+                partialPricingGroupValues: Optional<PartialPricingGroupValues>
+            ) = partialPricingGroupValues(partialPricingGroupValues.orElse(null))
+
+            /**
              * List of pricing group key value pairs, rates matching all of the key / value pairs
              * will be included in the response.
              */
-            fun pricingGroupValues(pricingGroupValues: PricingGroupValues) = apply {
+            fun pricingGroupValues(pricingGroupValues: PricingGroupValues?) = apply {
                 this.pricingGroupValues = pricingGroupValues
             }
 
+            /**
+             * List of pricing group key value pairs, rates matching all of the key / value pairs
+             * will be included in the response.
+             */
+            fun pricingGroupValues(pricingGroupValues: Optional<PricingGroupValues>) =
+                pricingGroupValues(pricingGroupValues.orElse(null))
+
             /** Rates matching the product id will be included in the response. */
-            fun productId(productId: String) = apply { this.productId = productId }
+            fun productId(productId: String?) = apply { this.productId = productId }
+
+            /** Rates matching the product id will be included in the response. */
+            fun productId(productId: Optional<String>) = productId(productId.orElse(null))
 
             /**
              * List of product tags, rates matching any of the tags will be included in the
              * response.
              */
-            fun productTags(productTags: List<String>) = apply {
-                this.productTags = productTags.toMutableList()
+            fun productTags(productTags: List<String>?) = apply {
+                this.productTags = productTags?.toMutableList()
             }
+
+            /**
+             * List of product tags, rates matching any of the tags will be included in the
+             * response.
+             */
+            fun productTags(productTags: Optional<List<String>>) =
+                productTags(productTags.orElse(null))
 
             /**
              * List of product tags, rates matching any of the tags will be included in the

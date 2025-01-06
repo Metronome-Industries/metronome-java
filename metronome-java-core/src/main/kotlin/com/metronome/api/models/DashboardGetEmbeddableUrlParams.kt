@@ -125,9 +125,13 @@ constructor(
             fun dashboard(dashboard: Dashboard) = apply { this.dashboard = dashboard }
 
             /** Optional list of billable metric group key overrides */
-            fun bmGroupKeyOverrides(bmGroupKeyOverrides: List<BmGroupKeyOverride>) = apply {
-                this.bmGroupKeyOverrides = bmGroupKeyOverrides.toMutableList()
+            fun bmGroupKeyOverrides(bmGroupKeyOverrides: List<BmGroupKeyOverride>?) = apply {
+                this.bmGroupKeyOverrides = bmGroupKeyOverrides?.toMutableList()
             }
+
+            /** Optional list of billable metric group key overrides */
+            fun bmGroupKeyOverrides(bmGroupKeyOverrides: Optional<List<BmGroupKeyOverride>>) =
+                bmGroupKeyOverrides(bmGroupKeyOverrides.orElse(null))
 
             /** Optional list of billable metric group key overrides */
             fun addBmGroupKeyOverride(bmGroupKeyOverride: BmGroupKeyOverride) = apply {
@@ -136,9 +140,13 @@ constructor(
             }
 
             /** Optional list of colors to override */
-            fun colorOverrides(colorOverrides: List<ColorOverride>) = apply {
-                this.colorOverrides = colorOverrides.toMutableList()
+            fun colorOverrides(colorOverrides: List<ColorOverride>?) = apply {
+                this.colorOverrides = colorOverrides?.toMutableList()
             }
+
+            /** Optional list of colors to override */
+            fun colorOverrides(colorOverrides: Optional<List<ColorOverride>>) =
+                colorOverrides(colorOverrides.orElse(null))
 
             /** Optional list of colors to override */
             fun addColorOverride(colorOverride: ColorOverride) = apply {
@@ -146,9 +154,13 @@ constructor(
             }
 
             /** Optional dashboard specific options */
-            fun dashboardOptions(dashboardOptions: List<DashboardOption>) = apply {
-                this.dashboardOptions = dashboardOptions.toMutableList()
+            fun dashboardOptions(dashboardOptions: List<DashboardOption>?) = apply {
+                this.dashboardOptions = dashboardOptions?.toMutableList()
             }
+
+            /** Optional dashboard specific options */
+            fun dashboardOptions(dashboardOptions: Optional<List<DashboardOption>>) =
+                dashboardOptions(dashboardOptions.orElse(null))
 
             /** Optional dashboard specific options */
             fun addDashboardOption(dashboardOption: DashboardOption) = apply {
@@ -234,9 +246,13 @@ constructor(
         fun dashboard(dashboard: Dashboard) = apply { body.dashboard(dashboard) }
 
         /** Optional list of billable metric group key overrides */
-        fun bmGroupKeyOverrides(bmGroupKeyOverrides: List<BmGroupKeyOverride>) = apply {
+        fun bmGroupKeyOverrides(bmGroupKeyOverrides: List<BmGroupKeyOverride>?) = apply {
             body.bmGroupKeyOverrides(bmGroupKeyOverrides)
         }
+
+        /** Optional list of billable metric group key overrides */
+        fun bmGroupKeyOverrides(bmGroupKeyOverrides: Optional<List<BmGroupKeyOverride>>) =
+            bmGroupKeyOverrides(bmGroupKeyOverrides.orElse(null))
 
         /** Optional list of billable metric group key overrides */
         fun addBmGroupKeyOverride(bmGroupKeyOverride: BmGroupKeyOverride) = apply {
@@ -244,9 +260,13 @@ constructor(
         }
 
         /** Optional list of colors to override */
-        fun colorOverrides(colorOverrides: List<ColorOverride>) = apply {
+        fun colorOverrides(colorOverrides: List<ColorOverride>?) = apply {
             body.colorOverrides(colorOverrides)
         }
+
+        /** Optional list of colors to override */
+        fun colorOverrides(colorOverrides: Optional<List<ColorOverride>>) =
+            colorOverrides(colorOverrides.orElse(null))
 
         /** Optional list of colors to override */
         fun addColorOverride(colorOverride: ColorOverride) = apply {
@@ -254,9 +274,13 @@ constructor(
         }
 
         /** Optional dashboard specific options */
-        fun dashboardOptions(dashboardOptions: List<DashboardOption>) = apply {
+        fun dashboardOptions(dashboardOptions: List<DashboardOption>?) = apply {
             body.dashboardOptions(dashboardOptions)
         }
+
+        /** Optional dashboard specific options */
+        fun dashboardOptions(dashboardOptions: Optional<List<DashboardOption>>) =
+            dashboardOptions(dashboardOptions.orElse(null))
 
         /** Optional dashboard specific options */
         fun addDashboardOption(dashboardOption: DashboardOption) = apply {
@@ -507,15 +531,25 @@ constructor(
             fun groupKeyName(groupKeyName: String) = apply { this.groupKeyName = groupKeyName }
 
             /** The display name for the billable metric group key */
-            fun displayName(displayName: String) = apply { this.displayName = displayName }
+            fun displayName(displayName: String?) = apply { this.displayName = displayName }
+
+            /** The display name for the billable metric group key */
+            fun displayName(displayName: Optional<String>) = displayName(displayName.orElse(null))
 
             /**
              * <key, value> pairs of the billable metric group key values and their display names.
              * e.g. {"a": "Asia", "b": "Euro"}
              */
-            fun valueDisplayNames(valueDisplayNames: ValueDisplayNames) = apply {
+            fun valueDisplayNames(valueDisplayNames: ValueDisplayNames?) = apply {
                 this.valueDisplayNames = valueDisplayNames
             }
+
+            /**
+             * <key, value> pairs of the billable metric group key values and their display names.
+             * e.g. {"a": "Asia", "b": "Euro"}
+             */
+            fun valueDisplayNames(valueDisplayNames: Optional<ValueDisplayNames>) =
+                valueDisplayNames(valueDisplayNames.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -680,10 +714,16 @@ constructor(
             }
 
             /** The color to override */
-            fun name(name: Name) = apply { this.name = name }
+            fun name(name: Name?) = apply { this.name = name }
+
+            /** The color to override */
+            fun name(name: Optional<Name>) = name(name.orElse(null))
 
             /** Hex value representation of the color */
-            fun value(value: String) = apply { this.value = value }
+            fun value(value: String?) = apply { this.value = value }
+
+            /** Hex value representation of the color */
+            fun value(value: Optional<String>) = value(value.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()

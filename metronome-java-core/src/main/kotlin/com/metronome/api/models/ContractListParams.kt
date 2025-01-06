@@ -138,29 +138,68 @@ constructor(
              * effective on the provided date. This cannot be provided if the starting_at filter is
              * provided.
              */
-            fun coveringDate(coveringDate: OffsetDateTime) = apply {
+            fun coveringDate(coveringDate: OffsetDateTime?) = apply {
                 this.coveringDate = coveringDate
             }
 
+            /**
+             * Optional RFC 3339 timestamp. If provided, the response will include only contracts
+             * effective on the provided date. This cannot be provided if the starting_at filter is
+             * provided.
+             */
+            fun coveringDate(coveringDate: Optional<OffsetDateTime>) =
+                coveringDate(coveringDate.orElse(null))
+
             /** Include archived contracts in the response */
-            fun includeArchived(includeArchived: Boolean) = apply {
+            fun includeArchived(includeArchived: Boolean?) = apply {
                 this.includeArchived = includeArchived
+            }
+
+            /** Include archived contracts in the response */
+            fun includeArchived(includeArchived: Boolean) =
+                includeArchived(includeArchived as Boolean?)
+
+            /** Include archived contracts in the response */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun includeArchived(includeArchived: Optional<Boolean>) =
+                includeArchived(includeArchived.orElse(null) as Boolean?)
+
+            /**
+             * Include commit ledgers in the response. Setting this flag may cause the query to be
+             * slower.
+             */
+            fun includeLedgers(includeLedgers: Boolean?) = apply {
+                this.includeLedgers = includeLedgers
             }
 
             /**
              * Include commit ledgers in the response. Setting this flag may cause the query to be
              * slower.
              */
-            fun includeLedgers(includeLedgers: Boolean) = apply {
-                this.includeLedgers = includeLedgers
-            }
+            fun includeLedgers(includeLedgers: Boolean) = includeLedgers(includeLedgers as Boolean?)
+
+            /**
+             * Include commit ledgers in the response. Setting this flag may cause the query to be
+             * slower.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun includeLedgers(includeLedgers: Optional<Boolean>) =
+                includeLedgers(includeLedgers.orElse(null) as Boolean?)
 
             /**
              * Optional RFC 3339 timestamp. If provided, the response will include only contracts
              * where effective_at is on or after the provided date. This cannot be provided if the
              * covering_date filter is provided.
              */
-            fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+            fun startingAt(startingAt: OffsetDateTime?) = apply { this.startingAt = startingAt }
+
+            /**
+             * Optional RFC 3339 timestamp. If provided, the response will include only contracts
+             * where effective_at is on or after the provided date. This cannot be provided if the
+             * covering_date filter is provided.
+             */
+            fun startingAt(startingAt: Optional<OffsetDateTime>) =
+                startingAt(startingAt.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -238,25 +277,62 @@ constructor(
          * effective on the provided date. This cannot be provided if the starting_at filter is
          * provided.
          */
-        fun coveringDate(coveringDate: OffsetDateTime) = apply { body.coveringDate(coveringDate) }
+        fun coveringDate(coveringDate: OffsetDateTime?) = apply { body.coveringDate(coveringDate) }
+
+        /**
+         * Optional RFC 3339 timestamp. If provided, the response will include only contracts
+         * effective on the provided date. This cannot be provided if the starting_at filter is
+         * provided.
+         */
+        fun coveringDate(coveringDate: Optional<OffsetDateTime>) =
+            coveringDate(coveringDate.orElse(null))
 
         /** Include archived contracts in the response */
-        fun includeArchived(includeArchived: Boolean) = apply {
+        fun includeArchived(includeArchived: Boolean?) = apply {
             body.includeArchived(includeArchived)
         }
+
+        /** Include archived contracts in the response */
+        fun includeArchived(includeArchived: Boolean) = includeArchived(includeArchived as Boolean?)
+
+        /** Include archived contracts in the response */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun includeArchived(includeArchived: Optional<Boolean>) =
+            includeArchived(includeArchived.orElse(null) as Boolean?)
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        fun includeLedgers(includeLedgers: Boolean) = apply { body.includeLedgers(includeLedgers) }
+        fun includeLedgers(includeLedgers: Boolean?) = apply { body.includeLedgers(includeLedgers) }
+
+        /**
+         * Include commit ledgers in the response. Setting this flag may cause the query to be
+         * slower.
+         */
+        fun includeLedgers(includeLedgers: Boolean) = includeLedgers(includeLedgers as Boolean?)
+
+        /**
+         * Include commit ledgers in the response. Setting this flag may cause the query to be
+         * slower.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun includeLedgers(includeLedgers: Optional<Boolean>) =
+            includeLedgers(includeLedgers.orElse(null) as Boolean?)
 
         /**
          * Optional RFC 3339 timestamp. If provided, the response will include only contracts where
          * effective_at is on or after the provided date. This cannot be provided if the
          * covering_date filter is provided.
          */
-        fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
+        fun startingAt(startingAt: OffsetDateTime?) = apply { body.startingAt(startingAt) }
+
+        /**
+         * Optional RFC 3339 timestamp. If provided, the response will include only contracts where
+         * effective_at is on or after the provided date. This cannot be provided if the
+         * covering_date filter is provided.
+         */
+        fun startingAt(startingAt: Optional<OffsetDateTime>) = startingAt(startingAt.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

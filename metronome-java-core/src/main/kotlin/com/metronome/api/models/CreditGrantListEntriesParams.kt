@@ -139,9 +139,16 @@ constructor(
              * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
              * entries for all credit types will be returned.
              */
-            fun creditTypeIds(creditTypeIds: List<String>) = apply {
-                this.creditTypeIds = creditTypeIds.toMutableList()
+            fun creditTypeIds(creditTypeIds: List<String>?) = apply {
+                this.creditTypeIds = creditTypeIds?.toMutableList()
             }
+
+            /**
+             * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
+             * entries for all credit types will be returned.
+             */
+            fun creditTypeIds(creditTypeIds: Optional<List<String>>) =
+                creditTypeIds(creditTypeIds.orElse(null))
 
             /**
              * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
@@ -155,9 +162,16 @@ constructor(
              * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger
              * entries for all customers will be returned.
              */
-            fun customerIds(customerIds: List<String>) = apply {
-                this.customerIds = customerIds.toMutableList()
+            fun customerIds(customerIds: List<String>?) = apply {
+                this.customerIds = customerIds?.toMutableList()
             }
+
+            /**
+             * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger
+             * entries for all customers will be returned.
+             */
+            fun customerIds(customerIds: Optional<List<String>>) =
+                customerIds(customerIds.orElse(null))
 
             /**
              * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger
@@ -172,14 +186,28 @@ constructor(
              * time. This timestamp must not be in the future. If no timestamp is supplied, all
              * entries up to the start of the customer's next billing period will be returned.
              */
-            fun endingBefore(endingBefore: OffsetDateTime) = apply {
+            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
                 this.endingBefore = endingBefore
             }
 
             /**
+             * If supplied, ledger entries will only be returned with an effective_at before this
+             * time. This timestamp must not be in the future. If no timestamp is supplied, all
+             * entries up to the start of the customer's next billing period will be returned.
+             */
+            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+                endingBefore(endingBefore.orElse(null))
+
+            /**
              * If supplied, only ledger entries effective at or after this time will be returned.
              */
-            fun startingOn(startingOn: OffsetDateTime) = apply { this.startingOn = startingOn }
+            fun startingOn(startingOn: OffsetDateTime?) = apply { this.startingOn = startingOn }
+
+            /**
+             * If supplied, only ledger entries effective at or after this time will be returned.
+             */
+            fun startingOn(startingOn: Optional<OffsetDateTime>) =
+                startingOn(startingOn.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -252,13 +280,25 @@ constructor(
         }
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+
+        /** Cursor that indicates where the next page of results should start. */
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         /**
          * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
          * entries for all credit types will be returned.
          */
-        fun creditTypeIds(creditTypeIds: List<String>) = apply { body.creditTypeIds(creditTypeIds) }
+        fun creditTypeIds(creditTypeIds: List<String>?) = apply {
+            body.creditTypeIds(creditTypeIds)
+        }
+
+        /**
+         * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
+         * entries for all credit types will be returned.
+         */
+        fun creditTypeIds(creditTypeIds: Optional<List<String>>) =
+            creditTypeIds(creditTypeIds.orElse(null))
 
         /**
          * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
@@ -270,7 +310,13 @@ constructor(
          * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger entries
          * for all customers will be returned.
          */
-        fun customerIds(customerIds: List<String>) = apply { body.customerIds(customerIds) }
+        fun customerIds(customerIds: List<String>?) = apply { body.customerIds(customerIds) }
+
+        /**
+         * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger entries
+         * for all customers will be returned.
+         */
+        fun customerIds(customerIds: Optional<List<String>>) = customerIds(customerIds.orElse(null))
 
         /**
          * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger entries
@@ -283,10 +329,21 @@ constructor(
          * This timestamp must not be in the future. If no timestamp is supplied, all entries up to
          * the start of the customer's next billing period will be returned.
          */
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
+        fun endingBefore(endingBefore: OffsetDateTime?) = apply { body.endingBefore(endingBefore) }
+
+        /**
+         * If supplied, ledger entries will only be returned with an effective_at before this time.
+         * This timestamp must not be in the future. If no timestamp is supplied, all entries up to
+         * the start of the customer's next billing period will be returned.
+         */
+        fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+            endingBefore(endingBefore.orElse(null))
 
         /** If supplied, only ledger entries effective at or after this time will be returned. */
-        fun startingOn(startingOn: OffsetDateTime) = apply { body.startingOn(startingOn) }
+        fun startingOn(startingOn: OffsetDateTime?) = apply { body.startingOn(startingOn) }
+
+        /** If supplied, only ledger entries effective at or after this time will be returned. */
+        fun startingOn(startingOn: Optional<OffsetDateTime>) = startingOn(startingOn.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

@@ -167,31 +167,70 @@ constructor(
         fun startingOn(startingOn: OffsetDateTime) = apply { this.startingOn = startingOn }
 
         /** Only return invoices for the specified credit type */
-        fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+        fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+
+        /** Only return invoices for the specified credit type */
+        fun creditTypeId(creditTypeId: Optional<String>) = creditTypeId(creditTypeId.orElse(null))
 
         /**
          * Max number of results that should be returned. For daily breakdowns, the response can
          * return up to 35 days worth of breakdowns. For hourly breakdowns, the response can return
          * up to 24 hours. If there are more results, a cursor to the next page is returned.
          */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /**
+         * Max number of results that should be returned. For daily breakdowns, the response can
+         * return up to 35 days worth of breakdowns. For hourly breakdowns, the response can return
+         * up to 24 hours. If there are more results, a cursor to the next page is returned.
+         */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /**
+         * Max number of results that should be returned. For daily breakdowns, the response can
+         * return up to 35 days worth of breakdowns. For hourly breakdowns, the response can return
+         * up to 24 hours. If there are more results, a cursor to the next page is returned.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+
+        /** Cursor that indicates where the next page of results should start. */
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         /** If set, all zero quantity line items will be filtered out of the response */
-        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Boolean) = apply {
+        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Boolean?) = apply {
             this.skipZeroQtyLineItems = skipZeroQtyLineItems
         }
 
+        /** If set, all zero quantity line items will be filtered out of the response */
+        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Boolean) =
+            skipZeroQtyLineItems(skipZeroQtyLineItems as Boolean?)
+
+        /** If set, all zero quantity line items will be filtered out of the response */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Optional<Boolean>) =
+            skipZeroQtyLineItems(skipZeroQtyLineItems.orElse(null) as Boolean?)
+
         /** Invoice sort order by issued_at, e.g. date_asc or date_desc. Defaults to date_asc. */
-        fun sort(sort: Sort) = apply { this.sort = sort }
+        fun sort(sort: Sort?) = apply { this.sort = sort }
+
+        /** Invoice sort order by issued_at, e.g. date_asc or date_desc. Defaults to date_asc. */
+        fun sort(sort: Optional<Sort>) = sort(sort.orElse(null))
 
         /** Invoice status, e.g. DRAFT or FINALIZED */
-        fun status(status: String) = apply { this.status = status }
+        fun status(status: String?) = apply { this.status = status }
+
+        /** Invoice status, e.g. DRAFT or FINALIZED */
+        fun status(status: Optional<String>) = status(status.orElse(null))
 
         /** The granularity of the breakdowns to return. Defaults to day. */
-        fun windowSize(windowSize: WindowSize) = apply { this.windowSize = windowSize }
+        fun windowSize(windowSize: WindowSize?) = apply { this.windowSize = windowSize }
+
+        /** The granularity of the breakdowns to return. Defaults to day. */
+        fun windowSize(windowSize: Optional<WindowSize>) = windowSize(windowSize.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

@@ -95,14 +95,32 @@ constructor(
             fun id(id: String) = apply { this.id = id }
 
             /** If true, resets the uniqueness key on this grant so it can be re-used */
-            fun releaseUniquenessKey(releaseUniquenessKey: Boolean) = apply {
+            fun releaseUniquenessKey(releaseUniquenessKey: Boolean?) = apply {
                 this.releaseUniquenessKey = releaseUniquenessKey
             }
 
+            /** If true, resets the uniqueness key on this grant so it can be re-used */
+            fun releaseUniquenessKey(releaseUniquenessKey: Boolean) =
+                releaseUniquenessKey(releaseUniquenessKey as Boolean?)
+
+            /** If true, resets the uniqueness key on this grant so it can be re-used */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun releaseUniquenessKey(releaseUniquenessKey: Optional<Boolean>) =
+                releaseUniquenessKey(releaseUniquenessKey.orElse(null) as Boolean?)
+
             /** If true, void the purchase invoice associated with the grant */
-            fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Boolean) = apply {
+            fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Boolean?) = apply {
                 this.voidCreditPurchaseInvoice = voidCreditPurchaseInvoice
             }
+
+            /** If true, void the purchase invoice associated with the grant */
+            fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Boolean) =
+                voidCreditPurchaseInvoice(voidCreditPurchaseInvoice as Boolean?)
+
+            /** If true, void the purchase invoice associated with the grant */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Optional<Boolean>) =
+                voidCreditPurchaseInvoice(voidCreditPurchaseInvoice.orElse(null) as Boolean?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -174,14 +192,32 @@ constructor(
         fun id(id: String) = apply { body.id(id) }
 
         /** If true, resets the uniqueness key on this grant so it can be re-used */
-        fun releaseUniquenessKey(releaseUniquenessKey: Boolean) = apply {
+        fun releaseUniquenessKey(releaseUniquenessKey: Boolean?) = apply {
             body.releaseUniquenessKey(releaseUniquenessKey)
         }
 
+        /** If true, resets the uniqueness key on this grant so it can be re-used */
+        fun releaseUniquenessKey(releaseUniquenessKey: Boolean) =
+            releaseUniquenessKey(releaseUniquenessKey as Boolean?)
+
+        /** If true, resets the uniqueness key on this grant so it can be re-used */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun releaseUniquenessKey(releaseUniquenessKey: Optional<Boolean>) =
+            releaseUniquenessKey(releaseUniquenessKey.orElse(null) as Boolean?)
+
         /** If true, void the purchase invoice associated with the grant */
-        fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Boolean) = apply {
+        fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Boolean?) = apply {
             body.voidCreditPurchaseInvoice(voidCreditPurchaseInvoice)
         }
+
+        /** If true, void the purchase invoice associated with the grant */
+        fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Boolean) =
+            voidCreditPurchaseInvoice(voidCreditPurchaseInvoice as Boolean?)
+
+        /** If true, void the purchase invoice associated with the grant */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Optional<Boolean>) =
+            voidCreditPurchaseInvoice(voidCreditPurchaseInvoice.orElse(null) as Boolean?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

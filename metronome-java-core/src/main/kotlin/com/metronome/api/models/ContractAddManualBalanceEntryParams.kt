@@ -154,13 +154,22 @@ constructor(
             fun segmentId(segmentId: String) = apply { this.segmentId = segmentId }
 
             /** ID of the contract to update. Leave blank to update a customer level balance. */
-            fun contractId(contractId: String) = apply { this.contractId = contractId }
+            fun contractId(contractId: String?) = apply { this.contractId = contractId }
+
+            /** ID of the contract to update. Leave blank to update a customer level balance. */
+            fun contractId(contractId: Optional<String>) = contractId(contractId.orElse(null))
 
             /**
              * RFC 3339 timestamp indicating when the manual adjustment takes place. If not
              * provided, it will default to the start of the segment.
              */
-            fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
+            fun timestamp(timestamp: OffsetDateTime?) = apply { this.timestamp = timestamp }
+
+            /**
+             * RFC 3339 timestamp indicating when the manual adjustment takes place. If not
+             * provided, it will default to the start of the segment.
+             */
+            fun timestamp(timestamp: Optional<OffsetDateTime>) = timestamp(timestamp.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -253,13 +262,22 @@ constructor(
         fun segmentId(segmentId: String) = apply { body.segmentId(segmentId) }
 
         /** ID of the contract to update. Leave blank to update a customer level balance. */
-        fun contractId(contractId: String) = apply { body.contractId(contractId) }
+        fun contractId(contractId: String?) = apply { body.contractId(contractId) }
+
+        /** ID of the contract to update. Leave blank to update a customer level balance. */
+        fun contractId(contractId: Optional<String>) = contractId(contractId.orElse(null))
 
         /**
          * RFC 3339 timestamp indicating when the manual adjustment takes place. If not provided, it
          * will default to the start of the segment.
          */
-        fun timestamp(timestamp: OffsetDateTime) = apply { body.timestamp(timestamp) }
+        fun timestamp(timestamp: OffsetDateTime?) = apply { body.timestamp(timestamp) }
+
+        /**
+         * RFC 3339 timestamp indicating when the manual adjustment takes place. If not provided, it
+         * will default to the start of the segment.
+         */
+        fun timestamp(timestamp: Optional<OffsetDateTime>) = timestamp(timestamp.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

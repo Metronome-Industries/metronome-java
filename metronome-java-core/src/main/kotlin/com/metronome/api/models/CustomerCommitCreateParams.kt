@@ -305,9 +305,16 @@ constructor(
              * Which contract the commit applies to. If not provided, the commit applies to all
              * contracts.
              */
-            fun applicableContractIds(applicableContractIds: List<String>) = apply {
-                this.applicableContractIds = applicableContractIds.toMutableList()
+            fun applicableContractIds(applicableContractIds: List<String>?) = apply {
+                this.applicableContractIds = applicableContractIds?.toMutableList()
             }
+
+            /**
+             * Which contract the commit applies to. If not provided, the commit applies to all
+             * contracts.
+             */
+            fun applicableContractIds(applicableContractIds: Optional<List<String>>) =
+                applicableContractIds(applicableContractIds.orElse(null))
 
             /**
              * Which contract the commit applies to. If not provided, the commit applies to all
@@ -322,9 +329,16 @@ constructor(
              * Which products the commit applies to. If both applicable_product_ids and
              * applicable_product_tags are not provided, the commit applies to all products.
              */
-            fun applicableProductIds(applicableProductIds: List<String>) = apply {
-                this.applicableProductIds = applicableProductIds.toMutableList()
+            fun applicableProductIds(applicableProductIds: List<String>?) = apply {
+                this.applicableProductIds = applicableProductIds?.toMutableList()
             }
+
+            /**
+             * Which products the commit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the commit applies to all products.
+             */
+            fun applicableProductIds(applicableProductIds: Optional<List<String>>) =
+                applicableProductIds(applicableProductIds.orElse(null))
 
             /**
              * Which products the commit applies to. If both applicable_product_ids and
@@ -339,9 +353,16 @@ constructor(
              * Which tags the commit applies to. If both applicable_product_ids and
              * applicable_product_tags are not provided, the commit applies to all products.
              */
-            fun applicableProductTags(applicableProductTags: List<String>) = apply {
-                this.applicableProductTags = applicableProductTags.toMutableList()
+            fun applicableProductTags(applicableProductTags: List<String>?) = apply {
+                this.applicableProductTags = applicableProductTags?.toMutableList()
             }
+
+            /**
+             * Which tags the commit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the commit applies to all products.
+             */
+            fun applicableProductTags(applicableProductTags: Optional<List<String>>) =
+                applicableProductTags(applicableProductTags.orElse(null))
 
             /**
              * Which tags the commit applies to. If both applicable_product_ids and
@@ -352,20 +373,44 @@ constructor(
                     (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
             }
 
-            fun customFields(customFields: CustomFields) = apply {
+            fun customFields(customFields: CustomFields?) = apply {
                 this.customFields = customFields
             }
 
+            fun customFields(customFields: Optional<CustomFields>) =
+                customFields(customFields.orElse(null))
+
             /** Used only in UI/API. It is not exposed to end customers. */
-            fun description(description: String) = apply { this.description = description }
+            fun description(description: String?) = apply { this.description = description }
+
+            /** Used only in UI/API. It is not exposed to end customers. */
+            fun description(description: Optional<String>) = description(description.orElse(null))
 
             /**
              * The contract that this commit will be billed on. This is required for "POSTPAID"
              * commits and for "PREPAID" commits unless there is no invoice schedule above (i.e.,
              * the commit is 'free').
              */
-            fun invoiceContractId(invoiceContractId: String) = apply {
+            fun invoiceContractId(invoiceContractId: String?) = apply {
                 this.invoiceContractId = invoiceContractId
+            }
+
+            /**
+             * The contract that this commit will be billed on. This is required for "POSTPAID"
+             * commits and for "PREPAID" commits unless there is no invoice schedule above (i.e.,
+             * the commit is 'free').
+             */
+            fun invoiceContractId(invoiceContractId: Optional<String>) =
+                invoiceContractId(invoiceContractId.orElse(null))
+
+            /**
+             * Required for "POSTPAID" commits: the true up invoice will be generated at this time
+             * and only one schedule item is allowed; the total must match accesss_schedule amount.
+             * Optional for "PREPAID" commits: if not provided, this will be a "complimentary"
+             * commit with no invoice.
+             */
+            fun invoiceSchedule(invoiceSchedule: InvoiceSchedule?) = apply {
+                this.invoiceSchedule = invoiceSchedule
             }
 
             /**
@@ -374,31 +419,51 @@ constructor(
              * Optional for "PREPAID" commits: if not provided, this will be a "complimentary"
              * commit with no invoice.
              */
-            fun invoiceSchedule(invoiceSchedule: InvoiceSchedule) = apply {
-                this.invoiceSchedule = invoiceSchedule
-            }
+            fun invoiceSchedule(invoiceSchedule: Optional<InvoiceSchedule>) =
+                invoiceSchedule(invoiceSchedule.orElse(null))
 
             /** displayed on invoices */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String?) = apply { this.name = name }
+
+            /** displayed on invoices */
+            fun name(name: Optional<String>) = name(name.orElse(null))
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
 
-            fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
+                netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
+
+            fun rateType(rateType: RateType?) = apply { this.rateType = rateType }
+
+            fun rateType(rateType: Optional<RateType>) = rateType(rateType.orElse(null))
 
             /** This field's availability is dependent on your client's configuration. */
-            fun salesforceOpportunityId(salesforceOpportunityId: String) = apply {
+            fun salesforceOpportunityId(salesforceOpportunityId: String?) = apply {
                 this.salesforceOpportunityId = salesforceOpportunityId
             }
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun salesforceOpportunityId(salesforceOpportunityId: Optional<String>) =
+                salesforceOpportunityId(salesforceOpportunityId.orElse(null))
 
             /**
              * Prevents the creation of duplicates. If a request to create a commit or credit is
              * made with a uniqueness key that was previously used to create a commit or credit, a
              * new record will not be created and the request will fail with a 409 error.
              */
-            fun uniquenessKey(uniquenessKey: String) = apply { this.uniquenessKey = uniquenessKey }
+            fun uniquenessKey(uniquenessKey: String?) = apply { this.uniquenessKey = uniquenessKey }
+
+            /**
+             * Prevents the creation of duplicates. If a request to create a commit or credit is
+             * made with a uniqueness key that was previously used to create a commit or credit, a
+             * new record will not be created and the request will fail with a 409 error.
+             */
+            fun uniquenessKey(uniquenessKey: Optional<String>) =
+                uniquenessKey(uniquenessKey.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -505,9 +570,16 @@ constructor(
          * Which contract the commit applies to. If not provided, the commit applies to all
          * contracts.
          */
-        fun applicableContractIds(applicableContractIds: List<String>) = apply {
+        fun applicableContractIds(applicableContractIds: List<String>?) = apply {
             body.applicableContractIds(applicableContractIds)
         }
+
+        /**
+         * Which contract the commit applies to. If not provided, the commit applies to all
+         * contracts.
+         */
+        fun applicableContractIds(applicableContractIds: Optional<List<String>>) =
+            applicableContractIds(applicableContractIds.orElse(null))
 
         /**
          * Which contract the commit applies to. If not provided, the commit applies to all
@@ -521,9 +593,16 @@ constructor(
          * Which products the commit applies to. If both applicable_product_ids and
          * applicable_product_tags are not provided, the commit applies to all products.
          */
-        fun applicableProductIds(applicableProductIds: List<String>) = apply {
+        fun applicableProductIds(applicableProductIds: List<String>?) = apply {
             body.applicableProductIds(applicableProductIds)
         }
+
+        /**
+         * Which products the commit applies to. If both applicable_product_ids and
+         * applicable_product_tags are not provided, the commit applies to all products.
+         */
+        fun applicableProductIds(applicableProductIds: Optional<List<String>>) =
+            applicableProductIds(applicableProductIds.orElse(null))
 
         /**
          * Which products the commit applies to. If both applicable_product_ids and
@@ -537,9 +616,16 @@ constructor(
          * Which tags the commit applies to. If both applicable_product_ids and
          * applicable_product_tags are not provided, the commit applies to all products.
          */
-        fun applicableProductTags(applicableProductTags: List<String>) = apply {
+        fun applicableProductTags(applicableProductTags: List<String>?) = apply {
             body.applicableProductTags(applicableProductTags)
         }
+
+        /**
+         * Which tags the commit applies to. If both applicable_product_ids and
+         * applicable_product_tags are not provided, the commit applies to all products.
+         */
+        fun applicableProductTags(applicableProductTags: Optional<List<String>>) =
+            applicableProductTags(applicableProductTags.orElse(null))
 
         /**
          * Which tags the commit applies to. If both applicable_product_ids and
@@ -549,18 +635,42 @@ constructor(
             body.addApplicableProductTag(applicableProductTag)
         }
 
-        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
+        fun customFields(customFields: CustomFields?) = apply { body.customFields(customFields) }
+
+        fun customFields(customFields: Optional<CustomFields>) =
+            customFields(customFields.orElse(null))
 
         /** Used only in UI/API. It is not exposed to end customers. */
-        fun description(description: String) = apply { body.description(description) }
+        fun description(description: String?) = apply { body.description(description) }
+
+        /** Used only in UI/API. It is not exposed to end customers. */
+        fun description(description: Optional<String>) = description(description.orElse(null))
 
         /**
          * The contract that this commit will be billed on. This is required for "POSTPAID" commits
          * and for "PREPAID" commits unless there is no invoice schedule above (i.e., the commit is
          * 'free').
          */
-        fun invoiceContractId(invoiceContractId: String) = apply {
+        fun invoiceContractId(invoiceContractId: String?) = apply {
             body.invoiceContractId(invoiceContractId)
+        }
+
+        /**
+         * The contract that this commit will be billed on. This is required for "POSTPAID" commits
+         * and for "PREPAID" commits unless there is no invoice schedule above (i.e., the commit is
+         * 'free').
+         */
+        fun invoiceContractId(invoiceContractId: Optional<String>) =
+            invoiceContractId(invoiceContractId.orElse(null))
+
+        /**
+         * Required for "POSTPAID" commits: the true up invoice will be generated at this time and
+         * only one schedule item is allowed; the total must match accesss_schedule amount. Optional
+         * for "PREPAID" commits: if not provided, this will be a "complimentary" commit with no
+         * invoice.
+         */
+        fun invoiceSchedule(invoiceSchedule: InvoiceSchedule?) = apply {
+            body.invoiceSchedule(invoiceSchedule)
         }
 
         /**
@@ -569,31 +679,51 @@ constructor(
          * for "PREPAID" commits: if not provided, this will be a "complimentary" commit with no
          * invoice.
          */
-        fun invoiceSchedule(invoiceSchedule: InvoiceSchedule) = apply {
-            body.invoiceSchedule(invoiceSchedule)
-        }
+        fun invoiceSchedule(invoiceSchedule: Optional<InvoiceSchedule>) =
+            invoiceSchedule(invoiceSchedule.orElse(null))
 
         /** displayed on invoices */
-        fun name(name: String) = apply { body.name(name) }
+        fun name(name: String?) = apply { body.name(name) }
+
+        /** displayed on invoices */
+        fun name(name: Optional<String>) = name(name.orElse(null))
 
         /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
             body.netsuiteSalesOrderId(netsuiteSalesOrderId)
         }
 
-        fun rateType(rateType: RateType) = apply { body.rateType(rateType) }
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
+            netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
+
+        fun rateType(rateType: RateType?) = apply { body.rateType(rateType) }
+
+        fun rateType(rateType: Optional<RateType>) = rateType(rateType.orElse(null))
 
         /** This field's availability is dependent on your client's configuration. */
-        fun salesforceOpportunityId(salesforceOpportunityId: String) = apply {
+        fun salesforceOpportunityId(salesforceOpportunityId: String?) = apply {
             body.salesforceOpportunityId(salesforceOpportunityId)
         }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun salesforceOpportunityId(salesforceOpportunityId: Optional<String>) =
+            salesforceOpportunityId(salesforceOpportunityId.orElse(null))
 
         /**
          * Prevents the creation of duplicates. If a request to create a commit or credit is made
          * with a uniqueness key that was previously used to create a commit or credit, a new record
          * will not be created and the request will fail with a 409 error.
          */
-        fun uniquenessKey(uniquenessKey: String) = apply { body.uniquenessKey(uniquenessKey) }
+        fun uniquenessKey(uniquenessKey: String?) = apply { body.uniquenessKey(uniquenessKey) }
+
+        /**
+         * Prevents the creation of duplicates. If a request to create a commit or credit is made
+         * with a uniqueness key that was previously used to create a commit or credit, a new record
+         * will not be created and the request will fail with a 409 error.
+         */
+        fun uniquenessKey(uniquenessKey: Optional<String>) =
+            uniquenessKey(uniquenessKey.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -773,7 +903,11 @@ constructor(
             }
 
             /** Defaults to USD (cents) if not passed */
-            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+            fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+
+            /** Defaults to USD (cents) if not passed */
+            fun creditTypeId(creditTypeId: Optional<String>) =
+                creditTypeId(creditTypeId.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1109,21 +1243,37 @@ constructor(
             }
 
             /** Defaults to USD (cents) if not passed. */
-            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+            fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+
+            /** Defaults to USD (cents) if not passed. */
+            fun creditTypeId(creditTypeId: Optional<String>) =
+                creditTypeId(creditTypeId.orElse(null))
 
             /**
              * Enter the unit price and quantity for the charge or instead only send the amount. If
              * amount is sent, the unit price is assumed to be the amount and quantity is inferred
              * to be 1.
              */
-            fun recurringSchedule(recurringSchedule: RecurringSchedule) = apply {
+            fun recurringSchedule(recurringSchedule: RecurringSchedule?) = apply {
                 this.recurringSchedule = recurringSchedule
             }
 
+            /**
+             * Enter the unit price and quantity for the charge or instead only send the amount. If
+             * amount is sent, the unit price is assumed to be the amount and quantity is inferred
+             * to be 1.
+             */
+            fun recurringSchedule(recurringSchedule: Optional<RecurringSchedule>) =
+                recurringSchedule(recurringSchedule.orElse(null))
+
             /** Either provide amount or provide both unit_price and quantity. */
-            fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
-                this.scheduleItems = scheduleItems.toMutableList()
+            fun scheduleItems(scheduleItems: List<ScheduleItem>?) = apply {
+                this.scheduleItems = scheduleItems?.toMutableList()
             }
+
+            /** Either provide amount or provide both unit_price and quantity. */
+            fun scheduleItems(scheduleItems: Optional<List<ScheduleItem>>) =
+                scheduleItems(scheduleItems.orElse(null))
 
             /** Either provide amount or provide both unit_price and quantity. */
             fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
@@ -1262,19 +1412,62 @@ constructor(
                  * amount is sent, the unit_price is assumed to be the amount and quantity is
                  * inferred to be 1.
                  */
-                fun amount(amount: Double) = apply { this.amount = amount }
+                fun amount(amount: Double?) = apply { this.amount = amount }
+
+                /**
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                fun amount(amount: Double) = amount(amount as Double?)
+
+                /**
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
 
                 /**
                  * Quantity for the charge. Will be multiplied by unit_price to determine the amount
                  * and must be specified with unit_price. If specified amount cannot be provided.
                  */
-                fun quantity(quantity: Double) = apply { this.quantity = quantity }
+                fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+
+                /**
+                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
+                 * and must be specified with unit_price. If specified amount cannot be provided.
+                 */
+                fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+                /**
+                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
+                 * and must be specified with unit_price. If specified amount cannot be provided.
+                 */
+                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                fun quantity(quantity: Optional<Double>) =
+                    quantity(quantity.orElse(null) as Double?)
 
                 /**
                  * Unit price for the charge. Will be multiplied by quantity to determine the amount
                  * and must be specified with quantity. If specified amount cannot be provided.
                  */
-                fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+                fun unitPrice(unitPrice: Double?) = apply { this.unitPrice = unitPrice }
+
+                /**
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
+                 */
+                fun unitPrice(unitPrice: Double) = unitPrice(unitPrice as Double?)
+
+                /**
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
+                 */
+                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                fun unitPrice(unitPrice: Optional<Double>) =
+                    unitPrice(unitPrice.orElse(null) as Double?)
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -1537,19 +1730,62 @@ constructor(
                  * amount is sent, the unit_price is assumed to be the amount and quantity is
                  * inferred to be 1.
                  */
-                fun amount(amount: Double) = apply { this.amount = amount }
+                fun amount(amount: Double?) = apply { this.amount = amount }
+
+                /**
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                fun amount(amount: Double) = amount(amount as Double?)
+
+                /**
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
 
                 /**
                  * Quantity for the charge. Will be multiplied by unit_price to determine the amount
                  * and must be specified with unit_price. If specified amount cannot be provided.
                  */
-                fun quantity(quantity: Double) = apply { this.quantity = quantity }
+                fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+
+                /**
+                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
+                 * and must be specified with unit_price. If specified amount cannot be provided.
+                 */
+                fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+                /**
+                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
+                 * and must be specified with unit_price. If specified amount cannot be provided.
+                 */
+                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                fun quantity(quantity: Optional<Double>) =
+                    quantity(quantity.orElse(null) as Double?)
 
                 /**
                  * Unit price for the charge. Will be multiplied by quantity to determine the amount
                  * and must be specified with quantity. If specified amount cannot be provided.
                  */
-                fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+                fun unitPrice(unitPrice: Double?) = apply { this.unitPrice = unitPrice }
+
+                /**
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
+                 */
+                fun unitPrice(unitPrice: Double) = unitPrice(unitPrice as Double?)
+
+                /**
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
+                 */
+                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                fun unitPrice(unitPrice: Optional<Double>) =
+                    unitPrice(unitPrice.orElse(null) as Double?)
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
