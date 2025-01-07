@@ -16,6 +16,7 @@ import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 
+/** Update the end date of a credit */
 class CustomerCreditUpdateEndDateParams
 constructor(
     private val body: CustomerCreditUpdateEndDateBody,

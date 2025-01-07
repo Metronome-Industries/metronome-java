@@ -8,6 +8,7 @@ import com.metronome.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
 
+/** Fetch a specific invoice for a given customer. */
 class CustomerInvoiceRetrieveParams
 constructor(
     private val customerId: String,

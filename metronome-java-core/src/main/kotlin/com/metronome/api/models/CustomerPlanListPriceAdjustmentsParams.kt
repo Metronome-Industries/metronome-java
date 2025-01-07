@@ -8,6 +8,11 @@ import com.metronome.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * Lists a customer plans adjustments. See the
+ * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
+ * for details.
+ */
 class CustomerPlanListPriceAdjustmentsParams
 constructor(
     private val customerId: String,

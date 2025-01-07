@@ -12,6 +12,10 @@ import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * Fetches a list of customers on a specific plan (by default, only currently active plans are
+ * included)
+ */
 class PlanListCustomersParams
 constructor(
     private val planId: String,

@@ -17,6 +17,10 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * Get a named schedule for the given customer. This endpoint's availability is dependent on your
+ * client's configuration.
+ */
 class CustomerNamedScheduleRetrieveParams
 constructor(
     private val body: CustomerNamedScheduleRetrieveBody,

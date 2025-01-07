@@ -17,6 +17,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** Get all rates for a rate card at a point in time */
 class ContractRateCardRateListParams
 constructor(
     private val limit: Long?,

@@ -19,6 +19,7 @@ import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
 
+/** Creates a new Billable Metric. */
 class BillableMetricCreateParams
 constructor(
     private val body: BillableMetricCreateBody,

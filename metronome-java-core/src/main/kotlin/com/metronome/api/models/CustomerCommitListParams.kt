@@ -17,6 +17,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** List commits. */
 class CustomerCommitListParams
 constructor(
     private val body: CustomerCommitListBody,

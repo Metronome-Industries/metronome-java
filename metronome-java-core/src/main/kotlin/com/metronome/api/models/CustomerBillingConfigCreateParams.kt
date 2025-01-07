@@ -19,6 +19,7 @@ import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
 
+/** Set the billing configuration for a given customer. */
 class CustomerBillingConfigCreateParams
 constructor(
     private val customerId: String,

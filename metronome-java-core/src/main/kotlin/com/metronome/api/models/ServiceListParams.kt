@@ -7,6 +7,11 @@ import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import java.util.Objects
 
+/**
+ * Fetches a list of services used by Metronome and the associated IP addresses. IP addresses are
+ * not necessarily unique between services. In most cases, IP addresses will appear in the list at
+ * least 30 days before they are used for the first time.
+ */
 class ServiceListParams
 constructor(
     private val additionalHeaders: Headers,

@@ -16,6 +16,7 @@ import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 
+/** Add a one time charge to the specified invoice */
 class CustomerInvoiceAddChargeParams
 constructor(
     private val customerId: String,

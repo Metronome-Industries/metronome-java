@@ -17,6 +17,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** Create a new rate card */
 class ContractRateCardCreateParams
 constructor(
     private val body: ContractRateCardCreateBody,

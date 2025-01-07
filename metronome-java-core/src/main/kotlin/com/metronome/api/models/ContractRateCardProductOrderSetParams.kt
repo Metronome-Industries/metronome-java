@@ -15,6 +15,7 @@ import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 
+/** Sets the ordering of products within a rate card */
 class ContractRateCardProductOrderSetParams
 constructor(
     private val body: ContractRateCardProductOrderSetBody,

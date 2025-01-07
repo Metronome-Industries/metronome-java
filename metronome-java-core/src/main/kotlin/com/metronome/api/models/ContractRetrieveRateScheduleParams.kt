@@ -17,6 +17,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** Get the rate schedule for the rate card on a given contract. */
 class ContractRetrieveRateScheduleParams
 constructor(
     private val limit: Long?,

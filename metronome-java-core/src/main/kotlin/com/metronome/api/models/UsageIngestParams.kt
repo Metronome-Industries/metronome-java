@@ -16,6 +16,12 @@ import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * Send usage events to Metronome. The body of this request is expected to be a JSON array of
+ * between 1 and 100 usage events. Compressed request bodies are supported with a `Content-Encoding:
+ * gzip` header. See [Getting usage into Metronome](https://docs.metronome.com/connect-metronome/)
+ * to learn more about usage events.
+ */
 class UsageIngestParams
 constructor(
     private val usage: List<Usage>,

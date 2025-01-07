@@ -17,6 +17,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** List all contracts for a customer */
 class ContractListParams
 constructor(
     private val body: ContractListBody,

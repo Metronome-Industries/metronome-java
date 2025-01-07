@@ -15,6 +15,7 @@ import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 
+/** Regenerate a voided contract invoice */
 class InvoiceRegenerateParams
 constructor(
     private val body: InvoiceRegenerateBody,

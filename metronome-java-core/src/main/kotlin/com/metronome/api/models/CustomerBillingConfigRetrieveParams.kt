@@ -11,6 +11,7 @@ import com.metronome.api.core.http.QueryParams
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 
+/** Fetch the billing configuration for the given customer. */
 class CustomerBillingConfigRetrieveParams
 constructor(
     private val customerId: String,

@@ -16,6 +16,7 @@ import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
+/** Updates the specified customer's config. */
 class CustomerUpdateConfigParams
 constructor(
     private val customerId: String,

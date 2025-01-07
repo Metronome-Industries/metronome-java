@@ -7,6 +7,7 @@ import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import java.util.Objects
 
+/** Get a billable metric. */
 class BillableMetricRetrieveParams
 constructor(
     private val billableMetricId: String,

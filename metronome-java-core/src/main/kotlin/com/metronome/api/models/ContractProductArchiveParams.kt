@@ -15,6 +15,7 @@ import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 
+/** Archive a product */
 class ContractProductArchiveParams
 constructor(
     private val body: ContractProductArchiveBody,

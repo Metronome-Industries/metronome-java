@@ -15,6 +15,7 @@ import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 
+/** Get a specific product */
 class ContractProductRetrieveParams
 constructor(
     private val body: ContractProductRetrieveBody,

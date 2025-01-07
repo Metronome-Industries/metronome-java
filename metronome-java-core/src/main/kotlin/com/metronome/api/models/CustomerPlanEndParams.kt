@@ -17,6 +17,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** Change the end date of a customer's plan. */
 class CustomerPlanEndParams
 constructor(
     private val customerId: String,

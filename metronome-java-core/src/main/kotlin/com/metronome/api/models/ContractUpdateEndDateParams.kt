@@ -17,6 +17,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** Update the end date of a contract */
 class ContractUpdateEndDateParams
 constructor(
     private val body: ContractUpdateEndDateBody,

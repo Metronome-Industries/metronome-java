@@ -17,6 +17,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** Add a manual balance entry */
 class ContractAddManualBalanceEntryParams
 constructor(
     private val body: ContractAddManualBalanceEntryBody,

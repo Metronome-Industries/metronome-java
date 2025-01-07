@@ -17,6 +17,11 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * Fetches a list of credit ledger entries. Returns lists of ledgers per customer. Ledger entries
+ * are returned in chronological order. Ledger entries associated with voided credit grants are not
+ * included.
+ */
 class CreditGrantListEntriesParams
 constructor(
     private val nextPage: String?,

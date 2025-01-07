@@ -16,6 +16,7 @@ import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 
+/** Set usage filter for a contract */
 class ContractSetUsageFilterParams
 constructor(
     private val body: ContractSetUsageFilterBody,

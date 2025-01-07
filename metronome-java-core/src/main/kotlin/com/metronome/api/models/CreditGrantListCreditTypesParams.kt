@@ -8,6 +8,7 @@ import com.metronome.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
 
+/** List all pricing units (known in the API by the legacy term "credit types"). */
 class CreditGrantListCreditTypesParams
 constructor(
     private val limit: Long?,

@@ -20,6 +20,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** Create a new commit at the customer level. */
 class CustomerCommitCreateParams
 constructor(
     private val body: CustomerCommitCreateBody,

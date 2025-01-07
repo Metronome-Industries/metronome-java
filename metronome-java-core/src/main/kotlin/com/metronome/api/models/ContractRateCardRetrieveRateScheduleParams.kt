@@ -17,6 +17,10 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * Get all rates for a rate card from starting_at (either in perpetuity or until ending_before, if
+ * provided)
+ */
 class ContractRateCardRetrieveRateScheduleParams
 constructor(
     private val limit: Long?,

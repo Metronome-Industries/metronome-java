@@ -14,6 +14,10 @@ import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * Delete the billing configuration for a given customer. Note: this is unsupported for Azure and
+ * AWS Marketplace customers.
+ */
 class CustomerBillingConfigDeleteParams
 constructor(
     private val customerId: String,

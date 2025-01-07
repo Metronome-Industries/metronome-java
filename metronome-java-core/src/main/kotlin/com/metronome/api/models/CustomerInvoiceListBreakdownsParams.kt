@@ -14,6 +14,10 @@ import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * List daily or hourly invoice breakdowns for a given customer, optionally filtered by status, date
+ * range, and/or credit type.
+ */
 class CustomerInvoiceListBreakdownsParams
 constructor(
     private val customerId: String,

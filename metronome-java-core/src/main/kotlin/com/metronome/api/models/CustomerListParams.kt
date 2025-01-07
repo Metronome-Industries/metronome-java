@@ -9,6 +9,7 @@ import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
+/** List all customers. */
 class CustomerListParams
 constructor(
     private val customerIds: List<String>?,

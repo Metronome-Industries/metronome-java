@@ -16,6 +16,7 @@ import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
+/** Get a specific contract */
 class ContractRetrieveParams
 constructor(
     private val body: ContractRetrieveBody,

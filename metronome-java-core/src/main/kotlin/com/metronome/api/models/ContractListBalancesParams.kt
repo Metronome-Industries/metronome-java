@@ -17,6 +17,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** List balances (commits and credits). */
 class ContractListBalancesParams
 constructor(
     private val body: ContractListBalancesBody,

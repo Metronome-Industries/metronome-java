@@ -17,6 +17,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** Update the end date of a PREPAID commit */
 class CustomerCommitUpdateEndDateParams
 constructor(
     private val body: CustomerCommitUpdateEndDateBody,

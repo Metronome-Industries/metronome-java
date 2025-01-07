@@ -17,6 +17,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** List credits. */
 class CustomerCreditListParams
 constructor(
     private val body: CustomerCreditListBody,

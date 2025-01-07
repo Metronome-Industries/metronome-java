@@ -18,6 +18,7 @@ import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 
+/** Remove a key from the allow list for a given entity. */
 class CustomFieldRemoveKeyParams
 constructor(
     private val body: CustomFieldRemoveKeyBody,

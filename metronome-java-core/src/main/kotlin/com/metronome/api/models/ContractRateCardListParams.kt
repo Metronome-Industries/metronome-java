@@ -9,6 +9,9 @@ import com.metronome.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * List rate cards NOTE: Use `/contract-pricing/rate-cards/getRates` to retrieve rate card rates.
+ */
 class ContractRateCardListParams
 constructor(
     private val body: JsonValue,

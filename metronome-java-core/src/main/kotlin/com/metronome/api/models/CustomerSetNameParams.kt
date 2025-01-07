@@ -15,6 +15,7 @@ import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 
+/** Updates the specified customer's name. */
 class CustomerSetNameParams
 constructor(
     private val customerId: String,

@@ -8,6 +8,7 @@ import com.metronome.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
 
+/** List the given customer's plans in reverse-chronological order. */
 class CustomerPlanListParams
 constructor(
     private val customerId: String,

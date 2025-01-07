@@ -17,6 +17,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** List credit grants. This list does not included voided grants. */
 class CreditGrantListParams
 constructor(
     private val limit: Long?,

@@ -20,6 +20,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** Creates historical usage invoices for a contract */
 class ContractCreateHistoricalInvoicesParams
 constructor(
     private val body: ContractCreateHistoricalInvoicesBody,

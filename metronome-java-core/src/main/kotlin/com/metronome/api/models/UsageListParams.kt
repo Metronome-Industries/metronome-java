@@ -20,6 +20,10 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * Fetch aggregated usage data for multiple customers and billable-metrics, broken into intervals of
+ * the specified length.
+ */
 class UsageListParams
 constructor(
     private val nextPage: String?,

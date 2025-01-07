@@ -16,6 +16,7 @@ import com.metronome.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
+/** Void a credit grant */
 class CreditGrantVoidParams
 constructor(
     private val body: CreditGrantVoidBody,

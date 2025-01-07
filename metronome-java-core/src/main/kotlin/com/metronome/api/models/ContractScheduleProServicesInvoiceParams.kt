@@ -17,6 +17,10 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * Create a new scheduled invoice for Professional Services terms on a contract. This endpoint's
+ * availability is dependent on your client's configuration.
+ */
 class ContractScheduleProServicesInvoiceParams
 constructor(
     private val body: ContractScheduleProServicesInvoiceBody,

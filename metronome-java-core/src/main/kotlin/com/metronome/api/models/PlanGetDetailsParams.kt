@@ -7,6 +7,7 @@ import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import java.util.Objects
 
+/** Fetch high level details of a specific plan. */
 class PlanGetDetailsParams
 constructor(
     private val planId: String,

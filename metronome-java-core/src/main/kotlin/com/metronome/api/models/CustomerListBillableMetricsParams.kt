@@ -8,6 +8,7 @@ import com.metronome.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
 
+/** Get all billable metrics for a given customer. */
 class CustomerListBillableMetricsParams
 constructor(
     private val customerId: String,

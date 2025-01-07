@@ -8,6 +8,7 @@ import com.metronome.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
 
+/** List all available plans. */
 class PlanListParams
 constructor(
     private val limit: Long?,

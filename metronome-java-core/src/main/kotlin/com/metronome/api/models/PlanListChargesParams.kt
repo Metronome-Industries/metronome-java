@@ -8,6 +8,7 @@ import com.metronome.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
 
+/** Fetches a list of charges of a specific plan. */
 class PlanListChargesParams
 constructor(
     private val planId: String,

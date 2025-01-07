@@ -15,6 +15,7 @@ import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 
+/** Get the customer alert status and alert information for the specified customer and alert */
 class CustomerAlertRetrieveParams
 constructor(
     private val body: CustomerAlertRetrieveBody,

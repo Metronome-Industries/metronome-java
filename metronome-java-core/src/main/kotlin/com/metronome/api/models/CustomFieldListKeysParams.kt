@@ -19,6 +19,7 @@ import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
 
+/** List all active custom field keys, optionally filtered by entity type. */
 class CustomFieldListKeysParams
 constructor(
     private val nextPage: String?,

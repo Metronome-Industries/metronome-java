@@ -19,6 +19,7 @@ import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
 
+/** Fetch all customer alert statuses and alert information for a customer */
 class CustomerAlertListParams
 constructor(
     private val nextPage: String?,

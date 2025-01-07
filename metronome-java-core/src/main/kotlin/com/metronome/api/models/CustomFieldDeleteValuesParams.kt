@@ -18,6 +18,7 @@ import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 
+/** Deletes one or more custom fields on an instance of a Metronome entity. */
 class CustomFieldDeleteValuesParams
 constructor(
     private val body: CustomFieldDeleteValuesBody,

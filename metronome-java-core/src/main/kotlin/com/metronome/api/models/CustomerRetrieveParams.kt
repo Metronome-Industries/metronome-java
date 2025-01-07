@@ -7,6 +7,7 @@ import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import java.util.Objects
 
+/** Get a customer by Metronome ID. */
 class CustomerRetrieveParams
 constructor(
     private val customerId: String,

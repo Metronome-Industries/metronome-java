@@ -15,6 +15,7 @@ import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 
+/** Void an invoice */
 class InvoiceVoidParams
 constructor(
     private val body: InvoiceVoidBody,

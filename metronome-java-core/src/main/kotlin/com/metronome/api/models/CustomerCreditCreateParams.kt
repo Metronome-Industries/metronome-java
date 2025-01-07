@@ -20,6 +20,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** Create a new credit at the customer level. */
 class CustomerCreditCreateParams
 constructor(
     private val body: CustomerCreditCreateBody,

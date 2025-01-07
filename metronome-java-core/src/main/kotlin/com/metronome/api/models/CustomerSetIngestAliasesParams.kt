@@ -15,6 +15,11 @@ import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 
+/**
+ * Sets the ingest aliases for a customer. Ingest aliases can be used in the `customer_id` field
+ * when sending usage events to Metronome. This call is idempotent. It fully replaces the set of
+ * ingest aliases for the given customer.
+ */
 class CustomerSetIngestAliasesParams
 constructor(
     private val customerId: String,

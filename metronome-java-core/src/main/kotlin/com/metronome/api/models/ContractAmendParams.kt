@@ -20,6 +20,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** Amend a contract */
 class ContractAmendParams
 constructor(
     private val body: ContractAmendBody,

@@ -15,6 +15,7 @@ import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 
+/** Reset state for an alert by customer id and force re-evaluation */
 class CustomerAlertResetParams
 constructor(
     private val body: CustomerAlertResetBody,

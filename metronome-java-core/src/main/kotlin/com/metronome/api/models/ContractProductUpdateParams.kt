@@ -17,6 +17,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** Update a product */
 class ContractProductUpdateParams
 constructor(
     private val body: ContractProductUpdateBody,

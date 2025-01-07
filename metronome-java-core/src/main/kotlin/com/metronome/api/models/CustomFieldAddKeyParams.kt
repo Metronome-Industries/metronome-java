@@ -18,6 +18,10 @@ import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 
+/**
+ * Add a key to the allow list for a given entity. There is a 100 character limit on custom field
+ * keys.
+ */
 class CustomFieldAddKeyParams
 constructor(
     private val body: CustomFieldAddKeyBody,

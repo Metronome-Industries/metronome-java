@@ -19,6 +19,7 @@ import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
 
+/** Create a new product */
 class ContractProductCreateParams
 constructor(
     private val body: ContractProductCreateBody,

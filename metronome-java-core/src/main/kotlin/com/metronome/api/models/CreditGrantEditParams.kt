@@ -17,6 +17,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** Edit an existing credit grant */
 class CreditGrantEditParams
 constructor(
     private val body: CreditGrantEditBody,

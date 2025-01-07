@@ -19,6 +19,7 @@ import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
 
+/** Create a new alert */
 class AlertCreateParams
 constructor(
     private val body: AlertCreateBody,

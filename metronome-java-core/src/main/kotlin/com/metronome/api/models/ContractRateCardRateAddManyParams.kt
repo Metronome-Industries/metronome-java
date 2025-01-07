@@ -20,6 +20,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** Add new rates */
 class ContractRateCardRateAddManyParams
 constructor(
     private val body: ContractRateCardRateAddManyBody,

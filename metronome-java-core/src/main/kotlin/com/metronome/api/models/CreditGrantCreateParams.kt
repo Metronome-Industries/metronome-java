@@ -28,6 +28,7 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/** Create a new credit grant */
 class CreditGrantCreateParams
 constructor(
     private val body: CreditGrantCreateBody,

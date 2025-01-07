@@ -15,6 +15,10 @@ import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 
+/**
+ * Get a specific rate card NOTE: Use `/contract-pricing/rate-cards/getRates` to retrieve rate card
+ * rates.
+ */
 class ContractRateCardRetrieveParams
 constructor(
     private val body: ContractRateCardRetrieveBody,

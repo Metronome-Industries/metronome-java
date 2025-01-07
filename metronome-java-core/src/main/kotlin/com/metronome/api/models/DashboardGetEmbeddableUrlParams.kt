@@ -19,6 +19,10 @@ import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * Retrieve an embeddable dashboard url for a customer. The dashboard can be embedded using an
+ * iframe in a website. This will show information such as usage data and customer invoices.
+ */
 class DashboardGetEmbeddableUrlParams
 constructor(
     private val body: DashboardGetEmbeddableUrlBody,

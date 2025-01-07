@@ -15,6 +15,7 @@ import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
 
+/** Archive an existing billable metric. */
 class BillableMetricArchiveParams
 constructor(
     private val body: BillableMetricArchiveBody,

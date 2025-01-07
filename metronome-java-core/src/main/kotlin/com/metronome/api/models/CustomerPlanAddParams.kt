@@ -20,6 +20,11 @@ import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * Associate an existing customer with a plan for a specified date range. See the
+ * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
+ * for details on the price adjustments.
+ */
 class CustomerPlanAddParams
 constructor(
     private val customerId: String,
