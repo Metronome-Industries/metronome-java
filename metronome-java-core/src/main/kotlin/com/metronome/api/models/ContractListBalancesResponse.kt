@@ -44,9 +44,9 @@ private constructor(
 
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage.getNullable("next_page"))
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Data>> = data
 
-    @JsonProperty("next_page") @ExcludeMissing fun _nextPage() = nextPage
+    @JsonProperty("next_page") @ExcludeMissing fun _nextPage(): JsonField<String> = nextPage
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -71,22 +71,39 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<List<Data>> = JsonMissing.of()
-        private var nextPage: JsonField<String> = JsonMissing.of()
+        private var data: JsonField<MutableList<Data>>? = null
+        private var nextPage: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contractListBalancesResponse: ContractListBalancesResponse) = apply {
-            data = contractListBalancesResponse.data
+            data = contractListBalancesResponse.data.map { it.toMutableList() }
             nextPage = contractListBalancesResponse.nextPage
             additionalProperties = contractListBalancesResponse.additionalProperties.toMutableMap()
         }
 
         fun data(data: List<Data>) = data(JsonField.of(data))
 
-        fun data(data: JsonField<List<Data>>) = apply { this.data = data }
+        fun data(data: JsonField<List<Data>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
 
-        fun nextPage(nextPage: String) = nextPage(JsonField.of(nextPage))
+        fun addData(data: Data) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(data)
+                }
+        }
+
+        fun nextPage(nextPage: String?) = nextPage(JsonField.ofNullable(nextPage))
+
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         fun nextPage(nextPage: JsonField<String>) = apply { this.nextPage = nextPage }
 
@@ -111,8 +128,9 @@ private constructor(
 
         fun build(): ContractListBalancesResponse =
             ContractListBalancesResponse(
-                data.map { it.toImmutable() },
-                nextPage,
+                checkNotNull(data) { "`data` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(nextPage) { "`nextPage` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }

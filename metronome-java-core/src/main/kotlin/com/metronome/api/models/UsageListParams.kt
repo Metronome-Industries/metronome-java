@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -58,11 +59,34 @@ constructor(
      */
     fun customerIds(): Optional<List<String>> = body.customerIds()
 
+    fun _endingBefore(): JsonField<OffsetDateTime> = body._endingBefore()
+
+    fun _startingOn(): JsonField<OffsetDateTime> = body._startingOn()
+
+    /**
+     * A window_size of "day" or "hour" will return the usage for the specified period segmented
+     * into daily or hourly aggregates. A window_size of "none" will return a single usage aggregate
+     * for the entirety of the specified period.
+     */
+    fun _windowSize(): JsonField<WindowSize> = body._windowSize()
+
+    /**
+     * A list of billable metrics to fetch usage for. If absent, all billable metrics will be
+     * returned.
+     */
+    fun _billableMetrics(): JsonField<List<BillableMetric>> = body._billableMetrics()
+
+    /**
+     * A list of Metronome customer IDs to fetch usage for. If absent, usage for all customers will
+     * be returned.
+     */
+    fun _customerIds(): JsonField<List<String>> = body._customerIds()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): UsageListBody = body
 
@@ -80,43 +104,99 @@ constructor(
     class UsageListBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
-        @JsonProperty("starting_on") private val startingOn: OffsetDateTime,
-        @JsonProperty("window_size") private val windowSize: WindowSize,
-        @JsonProperty("billable_metrics") private val billableMetrics: List<BillableMetric>?,
-        @JsonProperty("customer_ids") private val customerIds: List<String>?,
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("starting_on")
+        @ExcludeMissing
+        private val startingOn: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("window_size")
+        @ExcludeMissing
+        private val windowSize: JsonField<WindowSize> = JsonMissing.of(),
+        @JsonProperty("billable_metrics")
+        @ExcludeMissing
+        private val billableMetrics: JsonField<List<BillableMetric>> = JsonMissing.of(),
+        @JsonProperty("customer_ids")
+        @ExcludeMissing
+        private val customerIds: JsonField<List<String>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
+        fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
 
-        @JsonProperty("starting_on") fun startingOn(): OffsetDateTime = startingOn
+        fun startingOn(): OffsetDateTime = startingOn.getRequired("starting_on")
 
         /**
          * A window_size of "day" or "hour" will return the usage for the specified period segmented
          * into daily or hourly aggregates. A window_size of "none" will return a single usage
          * aggregate for the entirety of the specified period.
          */
-        @JsonProperty("window_size") fun windowSize(): WindowSize = windowSize
+        fun windowSize(): WindowSize = windowSize.getRequired("window_size")
+
+        /**
+         * A list of billable metrics to fetch usage for. If absent, all billable metrics will be
+         * returned.
+         */
+        fun billableMetrics(): Optional<List<BillableMetric>> =
+            Optional.ofNullable(billableMetrics.getNullable("billable_metrics"))
+
+        /**
+         * A list of Metronome customer IDs to fetch usage for. If absent, usage for all customers
+         * will be returned.
+         */
+        fun customerIds(): Optional<List<String>> =
+            Optional.ofNullable(customerIds.getNullable("customer_ids"))
+
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
+
+        @JsonProperty("starting_on")
+        @ExcludeMissing
+        fun _startingOn(): JsonField<OffsetDateTime> = startingOn
+
+        /**
+         * A window_size of "day" or "hour" will return the usage for the specified period segmented
+         * into daily or hourly aggregates. A window_size of "none" will return a single usage
+         * aggregate for the entirety of the specified period.
+         */
+        @JsonProperty("window_size")
+        @ExcludeMissing
+        fun _windowSize(): JsonField<WindowSize> = windowSize
 
         /**
          * A list of billable metrics to fetch usage for. If absent, all billable metrics will be
          * returned.
          */
         @JsonProperty("billable_metrics")
-        fun billableMetrics(): Optional<List<BillableMetric>> = Optional.ofNullable(billableMetrics)
+        @ExcludeMissing
+        fun _billableMetrics(): JsonField<List<BillableMetric>> = billableMetrics
 
         /**
          * A list of Metronome customer IDs to fetch usage for. If absent, usage for all customers
          * will be returned.
          */
         @JsonProperty("customer_ids")
-        fun customerIds(): Optional<List<String>> = Optional.ofNullable(customerIds)
+        @ExcludeMissing
+        fun _customerIds(): JsonField<List<String>> = customerIds
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): UsageListBody = apply {
+            if (!validated) {
+                endingBefore()
+                startingOn()
+                windowSize()
+                billableMetrics().map { it.forEach { it.validate() } }
+                customerIds()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -127,11 +207,11 @@ constructor(
 
         class Builder {
 
-            private var endingBefore: OffsetDateTime? = null
-            private var startingOn: OffsetDateTime? = null
-            private var windowSize: WindowSize? = null
-            private var billableMetrics: MutableList<BillableMetric>? = null
-            private var customerIds: MutableList<String>? = null
+            private var endingBefore: JsonField<OffsetDateTime>? = null
+            private var startingOn: JsonField<OffsetDateTime>? = null
+            private var windowSize: JsonField<WindowSize>? = null
+            private var billableMetrics: JsonField<MutableList<BillableMetric>>? = null
+            private var customerIds: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -139,68 +219,101 @@ constructor(
                 endingBefore = usageListBody.endingBefore
                 startingOn = usageListBody.startingOn
                 windowSize = usageListBody.windowSize
-                billableMetrics = usageListBody.billableMetrics?.toMutableList()
-                customerIds = usageListBody.customerIds?.toMutableList()
+                billableMetrics = usageListBody.billableMetrics.map { it.toMutableList() }
+                customerIds = usageListBody.customerIds.map { it.toMutableList() }
                 additionalProperties = usageListBody.additionalProperties.toMutableMap()
             }
 
-            fun endingBefore(endingBefore: OffsetDateTime) = apply {
+            fun endingBefore(endingBefore: OffsetDateTime) =
+                endingBefore(JsonField.of(endingBefore))
+
+            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
             }
 
-            fun startingOn(startingOn: OffsetDateTime) = apply { this.startingOn = startingOn }
+            fun startingOn(startingOn: OffsetDateTime) = startingOn(JsonField.of(startingOn))
+
+            fun startingOn(startingOn: JsonField<OffsetDateTime>) = apply {
+                this.startingOn = startingOn
+            }
 
             /**
              * A window_size of "day" or "hour" will return the usage for the specified period
              * segmented into daily or hourly aggregates. A window_size of "none" will return a
              * single usage aggregate for the entirety of the specified period.
              */
-            fun windowSize(windowSize: WindowSize) = apply { this.windowSize = windowSize }
+            fun windowSize(windowSize: WindowSize) = windowSize(JsonField.of(windowSize))
 
             /**
-             * A list of billable metrics to fetch usage for. If absent, all billable metrics will
-             * be returned.
+             * A window_size of "day" or "hour" will return the usage for the specified period
+             * segmented into daily or hourly aggregates. A window_size of "none" will return a
+             * single usage aggregate for the entirety of the specified period.
              */
-            fun billableMetrics(billableMetrics: List<BillableMetric>?) = apply {
-                this.billableMetrics = billableMetrics?.toMutableList()
+            fun windowSize(windowSize: JsonField<WindowSize>) = apply {
+                this.windowSize = windowSize
             }
 
             /**
              * A list of billable metrics to fetch usage for. If absent, all billable metrics will
              * be returned.
              */
-            fun billableMetrics(billableMetrics: Optional<List<BillableMetric>>) =
-                billableMetrics(billableMetrics.orElse(null))
+            fun billableMetrics(billableMetrics: List<BillableMetric>) =
+                billableMetrics(JsonField.of(billableMetrics))
+
+            /**
+             * A list of billable metrics to fetch usage for. If absent, all billable metrics will
+             * be returned.
+             */
+            fun billableMetrics(billableMetrics: JsonField<List<BillableMetric>>) = apply {
+                this.billableMetrics = billableMetrics.map { it.toMutableList() }
+            }
 
             /**
              * A list of billable metrics to fetch usage for. If absent, all billable metrics will
              * be returned.
              */
             fun addBillableMetric(billableMetric: BillableMetric) = apply {
-                billableMetrics = (billableMetrics ?: mutableListOf()).apply { add(billableMetric) }
+                billableMetrics =
+                    (billableMetrics ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(billableMetric)
+                    }
             }
 
             /**
              * A list of Metronome customer IDs to fetch usage for. If absent, usage for all
              * customers will be returned.
              */
-            fun customerIds(customerIds: List<String>?) = apply {
-                this.customerIds = customerIds?.toMutableList()
-            }
+            fun customerIds(customerIds: List<String>) = customerIds(JsonField.of(customerIds))
 
             /**
              * A list of Metronome customer IDs to fetch usage for. If absent, usage for all
              * customers will be returned.
              */
-            fun customerIds(customerIds: Optional<List<String>>) =
-                customerIds(customerIds.orElse(null))
+            fun customerIds(customerIds: JsonField<List<String>>) = apply {
+                this.customerIds = customerIds.map { it.toMutableList() }
+            }
 
             /**
              * A list of Metronome customer IDs to fetch usage for. If absent, usage for all
              * customers will be returned.
              */
             fun addCustomerId(customerId: String) = apply {
-                customerIds = (customerIds ?: mutableListOf()).apply { add(customerId) }
+                customerIds =
+                    (customerIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(customerId)
+                    }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -227,8 +340,8 @@ constructor(
                     checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
                     checkNotNull(startingOn) { "`startingOn` is required but was not set" },
                     checkNotNull(windowSize) { "`windowSize` is required but was not set" },
-                    billableMetrics?.toImmutable(),
-                    customerIds?.toImmutable(),
+                    (billableMetrics ?: JsonMissing.of()).map { it.toImmutable() },
+                    (customerIds ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -282,7 +395,15 @@ constructor(
 
         fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
 
+        fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+            body.endingBefore(endingBefore)
+        }
+
         fun startingOn(startingOn: OffsetDateTime) = apply { body.startingOn(startingOn) }
+
+        fun startingOn(startingOn: JsonField<OffsetDateTime>) = apply {
+            body.startingOn(startingOn)
+        }
 
         /**
          * A window_size of "day" or "hour" will return the usage for the specified period segmented
@@ -292,10 +413,17 @@ constructor(
         fun windowSize(windowSize: WindowSize) = apply { body.windowSize(windowSize) }
 
         /**
+         * A window_size of "day" or "hour" will return the usage for the specified period segmented
+         * into daily or hourly aggregates. A window_size of "none" will return a single usage
+         * aggregate for the entirety of the specified period.
+         */
+        fun windowSize(windowSize: JsonField<WindowSize>) = apply { body.windowSize(windowSize) }
+
+        /**
          * A list of billable metrics to fetch usage for. If absent, all billable metrics will be
          * returned.
          */
-        fun billableMetrics(billableMetrics: List<BillableMetric>?) = apply {
+        fun billableMetrics(billableMetrics: List<BillableMetric>) = apply {
             body.billableMetrics(billableMetrics)
         }
 
@@ -303,8 +431,9 @@ constructor(
          * A list of billable metrics to fetch usage for. If absent, all billable metrics will be
          * returned.
          */
-        fun billableMetrics(billableMetrics: Optional<List<BillableMetric>>) =
-            billableMetrics(billableMetrics.orElse(null))
+        fun billableMetrics(billableMetrics: JsonField<List<BillableMetric>>) = apply {
+            body.billableMetrics(billableMetrics)
+        }
 
         /**
          * A list of billable metrics to fetch usage for. If absent, all billable metrics will be
@@ -318,19 +447,40 @@ constructor(
          * A list of Metronome customer IDs to fetch usage for. If absent, usage for all customers
          * will be returned.
          */
-        fun customerIds(customerIds: List<String>?) = apply { body.customerIds(customerIds) }
+        fun customerIds(customerIds: List<String>) = apply { body.customerIds(customerIds) }
 
         /**
          * A list of Metronome customer IDs to fetch usage for. If absent, usage for all customers
          * will be returned.
          */
-        fun customerIds(customerIds: Optional<List<String>>) = customerIds(customerIds.orElse(null))
+        fun customerIds(customerIds: JsonField<List<String>>) = apply {
+            body.customerIds(customerIds)
+        }
 
         /**
          * A list of Metronome customer IDs to fetch usage for. If absent, usage for all customers
          * will be returned.
          */
         fun addCustomerId(customerId: String) = apply { body.addCustomerId(customerId) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -430,25 +580,6 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
         fun build(): UsageListParams =
             UsageListParams(
                 nextPage,
@@ -525,19 +656,35 @@ constructor(
     class BillableMetric
     @JsonCreator
     private constructor(
-        @JsonProperty("id") private val id: String,
-        @JsonProperty("group_by") private val groupBy: GroupBy?,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("group_by")
+        @ExcludeMissing
+        private val groupBy: JsonField<GroupBy> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("id") fun id(): String = id
+        fun id(): String = id.getRequired("id")
 
-        @JsonProperty("group_by") fun groupBy(): Optional<GroupBy> = Optional.ofNullable(groupBy)
+        fun groupBy(): Optional<GroupBy> = Optional.ofNullable(groupBy.getNullable("group_by"))
+
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        @JsonProperty("group_by") @ExcludeMissing fun _groupBy(): JsonField<GroupBy> = groupBy
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): BillableMetric = apply {
+            if (!validated) {
+                id()
+                groupBy().map { it.validate() }
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -548,8 +695,8 @@ constructor(
 
         class Builder {
 
-            private var id: String? = null
-            private var groupBy: GroupBy? = null
+            private var id: JsonField<String>? = null
+            private var groupBy: JsonField<GroupBy> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -559,11 +706,13 @@ constructor(
                 additionalProperties = billableMetric.additionalProperties.toMutableMap()
             }
 
-            fun id(id: String) = apply { this.id = id }
+            fun id(id: String) = id(JsonField.of(id))
 
-            fun groupBy(groupBy: GroupBy?) = apply { this.groupBy = groupBy }
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
-            fun groupBy(groupBy: Optional<GroupBy>) = groupBy(groupBy.orElse(null))
+            fun groupBy(groupBy: GroupBy) = groupBy(JsonField.of(groupBy))
+
+            fun groupBy(groupBy: JsonField<GroupBy>) = apply { this.groupBy = groupBy }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -596,25 +745,47 @@ constructor(
         class GroupBy
         @JsonCreator
         private constructor(
-            @JsonProperty("key") private val key: String,
-            @JsonProperty("values") private val values: List<String>?,
+            @JsonProperty("key")
+            @ExcludeMissing
+            private val key: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("values")
+            @ExcludeMissing
+            private val values: JsonField<List<String>> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             /** The name of the group_by key to use */
-            @JsonProperty("key") fun key(): String = key
+            fun key(): String = key.getRequired("key")
 
             /**
              * Values of the group_by key to return in the query. If this field is omitted, all
              * available values will be returned, up to a maximum of 200.
              */
-            @JsonProperty("values")
-            fun values(): Optional<List<String>> = Optional.ofNullable(values)
+            fun values(): Optional<List<String>> = Optional.ofNullable(values.getNullable("values"))
+
+            /** The name of the group_by key to use */
+            @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
+
+            /**
+             * Values of the group_by key to return in the query. If this field is omitted, all
+             * available values will be returned, up to a maximum of 200.
+             */
+            @JsonProperty("values") @ExcludeMissing fun _values(): JsonField<List<String>> = values
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): GroupBy = apply {
+                if (!validated) {
+                    key()
+                    values()
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -625,38 +796,52 @@ constructor(
 
             class Builder {
 
-                private var key: String? = null
-                private var values: MutableList<String>? = null
+                private var key: JsonField<String>? = null
+                private var values: JsonField<MutableList<String>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(groupBy: GroupBy) = apply {
                     key = groupBy.key
-                    values = groupBy.values?.toMutableList()
+                    values = groupBy.values.map { it.toMutableList() }
                     additionalProperties = groupBy.additionalProperties.toMutableMap()
                 }
 
                 /** The name of the group_by key to use */
-                fun key(key: String) = apply { this.key = key }
+                fun key(key: String) = key(JsonField.of(key))
+
+                /** The name of the group_by key to use */
+                fun key(key: JsonField<String>) = apply { this.key = key }
 
                 /**
                  * Values of the group_by key to return in the query. If this field is omitted, all
                  * available values will be returned, up to a maximum of 200.
                  */
-                fun values(values: List<String>?) = apply { this.values = values?.toMutableList() }
+                fun values(values: List<String>) = values(JsonField.of(values))
 
                 /**
                  * Values of the group_by key to return in the query. If this field is omitted, all
                  * available values will be returned, up to a maximum of 200.
                  */
-                fun values(values: Optional<List<String>>) = values(values.orElse(null))
+                fun values(values: JsonField<List<String>>) = apply {
+                    this.values = values.map { it.toMutableList() }
+                }
 
                 /**
                  * Values of the group_by key to return in the query. If this field is omitted, all
                  * available values will be returned, up to a maximum of 200.
                  */
                 fun addValue(value: String) = apply {
-                    values = (values ?: mutableListOf()).apply { add(value) }
+                    values =
+                        (values ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(value)
+                        }
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -684,7 +869,7 @@ constructor(
                 fun build(): GroupBy =
                     GroupBy(
                         checkNotNull(key) { "`key` is required but was not set" },
-                        values?.toImmutable(),
+                        (values ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toImmutable(),
                     )
             }

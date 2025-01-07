@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -50,11 +52,30 @@ constructor(
      */
     fun voidStripeInvoices(): Optional<Boolean> = body.voidStripeInvoices()
 
+    /**
+     * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00 UTC
+     * (midnight). If not provided, the plan end date will be cleared.
+     */
+    fun _endingBefore(): JsonField<OffsetDateTime> = body._endingBefore()
+
+    /**
+     * If true, plan end date can be before the last finalized invoice date. Any invoices generated
+     * after the plan end date will be voided.
+     */
+    fun _voidInvoices(): JsonField<Boolean> = body._voidInvoices()
+
+    /**
+     * Only applicable when void_invoices is set to true. If true, for every invoice that is voided
+     * we will also attempt to void/delete the stripe invoice (if any). Stripe invoices will be
+     * voided if finalized or deleted if still in draft state.
+     */
+    fun _voidStripeInvoices(): JsonField<Boolean> = body._voidStripeInvoices()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomerPlanEndBody = body
 
@@ -74,9 +95,15 @@ constructor(
     class CustomerPlanEndBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
-        @JsonProperty("void_invoices") private val voidInvoices: Boolean?,
-        @JsonProperty("void_stripe_invoices") private val voidStripeInvoices: Boolean?,
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("void_invoices")
+        @ExcludeMissing
+        private val voidInvoices: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("void_stripe_invoices")
+        @ExcludeMissing
+        private val voidStripeInvoices: JsonField<Boolean> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -85,15 +112,39 @@ constructor(
          * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
          * UTC (midnight). If not provided, the plan end date will be cleared.
          */
+        fun endingBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+        /**
+         * If true, plan end date can be before the last finalized invoice date. Any invoices
+         * generated after the plan end date will be voided.
+         */
+        fun voidInvoices(): Optional<Boolean> =
+            Optional.ofNullable(voidInvoices.getNullable("void_invoices"))
+
+        /**
+         * Only applicable when void_invoices is set to true. If true, for every invoice that is
+         * voided we will also attempt to void/delete the stripe invoice (if any). Stripe invoices
+         * will be voided if finalized or deleted if still in draft state.
+         */
+        fun voidStripeInvoices(): Optional<Boolean> =
+            Optional.ofNullable(voidStripeInvoices.getNullable("void_stripe_invoices"))
+
+        /**
+         * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
+         * UTC (midnight). If not provided, the plan end date will be cleared.
+         */
         @JsonProperty("ending_before")
-        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
         /**
          * If true, plan end date can be before the last finalized invoice date. Any invoices
          * generated after the plan end date will be voided.
          */
         @JsonProperty("void_invoices")
-        fun voidInvoices(): Optional<Boolean> = Optional.ofNullable(voidInvoices)
+        @ExcludeMissing
+        fun _voidInvoices(): JsonField<Boolean> = voidInvoices
 
         /**
          * Only applicable when void_invoices is set to true. If true, for every invoice that is
@@ -101,11 +152,23 @@ constructor(
          * will be voided if finalized or deleted if still in draft state.
          */
         @JsonProperty("void_stripe_invoices")
-        fun voidStripeInvoices(): Optional<Boolean> = Optional.ofNullable(voidStripeInvoices)
+        @ExcludeMissing
+        fun _voidStripeInvoices(): JsonField<Boolean> = voidStripeInvoices
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomerPlanEndBody = apply {
+            if (!validated) {
+                endingBefore()
+                voidInvoices()
+                voidStripeInvoices()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -116,9 +179,9 @@ constructor(
 
         class Builder {
 
-            private var endingBefore: OffsetDateTime? = null
-            private var voidInvoices: Boolean? = null
-            private var voidStripeInvoices: Boolean? = null
+            private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var voidInvoices: JsonField<Boolean> = JsonMissing.of()
+            private var voidStripeInvoices: JsonField<Boolean> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -133,44 +196,29 @@ constructor(
              * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at
              * 0:00 UTC (midnight). If not provided, the plan end date will be cleared.
              */
-            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
-                this.endingBefore = endingBefore
-            }
+            fun endingBefore(endingBefore: OffsetDateTime) =
+                endingBefore(JsonField.of(endingBefore))
 
             /**
              * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at
              * 0:00 UTC (midnight). If not provided, the plan end date will be cleared.
              */
-            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
-                endingBefore(endingBefore.orElse(null))
+            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+                this.endingBefore = endingBefore
+            }
 
             /**
              * If true, plan end date can be before the last finalized invoice date. Any invoices
              * generated after the plan end date will be voided.
              */
-            fun voidInvoices(voidInvoices: Boolean?) = apply { this.voidInvoices = voidInvoices }
+            fun voidInvoices(voidInvoices: Boolean) = voidInvoices(JsonField.of(voidInvoices))
 
             /**
              * If true, plan end date can be before the last finalized invoice date. Any invoices
              * generated after the plan end date will be voided.
              */
-            fun voidInvoices(voidInvoices: Boolean) = voidInvoices(voidInvoices as Boolean?)
-
-            /**
-             * If true, plan end date can be before the last finalized invoice date. Any invoices
-             * generated after the plan end date will be voided.
-             */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun voidInvoices(voidInvoices: Optional<Boolean>) =
-                voidInvoices(voidInvoices.orElse(null) as Boolean?)
-
-            /**
-             * Only applicable when void_invoices is set to true. If true, for every invoice that is
-             * voided we will also attempt to void/delete the stripe invoice (if any). Stripe
-             * invoices will be voided if finalized or deleted if still in draft state.
-             */
-            fun voidStripeInvoices(voidStripeInvoices: Boolean?) = apply {
-                this.voidStripeInvoices = voidStripeInvoices
+            fun voidInvoices(voidInvoices: JsonField<Boolean>) = apply {
+                this.voidInvoices = voidInvoices
             }
 
             /**
@@ -179,16 +227,16 @@ constructor(
              * invoices will be voided if finalized or deleted if still in draft state.
              */
             fun voidStripeInvoices(voidStripeInvoices: Boolean) =
-                voidStripeInvoices(voidStripeInvoices as Boolean?)
+                voidStripeInvoices(JsonField.of(voidStripeInvoices))
 
             /**
              * Only applicable when void_invoices is set to true. If true, for every invoice that is
              * voided we will also attempt to void/delete the stripe invoice (if any). Stripe
              * invoices will be voided if finalized or deleted if still in draft state.
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun voidStripeInvoices(voidStripeInvoices: Optional<Boolean>) =
-                voidStripeInvoices(voidStripeInvoices.orElse(null) as Boolean?)
+            fun voidStripeInvoices(voidStripeInvoices: JsonField<Boolean>) = apply {
+                this.voidStripeInvoices = voidStripeInvoices
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -269,41 +317,36 @@ constructor(
          * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
          * UTC (midnight). If not provided, the plan end date will be cleared.
          */
-        fun endingBefore(endingBefore: OffsetDateTime?) = apply { body.endingBefore(endingBefore) }
+        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
 
         /**
          * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
          * UTC (midnight). If not provided, the plan end date will be cleared.
          */
-        fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
-            endingBefore(endingBefore.orElse(null))
+        fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+            body.endingBefore(endingBefore)
+        }
 
         /**
          * If true, plan end date can be before the last finalized invoice date. Any invoices
          * generated after the plan end date will be voided.
          */
-        fun voidInvoices(voidInvoices: Boolean?) = apply { body.voidInvoices(voidInvoices) }
+        fun voidInvoices(voidInvoices: Boolean) = apply { body.voidInvoices(voidInvoices) }
 
         /**
          * If true, plan end date can be before the last finalized invoice date. Any invoices
          * generated after the plan end date will be voided.
          */
-        fun voidInvoices(voidInvoices: Boolean) = voidInvoices(voidInvoices as Boolean?)
-
-        /**
-         * If true, plan end date can be before the last finalized invoice date. Any invoices
-         * generated after the plan end date will be voided.
-         */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun voidInvoices(voidInvoices: Optional<Boolean>) =
-            voidInvoices(voidInvoices.orElse(null) as Boolean?)
+        fun voidInvoices(voidInvoices: JsonField<Boolean>) = apply {
+            body.voidInvoices(voidInvoices)
+        }
 
         /**
          * Only applicable when void_invoices is set to true. If true, for every invoice that is
          * voided we will also attempt to void/delete the stripe invoice (if any). Stripe invoices
          * will be voided if finalized or deleted if still in draft state.
          */
-        fun voidStripeInvoices(voidStripeInvoices: Boolean?) = apply {
+        fun voidStripeInvoices(voidStripeInvoices: Boolean) = apply {
             body.voidStripeInvoices(voidStripeInvoices)
         }
 
@@ -312,17 +355,28 @@ constructor(
          * voided we will also attempt to void/delete the stripe invoice (if any). Stripe invoices
          * will be voided if finalized or deleted if still in draft state.
          */
-        fun voidStripeInvoices(voidStripeInvoices: Boolean) =
-            voidStripeInvoices(voidStripeInvoices as Boolean?)
+        fun voidStripeInvoices(voidStripeInvoices: JsonField<Boolean>) = apply {
+            body.voidStripeInvoices(voidStripeInvoices)
+        }
 
-        /**
-         * Only applicable when void_invoices is set to true. If true, for every invoice that is
-         * voided we will also attempt to void/delete the stripe invoice (if any). Stripe invoices
-         * will be voided if finalized or deleted if still in draft state.
-         */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun voidStripeInvoices(voidStripeInvoices: Optional<Boolean>) =
-            voidStripeInvoices(voidStripeInvoices.orElse(null) as Boolean?)
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -420,25 +474,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerPlanEndParams =

@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -37,11 +39,23 @@ constructor(
     /** the updated name for the credit grant */
     fun name(): Optional<String> = body.name()
 
+    /** the ID of the credit grant */
+    fun _id(): JsonField<String> = body._id()
+
+    /** the updated credit grant type */
+    fun _creditGrantType(): JsonField<String> = body._creditGrantType()
+
+    /** the updated expiration date for the credit grant */
+    fun _expiresAt(): JsonField<OffsetDateTime> = body._expiresAt()
+
+    /** the updated name for the credit grant */
+    fun _name(): JsonField<String> = body._name()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CreditGrantEditBody = body
 
@@ -53,31 +67,65 @@ constructor(
     class CreditGrantEditBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("id") private val id: String,
-        @JsonProperty("credit_grant_type") private val creditGrantType: String?,
-        @JsonProperty("expires_at") private val expiresAt: OffsetDateTime?,
-        @JsonProperty("name") private val name: String?,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("credit_grant_type")
+        @ExcludeMissing
+        private val creditGrantType: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("expires_at")
+        @ExcludeMissing
+        private val expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** the ID of the credit grant */
-        @JsonProperty("id") fun id(): String = id
+        fun id(): String = id.getRequired("id")
+
+        /** the updated credit grant type */
+        fun creditGrantType(): Optional<String> =
+            Optional.ofNullable(creditGrantType.getNullable("credit_grant_type"))
+
+        /** the updated expiration date for the credit grant */
+        fun expiresAt(): Optional<OffsetDateTime> =
+            Optional.ofNullable(expiresAt.getNullable("expires_at"))
+
+        /** the updated name for the credit grant */
+        fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
+
+        /** the ID of the credit grant */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /** the updated credit grant type */
         @JsonProperty("credit_grant_type")
-        fun creditGrantType(): Optional<String> = Optional.ofNullable(creditGrantType)
+        @ExcludeMissing
+        fun _creditGrantType(): JsonField<String> = creditGrantType
 
         /** the updated expiration date for the credit grant */
         @JsonProperty("expires_at")
-        fun expiresAt(): Optional<OffsetDateTime> = Optional.ofNullable(expiresAt)
+        @ExcludeMissing
+        fun _expiresAt(): JsonField<OffsetDateTime> = expiresAt
 
         /** the updated name for the credit grant */
-        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CreditGrantEditBody = apply {
+            if (!validated) {
+                id()
+                creditGrantType()
+                expiresAt()
+                name()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -88,10 +136,10 @@ constructor(
 
         class Builder {
 
-            private var id: String? = null
-            private var creditGrantType: String? = null
-            private var expiresAt: OffsetDateTime? = null
-            private var name: String? = null
+            private var id: JsonField<String>? = null
+            private var creditGrantType: JsonField<String> = JsonMissing.of()
+            private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -104,28 +152,33 @@ constructor(
             }
 
             /** the ID of the credit grant */
-            fun id(id: String) = apply { this.id = id }
+            fun id(id: String) = id(JsonField.of(id))
+
+            /** the ID of the credit grant */
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** the updated credit grant type */
-            fun creditGrantType(creditGrantType: String?) = apply {
+            fun creditGrantType(creditGrantType: String) =
+                creditGrantType(JsonField.of(creditGrantType))
+
+            /** the updated credit grant type */
+            fun creditGrantType(creditGrantType: JsonField<String>) = apply {
                 this.creditGrantType = creditGrantType
             }
 
-            /** the updated credit grant type */
-            fun creditGrantType(creditGrantType: Optional<String>) =
-                creditGrantType(creditGrantType.orElse(null))
+            /** the updated expiration date for the credit grant */
+            fun expiresAt(expiresAt: OffsetDateTime) = expiresAt(JsonField.of(expiresAt))
 
             /** the updated expiration date for the credit grant */
-            fun expiresAt(expiresAt: OffsetDateTime?) = apply { this.expiresAt = expiresAt }
-
-            /** the updated expiration date for the credit grant */
-            fun expiresAt(expiresAt: Optional<OffsetDateTime>) = expiresAt(expiresAt.orElse(null))
-
-            /** the updated name for the credit grant */
-            fun name(name: String?) = apply { this.name = name }
+            fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply {
+                this.expiresAt = expiresAt
+            }
 
             /** the updated name for the credit grant */
-            fun name(name: Optional<String>) = name(name.orElse(null))
+            fun name(name: String) = name(JsonField.of(name))
+
+            /** the updated name for the credit grant */
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -198,26 +251,49 @@ constructor(
         /** the ID of the credit grant */
         fun id(id: String) = apply { body.id(id) }
 
+        /** the ID of the credit grant */
+        fun id(id: JsonField<String>) = apply { body.id(id) }
+
         /** the updated credit grant type */
-        fun creditGrantType(creditGrantType: String?) = apply {
+        fun creditGrantType(creditGrantType: String) = apply {
             body.creditGrantType(creditGrantType)
         }
 
         /** the updated credit grant type */
-        fun creditGrantType(creditGrantType: Optional<String>) =
-            creditGrantType(creditGrantType.orElse(null))
+        fun creditGrantType(creditGrantType: JsonField<String>) = apply {
+            body.creditGrantType(creditGrantType)
+        }
 
         /** the updated expiration date for the credit grant */
-        fun expiresAt(expiresAt: OffsetDateTime?) = apply { body.expiresAt(expiresAt) }
+        fun expiresAt(expiresAt: OffsetDateTime) = apply { body.expiresAt(expiresAt) }
 
         /** the updated expiration date for the credit grant */
-        fun expiresAt(expiresAt: Optional<OffsetDateTime>) = expiresAt(expiresAt.orElse(null))
+        fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply { body.expiresAt(expiresAt) }
 
         /** the updated name for the credit grant */
-        fun name(name: String?) = apply { body.name(name) }
+        fun name(name: String) = apply { body.name(name) }
 
         /** the updated name for the credit grant */
-        fun name(name: Optional<String>) = name(name.orElse(null))
+        fun name(name: JsonField<String>) = apply { body.name(name) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -315,25 +391,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CreditGrantEditParams =

@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -55,11 +57,33 @@ constructor(
     /** If supplied, only ledger entries effective at or after this time will be returned. */
     fun startingOn(): Optional<OffsetDateTime> = body.startingOn()
 
+    /**
+     * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger entries
+     * for all credit types will be returned.
+     */
+    fun _creditTypeIds(): JsonField<List<String>> = body._creditTypeIds()
+
+    /**
+     * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger entries for
+     * all customers will be returned.
+     */
+    fun _customerIds(): JsonField<List<String>> = body._customerIds()
+
+    /**
+     * If supplied, ledger entries will only be returned with an effective_at before this time. This
+     * timestamp must not be in the future. If no timestamp is supplied, all entries up to the start
+     * of the customer's next billing period will be returned.
+     */
+    fun _endingBefore(): JsonField<OffsetDateTime> = body._endingBefore()
+
+    /** If supplied, only ledger entries effective at or after this time will be returned. */
+    fun _startingOn(): JsonField<OffsetDateTime> = body._startingOn()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CreditGrantListEntriesBody = body
 
@@ -77,10 +101,18 @@ constructor(
     class CreditGrantListEntriesBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("credit_type_ids") private val creditTypeIds: List<String>?,
-        @JsonProperty("customer_ids") private val customerIds: List<String>?,
-        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
-        @JsonProperty("starting_on") private val startingOn: OffsetDateTime?,
+        @JsonProperty("credit_type_ids")
+        @ExcludeMissing
+        private val creditTypeIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("customer_ids")
+        @ExcludeMissing
+        private val customerIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("starting_on")
+        @ExcludeMissing
+        private val startingOn: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -89,15 +121,43 @@ constructor(
          * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
          * entries for all credit types will be returned.
          */
+        fun creditTypeIds(): Optional<List<String>> =
+            Optional.ofNullable(creditTypeIds.getNullable("credit_type_ids"))
+
+        /**
+         * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger entries
+         * for all customers will be returned.
+         */
+        fun customerIds(): Optional<List<String>> =
+            Optional.ofNullable(customerIds.getNullable("customer_ids"))
+
+        /**
+         * If supplied, ledger entries will only be returned with an effective_at before this time.
+         * This timestamp must not be in the future. If no timestamp is supplied, all entries up to
+         * the start of the customer's next billing period will be returned.
+         */
+        fun endingBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+        /** If supplied, only ledger entries effective at or after this time will be returned. */
+        fun startingOn(): Optional<OffsetDateTime> =
+            Optional.ofNullable(startingOn.getNullable("starting_on"))
+
+        /**
+         * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
+         * entries for all credit types will be returned.
+         */
         @JsonProperty("credit_type_ids")
-        fun creditTypeIds(): Optional<List<String>> = Optional.ofNullable(creditTypeIds)
+        @ExcludeMissing
+        fun _creditTypeIds(): JsonField<List<String>> = creditTypeIds
 
         /**
          * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger entries
          * for all customers will be returned.
          */
         @JsonProperty("customer_ids")
-        fun customerIds(): Optional<List<String>> = Optional.ofNullable(customerIds)
+        @ExcludeMissing
+        fun _customerIds(): JsonField<List<String>> = customerIds
 
         /**
          * If supplied, ledger entries will only be returned with an effective_at before this time.
@@ -105,15 +165,29 @@ constructor(
          * the start of the customer's next billing period will be returned.
          */
         @JsonProperty("ending_before")
-        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
         /** If supplied, only ledger entries effective at or after this time will be returned. */
         @JsonProperty("starting_on")
-        fun startingOn(): Optional<OffsetDateTime> = Optional.ofNullable(startingOn)
+        @ExcludeMissing
+        fun _startingOn(): JsonField<OffsetDateTime> = startingOn
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CreditGrantListEntriesBody = apply {
+            if (!validated) {
+                creditTypeIds()
+                customerIds()
+                endingBefore()
+                startingOn()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -124,16 +198,16 @@ constructor(
 
         class Builder {
 
-            private var creditTypeIds: MutableList<String>? = null
-            private var customerIds: MutableList<String>? = null
-            private var endingBefore: OffsetDateTime? = null
-            private var startingOn: OffsetDateTime? = null
+            private var creditTypeIds: JsonField<MutableList<String>>? = null
+            private var customerIds: JsonField<MutableList<String>>? = null
+            private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var startingOn: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(creditGrantListEntriesBody: CreditGrantListEntriesBody) = apply {
-                creditTypeIds = creditGrantListEntriesBody.creditTypeIds?.toMutableList()
-                customerIds = creditGrantListEntriesBody.customerIds?.toMutableList()
+                creditTypeIds = creditGrantListEntriesBody.creditTypeIds.map { it.toMutableList() }
+                customerIds = creditGrantListEntriesBody.customerIds.map { it.toMutableList() }
                 endingBefore = creditGrantListEntriesBody.endingBefore
                 startingOn = creditGrantListEntriesBody.startingOn
                 additionalProperties =
@@ -144,46 +218,63 @@ constructor(
              * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
              * entries for all credit types will be returned.
              */
-            fun creditTypeIds(creditTypeIds: List<String>?) = apply {
-                this.creditTypeIds = creditTypeIds?.toMutableList()
-            }
+            fun creditTypeIds(creditTypeIds: List<String>) =
+                creditTypeIds(JsonField.of(creditTypeIds))
 
             /**
              * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
              * entries for all credit types will be returned.
              */
-            fun creditTypeIds(creditTypeIds: Optional<List<String>>) =
-                creditTypeIds(creditTypeIds.orElse(null))
+            fun creditTypeIds(creditTypeIds: JsonField<List<String>>) = apply {
+                this.creditTypeIds = creditTypeIds.map { it.toMutableList() }
+            }
 
             /**
              * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
              * entries for all credit types will be returned.
              */
             fun addCreditTypeId(creditTypeId: String) = apply {
-                creditTypeIds = (creditTypeIds ?: mutableListOf()).apply { add(creditTypeId) }
+                creditTypeIds =
+                    (creditTypeIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(creditTypeId)
+                    }
             }
 
             /**
              * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger
              * entries for all customers will be returned.
              */
-            fun customerIds(customerIds: List<String>?) = apply {
-                this.customerIds = customerIds?.toMutableList()
-            }
+            fun customerIds(customerIds: List<String>) = customerIds(JsonField.of(customerIds))
 
             /**
              * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger
              * entries for all customers will be returned.
              */
-            fun customerIds(customerIds: Optional<List<String>>) =
-                customerIds(customerIds.orElse(null))
+            fun customerIds(customerIds: JsonField<List<String>>) = apply {
+                this.customerIds = customerIds.map { it.toMutableList() }
+            }
 
             /**
              * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger
              * entries for all customers will be returned.
              */
             fun addCustomerId(customerId: String) = apply {
-                customerIds = (customerIds ?: mutableListOf()).apply { add(customerId) }
+                customerIds =
+                    (customerIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(customerId)
+                    }
             }
 
             /**
@@ -191,28 +282,29 @@ constructor(
              * time. This timestamp must not be in the future. If no timestamp is supplied, all
              * entries up to the start of the customer's next billing period will be returned.
              */
-            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
+            fun endingBefore(endingBefore: OffsetDateTime) =
+                endingBefore(JsonField.of(endingBefore))
+
+            /**
+             * If supplied, ledger entries will only be returned with an effective_at before this
+             * time. This timestamp must not be in the future. If no timestamp is supplied, all
+             * entries up to the start of the customer's next billing period will be returned.
+             */
+            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
             }
 
             /**
-             * If supplied, ledger entries will only be returned with an effective_at before this
-             * time. This timestamp must not be in the future. If no timestamp is supplied, all
-             * entries up to the start of the customer's next billing period will be returned.
+             * If supplied, only ledger entries effective at or after this time will be returned.
              */
-            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
-                endingBefore(endingBefore.orElse(null))
+            fun startingOn(startingOn: OffsetDateTime) = startingOn(JsonField.of(startingOn))
 
             /**
              * If supplied, only ledger entries effective at or after this time will be returned.
              */
-            fun startingOn(startingOn: OffsetDateTime?) = apply { this.startingOn = startingOn }
-
-            /**
-             * If supplied, only ledger entries effective at or after this time will be returned.
-             */
-            fun startingOn(startingOn: Optional<OffsetDateTime>) =
-                startingOn(startingOn.orElse(null))
+            fun startingOn(startingOn: JsonField<OffsetDateTime>) = apply {
+                this.startingOn = startingOn
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -235,8 +327,8 @@ constructor(
 
             fun build(): CreditGrantListEntriesBody =
                 CreditGrantListEntriesBody(
-                    creditTypeIds?.toImmutable(),
-                    customerIds?.toImmutable(),
+                    (creditTypeIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    (customerIds ?: JsonMissing.of()).map { it.toImmutable() },
                     endingBefore,
                     startingOn,
                     additionalProperties.toImmutable(),
@@ -294,16 +386,15 @@ constructor(
          * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
          * entries for all credit types will be returned.
          */
-        fun creditTypeIds(creditTypeIds: List<String>?) = apply {
-            body.creditTypeIds(creditTypeIds)
-        }
+        fun creditTypeIds(creditTypeIds: List<String>) = apply { body.creditTypeIds(creditTypeIds) }
 
         /**
          * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
          * entries for all credit types will be returned.
          */
-        fun creditTypeIds(creditTypeIds: Optional<List<String>>) =
-            creditTypeIds(creditTypeIds.orElse(null))
+        fun creditTypeIds(creditTypeIds: JsonField<List<String>>) = apply {
+            body.creditTypeIds(creditTypeIds)
+        }
 
         /**
          * A list of Metronome credit type IDs to fetch ledger entries for. If absent, ledger
@@ -315,13 +406,15 @@ constructor(
          * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger entries
          * for all customers will be returned.
          */
-        fun customerIds(customerIds: List<String>?) = apply { body.customerIds(customerIds) }
+        fun customerIds(customerIds: List<String>) = apply { body.customerIds(customerIds) }
 
         /**
          * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger entries
          * for all customers will be returned.
          */
-        fun customerIds(customerIds: Optional<List<String>>) = customerIds(customerIds.orElse(null))
+        fun customerIds(customerIds: JsonField<List<String>>) = apply {
+            body.customerIds(customerIds)
+        }
 
         /**
          * A list of Metronome customer IDs to fetch ledger entries for. If absent, ledger entries
@@ -334,21 +427,43 @@ constructor(
          * This timestamp must not be in the future. If no timestamp is supplied, all entries up to
          * the start of the customer's next billing period will be returned.
          */
-        fun endingBefore(endingBefore: OffsetDateTime?) = apply { body.endingBefore(endingBefore) }
+        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
 
         /**
          * If supplied, ledger entries will only be returned with an effective_at before this time.
          * This timestamp must not be in the future. If no timestamp is supplied, all entries up to
          * the start of the customer's next billing period will be returned.
          */
-        fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
-            endingBefore(endingBefore.orElse(null))
+        fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+            body.endingBefore(endingBefore)
+        }
 
         /** If supplied, only ledger entries effective at or after this time will be returned. */
-        fun startingOn(startingOn: OffsetDateTime?) = apply { body.startingOn(startingOn) }
+        fun startingOn(startingOn: OffsetDateTime) = apply { body.startingOn(startingOn) }
 
         /** If supplied, only ledger entries effective at or after this time will be returned. */
-        fun startingOn(startingOn: Optional<OffsetDateTime>) = startingOn(startingOn.orElse(null))
+        fun startingOn(startingOn: JsonField<OffsetDateTime>) = apply {
+            body.startingOn(startingOn)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -446,25 +561,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CreditGrantListEntriesParams =

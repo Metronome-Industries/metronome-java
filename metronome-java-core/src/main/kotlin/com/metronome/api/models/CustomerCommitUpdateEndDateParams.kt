@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -43,11 +45,29 @@ constructor(
      */
     fun invoicesEndingBefore(): Optional<OffsetDateTime> = body.invoicesEndingBefore()
 
+    /** ID of the commit to update. Only supports "PREPAID" commits. */
+    fun _commitId(): JsonField<String> = body._commitId()
+
+    /** ID of the customer whose commit is to be updated */
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    /**
+     * RFC 3339 timestamp indicating when access to the commit will end and it will no longer be
+     * possible to draw it down (exclusive). If not provided, the access will not be updated.
+     */
+    fun _accessEndingBefore(): JsonField<OffsetDateTime> = body._accessEndingBefore()
+
+    /**
+     * RFC 3339 timestamp indicating when the commit will stop being invoiced (exclusive). If not
+     * provided, the invoice schedule will not be updated.
+     */
+    fun _invoicesEndingBefore(): JsonField<OffsetDateTime> = body._invoicesEndingBefore()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomerCommitUpdateEndDateBody = body
 
@@ -59,38 +79,81 @@ constructor(
     class CustomerCommitUpdateEndDateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("commit_id") private val commitId: String,
-        @JsonProperty("customer_id") private val customerId: String,
-        @JsonProperty("access_ending_before") private val accessEndingBefore: OffsetDateTime?,
-        @JsonProperty("invoices_ending_before") private val invoicesEndingBefore: OffsetDateTime?,
+        @JsonProperty("commit_id")
+        @ExcludeMissing
+        private val commitId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("access_ending_before")
+        @ExcludeMissing
+        private val accessEndingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("invoices_ending_before")
+        @ExcludeMissing
+        private val invoicesEndingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the commit to update. Only supports "PREPAID" commits. */
-        @JsonProperty("commit_id") fun commitId(): String = commitId
+        fun commitId(): String = commitId.getRequired("commit_id")
 
         /** ID of the customer whose commit is to be updated */
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
+
+        /**
+         * RFC 3339 timestamp indicating when access to the commit will end and it will no longer be
+         * possible to draw it down (exclusive). If not provided, the access will not be updated.
+         */
+        fun accessEndingBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(accessEndingBefore.getNullable("access_ending_before"))
+
+        /**
+         * RFC 3339 timestamp indicating when the commit will stop being invoiced (exclusive). If
+         * not provided, the invoice schedule will not be updated.
+         */
+        fun invoicesEndingBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(invoicesEndingBefore.getNullable("invoices_ending_before"))
+
+        /** ID of the commit to update. Only supports "PREPAID" commits. */
+        @JsonProperty("commit_id") @ExcludeMissing fun _commitId(): JsonField<String> = commitId
+
+        /** ID of the customer whose commit is to be updated */
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
 
         /**
          * RFC 3339 timestamp indicating when access to the commit will end and it will no longer be
          * possible to draw it down (exclusive). If not provided, the access will not be updated.
          */
         @JsonProperty("access_ending_before")
-        fun accessEndingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(accessEndingBefore)
+        @ExcludeMissing
+        fun _accessEndingBefore(): JsonField<OffsetDateTime> = accessEndingBefore
 
         /**
          * RFC 3339 timestamp indicating when the commit will stop being invoiced (exclusive). If
          * not provided, the invoice schedule will not be updated.
          */
         @JsonProperty("invoices_ending_before")
-        fun invoicesEndingBefore(): Optional<OffsetDateTime> =
-            Optional.ofNullable(invoicesEndingBefore)
+        @ExcludeMissing
+        fun _invoicesEndingBefore(): JsonField<OffsetDateTime> = invoicesEndingBefore
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomerCommitUpdateEndDateBody = apply {
+            if (!validated) {
+                commitId()
+                customerId()
+                accessEndingBefore()
+                invoicesEndingBefore()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -101,10 +164,10 @@ constructor(
 
         class Builder {
 
-            private var commitId: String? = null
-            private var customerId: String? = null
-            private var accessEndingBefore: OffsetDateTime? = null
-            private var invoicesEndingBefore: OffsetDateTime? = null
+            private var commitId: JsonField<String>? = null
+            private var customerId: JsonField<String>? = null
+            private var accessEndingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var invoicesEndingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -119,42 +182,48 @@ constructor(
                 }
 
             /** ID of the commit to update. Only supports "PREPAID" commits. */
-            fun commitId(commitId: String) = apply { this.commitId = commitId }
+            fun commitId(commitId: String) = commitId(JsonField.of(commitId))
+
+            /** ID of the commit to update. Only supports "PREPAID" commits. */
+            fun commitId(commitId: JsonField<String>) = apply { this.commitId = commitId }
 
             /** ID of the customer whose commit is to be updated */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            /** ID of the customer whose commit is to be updated */
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /**
              * RFC 3339 timestamp indicating when access to the commit will end and it will no
              * longer be possible to draw it down (exclusive). If not provided, the access will not
              * be updated.
              */
-            fun accessEndingBefore(accessEndingBefore: OffsetDateTime?) = apply {
+            fun accessEndingBefore(accessEndingBefore: OffsetDateTime) =
+                accessEndingBefore(JsonField.of(accessEndingBefore))
+
+            /**
+             * RFC 3339 timestamp indicating when access to the commit will end and it will no
+             * longer be possible to draw it down (exclusive). If not provided, the access will not
+             * be updated.
+             */
+            fun accessEndingBefore(accessEndingBefore: JsonField<OffsetDateTime>) = apply {
                 this.accessEndingBefore = accessEndingBefore
             }
 
             /**
-             * RFC 3339 timestamp indicating when access to the commit will end and it will no
-             * longer be possible to draw it down (exclusive). If not provided, the access will not
-             * be updated.
+             * RFC 3339 timestamp indicating when the commit will stop being invoiced (exclusive).
+             * If not provided, the invoice schedule will not be updated.
              */
-            fun accessEndingBefore(accessEndingBefore: Optional<OffsetDateTime>) =
-                accessEndingBefore(accessEndingBefore.orElse(null))
+            fun invoicesEndingBefore(invoicesEndingBefore: OffsetDateTime) =
+                invoicesEndingBefore(JsonField.of(invoicesEndingBefore))
 
             /**
              * RFC 3339 timestamp indicating when the commit will stop being invoiced (exclusive).
              * If not provided, the invoice schedule will not be updated.
              */
-            fun invoicesEndingBefore(invoicesEndingBefore: OffsetDateTime?) = apply {
+            fun invoicesEndingBefore(invoicesEndingBefore: JsonField<OffsetDateTime>) = apply {
                 this.invoicesEndingBefore = invoicesEndingBefore
             }
-
-            /**
-             * RFC 3339 timestamp indicating when the commit will stop being invoiced (exclusive).
-             * If not provided, the invoice schedule will not be updated.
-             */
-            fun invoicesEndingBefore(invoicesEndingBefore: Optional<OffsetDateTime>) =
-                invoicesEndingBefore(invoicesEndingBefore.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -230,14 +299,20 @@ constructor(
         /** ID of the commit to update. Only supports "PREPAID" commits. */
         fun commitId(commitId: String) = apply { body.commitId(commitId) }
 
+        /** ID of the commit to update. Only supports "PREPAID" commits. */
+        fun commitId(commitId: JsonField<String>) = apply { body.commitId(commitId) }
+
         /** ID of the customer whose commit is to be updated */
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
+
+        /** ID of the customer whose commit is to be updated */
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
 
         /**
          * RFC 3339 timestamp indicating when access to the commit will end and it will no longer be
          * possible to draw it down (exclusive). If not provided, the access will not be updated.
          */
-        fun accessEndingBefore(accessEndingBefore: OffsetDateTime?) = apply {
+        fun accessEndingBefore(accessEndingBefore: OffsetDateTime) = apply {
             body.accessEndingBefore(accessEndingBefore)
         }
 
@@ -245,14 +320,15 @@ constructor(
          * RFC 3339 timestamp indicating when access to the commit will end and it will no longer be
          * possible to draw it down (exclusive). If not provided, the access will not be updated.
          */
-        fun accessEndingBefore(accessEndingBefore: Optional<OffsetDateTime>) =
-            accessEndingBefore(accessEndingBefore.orElse(null))
+        fun accessEndingBefore(accessEndingBefore: JsonField<OffsetDateTime>) = apply {
+            body.accessEndingBefore(accessEndingBefore)
+        }
 
         /**
          * RFC 3339 timestamp indicating when the commit will stop being invoiced (exclusive). If
          * not provided, the invoice schedule will not be updated.
          */
-        fun invoicesEndingBefore(invoicesEndingBefore: OffsetDateTime?) = apply {
+        fun invoicesEndingBefore(invoicesEndingBefore: OffsetDateTime) = apply {
             body.invoicesEndingBefore(invoicesEndingBefore)
         }
 
@@ -260,8 +336,28 @@ constructor(
          * RFC 3339 timestamp indicating when the commit will stop being invoiced (exclusive). If
          * not provided, the invoice schedule will not be updated.
          */
-        fun invoicesEndingBefore(invoicesEndingBefore: Optional<OffsetDateTime>) =
-            invoicesEndingBefore(invoicesEndingBefore.orElse(null))
+        fun invoicesEndingBefore(invoicesEndingBefore: JsonField<OffsetDateTime>) = apply {
+            body.invoicesEndingBefore(invoicesEndingBefore)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -359,25 +455,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerCommitUpdateEndDateParams =

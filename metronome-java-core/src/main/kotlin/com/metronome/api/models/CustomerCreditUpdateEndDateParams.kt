@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -36,11 +38,23 @@ constructor(
     /** ID of the customer whose credit is to be updated */
     fun customerId(): String = body.customerId()
 
+    /**
+     * RFC 3339 timestamp indicating when access to the credit will end and it will no longer be
+     * possible to draw it down (exclusive).
+     */
+    fun _accessEndingBefore(): JsonField<OffsetDateTime> = body._accessEndingBefore()
+
+    /** ID of the commit to update */
+    fun _creditId(): JsonField<String> = body._creditId()
+
+    /** ID of the customer whose credit is to be updated */
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomerCreditUpdateEndDateBody = body
 
@@ -52,9 +66,15 @@ constructor(
     class CustomerCreditUpdateEndDateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("access_ending_before") private val accessEndingBefore: OffsetDateTime,
-        @JsonProperty("credit_id") private val creditId: String,
-        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("access_ending_before")
+        @ExcludeMissing
+        private val accessEndingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("credit_id")
+        @ExcludeMissing
+        private val creditId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -63,18 +83,45 @@ constructor(
          * RFC 3339 timestamp indicating when access to the credit will end and it will no longer be
          * possible to draw it down (exclusive).
          */
-        @JsonProperty("access_ending_before")
-        fun accessEndingBefore(): OffsetDateTime = accessEndingBefore
+        fun accessEndingBefore(): OffsetDateTime =
+            accessEndingBefore.getRequired("access_ending_before")
 
         /** ID of the commit to update */
-        @JsonProperty("credit_id") fun creditId(): String = creditId
+        fun creditId(): String = creditId.getRequired("credit_id")
 
         /** ID of the customer whose credit is to be updated */
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
+
+        /**
+         * RFC 3339 timestamp indicating when access to the credit will end and it will no longer be
+         * possible to draw it down (exclusive).
+         */
+        @JsonProperty("access_ending_before")
+        @ExcludeMissing
+        fun _accessEndingBefore(): JsonField<OffsetDateTime> = accessEndingBefore
+
+        /** ID of the commit to update */
+        @JsonProperty("credit_id") @ExcludeMissing fun _creditId(): JsonField<String> = creditId
+
+        /** ID of the customer whose credit is to be updated */
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomerCreditUpdateEndDateBody = apply {
+            if (!validated) {
+                accessEndingBefore()
+                creditId()
+                customerId()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -85,9 +132,9 @@ constructor(
 
         class Builder {
 
-            private var accessEndingBefore: OffsetDateTime? = null
-            private var creditId: String? = null
-            private var customerId: String? = null
+            private var accessEndingBefore: JsonField<OffsetDateTime>? = null
+            private var creditId: JsonField<String>? = null
+            private var customerId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -104,15 +151,28 @@ constructor(
              * RFC 3339 timestamp indicating when access to the credit will end and it will no
              * longer be possible to draw it down (exclusive).
              */
-            fun accessEndingBefore(accessEndingBefore: OffsetDateTime) = apply {
+            fun accessEndingBefore(accessEndingBefore: OffsetDateTime) =
+                accessEndingBefore(JsonField.of(accessEndingBefore))
+
+            /**
+             * RFC 3339 timestamp indicating when access to the credit will end and it will no
+             * longer be possible to draw it down (exclusive).
+             */
+            fun accessEndingBefore(accessEndingBefore: JsonField<OffsetDateTime>) = apply {
                 this.accessEndingBefore = accessEndingBefore
             }
 
             /** ID of the commit to update */
-            fun creditId(creditId: String) = apply { this.creditId = creditId }
+            fun creditId(creditId: String) = creditId(JsonField.of(creditId))
+
+            /** ID of the commit to update */
+            fun creditId(creditId: JsonField<String>) = apply { this.creditId = creditId }
 
             /** ID of the customer whose credit is to be updated */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            /** ID of the customer whose credit is to be updated */
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -194,11 +254,44 @@ constructor(
             body.accessEndingBefore(accessEndingBefore)
         }
 
+        /**
+         * RFC 3339 timestamp indicating when access to the credit will end and it will no longer be
+         * possible to draw it down (exclusive).
+         */
+        fun accessEndingBefore(accessEndingBefore: JsonField<OffsetDateTime>) = apply {
+            body.accessEndingBefore(accessEndingBefore)
+        }
+
         /** ID of the commit to update */
         fun creditId(creditId: String) = apply { body.creditId(creditId) }
 
+        /** ID of the commit to update */
+        fun creditId(creditId: JsonField<String>) = apply { body.creditId(creditId) }
+
         /** ID of the customer whose credit is to be updated */
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
+
+        /** ID of the customer whose credit is to be updated */
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -296,25 +389,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerCreditUpdateEndDateParams =

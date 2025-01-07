@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -54,11 +56,32 @@ constructor(
     /** Only return credit grants that expire at or after this timestamp. */
     fun notExpiringBefore(): Optional<OffsetDateTime> = body.notExpiringBefore()
 
+    /**
+     * An array of credit grant IDs. If this is specified, neither credit_type_ids nor customer_ids
+     * may be specified.
+     */
+    fun _creditGrantIds(): JsonField<List<String>> = body._creditGrantIds()
+
+    /** An array of credit type IDs. This must not be specified if credit_grant_ids is specified. */
+    fun _creditTypeIds(): JsonField<List<String>> = body._creditTypeIds()
+
+    /**
+     * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
+     * specified.
+     */
+    fun _customerIds(): JsonField<List<String>> = body._customerIds()
+
+    /** Only return credit grants that are effective before this timestamp (exclusive). */
+    fun _effectiveBefore(): JsonField<OffsetDateTime> = body._effectiveBefore()
+
+    /** Only return credit grants that expire at or after this timestamp. */
+    fun _notExpiringBefore(): JsonField<OffsetDateTime> = body._notExpiringBefore()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CreditGrantListBody = body
 
@@ -77,11 +100,21 @@ constructor(
     class CreditGrantListBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("credit_grant_ids") private val creditGrantIds: List<String>?,
-        @JsonProperty("credit_type_ids") private val creditTypeIds: List<String>?,
-        @JsonProperty("customer_ids") private val customerIds: List<String>?,
-        @JsonProperty("effective_before") private val effectiveBefore: OffsetDateTime?,
-        @JsonProperty("not_expiring_before") private val notExpiringBefore: OffsetDateTime?,
+        @JsonProperty("credit_grant_ids")
+        @ExcludeMissing
+        private val creditGrantIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("credit_type_ids")
+        @ExcludeMissing
+        private val creditTypeIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("customer_ids")
+        @ExcludeMissing
+        private val customerIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("effective_before")
+        @ExcludeMissing
+        private val effectiveBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("not_expiring_before")
+        @ExcludeMissing
+        private val notExpiringBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -90,33 +123,79 @@ constructor(
          * An array of credit grant IDs. If this is specified, neither credit_type_ids nor
          * customer_ids may be specified.
          */
+        fun creditGrantIds(): Optional<List<String>> =
+            Optional.ofNullable(creditGrantIds.getNullable("credit_grant_ids"))
+
+        /**
+         * An array of credit type IDs. This must not be specified if credit_grant_ids is specified.
+         */
+        fun creditTypeIds(): Optional<List<String>> =
+            Optional.ofNullable(creditTypeIds.getNullable("credit_type_ids"))
+
+        /**
+         * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
+         * specified.
+         */
+        fun customerIds(): Optional<List<String>> =
+            Optional.ofNullable(customerIds.getNullable("customer_ids"))
+
+        /** Only return credit grants that are effective before this timestamp (exclusive). */
+        fun effectiveBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(effectiveBefore.getNullable("effective_before"))
+
+        /** Only return credit grants that expire at or after this timestamp. */
+        fun notExpiringBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(notExpiringBefore.getNullable("not_expiring_before"))
+
+        /**
+         * An array of credit grant IDs. If this is specified, neither credit_type_ids nor
+         * customer_ids may be specified.
+         */
         @JsonProperty("credit_grant_ids")
-        fun creditGrantIds(): Optional<List<String>> = Optional.ofNullable(creditGrantIds)
+        @ExcludeMissing
+        fun _creditGrantIds(): JsonField<List<String>> = creditGrantIds
 
         /**
          * An array of credit type IDs. This must not be specified if credit_grant_ids is specified.
          */
         @JsonProperty("credit_type_ids")
-        fun creditTypeIds(): Optional<List<String>> = Optional.ofNullable(creditTypeIds)
+        @ExcludeMissing
+        fun _creditTypeIds(): JsonField<List<String>> = creditTypeIds
 
         /**
          * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
          * specified.
          */
         @JsonProperty("customer_ids")
-        fun customerIds(): Optional<List<String>> = Optional.ofNullable(customerIds)
+        @ExcludeMissing
+        fun _customerIds(): JsonField<List<String>> = customerIds
 
         /** Only return credit grants that are effective before this timestamp (exclusive). */
         @JsonProperty("effective_before")
-        fun effectiveBefore(): Optional<OffsetDateTime> = Optional.ofNullable(effectiveBefore)
+        @ExcludeMissing
+        fun _effectiveBefore(): JsonField<OffsetDateTime> = effectiveBefore
 
         /** Only return credit grants that expire at or after this timestamp. */
         @JsonProperty("not_expiring_before")
-        fun notExpiringBefore(): Optional<OffsetDateTime> = Optional.ofNullable(notExpiringBefore)
+        @ExcludeMissing
+        fun _notExpiringBefore(): JsonField<OffsetDateTime> = notExpiringBefore
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CreditGrantListBody = apply {
+            if (!validated) {
+                creditGrantIds()
+                creditTypeIds()
+                customerIds()
+                effectiveBefore()
+                notExpiringBefore()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -127,18 +206,18 @@ constructor(
 
         class Builder {
 
-            private var creditGrantIds: MutableList<String>? = null
-            private var creditTypeIds: MutableList<String>? = null
-            private var customerIds: MutableList<String>? = null
-            private var effectiveBefore: OffsetDateTime? = null
-            private var notExpiringBefore: OffsetDateTime? = null
+            private var creditGrantIds: JsonField<MutableList<String>>? = null
+            private var creditTypeIds: JsonField<MutableList<String>>? = null
+            private var customerIds: JsonField<MutableList<String>>? = null
+            private var effectiveBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var notExpiringBefore: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(creditGrantListBody: CreditGrantListBody) = apply {
-                creditGrantIds = creditGrantListBody.creditGrantIds?.toMutableList()
-                creditTypeIds = creditGrantListBody.creditTypeIds?.toMutableList()
-                customerIds = creditGrantListBody.customerIds?.toMutableList()
+                creditGrantIds = creditGrantListBody.creditGrantIds.map { it.toMutableList() }
+                creditTypeIds = creditGrantListBody.creditTypeIds.map { it.toMutableList() }
+                customerIds = creditGrantListBody.customerIds.map { it.toMutableList() }
                 effectiveBefore = creditGrantListBody.effectiveBefore
                 notExpiringBefore = creditGrantListBody.notExpiringBefore
                 additionalProperties = creditGrantListBody.additionalProperties.toMutableMap()
@@ -148,88 +227,114 @@ constructor(
              * An array of credit grant IDs. If this is specified, neither credit_type_ids nor
              * customer_ids may be specified.
              */
-            fun creditGrantIds(creditGrantIds: List<String>?) = apply {
-                this.creditGrantIds = creditGrantIds?.toMutableList()
-            }
+            fun creditGrantIds(creditGrantIds: List<String>) =
+                creditGrantIds(JsonField.of(creditGrantIds))
 
             /**
              * An array of credit grant IDs. If this is specified, neither credit_type_ids nor
              * customer_ids may be specified.
              */
-            fun creditGrantIds(creditGrantIds: Optional<List<String>>) =
-                creditGrantIds(creditGrantIds.orElse(null))
+            fun creditGrantIds(creditGrantIds: JsonField<List<String>>) = apply {
+                this.creditGrantIds = creditGrantIds.map { it.toMutableList() }
+            }
 
             /**
              * An array of credit grant IDs. If this is specified, neither credit_type_ids nor
              * customer_ids may be specified.
              */
             fun addCreditGrantId(creditGrantId: String) = apply {
-                creditGrantIds = (creditGrantIds ?: mutableListOf()).apply { add(creditGrantId) }
+                creditGrantIds =
+                    (creditGrantIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(creditGrantId)
+                    }
             }
 
             /**
              * An array of credit type IDs. This must not be specified if credit_grant_ids is
              * specified.
              */
-            fun creditTypeIds(creditTypeIds: List<String>?) = apply {
-                this.creditTypeIds = creditTypeIds?.toMutableList()
-            }
+            fun creditTypeIds(creditTypeIds: List<String>) =
+                creditTypeIds(JsonField.of(creditTypeIds))
 
             /**
              * An array of credit type IDs. This must not be specified if credit_grant_ids is
              * specified.
              */
-            fun creditTypeIds(creditTypeIds: Optional<List<String>>) =
-                creditTypeIds(creditTypeIds.orElse(null))
+            fun creditTypeIds(creditTypeIds: JsonField<List<String>>) = apply {
+                this.creditTypeIds = creditTypeIds.map { it.toMutableList() }
+            }
 
             /**
              * An array of credit type IDs. This must not be specified if credit_grant_ids is
              * specified.
              */
             fun addCreditTypeId(creditTypeId: String) = apply {
-                creditTypeIds = (creditTypeIds ?: mutableListOf()).apply { add(creditTypeId) }
+                creditTypeIds =
+                    (creditTypeIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(creditTypeId)
+                    }
             }
 
             /**
              * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
              * specified.
              */
-            fun customerIds(customerIds: List<String>?) = apply {
-                this.customerIds = customerIds?.toMutableList()
-            }
+            fun customerIds(customerIds: List<String>) = customerIds(JsonField.of(customerIds))
 
             /**
              * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
              * specified.
              */
-            fun customerIds(customerIds: Optional<List<String>>) =
-                customerIds(customerIds.orElse(null))
+            fun customerIds(customerIds: JsonField<List<String>>) = apply {
+                this.customerIds = customerIds.map { it.toMutableList() }
+            }
 
             /**
              * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
              * specified.
              */
             fun addCustomerId(customerId: String) = apply {
-                customerIds = (customerIds ?: mutableListOf()).apply { add(customerId) }
+                customerIds =
+                    (customerIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(customerId)
+                    }
             }
 
             /** Only return credit grants that are effective before this timestamp (exclusive). */
-            fun effectiveBefore(effectiveBefore: OffsetDateTime?) = apply {
+            fun effectiveBefore(effectiveBefore: OffsetDateTime) =
+                effectiveBefore(JsonField.of(effectiveBefore))
+
+            /** Only return credit grants that are effective before this timestamp (exclusive). */
+            fun effectiveBefore(effectiveBefore: JsonField<OffsetDateTime>) = apply {
                 this.effectiveBefore = effectiveBefore
             }
 
-            /** Only return credit grants that are effective before this timestamp (exclusive). */
-            fun effectiveBefore(effectiveBefore: Optional<OffsetDateTime>) =
-                effectiveBefore(effectiveBefore.orElse(null))
+            /** Only return credit grants that expire at or after this timestamp. */
+            fun notExpiringBefore(notExpiringBefore: OffsetDateTime) =
+                notExpiringBefore(JsonField.of(notExpiringBefore))
 
             /** Only return credit grants that expire at or after this timestamp. */
-            fun notExpiringBefore(notExpiringBefore: OffsetDateTime?) = apply {
+            fun notExpiringBefore(notExpiringBefore: JsonField<OffsetDateTime>) = apply {
                 this.notExpiringBefore = notExpiringBefore
             }
-
-            /** Only return credit grants that expire at or after this timestamp. */
-            fun notExpiringBefore(notExpiringBefore: Optional<OffsetDateTime>) =
-                notExpiringBefore(notExpiringBefore.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -252,9 +357,9 @@ constructor(
 
             fun build(): CreditGrantListBody =
                 CreditGrantListBody(
-                    creditGrantIds?.toImmutable(),
-                    creditTypeIds?.toImmutable(),
-                    customerIds?.toImmutable(),
+                    (creditGrantIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    (creditTypeIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    (customerIds ?: JsonMissing.of()).map { it.toImmutable() },
                     effectiveBefore,
                     notExpiringBefore,
                     additionalProperties.toImmutable(),
@@ -324,7 +429,7 @@ constructor(
          * An array of credit grant IDs. If this is specified, neither credit_type_ids nor
          * customer_ids may be specified.
          */
-        fun creditGrantIds(creditGrantIds: List<String>?) = apply {
+        fun creditGrantIds(creditGrantIds: List<String>) = apply {
             body.creditGrantIds(creditGrantIds)
         }
 
@@ -332,8 +437,9 @@ constructor(
          * An array of credit grant IDs. If this is specified, neither credit_type_ids nor
          * customer_ids may be specified.
          */
-        fun creditGrantIds(creditGrantIds: Optional<List<String>>) =
-            creditGrantIds(creditGrantIds.orElse(null))
+        fun creditGrantIds(creditGrantIds: JsonField<List<String>>) = apply {
+            body.creditGrantIds(creditGrantIds)
+        }
 
         /**
          * An array of credit grant IDs. If this is specified, neither credit_type_ids nor
@@ -344,15 +450,14 @@ constructor(
         /**
          * An array of credit type IDs. This must not be specified if credit_grant_ids is specified.
          */
-        fun creditTypeIds(creditTypeIds: List<String>?) = apply {
-            body.creditTypeIds(creditTypeIds)
-        }
+        fun creditTypeIds(creditTypeIds: List<String>) = apply { body.creditTypeIds(creditTypeIds) }
 
         /**
          * An array of credit type IDs. This must not be specified if credit_grant_ids is specified.
          */
-        fun creditTypeIds(creditTypeIds: Optional<List<String>>) =
-            creditTypeIds(creditTypeIds.orElse(null))
+        fun creditTypeIds(creditTypeIds: JsonField<List<String>>) = apply {
+            body.creditTypeIds(creditTypeIds)
+        }
 
         /**
          * An array of credit type IDs. This must not be specified if credit_grant_ids is specified.
@@ -363,13 +468,15 @@ constructor(
          * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
          * specified.
          */
-        fun customerIds(customerIds: List<String>?) = apply { body.customerIds(customerIds) }
+        fun customerIds(customerIds: List<String>) = apply { body.customerIds(customerIds) }
 
         /**
          * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
          * specified.
          */
-        fun customerIds(customerIds: Optional<List<String>>) = customerIds(customerIds.orElse(null))
+        fun customerIds(customerIds: JsonField<List<String>>) = apply {
+            body.customerIds(customerIds)
+        }
 
         /**
          * An array of Metronome customer IDs. This must not be specified if credit_grant_ids is
@@ -378,22 +485,43 @@ constructor(
         fun addCustomerId(customerId: String) = apply { body.addCustomerId(customerId) }
 
         /** Only return credit grants that are effective before this timestamp (exclusive). */
-        fun effectiveBefore(effectiveBefore: OffsetDateTime?) = apply {
+        fun effectiveBefore(effectiveBefore: OffsetDateTime) = apply {
             body.effectiveBefore(effectiveBefore)
         }
 
         /** Only return credit grants that are effective before this timestamp (exclusive). */
-        fun effectiveBefore(effectiveBefore: Optional<OffsetDateTime>) =
-            effectiveBefore(effectiveBefore.orElse(null))
+        fun effectiveBefore(effectiveBefore: JsonField<OffsetDateTime>) = apply {
+            body.effectiveBefore(effectiveBefore)
+        }
 
         /** Only return credit grants that expire at or after this timestamp. */
-        fun notExpiringBefore(notExpiringBefore: OffsetDateTime?) = apply {
+        fun notExpiringBefore(notExpiringBefore: OffsetDateTime) = apply {
             body.notExpiringBefore(notExpiringBefore)
         }
 
         /** Only return credit grants that expire at or after this timestamp. */
-        fun notExpiringBefore(notExpiringBefore: Optional<OffsetDateTime>) =
-            notExpiringBefore(notExpiringBefore.orElse(null))
+        fun notExpiringBefore(notExpiringBefore: JsonField<OffsetDateTime>) = apply {
+            body.notExpiringBefore(notExpiringBefore)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -491,25 +619,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CreditGrantListParams =

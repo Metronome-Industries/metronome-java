@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -40,11 +42,26 @@ constructor(
     /** Used only in UI/API. It is not exposed to end customers. */
     fun name(): Optional<String> = body.name()
 
+    /** ID of the rate card to update */
+    fun _rateCardId(): JsonField<String> = body._rateCardId()
+
+    /**
+     * Reference this alias when creating a contract. If the same alias is assigned to multiple rate
+     * cards, it will reference the rate card to which it was most recently assigned. It is not
+     * exposed to end customers.
+     */
+    fun _aliases(): JsonField<List<Alias>> = body._aliases()
+
+    fun _description(): JsonField<String> = body._description()
+
+    /** Used only in UI/API. It is not exposed to end customers. */
+    fun _name(): JsonField<String> = body._name()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): ContractRateCardUpdateBody = body
 
@@ -56,33 +73,72 @@ constructor(
     class ContractRateCardUpdateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("rate_card_id") private val rateCardId: String,
-        @JsonProperty("aliases") private val aliases: List<Alias>?,
-        @JsonProperty("description") private val description: String?,
-        @JsonProperty("name") private val name: String?,
+        @JsonProperty("rate_card_id")
+        @ExcludeMissing
+        private val rateCardId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("aliases")
+        @ExcludeMissing
+        private val aliases: JsonField<List<Alias>> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        private val description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the rate card to update */
-        @JsonProperty("rate_card_id") fun rateCardId(): String = rateCardId
+        fun rateCardId(): String = rateCardId.getRequired("rate_card_id")
 
         /**
          * Reference this alias when creating a contract. If the same alias is assigned to multiple
          * rate cards, it will reference the rate card to which it was most recently assigned. It is
          * not exposed to end customers.
          */
-        @JsonProperty("aliases") fun aliases(): Optional<List<Alias>> = Optional.ofNullable(aliases)
+        fun aliases(): Optional<List<Alias>> = Optional.ofNullable(aliases.getNullable("aliases"))
 
-        @JsonProperty("description")
-        fun description(): Optional<String> = Optional.ofNullable(description)
+        fun description(): Optional<String> =
+            Optional.ofNullable(description.getNullable("description"))
 
         /** Used only in UI/API. It is not exposed to end customers. */
-        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
+        fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
+
+        /** ID of the rate card to update */
+        @JsonProperty("rate_card_id")
+        @ExcludeMissing
+        fun _rateCardId(): JsonField<String> = rateCardId
+
+        /**
+         * Reference this alias when creating a contract. If the same alias is assigned to multiple
+         * rate cards, it will reference the rate card to which it was most recently assigned. It is
+         * not exposed to end customers.
+         */
+        @JsonProperty("aliases") @ExcludeMissing fun _aliases(): JsonField<List<Alias>> = aliases
+
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
+
+        /** Used only in UI/API. It is not exposed to end customers. */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ContractRateCardUpdateBody = apply {
+            if (!validated) {
+                rateCardId()
+                aliases().map { it.forEach { it.validate() } }
+                description()
+                name()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -93,16 +149,16 @@ constructor(
 
         class Builder {
 
-            private var rateCardId: String? = null
-            private var aliases: MutableList<Alias>? = null
-            private var description: String? = null
-            private var name: String? = null
+            private var rateCardId: JsonField<String>? = null
+            private var aliases: JsonField<MutableList<Alias>>? = null
+            private var description: JsonField<String> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(contractRateCardUpdateBody: ContractRateCardUpdateBody) = apply {
                 rateCardId = contractRateCardUpdateBody.rateCardId
-                aliases = contractRateCardUpdateBody.aliases?.toMutableList()
+                aliases = contractRateCardUpdateBody.aliases.map { it.toMutableList() }
                 description = contractRateCardUpdateBody.description
                 name = contractRateCardUpdateBody.name
                 additionalProperties =
@@ -110,21 +166,26 @@ constructor(
             }
 
             /** ID of the rate card to update */
-            fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
+            fun rateCardId(rateCardId: String) = rateCardId(JsonField.of(rateCardId))
+
+            /** ID of the rate card to update */
+            fun rateCardId(rateCardId: JsonField<String>) = apply { this.rateCardId = rateCardId }
 
             /**
              * Reference this alias when creating a contract. If the same alias is assigned to
              * multiple rate cards, it will reference the rate card to which it was most recently
              * assigned. It is not exposed to end customers.
              */
-            fun aliases(aliases: List<Alias>?) = apply { this.aliases = aliases?.toMutableList() }
+            fun aliases(aliases: List<Alias>) = aliases(JsonField.of(aliases))
 
             /**
              * Reference this alias when creating a contract. If the same alias is assigned to
              * multiple rate cards, it will reference the rate card to which it was most recently
              * assigned. It is not exposed to end customers.
              */
-            fun aliases(aliases: Optional<List<Alias>>) = aliases(aliases.orElse(null))
+            fun aliases(aliases: JsonField<List<Alias>>) = apply {
+                this.aliases = aliases.map { it.toMutableList() }
+            }
 
             /**
              * Reference this alias when creating a contract. If the same alias is assigned to
@@ -132,18 +193,29 @@ constructor(
              * assigned. It is not exposed to end customers.
              */
             fun addAlias(alias: Alias) = apply {
-                aliases = (aliases ?: mutableListOf()).apply { add(alias) }
+                aliases =
+                    (aliases ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(alias)
+                    }
             }
 
-            fun description(description: String?) = apply { this.description = description }
+            fun description(description: String) = description(JsonField.of(description))
 
-            fun description(description: Optional<String>) = description(description.orElse(null))
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
 
             /** Used only in UI/API. It is not exposed to end customers. */
-            fun name(name: String?) = apply { this.name = name }
+            fun name(name: String) = name(JsonField.of(name))
 
             /** Used only in UI/API. It is not exposed to end customers. */
-            fun name(name: Optional<String>) = name(name.orElse(null))
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -167,7 +239,7 @@ constructor(
             fun build(): ContractRateCardUpdateBody =
                 ContractRateCardUpdateBody(
                     checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
-                    aliases?.toImmutable(),
+                    (aliases ?: JsonMissing.of()).map { it.toImmutable() },
                     description,
                     name,
                     additionalProperties.toImmutable(),
@@ -216,19 +288,22 @@ constructor(
         /** ID of the rate card to update */
         fun rateCardId(rateCardId: String) = apply { body.rateCardId(rateCardId) }
 
-        /**
-         * Reference this alias when creating a contract. If the same alias is assigned to multiple
-         * rate cards, it will reference the rate card to which it was most recently assigned. It is
-         * not exposed to end customers.
-         */
-        fun aliases(aliases: List<Alias>?) = apply { body.aliases(aliases) }
+        /** ID of the rate card to update */
+        fun rateCardId(rateCardId: JsonField<String>) = apply { body.rateCardId(rateCardId) }
 
         /**
          * Reference this alias when creating a contract. If the same alias is assigned to multiple
          * rate cards, it will reference the rate card to which it was most recently assigned. It is
          * not exposed to end customers.
          */
-        fun aliases(aliases: Optional<List<Alias>>) = aliases(aliases.orElse(null))
+        fun aliases(aliases: List<Alias>) = apply { body.aliases(aliases) }
+
+        /**
+         * Reference this alias when creating a contract. If the same alias is assigned to multiple
+         * rate cards, it will reference the rate card to which it was most recently assigned. It is
+         * not exposed to end customers.
+         */
+        fun aliases(aliases: JsonField<List<Alias>>) = apply { body.aliases(aliases) }
 
         /**
          * Reference this alias when creating a contract. If the same alias is assigned to multiple
@@ -237,15 +312,34 @@ constructor(
          */
         fun addAlias(alias: Alias) = apply { body.addAlias(alias) }
 
-        fun description(description: String?) = apply { body.description(description) }
+        fun description(description: String) = apply { body.description(description) }
 
-        fun description(description: Optional<String>) = description(description.orElse(null))
-
-        /** Used only in UI/API. It is not exposed to end customers. */
-        fun name(name: String?) = apply { body.name(name) }
+        fun description(description: JsonField<String>) = apply { body.description(description) }
 
         /** Used only in UI/API. It is not exposed to end customers. */
-        fun name(name: Optional<String>) = name(name.orElse(null))
+        fun name(name: String) = apply { body.name(name) }
+
+        /** Used only in UI/API. It is not exposed to end customers. */
+        fun name(name: JsonField<String>) = apply { body.name(name) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -345,25 +439,6 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
         fun build(): ContractRateCardUpdateParams =
             ContractRateCardUpdateParams(
                 body.build(),
@@ -376,24 +451,51 @@ constructor(
     class Alias
     @JsonCreator
     private constructor(
-        @JsonProperty("name") private val name: String,
-        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
-        @JsonProperty("starting_at") private val startingAt: OffsetDateTime?,
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("name") fun name(): String = name
+        fun name(): String = name.getRequired("name")
+
+        fun endingBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+        fun startingAt(): Optional<OffsetDateTime> =
+            Optional.ofNullable(startingAt.getNullable("starting_at"))
+
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         @JsonProperty("ending_before")
-        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
         @JsonProperty("starting_at")
-        fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): Alias = apply {
+            if (!validated) {
+                name()
+                endingBefore()
+                startingAt()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -404,9 +506,9 @@ constructor(
 
         class Builder {
 
-            private var name: String? = null
-            private var endingBefore: OffsetDateTime? = null
-            private var startingAt: OffsetDateTime? = null
+            private var name: JsonField<String>? = null
+            private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -417,19 +519,22 @@ constructor(
                 additionalProperties = alias.additionalProperties.toMutableMap()
             }
 
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = name(JsonField.of(name))
 
-            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
+            fun name(name: JsonField<String>) = apply { this.name = name }
+
+            fun endingBefore(endingBefore: OffsetDateTime) =
+                endingBefore(JsonField.of(endingBefore))
+
+            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
             }
 
-            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
-                endingBefore(endingBefore.orElse(null))
+            fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
-            fun startingAt(startingAt: OffsetDateTime?) = apply { this.startingAt = startingAt }
-
-            fun startingAt(startingAt: Optional<OffsetDateTime>) =
-                startingAt(startingAt.orElse(null))
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                this.startingAt = startingAt
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()

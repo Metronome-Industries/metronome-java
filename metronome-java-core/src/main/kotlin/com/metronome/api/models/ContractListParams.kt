@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -48,11 +50,34 @@ constructor(
      */
     fun startingAt(): Optional<OffsetDateTime> = body.startingAt()
 
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    /**
+     * Optional RFC 3339 timestamp. If provided, the response will include only contracts effective
+     * on the provided date. This cannot be provided if the starting_at filter is provided.
+     */
+    fun _coveringDate(): JsonField<OffsetDateTime> = body._coveringDate()
+
+    /** Include archived contracts in the response */
+    fun _includeArchived(): JsonField<Boolean> = body._includeArchived()
+
+    /**
+     * Include commit ledgers in the response. Setting this flag may cause the query to be slower.
+     */
+    fun _includeLedgers(): JsonField<Boolean> = body._includeLedgers()
+
+    /**
+     * Optional RFC 3339 timestamp. If provided, the response will include only contracts where
+     * effective_at is on or after the provided date. This cannot be provided if the covering_date
+     * filter is provided.
+     */
+    fun _startingAt(): JsonField<OffsetDateTime> = body._startingAt()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): ContractListBody = body
 
@@ -64,16 +89,57 @@ constructor(
     class ContractListBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("customer_id") private val customerId: String,
-        @JsonProperty("covering_date") private val coveringDate: OffsetDateTime?,
-        @JsonProperty("include_archived") private val includeArchived: Boolean?,
-        @JsonProperty("include_ledgers") private val includeLedgers: Boolean?,
-        @JsonProperty("starting_at") private val startingAt: OffsetDateTime?,
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("covering_date")
+        @ExcludeMissing
+        private val coveringDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("include_archived")
+        @ExcludeMissing
+        private val includeArchived: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("include_ledgers")
+        @ExcludeMissing
+        private val includeLedgers: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
+
+        /**
+         * Optional RFC 3339 timestamp. If provided, the response will include only contracts
+         * effective on the provided date. This cannot be provided if the starting_at filter is
+         * provided.
+         */
+        fun coveringDate(): Optional<OffsetDateTime> =
+            Optional.ofNullable(coveringDate.getNullable("covering_date"))
+
+        /** Include archived contracts in the response */
+        fun includeArchived(): Optional<Boolean> =
+            Optional.ofNullable(includeArchived.getNullable("include_archived"))
+
+        /**
+         * Include commit ledgers in the response. Setting this flag may cause the query to be
+         * slower.
+         */
+        fun includeLedgers(): Optional<Boolean> =
+            Optional.ofNullable(includeLedgers.getNullable("include_ledgers"))
+
+        /**
+         * Optional RFC 3339 timestamp. If provided, the response will include only contracts where
+         * effective_at is on or after the provided date. This cannot be provided if the
+         * covering_date filter is provided.
+         */
+        fun startingAt(): Optional<OffsetDateTime> =
+            Optional.ofNullable(startingAt.getNullable("starting_at"))
+
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
 
         /**
          * Optional RFC 3339 timestamp. If provided, the response will include only contracts
@@ -81,18 +147,21 @@ constructor(
          * provided.
          */
         @JsonProperty("covering_date")
-        fun coveringDate(): Optional<OffsetDateTime> = Optional.ofNullable(coveringDate)
+        @ExcludeMissing
+        fun _coveringDate(): JsonField<OffsetDateTime> = coveringDate
 
         /** Include archived contracts in the response */
         @JsonProperty("include_archived")
-        fun includeArchived(): Optional<Boolean> = Optional.ofNullable(includeArchived)
+        @ExcludeMissing
+        fun _includeArchived(): JsonField<Boolean> = includeArchived
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
         @JsonProperty("include_ledgers")
-        fun includeLedgers(): Optional<Boolean> = Optional.ofNullable(includeLedgers)
+        @ExcludeMissing
+        fun _includeLedgers(): JsonField<Boolean> = includeLedgers
 
         /**
          * Optional RFC 3339 timestamp. If provided, the response will include only contracts where
@@ -100,11 +169,25 @@ constructor(
          * covering_date filter is provided.
          */
         @JsonProperty("starting_at")
-        fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ContractListBody = apply {
+            if (!validated) {
+                customerId()
+                coveringDate()
+                includeArchived()
+                includeLedgers()
+                startingAt()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -115,11 +198,11 @@ constructor(
 
         class Builder {
 
-            private var customerId: String? = null
-            private var coveringDate: OffsetDateTime? = null
-            private var includeArchived: Boolean? = null
-            private var includeLedgers: Boolean? = null
-            private var startingAt: OffsetDateTime? = null
+            private var customerId: JsonField<String>? = null
+            private var coveringDate: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var includeArchived: JsonField<Boolean> = JsonMissing.of()
+            private var includeLedgers: JsonField<Boolean> = JsonMissing.of()
+            private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -132,75 +215,66 @@ constructor(
                 additionalProperties = contractListBody.additionalProperties.toMutableMap()
             }
 
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /**
              * Optional RFC 3339 timestamp. If provided, the response will include only contracts
              * effective on the provided date. This cannot be provided if the starting_at filter is
              * provided.
              */
-            fun coveringDate(coveringDate: OffsetDateTime?) = apply {
+            fun coveringDate(coveringDate: OffsetDateTime) =
+                coveringDate(JsonField.of(coveringDate))
+
+            /**
+             * Optional RFC 3339 timestamp. If provided, the response will include only contracts
+             * effective on the provided date. This cannot be provided if the starting_at filter is
+             * provided.
+             */
+            fun coveringDate(coveringDate: JsonField<OffsetDateTime>) = apply {
                 this.coveringDate = coveringDate
-            }
-
-            /**
-             * Optional RFC 3339 timestamp. If provided, the response will include only contracts
-             * effective on the provided date. This cannot be provided if the starting_at filter is
-             * provided.
-             */
-            fun coveringDate(coveringDate: Optional<OffsetDateTime>) =
-                coveringDate(coveringDate.orElse(null))
-
-            /** Include archived contracts in the response */
-            fun includeArchived(includeArchived: Boolean?) = apply {
-                this.includeArchived = includeArchived
             }
 
             /** Include archived contracts in the response */
             fun includeArchived(includeArchived: Boolean) =
-                includeArchived(includeArchived as Boolean?)
+                includeArchived(JsonField.of(includeArchived))
 
             /** Include archived contracts in the response */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun includeArchived(includeArchived: Optional<Boolean>) =
-                includeArchived(includeArchived.orElse(null) as Boolean?)
-
-            /**
-             * Include commit ledgers in the response. Setting this flag may cause the query to be
-             * slower.
-             */
-            fun includeLedgers(includeLedgers: Boolean?) = apply {
-                this.includeLedgers = includeLedgers
+            fun includeArchived(includeArchived: JsonField<Boolean>) = apply {
+                this.includeArchived = includeArchived
             }
 
             /**
              * Include commit ledgers in the response. Setting this flag may cause the query to be
              * slower.
              */
-            fun includeLedgers(includeLedgers: Boolean) = includeLedgers(includeLedgers as Boolean?)
+            fun includeLedgers(includeLedgers: Boolean) =
+                includeLedgers(JsonField.of(includeLedgers))
 
             /**
              * Include commit ledgers in the response. Setting this flag may cause the query to be
              * slower.
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun includeLedgers(includeLedgers: Optional<Boolean>) =
-                includeLedgers(includeLedgers.orElse(null) as Boolean?)
+            fun includeLedgers(includeLedgers: JsonField<Boolean>) = apply {
+                this.includeLedgers = includeLedgers
+            }
 
             /**
              * Optional RFC 3339 timestamp. If provided, the response will include only contracts
              * where effective_at is on or after the provided date. This cannot be provided if the
              * covering_date filter is provided.
              */
-            fun startingAt(startingAt: OffsetDateTime?) = apply { this.startingAt = startingAt }
+            fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
             /**
              * Optional RFC 3339 timestamp. If provided, the response will include only contracts
              * where effective_at is on or after the provided date. This cannot be provided if the
              * covering_date filter is provided.
              */
-            fun startingAt(startingAt: Optional<OffsetDateTime>) =
-                startingAt(startingAt.orElse(null))
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                this.startingAt = startingAt
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -273,67 +347,82 @@ constructor(
 
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
-        /**
-         * Optional RFC 3339 timestamp. If provided, the response will include only contracts
-         * effective on the provided date. This cannot be provided if the starting_at filter is
-         * provided.
-         */
-        fun coveringDate(coveringDate: OffsetDateTime?) = apply { body.coveringDate(coveringDate) }
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
 
         /**
          * Optional RFC 3339 timestamp. If provided, the response will include only contracts
          * effective on the provided date. This cannot be provided if the starting_at filter is
          * provided.
          */
-        fun coveringDate(coveringDate: Optional<OffsetDateTime>) =
-            coveringDate(coveringDate.orElse(null))
+        fun coveringDate(coveringDate: OffsetDateTime) = apply { body.coveringDate(coveringDate) }
+
+        /**
+         * Optional RFC 3339 timestamp. If provided, the response will include only contracts
+         * effective on the provided date. This cannot be provided if the starting_at filter is
+         * provided.
+         */
+        fun coveringDate(coveringDate: JsonField<OffsetDateTime>) = apply {
+            body.coveringDate(coveringDate)
+        }
 
         /** Include archived contracts in the response */
-        fun includeArchived(includeArchived: Boolean?) = apply {
+        fun includeArchived(includeArchived: Boolean) = apply {
             body.includeArchived(includeArchived)
         }
 
         /** Include archived contracts in the response */
-        fun includeArchived(includeArchived: Boolean) = includeArchived(includeArchived as Boolean?)
-
-        /** Include archived contracts in the response */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun includeArchived(includeArchived: Optional<Boolean>) =
-            includeArchived(includeArchived.orElse(null) as Boolean?)
+        fun includeArchived(includeArchived: JsonField<Boolean>) = apply {
+            body.includeArchived(includeArchived)
+        }
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        fun includeLedgers(includeLedgers: Boolean?) = apply { body.includeLedgers(includeLedgers) }
+        fun includeLedgers(includeLedgers: Boolean) = apply { body.includeLedgers(includeLedgers) }
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        fun includeLedgers(includeLedgers: Boolean) = includeLedgers(includeLedgers as Boolean?)
-
-        /**
-         * Include commit ledgers in the response. Setting this flag may cause the query to be
-         * slower.
-         */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun includeLedgers(includeLedgers: Optional<Boolean>) =
-            includeLedgers(includeLedgers.orElse(null) as Boolean?)
+        fun includeLedgers(includeLedgers: JsonField<Boolean>) = apply {
+            body.includeLedgers(includeLedgers)
+        }
 
         /**
          * Optional RFC 3339 timestamp. If provided, the response will include only contracts where
          * effective_at is on or after the provided date. This cannot be provided if the
          * covering_date filter is provided.
          */
-        fun startingAt(startingAt: OffsetDateTime?) = apply { body.startingAt(startingAt) }
+        fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
 
         /**
          * Optional RFC 3339 timestamp. If provided, the response will include only contracts where
          * effective_at is on or after the provided date. This cannot be provided if the
          * covering_date filter is provided.
          */
-        fun startingAt(startingAt: Optional<OffsetDateTime>) = startingAt(startingAt.orElse(null))
+        fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+            body.startingAt(startingAt)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -431,25 +520,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractListParams =

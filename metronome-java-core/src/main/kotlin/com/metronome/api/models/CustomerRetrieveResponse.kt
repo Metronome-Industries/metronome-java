@@ -27,7 +27,7 @@ private constructor(
 
     fun data(): CustomerDetail = data.getRequired("data")
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<CustomerDetail> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -51,7 +51,7 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<CustomerDetail> = JsonMissing.of()
+        private var data: JsonField<CustomerDetail>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -84,7 +84,10 @@ private constructor(
         }
 
         fun build(): CustomerRetrieveResponse =
-            CustomerRetrieveResponse(data, additionalProperties.toImmutable())
+            CustomerRetrieveResponse(
+                checkNotNull(data) { "`data` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     override fun equals(other: Any?): Boolean {

@@ -36,9 +36,13 @@ private constructor(
     fun scheduleItems(): Optional<List<ScheduleItem>> =
         Optional.ofNullable(scheduleItems.getNullable("schedule_items"))
 
-    @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+    @JsonProperty("credit_type")
+    @ExcludeMissing
+    fun _creditType(): JsonField<CreditTypeData> = creditType
 
-    @JsonProperty("schedule_items") @ExcludeMissing fun _scheduleItems() = scheduleItems
+    @JsonProperty("schedule_items")
+    @ExcludeMissing
+    fun _scheduleItems(): JsonField<List<ScheduleItem>> = scheduleItems
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -64,13 +68,13 @@ private constructor(
     class Builder {
 
         private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
-        private var scheduleItems: JsonField<List<ScheduleItem>> = JsonMissing.of()
+        private var scheduleItems: JsonField<MutableList<ScheduleItem>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(schedulePointInTime: SchedulePointInTime) = apply {
             creditType = schedulePointInTime.creditType
-            scheduleItems = schedulePointInTime.scheduleItems
+            scheduleItems = schedulePointInTime.scheduleItems.map { it.toMutableList() }
             additionalProperties = schedulePointInTime.additionalProperties.toMutableMap()
         }
 
@@ -84,7 +88,20 @@ private constructor(
             scheduleItems(JsonField.of(scheduleItems))
 
         fun scheduleItems(scheduleItems: JsonField<List<ScheduleItem>>) = apply {
-            this.scheduleItems = scheduleItems
+            this.scheduleItems = scheduleItems.map { it.toMutableList() }
+        }
+
+        fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
+            scheduleItems =
+                (scheduleItems ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(scheduleItem)
+                }
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -109,7 +126,7 @@ private constructor(
         fun build(): SchedulePointInTime =
             SchedulePointInTime(
                 creditType,
-                scheduleItems.map { it.toImmutable() },
+                (scheduleItems ?: JsonMissing.of()).map { it.toImmutable() },
                 additionalProperties.toImmutable(),
             )
     }
@@ -150,17 +167,19 @@ private constructor(
 
         fun unitPrice(): Double = unitPrice.getRequired("unit_price")
 
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-        @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
-        @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
+        @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId(): JsonField<String> = invoiceId
 
-        @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
-        @JsonProperty("timestamp") @ExcludeMissing fun _timestamp() = timestamp
+        @JsonProperty("timestamp")
+        @ExcludeMissing
+        fun _timestamp(): JsonField<OffsetDateTime> = timestamp
 
-        @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice() = unitPrice
+        @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice(): JsonField<Double> = unitPrice
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -189,12 +208,12 @@ private constructor(
 
         class Builder {
 
-            private var id: JsonField<String> = JsonMissing.of()
-            private var amount: JsonField<Double> = JsonMissing.of()
-            private var invoiceId: JsonField<String> = JsonMissing.of()
-            private var quantity: JsonField<Double> = JsonMissing.of()
-            private var timestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var unitPrice: JsonField<Double> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var amount: JsonField<Double>? = null
+            private var invoiceId: JsonField<String>? = null
+            private var quantity: JsonField<Double>? = null
+            private var timestamp: JsonField<OffsetDateTime>? = null
+            private var unitPrice: JsonField<Double>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -255,12 +274,12 @@ private constructor(
 
             fun build(): ScheduleItem =
                 ScheduleItem(
-                    id,
-                    amount,
-                    invoiceId,
-                    quantity,
-                    timestamp,
-                    unitPrice,
+                    checkNotNull(id) { "`id` is required but was not set" },
+                    checkNotNull(amount) { "`amount` is required but was not set" },
+                    checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
+                    checkNotNull(quantity) { "`quantity` is required but was not set" },
+                    checkNotNull(timestamp) { "`timestamp` is required but was not set" },
+                    checkNotNull(unitPrice) { "`unitPrice` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }

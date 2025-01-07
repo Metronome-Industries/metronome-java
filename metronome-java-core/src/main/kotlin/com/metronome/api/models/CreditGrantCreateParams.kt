@@ -16,6 +16,8 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.BaseDeserializer
 import com.metronome.api.core.BaseSerializer
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.getOrThrow
@@ -87,11 +89,62 @@ constructor(
      */
     fun uniquenessKey(): Optional<String> = body.uniquenessKey()
 
+    /** the Metronome ID of the customer */
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    /** The credit grant will only apply to usage or charges dated before this timestamp */
+    fun _expiresAt(): JsonField<OffsetDateTime> = body._expiresAt()
+
+    /** the amount of credits granted */
+    fun _grantAmount(): JsonField<GrantAmount> = body._grantAmount()
+
+    /** the name of the credit grant as it will appear on invoices */
+    fun _name(): JsonField<String> = body._name()
+
+    /** the amount paid for this credit grant */
+    fun _paidAmount(): JsonField<PaidAmount> = body._paidAmount()
+
+    fun _priority(): JsonField<Double> = body._priority()
+
+    fun _creditGrantType(): JsonField<String> = body._creditGrantType()
+
+    /** Custom fields to attach to the credit grant. */
+    fun _customFields(): JsonField<CustomFields> = body._customFields()
+
+    /** The credit grant will only apply to usage or charges dated on or after this timestamp */
+    fun _effectiveAt(): JsonField<OffsetDateTime> = body._effectiveAt()
+
+    /** The date to issue an invoice for the paid_amount. */
+    fun _invoiceDate(): JsonField<OffsetDateTime> = body._invoiceDate()
+
+    /**
+     * The product(s) which these credits will be applied to. (If unspecified, the credits will be
+     * applied to charges for all products.). The array ordering specified here will be used to
+     * determine the order in which credits will be applied to invoice line items
+     */
+    fun _productIds(): JsonField<List<String>> = body._productIds()
+
+    fun _reason(): JsonField<String> = body._reason()
+
+    /**
+     * Configure a rollover for this credit grant so if it expires it rolls over a configured amount
+     * to a new credit grant. This feature is currently opt-in only. Contact Metronome to be added
+     * to the beta.
+     */
+    fun _rolloverSettings(): JsonField<RolloverSettings> = body._rolloverSettings()
+
+    /**
+     * Prevents the creation of duplicates. If a request to create a record is made with a
+     * previously used uniqueness key, a new record will not be created and the request will fail
+     * with a 409 error.
+     */
+    fun _uniquenessKey(): JsonField<String> = body._uniquenessKey()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CreditGrantCreateBody = body
 
@@ -103,55 +156,153 @@ constructor(
     class CreditGrantCreateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("customer_id") private val customerId: String,
-        @JsonProperty("expires_at") private val expiresAt: OffsetDateTime,
-        @JsonProperty("grant_amount") private val grantAmount: GrantAmount,
-        @JsonProperty("name") private val name: String,
-        @JsonProperty("paid_amount") private val paidAmount: PaidAmount,
-        @JsonProperty("priority") private val priority: Double,
-        @JsonProperty("credit_grant_type") private val creditGrantType: String?,
-        @JsonProperty("custom_fields") private val customFields: CustomFields?,
-        @JsonProperty("effective_at") private val effectiveAt: OffsetDateTime?,
-        @JsonProperty("invoice_date") private val invoiceDate: OffsetDateTime?,
-        @JsonProperty("product_ids") private val productIds: List<String>?,
-        @JsonProperty("reason") private val reason: String?,
-        @JsonProperty("rollover_settings") private val rolloverSettings: RolloverSettings?,
-        @JsonProperty("uniqueness_key") private val uniquenessKey: String?,
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("expires_at")
+        @ExcludeMissing
+        private val expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("grant_amount")
+        @ExcludeMissing
+        private val grantAmount: JsonField<GrantAmount> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("paid_amount")
+        @ExcludeMissing
+        private val paidAmount: JsonField<PaidAmount> = JsonMissing.of(),
+        @JsonProperty("priority")
+        @ExcludeMissing
+        private val priority: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("credit_grant_type")
+        @ExcludeMissing
+        private val creditGrantType: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("effective_at")
+        @ExcludeMissing
+        private val effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("invoice_date")
+        @ExcludeMissing
+        private val invoiceDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("product_ids")
+        @ExcludeMissing
+        private val productIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("reason")
+        @ExcludeMissing
+        private val reason: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("rollover_settings")
+        @ExcludeMissing
+        private val rolloverSettings: JsonField<RolloverSettings> = JsonMissing.of(),
+        @JsonProperty("uniqueness_key")
+        @ExcludeMissing
+        private val uniquenessKey: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** the Metronome ID of the customer */
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
 
         /** The credit grant will only apply to usage or charges dated before this timestamp */
-        @JsonProperty("expires_at") fun expiresAt(): OffsetDateTime = expiresAt
+        fun expiresAt(): OffsetDateTime = expiresAt.getRequired("expires_at")
 
         /** the amount of credits granted */
-        @JsonProperty("grant_amount") fun grantAmount(): GrantAmount = grantAmount
+        fun grantAmount(): GrantAmount = grantAmount.getRequired("grant_amount")
 
         /** the name of the credit grant as it will appear on invoices */
-        @JsonProperty("name") fun name(): String = name
+        fun name(): String = name.getRequired("name")
 
         /** the amount paid for this credit grant */
-        @JsonProperty("paid_amount") fun paidAmount(): PaidAmount = paidAmount
+        fun paidAmount(): PaidAmount = paidAmount.getRequired("paid_amount")
 
-        @JsonProperty("priority") fun priority(): Double = priority
+        fun priority(): Double = priority.getRequired("priority")
+
+        fun creditGrantType(): Optional<String> =
+            Optional.ofNullable(creditGrantType.getNullable("credit_grant_type"))
+
+        /** Custom fields to attach to the credit grant. */
+        fun customFields(): Optional<CustomFields> =
+            Optional.ofNullable(customFields.getNullable("custom_fields"))
+
+        /** The credit grant will only apply to usage or charges dated on or after this timestamp */
+        fun effectiveAt(): Optional<OffsetDateTime> =
+            Optional.ofNullable(effectiveAt.getNullable("effective_at"))
+
+        /** The date to issue an invoice for the paid_amount. */
+        fun invoiceDate(): Optional<OffsetDateTime> =
+            Optional.ofNullable(invoiceDate.getNullable("invoice_date"))
+
+        /**
+         * The product(s) which these credits will be applied to. (If unspecified, the credits will
+         * be applied to charges for all products.). The array ordering specified here will be used
+         * to determine the order in which credits will be applied to invoice line items
+         */
+        fun productIds(): Optional<List<String>> =
+            Optional.ofNullable(productIds.getNullable("product_ids"))
+
+        fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+
+        /**
+         * Configure a rollover for this credit grant so if it expires it rolls over a configured
+         * amount to a new credit grant. This feature is currently opt-in only. Contact Metronome to
+         * be added to the beta.
+         */
+        fun rolloverSettings(): Optional<RolloverSettings> =
+            Optional.ofNullable(rolloverSettings.getNullable("rollover_settings"))
+
+        /**
+         * Prevents the creation of duplicates. If a request to create a record is made with a
+         * previously used uniqueness key, a new record will not be created and the request will
+         * fail with a 409 error.
+         */
+        fun uniquenessKey(): Optional<String> =
+            Optional.ofNullable(uniquenessKey.getNullable("uniqueness_key"))
+
+        /** the Metronome ID of the customer */
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
+
+        /** The credit grant will only apply to usage or charges dated before this timestamp */
+        @JsonProperty("expires_at")
+        @ExcludeMissing
+        fun _expiresAt(): JsonField<OffsetDateTime> = expiresAt
+
+        /** the amount of credits granted */
+        @JsonProperty("grant_amount")
+        @ExcludeMissing
+        fun _grantAmount(): JsonField<GrantAmount> = grantAmount
+
+        /** the name of the credit grant as it will appear on invoices */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+        /** the amount paid for this credit grant */
+        @JsonProperty("paid_amount")
+        @ExcludeMissing
+        fun _paidAmount(): JsonField<PaidAmount> = paidAmount
+
+        @JsonProperty("priority") @ExcludeMissing fun _priority(): JsonField<Double> = priority
 
         @JsonProperty("credit_grant_type")
-        fun creditGrantType(): Optional<String> = Optional.ofNullable(creditGrantType)
+        @ExcludeMissing
+        fun _creditGrantType(): JsonField<String> = creditGrantType
 
         /** Custom fields to attach to the credit grant. */
         @JsonProperty("custom_fields")
-        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+        @ExcludeMissing
+        fun _customFields(): JsonField<CustomFields> = customFields
 
         /** The credit grant will only apply to usage or charges dated on or after this timestamp */
         @JsonProperty("effective_at")
-        fun effectiveAt(): Optional<OffsetDateTime> = Optional.ofNullable(effectiveAt)
+        @ExcludeMissing
+        fun _effectiveAt(): JsonField<OffsetDateTime> = effectiveAt
 
         /** The date to issue an invoice for the paid_amount. */
         @JsonProperty("invoice_date")
-        fun invoiceDate(): Optional<OffsetDateTime> = Optional.ofNullable(invoiceDate)
+        @ExcludeMissing
+        fun _invoiceDate(): JsonField<OffsetDateTime> = invoiceDate
 
         /**
          * The product(s) which these credits will be applied to. (If unspecified, the credits will
@@ -159,9 +310,10 @@ constructor(
          * to determine the order in which credits will be applied to invoice line items
          */
         @JsonProperty("product_ids")
-        fun productIds(): Optional<List<String>> = Optional.ofNullable(productIds)
+        @ExcludeMissing
+        fun _productIds(): JsonField<List<String>> = productIds
 
-        @JsonProperty("reason") fun reason(): Optional<String> = Optional.ofNullable(reason)
+        @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
         /**
          * Configure a rollover for this credit grant so if it expires it rolls over a configured
@@ -169,7 +321,8 @@ constructor(
          * be added to the beta.
          */
         @JsonProperty("rollover_settings")
-        fun rolloverSettings(): Optional<RolloverSettings> = Optional.ofNullable(rolloverSettings)
+        @ExcludeMissing
+        fun _rolloverSettings(): JsonField<RolloverSettings> = rolloverSettings
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
@@ -177,11 +330,34 @@ constructor(
          * fail with a 409 error.
          */
         @JsonProperty("uniqueness_key")
-        fun uniquenessKey(): Optional<String> = Optional.ofNullable(uniquenessKey)
+        @ExcludeMissing
+        fun _uniquenessKey(): JsonField<String> = uniquenessKey
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CreditGrantCreateBody = apply {
+            if (!validated) {
+                customerId()
+                expiresAt()
+                grantAmount().validate()
+                name()
+                paidAmount().validate()
+                priority()
+                creditGrantType()
+                customFields().map { it.validate() }
+                effectiveAt()
+                invoiceDate()
+                productIds()
+                reason()
+                rolloverSettings().map { it.validate() }
+                uniquenessKey()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -192,20 +368,20 @@ constructor(
 
         class Builder {
 
-            private var customerId: String? = null
-            private var expiresAt: OffsetDateTime? = null
-            private var grantAmount: GrantAmount? = null
-            private var name: String? = null
-            private var paidAmount: PaidAmount? = null
-            private var priority: Double? = null
-            private var creditGrantType: String? = null
-            private var customFields: CustomFields? = null
-            private var effectiveAt: OffsetDateTime? = null
-            private var invoiceDate: OffsetDateTime? = null
-            private var productIds: MutableList<String>? = null
-            private var reason: String? = null
-            private var rolloverSettings: RolloverSettings? = null
-            private var uniquenessKey: String? = null
+            private var customerId: JsonField<String>? = null
+            private var expiresAt: JsonField<OffsetDateTime>? = null
+            private var grantAmount: JsonField<GrantAmount>? = null
+            private var name: JsonField<String>? = null
+            private var paidAmount: JsonField<PaidAmount>? = null
+            private var priority: JsonField<Double>? = null
+            private var creditGrantType: JsonField<String> = JsonMissing.of()
+            private var customFields: JsonField<CustomFields> = JsonMissing.of()
+            private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var invoiceDate: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var productIds: JsonField<MutableList<String>>? = null
+            private var reason: JsonField<String> = JsonMissing.of()
+            private var rolloverSettings: JsonField<RolloverSettings> = JsonMissing.of()
+            private var uniquenessKey: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -220,7 +396,7 @@ constructor(
                 customFields = creditGrantCreateBody.customFields
                 effectiveAt = creditGrantCreateBody.effectiveAt
                 invoiceDate = creditGrantCreateBody.invoiceDate
-                productIds = creditGrantCreateBody.productIds?.toMutableList()
+                productIds = creditGrantCreateBody.productIds.map { it.toMutableList() }
                 reason = creditGrantCreateBody.reason
                 rolloverSettings = creditGrantCreateBody.rolloverSettings
                 uniquenessKey = creditGrantCreateBody.uniquenessKey
@@ -228,63 +404,78 @@ constructor(
             }
 
             /** the Metronome ID of the customer */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            /** the Metronome ID of the customer */
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /** The credit grant will only apply to usage or charges dated before this timestamp */
-            fun expiresAt(expiresAt: OffsetDateTime) = apply { this.expiresAt = expiresAt }
+            fun expiresAt(expiresAt: OffsetDateTime) = expiresAt(JsonField.of(expiresAt))
+
+            /** The credit grant will only apply to usage or charges dated before this timestamp */
+            fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply {
+                this.expiresAt = expiresAt
+            }
 
             /** the amount of credits granted */
-            fun grantAmount(grantAmount: GrantAmount) = apply { this.grantAmount = grantAmount }
+            fun grantAmount(grantAmount: GrantAmount) = grantAmount(JsonField.of(grantAmount))
+
+            /** the amount of credits granted */
+            fun grantAmount(grantAmount: JsonField<GrantAmount>) = apply {
+                this.grantAmount = grantAmount
+            }
 
             /** the name of the credit grant as it will appear on invoices */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = name(JsonField.of(name))
+
+            /** the name of the credit grant as it will appear on invoices */
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** the amount paid for this credit grant */
-            fun paidAmount(paidAmount: PaidAmount) = apply { this.paidAmount = paidAmount }
+            fun paidAmount(paidAmount: PaidAmount) = paidAmount(JsonField.of(paidAmount))
 
-            fun priority(priority: Double) = apply { this.priority = priority }
+            /** the amount paid for this credit grant */
+            fun paidAmount(paidAmount: JsonField<PaidAmount>) = apply {
+                this.paidAmount = paidAmount
+            }
 
-            fun creditGrantType(creditGrantType: String?) = apply {
+            fun priority(priority: Double) = priority(JsonField.of(priority))
+
+            fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
+
+            fun creditGrantType(creditGrantType: String) =
+                creditGrantType(JsonField.of(creditGrantType))
+
+            fun creditGrantType(creditGrantType: JsonField<String>) = apply {
                 this.creditGrantType = creditGrantType
             }
 
-            fun creditGrantType(creditGrantType: Optional<String>) =
-                creditGrantType(creditGrantType.orElse(null))
+            /** Custom fields to attach to the credit grant. */
+            fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
             /** Custom fields to attach to the credit grant. */
-            fun customFields(customFields: CustomFields?) = apply {
+            fun customFields(customFields: JsonField<CustomFields>) = apply {
                 this.customFields = customFields
             }
 
-            /** Custom fields to attach to the credit grant. */
-            fun customFields(customFields: Optional<CustomFields>) =
-                customFields(customFields.orElse(null))
+            /**
+             * The credit grant will only apply to usage or charges dated on or after this timestamp
+             */
+            fun effectiveAt(effectiveAt: OffsetDateTime) = effectiveAt(JsonField.of(effectiveAt))
 
             /**
              * The credit grant will only apply to usage or charges dated on or after this timestamp
              */
-            fun effectiveAt(effectiveAt: OffsetDateTime?) = apply { this.effectiveAt = effectiveAt }
-
-            /**
-             * The credit grant will only apply to usage or charges dated on or after this timestamp
-             */
-            fun effectiveAt(effectiveAt: Optional<OffsetDateTime>) =
-                effectiveAt(effectiveAt.orElse(null))
+            fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
+                this.effectiveAt = effectiveAt
+            }
 
             /** The date to issue an invoice for the paid_amount. */
-            fun invoiceDate(invoiceDate: OffsetDateTime?) = apply { this.invoiceDate = invoiceDate }
+            fun invoiceDate(invoiceDate: OffsetDateTime) = invoiceDate(JsonField.of(invoiceDate))
 
             /** The date to issue an invoice for the paid_amount. */
-            fun invoiceDate(invoiceDate: Optional<OffsetDateTime>) =
-                invoiceDate(invoiceDate.orElse(null))
-
-            /**
-             * The product(s) which these credits will be applied to. (If unspecified, the credits
-             * will be applied to charges for all products.). The array ordering specified here will
-             * be used to determine the order in which credits will be applied to invoice line items
-             */
-            fun productIds(productIds: List<String>?) = apply {
-                this.productIds = productIds?.toMutableList()
+            fun invoiceDate(invoiceDate: JsonField<OffsetDateTime>) = apply {
+                this.invoiceDate = invoiceDate
             }
 
             /**
@@ -292,7 +483,16 @@ constructor(
              * will be applied to charges for all products.). The array ordering specified here will
              * be used to determine the order in which credits will be applied to invoice line items
              */
-            fun productIds(productIds: Optional<List<String>>) = productIds(productIds.orElse(null))
+            fun productIds(productIds: List<String>) = productIds(JsonField.of(productIds))
+
+            /**
+             * The product(s) which these credits will be applied to. (If unspecified, the credits
+             * will be applied to charges for all products.). The array ordering specified here will
+             * be used to determine the order in which credits will be applied to invoice line items
+             */
+            fun productIds(productIds: JsonField<List<String>>) = apply {
+                this.productIds = productIds.map { it.toMutableList() }
+            }
 
             /**
              * The product(s) which these credits will be applied to. (If unspecified, the credits
@@ -300,44 +500,54 @@ constructor(
              * be used to determine the order in which credits will be applied to invoice line items
              */
             fun addProductId(productId: String) = apply {
-                productIds = (productIds ?: mutableListOf()).apply { add(productId) }
+                productIds =
+                    (productIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(productId)
+                    }
             }
 
-            fun reason(reason: String?) = apply { this.reason = reason }
+            fun reason(reason: String) = reason(JsonField.of(reason))
 
-            fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+            fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
             /**
              * Configure a rollover for this credit grant so if it expires it rolls over a
              * configured amount to a new credit grant. This feature is currently opt-in only.
              * Contact Metronome to be added to the beta.
              */
-            fun rolloverSettings(rolloverSettings: RolloverSettings?) = apply {
+            fun rolloverSettings(rolloverSettings: RolloverSettings) =
+                rolloverSettings(JsonField.of(rolloverSettings))
+
+            /**
+             * Configure a rollover for this credit grant so if it expires it rolls over a
+             * configured amount to a new credit grant. This feature is currently opt-in only.
+             * Contact Metronome to be added to the beta.
+             */
+            fun rolloverSettings(rolloverSettings: JsonField<RolloverSettings>) = apply {
                 this.rolloverSettings = rolloverSettings
             }
 
             /**
-             * Configure a rollover for this credit grant so if it expires it rolls over a
-             * configured amount to a new credit grant. This feature is currently opt-in only.
-             * Contact Metronome to be added to the beta.
+             * Prevents the creation of duplicates. If a request to create a record is made with a
+             * previously used uniqueness key, a new record will not be created and the request will
+             * fail with a 409 error.
              */
-            fun rolloverSettings(rolloverSettings: Optional<RolloverSettings>) =
-                rolloverSettings(rolloverSettings.orElse(null))
+            fun uniquenessKey(uniquenessKey: String) = uniquenessKey(JsonField.of(uniquenessKey))
 
             /**
              * Prevents the creation of duplicates. If a request to create a record is made with a
              * previously used uniqueness key, a new record will not be created and the request will
              * fail with a 409 error.
              */
-            fun uniquenessKey(uniquenessKey: String?) = apply { this.uniquenessKey = uniquenessKey }
-
-            /**
-             * Prevents the creation of duplicates. If a request to create a record is made with a
-             * previously used uniqueness key, a new record will not be created and the request will
-             * fail with a 409 error.
-             */
-            fun uniquenessKey(uniquenessKey: Optional<String>) =
-                uniquenessKey(uniquenessKey.orElse(null))
+            fun uniquenessKey(uniquenessKey: JsonField<String>) = apply {
+                this.uniquenessKey = uniquenessKey
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -370,7 +580,7 @@ constructor(
                     customFields,
                     effectiveAt,
                     invoiceDate,
-                    productIds?.toImmutable(),
+                    (productIds ?: JsonMissing.of()).map { it.toImmutable() },
                     reason,
                     rolloverSettings,
                     uniquenessKey,
@@ -420,61 +630,84 @@ constructor(
         /** the Metronome ID of the customer */
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
+        /** the Metronome ID of the customer */
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
+
         /** The credit grant will only apply to usage or charges dated before this timestamp */
         fun expiresAt(expiresAt: OffsetDateTime) = apply { body.expiresAt(expiresAt) }
+
+        /** The credit grant will only apply to usage or charges dated before this timestamp */
+        fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply { body.expiresAt(expiresAt) }
 
         /** the amount of credits granted */
         fun grantAmount(grantAmount: GrantAmount) = apply { body.grantAmount(grantAmount) }
 
+        /** the amount of credits granted */
+        fun grantAmount(grantAmount: JsonField<GrantAmount>) = apply {
+            body.grantAmount(grantAmount)
+        }
+
         /** the name of the credit grant as it will appear on invoices */
         fun name(name: String) = apply { body.name(name) }
+
+        /** the name of the credit grant as it will appear on invoices */
+        fun name(name: JsonField<String>) = apply { body.name(name) }
 
         /** the amount paid for this credit grant */
         fun paidAmount(paidAmount: PaidAmount) = apply { body.paidAmount(paidAmount) }
 
+        /** the amount paid for this credit grant */
+        fun paidAmount(paidAmount: JsonField<PaidAmount>) = apply { body.paidAmount(paidAmount) }
+
         fun priority(priority: Double) = apply { body.priority(priority) }
 
-        fun creditGrantType(creditGrantType: String?) = apply {
+        fun priority(priority: JsonField<Double>) = apply { body.priority(priority) }
+
+        fun creditGrantType(creditGrantType: String) = apply {
             body.creditGrantType(creditGrantType)
         }
 
-        fun creditGrantType(creditGrantType: Optional<String>) =
-            creditGrantType(creditGrantType.orElse(null))
+        fun creditGrantType(creditGrantType: JsonField<String>) = apply {
+            body.creditGrantType(creditGrantType)
+        }
 
         /** Custom fields to attach to the credit grant. */
-        fun customFields(customFields: CustomFields?) = apply { body.customFields(customFields) }
+        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
 
         /** Custom fields to attach to the credit grant. */
-        fun customFields(customFields: Optional<CustomFields>) =
-            customFields(customFields.orElse(null))
+        fun customFields(customFields: JsonField<CustomFields>) = apply {
+            body.customFields(customFields)
+        }
 
         /** The credit grant will only apply to usage or charges dated on or after this timestamp */
-        fun effectiveAt(effectiveAt: OffsetDateTime?) = apply { body.effectiveAt(effectiveAt) }
+        fun effectiveAt(effectiveAt: OffsetDateTime) = apply { body.effectiveAt(effectiveAt) }
 
         /** The credit grant will only apply to usage or charges dated on or after this timestamp */
-        fun effectiveAt(effectiveAt: Optional<OffsetDateTime>) =
-            effectiveAt(effectiveAt.orElse(null))
+        fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
+            body.effectiveAt(effectiveAt)
+        }
 
         /** The date to issue an invoice for the paid_amount. */
-        fun invoiceDate(invoiceDate: OffsetDateTime?) = apply { body.invoiceDate(invoiceDate) }
+        fun invoiceDate(invoiceDate: OffsetDateTime) = apply { body.invoiceDate(invoiceDate) }
 
         /** The date to issue an invoice for the paid_amount. */
-        fun invoiceDate(invoiceDate: Optional<OffsetDateTime>) =
-            invoiceDate(invoiceDate.orElse(null))
+        fun invoiceDate(invoiceDate: JsonField<OffsetDateTime>) = apply {
+            body.invoiceDate(invoiceDate)
+        }
 
         /**
          * The product(s) which these credits will be applied to. (If unspecified, the credits will
          * be applied to charges for all products.). The array ordering specified here will be used
          * to determine the order in which credits will be applied to invoice line items
          */
-        fun productIds(productIds: List<String>?) = apply { body.productIds(productIds) }
+        fun productIds(productIds: List<String>) = apply { body.productIds(productIds) }
 
         /**
          * The product(s) which these credits will be applied to. (If unspecified, the credits will
          * be applied to charges for all products.). The array ordering specified here will be used
          * to determine the order in which credits will be applied to invoice line items
          */
-        fun productIds(productIds: Optional<List<String>>) = productIds(productIds.orElse(null))
+        fun productIds(productIds: JsonField<List<String>>) = apply { body.productIds(productIds) }
 
         /**
          * The product(s) which these credits will be applied to. (If unspecified, the credits will
@@ -483,16 +716,16 @@ constructor(
          */
         fun addProductId(productId: String) = apply { body.addProductId(productId) }
 
-        fun reason(reason: String?) = apply { body.reason(reason) }
+        fun reason(reason: String) = apply { body.reason(reason) }
 
-        fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+        fun reason(reason: JsonField<String>) = apply { body.reason(reason) }
 
         /**
          * Configure a rollover for this credit grant so if it expires it rolls over a configured
          * amount to a new credit grant. This feature is currently opt-in only. Contact Metronome to
          * be added to the beta.
          */
-        fun rolloverSettings(rolloverSettings: RolloverSettings?) = apply {
+        fun rolloverSettings(rolloverSettings: RolloverSettings) = apply {
             body.rolloverSettings(rolloverSettings)
         }
 
@@ -501,23 +734,44 @@ constructor(
          * amount to a new credit grant. This feature is currently opt-in only. Contact Metronome to
          * be added to the beta.
          */
-        fun rolloverSettings(rolloverSettings: Optional<RolloverSettings>) =
-            rolloverSettings(rolloverSettings.orElse(null))
+        fun rolloverSettings(rolloverSettings: JsonField<RolloverSettings>) = apply {
+            body.rolloverSettings(rolloverSettings)
+        }
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
          * previously used uniqueness key, a new record will not be created and the request will
          * fail with a 409 error.
          */
-        fun uniquenessKey(uniquenessKey: String?) = apply { body.uniquenessKey(uniquenessKey) }
+        fun uniquenessKey(uniquenessKey: String) = apply { body.uniquenessKey(uniquenessKey) }
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
          * previously used uniqueness key, a new record will not be created and the request will
          * fail with a 409 error.
          */
-        fun uniquenessKey(uniquenessKey: Optional<String>) =
-            uniquenessKey(uniquenessKey.orElse(null))
+        fun uniquenessKey(uniquenessKey: JsonField<String>) = apply {
+            body.uniquenessKey(uniquenessKey)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -617,25 +871,6 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
         fun build(): CreditGrantCreateParams =
             CreditGrantCreateParams(
                 body.build(),
@@ -649,20 +884,41 @@ constructor(
     class GrantAmount
     @JsonCreator
     private constructor(
-        @JsonProperty("amount") private val amount: Double,
-        @JsonProperty("credit_type_id") private val creditTypeId: String,
+        @JsonProperty("amount")
+        @ExcludeMissing
+        private val amount: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("credit_type_id")
+        @ExcludeMissing
+        private val creditTypeId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("amount") fun amount(): Double = amount
+        fun amount(): Double = amount.getRequired("amount")
 
         /** the ID of the pricing unit to be used. Defaults to USD (cents) if not passed. */
-        @JsonProperty("credit_type_id") fun creditTypeId(): String = creditTypeId
+        fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
+
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+
+        /** the ID of the pricing unit to be used. Defaults to USD (cents) if not passed. */
+        @JsonProperty("credit_type_id")
+        @ExcludeMissing
+        fun _creditTypeId(): JsonField<String> = creditTypeId
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): GrantAmount = apply {
+            if (!validated) {
+                amount()
+                creditTypeId()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -673,8 +929,8 @@ constructor(
 
         class Builder {
 
-            private var amount: Double? = null
-            private var creditTypeId: String? = null
+            private var amount: JsonField<Double>? = null
+            private var creditTypeId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -684,10 +940,17 @@ constructor(
                 additionalProperties = grantAmount.additionalProperties.toMutableMap()
             }
 
-            fun amount(amount: Double) = apply { this.amount = amount }
+            fun amount(amount: Double) = amount(JsonField.of(amount))
+
+            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
             /** the ID of the pricing unit to be used. Defaults to USD (cents) if not passed. */
-            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+            fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
+
+            /** the ID of the pricing unit to be used. Defaults to USD (cents) if not passed. */
+            fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                this.creditTypeId = creditTypeId
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -739,20 +1002,41 @@ constructor(
     class PaidAmount
     @JsonCreator
     private constructor(
-        @JsonProperty("amount") private val amount: Double,
-        @JsonProperty("credit_type_id") private val creditTypeId: String,
+        @JsonProperty("amount")
+        @ExcludeMissing
+        private val amount: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("credit_type_id")
+        @ExcludeMissing
+        private val creditTypeId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("amount") fun amount(): Double = amount
+        fun amount(): Double = amount.getRequired("amount")
 
         /** the ID of the pricing unit to be used. Defaults to USD (cents) if not passed. */
-        @JsonProperty("credit_type_id") fun creditTypeId(): String = creditTypeId
+        fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
+
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+
+        /** the ID of the pricing unit to be used. Defaults to USD (cents) if not passed. */
+        @JsonProperty("credit_type_id")
+        @ExcludeMissing
+        fun _creditTypeId(): JsonField<String> = creditTypeId
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): PaidAmount = apply {
+            if (!validated) {
+                amount()
+                creditTypeId()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -763,8 +1047,8 @@ constructor(
 
         class Builder {
 
-            private var amount: Double? = null
-            private var creditTypeId: String? = null
+            private var amount: JsonField<Double>? = null
+            private var creditTypeId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -774,10 +1058,17 @@ constructor(
                 additionalProperties = paidAmount.additionalProperties.toMutableMap()
             }
 
-            fun amount(amount: Double) = apply { this.amount = amount }
+            fun amount(amount: Double) = amount(JsonField.of(amount))
+
+            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
             /** the ID of the pricing unit to be used. Defaults to USD (cents) if not passed. */
-            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+            fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
+
+            /** the ID of the pricing unit to be used. Defaults to USD (cents) if not passed. */
+            fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                this.creditTypeId = creditTypeId
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -836,6 +1127,14 @@ constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomFields = apply {
+            if (!validated) {
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -901,27 +1200,59 @@ constructor(
     class RolloverSettings
     @JsonCreator
     private constructor(
-        @JsonProperty("expires_at") private val expiresAt: OffsetDateTime,
-        @JsonProperty("priority") private val priority: Double,
-        @JsonProperty("rollover_amount") private val rolloverAmount: RolloverAmount,
+        @JsonProperty("expires_at")
+        @ExcludeMissing
+        private val expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("priority")
+        @ExcludeMissing
+        private val priority: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("rollover_amount")
+        @ExcludeMissing
+        private val rolloverAmount: JsonField<RolloverAmount> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The date to expire the rollover credits. */
-        @JsonProperty("expires_at") fun expiresAt(): OffsetDateTime = expiresAt
+        fun expiresAt(): OffsetDateTime = expiresAt.getRequired("expires_at")
 
         /**
          * The priority to give the rollover credit grant that gets created when a rollover happens.
          */
-        @JsonProperty("priority") fun priority(): Double = priority
+        fun priority(): Double = priority.getRequired("priority")
 
         /** Specify how much to rollover to the rollover credit grant */
-        @JsonProperty("rollover_amount") fun rolloverAmount(): RolloverAmount = rolloverAmount
+        fun rolloverAmount(): RolloverAmount = rolloverAmount.getRequired("rollover_amount")
+
+        /** The date to expire the rollover credits. */
+        @JsonProperty("expires_at")
+        @ExcludeMissing
+        fun _expiresAt(): JsonField<OffsetDateTime> = expiresAt
+
+        /**
+         * The priority to give the rollover credit grant that gets created when a rollover happens.
+         */
+        @JsonProperty("priority") @ExcludeMissing fun _priority(): JsonField<Double> = priority
+
+        /** Specify how much to rollover to the rollover credit grant */
+        @JsonProperty("rollover_amount")
+        @ExcludeMissing
+        fun _rolloverAmount(): JsonField<RolloverAmount> = rolloverAmount
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): RolloverSettings = apply {
+            if (!validated) {
+                expiresAt()
+                priority()
+                rolloverAmount()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -932,9 +1263,9 @@ constructor(
 
         class Builder {
 
-            private var expiresAt: OffsetDateTime? = null
-            private var priority: Double? = null
-            private var rolloverAmount: RolloverAmount? = null
+            private var expiresAt: JsonField<OffsetDateTime>? = null
+            private var priority: JsonField<Double>? = null
+            private var rolloverAmount: JsonField<RolloverAmount>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -946,28 +1277,41 @@ constructor(
             }
 
             /** The date to expire the rollover credits. */
-            fun expiresAt(expiresAt: OffsetDateTime) = apply { this.expiresAt = expiresAt }
+            fun expiresAt(expiresAt: OffsetDateTime) = expiresAt(JsonField.of(expiresAt))
+
+            /** The date to expire the rollover credits. */
+            fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply {
+                this.expiresAt = expiresAt
+            }
 
             /**
              * The priority to give the rollover credit grant that gets created when a rollover
              * happens.
              */
-            fun priority(priority: Double) = apply { this.priority = priority }
+            fun priority(priority: Double) = priority(JsonField.of(priority))
+
+            /**
+             * The priority to give the rollover credit grant that gets created when a rollover
+             * happens.
+             */
+            fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
 
             /** Specify how much to rollover to the rollover credit grant */
-            fun rolloverAmount(rolloverAmount: RolloverAmount) = apply {
+            fun rolloverAmount(rolloverAmount: RolloverAmount) =
+                rolloverAmount(JsonField.of(rolloverAmount))
+
+            /** Specify how much to rollover to the rollover credit grant */
+            fun rolloverAmount(rolloverAmount: JsonField<RolloverAmount>) = apply {
                 this.rolloverAmount = rolloverAmount
             }
 
-            fun rolloverAmount(rolloverAmountMaxPercentage: RolloverAmountMaxPercentage) = apply {
-                this.rolloverAmount =
+            fun rolloverAmount(rolloverAmountMaxPercentage: RolloverAmountMaxPercentage) =
+                rolloverAmount(
                     RolloverAmount.ofRolloverAmountMaxPercentage(rolloverAmountMaxPercentage)
-            }
+                )
 
-            fun rolloverAmount(rolloverAmountMaxAmount: RolloverAmountMaxAmount) = apply {
-                this.rolloverAmount =
-                    RolloverAmount.ofRolloverAmountMaxAmount(rolloverAmountMaxAmount)
-            }
+            fun rolloverAmount(rolloverAmountMaxAmount: RolloverAmountMaxAmount) =
+                rolloverAmount(RolloverAmount.ofRolloverAmountMaxAmount(rolloverAmountMaxAmount))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1007,6 +1351,8 @@ constructor(
             private val _json: JsonValue? = null,
         ) {
 
+            private var validated: Boolean = false
+
             fun rolloverAmountMaxPercentage(): Optional<RolloverAmountMaxPercentage> =
                 Optional.ofNullable(rolloverAmountMaxPercentage)
 
@@ -1032,6 +1378,17 @@ constructor(
                     rolloverAmountMaxAmount != null ->
                         visitor.visitRolloverAmountMaxAmount(rolloverAmountMaxAmount)
                     else -> visitor.unknown(_json)
+                }
+            }
+
+            fun validate(): RolloverAmount = apply {
+                if (!validated) {
+                    if (rolloverAmountMaxPercentage == null && rolloverAmountMaxAmount == null) {
+                        throw MetronomeInvalidDataException("Unknown RolloverAmount: $_json")
+                    }
+                    rolloverAmountMaxPercentage?.validate()
+                    rolloverAmountMaxAmount?.validate()
+                    validated = true
                 }
             }
 
@@ -1087,12 +1444,18 @@ constructor(
                 override fun ObjectCodec.deserialize(node: JsonNode): RolloverAmount {
                     val json = JsonValue.fromJsonNode(node)
 
-                    tryDeserialize(node, jacksonTypeRef<RolloverAmountMaxPercentage>())?.let {
-                        return RolloverAmount(rolloverAmountMaxPercentage = it, _json = json)
-                    }
-                    tryDeserialize(node, jacksonTypeRef<RolloverAmountMaxAmount>())?.let {
-                        return RolloverAmount(rolloverAmountMaxAmount = it, _json = json)
-                    }
+                    tryDeserialize(node, jacksonTypeRef<RolloverAmountMaxPercentage>()) {
+                            it.validate()
+                        }
+                        ?.let {
+                            return RolloverAmount(rolloverAmountMaxPercentage = it, _json = json)
+                        }
+                    tryDeserialize(node, jacksonTypeRef<RolloverAmountMaxAmount>()) {
+                            it.validate()
+                        }
+                        ?.let {
+                            return RolloverAmount(rolloverAmountMaxAmount = it, _json = json)
+                        }
 
                     return RolloverAmount(_json = json)
                 }

@@ -59,19 +59,27 @@ private constructor(
     fun customFields(): Optional<CustomFields> =
         Optional.ofNullable(customFields.getNullable("custom_fields"))
 
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    @JsonProperty("current") @ExcludeMissing fun _current() = current
+    @JsonProperty("current")
+    @ExcludeMissing
+    fun _current(): JsonField<ProductListItemState> = current
 
-    @JsonProperty("initial") @ExcludeMissing fun _initial() = initial
+    @JsonProperty("initial")
+    @ExcludeMissing
+    fun _initial(): JsonField<ProductListItemState> = initial
 
-    @JsonProperty("type") @ExcludeMissing fun _type() = type
+    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
-    @JsonProperty("updates") @ExcludeMissing fun _updates() = updates
+    @JsonProperty("updates") @ExcludeMissing fun _updates(): JsonField<List<Update>> = updates
 
-    @JsonProperty("archived_at") @ExcludeMissing fun _archivedAt() = archivedAt
+    @JsonProperty("archived_at")
+    @ExcludeMissing
+    fun _archivedAt(): JsonField<OffsetDateTime> = archivedAt
 
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    fun _customFields(): JsonField<CustomFields> = customFields
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -101,11 +109,11 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var current: JsonField<ProductListItemState> = JsonMissing.of()
-        private var initial: JsonField<ProductListItemState> = JsonMissing.of()
-        private var type: JsonField<Type> = JsonMissing.of()
-        private var updates: JsonField<List<Update>> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var current: JsonField<ProductListItemState>? = null
+        private var initial: JsonField<ProductListItemState>? = null
+        private var type: JsonField<Type>? = null
+        private var updates: JsonField<MutableList<Update>>? = null
         private var archivedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -116,7 +124,7 @@ private constructor(
             current = contractProductListResponse.current
             initial = contractProductListResponse.initial
             type = contractProductListResponse.type
-            updates = contractProductListResponse.updates
+            updates = contractProductListResponse.updates.map { it.toMutableList() }
             archivedAt = contractProductListResponse.archivedAt
             customFields = contractProductListResponse.customFields
             additionalProperties = contractProductListResponse.additionalProperties.toMutableMap()
@@ -140,9 +148,26 @@ private constructor(
 
         fun updates(updates: List<Update>) = updates(JsonField.of(updates))
 
-        fun updates(updates: JsonField<List<Update>>) = apply { this.updates = updates }
+        fun updates(updates: JsonField<List<Update>>) = apply {
+            this.updates = updates.map { it.toMutableList() }
+        }
 
-        fun archivedAt(archivedAt: OffsetDateTime) = archivedAt(JsonField.of(archivedAt))
+        fun addUpdate(update: Update) = apply {
+            updates =
+                (updates ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(update)
+                }
+        }
+
+        fun archivedAt(archivedAt: OffsetDateTime?) = archivedAt(JsonField.ofNullable(archivedAt))
+
+        fun archivedAt(archivedAt: Optional<OffsetDateTime>) = archivedAt(archivedAt.orElse(null))
 
         fun archivedAt(archivedAt: JsonField<OffsetDateTime>) = apply {
             this.archivedAt = archivedAt
@@ -175,11 +200,12 @@ private constructor(
 
         fun build(): ContractProductListResponse =
             ContractProductListResponse(
-                id,
-                current,
-                initial,
-                type,
-                updates.map { it.toImmutable() },
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(current) { "`current` is required but was not set" },
+                checkNotNull(initial) { "`initial` is required but was not set" },
+                checkNotNull(type) { "`type` is required but was not set" },
+                checkNotNull(updates) { "`updates` is required but was not set" }
+                    .map { it.toImmutable() },
                 archivedAt,
                 customFields,
                 additionalProperties.toImmutable(),
@@ -387,37 +413,43 @@ private constructor(
 
         fun tags(): Optional<List<String>> = Optional.ofNullable(tags.getNullable("tags"))
 
-        @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
-        @JsonProperty("created_by") @ExcludeMissing fun _createdBy() = createdBy
+        @JsonProperty("created_by") @ExcludeMissing fun _createdBy(): JsonField<String> = createdBy
 
         @JsonProperty("billable_metric_id")
         @ExcludeMissing
-        fun _billableMetricId() = billableMetricId
+        fun _billableMetricId(): JsonField<String> = billableMetricId
 
         @JsonProperty("composite_product_ids")
         @ExcludeMissing
-        fun _compositeProductIds() = compositeProductIds
+        fun _compositeProductIds(): JsonField<List<String>> = compositeProductIds
 
-        @JsonProperty("composite_tags") @ExcludeMissing fun _compositeTags() = compositeTags
+        @JsonProperty("composite_tags")
+        @ExcludeMissing
+        fun _compositeTags(): JsonField<List<String>> = compositeTags
 
         @JsonProperty("exclude_free_usage")
         @ExcludeMissing
-        fun _excludeFreeUsage() = excludeFreeUsage
+        fun _excludeFreeUsage(): JsonField<Boolean> = excludeFreeUsage
 
-        @JsonProperty("is_refundable") @ExcludeMissing fun _isRefundable() = isRefundable
+        @JsonProperty("is_refundable")
+        @ExcludeMissing
+        fun _isRefundable(): JsonField<Boolean> = isRefundable
 
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_internal_item_id")
         @ExcludeMissing
-        fun _netsuiteInternalItemId() = netsuiteInternalItemId
+        fun _netsuiteInternalItemId(): JsonField<String> = netsuiteInternalItemId
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_overage_item_id")
         @ExcludeMissing
-        fun _netsuiteOverageItemId() = netsuiteOverageItemId
+        fun _netsuiteOverageItemId(): JsonField<String> = netsuiteOverageItemId
 
         /**
          * For USAGE products only. Groups usage line items on invoices. The superset of values in
@@ -426,7 +458,7 @@ private constructor(
          */
         @JsonProperty("presentation_group_key")
         @ExcludeMissing
-        fun _presentationGroupKey() = presentationGroupKey
+        fun _presentationGroupKey(): JsonField<List<String>> = presentationGroupKey
 
         /**
          * For USAGE products only. If set, pricing for this product will be determined for each
@@ -434,7 +466,9 @@ private constructor(
          * the pricing group key and presentation group key must be set as one compound group key on
          * the billable metric.
          */
-        @JsonProperty("pricing_group_key") @ExcludeMissing fun _pricingGroupKey() = pricingGroupKey
+        @JsonProperty("pricing_group_key")
+        @ExcludeMissing
+        fun _pricingGroupKey(): JsonField<List<String>> = pricingGroupKey
 
         /**
          * Optional. Only valid for USAGE products. If provided, the quantity will be converted
@@ -446,7 +480,7 @@ private constructor(
          */
         @JsonProperty("quantity_conversion")
         @ExcludeMissing
-        fun _quantityConversion() = quantityConversion
+        fun _quantityConversion(): JsonField<QuantityConversion> = quantityConversion
 
         /**
          * Optional. Only valid for USAGE products. If provided, the quantity will be rounded using
@@ -455,11 +489,13 @@ private constructor(
          */
         @JsonProperty("quantity_rounding")
         @ExcludeMissing
-        fun _quantityRounding() = quantityRounding
+        fun _quantityRounding(): JsonField<QuantityRounding> = quantityRounding
 
-        @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
-        @JsonProperty("tags") @ExcludeMissing fun _tags() = tags
+        @JsonProperty("tags") @ExcludeMissing fun _tags(): JsonField<List<String>> = tags
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -498,22 +534,22 @@ private constructor(
 
         class Builder {
 
-            private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var createdBy: JsonField<String> = JsonMissing.of()
+            private var createdAt: JsonField<OffsetDateTime>? = null
+            private var createdBy: JsonField<String>? = null
             private var billableMetricId: JsonField<String> = JsonMissing.of()
-            private var compositeProductIds: JsonField<List<String>> = JsonMissing.of()
-            private var compositeTags: JsonField<List<String>> = JsonMissing.of()
+            private var compositeProductIds: JsonField<MutableList<String>>? = null
+            private var compositeTags: JsonField<MutableList<String>>? = null
             private var excludeFreeUsage: JsonField<Boolean> = JsonMissing.of()
             private var isRefundable: JsonField<Boolean> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var netsuiteInternalItemId: JsonField<String> = JsonMissing.of()
             private var netsuiteOverageItemId: JsonField<String> = JsonMissing.of()
-            private var presentationGroupKey: JsonField<List<String>> = JsonMissing.of()
-            private var pricingGroupKey: JsonField<List<String>> = JsonMissing.of()
+            private var presentationGroupKey: JsonField<MutableList<String>>? = null
+            private var pricingGroupKey: JsonField<MutableList<String>>? = null
             private var quantityConversion: JsonField<QuantityConversion> = JsonMissing.of()
             private var quantityRounding: JsonField<QuantityRounding> = JsonMissing.of()
             private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var tags: JsonField<List<String>> = JsonMissing.of()
+            private var tags: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -521,19 +557,19 @@ private constructor(
                 createdAt = update.createdAt
                 createdBy = update.createdBy
                 billableMetricId = update.billableMetricId
-                compositeProductIds = update.compositeProductIds
-                compositeTags = update.compositeTags
+                compositeProductIds = update.compositeProductIds.map { it.toMutableList() }
+                compositeTags = update.compositeTags.map { it.toMutableList() }
                 excludeFreeUsage = update.excludeFreeUsage
                 isRefundable = update.isRefundable
                 name = update.name
                 netsuiteInternalItemId = update.netsuiteInternalItemId
                 netsuiteOverageItemId = update.netsuiteOverageItemId
-                presentationGroupKey = update.presentationGroupKey
-                pricingGroupKey = update.pricingGroupKey
+                presentationGroupKey = update.presentationGroupKey.map { it.toMutableList() }
+                pricingGroupKey = update.pricingGroupKey.map { it.toMutableList() }
                 quantityConversion = update.quantityConversion
                 quantityRounding = update.quantityRounding
                 startingAt = update.startingAt
-                tags = update.tags
+                tags = update.tags.map { it.toMutableList() }
                 additionalProperties = update.additionalProperties.toMutableMap()
             }
 
@@ -558,14 +594,40 @@ private constructor(
                 compositeProductIds(JsonField.of(compositeProductIds))
 
             fun compositeProductIds(compositeProductIds: JsonField<List<String>>) = apply {
-                this.compositeProductIds = compositeProductIds
+                this.compositeProductIds = compositeProductIds.map { it.toMutableList() }
+            }
+
+            fun addCompositeProductId(compositeProductId: String) = apply {
+                compositeProductIds =
+                    (compositeProductIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(compositeProductId)
+                    }
             }
 
             fun compositeTags(compositeTags: List<String>) =
                 compositeTags(JsonField.of(compositeTags))
 
             fun compositeTags(compositeTags: JsonField<List<String>>) = apply {
-                this.compositeTags = compositeTags
+                this.compositeTags = compositeTags.map { it.toMutableList() }
+            }
+
+            fun addCompositeTag(compositeTag: String) = apply {
+                compositeTags =
+                    (compositeTags ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(compositeTag)
+                    }
             }
 
             fun excludeFreeUsage(excludeFreeUsage: Boolean) =
@@ -617,7 +679,25 @@ private constructor(
              * key on the billable metric.
              */
             fun presentationGroupKey(presentationGroupKey: JsonField<List<String>>) = apply {
-                this.presentationGroupKey = presentationGroupKey
+                this.presentationGroupKey = presentationGroupKey.map { it.toMutableList() }
+            }
+
+            /**
+             * For USAGE products only. Groups usage line items on invoices. The superset of values
+             * in the pricing group key and presentation group key must be set as one compound group
+             * key on the billable metric.
+             */
+            fun addPresentationGroupKey(presentationGroupKey: String) = apply {
+                this.presentationGroupKey =
+                    (this.presentationGroupKey ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(presentationGroupKey)
+                    }
             }
 
             /**
@@ -636,7 +716,26 @@ private constructor(
              * key on the billable metric.
              */
             fun pricingGroupKey(pricingGroupKey: JsonField<List<String>>) = apply {
-                this.pricingGroupKey = pricingGroupKey
+                this.pricingGroupKey = pricingGroupKey.map { it.toMutableList() }
+            }
+
+            /**
+             * For USAGE products only. If set, pricing for this product will be determined for each
+             * pricing_group_key value, as opposed to the product as a whole. The superset of values
+             * in the pricing group key and presentation group key must be set as one compound group
+             * key on the billable metric.
+             */
+            fun addPricingGroupKey(pricingGroupKey: String) = apply {
+                this.pricingGroupKey =
+                    (this.pricingGroupKey ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(pricingGroupKey)
+                    }
             }
 
             /**
@@ -647,8 +746,19 @@ private constructor(
              * another. For example, data could be sent in MB and priced in GB. In this case, the
              * conversion factor would be 1024 and the operation would be "divide".
              */
-            fun quantityConversion(quantityConversion: QuantityConversion) =
-                quantityConversion(JsonField.of(quantityConversion))
+            fun quantityConversion(quantityConversion: QuantityConversion?) =
+                quantityConversion(JsonField.ofNullable(quantityConversion))
+
+            /**
+             * Optional. Only valid for USAGE products. If provided, the quantity will be converted
+             * using the provided conversion factor and operation. For example, if the operation is
+             * "multiply" and the conversion factor is 100, then the quantity will be multiplied
+             * by 100. This can be used in cases where data is sent in one unit and priced in
+             * another. For example, data could be sent in MB and priced in GB. In this case, the
+             * conversion factor would be 1024 and the operation would be "divide".
+             */
+            fun quantityConversion(quantityConversion: Optional<QuantityConversion>) =
+                quantityConversion(quantityConversion.orElse(null))
 
             /**
              * Optional. Only valid for USAGE products. If provided, the quantity will be converted
@@ -668,8 +778,17 @@ private constructor(
              * "round up" and the decimal places is 0, then the quantity will be rounded up to the
              * nearest integer.
              */
-            fun quantityRounding(quantityRounding: QuantityRounding) =
-                quantityRounding(JsonField.of(quantityRounding))
+            fun quantityRounding(quantityRounding: QuantityRounding?) =
+                quantityRounding(JsonField.ofNullable(quantityRounding))
+
+            /**
+             * Optional. Only valid for USAGE products. If provided, the quantity will be rounded
+             * using the provided rounding method and decimal places. For example, if the method is
+             * "round up" and the decimal places is 0, then the quantity will be rounded up to the
+             * nearest integer.
+             */
+            fun quantityRounding(quantityRounding: Optional<QuantityRounding>) =
+                quantityRounding(quantityRounding.orElse(null))
 
             /**
              * Optional. Only valid for USAGE products. If provided, the quantity will be rounded
@@ -689,7 +808,22 @@ private constructor(
 
             fun tags(tags: List<String>) = tags(JsonField.of(tags))
 
-            fun tags(tags: JsonField<List<String>>) = apply { this.tags = tags }
+            fun tags(tags: JsonField<List<String>>) = apply {
+                this.tags = tags.map { it.toMutableList() }
+            }
+
+            fun addTag(tag: String) = apply {
+                tags =
+                    (tags ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(tag)
+                    }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -712,22 +846,22 @@ private constructor(
 
             fun build(): Update =
                 Update(
-                    createdAt,
-                    createdBy,
+                    checkNotNull(createdAt) { "`createdAt` is required but was not set" },
+                    checkNotNull(createdBy) { "`createdBy` is required but was not set" },
                     billableMetricId,
-                    compositeProductIds.map { it.toImmutable() },
-                    compositeTags.map { it.toImmutable() },
+                    (compositeProductIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    (compositeTags ?: JsonMissing.of()).map { it.toImmutable() },
                     excludeFreeUsage,
                     isRefundable,
                     name,
                     netsuiteInternalItemId,
                     netsuiteOverageItemId,
-                    presentationGroupKey.map { it.toImmutable() },
-                    pricingGroupKey.map { it.toImmutable() },
+                    (presentationGroupKey ?: JsonMissing.of()).map { it.toImmutable() },
+                    (pricingGroupKey ?: JsonMissing.of()).map { it.toImmutable() },
                     quantityConversion,
                     quantityRounding,
                     startingAt,
-                    tags.map { it.toImmutable() },
+                    (tags ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }

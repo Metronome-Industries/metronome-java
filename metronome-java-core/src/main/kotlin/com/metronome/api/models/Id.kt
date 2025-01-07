@@ -25,7 +25,7 @@ private constructor(
 
     fun id(): String = id.getRequired("id")
 
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -49,7 +49,7 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
+        private var id: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -81,7 +81,11 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
-        fun build(): Id = Id(id, additionalProperties.toImmutable())
+        fun build(): Id =
+            Id(
+                checkNotNull(id) { "`id` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     override fun equals(other: Any?): Boolean {

@@ -50,13 +50,15 @@ private constructor(
     fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
 
     /** The factor to multiply or divide the quantity by. */
-    @JsonProperty("conversion_factor") @ExcludeMissing fun _conversionFactor() = conversionFactor
+    @JsonProperty("conversion_factor")
+    @ExcludeMissing
+    fun _conversionFactor(): JsonField<Double> = conversionFactor
 
     /** The operation to perform on the quantity */
-    @JsonProperty("operation") @ExcludeMissing fun _operation() = operation
+    @JsonProperty("operation") @ExcludeMissing fun _operation(): JsonField<Operation> = operation
 
     /** Optional name for this conversion. */
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -82,8 +84,8 @@ private constructor(
 
     class Builder {
 
-        private var conversionFactor: JsonField<Double> = JsonMissing.of()
-        private var operation: JsonField<Operation> = JsonMissing.of()
+        private var conversionFactor: JsonField<Double>? = null
+        private var operation: JsonField<Operation>? = null
         private var name: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -137,8 +139,8 @@ private constructor(
 
         fun build(): QuantityConversion =
             QuantityConversion(
-                conversionFactor,
-                operation,
+                checkNotNull(conversionFactor) { "`conversionFactor` is required but was not set" },
+                checkNotNull(operation) { "`operation` is required but was not set" },
                 name,
                 additionalProperties.toImmutable(),
             )

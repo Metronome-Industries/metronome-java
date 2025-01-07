@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -65,11 +66,48 @@ constructor(
     /** This field's availability is dependent on your client's configuration. */
     fun totalContractValue(): Optional<Double> = body.totalContractValue()
 
+    /** ID of the contract to amend */
+    fun _contractId(): JsonField<String> = body._contractId()
+
+    /** ID of the customer whose contract is to be amended */
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    /** inclusive start time for the amendment */
+    fun _startingAt(): JsonField<OffsetDateTime> = body._startingAt()
+
+    fun _commits(): JsonField<List<Commit>> = body._commits()
+
+    fun _credits(): JsonField<List<Credit>> = body._credits()
+
+    fun _customFields(): JsonField<CustomFields> = body._customFields()
+
+    /** This field's availability is dependent on your client's configuration. */
+    fun _discounts(): JsonField<List<Discount>> = body._discounts()
+
+    /** This field's availability is dependent on your client's configuration. */
+    fun _netsuiteSalesOrderId(): JsonField<String> = body._netsuiteSalesOrderId()
+
+    fun _overrides(): JsonField<List<Override>> = body._overrides()
+
+    /** This field's availability is dependent on your client's configuration. */
+    fun _professionalServices(): JsonField<List<ProfessionalService>> = body._professionalServices()
+
+    /** This field's availability is dependent on your client's configuration. */
+    fun _resellerRoyalties(): JsonField<List<ResellerRoyalty>> = body._resellerRoyalties()
+
+    /** This field's availability is dependent on your client's configuration. */
+    fun _salesforceOpportunityId(): JsonField<String> = body._salesforceOpportunityId()
+
+    fun _scheduledCharges(): JsonField<List<ScheduledCharge>> = body._scheduledCharges()
+
+    /** This field's availability is dependent on your client's configuration. */
+    fun _totalContractValue(): JsonField<Double> = body._totalContractValue()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): ContractAmendBody = body
 
@@ -81,80 +119,184 @@ constructor(
     class ContractAmendBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("contract_id") private val contractId: String,
-        @JsonProperty("customer_id") private val customerId: String,
-        @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
-        @JsonProperty("commits") private val commits: List<Commit>?,
-        @JsonProperty("credits") private val credits: List<Credit>?,
-        @JsonProperty("custom_fields") private val customFields: CustomFields?,
-        @JsonProperty("discounts") private val discounts: List<Discount>?,
-        @JsonProperty("netsuite_sales_order_id") private val netsuiteSalesOrderId: String?,
-        @JsonProperty("overrides") private val overrides: List<Override>?,
+        @JsonProperty("contract_id")
+        @ExcludeMissing
+        private val contractId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("commits")
+        @ExcludeMissing
+        private val commits: JsonField<List<Commit>> = JsonMissing.of(),
+        @JsonProperty("credits")
+        @ExcludeMissing
+        private val credits: JsonField<List<Credit>> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("discounts")
+        @ExcludeMissing
+        private val discounts: JsonField<List<Discount>> = JsonMissing.of(),
+        @JsonProperty("netsuite_sales_order_id")
+        @ExcludeMissing
+        private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("overrides")
+        @ExcludeMissing
+        private val overrides: JsonField<List<Override>> = JsonMissing.of(),
         @JsonProperty("professional_services")
-        private val professionalServices: List<ProfessionalService>?,
-        @JsonProperty("reseller_royalties") private val resellerRoyalties: List<ResellerRoyalty>?,
-        @JsonProperty("salesforce_opportunity_id") private val salesforceOpportunityId: String?,
-        @JsonProperty("scheduled_charges") private val scheduledCharges: List<ScheduledCharge>?,
-        @JsonProperty("total_contract_value") private val totalContractValue: Double?,
+        @ExcludeMissing
+        private val professionalServices: JsonField<List<ProfessionalService>> = JsonMissing.of(),
+        @JsonProperty("reseller_royalties")
+        @ExcludeMissing
+        private val resellerRoyalties: JsonField<List<ResellerRoyalty>> = JsonMissing.of(),
+        @JsonProperty("salesforce_opportunity_id")
+        @ExcludeMissing
+        private val salesforceOpportunityId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("scheduled_charges")
+        @ExcludeMissing
+        private val scheduledCharges: JsonField<List<ScheduledCharge>> = JsonMissing.of(),
+        @JsonProperty("total_contract_value")
+        @ExcludeMissing
+        private val totalContractValue: JsonField<Double> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the contract to amend */
-        @JsonProperty("contract_id") fun contractId(): String = contractId
+        fun contractId(): String = contractId.getRequired("contract_id")
 
         /** ID of the customer whose contract is to be amended */
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
 
         /** inclusive start time for the amendment */
-        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+        fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
-        @JsonProperty("commits")
-        fun commits(): Optional<List<Commit>> = Optional.ofNullable(commits)
+        fun commits(): Optional<List<Commit>> = Optional.ofNullable(commits.getNullable("commits"))
 
-        @JsonProperty("credits")
-        fun credits(): Optional<List<Credit>> = Optional.ofNullable(credits)
+        fun credits(): Optional<List<Credit>> = Optional.ofNullable(credits.getNullable("credits"))
+
+        fun customFields(): Optional<CustomFields> =
+            Optional.ofNullable(customFields.getNullable("custom_fields"))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun discounts(): Optional<List<Discount>> =
+            Optional.ofNullable(discounts.getNullable("discounts"))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(): Optional<String> =
+            Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
+
+        fun overrides(): Optional<List<Override>> =
+            Optional.ofNullable(overrides.getNullable("overrides"))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun professionalServices(): Optional<List<ProfessionalService>> =
+            Optional.ofNullable(professionalServices.getNullable("professional_services"))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun resellerRoyalties(): Optional<List<ResellerRoyalty>> =
+            Optional.ofNullable(resellerRoyalties.getNullable("reseller_royalties"))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun salesforceOpportunityId(): Optional<String> =
+            Optional.ofNullable(salesforceOpportunityId.getNullable("salesforce_opportunity_id"))
+
+        fun scheduledCharges(): Optional<List<ScheduledCharge>> =
+            Optional.ofNullable(scheduledCharges.getNullable("scheduled_charges"))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun totalContractValue(): Optional<Double> =
+            Optional.ofNullable(totalContractValue.getNullable("total_contract_value"))
+
+        /** ID of the contract to amend */
+        @JsonProperty("contract_id")
+        @ExcludeMissing
+        fun _contractId(): JsonField<String> = contractId
+
+        /** ID of the customer whose contract is to be amended */
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
+
+        /** inclusive start time for the amendment */
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
+
+        @JsonProperty("commits") @ExcludeMissing fun _commits(): JsonField<List<Commit>> = commits
+
+        @JsonProperty("credits") @ExcludeMissing fun _credits(): JsonField<List<Credit>> = credits
 
         @JsonProperty("custom_fields")
-        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+        @ExcludeMissing
+        fun _customFields(): JsonField<CustomFields> = customFields
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("discounts")
-        fun discounts(): Optional<List<Discount>> = Optional.ofNullable(discounts)
+        @ExcludeMissing
+        fun _discounts(): JsonField<List<Discount>> = discounts
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_sales_order_id")
-        fun netsuiteSalesOrderId(): Optional<String> = Optional.ofNullable(netsuiteSalesOrderId)
+        @ExcludeMissing
+        fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
 
         @JsonProperty("overrides")
-        fun overrides(): Optional<List<Override>> = Optional.ofNullable(overrides)
+        @ExcludeMissing
+        fun _overrides(): JsonField<List<Override>> = overrides
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("professional_services")
-        fun professionalServices(): Optional<List<ProfessionalService>> =
-            Optional.ofNullable(professionalServices)
+        @ExcludeMissing
+        fun _professionalServices(): JsonField<List<ProfessionalService>> = professionalServices
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("reseller_royalties")
-        fun resellerRoyalties(): Optional<List<ResellerRoyalty>> =
-            Optional.ofNullable(resellerRoyalties)
+        @ExcludeMissing
+        fun _resellerRoyalties(): JsonField<List<ResellerRoyalty>> = resellerRoyalties
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("salesforce_opportunity_id")
-        fun salesforceOpportunityId(): Optional<String> =
-            Optional.ofNullable(salesforceOpportunityId)
+        @ExcludeMissing
+        fun _salesforceOpportunityId(): JsonField<String> = salesforceOpportunityId
 
         @JsonProperty("scheduled_charges")
-        fun scheduledCharges(): Optional<List<ScheduledCharge>> =
-            Optional.ofNullable(scheduledCharges)
+        @ExcludeMissing
+        fun _scheduledCharges(): JsonField<List<ScheduledCharge>> = scheduledCharges
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("total_contract_value")
-        fun totalContractValue(): Optional<Double> = Optional.ofNullable(totalContractValue)
+        @ExcludeMissing
+        fun _totalContractValue(): JsonField<Double> = totalContractValue
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ContractAmendBody = apply {
+            if (!validated) {
+                contractId()
+                customerId()
+                startingAt()
+                commits().map { it.forEach { it.validate() } }
+                credits().map { it.forEach { it.validate() } }
+                customFields().map { it.validate() }
+                discounts().map { it.forEach { it.validate() } }
+                netsuiteSalesOrderId()
+                overrides().map { it.forEach { it.validate() } }
+                professionalServices().map { it.forEach { it.validate() } }
+                resellerRoyalties().map { it.forEach { it.validate() } }
+                salesforceOpportunityId()
+                scheduledCharges().map { it.forEach { it.validate() } }
+                totalContractValue()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -165,20 +307,20 @@ constructor(
 
         class Builder {
 
-            private var contractId: String? = null
-            private var customerId: String? = null
-            private var startingAt: OffsetDateTime? = null
-            private var commits: MutableList<Commit>? = null
-            private var credits: MutableList<Credit>? = null
-            private var customFields: CustomFields? = null
-            private var discounts: MutableList<Discount>? = null
-            private var netsuiteSalesOrderId: String? = null
-            private var overrides: MutableList<Override>? = null
-            private var professionalServices: MutableList<ProfessionalService>? = null
-            private var resellerRoyalties: MutableList<ResellerRoyalty>? = null
-            private var salesforceOpportunityId: String? = null
-            private var scheduledCharges: MutableList<ScheduledCharge>? = null
-            private var totalContractValue: Double? = null
+            private var contractId: JsonField<String>? = null
+            private var customerId: JsonField<String>? = null
+            private var startingAt: JsonField<OffsetDateTime>? = null
+            private var commits: JsonField<MutableList<Commit>>? = null
+            private var credits: JsonField<MutableList<Credit>>? = null
+            private var customFields: JsonField<CustomFields> = JsonMissing.of()
+            private var discounts: JsonField<MutableList<Discount>>? = null
+            private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
+            private var overrides: JsonField<MutableList<Override>>? = null
+            private var professionalServices: JsonField<MutableList<ProfessionalService>>? = null
+            private var resellerRoyalties: JsonField<MutableList<ResellerRoyalty>>? = null
+            private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
+            private var scheduledCharges: JsonField<MutableList<ScheduledCharge>>? = null
+            private var totalContractValue: JsonField<Double> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -186,148 +328,219 @@ constructor(
                 contractId = contractAmendBody.contractId
                 customerId = contractAmendBody.customerId
                 startingAt = contractAmendBody.startingAt
-                commits = contractAmendBody.commits?.toMutableList()
-                credits = contractAmendBody.credits?.toMutableList()
+                commits = contractAmendBody.commits.map { it.toMutableList() }
+                credits = contractAmendBody.credits.map { it.toMutableList() }
                 customFields = contractAmendBody.customFields
-                discounts = contractAmendBody.discounts?.toMutableList()
+                discounts = contractAmendBody.discounts.map { it.toMutableList() }
                 netsuiteSalesOrderId = contractAmendBody.netsuiteSalesOrderId
-                overrides = contractAmendBody.overrides?.toMutableList()
-                professionalServices = contractAmendBody.professionalServices?.toMutableList()
-                resellerRoyalties = contractAmendBody.resellerRoyalties?.toMutableList()
+                overrides = contractAmendBody.overrides.map { it.toMutableList() }
+                professionalServices =
+                    contractAmendBody.professionalServices.map { it.toMutableList() }
+                resellerRoyalties = contractAmendBody.resellerRoyalties.map { it.toMutableList() }
                 salesforceOpportunityId = contractAmendBody.salesforceOpportunityId
-                scheduledCharges = contractAmendBody.scheduledCharges?.toMutableList()
+                scheduledCharges = contractAmendBody.scheduledCharges.map { it.toMutableList() }
                 totalContractValue = contractAmendBody.totalContractValue
                 additionalProperties = contractAmendBody.additionalProperties.toMutableMap()
             }
 
             /** ID of the contract to amend */
-            fun contractId(contractId: String) = apply { this.contractId = contractId }
+            fun contractId(contractId: String) = contractId(JsonField.of(contractId))
+
+            /** ID of the contract to amend */
+            fun contractId(contractId: JsonField<String>) = apply { this.contractId = contractId }
 
             /** ID of the customer whose contract is to be amended */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            /** ID of the customer whose contract is to be amended */
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /** inclusive start time for the amendment */
-            fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+            fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
-            fun commits(commits: List<Commit>?) = apply { this.commits = commits?.toMutableList() }
+            /** inclusive start time for the amendment */
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                this.startingAt = startingAt
+            }
 
-            fun commits(commits: Optional<List<Commit>>) = commits(commits.orElse(null))
+            fun commits(commits: List<Commit>) = commits(JsonField.of(commits))
+
+            fun commits(commits: JsonField<List<Commit>>) = apply {
+                this.commits = commits.map { it.toMutableList() }
+            }
 
             fun addCommit(commit: Commit) = apply {
-                commits = (commits ?: mutableListOf()).apply { add(commit) }
+                commits =
+                    (commits ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(commit)
+                    }
             }
 
-            fun credits(credits: List<Credit>?) = apply { this.credits = credits?.toMutableList() }
+            fun credits(credits: List<Credit>) = credits(JsonField.of(credits))
 
-            fun credits(credits: Optional<List<Credit>>) = credits(credits.orElse(null))
+            fun credits(credits: JsonField<List<Credit>>) = apply {
+                this.credits = credits.map { it.toMutableList() }
+            }
 
             fun addCredit(credit: Credit) = apply {
-                credits = (credits ?: mutableListOf()).apply { add(credit) }
+                credits =
+                    (credits ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(credit)
+                    }
             }
 
-            fun customFields(customFields: CustomFields?) = apply {
+            fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+
+            fun customFields(customFields: JsonField<CustomFields>) = apply {
                 this.customFields = customFields
             }
 
-            fun customFields(customFields: Optional<CustomFields>) =
-                customFields(customFields.orElse(null))
+            /** This field's availability is dependent on your client's configuration. */
+            fun discounts(discounts: List<Discount>) = discounts(JsonField.of(discounts))
 
             /** This field's availability is dependent on your client's configuration. */
-            fun discounts(discounts: List<Discount>?) = apply {
-                this.discounts = discounts?.toMutableList()
+            fun discounts(discounts: JsonField<List<Discount>>) = apply {
+                this.discounts = discounts.map { it.toMutableList() }
             }
-
-            /** This field's availability is dependent on your client's configuration. */
-            fun discounts(discounts: Optional<List<Discount>>) = discounts(discounts.orElse(null))
 
             /** This field's availability is dependent on your client's configuration. */
             fun addDiscount(discount: Discount) = apply {
-                discounts = (discounts ?: mutableListOf()).apply { add(discount) }
+                discounts =
+                    (discounts ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(discount)
+                    }
             }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
+                netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
 
-            /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
-                netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
+            fun overrides(overrides: List<Override>) = overrides(JsonField.of(overrides))
 
-            fun overrides(overrides: List<Override>?) = apply {
-                this.overrides = overrides?.toMutableList()
+            fun overrides(overrides: JsonField<List<Override>>) = apply {
+                this.overrides = overrides.map { it.toMutableList() }
             }
-
-            fun overrides(overrides: Optional<List<Override>>) = overrides(overrides.orElse(null))
 
             fun addOverride(override: Override) = apply {
-                overrides = (overrides ?: mutableListOf()).apply { add(override) }
+                overrides =
+                    (overrides ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(override)
+                    }
             }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun professionalServices(professionalServices: List<ProfessionalService>?) = apply {
-                this.professionalServices = professionalServices?.toMutableList()
-            }
+            fun professionalServices(professionalServices: List<ProfessionalService>) =
+                professionalServices(JsonField.of(professionalServices))
 
             /** This field's availability is dependent on your client's configuration. */
-            fun professionalServices(professionalServices: Optional<List<ProfessionalService>>) =
-                professionalServices(professionalServices.orElse(null))
+            fun professionalServices(professionalServices: JsonField<List<ProfessionalService>>) =
+                apply {
+                    this.professionalServices = professionalServices.map { it.toMutableList() }
+                }
 
             /** This field's availability is dependent on your client's configuration. */
             fun addProfessionalService(professionalService: ProfessionalService) = apply {
                 professionalServices =
-                    (professionalServices ?: mutableListOf()).apply { add(professionalService) }
+                    (professionalServices ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(professionalService)
+                    }
             }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun resellerRoyalties(resellerRoyalties: List<ResellerRoyalty>?) = apply {
-                this.resellerRoyalties = resellerRoyalties?.toMutableList()
-            }
+            fun resellerRoyalties(resellerRoyalties: List<ResellerRoyalty>) =
+                resellerRoyalties(JsonField.of(resellerRoyalties))
 
             /** This field's availability is dependent on your client's configuration. */
-            fun resellerRoyalties(resellerRoyalties: Optional<List<ResellerRoyalty>>) =
-                resellerRoyalties(resellerRoyalties.orElse(null))
+            fun resellerRoyalties(resellerRoyalties: JsonField<List<ResellerRoyalty>>) = apply {
+                this.resellerRoyalties = resellerRoyalties.map { it.toMutableList() }
+            }
 
             /** This field's availability is dependent on your client's configuration. */
             fun addResellerRoyalty(resellerRoyalty: ResellerRoyalty) = apply {
                 resellerRoyalties =
-                    (resellerRoyalties ?: mutableListOf()).apply { add(resellerRoyalty) }
+                    (resellerRoyalties ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(resellerRoyalty)
+                    }
             }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun salesforceOpportunityId(salesforceOpportunityId: String?) = apply {
+            fun salesforceOpportunityId(salesforceOpportunityId: String) =
+                salesforceOpportunityId(JsonField.of(salesforceOpportunityId))
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun salesforceOpportunityId(salesforceOpportunityId: JsonField<String>) = apply {
                 this.salesforceOpportunityId = salesforceOpportunityId
             }
 
-            /** This field's availability is dependent on your client's configuration. */
-            fun salesforceOpportunityId(salesforceOpportunityId: Optional<String>) =
-                salesforceOpportunityId(salesforceOpportunityId.orElse(null))
+            fun scheduledCharges(scheduledCharges: List<ScheduledCharge>) =
+                scheduledCharges(JsonField.of(scheduledCharges))
 
-            fun scheduledCharges(scheduledCharges: List<ScheduledCharge>?) = apply {
-                this.scheduledCharges = scheduledCharges?.toMutableList()
+            fun scheduledCharges(scheduledCharges: JsonField<List<ScheduledCharge>>) = apply {
+                this.scheduledCharges = scheduledCharges.map { it.toMutableList() }
             }
-
-            fun scheduledCharges(scheduledCharges: Optional<List<ScheduledCharge>>) =
-                scheduledCharges(scheduledCharges.orElse(null))
 
             fun addScheduledCharge(scheduledCharge: ScheduledCharge) = apply {
                 scheduledCharges =
-                    (scheduledCharges ?: mutableListOf()).apply { add(scheduledCharge) }
-            }
-
-            /** This field's availability is dependent on your client's configuration. */
-            fun totalContractValue(totalContractValue: Double?) = apply {
-                this.totalContractValue = totalContractValue
+                    (scheduledCharges ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(scheduledCharge)
+                    }
             }
 
             /** This field's availability is dependent on your client's configuration. */
             fun totalContractValue(totalContractValue: Double) =
-                totalContractValue(totalContractValue as Double?)
+                totalContractValue(JsonField.of(totalContractValue))
 
             /** This field's availability is dependent on your client's configuration. */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun totalContractValue(totalContractValue: Optional<Double>) =
-                totalContractValue(totalContractValue.orElse(null) as Double?)
+            fun totalContractValue(totalContractValue: JsonField<Double>) = apply {
+                this.totalContractValue = totalContractValue
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -353,16 +566,16 @@ constructor(
                     checkNotNull(contractId) { "`contractId` is required but was not set" },
                     checkNotNull(customerId) { "`customerId` is required but was not set" },
                     checkNotNull(startingAt) { "`startingAt` is required but was not set" },
-                    commits?.toImmutable(),
-                    credits?.toImmutable(),
+                    (commits ?: JsonMissing.of()).map { it.toImmutable() },
+                    (credits ?: JsonMissing.of()).map { it.toImmutable() },
                     customFields,
-                    discounts?.toImmutable(),
+                    (discounts ?: JsonMissing.of()).map { it.toImmutable() },
                     netsuiteSalesOrderId,
-                    overrides?.toImmutable(),
-                    professionalServices?.toImmutable(),
-                    resellerRoyalties?.toImmutable(),
+                    (overrides ?: JsonMissing.of()).map { it.toImmutable() },
+                    (professionalServices ?: JsonMissing.of()).map { it.toImmutable() },
+                    (resellerRoyalties ?: JsonMissing.of()).map { it.toImmutable() },
                     salesforceOpportunityId,
-                    scheduledCharges?.toImmutable(),
+                    (scheduledCharges ?: JsonMissing.of()).map { it.toImmutable() },
                     totalContractValue,
                     additionalProperties.toImmutable(),
                 )
@@ -410,61 +623,76 @@ constructor(
         /** ID of the contract to amend */
         fun contractId(contractId: String) = apply { body.contractId(contractId) }
 
+        /** ID of the contract to amend */
+        fun contractId(contractId: JsonField<String>) = apply { body.contractId(contractId) }
+
         /** ID of the customer whose contract is to be amended */
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
+
+        /** ID of the customer whose contract is to be amended */
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
 
         /** inclusive start time for the amendment */
         fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
 
-        fun commits(commits: List<Commit>?) = apply { body.commits(commits) }
+        /** inclusive start time for the amendment */
+        fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+            body.startingAt(startingAt)
+        }
 
-        fun commits(commits: Optional<List<Commit>>) = commits(commits.orElse(null))
+        fun commits(commits: List<Commit>) = apply { body.commits(commits) }
+
+        fun commits(commits: JsonField<List<Commit>>) = apply { body.commits(commits) }
 
         fun addCommit(commit: Commit) = apply { body.addCommit(commit) }
 
-        fun credits(credits: List<Credit>?) = apply { body.credits(credits) }
+        fun credits(credits: List<Credit>) = apply { body.credits(credits) }
 
-        fun credits(credits: Optional<List<Credit>>) = credits(credits.orElse(null))
+        fun credits(credits: JsonField<List<Credit>>) = apply { body.credits(credits) }
 
         fun addCredit(credit: Credit) = apply { body.addCredit(credit) }
 
-        fun customFields(customFields: CustomFields?) = apply { body.customFields(customFields) }
+        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
 
-        fun customFields(customFields: Optional<CustomFields>) =
-            customFields(customFields.orElse(null))
-
-        /** This field's availability is dependent on your client's configuration. */
-        fun discounts(discounts: List<Discount>?) = apply { body.discounts(discounts) }
+        fun customFields(customFields: JsonField<CustomFields>) = apply {
+            body.customFields(customFields)
+        }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun discounts(discounts: Optional<List<Discount>>) = discounts(discounts.orElse(null))
+        fun discounts(discounts: List<Discount>) = apply { body.discounts(discounts) }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun discounts(discounts: JsonField<List<Discount>>) = apply { body.discounts(discounts) }
 
         /** This field's availability is dependent on your client's configuration. */
         fun addDiscount(discount: Discount) = apply { body.addDiscount(discount) }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) = apply {
             body.netsuiteSalesOrderId(netsuiteSalesOrderId)
         }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
-            netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
+        fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
+            body.netsuiteSalesOrderId(netsuiteSalesOrderId)
+        }
 
-        fun overrides(overrides: List<Override>?) = apply { body.overrides(overrides) }
+        fun overrides(overrides: List<Override>) = apply { body.overrides(overrides) }
 
-        fun overrides(overrides: Optional<List<Override>>) = overrides(overrides.orElse(null))
+        fun overrides(overrides: JsonField<List<Override>>) = apply { body.overrides(overrides) }
 
         fun addOverride(override: Override) = apply { body.addOverride(override) }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun professionalServices(professionalServices: List<ProfessionalService>?) = apply {
+        fun professionalServices(professionalServices: List<ProfessionalService>) = apply {
             body.professionalServices(professionalServices)
         }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun professionalServices(professionalServices: Optional<List<ProfessionalService>>) =
-            professionalServices(professionalServices.orElse(null))
+        fun professionalServices(professionalServices: JsonField<List<ProfessionalService>>) =
+            apply {
+                body.professionalServices(professionalServices)
+            }
 
         /** This field's availability is dependent on your client's configuration. */
         fun addProfessionalService(professionalService: ProfessionalService) = apply {
@@ -472,13 +700,14 @@ constructor(
         }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun resellerRoyalties(resellerRoyalties: List<ResellerRoyalty>?) = apply {
+        fun resellerRoyalties(resellerRoyalties: List<ResellerRoyalty>) = apply {
             body.resellerRoyalties(resellerRoyalties)
         }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun resellerRoyalties(resellerRoyalties: Optional<List<ResellerRoyalty>>) =
-            resellerRoyalties(resellerRoyalties.orElse(null))
+        fun resellerRoyalties(resellerRoyalties: JsonField<List<ResellerRoyalty>>) = apply {
+            body.resellerRoyalties(resellerRoyalties)
+        }
 
         /** This field's availability is dependent on your client's configuration. */
         fun addResellerRoyalty(resellerRoyalty: ResellerRoyalty) = apply {
@@ -486,38 +715,55 @@ constructor(
         }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun salesforceOpportunityId(salesforceOpportunityId: String?) = apply {
+        fun salesforceOpportunityId(salesforceOpportunityId: String) = apply {
             body.salesforceOpportunityId(salesforceOpportunityId)
         }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun salesforceOpportunityId(salesforceOpportunityId: Optional<String>) =
-            salesforceOpportunityId(salesforceOpportunityId.orElse(null))
+        fun salesforceOpportunityId(salesforceOpportunityId: JsonField<String>) = apply {
+            body.salesforceOpportunityId(salesforceOpportunityId)
+        }
 
-        fun scheduledCharges(scheduledCharges: List<ScheduledCharge>?) = apply {
+        fun scheduledCharges(scheduledCharges: List<ScheduledCharge>) = apply {
             body.scheduledCharges(scheduledCharges)
         }
 
-        fun scheduledCharges(scheduledCharges: Optional<List<ScheduledCharge>>) =
-            scheduledCharges(scheduledCharges.orElse(null))
+        fun scheduledCharges(scheduledCharges: JsonField<List<ScheduledCharge>>) = apply {
+            body.scheduledCharges(scheduledCharges)
+        }
 
         fun addScheduledCharge(scheduledCharge: ScheduledCharge) = apply {
             body.addScheduledCharge(scheduledCharge)
         }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun totalContractValue(totalContractValue: Double?) = apply {
+        fun totalContractValue(totalContractValue: Double) = apply {
             body.totalContractValue(totalContractValue)
         }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun totalContractValue(totalContractValue: Double) =
-            totalContractValue(totalContractValue as Double?)
+        fun totalContractValue(totalContractValue: JsonField<Double>) = apply {
+            body.totalContractValue(totalContractValue)
+        }
 
-        /** This field's availability is dependent on your client's configuration. */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun totalContractValue(totalContractValue: Optional<Double>) =
-            totalContractValue(totalContractValue.orElse(null) as Double?)
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -617,25 +863,6 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
         fun build(): ContractAmendParams =
             ContractAmendParams(
                 body.build(),
@@ -648,61 +875,159 @@ constructor(
     class Commit
     @JsonCreator
     private constructor(
-        @JsonProperty("product_id") private val productId: String,
-        @JsonProperty("type") private val type: Type,
-        @JsonProperty("access_schedule") private val accessSchedule: AccessSchedule?,
-        @JsonProperty("amount") private val amount: Double?,
-        @JsonProperty("applicable_product_ids") private val applicableProductIds: List<String>?,
-        @JsonProperty("applicable_product_tags") private val applicableProductTags: List<String>?,
-        @JsonProperty("custom_fields") private val customFields: CustomFields?,
-        @JsonProperty("description") private val description: String?,
-        @JsonProperty("invoice_schedule") private val invoiceSchedule: InvoiceSchedule?,
-        @JsonProperty("name") private val name: String?,
-        @JsonProperty("netsuite_sales_order_id") private val netsuiteSalesOrderId: String?,
-        @JsonProperty("priority") private val priority: Double?,
-        @JsonProperty("rate_type") private val rateType: RateType?,
-        @JsonProperty("rollover_fraction") private val rolloverFraction: Double?,
-        @JsonProperty("temporary_id") private val temporaryId: String?,
+        @JsonProperty("product_id")
+        @ExcludeMissing
+        private val productId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
+        @JsonProperty("access_schedule")
+        @ExcludeMissing
+        private val accessSchedule: JsonField<AccessSchedule> = JsonMissing.of(),
+        @JsonProperty("amount")
+        @ExcludeMissing
+        private val amount: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("applicable_product_ids")
+        @ExcludeMissing
+        private val applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("applicable_product_tags")
+        @ExcludeMissing
+        private val applicableProductTags: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        private val description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("invoice_schedule")
+        @ExcludeMissing
+        private val invoiceSchedule: JsonField<InvoiceSchedule> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("netsuite_sales_order_id")
+        @ExcludeMissing
+        private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("priority")
+        @ExcludeMissing
+        private val priority: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("rate_type")
+        @ExcludeMissing
+        private val rateType: JsonField<RateType> = JsonMissing.of(),
+        @JsonProperty("rollover_fraction")
+        @ExcludeMissing
+        private val rolloverFraction: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("temporary_id")
+        @ExcludeMissing
+        private val temporaryId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("product_id") fun productId(): String = productId
+        fun productId(): String = productId.getRequired("product_id")
 
-        @JsonProperty("type") fun type(): Type = type
+        fun type(): Type = type.getRequired("type")
+
+        /**
+         * Required: Schedule for distributing the commit to the customer. For "POSTPAID" commits
+         * only one schedule item is allowed and amount must match invoice_schedule total.
+         */
+        fun accessSchedule(): Optional<AccessSchedule> =
+            Optional.ofNullable(accessSchedule.getNullable("access_schedule"))
+
+        /** (DEPRECATED) Use access_schedule and invoice_schedule instead. */
+        fun amount(): Optional<Double> = Optional.ofNullable(amount.getNullable("amount"))
+
+        /**
+         * Which products the commit applies to. If both applicable_product_ids and
+         * applicable_product_tags are not provided, the commit applies to all products.
+         */
+        fun applicableProductIds(): Optional<List<String>> =
+            Optional.ofNullable(applicableProductIds.getNullable("applicable_product_ids"))
+
+        /**
+         * Which tags the commit applies to. If both applicable_product_ids and
+         * applicable_product_tags are not provided, the commit applies to all products.
+         */
+        fun applicableProductTags(): Optional<List<String>> =
+            Optional.ofNullable(applicableProductTags.getNullable("applicable_product_tags"))
+
+        fun customFields(): Optional<CustomFields> =
+            Optional.ofNullable(customFields.getNullable("custom_fields"))
+
+        /** Used only in UI/API. It is not exposed to end customers. */
+        fun description(): Optional<String> =
+            Optional.ofNullable(description.getNullable("description"))
+
+        /**
+         * Required for "POSTPAID" commits: the true up invoice will be generated at this time and
+         * only one schedule item is allowed; the total must match access_schedule amount. Optional
+         * for "PREPAID" commits: if not provided, this will be a "complimentary" commit with no
+         * invoice.
+         */
+        fun invoiceSchedule(): Optional<InvoiceSchedule> =
+            Optional.ofNullable(invoiceSchedule.getNullable("invoice_schedule"))
+
+        /** displayed on invoices */
+        fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(): Optional<String> =
+            Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
+
+        /** If multiple commits are applicable, the one with the lower priority will apply first. */
+        fun priority(): Optional<Double> = Optional.ofNullable(priority.getNullable("priority"))
+
+        fun rateType(): Optional<RateType> = Optional.ofNullable(rateType.getNullable("rate_type"))
+
+        /** Fraction of unused segments that will be rolled over. Must be between 0 and 1. */
+        fun rolloverFraction(): Optional<Double> =
+            Optional.ofNullable(rolloverFraction.getNullable("rollover_fraction"))
+
+        /**
+         * A temporary ID for the commit that can be used to reference the commit for commit
+         * specific overrides.
+         */
+        fun temporaryId(): Optional<String> =
+            Optional.ofNullable(temporaryId.getNullable("temporary_id"))
+
+        @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
+
+        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
         /**
          * Required: Schedule for distributing the commit to the customer. For "POSTPAID" commits
          * only one schedule item is allowed and amount must match invoice_schedule total.
          */
         @JsonProperty("access_schedule")
-        fun accessSchedule(): Optional<AccessSchedule> = Optional.ofNullable(accessSchedule)
+        @ExcludeMissing
+        fun _accessSchedule(): JsonField<AccessSchedule> = accessSchedule
 
         /** (DEPRECATED) Use access_schedule and invoice_schedule instead. */
-        @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
         /**
          * Which products the commit applies to. If both applicable_product_ids and
          * applicable_product_tags are not provided, the commit applies to all products.
          */
         @JsonProperty("applicable_product_ids")
-        fun applicableProductIds(): Optional<List<String>> =
-            Optional.ofNullable(applicableProductIds)
+        @ExcludeMissing
+        fun _applicableProductIds(): JsonField<List<String>> = applicableProductIds
 
         /**
          * Which tags the commit applies to. If both applicable_product_ids and
          * applicable_product_tags are not provided, the commit applies to all products.
          */
         @JsonProperty("applicable_product_tags")
-        fun applicableProductTags(): Optional<List<String>> =
-            Optional.ofNullable(applicableProductTags)
+        @ExcludeMissing
+        fun _applicableProductTags(): JsonField<List<String>> = applicableProductTags
 
         @JsonProperty("custom_fields")
-        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+        @ExcludeMissing
+        fun _customFields(): JsonField<CustomFields> = customFields
 
         /** Used only in UI/API. It is not exposed to end customers. */
         @JsonProperty("description")
-        fun description(): Optional<String> = Optional.ofNullable(description)
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
 
         /**
          * Required for "POSTPAID" commits: the true up invoice will be generated at this time and
@@ -711,35 +1036,61 @@ constructor(
          * invoice.
          */
         @JsonProperty("invoice_schedule")
-        fun invoiceSchedule(): Optional<InvoiceSchedule> = Optional.ofNullable(invoiceSchedule)
+        @ExcludeMissing
+        fun _invoiceSchedule(): JsonField<InvoiceSchedule> = invoiceSchedule
 
         /** displayed on invoices */
-        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_sales_order_id")
-        fun netsuiteSalesOrderId(): Optional<String> = Optional.ofNullable(netsuiteSalesOrderId)
+        @ExcludeMissing
+        fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
 
         /** If multiple commits are applicable, the one with the lower priority will apply first. */
-        @JsonProperty("priority") fun priority(): Optional<Double> = Optional.ofNullable(priority)
+        @JsonProperty("priority") @ExcludeMissing fun _priority(): JsonField<Double> = priority
 
-        @JsonProperty("rate_type")
-        fun rateType(): Optional<RateType> = Optional.ofNullable(rateType)
+        @JsonProperty("rate_type") @ExcludeMissing fun _rateType(): JsonField<RateType> = rateType
 
         /** Fraction of unused segments that will be rolled over. Must be between 0 and 1. */
         @JsonProperty("rollover_fraction")
-        fun rolloverFraction(): Optional<Double> = Optional.ofNullable(rolloverFraction)
+        @ExcludeMissing
+        fun _rolloverFraction(): JsonField<Double> = rolloverFraction
 
         /**
          * A temporary ID for the commit that can be used to reference the commit for commit
          * specific overrides.
          */
         @JsonProperty("temporary_id")
-        fun temporaryId(): Optional<String> = Optional.ofNullable(temporaryId)
+        @ExcludeMissing
+        fun _temporaryId(): JsonField<String> = temporaryId
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): Commit = apply {
+            if (!validated) {
+                productId()
+                type()
+                accessSchedule().map { it.validate() }
+                amount()
+                applicableProductIds()
+                applicableProductTags()
+                customFields().map { it.validate() }
+                description()
+                invoiceSchedule().map { it.validate() }
+                name()
+                netsuiteSalesOrderId()
+                priority()
+                rateType()
+                rolloverFraction()
+                temporaryId()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -750,21 +1101,21 @@ constructor(
 
         class Builder {
 
-            private var productId: String? = null
-            private var type: Type? = null
-            private var accessSchedule: AccessSchedule? = null
-            private var amount: Double? = null
-            private var applicableProductIds: MutableList<String>? = null
-            private var applicableProductTags: MutableList<String>? = null
-            private var customFields: CustomFields? = null
-            private var description: String? = null
-            private var invoiceSchedule: InvoiceSchedule? = null
-            private var name: String? = null
-            private var netsuiteSalesOrderId: String? = null
-            private var priority: Double? = null
-            private var rateType: RateType? = null
-            private var rolloverFraction: Double? = null
-            private var temporaryId: String? = null
+            private var productId: JsonField<String>? = null
+            private var type: JsonField<Type>? = null
+            private var accessSchedule: JsonField<AccessSchedule> = JsonMissing.of()
+            private var amount: JsonField<Double> = JsonMissing.of()
+            private var applicableProductIds: JsonField<MutableList<String>>? = null
+            private var applicableProductTags: JsonField<MutableList<String>>? = null
+            private var customFields: JsonField<CustomFields> = JsonMissing.of()
+            private var description: JsonField<String> = JsonMissing.of()
+            private var invoiceSchedule: JsonField<InvoiceSchedule> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
+            private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
+            private var priority: JsonField<Double> = JsonMissing.of()
+            private var rateType: JsonField<RateType> = JsonMissing.of()
+            private var rolloverFraction: JsonField<Double> = JsonMissing.of()
+            private var temporaryId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -773,8 +1124,8 @@ constructor(
                 type = commit.type
                 accessSchedule = commit.accessSchedule
                 amount = commit.amount
-                applicableProductIds = commit.applicableProductIds?.toMutableList()
-                applicableProductTags = commit.applicableProductTags?.toMutableList()
+                applicableProductIds = commit.applicableProductIds.map { it.toMutableList() }
+                applicableProductTags = commit.applicableProductTags.map { it.toMutableList() }
                 customFields = commit.customFields
                 description = commit.description
                 invoiceSchedule = commit.invoiceSchedule
@@ -787,51 +1138,51 @@ constructor(
                 additionalProperties = commit.additionalProperties.toMutableMap()
             }
 
-            fun productId(productId: String) = apply { this.productId = productId }
+            fun productId(productId: String) = productId(JsonField.of(productId))
 
-            fun type(type: Type) = apply { this.type = type }
+            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
+
+            fun type(type: Type) = type(JsonField.of(type))
+
+            fun type(type: JsonField<Type>) = apply { this.type = type }
 
             /**
              * Required: Schedule for distributing the commit to the customer. For "POSTPAID"
              * commits only one schedule item is allowed and amount must match invoice_schedule
              * total.
              */
-            fun accessSchedule(accessSchedule: AccessSchedule?) = apply {
+            fun accessSchedule(accessSchedule: AccessSchedule) =
+                accessSchedule(JsonField.of(accessSchedule))
+
+            /**
+             * Required: Schedule for distributing the commit to the customer. For "POSTPAID"
+             * commits only one schedule item is allowed and amount must match invoice_schedule
+             * total.
+             */
+            fun accessSchedule(accessSchedule: JsonField<AccessSchedule>) = apply {
                 this.accessSchedule = accessSchedule
             }
 
-            /**
-             * Required: Schedule for distributing the commit to the customer. For "POSTPAID"
-             * commits only one schedule item is allowed and amount must match invoice_schedule
-             * total.
-             */
-            fun accessSchedule(accessSchedule: Optional<AccessSchedule>) =
-                accessSchedule(accessSchedule.orElse(null))
+            /** (DEPRECATED) Use access_schedule and invoice_schedule instead. */
+            fun amount(amount: Double) = amount(JsonField.of(amount))
 
             /** (DEPRECATED) Use access_schedule and invoice_schedule instead. */
-            fun amount(amount: Double?) = apply { this.amount = amount }
-
-            /** (DEPRECATED) Use access_schedule and invoice_schedule instead. */
-            fun amount(amount: Double) = amount(amount as Double?)
-
-            /** (DEPRECATED) Use access_schedule and invoice_schedule instead. */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
+            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
             /**
              * Which products the commit applies to. If both applicable_product_ids and
              * applicable_product_tags are not provided, the commit applies to all products.
              */
-            fun applicableProductIds(applicableProductIds: List<String>?) = apply {
-                this.applicableProductIds = applicableProductIds?.toMutableList()
+            fun applicableProductIds(applicableProductIds: List<String>) =
+                applicableProductIds(JsonField.of(applicableProductIds))
+
+            /**
+             * Which products the commit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the commit applies to all products.
+             */
+            fun applicableProductIds(applicableProductIds: JsonField<List<String>>) = apply {
+                this.applicableProductIds = applicableProductIds.map { it.toMutableList() }
             }
-
-            /**
-             * Which products the commit applies to. If both applicable_product_ids and
-             * applicable_product_tags are not provided, the commit applies to all products.
-             */
-            fun applicableProductIds(applicableProductIds: Optional<List<String>>) =
-                applicableProductIds(applicableProductIds.orElse(null))
 
             /**
              * Which products the commit applies to. If both applicable_product_ids and
@@ -839,23 +1190,31 @@ constructor(
              */
             fun addApplicableProductId(applicableProductId: String) = apply {
                 applicableProductIds =
-                    (applicableProductIds ?: mutableListOf()).apply { add(applicableProductId) }
+                    (applicableProductIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(applicableProductId)
+                    }
             }
 
             /**
              * Which tags the commit applies to. If both applicable_product_ids and
              * applicable_product_tags are not provided, the commit applies to all products.
              */
-            fun applicableProductTags(applicableProductTags: List<String>?) = apply {
-                this.applicableProductTags = applicableProductTags?.toMutableList()
-            }
+            fun applicableProductTags(applicableProductTags: List<String>) =
+                applicableProductTags(JsonField.of(applicableProductTags))
 
             /**
              * Which tags the commit applies to. If both applicable_product_ids and
              * applicable_product_tags are not provided, the commit applies to all products.
              */
-            fun applicableProductTags(applicableProductTags: Optional<List<String>>) =
-                applicableProductTags(applicableProductTags.orElse(null))
+            fun applicableProductTags(applicableProductTags: JsonField<List<String>>) = apply {
+                this.applicableProductTags = applicableProductTags.map { it.toMutableList() }
+            }
 
             /**
              * Which tags the commit applies to. If both applicable_product_ids and
@@ -863,21 +1222,30 @@ constructor(
              */
             fun addApplicableProductTag(applicableProductTag: String) = apply {
                 applicableProductTags =
-                    (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
+                    (applicableProductTags ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(applicableProductTag)
+                    }
             }
 
-            fun customFields(customFields: CustomFields?) = apply {
+            fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+
+            fun customFields(customFields: JsonField<CustomFields>) = apply {
                 this.customFields = customFields
             }
 
-            fun customFields(customFields: Optional<CustomFields>) =
-                customFields(customFields.orElse(null))
+            /** Used only in UI/API. It is not exposed to end customers. */
+            fun description(description: String) = description(JsonField.of(description))
 
             /** Used only in UI/API. It is not exposed to end customers. */
-            fun description(description: String?) = apply { this.description = description }
-
-            /** Used only in UI/API. It is not exposed to end customers. */
-            fun description(description: Optional<String>) = description(description.orElse(null))
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
 
             /**
              * Required for "POSTPAID" commits: the true up invoice will be generated at this time
@@ -885,79 +1253,70 @@ constructor(
              * Optional for "PREPAID" commits: if not provided, this will be a "complimentary"
              * commit with no invoice.
              */
-            fun invoiceSchedule(invoiceSchedule: InvoiceSchedule?) = apply {
+            fun invoiceSchedule(invoiceSchedule: InvoiceSchedule) =
+                invoiceSchedule(JsonField.of(invoiceSchedule))
+
+            /**
+             * Required for "POSTPAID" commits: the true up invoice will be generated at this time
+             * and only one schedule item is allowed; the total must match access_schedule amount.
+             * Optional for "PREPAID" commits: if not provided, this will be a "complimentary"
+             * commit with no invoice.
+             */
+            fun invoiceSchedule(invoiceSchedule: JsonField<InvoiceSchedule>) = apply {
                 this.invoiceSchedule = invoiceSchedule
             }
 
-            /**
-             * Required for "POSTPAID" commits: the true up invoice will be generated at this time
-             * and only one schedule item is allowed; the total must match access_schedule amount.
-             * Optional for "PREPAID" commits: if not provided, this will be a "complimentary"
-             * commit with no invoice.
-             */
-            fun invoiceSchedule(invoiceSchedule: Optional<InvoiceSchedule>) =
-                invoiceSchedule(invoiceSchedule.orElse(null))
+            /** displayed on invoices */
+            fun name(name: String) = name(JsonField.of(name))
 
             /** displayed on invoices */
-            fun name(name: String?) = apply { this.name = name }
-
-            /** displayed on invoices */
-            fun name(name: Optional<String>) = name(name.orElse(null))
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
+                netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
 
-            /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
-                netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
+            /**
+             * If multiple commits are applicable, the one with the lower priority will apply first.
+             */
+            fun priority(priority: Double) = priority(JsonField.of(priority))
 
             /**
              * If multiple commits are applicable, the one with the lower priority will apply first.
              */
-            fun priority(priority: Double?) = apply { this.priority = priority }
+            fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
 
-            /**
-             * If multiple commits are applicable, the one with the lower priority will apply first.
-             */
-            fun priority(priority: Double) = priority(priority as Double?)
+            fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
 
-            /**
-             * If multiple commits are applicable, the one with the lower priority will apply first.
-             */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun priority(priority: Optional<Double>) = priority(priority.orElse(null) as Double?)
-
-            fun rateType(rateType: RateType?) = apply { this.rateType = rateType }
-
-            fun rateType(rateType: Optional<RateType>) = rateType(rateType.orElse(null))
-
-            /** Fraction of unused segments that will be rolled over. Must be between 0 and 1. */
-            fun rolloverFraction(rolloverFraction: Double?) = apply {
-                this.rolloverFraction = rolloverFraction
-            }
+            fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
 
             /** Fraction of unused segments that will be rolled over. Must be between 0 and 1. */
             fun rolloverFraction(rolloverFraction: Double) =
-                rolloverFraction(rolloverFraction as Double?)
+                rolloverFraction(JsonField.of(rolloverFraction))
 
             /** Fraction of unused segments that will be rolled over. Must be between 0 and 1. */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun rolloverFraction(rolloverFraction: Optional<Double>) =
-                rolloverFraction(rolloverFraction.orElse(null) as Double?)
+            fun rolloverFraction(rolloverFraction: JsonField<Double>) = apply {
+                this.rolloverFraction = rolloverFraction
+            }
 
             /**
              * A temporary ID for the commit that can be used to reference the commit for commit
              * specific overrides.
              */
-            fun temporaryId(temporaryId: String?) = apply { this.temporaryId = temporaryId }
+            fun temporaryId(temporaryId: String) = temporaryId(JsonField.of(temporaryId))
 
             /**
              * A temporary ID for the commit that can be used to reference the commit for commit
              * specific overrides.
              */
-            fun temporaryId(temporaryId: Optional<String>) = temporaryId(temporaryId.orElse(null))
+            fun temporaryId(temporaryId: JsonField<String>) = apply {
+                this.temporaryId = temporaryId
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -984,8 +1343,8 @@ constructor(
                     checkNotNull(type) { "`type` is required but was not set" },
                     accessSchedule,
                     amount,
-                    applicableProductIds?.toImmutable(),
-                    applicableProductTags?.toImmutable(),
+                    (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     customFields,
                     description,
                     invoiceSchedule,
@@ -1064,21 +1423,44 @@ constructor(
         class AccessSchedule
         @JsonCreator
         private constructor(
-            @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>,
-            @JsonProperty("credit_type_id") private val creditTypeId: String?,
+            @JsonProperty("schedule_items")
+            @ExcludeMissing
+            private val scheduleItems: JsonField<List<ScheduleItem>> = JsonMissing.of(),
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            private val creditTypeId: JsonField<String> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem> = scheduleItems
+            fun scheduleItems(): List<ScheduleItem> = scheduleItems.getRequired("schedule_items")
+
+            /** Defaults to USD (cents) if not passed */
+            fun creditTypeId(): Optional<String> =
+                Optional.ofNullable(creditTypeId.getNullable("credit_type_id"))
+
+            @JsonProperty("schedule_items")
+            @ExcludeMissing
+            fun _scheduleItems(): JsonField<List<ScheduleItem>> = scheduleItems
 
             /** Defaults to USD (cents) if not passed */
             @JsonProperty("credit_type_id")
-            fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): AccessSchedule = apply {
+                if (!validated) {
+                    scheduleItems().forEach { it.validate() }
+                    creditTypeId()
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -1089,31 +1471,44 @@ constructor(
 
             class Builder {
 
-                private var scheduleItems: MutableList<ScheduleItem>? = null
-                private var creditTypeId: String? = null
+                private var scheduleItems: JsonField<MutableList<ScheduleItem>>? = null
+                private var creditTypeId: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(accessSchedule: AccessSchedule) = apply {
-                    scheduleItems = accessSchedule.scheduleItems.toMutableList()
+                    scheduleItems = accessSchedule.scheduleItems.map { it.toMutableList() }
                     creditTypeId = accessSchedule.creditTypeId
                     additionalProperties = accessSchedule.additionalProperties.toMutableMap()
                 }
 
-                fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
-                    this.scheduleItems = scheduleItems.toMutableList()
+                fun scheduleItems(scheduleItems: List<ScheduleItem>) =
+                    scheduleItems(JsonField.of(scheduleItems))
+
+                fun scheduleItems(scheduleItems: JsonField<List<ScheduleItem>>) = apply {
+                    this.scheduleItems = scheduleItems.map { it.toMutableList() }
                 }
 
                 fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
-                    scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
+                    scheduleItems =
+                        (scheduleItems ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(scheduleItem)
+                        }
                 }
 
                 /** Defaults to USD (cents) if not passed */
-                fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
 
                 /** Defaults to USD (cents) if not passed */
-                fun creditTypeId(creditTypeId: Optional<String>) =
-                    creditTypeId(creditTypeId.orElse(null))
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -1142,7 +1537,7 @@ constructor(
                         checkNotNull(scheduleItems) {
                                 "`scheduleItems` is required but was not set"
                             }
-                            .toImmutable(),
+                            .map { it.toImmutable() },
                         creditTypeId,
                         additionalProperties.toImmutable(),
                     )
@@ -1152,24 +1547,53 @@ constructor(
             class ScheduleItem
             @JsonCreator
             private constructor(
-                @JsonProperty("amount") private val amount: Double,
-                @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
-                @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
+                @JsonProperty("amount")
+                @ExcludeMissing
+                private val amount: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                @JsonProperty("amount") fun amount(): Double = amount
+                fun amount(): Double = amount.getRequired("amount")
 
                 /** RFC 3339 timestamp (exclusive) */
-                @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
+                fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
 
                 /** RFC 3339 timestamp (inclusive) */
-                @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+                fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+                @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+
+                /** RFC 3339 timestamp (exclusive) */
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
+
+                /** RFC 3339 timestamp (inclusive) */
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                private var validated: Boolean = false
+
+                fun validate(): ScheduleItem = apply {
+                    if (!validated) {
+                        amount()
+                        endingBefore()
+                        startingAt()
+                        validated = true
+                    }
+                }
 
                 fun toBuilder() = Builder().from(this)
 
@@ -1180,9 +1604,9 @@ constructor(
 
                 class Builder {
 
-                    private var amount: Double? = null
-                    private var endingBefore: OffsetDateTime? = null
-                    private var startingAt: OffsetDateTime? = null
+                    private var amount: JsonField<Double>? = null
+                    private var endingBefore: JsonField<OffsetDateTime>? = null
+                    private var startingAt: JsonField<OffsetDateTime>? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -1193,15 +1617,25 @@ constructor(
                         additionalProperties = scheduleItem.additionalProperties.toMutableMap()
                     }
 
-                    fun amount(amount: Double) = apply { this.amount = amount }
+                    fun amount(amount: Double) = amount(JsonField.of(amount))
+
+                    fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
                     /** RFC 3339 timestamp (exclusive) */
-                    fun endingBefore(endingBefore: OffsetDateTime) = apply {
+                    fun endingBefore(endingBefore: OffsetDateTime) =
+                        endingBefore(JsonField.of(endingBefore))
+
+                    /** RFC 3339 timestamp (exclusive) */
+                    fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                         this.endingBefore = endingBefore
                     }
 
                     /** RFC 3339 timestamp (inclusive) */
-                    fun startingAt(startingAt: OffsetDateTime) = apply {
+                    fun startingAt(startingAt: OffsetDateTime) =
+                        startingAt(JsonField.of(startingAt))
+
+                    /** RFC 3339 timestamp (inclusive) */
+                    fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                         this.startingAt = startingAt
                     }
 
@@ -1286,6 +1720,14 @@ constructor(
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+            private var validated: Boolean = false
+
+            fun validate(): CustomFields = apply {
+                if (!validated) {
+                    validated = true
+                }
+            }
+
             fun toBuilder() = Builder().from(this)
 
             companion object {
@@ -1354,16 +1796,39 @@ constructor(
         class InvoiceSchedule
         @JsonCreator
         private constructor(
-            @JsonProperty("credit_type_id") private val creditTypeId: String?,
-            @JsonProperty("recurring_schedule") private val recurringSchedule: RecurringSchedule?,
-            @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>?,
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            private val creditTypeId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("recurring_schedule")
+            @ExcludeMissing
+            private val recurringSchedule: JsonField<RecurringSchedule> = JsonMissing.of(),
+            @JsonProperty("schedule_items")
+            @ExcludeMissing
+            private val scheduleItems: JsonField<List<ScheduleItem>> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             /** Defaults to USD (cents) if not passed. */
+            fun creditTypeId(): Optional<String> =
+                Optional.ofNullable(creditTypeId.getNullable("credit_type_id"))
+
+            /**
+             * Enter the unit price and quantity for the charge or instead only send the amount. If
+             * amount is sent, the unit price is assumed to be the amount and quantity is inferred
+             * to be 1.
+             */
+            fun recurringSchedule(): Optional<RecurringSchedule> =
+                Optional.ofNullable(recurringSchedule.getNullable("recurring_schedule"))
+
+            /** Either provide amount or provide both unit_price and quantity. */
+            fun scheduleItems(): Optional<List<ScheduleItem>> =
+                Optional.ofNullable(scheduleItems.getNullable("schedule_items"))
+
+            /** Defaults to USD (cents) if not passed. */
             @JsonProperty("credit_type_id")
-            fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
 
             /**
              * Enter the unit price and quantity for the charge or instead only send the amount. If
@@ -1371,16 +1836,28 @@ constructor(
              * to be 1.
              */
             @JsonProperty("recurring_schedule")
-            fun recurringSchedule(): Optional<RecurringSchedule> =
-                Optional.ofNullable(recurringSchedule)
+            @ExcludeMissing
+            fun _recurringSchedule(): JsonField<RecurringSchedule> = recurringSchedule
 
             /** Either provide amount or provide both unit_price and quantity. */
             @JsonProperty("schedule_items")
-            fun scheduleItems(): Optional<List<ScheduleItem>> = Optional.ofNullable(scheduleItems)
+            @ExcludeMissing
+            fun _scheduleItems(): JsonField<List<ScheduleItem>> = scheduleItems
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): InvoiceSchedule = apply {
+                if (!validated) {
+                    creditTypeId()
+                    recurringSchedule().map { it.validate() }
+                    scheduleItems().map { it.forEach { it.validate() } }
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -1391,55 +1868,65 @@ constructor(
 
             class Builder {
 
-                private var creditTypeId: String? = null
-                private var recurringSchedule: RecurringSchedule? = null
-                private var scheduleItems: MutableList<ScheduleItem>? = null
+                private var creditTypeId: JsonField<String> = JsonMissing.of()
+                private var recurringSchedule: JsonField<RecurringSchedule> = JsonMissing.of()
+                private var scheduleItems: JsonField<MutableList<ScheduleItem>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(invoiceSchedule: InvoiceSchedule) = apply {
                     creditTypeId = invoiceSchedule.creditTypeId
                     recurringSchedule = invoiceSchedule.recurringSchedule
-                    scheduleItems = invoiceSchedule.scheduleItems?.toMutableList()
+                    scheduleItems = invoiceSchedule.scheduleItems.map { it.toMutableList() }
                     additionalProperties = invoiceSchedule.additionalProperties.toMutableMap()
                 }
 
                 /** Defaults to USD (cents) if not passed. */
-                fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
 
                 /** Defaults to USD (cents) if not passed. */
-                fun creditTypeId(creditTypeId: Optional<String>) =
-                    creditTypeId(creditTypeId.orElse(null))
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
+                }
 
                 /**
                  * Enter the unit price and quantity for the charge or instead only send the amount.
                  * If amount is sent, the unit price is assumed to be the amount and quantity is
                  * inferred to be 1.
                  */
-                fun recurringSchedule(recurringSchedule: RecurringSchedule?) = apply {
+                fun recurringSchedule(recurringSchedule: RecurringSchedule) =
+                    recurringSchedule(JsonField.of(recurringSchedule))
+
+                /**
+                 * Enter the unit price and quantity for the charge or instead only send the amount.
+                 * If amount is sent, the unit price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                fun recurringSchedule(recurringSchedule: JsonField<RecurringSchedule>) = apply {
                     this.recurringSchedule = recurringSchedule
                 }
 
-                /**
-                 * Enter the unit price and quantity for the charge or instead only send the amount.
-                 * If amount is sent, the unit price is assumed to be the amount and quantity is
-                 * inferred to be 1.
-                 */
-                fun recurringSchedule(recurringSchedule: Optional<RecurringSchedule>) =
-                    recurringSchedule(recurringSchedule.orElse(null))
+                /** Either provide amount or provide both unit_price and quantity. */
+                fun scheduleItems(scheduleItems: List<ScheduleItem>) =
+                    scheduleItems(JsonField.of(scheduleItems))
 
                 /** Either provide amount or provide both unit_price and quantity. */
-                fun scheduleItems(scheduleItems: List<ScheduleItem>?) = apply {
-                    this.scheduleItems = scheduleItems?.toMutableList()
+                fun scheduleItems(scheduleItems: JsonField<List<ScheduleItem>>) = apply {
+                    this.scheduleItems = scheduleItems.map { it.toMutableList() }
                 }
 
                 /** Either provide amount or provide both unit_price and quantity. */
-                fun scheduleItems(scheduleItems: Optional<List<ScheduleItem>>) =
-                    scheduleItems(scheduleItems.orElse(null))
-
-                /** Either provide amount or provide both unit_price and quantity. */
                 fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
-                    scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
+                    scheduleItems =
+                        (scheduleItems ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(scheduleItem)
+                        }
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1468,7 +1955,7 @@ constructor(
                     InvoiceSchedule(
                         creditTypeId,
                         recurringSchedule,
-                        scheduleItems?.toImmutable(),
+                        (scheduleItems ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -1483,52 +1970,121 @@ constructor(
             @JsonCreator
             private constructor(
                 @JsonProperty("amount_distribution")
-                private val amountDistribution: AmountDistribution,
-                @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
-                @JsonProperty("frequency") private val frequency: Frequency,
-                @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
-                @JsonProperty("amount") private val amount: Double?,
-                @JsonProperty("quantity") private val quantity: Double?,
-                @JsonProperty("unit_price") private val unitPrice: Double?,
+                @ExcludeMissing
+                private val amountDistribution: JsonField<AmountDistribution> = JsonMissing.of(),
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("frequency")
+                @ExcludeMissing
+                private val frequency: JsonField<Frequency> = JsonMissing.of(),
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("amount")
+                @ExcludeMissing
+                private val amount: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                private val quantity: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("unit_price")
+                @ExcludeMissing
+                private val unitPrice: JsonField<Double> = JsonMissing.of(),
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                @JsonProperty("amount_distribution")
-                fun amountDistribution(): AmountDistribution = amountDistribution
+                fun amountDistribution(): AmountDistribution =
+                    amountDistribution.getRequired("amount_distribution")
 
                 /** RFC 3339 timestamp (exclusive). */
-                @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
+                fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
 
-                @JsonProperty("frequency") fun frequency(): Frequency = frequency
+                fun frequency(): Frequency = frequency.getRequired("frequency")
 
                 /** RFC 3339 timestamp (inclusive). */
-                @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+                fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
                 /**
                  * Amount for the charge. Can be provided instead of unit_price and quantity. If
                  * amount is sent, the unit_price is assumed to be the amount and quantity is
                  * inferred to be 1.
                  */
-                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
+                fun amount(): Optional<Double> = Optional.ofNullable(amount.getNullable("amount"))
+
+                /**
+                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
+                 * and must be specified with unit_price. If specified amount cannot be provided.
+                 */
+                fun quantity(): Optional<Double> =
+                    Optional.ofNullable(quantity.getNullable("quantity"))
+
+                /**
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
+                 */
+                fun unitPrice(): Optional<Double> =
+                    Optional.ofNullable(unitPrice.getNullable("unit_price"))
+
+                @JsonProperty("amount_distribution")
+                @ExcludeMissing
+                fun _amountDistribution(): JsonField<AmountDistribution> = amountDistribution
+
+                /** RFC 3339 timestamp (exclusive). */
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
+
+                @JsonProperty("frequency")
+                @ExcludeMissing
+                fun _frequency(): JsonField<Frequency> = frequency
+
+                /** RFC 3339 timestamp (inclusive). */
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                fun _startingAt(): JsonField<OffsetDateTime> = startingAt
+
+                /**
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
                 /**
                  * Quantity for the charge. Will be multiplied by unit_price to determine the amount
                  * and must be specified with unit_price. If specified amount cannot be provided.
                  */
                 @JsonProperty("quantity")
-                fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
+                @ExcludeMissing
+                fun _quantity(): JsonField<Double> = quantity
 
                 /**
                  * Unit price for the charge. Will be multiplied by quantity to determine the amount
                  * and must be specified with quantity. If specified amount cannot be provided.
                  */
                 @JsonProperty("unit_price")
-                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
+                @ExcludeMissing
+                fun _unitPrice(): JsonField<Double> = unitPrice
 
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                private var validated: Boolean = false
+
+                fun validate(): RecurringSchedule = apply {
+                    if (!validated) {
+                        amountDistribution()
+                        endingBefore()
+                        frequency()
+                        startingAt()
+                        amount()
+                        quantity()
+                        unitPrice()
+                        validated = true
+                    }
+                }
 
                 fun toBuilder() = Builder().from(this)
 
@@ -1539,13 +2095,13 @@ constructor(
 
                 class Builder {
 
-                    private var amountDistribution: AmountDistribution? = null
-                    private var endingBefore: OffsetDateTime? = null
-                    private var frequency: Frequency? = null
-                    private var startingAt: OffsetDateTime? = null
-                    private var amount: Double? = null
-                    private var quantity: Double? = null
-                    private var unitPrice: Double? = null
+                    private var amountDistribution: JsonField<AmountDistribution>? = null
+                    private var endingBefore: JsonField<OffsetDateTime>? = null
+                    private var frequency: JsonField<Frequency>? = null
+                    private var startingAt: JsonField<OffsetDateTime>? = null
+                    private var amount: JsonField<Double> = JsonMissing.of()
+                    private var quantity: JsonField<Double> = JsonMissing.of()
+                    private var unitPrice: JsonField<Double> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -1560,19 +2116,35 @@ constructor(
                         additionalProperties = recurringSchedule.additionalProperties.toMutableMap()
                     }
 
-                    fun amountDistribution(amountDistribution: AmountDistribution) = apply {
-                        this.amountDistribution = amountDistribution
-                    }
+                    fun amountDistribution(amountDistribution: AmountDistribution) =
+                        amountDistribution(JsonField.of(amountDistribution))
+
+                    fun amountDistribution(amountDistribution: JsonField<AmountDistribution>) =
+                        apply {
+                            this.amountDistribution = amountDistribution
+                        }
 
                     /** RFC 3339 timestamp (exclusive). */
-                    fun endingBefore(endingBefore: OffsetDateTime) = apply {
+                    fun endingBefore(endingBefore: OffsetDateTime) =
+                        endingBefore(JsonField.of(endingBefore))
+
+                    /** RFC 3339 timestamp (exclusive). */
+                    fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                         this.endingBefore = endingBefore
                     }
 
-                    fun frequency(frequency: Frequency) = apply { this.frequency = frequency }
+                    fun frequency(frequency: Frequency) = frequency(JsonField.of(frequency))
+
+                    fun frequency(frequency: JsonField<Frequency>) = apply {
+                        this.frequency = frequency
+                    }
 
                     /** RFC 3339 timestamp (inclusive). */
-                    fun startingAt(startingAt: OffsetDateTime) = apply {
+                    fun startingAt(startingAt: OffsetDateTime) =
+                        startingAt(JsonField.of(startingAt))
+
+                    /** RFC 3339 timestamp (inclusive). */
+                    fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                         this.startingAt = startingAt
                     }
 
@@ -1581,68 +2153,44 @@ constructor(
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double?) = apply { this.amount = amount }
+                    fun amount(amount: Double) = amount(JsonField.of(amount))
 
                     /**
                      * Amount for the charge. Can be provided instead of unit_price and quantity. If
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double) = amount(amount as Double?)
-
-                    /**
-                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                     * amount is sent, the unit_price is assumed to be the amount and quantity is
-                     * inferred to be 1.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
+                    fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+                    fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double) = quantity(quantity as Double?)
-
-                    /**
-                     * Quantity for the charge. Will be multiplied by unit_price to determine the
-                     * amount and must be specified with unit_price. If specified amount cannot be
-                     * provided.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun quantity(quantity: Optional<Double>) =
-                        quantity(quantity.orElse(null) as Double?)
+                    fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double?) = apply { this.unitPrice = unitPrice }
+                    fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double) = unitPrice(unitPrice as Double?)
-
-                    /**
-                     * Unit price for the charge. Will be multiplied by quantity to determine the
-                     * amount and must be specified with quantity. If specified amount cannot be
-                     * provided.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun unitPrice(unitPrice: Optional<Double>) =
-                        unitPrice(unitPrice.orElse(null) as Double?)
+                    fun unitPrice(unitPrice: JsonField<Double>) = apply {
+                        this.unitPrice = unitPrice
+                    }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -1842,41 +2390,89 @@ constructor(
             class ScheduleItem
             @JsonCreator
             private constructor(
-                @JsonProperty("timestamp") private val timestamp: OffsetDateTime,
-                @JsonProperty("amount") private val amount: Double?,
-                @JsonProperty("quantity") private val quantity: Double?,
-                @JsonProperty("unit_price") private val unitPrice: Double?,
+                @JsonProperty("timestamp")
+                @ExcludeMissing
+                private val timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("amount")
+                @ExcludeMissing
+                private val amount: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                private val quantity: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("unit_price")
+                @ExcludeMissing
+                private val unitPrice: JsonField<Double> = JsonMissing.of(),
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
                 /** timestamp of the scheduled event */
-                @JsonProperty("timestamp") fun timestamp(): OffsetDateTime = timestamp
+                fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
 
                 /**
                  * Amount for the charge. Can be provided instead of unit_price and quantity. If
                  * amount is sent, the unit_price is assumed to be the amount and quantity is
                  * inferred to be 1.
                  */
-                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
+                fun amount(): Optional<Double> = Optional.ofNullable(amount.getNullable("amount"))
+
+                /**
+                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
+                 * and must be specified with unit_price. If specified amount cannot be provided.
+                 */
+                fun quantity(): Optional<Double> =
+                    Optional.ofNullable(quantity.getNullable("quantity"))
+
+                /**
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
+                 */
+                fun unitPrice(): Optional<Double> =
+                    Optional.ofNullable(unitPrice.getNullable("unit_price"))
+
+                /** timestamp of the scheduled event */
+                @JsonProperty("timestamp")
+                @ExcludeMissing
+                fun _timestamp(): JsonField<OffsetDateTime> = timestamp
+
+                /**
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
                 /**
                  * Quantity for the charge. Will be multiplied by unit_price to determine the amount
                  * and must be specified with unit_price. If specified amount cannot be provided.
                  */
                 @JsonProperty("quantity")
-                fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
+                @ExcludeMissing
+                fun _quantity(): JsonField<Double> = quantity
 
                 /**
                  * Unit price for the charge. Will be multiplied by quantity to determine the amount
                  * and must be specified with quantity. If specified amount cannot be provided.
                  */
                 @JsonProperty("unit_price")
-                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
+                @ExcludeMissing
+                fun _unitPrice(): JsonField<Double> = unitPrice
 
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                private var validated: Boolean = false
+
+                fun validate(): ScheduleItem = apply {
+                    if (!validated) {
+                        timestamp()
+                        amount()
+                        quantity()
+                        unitPrice()
+                        validated = true
+                    }
+                }
 
                 fun toBuilder() = Builder().from(this)
 
@@ -1887,10 +2483,10 @@ constructor(
 
                 class Builder {
 
-                    private var timestamp: OffsetDateTime? = null
-                    private var amount: Double? = null
-                    private var quantity: Double? = null
-                    private var unitPrice: Double? = null
+                    private var timestamp: JsonField<OffsetDateTime>? = null
+                    private var amount: JsonField<Double> = JsonMissing.of()
+                    private var quantity: JsonField<Double> = JsonMissing.of()
+                    private var unitPrice: JsonField<Double> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -1903,75 +2499,56 @@ constructor(
                     }
 
                     /** timestamp of the scheduled event */
-                    fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
+                    fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
+
+                    /** timestamp of the scheduled event */
+                    fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
+                        this.timestamp = timestamp
+                    }
 
                     /**
                      * Amount for the charge. Can be provided instead of unit_price and quantity. If
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double?) = apply { this.amount = amount }
+                    fun amount(amount: Double) = amount(JsonField.of(amount))
 
                     /**
                      * Amount for the charge. Can be provided instead of unit_price and quantity. If
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double) = amount(amount as Double?)
-
-                    /**
-                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                     * amount is sent, the unit_price is assumed to be the amount and quantity is
-                     * inferred to be 1.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
+                    fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+                    fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double) = quantity(quantity as Double?)
-
-                    /**
-                     * Quantity for the charge. Will be multiplied by unit_price to determine the
-                     * amount and must be specified with unit_price. If specified amount cannot be
-                     * provided.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun quantity(quantity: Optional<Double>) =
-                        quantity(quantity.orElse(null) as Double?)
+                    fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double?) = apply { this.unitPrice = unitPrice }
+                    fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double) = unitPrice(unitPrice as Double?)
-
-                    /**
-                     * Unit price for the charge. Will be multiplied by quantity to determine the
-                     * amount and must be specified with quantity. If specified amount cannot be
-                     * provided.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun unitPrice(unitPrice: Optional<Double>) =
-                        unitPrice(unitPrice.orElse(null) as Double?)
+                    fun unitPrice(unitPrice: JsonField<Double>) = apply {
+                        this.unitPrice = unitPrice
+                    }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -2132,64 +2709,144 @@ constructor(
     class Credit
     @JsonCreator
     private constructor(
-        @JsonProperty("access_schedule") private val accessSchedule: AccessSchedule,
-        @JsonProperty("product_id") private val productId: String,
-        @JsonProperty("applicable_product_ids") private val applicableProductIds: List<String>?,
-        @JsonProperty("applicable_product_tags") private val applicableProductTags: List<String>?,
-        @JsonProperty("custom_fields") private val customFields: CustomFields?,
-        @JsonProperty("description") private val description: String?,
-        @JsonProperty("name") private val name: String?,
-        @JsonProperty("netsuite_sales_order_id") private val netsuiteSalesOrderId: String?,
-        @JsonProperty("priority") private val priority: Double?,
-        @JsonProperty("rate_type") private val rateType: RateType?,
+        @JsonProperty("access_schedule")
+        @ExcludeMissing
+        private val accessSchedule: JsonField<AccessSchedule> = JsonMissing.of(),
+        @JsonProperty("product_id")
+        @ExcludeMissing
+        private val productId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("applicable_product_ids")
+        @ExcludeMissing
+        private val applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("applicable_product_tags")
+        @ExcludeMissing
+        private val applicableProductTags: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        private val description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("netsuite_sales_order_id")
+        @ExcludeMissing
+        private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("priority")
+        @ExcludeMissing
+        private val priority: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("rate_type")
+        @ExcludeMissing
+        private val rateType: JsonField<RateType> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Schedule for distributing the credit to the customer. */
-        @JsonProperty("access_schedule") fun accessSchedule(): AccessSchedule = accessSchedule
+        fun accessSchedule(): AccessSchedule = accessSchedule.getRequired("access_schedule")
 
-        @JsonProperty("product_id") fun productId(): String = productId
+        fun productId(): String = productId.getRequired("product_id")
+
+        /**
+         * Which products the credit applies to. If both applicable_product_ids and
+         * applicable_product_tags are not provided, the credit applies to all products.
+         */
+        fun applicableProductIds(): Optional<List<String>> =
+            Optional.ofNullable(applicableProductIds.getNullable("applicable_product_ids"))
+
+        /**
+         * Which tags the credit applies to. If both applicable_product_ids and
+         * applicable_product_tags are not provided, the credit applies to all products.
+         */
+        fun applicableProductTags(): Optional<List<String>> =
+            Optional.ofNullable(applicableProductTags.getNullable("applicable_product_tags"))
+
+        fun customFields(): Optional<CustomFields> =
+            Optional.ofNullable(customFields.getNullable("custom_fields"))
+
+        /** Used only in UI/API. It is not exposed to end customers. */
+        fun description(): Optional<String> =
+            Optional.ofNullable(description.getNullable("description"))
+
+        /** displayed on invoices */
+        fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(): Optional<String> =
+            Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
+
+        /** If multiple credits are applicable, the one with the lower priority will apply first. */
+        fun priority(): Optional<Double> = Optional.ofNullable(priority.getNullable("priority"))
+
+        fun rateType(): Optional<RateType> = Optional.ofNullable(rateType.getNullable("rate_type"))
+
+        /** Schedule for distributing the credit to the customer. */
+        @JsonProperty("access_schedule")
+        @ExcludeMissing
+        fun _accessSchedule(): JsonField<AccessSchedule> = accessSchedule
+
+        @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
         /**
          * Which products the credit applies to. If both applicable_product_ids and
          * applicable_product_tags are not provided, the credit applies to all products.
          */
         @JsonProperty("applicable_product_ids")
-        fun applicableProductIds(): Optional<List<String>> =
-            Optional.ofNullable(applicableProductIds)
+        @ExcludeMissing
+        fun _applicableProductIds(): JsonField<List<String>> = applicableProductIds
 
         /**
          * Which tags the credit applies to. If both applicable_product_ids and
          * applicable_product_tags are not provided, the credit applies to all products.
          */
         @JsonProperty("applicable_product_tags")
-        fun applicableProductTags(): Optional<List<String>> =
-            Optional.ofNullable(applicableProductTags)
+        @ExcludeMissing
+        fun _applicableProductTags(): JsonField<List<String>> = applicableProductTags
 
         @JsonProperty("custom_fields")
-        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+        @ExcludeMissing
+        fun _customFields(): JsonField<CustomFields> = customFields
 
         /** Used only in UI/API. It is not exposed to end customers. */
         @JsonProperty("description")
-        fun description(): Optional<String> = Optional.ofNullable(description)
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
 
         /** displayed on invoices */
-        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_sales_order_id")
-        fun netsuiteSalesOrderId(): Optional<String> = Optional.ofNullable(netsuiteSalesOrderId)
+        @ExcludeMissing
+        fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
 
         /** If multiple credits are applicable, the one with the lower priority will apply first. */
-        @JsonProperty("priority") fun priority(): Optional<Double> = Optional.ofNullable(priority)
+        @JsonProperty("priority") @ExcludeMissing fun _priority(): JsonField<Double> = priority
 
-        @JsonProperty("rate_type")
-        fun rateType(): Optional<RateType> = Optional.ofNullable(rateType)
+        @JsonProperty("rate_type") @ExcludeMissing fun _rateType(): JsonField<RateType> = rateType
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): Credit = apply {
+            if (!validated) {
+                accessSchedule().validate()
+                productId()
+                applicableProductIds()
+                applicableProductTags()
+                customFields().map { it.validate() }
+                description()
+                name()
+                netsuiteSalesOrderId()
+                priority()
+                rateType()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -2200,24 +2857,24 @@ constructor(
 
         class Builder {
 
-            private var accessSchedule: AccessSchedule? = null
-            private var productId: String? = null
-            private var applicableProductIds: MutableList<String>? = null
-            private var applicableProductTags: MutableList<String>? = null
-            private var customFields: CustomFields? = null
-            private var description: String? = null
-            private var name: String? = null
-            private var netsuiteSalesOrderId: String? = null
-            private var priority: Double? = null
-            private var rateType: RateType? = null
+            private var accessSchedule: JsonField<AccessSchedule>? = null
+            private var productId: JsonField<String>? = null
+            private var applicableProductIds: JsonField<MutableList<String>>? = null
+            private var applicableProductTags: JsonField<MutableList<String>>? = null
+            private var customFields: JsonField<CustomFields> = JsonMissing.of()
+            private var description: JsonField<String> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
+            private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
+            private var priority: JsonField<Double> = JsonMissing.of()
+            private var rateType: JsonField<RateType> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(credit: Credit) = apply {
                 accessSchedule = credit.accessSchedule
                 productId = credit.productId
-                applicableProductIds = credit.applicableProductIds?.toMutableList()
-                applicableProductTags = credit.applicableProductTags?.toMutableList()
+                applicableProductIds = credit.applicableProductIds.map { it.toMutableList() }
+                applicableProductTags = credit.applicableProductTags.map { it.toMutableList() }
                 customFields = credit.customFields
                 description = credit.description
                 name = credit.name
@@ -2228,26 +2885,32 @@ constructor(
             }
 
             /** Schedule for distributing the credit to the customer. */
-            fun accessSchedule(accessSchedule: AccessSchedule) = apply {
+            fun accessSchedule(accessSchedule: AccessSchedule) =
+                accessSchedule(JsonField.of(accessSchedule))
+
+            /** Schedule for distributing the credit to the customer. */
+            fun accessSchedule(accessSchedule: JsonField<AccessSchedule>) = apply {
                 this.accessSchedule = accessSchedule
             }
 
-            fun productId(productId: String) = apply { this.productId = productId }
+            fun productId(productId: String) = productId(JsonField.of(productId))
+
+            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
             /**
              * Which products the credit applies to. If both applicable_product_ids and
              * applicable_product_tags are not provided, the credit applies to all products.
              */
-            fun applicableProductIds(applicableProductIds: List<String>?) = apply {
-                this.applicableProductIds = applicableProductIds?.toMutableList()
+            fun applicableProductIds(applicableProductIds: List<String>) =
+                applicableProductIds(JsonField.of(applicableProductIds))
+
+            /**
+             * Which products the credit applies to. If both applicable_product_ids and
+             * applicable_product_tags are not provided, the credit applies to all products.
+             */
+            fun applicableProductIds(applicableProductIds: JsonField<List<String>>) = apply {
+                this.applicableProductIds = applicableProductIds.map { it.toMutableList() }
             }
-
-            /**
-             * Which products the credit applies to. If both applicable_product_ids and
-             * applicable_product_tags are not provided, the credit applies to all products.
-             */
-            fun applicableProductIds(applicableProductIds: Optional<List<String>>) =
-                applicableProductIds(applicableProductIds.orElse(null))
 
             /**
              * Which products the credit applies to. If both applicable_product_ids and
@@ -2255,23 +2918,31 @@ constructor(
              */
             fun addApplicableProductId(applicableProductId: String) = apply {
                 applicableProductIds =
-                    (applicableProductIds ?: mutableListOf()).apply { add(applicableProductId) }
+                    (applicableProductIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(applicableProductId)
+                    }
             }
 
             /**
              * Which tags the credit applies to. If both applicable_product_ids and
              * applicable_product_tags are not provided, the credit applies to all products.
              */
-            fun applicableProductTags(applicableProductTags: List<String>?) = apply {
-                this.applicableProductTags = applicableProductTags?.toMutableList()
-            }
+            fun applicableProductTags(applicableProductTags: List<String>) =
+                applicableProductTags(JsonField.of(applicableProductTags))
 
             /**
              * Which tags the credit applies to. If both applicable_product_ids and
              * applicable_product_tags are not provided, the credit applies to all products.
              */
-            fun applicableProductTags(applicableProductTags: Optional<List<String>>) =
-                applicableProductTags(applicableProductTags.orElse(null))
+            fun applicableProductTags(applicableProductTags: JsonField<List<String>>) = apply {
+                this.applicableProductTags = applicableProductTags.map { it.toMutableList() }
+            }
 
             /**
              * Which tags the credit applies to. If both applicable_product_ids and
@@ -2279,56 +2950,59 @@ constructor(
              */
             fun addApplicableProductTag(applicableProductTag: String) = apply {
                 applicableProductTags =
-                    (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
+                    (applicableProductTags ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(applicableProductTag)
+                    }
             }
 
-            fun customFields(customFields: CustomFields?) = apply {
+            fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+
+            fun customFields(customFields: JsonField<CustomFields>) = apply {
                 this.customFields = customFields
             }
 
-            fun customFields(customFields: Optional<CustomFields>) =
-                customFields(customFields.orElse(null))
+            /** Used only in UI/API. It is not exposed to end customers. */
+            fun description(description: String) = description(JsonField.of(description))
 
             /** Used only in UI/API. It is not exposed to end customers. */
-            fun description(description: String?) = apply { this.description = description }
-
-            /** Used only in UI/API. It is not exposed to end customers. */
-            fun description(description: Optional<String>) = description(description.orElse(null))
-
-            /** displayed on invoices */
-            fun name(name: String?) = apply { this.name = name }
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
 
             /** displayed on invoices */
-            fun name(name: Optional<String>) = name(name.orElse(null))
+            fun name(name: String) = name(JsonField.of(name))
+
+            /** displayed on invoices */
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
+                netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
 
-            /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
-                netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
+            /**
+             * If multiple credits are applicable, the one with the lower priority will apply first.
+             */
+            fun priority(priority: Double) = priority(JsonField.of(priority))
 
             /**
              * If multiple credits are applicable, the one with the lower priority will apply first.
              */
-            fun priority(priority: Double?) = apply { this.priority = priority }
+            fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
 
-            /**
-             * If multiple credits are applicable, the one with the lower priority will apply first.
-             */
-            fun priority(priority: Double) = priority(priority as Double?)
+            fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
 
-            /**
-             * If multiple credits are applicable, the one with the lower priority will apply first.
-             */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun priority(priority: Optional<Double>) = priority(priority.orElse(null) as Double?)
-
-            fun rateType(rateType: RateType?) = apply { this.rateType = rateType }
-
-            fun rateType(rateType: Optional<RateType>) = rateType(rateType.orElse(null))
+            fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -2353,8 +3027,8 @@ constructor(
                 Credit(
                     checkNotNull(accessSchedule) { "`accessSchedule` is required but was not set" },
                     checkNotNull(productId) { "`productId` is required but was not set" },
-                    applicableProductIds?.toImmutable(),
-                    applicableProductTags?.toImmutable(),
+                    (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     customFields,
                     description,
                     name,
@@ -2370,21 +3044,44 @@ constructor(
         class AccessSchedule
         @JsonCreator
         private constructor(
-            @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>,
-            @JsonProperty("credit_type_id") private val creditTypeId: String?,
+            @JsonProperty("schedule_items")
+            @ExcludeMissing
+            private val scheduleItems: JsonField<List<ScheduleItem>> = JsonMissing.of(),
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            private val creditTypeId: JsonField<String> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            @JsonProperty("schedule_items") fun scheduleItems(): List<ScheduleItem> = scheduleItems
+            fun scheduleItems(): List<ScheduleItem> = scheduleItems.getRequired("schedule_items")
+
+            /** Defaults to USD (cents) if not passed */
+            fun creditTypeId(): Optional<String> =
+                Optional.ofNullable(creditTypeId.getNullable("credit_type_id"))
+
+            @JsonProperty("schedule_items")
+            @ExcludeMissing
+            fun _scheduleItems(): JsonField<List<ScheduleItem>> = scheduleItems
 
             /** Defaults to USD (cents) if not passed */
             @JsonProperty("credit_type_id")
-            fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): AccessSchedule = apply {
+                if (!validated) {
+                    scheduleItems().forEach { it.validate() }
+                    creditTypeId()
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -2395,31 +3092,44 @@ constructor(
 
             class Builder {
 
-                private var scheduleItems: MutableList<ScheduleItem>? = null
-                private var creditTypeId: String? = null
+                private var scheduleItems: JsonField<MutableList<ScheduleItem>>? = null
+                private var creditTypeId: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(accessSchedule: AccessSchedule) = apply {
-                    scheduleItems = accessSchedule.scheduleItems.toMutableList()
+                    scheduleItems = accessSchedule.scheduleItems.map { it.toMutableList() }
                     creditTypeId = accessSchedule.creditTypeId
                     additionalProperties = accessSchedule.additionalProperties.toMutableMap()
                 }
 
-                fun scheduleItems(scheduleItems: List<ScheduleItem>) = apply {
-                    this.scheduleItems = scheduleItems.toMutableList()
+                fun scheduleItems(scheduleItems: List<ScheduleItem>) =
+                    scheduleItems(JsonField.of(scheduleItems))
+
+                fun scheduleItems(scheduleItems: JsonField<List<ScheduleItem>>) = apply {
+                    this.scheduleItems = scheduleItems.map { it.toMutableList() }
                 }
 
                 fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
-                    scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
+                    scheduleItems =
+                        (scheduleItems ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(scheduleItem)
+                        }
                 }
 
                 /** Defaults to USD (cents) if not passed */
-                fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
 
                 /** Defaults to USD (cents) if not passed */
-                fun creditTypeId(creditTypeId: Optional<String>) =
-                    creditTypeId(creditTypeId.orElse(null))
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -2448,7 +3158,7 @@ constructor(
                         checkNotNull(scheduleItems) {
                                 "`scheduleItems` is required but was not set"
                             }
-                            .toImmutable(),
+                            .map { it.toImmutable() },
                         creditTypeId,
                         additionalProperties.toImmutable(),
                     )
@@ -2458,24 +3168,53 @@ constructor(
             class ScheduleItem
             @JsonCreator
             private constructor(
-                @JsonProperty("amount") private val amount: Double,
-                @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
-                @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
+                @JsonProperty("amount")
+                @ExcludeMissing
+                private val amount: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                @JsonProperty("amount") fun amount(): Double = amount
+                fun amount(): Double = amount.getRequired("amount")
 
                 /** RFC 3339 timestamp (exclusive) */
-                @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
+                fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
 
                 /** RFC 3339 timestamp (inclusive) */
-                @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+                fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+                @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+
+                /** RFC 3339 timestamp (exclusive) */
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
+
+                /** RFC 3339 timestamp (inclusive) */
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                private var validated: Boolean = false
+
+                fun validate(): ScheduleItem = apply {
+                    if (!validated) {
+                        amount()
+                        endingBefore()
+                        startingAt()
+                        validated = true
+                    }
+                }
 
                 fun toBuilder() = Builder().from(this)
 
@@ -2486,9 +3225,9 @@ constructor(
 
                 class Builder {
 
-                    private var amount: Double? = null
-                    private var endingBefore: OffsetDateTime? = null
-                    private var startingAt: OffsetDateTime? = null
+                    private var amount: JsonField<Double>? = null
+                    private var endingBefore: JsonField<OffsetDateTime>? = null
+                    private var startingAt: JsonField<OffsetDateTime>? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -2499,15 +3238,25 @@ constructor(
                         additionalProperties = scheduleItem.additionalProperties.toMutableMap()
                     }
 
-                    fun amount(amount: Double) = apply { this.amount = amount }
+                    fun amount(amount: Double) = amount(JsonField.of(amount))
+
+                    fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
                     /** RFC 3339 timestamp (exclusive) */
-                    fun endingBefore(endingBefore: OffsetDateTime) = apply {
+                    fun endingBefore(endingBefore: OffsetDateTime) =
+                        endingBefore(JsonField.of(endingBefore))
+
+                    /** RFC 3339 timestamp (exclusive) */
+                    fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                         this.endingBefore = endingBefore
                     }
 
                     /** RFC 3339 timestamp (inclusive) */
-                    fun startingAt(startingAt: OffsetDateTime) = apply {
+                    fun startingAt(startingAt: OffsetDateTime) =
+                        startingAt(JsonField.of(startingAt))
+
+                    /** RFC 3339 timestamp (inclusive) */
+                    fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                         this.startingAt = startingAt
                     }
 
@@ -2591,6 +3340,14 @@ constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): CustomFields = apply {
+                if (!validated) {
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -2749,6 +3506,14 @@ constructor(
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+        private var validated: Boolean = false
+
+        fun validate(): CustomFields = apply {
+            if (!validated) {
+                validated = true
+            }
+        }
+
         fun toBuilder() = Builder().from(this)
 
         companion object {
@@ -2808,29 +3573,62 @@ constructor(
     class Discount
     @JsonCreator
     private constructor(
-        @JsonProperty("product_id") private val productId: String,
-        @JsonProperty("schedule") private val schedule: Schedule,
-        @JsonProperty("name") private val name: String?,
-        @JsonProperty("netsuite_sales_order_id") private val netsuiteSalesOrderId: String?,
+        @JsonProperty("product_id")
+        @ExcludeMissing
+        private val productId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("schedule")
+        @ExcludeMissing
+        private val schedule: JsonField<Schedule> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("netsuite_sales_order_id")
+        @ExcludeMissing
+        private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("product_id") fun productId(): String = productId
+        fun productId(): String = productId.getRequired("product_id")
 
         /** Must provide either schedule_items or recurring_schedule. */
-        @JsonProperty("schedule") fun schedule(): Schedule = schedule
+        fun schedule(): Schedule = schedule.getRequired("schedule")
 
         /** displayed on invoices */
-        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
+        fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(): Optional<String> =
+            Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
+
+        @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
+
+        /** Must provide either schedule_items or recurring_schedule. */
+        @JsonProperty("schedule") @ExcludeMissing fun _schedule(): JsonField<Schedule> = schedule
+
+        /** displayed on invoices */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_sales_order_id")
-        fun netsuiteSalesOrderId(): Optional<String> = Optional.ofNullable(netsuiteSalesOrderId)
+        @ExcludeMissing
+        fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): Discount = apply {
+            if (!validated) {
+                productId()
+                schedule().validate()
+                name()
+                netsuiteSalesOrderId()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -2841,10 +3639,10 @@ constructor(
 
         class Builder {
 
-            private var productId: String? = null
-            private var schedule: Schedule? = null
-            private var name: String? = null
-            private var netsuiteSalesOrderId: String? = null
+            private var productId: JsonField<String>? = null
+            private var schedule: JsonField<Schedule>? = null
+            private var name: JsonField<String> = JsonMissing.of()
+            private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -2856,25 +3654,30 @@ constructor(
                 additionalProperties = discount.additionalProperties.toMutableMap()
             }
 
-            fun productId(productId: String) = apply { this.productId = productId }
+            fun productId(productId: String) = productId(JsonField.of(productId))
+
+            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
             /** Must provide either schedule_items or recurring_schedule. */
-            fun schedule(schedule: Schedule) = apply { this.schedule = schedule }
+            fun schedule(schedule: Schedule) = schedule(JsonField.of(schedule))
+
+            /** Must provide either schedule_items or recurring_schedule. */
+            fun schedule(schedule: JsonField<Schedule>) = apply { this.schedule = schedule }
 
             /** displayed on invoices */
-            fun name(name: String?) = apply { this.name = name }
+            fun name(name: String) = name(JsonField.of(name))
 
             /** displayed on invoices */
-            fun name(name: Optional<String>) = name(name.orElse(null))
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
+                netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
-
-            /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
-                netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -2910,16 +3713,39 @@ constructor(
         class Schedule
         @JsonCreator
         private constructor(
-            @JsonProperty("credit_type_id") private val creditTypeId: String?,
-            @JsonProperty("recurring_schedule") private val recurringSchedule: RecurringSchedule?,
-            @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>?,
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            private val creditTypeId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("recurring_schedule")
+            @ExcludeMissing
+            private val recurringSchedule: JsonField<RecurringSchedule> = JsonMissing.of(),
+            @JsonProperty("schedule_items")
+            @ExcludeMissing
+            private val scheduleItems: JsonField<List<ScheduleItem>> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             /** Defaults to USD (cents) if not passed. */
+            fun creditTypeId(): Optional<String> =
+                Optional.ofNullable(creditTypeId.getNullable("credit_type_id"))
+
+            /**
+             * Enter the unit price and quantity for the charge or instead only send the amount. If
+             * amount is sent, the unit price is assumed to be the amount and quantity is inferred
+             * to be 1.
+             */
+            fun recurringSchedule(): Optional<RecurringSchedule> =
+                Optional.ofNullable(recurringSchedule.getNullable("recurring_schedule"))
+
+            /** Either provide amount or provide both unit_price and quantity. */
+            fun scheduleItems(): Optional<List<ScheduleItem>> =
+                Optional.ofNullable(scheduleItems.getNullable("schedule_items"))
+
+            /** Defaults to USD (cents) if not passed. */
             @JsonProperty("credit_type_id")
-            fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
 
             /**
              * Enter the unit price and quantity for the charge or instead only send the amount. If
@@ -2927,16 +3753,28 @@ constructor(
              * to be 1.
              */
             @JsonProperty("recurring_schedule")
-            fun recurringSchedule(): Optional<RecurringSchedule> =
-                Optional.ofNullable(recurringSchedule)
+            @ExcludeMissing
+            fun _recurringSchedule(): JsonField<RecurringSchedule> = recurringSchedule
 
             /** Either provide amount or provide both unit_price and quantity. */
             @JsonProperty("schedule_items")
-            fun scheduleItems(): Optional<List<ScheduleItem>> = Optional.ofNullable(scheduleItems)
+            @ExcludeMissing
+            fun _scheduleItems(): JsonField<List<ScheduleItem>> = scheduleItems
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): Schedule = apply {
+                if (!validated) {
+                    creditTypeId()
+                    recurringSchedule().map { it.validate() }
+                    scheduleItems().map { it.forEach { it.validate() } }
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -2947,55 +3785,65 @@ constructor(
 
             class Builder {
 
-                private var creditTypeId: String? = null
-                private var recurringSchedule: RecurringSchedule? = null
-                private var scheduleItems: MutableList<ScheduleItem>? = null
+                private var creditTypeId: JsonField<String> = JsonMissing.of()
+                private var recurringSchedule: JsonField<RecurringSchedule> = JsonMissing.of()
+                private var scheduleItems: JsonField<MutableList<ScheduleItem>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(schedule: Schedule) = apply {
                     creditTypeId = schedule.creditTypeId
                     recurringSchedule = schedule.recurringSchedule
-                    scheduleItems = schedule.scheduleItems?.toMutableList()
+                    scheduleItems = schedule.scheduleItems.map { it.toMutableList() }
                     additionalProperties = schedule.additionalProperties.toMutableMap()
                 }
 
                 /** Defaults to USD (cents) if not passed. */
-                fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
 
                 /** Defaults to USD (cents) if not passed. */
-                fun creditTypeId(creditTypeId: Optional<String>) =
-                    creditTypeId(creditTypeId.orElse(null))
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
+                }
 
                 /**
                  * Enter the unit price and quantity for the charge or instead only send the amount.
                  * If amount is sent, the unit price is assumed to be the amount and quantity is
                  * inferred to be 1.
                  */
-                fun recurringSchedule(recurringSchedule: RecurringSchedule?) = apply {
+                fun recurringSchedule(recurringSchedule: RecurringSchedule) =
+                    recurringSchedule(JsonField.of(recurringSchedule))
+
+                /**
+                 * Enter the unit price and quantity for the charge or instead only send the amount.
+                 * If amount is sent, the unit price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                fun recurringSchedule(recurringSchedule: JsonField<RecurringSchedule>) = apply {
                     this.recurringSchedule = recurringSchedule
                 }
 
-                /**
-                 * Enter the unit price and quantity for the charge or instead only send the amount.
-                 * If amount is sent, the unit price is assumed to be the amount and quantity is
-                 * inferred to be 1.
-                 */
-                fun recurringSchedule(recurringSchedule: Optional<RecurringSchedule>) =
-                    recurringSchedule(recurringSchedule.orElse(null))
+                /** Either provide amount or provide both unit_price and quantity. */
+                fun scheduleItems(scheduleItems: List<ScheduleItem>) =
+                    scheduleItems(JsonField.of(scheduleItems))
 
                 /** Either provide amount or provide both unit_price and quantity. */
-                fun scheduleItems(scheduleItems: List<ScheduleItem>?) = apply {
-                    this.scheduleItems = scheduleItems?.toMutableList()
+                fun scheduleItems(scheduleItems: JsonField<List<ScheduleItem>>) = apply {
+                    this.scheduleItems = scheduleItems.map { it.toMutableList() }
                 }
 
                 /** Either provide amount or provide both unit_price and quantity. */
-                fun scheduleItems(scheduleItems: Optional<List<ScheduleItem>>) =
-                    scheduleItems(scheduleItems.orElse(null))
-
-                /** Either provide amount or provide both unit_price and quantity. */
                 fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
-                    scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
+                    scheduleItems =
+                        (scheduleItems ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(scheduleItem)
+                        }
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -3024,7 +3872,7 @@ constructor(
                     Schedule(
                         creditTypeId,
                         recurringSchedule,
-                        scheduleItems?.toImmutable(),
+                        (scheduleItems ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -3039,52 +3887,121 @@ constructor(
             @JsonCreator
             private constructor(
                 @JsonProperty("amount_distribution")
-                private val amountDistribution: AmountDistribution,
-                @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
-                @JsonProperty("frequency") private val frequency: Frequency,
-                @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
-                @JsonProperty("amount") private val amount: Double?,
-                @JsonProperty("quantity") private val quantity: Double?,
-                @JsonProperty("unit_price") private val unitPrice: Double?,
+                @ExcludeMissing
+                private val amountDistribution: JsonField<AmountDistribution> = JsonMissing.of(),
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("frequency")
+                @ExcludeMissing
+                private val frequency: JsonField<Frequency> = JsonMissing.of(),
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("amount")
+                @ExcludeMissing
+                private val amount: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                private val quantity: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("unit_price")
+                @ExcludeMissing
+                private val unitPrice: JsonField<Double> = JsonMissing.of(),
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                @JsonProperty("amount_distribution")
-                fun amountDistribution(): AmountDistribution = amountDistribution
+                fun amountDistribution(): AmountDistribution =
+                    amountDistribution.getRequired("amount_distribution")
 
                 /** RFC 3339 timestamp (exclusive). */
-                @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
+                fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
 
-                @JsonProperty("frequency") fun frequency(): Frequency = frequency
+                fun frequency(): Frequency = frequency.getRequired("frequency")
 
                 /** RFC 3339 timestamp (inclusive). */
-                @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+                fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
                 /**
                  * Amount for the charge. Can be provided instead of unit_price and quantity. If
                  * amount is sent, the unit_price is assumed to be the amount and quantity is
                  * inferred to be 1.
                  */
-                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
+                fun amount(): Optional<Double> = Optional.ofNullable(amount.getNullable("amount"))
+
+                /**
+                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
+                 * and must be specified with unit_price. If specified amount cannot be provided.
+                 */
+                fun quantity(): Optional<Double> =
+                    Optional.ofNullable(quantity.getNullable("quantity"))
+
+                /**
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
+                 */
+                fun unitPrice(): Optional<Double> =
+                    Optional.ofNullable(unitPrice.getNullable("unit_price"))
+
+                @JsonProperty("amount_distribution")
+                @ExcludeMissing
+                fun _amountDistribution(): JsonField<AmountDistribution> = amountDistribution
+
+                /** RFC 3339 timestamp (exclusive). */
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
+
+                @JsonProperty("frequency")
+                @ExcludeMissing
+                fun _frequency(): JsonField<Frequency> = frequency
+
+                /** RFC 3339 timestamp (inclusive). */
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                fun _startingAt(): JsonField<OffsetDateTime> = startingAt
+
+                /**
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
                 /**
                  * Quantity for the charge. Will be multiplied by unit_price to determine the amount
                  * and must be specified with unit_price. If specified amount cannot be provided.
                  */
                 @JsonProperty("quantity")
-                fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
+                @ExcludeMissing
+                fun _quantity(): JsonField<Double> = quantity
 
                 /**
                  * Unit price for the charge. Will be multiplied by quantity to determine the amount
                  * and must be specified with quantity. If specified amount cannot be provided.
                  */
                 @JsonProperty("unit_price")
-                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
+                @ExcludeMissing
+                fun _unitPrice(): JsonField<Double> = unitPrice
 
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                private var validated: Boolean = false
+
+                fun validate(): RecurringSchedule = apply {
+                    if (!validated) {
+                        amountDistribution()
+                        endingBefore()
+                        frequency()
+                        startingAt()
+                        amount()
+                        quantity()
+                        unitPrice()
+                        validated = true
+                    }
+                }
 
                 fun toBuilder() = Builder().from(this)
 
@@ -3095,13 +4012,13 @@ constructor(
 
                 class Builder {
 
-                    private var amountDistribution: AmountDistribution? = null
-                    private var endingBefore: OffsetDateTime? = null
-                    private var frequency: Frequency? = null
-                    private var startingAt: OffsetDateTime? = null
-                    private var amount: Double? = null
-                    private var quantity: Double? = null
-                    private var unitPrice: Double? = null
+                    private var amountDistribution: JsonField<AmountDistribution>? = null
+                    private var endingBefore: JsonField<OffsetDateTime>? = null
+                    private var frequency: JsonField<Frequency>? = null
+                    private var startingAt: JsonField<OffsetDateTime>? = null
+                    private var amount: JsonField<Double> = JsonMissing.of()
+                    private var quantity: JsonField<Double> = JsonMissing.of()
+                    private var unitPrice: JsonField<Double> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -3116,19 +4033,35 @@ constructor(
                         additionalProperties = recurringSchedule.additionalProperties.toMutableMap()
                     }
 
-                    fun amountDistribution(amountDistribution: AmountDistribution) = apply {
-                        this.amountDistribution = amountDistribution
-                    }
+                    fun amountDistribution(amountDistribution: AmountDistribution) =
+                        amountDistribution(JsonField.of(amountDistribution))
+
+                    fun amountDistribution(amountDistribution: JsonField<AmountDistribution>) =
+                        apply {
+                            this.amountDistribution = amountDistribution
+                        }
 
                     /** RFC 3339 timestamp (exclusive). */
-                    fun endingBefore(endingBefore: OffsetDateTime) = apply {
+                    fun endingBefore(endingBefore: OffsetDateTime) =
+                        endingBefore(JsonField.of(endingBefore))
+
+                    /** RFC 3339 timestamp (exclusive). */
+                    fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                         this.endingBefore = endingBefore
                     }
 
-                    fun frequency(frequency: Frequency) = apply { this.frequency = frequency }
+                    fun frequency(frequency: Frequency) = frequency(JsonField.of(frequency))
+
+                    fun frequency(frequency: JsonField<Frequency>) = apply {
+                        this.frequency = frequency
+                    }
 
                     /** RFC 3339 timestamp (inclusive). */
-                    fun startingAt(startingAt: OffsetDateTime) = apply {
+                    fun startingAt(startingAt: OffsetDateTime) =
+                        startingAt(JsonField.of(startingAt))
+
+                    /** RFC 3339 timestamp (inclusive). */
+                    fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                         this.startingAt = startingAt
                     }
 
@@ -3137,68 +4070,44 @@ constructor(
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double?) = apply { this.amount = amount }
+                    fun amount(amount: Double) = amount(JsonField.of(amount))
 
                     /**
                      * Amount for the charge. Can be provided instead of unit_price and quantity. If
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double) = amount(amount as Double?)
-
-                    /**
-                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                     * amount is sent, the unit_price is assumed to be the amount and quantity is
-                     * inferred to be 1.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
+                    fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+                    fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double) = quantity(quantity as Double?)
-
-                    /**
-                     * Quantity for the charge. Will be multiplied by unit_price to determine the
-                     * amount and must be specified with unit_price. If specified amount cannot be
-                     * provided.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun quantity(quantity: Optional<Double>) =
-                        quantity(quantity.orElse(null) as Double?)
+                    fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double?) = apply { this.unitPrice = unitPrice }
+                    fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double) = unitPrice(unitPrice as Double?)
-
-                    /**
-                     * Unit price for the charge. Will be multiplied by quantity to determine the
-                     * amount and must be specified with quantity. If specified amount cannot be
-                     * provided.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun unitPrice(unitPrice: Optional<Double>) =
-                        unitPrice(unitPrice.orElse(null) as Double?)
+                    fun unitPrice(unitPrice: JsonField<Double>) = apply {
+                        this.unitPrice = unitPrice
+                    }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -3398,41 +4307,89 @@ constructor(
             class ScheduleItem
             @JsonCreator
             private constructor(
-                @JsonProperty("timestamp") private val timestamp: OffsetDateTime,
-                @JsonProperty("amount") private val amount: Double?,
-                @JsonProperty("quantity") private val quantity: Double?,
-                @JsonProperty("unit_price") private val unitPrice: Double?,
+                @JsonProperty("timestamp")
+                @ExcludeMissing
+                private val timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("amount")
+                @ExcludeMissing
+                private val amount: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                private val quantity: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("unit_price")
+                @ExcludeMissing
+                private val unitPrice: JsonField<Double> = JsonMissing.of(),
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
                 /** timestamp of the scheduled event */
-                @JsonProperty("timestamp") fun timestamp(): OffsetDateTime = timestamp
+                fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
 
                 /**
                  * Amount for the charge. Can be provided instead of unit_price and quantity. If
                  * amount is sent, the unit_price is assumed to be the amount and quantity is
                  * inferred to be 1.
                  */
-                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
+                fun amount(): Optional<Double> = Optional.ofNullable(amount.getNullable("amount"))
+
+                /**
+                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
+                 * and must be specified with unit_price. If specified amount cannot be provided.
+                 */
+                fun quantity(): Optional<Double> =
+                    Optional.ofNullable(quantity.getNullable("quantity"))
+
+                /**
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
+                 */
+                fun unitPrice(): Optional<Double> =
+                    Optional.ofNullable(unitPrice.getNullable("unit_price"))
+
+                /** timestamp of the scheduled event */
+                @JsonProperty("timestamp")
+                @ExcludeMissing
+                fun _timestamp(): JsonField<OffsetDateTime> = timestamp
+
+                /**
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
                 /**
                  * Quantity for the charge. Will be multiplied by unit_price to determine the amount
                  * and must be specified with unit_price. If specified amount cannot be provided.
                  */
                 @JsonProperty("quantity")
-                fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
+                @ExcludeMissing
+                fun _quantity(): JsonField<Double> = quantity
 
                 /**
                  * Unit price for the charge. Will be multiplied by quantity to determine the amount
                  * and must be specified with quantity. If specified amount cannot be provided.
                  */
                 @JsonProperty("unit_price")
-                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
+                @ExcludeMissing
+                fun _unitPrice(): JsonField<Double> = unitPrice
 
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                private var validated: Boolean = false
+
+                fun validate(): ScheduleItem = apply {
+                    if (!validated) {
+                        timestamp()
+                        amount()
+                        quantity()
+                        unitPrice()
+                        validated = true
+                    }
+                }
 
                 fun toBuilder() = Builder().from(this)
 
@@ -3443,10 +4400,10 @@ constructor(
 
                 class Builder {
 
-                    private var timestamp: OffsetDateTime? = null
-                    private var amount: Double? = null
-                    private var quantity: Double? = null
-                    private var unitPrice: Double? = null
+                    private var timestamp: JsonField<OffsetDateTime>? = null
+                    private var amount: JsonField<Double> = JsonMissing.of()
+                    private var quantity: JsonField<Double> = JsonMissing.of()
+                    private var unitPrice: JsonField<Double> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -3459,75 +4416,56 @@ constructor(
                     }
 
                     /** timestamp of the scheduled event */
-                    fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
+                    fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
+
+                    /** timestamp of the scheduled event */
+                    fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
+                        this.timestamp = timestamp
+                    }
 
                     /**
                      * Amount for the charge. Can be provided instead of unit_price and quantity. If
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double?) = apply { this.amount = amount }
+                    fun amount(amount: Double) = amount(JsonField.of(amount))
 
                     /**
                      * Amount for the charge. Can be provided instead of unit_price and quantity. If
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double) = amount(amount as Double?)
-
-                    /**
-                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                     * amount is sent, the unit_price is assumed to be the amount and quantity is
-                     * inferred to be 1.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
+                    fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+                    fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double) = quantity(quantity as Double?)
-
-                    /**
-                     * Quantity for the charge. Will be multiplied by unit_price to determine the
-                     * amount and must be specified with unit_price. If specified amount cannot be
-                     * provided.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun quantity(quantity: Optional<Double>) =
-                        quantity(quantity.orElse(null) as Double?)
+                    fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double?) = apply { this.unitPrice = unitPrice }
+                    fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double) = unitPrice(unitPrice as Double?)
-
-                    /**
-                     * Unit price for the charge. Will be multiplied by quantity to determine the
-                     * amount and must be specified with quantity. If specified amount cannot be
-                     * provided.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun unitPrice(unitPrice: Optional<Double>) =
-                        unitPrice(unitPrice.orElse(null) as Double?)
+                    fun unitPrice(unitPrice: JsonField<Double>) = apply {
+                        this.unitPrice = unitPrice
+                    }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -3619,40 +4557,131 @@ constructor(
     class Override
     @JsonCreator
     private constructor(
-        @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
-        @JsonProperty("applicable_product_tags") private val applicableProductTags: List<String>?,
-        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
-        @JsonProperty("entitled") private val entitled: Boolean?,
-        @JsonProperty("is_commit_specific") private val isCommitSpecific: Boolean?,
-        @JsonProperty("multiplier") private val multiplier: Double?,
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("applicable_product_tags")
+        @ExcludeMissing
+        private val applicableProductTags: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("entitled")
+        @ExcludeMissing
+        private val entitled: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("is_commit_specific")
+        @ExcludeMissing
+        private val isCommitSpecific: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("multiplier")
+        @ExcludeMissing
+        private val multiplier: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("override_specifiers")
-        private val overrideSpecifiers: List<OverrideSpecifier>?,
-        @JsonProperty("overwrite_rate") private val overwriteRate: OverwriteRate?,
-        @JsonProperty("priority") private val priority: Double?,
-        @JsonProperty("product_id") private val productId: String?,
-        @JsonProperty("target") private val target: Target?,
-        @JsonProperty("tiers") private val tiers: List<Tier>?,
-        @JsonProperty("type") private val type: Type?,
+        @ExcludeMissing
+        private val overrideSpecifiers: JsonField<List<OverrideSpecifier>> = JsonMissing.of(),
+        @JsonProperty("overwrite_rate")
+        @ExcludeMissing
+        private val overwriteRate: JsonField<OverwriteRate> = JsonMissing.of(),
+        @JsonProperty("priority")
+        @ExcludeMissing
+        private val priority: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("product_id")
+        @ExcludeMissing
+        private val productId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("target")
+        @ExcludeMissing
+        private val target: JsonField<Target> = JsonMissing.of(),
+        @JsonProperty("tiers")
+        @ExcludeMissing
+        private val tiers: JsonField<List<Tier>> = JsonMissing.of(),
+        @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** RFC 3339 timestamp indicating when the override will start applying (inclusive) */
-        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+        fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+        /**
+         * tags identifying products whose rates are being overridden. Cannot be used in conjunction
+         * with override_specifiers.
+         */
+        fun applicableProductTags(): Optional<List<String>> =
+            Optional.ofNullable(applicableProductTags.getNullable("applicable_product_tags"))
+
+        /** RFC 3339 timestamp indicating when the override will stop applying (exclusive) */
+        fun endingBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+        fun entitled(): Optional<Boolean> = Optional.ofNullable(entitled.getNullable("entitled"))
+
+        /**
+         * Indicates whether the override should only apply to commits. Defaults to `false`. If
+         * `true`, you can specify relevant commits in `override_specifiers` by passing
+         * `commit_ids`. if you do not specify `commit_ids`, then the override will apply when
+         * consuming any prepaid or postpaid commit.
+         */
+        fun isCommitSpecific(): Optional<Boolean> =
+            Optional.ofNullable(isCommitSpecific.getNullable("is_commit_specific"))
+
+        /** Required for MULTIPLIER type. Must be >=0. */
+        fun multiplier(): Optional<Double> =
+            Optional.ofNullable(multiplier.getNullable("multiplier"))
+
+        /**
+         * Cannot be used in conjunction with product_id or applicable_product_tags. If provided,
+         * the override will apply to all products with the specified specifiers.
+         */
+        fun overrideSpecifiers(): Optional<List<OverrideSpecifier>> =
+            Optional.ofNullable(overrideSpecifiers.getNullable("override_specifiers"))
+
+        /** Required for OVERWRITE type. */
+        fun overwriteRate(): Optional<OverwriteRate> =
+            Optional.ofNullable(overwriteRate.getNullable("overwrite_rate"))
+
+        /**
+         * Required for EXPLICIT multiplier prioritization scheme and all TIERED overrides. Under
+         * EXPLICIT prioritization, overwrites are prioritized first, and then tiered and multiplier
+         * overrides are prioritized by their priority value (lowest first). Must be > 0.
+         */
+        fun priority(): Optional<Double> = Optional.ofNullable(priority.getNullable("priority"))
+
+        /**
+         * ID of the product whose rate is being overridden. Cannot be used in conjunction with
+         * override_specifiers.
+         */
+        fun productId(): Optional<String> = Optional.ofNullable(productId.getNullable("product_id"))
+
+        /**
+         * Indicates whether the override applies to commit rates or list rates. Can only be used
+         * for overrides that have `is_commit_specific` set to `true`. Defaults to `"LIST_RATE"`.
+         */
+        fun target(): Optional<Target> = Optional.ofNullable(target.getNullable("target"))
+
+        /** Required for TIERED type. Must have at least one tier. */
+        fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers.getNullable("tiers"))
+
+        /** Overwrites are prioritized over multipliers and tiered overrides. */
+        fun type(): Optional<Type> = Optional.ofNullable(type.getNullable("type"))
+
+        /** RFC 3339 timestamp indicating when the override will start applying (inclusive) */
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         /**
          * tags identifying products whose rates are being overridden. Cannot be used in conjunction
          * with override_specifiers.
          */
         @JsonProperty("applicable_product_tags")
-        fun applicableProductTags(): Optional<List<String>> =
-            Optional.ofNullable(applicableProductTags)
+        @ExcludeMissing
+        fun _applicableProductTags(): JsonField<List<String>> = applicableProductTags
 
         /** RFC 3339 timestamp indicating when the override will stop applying (exclusive) */
         @JsonProperty("ending_before")
-        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
-        @JsonProperty("entitled") fun entitled(): Optional<Boolean> = Optional.ofNullable(entitled)
+        @JsonProperty("entitled") @ExcludeMissing fun _entitled(): JsonField<Boolean> = entitled
 
         /**
          * Indicates whether the override should only apply to commits. Defaults to `false`. If
@@ -3661,53 +4690,76 @@ constructor(
          * consuming any prepaid or postpaid commit.
          */
         @JsonProperty("is_commit_specific")
-        fun isCommitSpecific(): Optional<Boolean> = Optional.ofNullable(isCommitSpecific)
+        @ExcludeMissing
+        fun _isCommitSpecific(): JsonField<Boolean> = isCommitSpecific
 
         /** Required for MULTIPLIER type. Must be >=0. */
         @JsonProperty("multiplier")
-        fun multiplier(): Optional<Double> = Optional.ofNullable(multiplier)
+        @ExcludeMissing
+        fun _multiplier(): JsonField<Double> = multiplier
 
         /**
          * Cannot be used in conjunction with product_id or applicable_product_tags. If provided,
          * the override will apply to all products with the specified specifiers.
          */
         @JsonProperty("override_specifiers")
-        fun overrideSpecifiers(): Optional<List<OverrideSpecifier>> =
-            Optional.ofNullable(overrideSpecifiers)
+        @ExcludeMissing
+        fun _overrideSpecifiers(): JsonField<List<OverrideSpecifier>> = overrideSpecifiers
 
         /** Required for OVERWRITE type. */
         @JsonProperty("overwrite_rate")
-        fun overwriteRate(): Optional<OverwriteRate> = Optional.ofNullable(overwriteRate)
+        @ExcludeMissing
+        fun _overwriteRate(): JsonField<OverwriteRate> = overwriteRate
 
         /**
          * Required for EXPLICIT multiplier prioritization scheme and all TIERED overrides. Under
          * EXPLICIT prioritization, overwrites are prioritized first, and then tiered and multiplier
          * overrides are prioritized by their priority value (lowest first). Must be > 0.
          */
-        @JsonProperty("priority") fun priority(): Optional<Double> = Optional.ofNullable(priority)
+        @JsonProperty("priority") @ExcludeMissing fun _priority(): JsonField<Double> = priority
 
         /**
          * ID of the product whose rate is being overridden. Cannot be used in conjunction with
          * override_specifiers.
          */
-        @JsonProperty("product_id")
-        fun productId(): Optional<String> = Optional.ofNullable(productId)
+        @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
         /**
          * Indicates whether the override applies to commit rates or list rates. Can only be used
          * for overrides that have `is_commit_specific` set to `true`. Defaults to `"LIST_RATE"`.
          */
-        @JsonProperty("target") fun target(): Optional<Target> = Optional.ofNullable(target)
+        @JsonProperty("target") @ExcludeMissing fun _target(): JsonField<Target> = target
 
         /** Required for TIERED type. Must have at least one tier. */
-        @JsonProperty("tiers") fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers)
+        @JsonProperty("tiers") @ExcludeMissing fun _tiers(): JsonField<List<Tier>> = tiers
 
         /** Overwrites are prioritized over multipliers and tiered overrides. */
-        @JsonProperty("type") fun type(): Optional<Type> = Optional.ofNullable(type)
+        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): Override = apply {
+            if (!validated) {
+                startingAt()
+                applicableProductTags()
+                endingBefore()
+                entitled()
+                isCommitSpecific()
+                multiplier()
+                overrideSpecifiers().map { it.forEach { it.validate() } }
+                overwriteRate().map { it.validate() }
+                priority()
+                productId()
+                target()
+                tiers().map { it.forEach { it.validate() } }
+                type()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -3718,56 +4770,61 @@ constructor(
 
         class Builder {
 
-            private var startingAt: OffsetDateTime? = null
-            private var applicableProductTags: MutableList<String>? = null
-            private var endingBefore: OffsetDateTime? = null
-            private var entitled: Boolean? = null
-            private var isCommitSpecific: Boolean? = null
-            private var multiplier: Double? = null
-            private var overrideSpecifiers: MutableList<OverrideSpecifier>? = null
-            private var overwriteRate: OverwriteRate? = null
-            private var priority: Double? = null
-            private var productId: String? = null
-            private var target: Target? = null
-            private var tiers: MutableList<Tier>? = null
-            private var type: Type? = null
+            private var startingAt: JsonField<OffsetDateTime>? = null
+            private var applicableProductTags: JsonField<MutableList<String>>? = null
+            private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var entitled: JsonField<Boolean> = JsonMissing.of()
+            private var isCommitSpecific: JsonField<Boolean> = JsonMissing.of()
+            private var multiplier: JsonField<Double> = JsonMissing.of()
+            private var overrideSpecifiers: JsonField<MutableList<OverrideSpecifier>>? = null
+            private var overwriteRate: JsonField<OverwriteRate> = JsonMissing.of()
+            private var priority: JsonField<Double> = JsonMissing.of()
+            private var productId: JsonField<String> = JsonMissing.of()
+            private var target: JsonField<Target> = JsonMissing.of()
+            private var tiers: JsonField<MutableList<Tier>>? = null
+            private var type: JsonField<Type> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(override: Override) = apply {
                 startingAt = override.startingAt
-                applicableProductTags = override.applicableProductTags?.toMutableList()
+                applicableProductTags = override.applicableProductTags.map { it.toMutableList() }
                 endingBefore = override.endingBefore
                 entitled = override.entitled
                 isCommitSpecific = override.isCommitSpecific
                 multiplier = override.multiplier
-                overrideSpecifiers = override.overrideSpecifiers?.toMutableList()
+                overrideSpecifiers = override.overrideSpecifiers.map { it.toMutableList() }
                 overwriteRate = override.overwriteRate
                 priority = override.priority
                 productId = override.productId
                 target = override.target
-                tiers = override.tiers?.toMutableList()
+                tiers = override.tiers.map { it.toMutableList() }
                 type = override.type
                 additionalProperties = override.additionalProperties.toMutableMap()
             }
 
             /** RFC 3339 timestamp indicating when the override will start applying (inclusive) */
-            fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+            fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
-            /**
-             * tags identifying products whose rates are being overridden. Cannot be used in
-             * conjunction with override_specifiers.
-             */
-            fun applicableProductTags(applicableProductTags: List<String>?) = apply {
-                this.applicableProductTags = applicableProductTags?.toMutableList()
+            /** RFC 3339 timestamp indicating when the override will start applying (inclusive) */
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                this.startingAt = startingAt
             }
 
             /**
              * tags identifying products whose rates are being overridden. Cannot be used in
              * conjunction with override_specifiers.
              */
-            fun applicableProductTags(applicableProductTags: Optional<List<String>>) =
-                applicableProductTags(applicableProductTags.orElse(null))
+            fun applicableProductTags(applicableProductTags: List<String>) =
+                applicableProductTags(JsonField.of(applicableProductTags))
+
+            /**
+             * tags identifying products whose rates are being overridden. Cannot be used in
+             * conjunction with override_specifiers.
+             */
+            fun applicableProductTags(applicableProductTags: JsonField<List<String>>) = apply {
+                this.applicableProductTags = applicableProductTags.map { it.toMutableList() }
+            }
 
             /**
              * tags identifying products whose rates are being overridden. Cannot be used in
@@ -3775,34 +4832,29 @@ constructor(
              */
             fun addApplicableProductTag(applicableProductTag: String) = apply {
                 applicableProductTags =
-                    (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
+                    (applicableProductTags ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(applicableProductTag)
+                    }
             }
 
             /** RFC 3339 timestamp indicating when the override will stop applying (exclusive) */
-            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
+            fun endingBefore(endingBefore: OffsetDateTime) =
+                endingBefore(JsonField.of(endingBefore))
+
+            /** RFC 3339 timestamp indicating when the override will stop applying (exclusive) */
+            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
             }
 
-            /** RFC 3339 timestamp indicating when the override will stop applying (exclusive) */
-            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
-                endingBefore(endingBefore.orElse(null))
+            fun entitled(entitled: Boolean) = entitled(JsonField.of(entitled))
 
-            fun entitled(entitled: Boolean?) = apply { this.entitled = entitled }
-
-            fun entitled(entitled: Boolean) = entitled(entitled as Boolean?)
-
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun entitled(entitled: Optional<Boolean>) = entitled(entitled.orElse(null) as Boolean?)
-
-            /**
-             * Indicates whether the override should only apply to commits. Defaults to `false`. If
-             * `true`, you can specify relevant commits in `override_specifiers` by passing
-             * `commit_ids`. if you do not specify `commit_ids`, then the override will apply when
-             * consuming any prepaid or postpaid commit.
-             */
-            fun isCommitSpecific(isCommitSpecific: Boolean?) = apply {
-                this.isCommitSpecific = isCommitSpecific
-            }
+            fun entitled(entitled: JsonField<Boolean>) = apply { this.entitled = entitled }
 
             /**
              * Indicates whether the override should only apply to commits. Defaults to `false`. If
@@ -3811,7 +4863,7 @@ constructor(
              * consuming any prepaid or postpaid commit.
              */
             fun isCommitSpecific(isCommitSpecific: Boolean) =
-                isCommitSpecific(isCommitSpecific as Boolean?)
+                isCommitSpecific(JsonField.of(isCommitSpecific))
 
             /**
              * Indicates whether the override should only apply to commits. Defaults to `false`. If
@@ -3819,35 +4871,30 @@ constructor(
              * `commit_ids`. if you do not specify `commit_ids`, then the override will apply when
              * consuming any prepaid or postpaid commit.
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun isCommitSpecific(isCommitSpecific: Optional<Boolean>) =
-                isCommitSpecific(isCommitSpecific.orElse(null) as Boolean?)
-
-            /** Required for MULTIPLIER type. Must be >=0. */
-            fun multiplier(multiplier: Double?) = apply { this.multiplier = multiplier }
-
-            /** Required for MULTIPLIER type. Must be >=0. */
-            fun multiplier(multiplier: Double) = multiplier(multiplier as Double?)
-
-            /** Required for MULTIPLIER type. Must be >=0. */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun multiplier(multiplier: Optional<Double>) =
-                multiplier(multiplier.orElse(null) as Double?)
-
-            /**
-             * Cannot be used in conjunction with product_id or applicable_product_tags. If
-             * provided, the override will apply to all products with the specified specifiers.
-             */
-            fun overrideSpecifiers(overrideSpecifiers: List<OverrideSpecifier>?) = apply {
-                this.overrideSpecifiers = overrideSpecifiers?.toMutableList()
+            fun isCommitSpecific(isCommitSpecific: JsonField<Boolean>) = apply {
+                this.isCommitSpecific = isCommitSpecific
             }
 
+            /** Required for MULTIPLIER type. Must be >=0. */
+            fun multiplier(multiplier: Double) = multiplier(JsonField.of(multiplier))
+
+            /** Required for MULTIPLIER type. Must be >=0. */
+            fun multiplier(multiplier: JsonField<Double>) = apply { this.multiplier = multiplier }
+
             /**
              * Cannot be used in conjunction with product_id or applicable_product_tags. If
              * provided, the override will apply to all products with the specified specifiers.
              */
-            fun overrideSpecifiers(overrideSpecifiers: Optional<List<OverrideSpecifier>>) =
-                overrideSpecifiers(overrideSpecifiers.orElse(null))
+            fun overrideSpecifiers(overrideSpecifiers: List<OverrideSpecifier>) =
+                overrideSpecifiers(JsonField.of(overrideSpecifiers))
+
+            /**
+             * Cannot be used in conjunction with product_id or applicable_product_tags. If
+             * provided, the override will apply to all products with the specified specifiers.
+             */
+            fun overrideSpecifiers(overrideSpecifiers: JsonField<List<OverrideSpecifier>>) = apply {
+                this.overrideSpecifiers = overrideSpecifiers.map { it.toMutableList() }
+            }
 
             /**
              * Cannot be used in conjunction with product_id or applicable_product_tags. If
@@ -3855,17 +4902,33 @@ constructor(
              */
             fun addOverrideSpecifier(overrideSpecifier: OverrideSpecifier) = apply {
                 overrideSpecifiers =
-                    (overrideSpecifiers ?: mutableListOf()).apply { add(overrideSpecifier) }
+                    (overrideSpecifiers ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(overrideSpecifier)
+                    }
             }
 
             /** Required for OVERWRITE type. */
-            fun overwriteRate(overwriteRate: OverwriteRate?) = apply {
+            fun overwriteRate(overwriteRate: OverwriteRate) =
+                overwriteRate(JsonField.of(overwriteRate))
+
+            /** Required for OVERWRITE type. */
+            fun overwriteRate(overwriteRate: JsonField<OverwriteRate>) = apply {
                 this.overwriteRate = overwriteRate
             }
 
-            /** Required for OVERWRITE type. */
-            fun overwriteRate(overwriteRate: Optional<OverwriteRate>) =
-                overwriteRate(overwriteRate.orElse(null))
+            /**
+             * Required for EXPLICIT multiplier prioritization scheme and all TIERED overrides.
+             * Under EXPLICIT prioritization, overwrites are prioritized first, and then tiered and
+             * multiplier overrides are prioritized by their priority value (lowest first). Must
+             * be > 0.
+             */
+            fun priority(priority: Double) = priority(JsonField.of(priority))
 
             /**
              * Required for EXPLICIT multiplier prioritization scheme and all TIERED overrides.
@@ -3873,67 +4936,61 @@ constructor(
              * multiplier overrides are prioritized by their priority value (lowest first). Must
              * be > 0.
              */
-            fun priority(priority: Double?) = apply { this.priority = priority }
-
-            /**
-             * Required for EXPLICIT multiplier prioritization scheme and all TIERED overrides.
-             * Under EXPLICIT prioritization, overwrites are prioritized first, and then tiered and
-             * multiplier overrides are prioritized by their priority value (lowest first). Must
-             * be > 0.
-             */
-            fun priority(priority: Double) = priority(priority as Double?)
-
-            /**
-             * Required for EXPLICIT multiplier prioritization scheme and all TIERED overrides.
-             * Under EXPLICIT prioritization, overwrites are prioritized first, and then tiered and
-             * multiplier overrides are prioritized by their priority value (lowest first). Must
-             * be > 0.
-             */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun priority(priority: Optional<Double>) = priority(priority.orElse(null) as Double?)
+            fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
 
             /**
              * ID of the product whose rate is being overridden. Cannot be used in conjunction with
              * override_specifiers.
              */
-            fun productId(productId: String?) = apply { this.productId = productId }
+            fun productId(productId: String) = productId(JsonField.of(productId))
 
             /**
              * ID of the product whose rate is being overridden. Cannot be used in conjunction with
              * override_specifiers.
              */
-            fun productId(productId: Optional<String>) = productId(productId.orElse(null))
+            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
             /**
              * Indicates whether the override applies to commit rates or list rates. Can only be
              * used for overrides that have `is_commit_specific` set to `true`. Defaults to
              * `"LIST_RATE"`.
              */
-            fun target(target: Target?) = apply { this.target = target }
+            fun target(target: Target) = target(JsonField.of(target))
 
             /**
              * Indicates whether the override applies to commit rates or list rates. Can only be
              * used for overrides that have `is_commit_specific` set to `true`. Defaults to
              * `"LIST_RATE"`.
              */
-            fun target(target: Optional<Target>) = target(target.orElse(null))
+            fun target(target: JsonField<Target>) = apply { this.target = target }
 
             /** Required for TIERED type. Must have at least one tier. */
-            fun tiers(tiers: List<Tier>?) = apply { this.tiers = tiers?.toMutableList() }
+            fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
             /** Required for TIERED type. Must have at least one tier. */
-            fun tiers(tiers: Optional<List<Tier>>) = tiers(tiers.orElse(null))
+            fun tiers(tiers: JsonField<List<Tier>>) = apply {
+                this.tiers = tiers.map { it.toMutableList() }
+            }
 
             /** Required for TIERED type. Must have at least one tier. */
             fun addTier(tier: Tier) = apply {
-                tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                tiers =
+                    (tiers ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(tier)
+                    }
             }
 
             /** Overwrites are prioritized over multipliers and tiered overrides. */
-            fun type(type: Type?) = apply { this.type = type }
+            fun type(type: Type) = type(JsonField.of(type))
 
             /** Overwrites are prioritized over multipliers and tiered overrides. */
-            fun type(type: Optional<Type>) = type(type.orElse(null))
+            fun type(type: JsonField<Type>) = apply { this.type = type }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -3957,17 +5014,17 @@ constructor(
             fun build(): Override =
                 Override(
                     checkNotNull(startingAt) { "`startingAt` is required but was not set" },
-                    applicableProductTags?.toImmutable(),
+                    (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     endingBefore,
                     entitled,
                     isCommitSpecific,
                     multiplier,
-                    overrideSpecifiers?.toImmutable(),
+                    (overrideSpecifiers ?: JsonMissing.of()).map { it.toImmutable() },
                     overwriteRate,
                     priority,
                     productId,
                     target,
-                    tiers?.toImmutable(),
+                    (tiers ?: JsonMissing.of()).map { it.toImmutable() },
                     type,
                     additionalProperties.toImmutable(),
                 )
@@ -3977,13 +5034,22 @@ constructor(
         class OverrideSpecifier
         @JsonCreator
         private constructor(
-            @JsonProperty("commit_ids") private val commitIds: List<String>?,
+            @JsonProperty("commit_ids")
+            @ExcludeMissing
+            private val commitIds: JsonField<List<String>> = JsonMissing.of(),
             @JsonProperty("presentation_group_values")
-            private val presentationGroupValues: PresentationGroupValues?,
+            @ExcludeMissing
+            private val presentationGroupValues: JsonField<PresentationGroupValues> =
+                JsonMissing.of(),
             @JsonProperty("pricing_group_values")
-            private val pricingGroupValues: PricingGroupValues?,
-            @JsonProperty("product_id") private val productId: String?,
-            @JsonProperty("product_tags") private val productTags: List<String>?,
+            @ExcludeMissing
+            private val pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of(),
+            @JsonProperty("product_id")
+            @ExcludeMissing
+            private val productId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("product_tags")
+            @ExcludeMissing
+            private val productTags: JsonField<List<String>> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
@@ -3994,38 +5060,90 @@ constructor(
              * provided, the override will only apply to the specified commits. If not provided, the
              * override will apply to all commits.
              */
+            fun commitIds(): Optional<List<String>> =
+                Optional.ofNullable(commitIds.getNullable("commit_ids"))
+
+            /**
+             * A map of group names to values. The override will only apply to line items with the
+             * specified presentation group values. Can only be used for multiplier overrides.
+             */
+            fun presentationGroupValues(): Optional<PresentationGroupValues> =
+                Optional.ofNullable(
+                    presentationGroupValues.getNullable("presentation_group_values")
+                )
+
+            /**
+             * A map of pricing group names to values. The override will only apply to products with
+             * the specified pricing group values.
+             */
+            fun pricingGroupValues(): Optional<PricingGroupValues> =
+                Optional.ofNullable(pricingGroupValues.getNullable("pricing_group_values"))
+
+            /** If provided, the override will only apply to the product with the specified ID. */
+            fun productId(): Optional<String> =
+                Optional.ofNullable(productId.getNullable("product_id"))
+
+            /**
+             * If provided, the override will only apply to products with all the specified tags.
+             */
+            fun productTags(): Optional<List<String>> =
+                Optional.ofNullable(productTags.getNullable("product_tags"))
+
+            /**
+             * Can only be used for commit specific overrides. Must be used in conjunction with one
+             * of product_id, product_tags, pricing_group_values, or presentation_group_values. If
+             * provided, the override will only apply to the specified commits. If not provided, the
+             * override will apply to all commits.
+             */
             @JsonProperty("commit_ids")
-            fun commitIds(): Optional<List<String>> = Optional.ofNullable(commitIds)
+            @ExcludeMissing
+            fun _commitIds(): JsonField<List<String>> = commitIds
 
             /**
              * A map of group names to values. The override will only apply to line items with the
              * specified presentation group values. Can only be used for multiplier overrides.
              */
             @JsonProperty("presentation_group_values")
-            fun presentationGroupValues(): Optional<PresentationGroupValues> =
-                Optional.ofNullable(presentationGroupValues)
+            @ExcludeMissing
+            fun _presentationGroupValues(): JsonField<PresentationGroupValues> =
+                presentationGroupValues
 
             /**
              * A map of pricing group names to values. The override will only apply to products with
              * the specified pricing group values.
              */
             @JsonProperty("pricing_group_values")
-            fun pricingGroupValues(): Optional<PricingGroupValues> =
-                Optional.ofNullable(pricingGroupValues)
+            @ExcludeMissing
+            fun _pricingGroupValues(): JsonField<PricingGroupValues> = pricingGroupValues
 
             /** If provided, the override will only apply to the product with the specified ID. */
             @JsonProperty("product_id")
-            fun productId(): Optional<String> = Optional.ofNullable(productId)
+            @ExcludeMissing
+            fun _productId(): JsonField<String> = productId
 
             /**
              * If provided, the override will only apply to products with all the specified tags.
              */
             @JsonProperty("product_tags")
-            fun productTags(): Optional<List<String>> = Optional.ofNullable(productTags)
+            @ExcludeMissing
+            fun _productTags(): JsonField<List<String>> = productTags
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): OverrideSpecifier = apply {
+                if (!validated) {
+                    commitIds()
+                    presentationGroupValues().map { it.validate() }
+                    pricingGroupValues().map { it.validate() }
+                    productId()
+                    productTags()
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -4036,20 +5154,21 @@ constructor(
 
             class Builder {
 
-                private var commitIds: MutableList<String>? = null
-                private var presentationGroupValues: PresentationGroupValues? = null
-                private var pricingGroupValues: PricingGroupValues? = null
-                private var productId: String? = null
-                private var productTags: MutableList<String>? = null
+                private var commitIds: JsonField<MutableList<String>>? = null
+                private var presentationGroupValues: JsonField<PresentationGroupValues> =
+                    JsonMissing.of()
+                private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
+                private var productId: JsonField<String> = JsonMissing.of()
+                private var productTags: JsonField<MutableList<String>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(overrideSpecifier: OverrideSpecifier) = apply {
-                    commitIds = overrideSpecifier.commitIds?.toMutableList()
+                    commitIds = overrideSpecifier.commitIds.map { it.toMutableList() }
                     presentationGroupValues = overrideSpecifier.presentationGroupValues
                     pricingGroupValues = overrideSpecifier.pricingGroupValues
                     productId = overrideSpecifier.productId
-                    productTags = overrideSpecifier.productTags?.toMutableList()
+                    productTags = overrideSpecifier.productTags.map { it.toMutableList() }
                     additionalProperties = overrideSpecifier.additionalProperties.toMutableMap()
                 }
 
@@ -4059,9 +5178,7 @@ constructor(
                  * presentation_group_values. If provided, the override will only apply to the
                  * specified commits. If not provided, the override will apply to all commits.
                  */
-                fun commitIds(commitIds: List<String>?) = apply {
-                    this.commitIds = commitIds?.toMutableList()
-                }
+                fun commitIds(commitIds: List<String>) = commitIds(JsonField.of(commitIds))
 
                 /**
                  * Can only be used for commit specific overrides. Must be used in conjunction with
@@ -4069,7 +5186,9 @@ constructor(
                  * presentation_group_values. If provided, the override will only apply to the
                  * specified commits. If not provided, the override will apply to all commits.
                  */
-                fun commitIds(commitIds: Optional<List<String>>) = commitIds(commitIds.orElse(null))
+                fun commitIds(commitIds: JsonField<List<String>>) = apply {
+                    this.commitIds = commitIds.map { it.toMutableList() }
+                }
 
                 /**
                  * Can only be used for commit specific overrides. Must be used in conjunction with
@@ -4078,7 +5197,16 @@ constructor(
                  * specified commits. If not provided, the override will apply to all commits.
                  */
                 fun addCommitId(commitId: String) = apply {
-                    commitIds = (commitIds ?: mutableListOf()).apply { add(commitId) }
+                    commitIds =
+                        (commitIds ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(commitId)
+                        }
                 }
 
                 /**
@@ -4086,10 +5214,8 @@ constructor(
                  * the specified presentation group values. Can only be used for multiplier
                  * overrides.
                  */
-                fun presentationGroupValues(presentationGroupValues: PresentationGroupValues?) =
-                    apply {
-                        this.presentationGroupValues = presentationGroupValues
-                    }
+                fun presentationGroupValues(presentationGroupValues: PresentationGroupValues) =
+                    presentationGroupValues(JsonField.of(presentationGroupValues))
 
                 /**
                  * A map of group names to values. The override will only apply to line items with
@@ -4097,55 +5223,63 @@ constructor(
                  * overrides.
                  */
                 fun presentationGroupValues(
-                    presentationGroupValues: Optional<PresentationGroupValues>
-                ) = presentationGroupValues(presentationGroupValues.orElse(null))
+                    presentationGroupValues: JsonField<PresentationGroupValues>
+                ) = apply { this.presentationGroupValues = presentationGroupValues }
 
                 /**
                  * A map of pricing group names to values. The override will only apply to products
                  * with the specified pricing group values.
                  */
-                fun pricingGroupValues(pricingGroupValues: PricingGroupValues?) = apply {
+                fun pricingGroupValues(pricingGroupValues: PricingGroupValues) =
+                    pricingGroupValues(JsonField.of(pricingGroupValues))
+
+                /**
+                 * A map of pricing group names to values. The override will only apply to products
+                 * with the specified pricing group values.
+                 */
+                fun pricingGroupValues(pricingGroupValues: JsonField<PricingGroupValues>) = apply {
                     this.pricingGroupValues = pricingGroupValues
                 }
 
                 /**
-                 * A map of pricing group names to values. The override will only apply to products
-                 * with the specified pricing group values.
+                 * If provided, the override will only apply to the product with the specified ID.
                  */
-                fun pricingGroupValues(pricingGroupValues: Optional<PricingGroupValues>) =
-                    pricingGroupValues(pricingGroupValues.orElse(null))
+                fun productId(productId: String) = productId(JsonField.of(productId))
 
                 /**
                  * If provided, the override will only apply to the product with the specified ID.
                  */
-                fun productId(productId: String?) = apply { this.productId = productId }
-
-                /**
-                 * If provided, the override will only apply to the product with the specified ID.
-                 */
-                fun productId(productId: Optional<String>) = productId(productId.orElse(null))
+                fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
                 /**
                  * If provided, the override will only apply to products with all the specified
                  * tags.
                  */
-                fun productTags(productTags: List<String>?) = apply {
-                    this.productTags = productTags?.toMutableList()
+                fun productTags(productTags: List<String>) = productTags(JsonField.of(productTags))
+
+                /**
+                 * If provided, the override will only apply to products with all the specified
+                 * tags.
+                 */
+                fun productTags(productTags: JsonField<List<String>>) = apply {
+                    this.productTags = productTags.map { it.toMutableList() }
                 }
-
-                /**
-                 * If provided, the override will only apply to products with all the specified
-                 * tags.
-                 */
-                fun productTags(productTags: Optional<List<String>>) =
-                    productTags(productTags.orElse(null))
 
                 /**
                  * If provided, the override will only apply to products with all the specified
                  * tags.
                  */
                 fun addProductTag(productTag: String) = apply {
-                    productTags = (productTags ?: mutableListOf()).apply { add(productTag) }
+                    productTags =
+                        (productTags ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(productTag)
+                        }
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -4172,11 +5306,11 @@ constructor(
 
                 fun build(): OverrideSpecifier =
                     OverrideSpecifier(
-                        commitIds?.toImmutable(),
+                        (commitIds ?: JsonMissing.of()).map { it.toImmutable() },
                         presentationGroupValues,
                         pricingGroupValues,
                         productId,
-                        productTags?.toImmutable(),
+                        (productTags ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -4196,6 +5330,14 @@ constructor(
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                private var validated: Boolean = false
+
+                fun validate(): PresentationGroupValues = apply {
+                    if (!validated) {
+                        validated = true
+                    }
+                }
 
                 fun toBuilder() = Builder().from(this)
 
@@ -4273,6 +5415,14 @@ constructor(
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                private var validated: Boolean = false
+
+                fun validate(): PricingGroupValues = apply {
+                    if (!validated) {
+                        validated = true
+                    }
+                }
 
                 fun toBuilder() = Builder().from(this)
 
@@ -4358,51 +5508,114 @@ constructor(
         class OverwriteRate
         @JsonCreator
         private constructor(
-            @JsonProperty("rate_type") private val rateType: RateType,
-            @JsonProperty("credit_type_id") private val creditTypeId: String?,
-            @JsonProperty("custom_rate") private val customRate: CustomRate?,
-            @JsonProperty("is_prorated") private val isProrated: Boolean?,
-            @JsonProperty("price") private val price: Double?,
-            @JsonProperty("quantity") private val quantity: Double?,
-            @JsonProperty("tiers") private val tiers: List<Tier>?,
+            @JsonProperty("rate_type")
+            @ExcludeMissing
+            private val rateType: JsonField<RateType> = JsonMissing.of(),
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            private val creditTypeId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("custom_rate")
+            @ExcludeMissing
+            private val customRate: JsonField<CustomRate> = JsonMissing.of(),
+            @JsonProperty("is_prorated")
+            @ExcludeMissing
+            private val isProrated: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("price")
+            @ExcludeMissing
+            private val price: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("quantity")
+            @ExcludeMissing
+            private val quantity: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("tiers")
+            @ExcludeMissing
+            private val tiers: JsonField<List<Tier>> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            @JsonProperty("rate_type") fun rateType(): RateType = rateType
+            fun rateType(): RateType = rateType.getRequired("rate_type")
+
+            fun creditTypeId(): Optional<String> =
+                Optional.ofNullable(creditTypeId.getNullable("credit_type_id"))
+
+            /**
+             * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
+             */
+            fun customRate(): Optional<CustomRate> =
+                Optional.ofNullable(customRate.getNullable("custom_rate"))
+
+            /**
+             * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
+             * to true.
+             */
+            fun isProrated(): Optional<Boolean> =
+                Optional.ofNullable(isProrated.getNullable("is_prorated"))
+
+            /**
+             * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this
+             * is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+             */
+            fun price(): Optional<Double> = Optional.ofNullable(price.getNullable("price"))
+
+            /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+            fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
+
+            /** Only set for TIERED rate_type. */
+            fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers.getNullable("tiers"))
+
+            @JsonProperty("rate_type")
+            @ExcludeMissing
+            fun _rateType(): JsonField<RateType> = rateType
 
             @JsonProperty("credit_type_id")
-            fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
 
             /**
              * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
              */
             @JsonProperty("custom_rate")
-            fun customRate(): Optional<CustomRate> = Optional.ofNullable(customRate)
+            @ExcludeMissing
+            fun _customRate(): JsonField<CustomRate> = customRate
 
             /**
              * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
              * to true.
              */
             @JsonProperty("is_prorated")
-            fun isProrated(): Optional<Boolean> = Optional.ofNullable(isProrated)
+            @ExcludeMissing
+            fun _isProrated(): JsonField<Boolean> = isProrated
 
             /**
              * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this
              * is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
              */
-            @JsonProperty("price") fun price(): Optional<Double> = Optional.ofNullable(price)
+            @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Double> = price
 
             /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-            @JsonProperty("quantity")
-            fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
+            @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
             /** Only set for TIERED rate_type. */
-            @JsonProperty("tiers") fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers)
+            @JsonProperty("tiers") @ExcludeMissing fun _tiers(): JsonField<List<Tier>> = tiers
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): OverwriteRate = apply {
+                if (!validated) {
+                    rateType()
+                    creditTypeId()
+                    customRate().map { it.validate() }
+                    isProrated()
+                    price()
+                    quantity()
+                    tiers().map { it.forEach { it.validate() } }
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -4413,13 +5626,13 @@ constructor(
 
             class Builder {
 
-                private var rateType: RateType? = null
-                private var creditTypeId: String? = null
-                private var customRate: CustomRate? = null
-                private var isProrated: Boolean? = null
-                private var price: Double? = null
-                private var quantity: Double? = null
-                private var tiers: MutableList<Tier>? = null
+                private var rateType: JsonField<RateType>? = null
+                private var creditTypeId: JsonField<String> = JsonMissing.of()
+                private var customRate: JsonField<CustomRate> = JsonMissing.of()
+                private var isProrated: JsonField<Boolean> = JsonMissing.of()
+                private var price: JsonField<Double> = JsonMissing.of()
+                private var quantity: JsonField<Double> = JsonMissing.of()
+                private var tiers: JsonField<MutableList<Tier>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -4430,89 +5643,86 @@ constructor(
                     isProrated = overwriteRate.isProrated
                     price = overwriteRate.price
                     quantity = overwriteRate.quantity
-                    tiers = overwriteRate.tiers?.toMutableList()
+                    tiers = overwriteRate.tiers.map { it.toMutableList() }
                     additionalProperties = overwriteRate.additionalProperties.toMutableMap()
                 }
 
-                fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+                fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
 
-                fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+                fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
 
-                fun creditTypeId(creditTypeId: Optional<String>) =
-                    creditTypeId(creditTypeId.orElse(null))
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
 
-                /**
-                 * Only set for CUSTOM rate_type. This field is interpreted by custom rate
-                 * processors.
-                 */
-                fun customRate(customRate: CustomRate?) = apply { this.customRate = customRate }
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
+                }
 
                 /**
                  * Only set for CUSTOM rate_type. This field is interpreted by custom rate
                  * processors.
                  */
-                fun customRate(customRate: Optional<CustomRate>) =
-                    customRate(customRate.orElse(null))
+                fun customRate(customRate: CustomRate) = customRate(JsonField.of(customRate))
+
+                /**
+                 * Only set for CUSTOM rate_type. This field is interpreted by custom rate
+                 * processors.
+                 */
+                fun customRate(customRate: JsonField<CustomRate>) = apply {
+                    this.customRate = customRate
+                }
 
                 /**
                  * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be
                  * set to true.
                  */
-                fun isProrated(isProrated: Boolean?) = apply { this.isProrated = isProrated }
+                fun isProrated(isProrated: Boolean) = isProrated(JsonField.of(isProrated))
 
                 /**
                  * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be
                  * set to true.
                  */
-                fun isProrated(isProrated: Boolean) = isProrated(isProrated as Boolean?)
-
-                /**
-                 * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be
-                 * set to true.
-                 */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                fun isProrated(isProrated: Optional<Boolean>) =
-                    isProrated(isProrated.orElse(null) as Boolean?)
+                fun isProrated(isProrated: JsonField<Boolean>) = apply {
+                    this.isProrated = isProrated
+                }
 
                 /**
                  * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type,
                  * this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
                  */
-                fun price(price: Double?) = apply { this.price = price }
+                fun price(price: Double) = price(JsonField.of(price))
 
                 /**
                  * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type,
                  * this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
                  */
-                fun price(price: Double) = price(price as Double?)
-
-                /**
-                 * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type,
-                 * this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
-                 */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                fun price(price: Optional<Double>) = price(price.orElse(null) as Double?)
+                fun price(price: JsonField<Double>) = apply { this.price = price }
 
                 /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-                fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+                fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
                 /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-                fun quantity(quantity: Double) = quantity(quantity as Double?)
-
-                /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                fun quantity(quantity: Optional<Double>) =
-                    quantity(quantity.orElse(null) as Double?)
+                fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                 /** Only set for TIERED rate_type. */
-                fun tiers(tiers: List<Tier>?) = apply { this.tiers = tiers?.toMutableList() }
+                fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
                 /** Only set for TIERED rate_type. */
-                fun tiers(tiers: Optional<List<Tier>>) = tiers(tiers.orElse(null))
+                fun tiers(tiers: JsonField<List<Tier>>) = apply {
+                    this.tiers = tiers.map { it.toMutableList() }
+                }
 
                 /** Only set for TIERED rate_type. */
                 fun addTier(tier: Tier) = apply {
-                    tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                    tiers =
+                        (tiers ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(tier)
+                        }
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -4545,7 +5755,7 @@ constructor(
                         isProrated,
                         price,
                         quantity,
-                        tiers?.toImmutable(),
+                        (tiers ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -4639,6 +5849,14 @@ constructor(
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                private var validated: Boolean = false
+
+                fun validate(): CustomRate = apply {
+                    if (!validated) {
+                        validated = true
+                    }
+                }
 
                 fun toBuilder() = Builder().from(this)
 
@@ -4789,19 +6007,39 @@ constructor(
         class Tier
         @JsonCreator
         private constructor(
-            @JsonProperty("multiplier") private val multiplier: Double,
-            @JsonProperty("size") private val size: Double?,
+            @JsonProperty("multiplier")
+            @ExcludeMissing
+            private val multiplier: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("size")
+            @ExcludeMissing
+            private val size: JsonField<Double> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            @JsonProperty("multiplier") fun multiplier(): Double = multiplier
+            fun multiplier(): Double = multiplier.getRequired("multiplier")
 
-            @JsonProperty("size") fun size(): Optional<Double> = Optional.ofNullable(size)
+            fun size(): Optional<Double> = Optional.ofNullable(size.getNullable("size"))
+
+            @JsonProperty("multiplier")
+            @ExcludeMissing
+            fun _multiplier(): JsonField<Double> = multiplier
+
+            @JsonProperty("size") @ExcludeMissing fun _size(): JsonField<Double> = size
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): Tier = apply {
+                if (!validated) {
+                    multiplier()
+                    size()
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -4812,8 +6050,8 @@ constructor(
 
             class Builder {
 
-                private var multiplier: Double? = null
-                private var size: Double? = null
+                private var multiplier: JsonField<Double>? = null
+                private var size: JsonField<Double> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -4823,14 +6061,15 @@ constructor(
                     additionalProperties = tier.additionalProperties.toMutableMap()
                 }
 
-                fun multiplier(multiplier: Double) = apply { this.multiplier = multiplier }
+                fun multiplier(multiplier: Double) = multiplier(JsonField.of(multiplier))
 
-                fun size(size: Double?) = apply { this.size = size }
+                fun multiplier(multiplier: JsonField<Double>) = apply {
+                    this.multiplier = multiplier
+                }
 
-                fun size(size: Double) = size(size as Double?)
+                fun size(size: Double) = size(JsonField.of(size))
 
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                fun size(size: Optional<Double>) = size(size.orElse(null) as Double?)
+                fun size(size: JsonField<Double>) = apply { this.size = size }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -4965,44 +6204,100 @@ constructor(
     class ProfessionalService
     @JsonCreator
     private constructor(
-        @JsonProperty("max_amount") private val maxAmount: Double,
-        @JsonProperty("product_id") private val productId: String,
-        @JsonProperty("quantity") private val quantity: Double,
-        @JsonProperty("unit_price") private val unitPrice: Double,
-        @JsonProperty("custom_fields") private val customFields: CustomFields?,
-        @JsonProperty("description") private val description: String?,
-        @JsonProperty("netsuite_sales_order_id") private val netsuiteSalesOrderId: String?,
+        @JsonProperty("max_amount")
+        @ExcludeMissing
+        private val maxAmount: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("product_id")
+        @ExcludeMissing
+        private val productId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("quantity")
+        @ExcludeMissing
+        private val quantity: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("unit_price")
+        @ExcludeMissing
+        private val unitPrice: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        private val description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("netsuite_sales_order_id")
+        @ExcludeMissing
+        private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Maximum amount for the term. */
-        @JsonProperty("max_amount") fun maxAmount(): Double = maxAmount
+        fun maxAmount(): Double = maxAmount.getRequired("max_amount")
 
-        @JsonProperty("product_id") fun productId(): String = productId
+        fun productId(): String = productId.getRequired("product_id")
 
         /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
-        @JsonProperty("quantity") fun quantity(): Double = quantity
+        fun quantity(): Double = quantity.getRequired("quantity")
 
         /**
          * Unit price for the charge. Will be multiplied by quantity to determine the amount and
          * must be specified.
          */
-        @JsonProperty("unit_price") fun unitPrice(): Double = unitPrice
+        fun unitPrice(): Double = unitPrice.getRequired("unit_price")
+
+        fun customFields(): Optional<CustomFields> =
+            Optional.ofNullable(customFields.getNullable("custom_fields"))
+
+        fun description(): Optional<String> =
+            Optional.ofNullable(description.getNullable("description"))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(): Optional<String> =
+            Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
+
+        /** Maximum amount for the term. */
+        @JsonProperty("max_amount") @ExcludeMissing fun _maxAmount(): JsonField<Double> = maxAmount
+
+        @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
+
+        /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
+
+        /**
+         * Unit price for the charge. Will be multiplied by quantity to determine the amount and
+         * must be specified.
+         */
+        @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice(): JsonField<Double> = unitPrice
 
         @JsonProperty("custom_fields")
-        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+        @ExcludeMissing
+        fun _customFields(): JsonField<CustomFields> = customFields
 
         @JsonProperty("description")
-        fun description(): Optional<String> = Optional.ofNullable(description)
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_sales_order_id")
-        fun netsuiteSalesOrderId(): Optional<String> = Optional.ofNullable(netsuiteSalesOrderId)
+        @ExcludeMissing
+        fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ProfessionalService = apply {
+            if (!validated) {
+                maxAmount()
+                productId()
+                quantity()
+                unitPrice()
+                customFields().map { it.validate() }
+                description()
+                netsuiteSalesOrderId()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -5013,13 +6308,13 @@ constructor(
 
         class Builder {
 
-            private var maxAmount: Double? = null
-            private var productId: String? = null
-            private var quantity: Double? = null
-            private var unitPrice: Double? = null
-            private var customFields: CustomFields? = null
-            private var description: String? = null
-            private var netsuiteSalesOrderId: String? = null
+            private var maxAmount: JsonField<Double>? = null
+            private var productId: JsonField<String>? = null
+            private var quantity: JsonField<Double>? = null
+            private var unitPrice: JsonField<Double>? = null
+            private var customFields: JsonField<CustomFields> = JsonMissing.of()
+            private var description: JsonField<String> = JsonMissing.of()
+            private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -5035,40 +6330,57 @@ constructor(
             }
 
             /** Maximum amount for the term. */
-            fun maxAmount(maxAmount: Double) = apply { this.maxAmount = maxAmount }
+            fun maxAmount(maxAmount: Double) = maxAmount(JsonField.of(maxAmount))
 
-            fun productId(productId: String) = apply { this.productId = productId }
+            /** Maximum amount for the term. */
+            fun maxAmount(maxAmount: JsonField<Double>) = apply { this.maxAmount = maxAmount }
+
+            fun productId(productId: String) = productId(JsonField.of(productId))
+
+            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
             /**
              * Quantity for the charge. Will be multiplied by unit_price to determine the amount.
              */
-            fun quantity(quantity: Double) = apply { this.quantity = quantity }
+            fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+
+            /**
+             * Quantity for the charge. Will be multiplied by unit_price to determine the amount.
+             */
+            fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
             /**
              * Unit price for the charge. Will be multiplied by quantity to determine the amount and
              * must be specified.
              */
-            fun unitPrice(unitPrice: Double) = apply { this.unitPrice = unitPrice }
+            fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
 
-            fun customFields(customFields: CustomFields?) = apply {
+            /**
+             * Unit price for the charge. Will be multiplied by quantity to determine the amount and
+             * must be specified.
+             */
+            fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
+
+            fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+
+            fun customFields(customFields: JsonField<CustomFields>) = apply {
                 this.customFields = customFields
             }
 
-            fun customFields(customFields: Optional<CustomFields>) =
-                customFields(customFields.orElse(null))
+            fun description(description: String) = description(JsonField.of(description))
 
-            fun description(description: String?) = apply { this.description = description }
-
-            fun description(description: Optional<String>) = description(description.orElse(null))
-
-            /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
-                this.netsuiteSalesOrderId = netsuiteSalesOrderId
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
             }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
-                netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
+                netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
+                this.netsuiteSalesOrderId = netsuiteSalesOrderId
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -5113,6 +6425,14 @@ constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): CustomFields = apply {
+                if (!validated) {
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -5194,56 +6514,133 @@ constructor(
     class ResellerRoyalty
     @JsonCreator
     private constructor(
-        @JsonProperty("reseller_type") private val resellerType: ResellerType,
-        @JsonProperty("applicable_product_ids") private val applicableProductIds: List<String>?,
-        @JsonProperty("applicable_product_tags") private val applicableProductTags: List<String>?,
-        @JsonProperty("aws_options") private val awsOptions: AwsOptions?,
-        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
-        @JsonProperty("fraction") private val fraction: Double?,
-        @JsonProperty("gcp_options") private val gcpOptions: GcpOptions?,
-        @JsonProperty("netsuite_reseller_id") private val netsuiteResellerId: String?,
-        @JsonProperty("reseller_contract_value") private val resellerContractValue: Double?,
-        @JsonProperty("starting_at") private val startingAt: OffsetDateTime?,
+        @JsonProperty("reseller_type")
+        @ExcludeMissing
+        private val resellerType: JsonField<ResellerType> = JsonMissing.of(),
+        @JsonProperty("applicable_product_ids")
+        @ExcludeMissing
+        private val applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("applicable_product_tags")
+        @ExcludeMissing
+        private val applicableProductTags: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("aws_options")
+        @ExcludeMissing
+        private val awsOptions: JsonField<AwsOptions> = JsonMissing.of(),
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("fraction")
+        @ExcludeMissing
+        private val fraction: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("gcp_options")
+        @ExcludeMissing
+        private val gcpOptions: JsonField<GcpOptions> = JsonMissing.of(),
+        @JsonProperty("netsuite_reseller_id")
+        @ExcludeMissing
+        private val netsuiteResellerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("reseller_contract_value")
+        @ExcludeMissing
+        private val resellerContractValue: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("reseller_type") fun resellerType(): ResellerType = resellerType
+        fun resellerType(): ResellerType = resellerType.getRequired("reseller_type")
+
+        /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
+        fun applicableProductIds(): Optional<List<String>> =
+            Optional.ofNullable(applicableProductIds.getNullable("applicable_product_ids"))
+
+        /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
+        fun applicableProductTags(): Optional<List<String>> =
+            Optional.ofNullable(applicableProductTags.getNullable("applicable_product_tags"))
+
+        fun awsOptions(): Optional<AwsOptions> =
+            Optional.ofNullable(awsOptions.getNullable("aws_options"))
+
+        /** Use null to indicate that the existing end timestamp should be removed. */
+        fun endingBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+        fun fraction(): Optional<Double> = Optional.ofNullable(fraction.getNullable("fraction"))
+
+        fun gcpOptions(): Optional<GcpOptions> =
+            Optional.ofNullable(gcpOptions.getNullable("gcp_options"))
+
+        fun netsuiteResellerId(): Optional<String> =
+            Optional.ofNullable(netsuiteResellerId.getNullable("netsuite_reseller_id"))
+
+        fun resellerContractValue(): Optional<Double> =
+            Optional.ofNullable(resellerContractValue.getNullable("reseller_contract_value"))
+
+        fun startingAt(): Optional<OffsetDateTime> =
+            Optional.ofNullable(startingAt.getNullable("starting_at"))
+
+        @JsonProperty("reseller_type")
+        @ExcludeMissing
+        fun _resellerType(): JsonField<ResellerType> = resellerType
 
         /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
         @JsonProperty("applicable_product_ids")
-        fun applicableProductIds(): Optional<List<String>> =
-            Optional.ofNullable(applicableProductIds)
+        @ExcludeMissing
+        fun _applicableProductIds(): JsonField<List<String>> = applicableProductIds
 
         /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
         @JsonProperty("applicable_product_tags")
-        fun applicableProductTags(): Optional<List<String>> =
-            Optional.ofNullable(applicableProductTags)
+        @ExcludeMissing
+        fun _applicableProductTags(): JsonField<List<String>> = applicableProductTags
 
         @JsonProperty("aws_options")
-        fun awsOptions(): Optional<AwsOptions> = Optional.ofNullable(awsOptions)
+        @ExcludeMissing
+        fun _awsOptions(): JsonField<AwsOptions> = awsOptions
 
         /** Use null to indicate that the existing end timestamp should be removed. */
         @JsonProperty("ending_before")
-        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
-        @JsonProperty("fraction") fun fraction(): Optional<Double> = Optional.ofNullable(fraction)
+        @JsonProperty("fraction") @ExcludeMissing fun _fraction(): JsonField<Double> = fraction
 
         @JsonProperty("gcp_options")
-        fun gcpOptions(): Optional<GcpOptions> = Optional.ofNullable(gcpOptions)
+        @ExcludeMissing
+        fun _gcpOptions(): JsonField<GcpOptions> = gcpOptions
 
         @JsonProperty("netsuite_reseller_id")
-        fun netsuiteResellerId(): Optional<String> = Optional.ofNullable(netsuiteResellerId)
+        @ExcludeMissing
+        fun _netsuiteResellerId(): JsonField<String> = netsuiteResellerId
 
         @JsonProperty("reseller_contract_value")
-        fun resellerContractValue(): Optional<Double> = Optional.ofNullable(resellerContractValue)
+        @ExcludeMissing
+        fun _resellerContractValue(): JsonField<Double> = resellerContractValue
 
         @JsonProperty("starting_at")
-        fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ResellerRoyalty = apply {
+            if (!validated) {
+                resellerType()
+                applicableProductIds()
+                applicableProductTags()
+                awsOptions().map { it.validate() }
+                endingBefore()
+                fraction()
+                gcpOptions().map { it.validate() }
+                netsuiteResellerId()
+                resellerContractValue()
+                startingAt()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -5254,23 +6651,25 @@ constructor(
 
         class Builder {
 
-            private var resellerType: ResellerType? = null
-            private var applicableProductIds: MutableList<String>? = null
-            private var applicableProductTags: MutableList<String>? = null
-            private var awsOptions: AwsOptions? = null
-            private var endingBefore: OffsetDateTime? = null
-            private var fraction: Double? = null
-            private var gcpOptions: GcpOptions? = null
-            private var netsuiteResellerId: String? = null
-            private var resellerContractValue: Double? = null
-            private var startingAt: OffsetDateTime? = null
+            private var resellerType: JsonField<ResellerType>? = null
+            private var applicableProductIds: JsonField<MutableList<String>>? = null
+            private var applicableProductTags: JsonField<MutableList<String>>? = null
+            private var awsOptions: JsonField<AwsOptions> = JsonMissing.of()
+            private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var fraction: JsonField<Double> = JsonMissing.of()
+            private var gcpOptions: JsonField<GcpOptions> = JsonMissing.of()
+            private var netsuiteResellerId: JsonField<String> = JsonMissing.of()
+            private var resellerContractValue: JsonField<Double> = JsonMissing.of()
+            private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(resellerRoyalty: ResellerRoyalty) = apply {
                 resellerType = resellerRoyalty.resellerType
-                applicableProductIds = resellerRoyalty.applicableProductIds?.toMutableList()
-                applicableProductTags = resellerRoyalty.applicableProductTags?.toMutableList()
+                applicableProductIds =
+                    resellerRoyalty.applicableProductIds.map { it.toMutableList() }
+                applicableProductTags =
+                    resellerRoyalty.applicableProductTags.map { it.toMutableList() }
                 awsOptions = resellerRoyalty.awsOptions
                 endingBefore = resellerRoyalty.endingBefore
                 fraction = resellerRoyalty.fraction
@@ -5281,86 +6680,106 @@ constructor(
                 additionalProperties = resellerRoyalty.additionalProperties.toMutableMap()
             }
 
-            fun resellerType(resellerType: ResellerType) = apply {
+            fun resellerType(resellerType: ResellerType) = resellerType(JsonField.of(resellerType))
+
+            fun resellerType(resellerType: JsonField<ResellerType>) = apply {
                 this.resellerType = resellerType
             }
 
             /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
-            fun applicableProductIds(applicableProductIds: List<String>?) = apply {
-                this.applicableProductIds = applicableProductIds?.toMutableList()
-            }
+            fun applicableProductIds(applicableProductIds: List<String>) =
+                applicableProductIds(JsonField.of(applicableProductIds))
 
             /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
-            fun applicableProductIds(applicableProductIds: Optional<List<String>>) =
-                applicableProductIds(applicableProductIds.orElse(null))
+            fun applicableProductIds(applicableProductIds: JsonField<List<String>>) = apply {
+                this.applicableProductIds = applicableProductIds.map { it.toMutableList() }
+            }
 
             /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
             fun addApplicableProductId(applicableProductId: String) = apply {
                 applicableProductIds =
-                    (applicableProductIds ?: mutableListOf()).apply { add(applicableProductId) }
+                    (applicableProductIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(applicableProductId)
+                    }
             }
 
             /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
-            fun applicableProductTags(applicableProductTags: List<String>?) = apply {
-                this.applicableProductTags = applicableProductTags?.toMutableList()
-            }
+            fun applicableProductTags(applicableProductTags: List<String>) =
+                applicableProductTags(JsonField.of(applicableProductTags))
 
             /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
-            fun applicableProductTags(applicableProductTags: Optional<List<String>>) =
-                applicableProductTags(applicableProductTags.orElse(null))
+            fun applicableProductTags(applicableProductTags: JsonField<List<String>>) = apply {
+                this.applicableProductTags = applicableProductTags.map { it.toMutableList() }
+            }
 
             /** Must provide at least one of applicable_product_ids or applicable_product_tags. */
             fun addApplicableProductTag(applicableProductTag: String) = apply {
                 applicableProductTags =
-                    (applicableProductTags ?: mutableListOf()).apply { add(applicableProductTag) }
+                    (applicableProductTags ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(applicableProductTag)
+                    }
             }
 
-            fun awsOptions(awsOptions: AwsOptions?) = apply { this.awsOptions = awsOptions }
+            fun awsOptions(awsOptions: AwsOptions) = awsOptions(JsonField.of(awsOptions))
 
-            fun awsOptions(awsOptions: Optional<AwsOptions>) = awsOptions(awsOptions.orElse(null))
+            fun awsOptions(awsOptions: JsonField<AwsOptions>) = apply {
+                this.awsOptions = awsOptions
+            }
 
             /** Use null to indicate that the existing end timestamp should be removed. */
-            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
-                this.endingBefore = endingBefore
-            }
+            fun endingBefore(endingBefore: OffsetDateTime?) =
+                endingBefore(JsonField.ofNullable(endingBefore))
 
             /** Use null to indicate that the existing end timestamp should be removed. */
             fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
                 endingBefore(endingBefore.orElse(null))
 
-            fun fraction(fraction: Double?) = apply { this.fraction = fraction }
+            /** Use null to indicate that the existing end timestamp should be removed. */
+            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+                this.endingBefore = endingBefore
+            }
 
-            fun fraction(fraction: Double) = fraction(fraction as Double?)
+            fun fraction(fraction: Double) = fraction(JsonField.of(fraction))
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun fraction(fraction: Optional<Double>) = fraction(fraction.orElse(null) as Double?)
+            fun fraction(fraction: JsonField<Double>) = apply { this.fraction = fraction }
 
-            fun gcpOptions(gcpOptions: GcpOptions?) = apply { this.gcpOptions = gcpOptions }
+            fun gcpOptions(gcpOptions: GcpOptions) = gcpOptions(JsonField.of(gcpOptions))
 
-            fun gcpOptions(gcpOptions: Optional<GcpOptions>) = gcpOptions(gcpOptions.orElse(null))
+            fun gcpOptions(gcpOptions: JsonField<GcpOptions>) = apply {
+                this.gcpOptions = gcpOptions
+            }
 
-            fun netsuiteResellerId(netsuiteResellerId: String?) = apply {
+            fun netsuiteResellerId(netsuiteResellerId: String) =
+                netsuiteResellerId(JsonField.of(netsuiteResellerId))
+
+            fun netsuiteResellerId(netsuiteResellerId: JsonField<String>) = apply {
                 this.netsuiteResellerId = netsuiteResellerId
             }
 
-            fun netsuiteResellerId(netsuiteResellerId: Optional<String>) =
-                netsuiteResellerId(netsuiteResellerId.orElse(null))
+            fun resellerContractValue(resellerContractValue: Double) =
+                resellerContractValue(JsonField.of(resellerContractValue))
 
-            fun resellerContractValue(resellerContractValue: Double?) = apply {
+            fun resellerContractValue(resellerContractValue: JsonField<Double>) = apply {
                 this.resellerContractValue = resellerContractValue
             }
 
-            fun resellerContractValue(resellerContractValue: Double) =
-                resellerContractValue(resellerContractValue as Double?)
+            fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun resellerContractValue(resellerContractValue: Optional<Double>) =
-                resellerContractValue(resellerContractValue.orElse(null) as Double?)
-
-            fun startingAt(startingAt: OffsetDateTime?) = apply { this.startingAt = startingAt }
-
-            fun startingAt(startingAt: Optional<OffsetDateTime>) =
-                startingAt(startingAt.orElse(null))
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                this.startingAt = startingAt
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -5384,8 +6803,8 @@ constructor(
             fun build(): ResellerRoyalty =
                 ResellerRoyalty(
                     checkNotNull(resellerType) { "`resellerType` is required but was not set" },
-                    applicableProductIds?.toImmutable(),
-                    applicableProductTags?.toImmutable(),
+                    (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     awsOptions,
                     endingBefore,
                     fraction,
@@ -5470,25 +6889,54 @@ constructor(
         class AwsOptions
         @JsonCreator
         private constructor(
-            @JsonProperty("aws_account_number") private val awsAccountNumber: String?,
-            @JsonProperty("aws_offer_id") private val awsOfferId: String?,
-            @JsonProperty("aws_payer_reference_id") private val awsPayerReferenceId: String?,
+            @JsonProperty("aws_account_number")
+            @ExcludeMissing
+            private val awsAccountNumber: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("aws_offer_id")
+            @ExcludeMissing
+            private val awsOfferId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("aws_payer_reference_id")
+            @ExcludeMissing
+            private val awsPayerReferenceId: JsonField<String> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            fun awsAccountNumber(): Optional<String> =
+                Optional.ofNullable(awsAccountNumber.getNullable("aws_account_number"))
+
+            fun awsOfferId(): Optional<String> =
+                Optional.ofNullable(awsOfferId.getNullable("aws_offer_id"))
+
+            fun awsPayerReferenceId(): Optional<String> =
+                Optional.ofNullable(awsPayerReferenceId.getNullable("aws_payer_reference_id"))
+
             @JsonProperty("aws_account_number")
-            fun awsAccountNumber(): Optional<String> = Optional.ofNullable(awsAccountNumber)
+            @ExcludeMissing
+            fun _awsAccountNumber(): JsonField<String> = awsAccountNumber
 
             @JsonProperty("aws_offer_id")
-            fun awsOfferId(): Optional<String> = Optional.ofNullable(awsOfferId)
+            @ExcludeMissing
+            fun _awsOfferId(): JsonField<String> = awsOfferId
 
             @JsonProperty("aws_payer_reference_id")
-            fun awsPayerReferenceId(): Optional<String> = Optional.ofNullable(awsPayerReferenceId)
+            @ExcludeMissing
+            fun _awsPayerReferenceId(): JsonField<String> = awsPayerReferenceId
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): AwsOptions = apply {
+                if (!validated) {
+                    awsAccountNumber()
+                    awsOfferId()
+                    awsPayerReferenceId()
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -5499,9 +6947,9 @@ constructor(
 
             class Builder {
 
-                private var awsAccountNumber: String? = null
-                private var awsOfferId: String? = null
-                private var awsPayerReferenceId: String? = null
+                private var awsAccountNumber: JsonField<String> = JsonMissing.of()
+                private var awsOfferId: JsonField<String> = JsonMissing.of()
+                private var awsPayerReferenceId: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -5512,23 +6960,25 @@ constructor(
                     additionalProperties = awsOptions.additionalProperties.toMutableMap()
                 }
 
-                fun awsAccountNumber(awsAccountNumber: String?) = apply {
+                fun awsAccountNumber(awsAccountNumber: String) =
+                    awsAccountNumber(JsonField.of(awsAccountNumber))
+
+                fun awsAccountNumber(awsAccountNumber: JsonField<String>) = apply {
                     this.awsAccountNumber = awsAccountNumber
                 }
 
-                fun awsAccountNumber(awsAccountNumber: Optional<String>) =
-                    awsAccountNumber(awsAccountNumber.orElse(null))
+                fun awsOfferId(awsOfferId: String) = awsOfferId(JsonField.of(awsOfferId))
 
-                fun awsOfferId(awsOfferId: String?) = apply { this.awsOfferId = awsOfferId }
-
-                fun awsOfferId(awsOfferId: Optional<String>) = awsOfferId(awsOfferId.orElse(null))
-
-                fun awsPayerReferenceId(awsPayerReferenceId: String?) = apply {
-                    this.awsPayerReferenceId = awsPayerReferenceId
+                fun awsOfferId(awsOfferId: JsonField<String>) = apply {
+                    this.awsOfferId = awsOfferId
                 }
 
-                fun awsPayerReferenceId(awsPayerReferenceId: Optional<String>) =
-                    awsPayerReferenceId(awsPayerReferenceId.orElse(null))
+                fun awsPayerReferenceId(awsPayerReferenceId: String) =
+                    awsPayerReferenceId(JsonField.of(awsPayerReferenceId))
+
+                fun awsPayerReferenceId(awsPayerReferenceId: JsonField<String>) = apply {
+                    this.awsPayerReferenceId = awsPayerReferenceId
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -5583,21 +7033,43 @@ constructor(
         class GcpOptions
         @JsonCreator
         private constructor(
-            @JsonProperty("gcp_account_id") private val gcpAccountId: String?,
-            @JsonProperty("gcp_offer_id") private val gcpOfferId: String?,
+            @JsonProperty("gcp_account_id")
+            @ExcludeMissing
+            private val gcpAccountId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("gcp_offer_id")
+            @ExcludeMissing
+            private val gcpOfferId: JsonField<String> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            fun gcpAccountId(): Optional<String> =
+                Optional.ofNullable(gcpAccountId.getNullable("gcp_account_id"))
+
+            fun gcpOfferId(): Optional<String> =
+                Optional.ofNullable(gcpOfferId.getNullable("gcp_offer_id"))
+
             @JsonProperty("gcp_account_id")
-            fun gcpAccountId(): Optional<String> = Optional.ofNullable(gcpAccountId)
+            @ExcludeMissing
+            fun _gcpAccountId(): JsonField<String> = gcpAccountId
 
             @JsonProperty("gcp_offer_id")
-            fun gcpOfferId(): Optional<String> = Optional.ofNullable(gcpOfferId)
+            @ExcludeMissing
+            fun _gcpOfferId(): JsonField<String> = gcpOfferId
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): GcpOptions = apply {
+                if (!validated) {
+                    gcpAccountId()
+                    gcpOfferId()
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -5608,8 +7080,8 @@ constructor(
 
             class Builder {
 
-                private var gcpAccountId: String? = null
-                private var gcpOfferId: String? = null
+                private var gcpAccountId: JsonField<String> = JsonMissing.of()
+                private var gcpOfferId: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -5619,14 +7091,17 @@ constructor(
                     additionalProperties = gcpOptions.additionalProperties.toMutableMap()
                 }
 
-                fun gcpAccountId(gcpAccountId: String?) = apply { this.gcpAccountId = gcpAccountId }
+                fun gcpAccountId(gcpAccountId: String) = gcpAccountId(JsonField.of(gcpAccountId))
 
-                fun gcpAccountId(gcpAccountId: Optional<String>) =
-                    gcpAccountId(gcpAccountId.orElse(null))
+                fun gcpAccountId(gcpAccountId: JsonField<String>) = apply {
+                    this.gcpAccountId = gcpAccountId
+                }
 
-                fun gcpOfferId(gcpOfferId: String?) = apply { this.gcpOfferId = gcpOfferId }
+                fun gcpOfferId(gcpOfferId: String) = gcpOfferId(JsonField.of(gcpOfferId))
 
-                fun gcpOfferId(gcpOfferId: Optional<String>) = gcpOfferId(gcpOfferId.orElse(null))
+                fun gcpOfferId(gcpOfferId: JsonField<String>) = apply {
+                    this.gcpOfferId = gcpOfferId
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -5698,29 +7173,62 @@ constructor(
     class ScheduledCharge
     @JsonCreator
     private constructor(
-        @JsonProperty("product_id") private val productId: String,
-        @JsonProperty("schedule") private val schedule: Schedule,
-        @JsonProperty("name") private val name: String?,
-        @JsonProperty("netsuite_sales_order_id") private val netsuiteSalesOrderId: String?,
+        @JsonProperty("product_id")
+        @ExcludeMissing
+        private val productId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("schedule")
+        @ExcludeMissing
+        private val schedule: JsonField<Schedule> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("netsuite_sales_order_id")
+        @ExcludeMissing
+        private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("product_id") fun productId(): String = productId
+        fun productId(): String = productId.getRequired("product_id")
 
         /** Must provide either schedule_items or recurring_schedule. */
-        @JsonProperty("schedule") fun schedule(): Schedule = schedule
+        fun schedule(): Schedule = schedule.getRequired("schedule")
 
         /** displayed on invoices */
-        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
+        fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteSalesOrderId(): Optional<String> =
+            Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
+
+        @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
+
+        /** Must provide either schedule_items or recurring_schedule. */
+        @JsonProperty("schedule") @ExcludeMissing fun _schedule(): JsonField<Schedule> = schedule
+
+        /** displayed on invoices */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_sales_order_id")
-        fun netsuiteSalesOrderId(): Optional<String> = Optional.ofNullable(netsuiteSalesOrderId)
+        @ExcludeMissing
+        fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ScheduledCharge = apply {
+            if (!validated) {
+                productId()
+                schedule().validate()
+                name()
+                netsuiteSalesOrderId()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -5731,10 +7239,10 @@ constructor(
 
         class Builder {
 
-            private var productId: String? = null
-            private var schedule: Schedule? = null
-            private var name: String? = null
-            private var netsuiteSalesOrderId: String? = null
+            private var productId: JsonField<String>? = null
+            private var schedule: JsonField<Schedule>? = null
+            private var name: JsonField<String> = JsonMissing.of()
+            private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -5746,25 +7254,30 @@ constructor(
                 additionalProperties = scheduledCharge.additionalProperties.toMutableMap()
             }
 
-            fun productId(productId: String) = apply { this.productId = productId }
+            fun productId(productId: String) = productId(JsonField.of(productId))
+
+            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
             /** Must provide either schedule_items or recurring_schedule. */
-            fun schedule(schedule: Schedule) = apply { this.schedule = schedule }
+            fun schedule(schedule: Schedule) = schedule(JsonField.of(schedule))
+
+            /** Must provide either schedule_items or recurring_schedule. */
+            fun schedule(schedule: JsonField<Schedule>) = apply { this.schedule = schedule }
 
             /** displayed on invoices */
-            fun name(name: String?) = apply { this.name = name }
+            fun name(name: String) = name(JsonField.of(name))
 
             /** displayed on invoices */
-            fun name(name: Optional<String>) = name(name.orElse(null))
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String?) = apply {
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
+                netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
             }
-
-            /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteSalesOrderId(netsuiteSalesOrderId: Optional<String>) =
-                netsuiteSalesOrderId(netsuiteSalesOrderId.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -5800,16 +7313,39 @@ constructor(
         class Schedule
         @JsonCreator
         private constructor(
-            @JsonProperty("credit_type_id") private val creditTypeId: String?,
-            @JsonProperty("recurring_schedule") private val recurringSchedule: RecurringSchedule?,
-            @JsonProperty("schedule_items") private val scheduleItems: List<ScheduleItem>?,
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            private val creditTypeId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("recurring_schedule")
+            @ExcludeMissing
+            private val recurringSchedule: JsonField<RecurringSchedule> = JsonMissing.of(),
+            @JsonProperty("schedule_items")
+            @ExcludeMissing
+            private val scheduleItems: JsonField<List<ScheduleItem>> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             /** Defaults to USD (cents) if not passed. */
+            fun creditTypeId(): Optional<String> =
+                Optional.ofNullable(creditTypeId.getNullable("credit_type_id"))
+
+            /**
+             * Enter the unit price and quantity for the charge or instead only send the amount. If
+             * amount is sent, the unit price is assumed to be the amount and quantity is inferred
+             * to be 1.
+             */
+            fun recurringSchedule(): Optional<RecurringSchedule> =
+                Optional.ofNullable(recurringSchedule.getNullable("recurring_schedule"))
+
+            /** Either provide amount or provide both unit_price and quantity. */
+            fun scheduleItems(): Optional<List<ScheduleItem>> =
+                Optional.ofNullable(scheduleItems.getNullable("schedule_items"))
+
+            /** Defaults to USD (cents) if not passed. */
             @JsonProperty("credit_type_id")
-            fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
 
             /**
              * Enter the unit price and quantity for the charge or instead only send the amount. If
@@ -5817,16 +7353,28 @@ constructor(
              * to be 1.
              */
             @JsonProperty("recurring_schedule")
-            fun recurringSchedule(): Optional<RecurringSchedule> =
-                Optional.ofNullable(recurringSchedule)
+            @ExcludeMissing
+            fun _recurringSchedule(): JsonField<RecurringSchedule> = recurringSchedule
 
             /** Either provide amount or provide both unit_price and quantity. */
             @JsonProperty("schedule_items")
-            fun scheduleItems(): Optional<List<ScheduleItem>> = Optional.ofNullable(scheduleItems)
+            @ExcludeMissing
+            fun _scheduleItems(): JsonField<List<ScheduleItem>> = scheduleItems
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): Schedule = apply {
+                if (!validated) {
+                    creditTypeId()
+                    recurringSchedule().map { it.validate() }
+                    scheduleItems().map { it.forEach { it.validate() } }
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -5837,55 +7385,65 @@ constructor(
 
             class Builder {
 
-                private var creditTypeId: String? = null
-                private var recurringSchedule: RecurringSchedule? = null
-                private var scheduleItems: MutableList<ScheduleItem>? = null
+                private var creditTypeId: JsonField<String> = JsonMissing.of()
+                private var recurringSchedule: JsonField<RecurringSchedule> = JsonMissing.of()
+                private var scheduleItems: JsonField<MutableList<ScheduleItem>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(schedule: Schedule) = apply {
                     creditTypeId = schedule.creditTypeId
                     recurringSchedule = schedule.recurringSchedule
-                    scheduleItems = schedule.scheduleItems?.toMutableList()
+                    scheduleItems = schedule.scheduleItems.map { it.toMutableList() }
                     additionalProperties = schedule.additionalProperties.toMutableMap()
                 }
 
                 /** Defaults to USD (cents) if not passed. */
-                fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
 
                 /** Defaults to USD (cents) if not passed. */
-                fun creditTypeId(creditTypeId: Optional<String>) =
-                    creditTypeId(creditTypeId.orElse(null))
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
+                }
 
                 /**
                  * Enter the unit price and quantity for the charge or instead only send the amount.
                  * If amount is sent, the unit price is assumed to be the amount and quantity is
                  * inferred to be 1.
                  */
-                fun recurringSchedule(recurringSchedule: RecurringSchedule?) = apply {
+                fun recurringSchedule(recurringSchedule: RecurringSchedule) =
+                    recurringSchedule(JsonField.of(recurringSchedule))
+
+                /**
+                 * Enter the unit price and quantity for the charge or instead only send the amount.
+                 * If amount is sent, the unit price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                fun recurringSchedule(recurringSchedule: JsonField<RecurringSchedule>) = apply {
                     this.recurringSchedule = recurringSchedule
                 }
 
-                /**
-                 * Enter the unit price and quantity for the charge or instead only send the amount.
-                 * If amount is sent, the unit price is assumed to be the amount and quantity is
-                 * inferred to be 1.
-                 */
-                fun recurringSchedule(recurringSchedule: Optional<RecurringSchedule>) =
-                    recurringSchedule(recurringSchedule.orElse(null))
+                /** Either provide amount or provide both unit_price and quantity. */
+                fun scheduleItems(scheduleItems: List<ScheduleItem>) =
+                    scheduleItems(JsonField.of(scheduleItems))
 
                 /** Either provide amount or provide both unit_price and quantity. */
-                fun scheduleItems(scheduleItems: List<ScheduleItem>?) = apply {
-                    this.scheduleItems = scheduleItems?.toMutableList()
+                fun scheduleItems(scheduleItems: JsonField<List<ScheduleItem>>) = apply {
+                    this.scheduleItems = scheduleItems.map { it.toMutableList() }
                 }
 
                 /** Either provide amount or provide both unit_price and quantity. */
-                fun scheduleItems(scheduleItems: Optional<List<ScheduleItem>>) =
-                    scheduleItems(scheduleItems.orElse(null))
-
-                /** Either provide amount or provide both unit_price and quantity. */
                 fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
-                    scheduleItems = (scheduleItems ?: mutableListOf()).apply { add(scheduleItem) }
+                    scheduleItems =
+                        (scheduleItems ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(scheduleItem)
+                        }
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -5914,7 +7472,7 @@ constructor(
                     Schedule(
                         creditTypeId,
                         recurringSchedule,
-                        scheduleItems?.toImmutable(),
+                        (scheduleItems ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -5929,52 +7487,121 @@ constructor(
             @JsonCreator
             private constructor(
                 @JsonProperty("amount_distribution")
-                private val amountDistribution: AmountDistribution,
-                @JsonProperty("ending_before") private val endingBefore: OffsetDateTime,
-                @JsonProperty("frequency") private val frequency: Frequency,
-                @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
-                @JsonProperty("amount") private val amount: Double?,
-                @JsonProperty("quantity") private val quantity: Double?,
-                @JsonProperty("unit_price") private val unitPrice: Double?,
+                @ExcludeMissing
+                private val amountDistribution: JsonField<AmountDistribution> = JsonMissing.of(),
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("frequency")
+                @ExcludeMissing
+                private val frequency: JsonField<Frequency> = JsonMissing.of(),
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("amount")
+                @ExcludeMissing
+                private val amount: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                private val quantity: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("unit_price")
+                @ExcludeMissing
+                private val unitPrice: JsonField<Double> = JsonMissing.of(),
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                @JsonProperty("amount_distribution")
-                fun amountDistribution(): AmountDistribution = amountDistribution
+                fun amountDistribution(): AmountDistribution =
+                    amountDistribution.getRequired("amount_distribution")
 
                 /** RFC 3339 timestamp (exclusive). */
-                @JsonProperty("ending_before") fun endingBefore(): OffsetDateTime = endingBefore
+                fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
 
-                @JsonProperty("frequency") fun frequency(): Frequency = frequency
+                fun frequency(): Frequency = frequency.getRequired("frequency")
 
                 /** RFC 3339 timestamp (inclusive). */
-                @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+                fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
                 /**
                  * Amount for the charge. Can be provided instead of unit_price and quantity. If
                  * amount is sent, the unit_price is assumed to be the amount and quantity is
                  * inferred to be 1.
                  */
-                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
+                fun amount(): Optional<Double> = Optional.ofNullable(amount.getNullable("amount"))
+
+                /**
+                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
+                 * and must be specified with unit_price. If specified amount cannot be provided.
+                 */
+                fun quantity(): Optional<Double> =
+                    Optional.ofNullable(quantity.getNullable("quantity"))
+
+                /**
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
+                 */
+                fun unitPrice(): Optional<Double> =
+                    Optional.ofNullable(unitPrice.getNullable("unit_price"))
+
+                @JsonProperty("amount_distribution")
+                @ExcludeMissing
+                fun _amountDistribution(): JsonField<AmountDistribution> = amountDistribution
+
+                /** RFC 3339 timestamp (exclusive). */
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
+
+                @JsonProperty("frequency")
+                @ExcludeMissing
+                fun _frequency(): JsonField<Frequency> = frequency
+
+                /** RFC 3339 timestamp (inclusive). */
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                fun _startingAt(): JsonField<OffsetDateTime> = startingAt
+
+                /**
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
                 /**
                  * Quantity for the charge. Will be multiplied by unit_price to determine the amount
                  * and must be specified with unit_price. If specified amount cannot be provided.
                  */
                 @JsonProperty("quantity")
-                fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
+                @ExcludeMissing
+                fun _quantity(): JsonField<Double> = quantity
 
                 /**
                  * Unit price for the charge. Will be multiplied by quantity to determine the amount
                  * and must be specified with quantity. If specified amount cannot be provided.
                  */
                 @JsonProperty("unit_price")
-                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
+                @ExcludeMissing
+                fun _unitPrice(): JsonField<Double> = unitPrice
 
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                private var validated: Boolean = false
+
+                fun validate(): RecurringSchedule = apply {
+                    if (!validated) {
+                        amountDistribution()
+                        endingBefore()
+                        frequency()
+                        startingAt()
+                        amount()
+                        quantity()
+                        unitPrice()
+                        validated = true
+                    }
+                }
 
                 fun toBuilder() = Builder().from(this)
 
@@ -5985,13 +7612,13 @@ constructor(
 
                 class Builder {
 
-                    private var amountDistribution: AmountDistribution? = null
-                    private var endingBefore: OffsetDateTime? = null
-                    private var frequency: Frequency? = null
-                    private var startingAt: OffsetDateTime? = null
-                    private var amount: Double? = null
-                    private var quantity: Double? = null
-                    private var unitPrice: Double? = null
+                    private var amountDistribution: JsonField<AmountDistribution>? = null
+                    private var endingBefore: JsonField<OffsetDateTime>? = null
+                    private var frequency: JsonField<Frequency>? = null
+                    private var startingAt: JsonField<OffsetDateTime>? = null
+                    private var amount: JsonField<Double> = JsonMissing.of()
+                    private var quantity: JsonField<Double> = JsonMissing.of()
+                    private var unitPrice: JsonField<Double> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -6006,19 +7633,35 @@ constructor(
                         additionalProperties = recurringSchedule.additionalProperties.toMutableMap()
                     }
 
-                    fun amountDistribution(amountDistribution: AmountDistribution) = apply {
-                        this.amountDistribution = amountDistribution
-                    }
+                    fun amountDistribution(amountDistribution: AmountDistribution) =
+                        amountDistribution(JsonField.of(amountDistribution))
+
+                    fun amountDistribution(amountDistribution: JsonField<AmountDistribution>) =
+                        apply {
+                            this.amountDistribution = amountDistribution
+                        }
 
                     /** RFC 3339 timestamp (exclusive). */
-                    fun endingBefore(endingBefore: OffsetDateTime) = apply {
+                    fun endingBefore(endingBefore: OffsetDateTime) =
+                        endingBefore(JsonField.of(endingBefore))
+
+                    /** RFC 3339 timestamp (exclusive). */
+                    fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                         this.endingBefore = endingBefore
                     }
 
-                    fun frequency(frequency: Frequency) = apply { this.frequency = frequency }
+                    fun frequency(frequency: Frequency) = frequency(JsonField.of(frequency))
+
+                    fun frequency(frequency: JsonField<Frequency>) = apply {
+                        this.frequency = frequency
+                    }
 
                     /** RFC 3339 timestamp (inclusive). */
-                    fun startingAt(startingAt: OffsetDateTime) = apply {
+                    fun startingAt(startingAt: OffsetDateTime) =
+                        startingAt(JsonField.of(startingAt))
+
+                    /** RFC 3339 timestamp (inclusive). */
+                    fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                         this.startingAt = startingAt
                     }
 
@@ -6027,68 +7670,44 @@ constructor(
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double?) = apply { this.amount = amount }
+                    fun amount(amount: Double) = amount(JsonField.of(amount))
 
                     /**
                      * Amount for the charge. Can be provided instead of unit_price and quantity. If
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double) = amount(amount as Double?)
-
-                    /**
-                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                     * amount is sent, the unit_price is assumed to be the amount and quantity is
-                     * inferred to be 1.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
+                    fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+                    fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double) = quantity(quantity as Double?)
-
-                    /**
-                     * Quantity for the charge. Will be multiplied by unit_price to determine the
-                     * amount and must be specified with unit_price. If specified amount cannot be
-                     * provided.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun quantity(quantity: Optional<Double>) =
-                        quantity(quantity.orElse(null) as Double?)
+                    fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double?) = apply { this.unitPrice = unitPrice }
+                    fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double) = unitPrice(unitPrice as Double?)
-
-                    /**
-                     * Unit price for the charge. Will be multiplied by quantity to determine the
-                     * amount and must be specified with quantity. If specified amount cannot be
-                     * provided.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun unitPrice(unitPrice: Optional<Double>) =
-                        unitPrice(unitPrice.orElse(null) as Double?)
+                    fun unitPrice(unitPrice: JsonField<Double>) = apply {
+                        this.unitPrice = unitPrice
+                    }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -6288,41 +7907,89 @@ constructor(
             class ScheduleItem
             @JsonCreator
             private constructor(
-                @JsonProperty("timestamp") private val timestamp: OffsetDateTime,
-                @JsonProperty("amount") private val amount: Double?,
-                @JsonProperty("quantity") private val quantity: Double?,
-                @JsonProperty("unit_price") private val unitPrice: Double?,
+                @JsonProperty("timestamp")
+                @ExcludeMissing
+                private val timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("amount")
+                @ExcludeMissing
+                private val amount: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                private val quantity: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("unit_price")
+                @ExcludeMissing
+                private val unitPrice: JsonField<Double> = JsonMissing.of(),
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
                 /** timestamp of the scheduled event */
-                @JsonProperty("timestamp") fun timestamp(): OffsetDateTime = timestamp
+                fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
 
                 /**
                  * Amount for the charge. Can be provided instead of unit_price and quantity. If
                  * amount is sent, the unit_price is assumed to be the amount and quantity is
                  * inferred to be 1.
                  */
-                @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
+                fun amount(): Optional<Double> = Optional.ofNullable(amount.getNullable("amount"))
+
+                /**
+                 * Quantity for the charge. Will be multiplied by unit_price to determine the amount
+                 * and must be specified with unit_price. If specified amount cannot be provided.
+                 */
+                fun quantity(): Optional<Double> =
+                    Optional.ofNullable(quantity.getNullable("quantity"))
+
+                /**
+                 * Unit price for the charge. Will be multiplied by quantity to determine the amount
+                 * and must be specified with quantity. If specified amount cannot be provided.
+                 */
+                fun unitPrice(): Optional<Double> =
+                    Optional.ofNullable(unitPrice.getNullable("unit_price"))
+
+                /** timestamp of the scheduled event */
+                @JsonProperty("timestamp")
+                @ExcludeMissing
+                fun _timestamp(): JsonField<OffsetDateTime> = timestamp
+
+                /**
+                 * Amount for the charge. Can be provided instead of unit_price and quantity. If
+                 * amount is sent, the unit_price is assumed to be the amount and quantity is
+                 * inferred to be 1.
+                 */
+                @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
                 /**
                  * Quantity for the charge. Will be multiplied by unit_price to determine the amount
                  * and must be specified with unit_price. If specified amount cannot be provided.
                  */
                 @JsonProperty("quantity")
-                fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
+                @ExcludeMissing
+                fun _quantity(): JsonField<Double> = quantity
 
                 /**
                  * Unit price for the charge. Will be multiplied by quantity to determine the amount
                  * and must be specified with quantity. If specified amount cannot be provided.
                  */
                 @JsonProperty("unit_price")
-                fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice)
+                @ExcludeMissing
+                fun _unitPrice(): JsonField<Double> = unitPrice
 
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                private var validated: Boolean = false
+
+                fun validate(): ScheduleItem = apply {
+                    if (!validated) {
+                        timestamp()
+                        amount()
+                        quantity()
+                        unitPrice()
+                        validated = true
+                    }
+                }
 
                 fun toBuilder() = Builder().from(this)
 
@@ -6333,10 +8000,10 @@ constructor(
 
                 class Builder {
 
-                    private var timestamp: OffsetDateTime? = null
-                    private var amount: Double? = null
-                    private var quantity: Double? = null
-                    private var unitPrice: Double? = null
+                    private var timestamp: JsonField<OffsetDateTime>? = null
+                    private var amount: JsonField<Double> = JsonMissing.of()
+                    private var quantity: JsonField<Double> = JsonMissing.of()
+                    private var unitPrice: JsonField<Double> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -6349,75 +8016,56 @@ constructor(
                     }
 
                     /** timestamp of the scheduled event */
-                    fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
+                    fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
+
+                    /** timestamp of the scheduled event */
+                    fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
+                        this.timestamp = timestamp
+                    }
 
                     /**
                      * Amount for the charge. Can be provided instead of unit_price and quantity. If
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double?) = apply { this.amount = amount }
+                    fun amount(amount: Double) = amount(JsonField.of(amount))
 
                     /**
                      * Amount for the charge. Can be provided instead of unit_price and quantity. If
                      * amount is sent, the unit_price is assumed to be the amount and quantity is
                      * inferred to be 1.
                      */
-                    fun amount(amount: Double) = amount(amount as Double?)
-
-                    /**
-                     * Amount for the charge. Can be provided instead of unit_price and quantity. If
-                     * amount is sent, the unit_price is assumed to be the amount and quantity is
-                     * inferred to be 1.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
+                    fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+                    fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
                     /**
                      * Quantity for the charge. Will be multiplied by unit_price to determine the
                      * amount and must be specified with unit_price. If specified amount cannot be
                      * provided.
                      */
-                    fun quantity(quantity: Double) = quantity(quantity as Double?)
-
-                    /**
-                     * Quantity for the charge. Will be multiplied by unit_price to determine the
-                     * amount and must be specified with unit_price. If specified amount cannot be
-                     * provided.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun quantity(quantity: Optional<Double>) =
-                        quantity(quantity.orElse(null) as Double?)
+                    fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double?) = apply { this.unitPrice = unitPrice }
+                    fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
 
                     /**
                      * Unit price for the charge. Will be multiplied by quantity to determine the
                      * amount and must be specified with quantity. If specified amount cannot be
                      * provided.
                      */
-                    fun unitPrice(unitPrice: Double) = unitPrice(unitPrice as Double?)
-
-                    /**
-                     * Unit price for the charge. Will be multiplied by quantity to determine the
-                     * amount and must be specified with quantity. If specified amount cannot be
-                     * provided.
-                     */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun unitPrice(unitPrice: Optional<Double>) =
-                        unitPrice(unitPrice.orElse(null) as Double?)
+                    fun unitPrice(unitPrice: JsonField<Double>) = apply {
+                        this.unitPrice = unitPrice
+                    }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()

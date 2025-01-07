@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -32,11 +33,17 @@ constructor(
 
     fun keys(): List<String> = body.keys()
 
+    fun _entity(): JsonField<Entity> = body._entity()
+
+    fun _entityId(): JsonField<String> = body._entityId()
+
+    fun _keys(): JsonField<List<String>> = body._keys()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomFieldDeleteValuesBody = body
 
@@ -48,22 +55,45 @@ constructor(
     class CustomFieldDeleteValuesBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("entity") private val entity: Entity,
-        @JsonProperty("entity_id") private val entityId: String,
-        @JsonProperty("keys") private val keys: List<String>,
+        @JsonProperty("entity")
+        @ExcludeMissing
+        private val entity: JsonField<Entity> = JsonMissing.of(),
+        @JsonProperty("entity_id")
+        @ExcludeMissing
+        private val entityId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("keys")
+        @ExcludeMissing
+        private val keys: JsonField<List<String>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("entity") fun entity(): Entity = entity
+        fun entity(): Entity = entity.getRequired("entity")
 
-        @JsonProperty("entity_id") fun entityId(): String = entityId
+        fun entityId(): String = entityId.getRequired("entity_id")
 
-        @JsonProperty("keys") fun keys(): List<String> = keys
+        fun keys(): List<String> = keys.getRequired("keys")
+
+        @JsonProperty("entity") @ExcludeMissing fun _entity(): JsonField<Entity> = entity
+
+        @JsonProperty("entity_id") @ExcludeMissing fun _entityId(): JsonField<String> = entityId
+
+        @JsonProperty("keys") @ExcludeMissing fun _keys(): JsonField<List<String>> = keys
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomFieldDeleteValuesBody = apply {
+            if (!validated) {
+                entity()
+                entityId()
+                keys()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -74,27 +104,46 @@ constructor(
 
         class Builder {
 
-            private var entity: Entity? = null
-            private var entityId: String? = null
-            private var keys: MutableList<String>? = null
+            private var entity: JsonField<Entity>? = null
+            private var entityId: JsonField<String>? = null
+            private var keys: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(customFieldDeleteValuesBody: CustomFieldDeleteValuesBody) = apply {
                 entity = customFieldDeleteValuesBody.entity
                 entityId = customFieldDeleteValuesBody.entityId
-                keys = customFieldDeleteValuesBody.keys.toMutableList()
+                keys = customFieldDeleteValuesBody.keys.map { it.toMutableList() }
                 additionalProperties =
                     customFieldDeleteValuesBody.additionalProperties.toMutableMap()
             }
 
-            fun entity(entity: Entity) = apply { this.entity = entity }
+            fun entity(entity: Entity) = entity(JsonField.of(entity))
 
-            fun entityId(entityId: String) = apply { this.entityId = entityId }
+            fun entity(entity: JsonField<Entity>) = apply { this.entity = entity }
 
-            fun keys(keys: List<String>) = apply { this.keys = keys.toMutableList() }
+            fun entityId(entityId: String) = entityId(JsonField.of(entityId))
 
-            fun addKey(key: String) = apply { keys = (keys ?: mutableListOf()).apply { add(key) } }
+            fun entityId(entityId: JsonField<String>) = apply { this.entityId = entityId }
+
+            fun keys(keys: List<String>) = keys(JsonField.of(keys))
+
+            fun keys(keys: JsonField<List<String>>) = apply {
+                this.keys = keys.map { it.toMutableList() }
+            }
+
+            fun addKey(key: String) = apply {
+                keys =
+                    (keys ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(key)
+                    }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -119,7 +168,8 @@ constructor(
                 CustomFieldDeleteValuesBody(
                     checkNotNull(entity) { "`entity` is required but was not set" },
                     checkNotNull(entityId) { "`entityId` is required but was not set" },
-                    checkNotNull(keys) { "`keys` is required but was not set" }.toImmutable(),
+                    checkNotNull(keys) { "`keys` is required but was not set" }
+                        .map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -166,11 +216,36 @@ constructor(
 
         fun entity(entity: Entity) = apply { body.entity(entity) }
 
+        fun entity(entity: JsonField<Entity>) = apply { body.entity(entity) }
+
         fun entityId(entityId: String) = apply { body.entityId(entityId) }
+
+        fun entityId(entityId: JsonField<String>) = apply { body.entityId(entityId) }
 
         fun keys(keys: List<String>) = apply { body.keys(keys) }
 
+        fun keys(keys: JsonField<List<String>>) = apply { body.keys(keys) }
+
         fun addKey(key: String) = apply { body.addKey(key) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -268,25 +343,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomFieldDeleteValuesParams =

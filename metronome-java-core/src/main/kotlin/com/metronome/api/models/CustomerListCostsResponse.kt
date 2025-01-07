@@ -38,11 +38,17 @@ private constructor(
 
     fun startTimestamp(): OffsetDateTime = startTimestamp.getRequired("start_timestamp")
 
-    @JsonProperty("credit_types") @ExcludeMissing fun _creditTypes() = creditTypes
+    @JsonProperty("credit_types")
+    @ExcludeMissing
+    fun _creditTypes(): JsonField<CreditTypes> = creditTypes
 
-    @JsonProperty("end_timestamp") @ExcludeMissing fun _endTimestamp() = endTimestamp
+    @JsonProperty("end_timestamp")
+    @ExcludeMissing
+    fun _endTimestamp(): JsonField<OffsetDateTime> = endTimestamp
 
-    @JsonProperty("start_timestamp") @ExcludeMissing fun _startTimestamp() = startTimestamp
+    @JsonProperty("start_timestamp")
+    @ExcludeMissing
+    fun _startTimestamp(): JsonField<OffsetDateTime> = startTimestamp
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -68,9 +74,9 @@ private constructor(
 
     class Builder {
 
-        private var creditTypes: JsonField<CreditTypes> = JsonMissing.of()
-        private var endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var creditTypes: JsonField<CreditTypes>? = null
+        private var endTimestamp: JsonField<OffsetDateTime>? = null
+        private var startTimestamp: JsonField<OffsetDateTime>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -121,9 +127,9 @@ private constructor(
 
         fun build(): CustomerListCostsResponse =
             CustomerListCostsResponse(
-                creditTypes,
-                endTimestamp,
-                startTimestamp,
+                checkNotNull(creditTypes) { "`creditTypes` is required but was not set" },
+                checkNotNull(endTimestamp) { "`endTimestamp` is required but was not set" },
+                checkNotNull(startTimestamp) { "`startTimestamp` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }

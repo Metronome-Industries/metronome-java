@@ -69,30 +69,36 @@ private constructor(
         Optional.ofNullable(currentBillableStatus.getNullable("current_billable_status"))
 
     /** the Metronome ID of the customer */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    fun _customFields(): JsonField<CustomFields> = customFields
 
-    @JsonProperty("customer_config") @ExcludeMissing fun _customerConfig() = customerConfig
+    @JsonProperty("customer_config")
+    @ExcludeMissing
+    fun _customerConfig(): JsonField<CustomerConfig> = customerConfig
 
     /**
      * (deprecated, use ingest_aliases instead) the first ID (Metronome or ingest alias) that can be
      * used in usage events
      */
-    @JsonProperty("external_id") @ExcludeMissing fun _externalId() = externalId
+    @JsonProperty("external_id") @ExcludeMissing fun _externalId(): JsonField<String> = externalId
 
     /**
      * aliases for this customer that can be used instead of the Metronome customer ID in usage
      * events
      */
-    @JsonProperty("ingest_aliases") @ExcludeMissing fun _ingestAliases() = ingestAliases
+    @JsonProperty("ingest_aliases")
+    @ExcludeMissing
+    fun _ingestAliases(): JsonField<List<String>> = ingestAliases
 
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("current_billable_status")
     @ExcludeMissing
-    fun _currentBillableStatus() = currentBillableStatus
+    fun _currentBillableStatus(): JsonField<CurrentBillableStatus> = currentBillableStatus
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -122,12 +128,12 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var customFields: JsonField<CustomFields> = JsonMissing.of()
-        private var customerConfig: JsonField<CustomerConfig> = JsonMissing.of()
-        private var externalId: JsonField<String> = JsonMissing.of()
-        private var ingestAliases: JsonField<List<String>> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var customFields: JsonField<CustomFields>? = null
+        private var customerConfig: JsonField<CustomerConfig>? = null
+        private var externalId: JsonField<String>? = null
+        private var ingestAliases: JsonField<MutableList<String>>? = null
+        private var name: JsonField<String>? = null
         private var currentBillableStatus: JsonField<CurrentBillableStatus> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -137,7 +143,7 @@ private constructor(
             customFields = customerDetail.customFields
             customerConfig = customerDetail.customerConfig
             externalId = customerDetail.externalId
-            ingestAliases = customerDetail.ingestAliases
+            ingestAliases = customerDetail.ingestAliases.map { it.toMutableList() }
             name = customerDetail.name
             currentBillableStatus = customerDetail.currentBillableStatus
             additionalProperties = customerDetail.additionalProperties.toMutableMap()
@@ -185,7 +191,24 @@ private constructor(
          * events
          */
         fun ingestAliases(ingestAliases: JsonField<List<String>>) = apply {
-            this.ingestAliases = ingestAliases
+            this.ingestAliases = ingestAliases.map { it.toMutableList() }
+        }
+
+        /**
+         * aliases for this customer that can be used instead of the Metronome customer ID in usage
+         * events
+         */
+        fun addIngestAlias(ingestAlias: String) = apply {
+            ingestAliases =
+                (ingestAliases ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(ingestAlias)
+                }
         }
 
         fun name(name: String) = name(JsonField.of(name))
@@ -222,12 +245,13 @@ private constructor(
 
         fun build(): CustomerDetail =
             CustomerDetail(
-                id,
-                customFields,
-                customerConfig,
-                externalId,
-                ingestAliases.map { it.toImmutable() },
-                name,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(customFields) { "`customFields` is required but was not set" },
+                checkNotNull(customerConfig) { "`customerConfig` is required but was not set" },
+                checkNotNull(externalId) { "`externalId` is required but was not set" },
+                checkNotNull(ingestAliases) { "`ingestAliases` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(name) { "`name` is required but was not set" },
                 currentBillableStatus,
                 additionalProperties.toImmutable(),
             )
@@ -326,7 +350,7 @@ private constructor(
         /** The Salesforce account ID for the customer */
         @JsonProperty("salesforce_account_id")
         @ExcludeMissing
-        fun _salesforceAccountId() = salesforceAccountId
+        fun _salesforceAccountId(): JsonField<String> = salesforceAccountId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -350,7 +374,7 @@ private constructor(
 
         class Builder {
 
-            private var salesforceAccountId: JsonField<String> = JsonMissing.of()
+            private var salesforceAccountId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -360,8 +384,12 @@ private constructor(
             }
 
             /** The Salesforce account ID for the customer */
-            fun salesforceAccountId(salesforceAccountId: String) =
-                salesforceAccountId(JsonField.of(salesforceAccountId))
+            fun salesforceAccountId(salesforceAccountId: String?) =
+                salesforceAccountId(JsonField.ofNullable(salesforceAccountId))
+
+            /** The Salesforce account ID for the customer */
+            fun salesforceAccountId(salesforceAccountId: Optional<String>) =
+                salesforceAccountId(salesforceAccountId.orElse(null))
 
             /** The Salesforce account ID for the customer */
             fun salesforceAccountId(salesforceAccountId: JsonField<String>) = apply {
@@ -388,7 +416,12 @@ private constructor(
             }
 
             fun build(): CustomerConfig =
-                CustomerConfig(salesforceAccountId, additionalProperties.toImmutable())
+                CustomerConfig(
+                    checkNotNull(salesforceAccountId) {
+                        "`salesforceAccountId` is required but was not set"
+                    },
+                    additionalProperties.toImmutable()
+                )
         }
 
         override fun equals(other: Any?): Boolean {
@@ -429,9 +462,11 @@ private constructor(
         fun effectiveAt(): Optional<OffsetDateTime> =
             Optional.ofNullable(effectiveAt.getNullable("effective_at"))
 
-        @JsonProperty("value") @ExcludeMissing fun _value() = value
+        @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<Value> = value
 
-        @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
+        @JsonProperty("effective_at")
+        @ExcludeMissing
+        fun _effectiveAt(): JsonField<OffsetDateTime> = effectiveAt
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -456,7 +491,7 @@ private constructor(
 
         class Builder {
 
-            private var value: JsonField<Value> = JsonMissing.of()
+            private var value: JsonField<Value>? = null
             private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -471,7 +506,11 @@ private constructor(
 
             fun value(value: JsonField<Value>) = apply { this.value = value }
 
-            fun effectiveAt(effectiveAt: OffsetDateTime) = effectiveAt(JsonField.of(effectiveAt))
+            fun effectiveAt(effectiveAt: OffsetDateTime?) =
+                effectiveAt(JsonField.ofNullable(effectiveAt))
+
+            fun effectiveAt(effectiveAt: Optional<OffsetDateTime>) =
+                effectiveAt(effectiveAt.orElse(null))
 
             fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
                 this.effectiveAt = effectiveAt
@@ -498,7 +537,7 @@ private constructor(
 
             fun build(): CurrentBillableStatus =
                 CurrentBillableStatus(
-                    value,
+                    checkNotNull(value) { "`value` is required but was not set" },
                     effectiveAt,
                     additionalProperties.toImmutable(),
                 )

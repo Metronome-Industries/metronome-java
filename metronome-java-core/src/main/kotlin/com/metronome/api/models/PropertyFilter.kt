@@ -59,28 +59,30 @@ private constructor(
         Optional.ofNullable(notInValues.getNullable("not_in_values"))
 
     /** The name of the event property. */
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     /**
      * Determines whether the property must exist in the event. If true, only events with this
      * property will pass the filter. If false, only events without this property will pass the
      * filter. If null or omitted, the existence of the property is optional.
      */
-    @JsonProperty("exists") @ExcludeMissing fun _exists() = exists
+    @JsonProperty("exists") @ExcludeMissing fun _exists(): JsonField<Boolean> = exists
 
     /**
      * Specifies the allowed values for the property to match an event. An event will pass the
      * filter only if its property value is included in this list. If undefined, all property values
      * will pass the filter. Must be non-empty if present.
      */
-    @JsonProperty("in_values") @ExcludeMissing fun _inValues() = inValues
+    @JsonProperty("in_values") @ExcludeMissing fun _inValues(): JsonField<List<String>> = inValues
 
     /**
      * Specifies the values that prevent an event from matching the filter. An event will not pass
      * the filter if its property value is included in this list. If null or empty, all property
      * values will pass the filter. Must be non-empty if present.
      */
-    @JsonProperty("not_in_values") @ExcludeMissing fun _notInValues() = notInValues
+    @JsonProperty("not_in_values")
+    @ExcludeMissing
+    fun _notInValues(): JsonField<List<String>> = notInValues
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -107,18 +109,18 @@ private constructor(
 
     class Builder {
 
-        private var name: JsonField<String> = JsonMissing.of()
+        private var name: JsonField<String>? = null
         private var exists: JsonField<Boolean> = JsonMissing.of()
-        private var inValues: JsonField<List<String>> = JsonMissing.of()
-        private var notInValues: JsonField<List<String>> = JsonMissing.of()
+        private var inValues: JsonField<MutableList<String>>? = null
+        private var notInValues: JsonField<MutableList<String>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(propertyFilter: PropertyFilter) = apply {
             name = propertyFilter.name
             exists = propertyFilter.exists
-            inValues = propertyFilter.inValues
-            notInValues = propertyFilter.notInValues
+            inValues = propertyFilter.inValues.map { it.toMutableList() }
+            notInValues = propertyFilter.notInValues.map { it.toMutableList() }
             additionalProperties = propertyFilter.additionalProperties.toMutableMap()
         }
 
@@ -154,7 +156,27 @@ private constructor(
          * filter only if its property value is included in this list. If undefined, all property
          * values will pass the filter. Must be non-empty if present.
          */
-        fun inValues(inValues: JsonField<List<String>>) = apply { this.inValues = inValues }
+        fun inValues(inValues: JsonField<List<String>>) = apply {
+            this.inValues = inValues.map { it.toMutableList() }
+        }
+
+        /**
+         * Specifies the allowed values for the property to match an event. An event will pass the
+         * filter only if its property value is included in this list. If undefined, all property
+         * values will pass the filter. Must be non-empty if present.
+         */
+        fun addInValue(inValue: String) = apply {
+            inValues =
+                (inValues ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(inValue)
+                }
+        }
 
         /**
          * Specifies the values that prevent an event from matching the filter. An event will not
@@ -169,7 +191,25 @@ private constructor(
          * property values will pass the filter. Must be non-empty if present.
          */
         fun notInValues(notInValues: JsonField<List<String>>) = apply {
-            this.notInValues = notInValues
+            this.notInValues = notInValues.map { it.toMutableList() }
+        }
+
+        /**
+         * Specifies the values that prevent an event from matching the filter. An event will not
+         * pass the filter if its property value is included in this list. If null or empty, all
+         * property values will pass the filter. Must be non-empty if present.
+         */
+        fun addNotInValue(notInValue: String) = apply {
+            notInValues =
+                (notInValues ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(notInValue)
+                }
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -193,10 +233,10 @@ private constructor(
 
         fun build(): PropertyFilter =
             PropertyFilter(
-                name,
+                checkNotNull(name) { "`name` is required but was not set" },
                 exists,
-                inValues.map { it.toImmutable() },
-                notInValues.map { it.toImmutable() },
+                (inValues ?: JsonMissing.of()).map { it.toImmutable() },
+                (notInValues ?: JsonMissing.of()).map { it.toImmutable() },
                 additionalProperties.toImmutable(),
             )
     }

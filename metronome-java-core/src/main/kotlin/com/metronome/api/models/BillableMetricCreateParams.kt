@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -64,11 +65,48 @@ constructor(
      */
     fun sql(): Optional<String> = body.sql()
 
+    /** The display name of the billable metric. */
+    fun _name(): JsonField<String> = body._name()
+
+    /**
+     * Specifies the type of aggregation performed on matching events. Required if `sql` is not
+     * provided.
+     */
+    fun _aggregationKey(): JsonField<String> = body._aggregationKey()
+
+    /** Specifies the type of aggregation performed on matching events. */
+    fun _aggregationType(): JsonField<AggregationType> = body._aggregationType()
+
+    /** Custom fields to attach to the billable metric. */
+    fun _customFields(): JsonField<CustomFields> = body._customFields()
+
+    /** An optional filtering rule to match the 'event_type' property of an event. */
+    fun _eventTypeFilter(): JsonField<EventTypeFilter> = body._eventTypeFilter()
+
+    /**
+     * Property names that are used to group usage costs on an invoice. Each entry represents a set
+     * of properties used to slice events into distinct buckets.
+     */
+    fun _groupKeys(): JsonField<List<List<String>>> = body._groupKeys()
+
+    /**
+     * A list of filters to match events to this billable metric. Each filter defines a rule on an
+     * event property. All rules must pass for the event to match the billable metric.
+     */
+    fun _propertyFilters(): JsonField<List<PropertyFilter>> = body._propertyFilters()
+
+    /**
+     * The SQL query associated with the billable metric. This field is mutually exclusive with
+     * aggregation_type, event_type_filter, property_filters, aggregation_key, and group_keys. If
+     * provided, these other fields must be omitted.
+     */
+    fun _sql(): JsonField<String> = body._sql()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): BillableMetricCreateBody = body
 
@@ -80,64 +118,143 @@ constructor(
     class BillableMetricCreateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("name") private val name: String,
-        @JsonProperty("aggregation_key") private val aggregationKey: String?,
-        @JsonProperty("aggregation_type") private val aggregationType: AggregationType?,
-        @JsonProperty("custom_fields") private val customFields: CustomFields?,
-        @JsonProperty("event_type_filter") private val eventTypeFilter: EventTypeFilter?,
-        @JsonProperty("group_keys") private val groupKeys: List<List<String>>?,
-        @JsonProperty("property_filters") private val propertyFilters: List<PropertyFilter>?,
-        @JsonProperty("sql") private val sql: String?,
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("aggregation_key")
+        @ExcludeMissing
+        private val aggregationKey: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("aggregation_type")
+        @ExcludeMissing
+        private val aggregationType: JsonField<AggregationType> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("event_type_filter")
+        @ExcludeMissing
+        private val eventTypeFilter: JsonField<EventTypeFilter> = JsonMissing.of(),
+        @JsonProperty("group_keys")
+        @ExcludeMissing
+        private val groupKeys: JsonField<List<List<String>>> = JsonMissing.of(),
+        @JsonProperty("property_filters")
+        @ExcludeMissing
+        private val propertyFilters: JsonField<List<PropertyFilter>> = JsonMissing.of(),
+        @JsonProperty("sql") @ExcludeMissing private val sql: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The display name of the billable metric. */
-        @JsonProperty("name") fun name(): String = name
+        fun name(): String = name.getRequired("name")
 
         /**
          * Specifies the type of aggregation performed on matching events. Required if `sql` is not
          * provided.
          */
-        @JsonProperty("aggregation_key")
-        fun aggregationKey(): Optional<String> = Optional.ofNullable(aggregationKey)
+        fun aggregationKey(): Optional<String> =
+            Optional.ofNullable(aggregationKey.getNullable("aggregation_key"))
 
         /** Specifies the type of aggregation performed on matching events. */
-        @JsonProperty("aggregation_type")
-        fun aggregationType(): Optional<AggregationType> = Optional.ofNullable(aggregationType)
+        fun aggregationType(): Optional<AggregationType> =
+            Optional.ofNullable(aggregationType.getNullable("aggregation_type"))
 
         /** Custom fields to attach to the billable metric. */
-        @JsonProperty("custom_fields")
-        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+        fun customFields(): Optional<CustomFields> =
+            Optional.ofNullable(customFields.getNullable("custom_fields"))
 
         /** An optional filtering rule to match the 'event_type' property of an event. */
-        @JsonProperty("event_type_filter")
-        fun eventTypeFilter(): Optional<EventTypeFilter> = Optional.ofNullable(eventTypeFilter)
+        fun eventTypeFilter(): Optional<EventTypeFilter> =
+            Optional.ofNullable(eventTypeFilter.getNullable("event_type_filter"))
 
         /**
          * Property names that are used to group usage costs on an invoice. Each entry represents a
          * set of properties used to slice events into distinct buckets.
          */
-        @JsonProperty("group_keys")
-        fun groupKeys(): Optional<List<List<String>>> = Optional.ofNullable(groupKeys)
+        fun groupKeys(): Optional<List<List<String>>> =
+            Optional.ofNullable(groupKeys.getNullable("group_keys"))
 
         /**
          * A list of filters to match events to this billable metric. Each filter defines a rule on
          * an event property. All rules must pass for the event to match the billable metric.
          */
-        @JsonProperty("property_filters")
-        fun propertyFilters(): Optional<List<PropertyFilter>> = Optional.ofNullable(propertyFilters)
+        fun propertyFilters(): Optional<List<PropertyFilter>> =
+            Optional.ofNullable(propertyFilters.getNullable("property_filters"))
 
         /**
          * The SQL query associated with the billable metric. This field is mutually exclusive with
          * aggregation_type, event_type_filter, property_filters, aggregation_key, and group_keys.
          * If provided, these other fields must be omitted.
          */
-        @JsonProperty("sql") fun sql(): Optional<String> = Optional.ofNullable(sql)
+        fun sql(): Optional<String> = Optional.ofNullable(sql.getNullable("sql"))
+
+        /** The display name of the billable metric. */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+        /**
+         * Specifies the type of aggregation performed on matching events. Required if `sql` is not
+         * provided.
+         */
+        @JsonProperty("aggregation_key")
+        @ExcludeMissing
+        fun _aggregationKey(): JsonField<String> = aggregationKey
+
+        /** Specifies the type of aggregation performed on matching events. */
+        @JsonProperty("aggregation_type")
+        @ExcludeMissing
+        fun _aggregationType(): JsonField<AggregationType> = aggregationType
+
+        /** Custom fields to attach to the billable metric. */
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        fun _customFields(): JsonField<CustomFields> = customFields
+
+        /** An optional filtering rule to match the 'event_type' property of an event. */
+        @JsonProperty("event_type_filter")
+        @ExcludeMissing
+        fun _eventTypeFilter(): JsonField<EventTypeFilter> = eventTypeFilter
+
+        /**
+         * Property names that are used to group usage costs on an invoice. Each entry represents a
+         * set of properties used to slice events into distinct buckets.
+         */
+        @JsonProperty("group_keys")
+        @ExcludeMissing
+        fun _groupKeys(): JsonField<List<List<String>>> = groupKeys
+
+        /**
+         * A list of filters to match events to this billable metric. Each filter defines a rule on
+         * an event property. All rules must pass for the event to match the billable metric.
+         */
+        @JsonProperty("property_filters")
+        @ExcludeMissing
+        fun _propertyFilters(): JsonField<List<PropertyFilter>> = propertyFilters
+
+        /**
+         * The SQL query associated with the billable metric. This field is mutually exclusive with
+         * aggregation_type, event_type_filter, property_filters, aggregation_key, and group_keys.
+         * If provided, these other fields must be omitted.
+         */
+        @JsonProperty("sql") @ExcludeMissing fun _sql(): JsonField<String> = sql
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): BillableMetricCreateBody = apply {
+            if (!validated) {
+                name()
+                aggregationKey()
+                aggregationType()
+                customFields().map { it.validate() }
+                eventTypeFilter().map { it.validate() }
+                groupKeys()
+                propertyFilters().map { it.forEach { it.validate() } }
+                sql()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -148,14 +265,14 @@ constructor(
 
         class Builder {
 
-            private var name: String? = null
-            private var aggregationKey: String? = null
-            private var aggregationType: AggregationType? = null
-            private var customFields: CustomFields? = null
-            private var eventTypeFilter: EventTypeFilter? = null
-            private var groupKeys: MutableList<List<String>>? = null
-            private var propertyFilters: MutableList<PropertyFilter>? = null
-            private var sql: String? = null
+            private var name: JsonField<String>? = null
+            private var aggregationKey: JsonField<String> = JsonMissing.of()
+            private var aggregationType: JsonField<AggregationType> = JsonMissing.of()
+            private var customFields: JsonField<CustomFields> = JsonMissing.of()
+            private var eventTypeFilter: JsonField<EventTypeFilter> = JsonMissing.of()
+            private var groupKeys: JsonField<MutableList<List<String>>>? = null
+            private var propertyFilters: JsonField<MutableList<PropertyFilter>>? = null
+            private var sql: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -165,101 +282,121 @@ constructor(
                 aggregationType = billableMetricCreateBody.aggregationType
                 customFields = billableMetricCreateBody.customFields
                 eventTypeFilter = billableMetricCreateBody.eventTypeFilter
-                groupKeys = billableMetricCreateBody.groupKeys?.toMutableList()
-                propertyFilters = billableMetricCreateBody.propertyFilters?.toMutableList()
+                groupKeys = billableMetricCreateBody.groupKeys.map { it.toMutableList() }
+                propertyFilters =
+                    billableMetricCreateBody.propertyFilters.map { it.toMutableList() }
                 sql = billableMetricCreateBody.sql
                 additionalProperties = billableMetricCreateBody.additionalProperties.toMutableMap()
             }
 
             /** The display name of the billable metric. */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = name(JsonField.of(name))
+
+            /** The display name of the billable metric. */
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             /**
              * Specifies the type of aggregation performed on matching events. Required if `sql` is
              * not provided.
              */
-            fun aggregationKey(aggregationKey: String?) = apply {
+            fun aggregationKey(aggregationKey: String) =
+                aggregationKey(JsonField.of(aggregationKey))
+
+            /**
+             * Specifies the type of aggregation performed on matching events. Required if `sql` is
+             * not provided.
+             */
+            fun aggregationKey(aggregationKey: JsonField<String>) = apply {
                 this.aggregationKey = aggregationKey
             }
 
-            /**
-             * Specifies the type of aggregation performed on matching events. Required if `sql` is
-             * not provided.
-             */
-            fun aggregationKey(aggregationKey: Optional<String>) =
-                aggregationKey(aggregationKey.orElse(null))
+            /** Specifies the type of aggregation performed on matching events. */
+            fun aggregationType(aggregationType: AggregationType) =
+                aggregationType(JsonField.of(aggregationType))
 
             /** Specifies the type of aggregation performed on matching events. */
-            fun aggregationType(aggregationType: AggregationType?) = apply {
+            fun aggregationType(aggregationType: JsonField<AggregationType>) = apply {
                 this.aggregationType = aggregationType
             }
 
-            /** Specifies the type of aggregation performed on matching events. */
-            fun aggregationType(aggregationType: Optional<AggregationType>) =
-                aggregationType(aggregationType.orElse(null))
+            /** Custom fields to attach to the billable metric. */
+            fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
             /** Custom fields to attach to the billable metric. */
-            fun customFields(customFields: CustomFields?) = apply {
+            fun customFields(customFields: JsonField<CustomFields>) = apply {
                 this.customFields = customFields
             }
 
-            /** Custom fields to attach to the billable metric. */
-            fun customFields(customFields: Optional<CustomFields>) =
-                customFields(customFields.orElse(null))
+            /** An optional filtering rule to match the 'event_type' property of an event. */
+            fun eventTypeFilter(eventTypeFilter: EventTypeFilter) =
+                eventTypeFilter(JsonField.of(eventTypeFilter))
 
             /** An optional filtering rule to match the 'event_type' property of an event. */
-            fun eventTypeFilter(eventTypeFilter: EventTypeFilter?) = apply {
+            fun eventTypeFilter(eventTypeFilter: JsonField<EventTypeFilter>) = apply {
                 this.eventTypeFilter = eventTypeFilter
             }
 
-            /** An optional filtering rule to match the 'event_type' property of an event. */
-            fun eventTypeFilter(eventTypeFilter: Optional<EventTypeFilter>) =
-                eventTypeFilter(eventTypeFilter.orElse(null))
+            /**
+             * Property names that are used to group usage costs on an invoice. Each entry
+             * represents a set of properties used to slice events into distinct buckets.
+             */
+            fun groupKeys(groupKeys: List<List<String>>) = groupKeys(JsonField.of(groupKeys))
 
             /**
              * Property names that are used to group usage costs on an invoice. Each entry
              * represents a set of properties used to slice events into distinct buckets.
              */
-            fun groupKeys(groupKeys: List<List<String>>?) = apply {
-                this.groupKeys = groupKeys?.toMutableList()
+            fun groupKeys(groupKeys: JsonField<List<List<String>>>) = apply {
+                this.groupKeys = groupKeys.map { it.toMutableList() }
             }
-
-            /**
-             * Property names that are used to group usage costs on an invoice. Each entry
-             * represents a set of properties used to slice events into distinct buckets.
-             */
-            fun groupKeys(groupKeys: Optional<List<List<String>>>) =
-                groupKeys(groupKeys.orElse(null))
 
             /**
              * Property names that are used to group usage costs on an invoice. Each entry
              * represents a set of properties used to slice events into distinct buckets.
              */
             fun addGroupKey(groupKey: List<String>) = apply {
-                groupKeys = (groupKeys ?: mutableListOf()).apply { add(groupKey) }
+                groupKeys =
+                    (groupKeys ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(groupKey)
+                    }
             }
 
             /**
              * A list of filters to match events to this billable metric. Each filter defines a rule
              * on an event property. All rules must pass for the event to match the billable metric.
              */
-            fun propertyFilters(propertyFilters: List<PropertyFilter>?) = apply {
-                this.propertyFilters = propertyFilters?.toMutableList()
-            }
+            fun propertyFilters(propertyFilters: List<PropertyFilter>) =
+                propertyFilters(JsonField.of(propertyFilters))
 
             /**
              * A list of filters to match events to this billable metric. Each filter defines a rule
              * on an event property. All rules must pass for the event to match the billable metric.
              */
-            fun propertyFilters(propertyFilters: Optional<List<PropertyFilter>>) =
-                propertyFilters(propertyFilters.orElse(null))
+            fun propertyFilters(propertyFilters: JsonField<List<PropertyFilter>>) = apply {
+                this.propertyFilters = propertyFilters.map { it.toMutableList() }
+            }
 
             /**
              * A list of filters to match events to this billable metric. Each filter defines a rule
              * on an event property. All rules must pass for the event to match the billable metric.
              */
             fun addPropertyFilter(propertyFilter: PropertyFilter) = apply {
-                propertyFilters = (propertyFilters ?: mutableListOf()).apply { add(propertyFilter) }
+                propertyFilters =
+                    (propertyFilters ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(propertyFilter)
+                    }
             }
 
             /**
@@ -267,14 +404,14 @@ constructor(
              * with aggregation_type, event_type_filter, property_filters, aggregation_key, and
              * group_keys. If provided, these other fields must be omitted.
              */
-            fun sql(sql: String?) = apply { this.sql = sql }
+            fun sql(sql: String) = sql(JsonField.of(sql))
 
             /**
              * The SQL query associated with the billable metric. This field is mutually exclusive
              * with aggregation_type, event_type_filter, property_filters, aggregation_key, and
              * group_keys. If provided, these other fields must be omitted.
              */
-            fun sql(sql: Optional<String>) = sql(sql.orElse(null))
+            fun sql(sql: JsonField<String>) = apply { this.sql = sql }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -302,8 +439,8 @@ constructor(
                     aggregationType,
                     customFields,
                     eventTypeFilter,
-                    groupKeys?.toImmutable(),
-                    propertyFilters?.toImmutable(),
+                    (groupKeys ?: JsonMissing.of()).map { it.toImmutable() },
+                    (propertyFilters ?: JsonMissing.of()).map { it.toImmutable() },
                     sql,
                     additionalProperties.toImmutable(),
                 )
@@ -351,55 +488,64 @@ constructor(
         /** The display name of the billable metric. */
         fun name(name: String) = apply { body.name(name) }
 
-        /**
-         * Specifies the type of aggregation performed on matching events. Required if `sql` is not
-         * provided.
-         */
-        fun aggregationKey(aggregationKey: String?) = apply { body.aggregationKey(aggregationKey) }
+        /** The display name of the billable metric. */
+        fun name(name: JsonField<String>) = apply { body.name(name) }
 
         /**
          * Specifies the type of aggregation performed on matching events. Required if `sql` is not
          * provided.
          */
-        fun aggregationKey(aggregationKey: Optional<String>) =
-            aggregationKey(aggregationKey.orElse(null))
+        fun aggregationKey(aggregationKey: String) = apply { body.aggregationKey(aggregationKey) }
+
+        /**
+         * Specifies the type of aggregation performed on matching events. Required if `sql` is not
+         * provided.
+         */
+        fun aggregationKey(aggregationKey: JsonField<String>) = apply {
+            body.aggregationKey(aggregationKey)
+        }
 
         /** Specifies the type of aggregation performed on matching events. */
-        fun aggregationType(aggregationType: AggregationType?) = apply {
+        fun aggregationType(aggregationType: AggregationType) = apply {
             body.aggregationType(aggregationType)
         }
 
         /** Specifies the type of aggregation performed on matching events. */
-        fun aggregationType(aggregationType: Optional<AggregationType>) =
-            aggregationType(aggregationType.orElse(null))
+        fun aggregationType(aggregationType: JsonField<AggregationType>) = apply {
+            body.aggregationType(aggregationType)
+        }
 
         /** Custom fields to attach to the billable metric. */
-        fun customFields(customFields: CustomFields?) = apply { body.customFields(customFields) }
+        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
 
         /** Custom fields to attach to the billable metric. */
-        fun customFields(customFields: Optional<CustomFields>) =
-            customFields(customFields.orElse(null))
+        fun customFields(customFields: JsonField<CustomFields>) = apply {
+            body.customFields(customFields)
+        }
 
         /** An optional filtering rule to match the 'event_type' property of an event. */
-        fun eventTypeFilter(eventTypeFilter: EventTypeFilter?) = apply {
+        fun eventTypeFilter(eventTypeFilter: EventTypeFilter) = apply {
             body.eventTypeFilter(eventTypeFilter)
         }
 
         /** An optional filtering rule to match the 'event_type' property of an event. */
-        fun eventTypeFilter(eventTypeFilter: Optional<EventTypeFilter>) =
-            eventTypeFilter(eventTypeFilter.orElse(null))
+        fun eventTypeFilter(eventTypeFilter: JsonField<EventTypeFilter>) = apply {
+            body.eventTypeFilter(eventTypeFilter)
+        }
 
         /**
          * Property names that are used to group usage costs on an invoice. Each entry represents a
          * set of properties used to slice events into distinct buckets.
          */
-        fun groupKeys(groupKeys: List<List<String>>?) = apply { body.groupKeys(groupKeys) }
+        fun groupKeys(groupKeys: List<List<String>>) = apply { body.groupKeys(groupKeys) }
 
         /**
          * Property names that are used to group usage costs on an invoice. Each entry represents a
          * set of properties used to slice events into distinct buckets.
          */
-        fun groupKeys(groupKeys: Optional<List<List<String>>>) = groupKeys(groupKeys.orElse(null))
+        fun groupKeys(groupKeys: JsonField<List<List<String>>>) = apply {
+            body.groupKeys(groupKeys)
+        }
 
         /**
          * Property names that are used to group usage costs on an invoice. Each entry represents a
@@ -411,7 +557,7 @@ constructor(
          * A list of filters to match events to this billable metric. Each filter defines a rule on
          * an event property. All rules must pass for the event to match the billable metric.
          */
-        fun propertyFilters(propertyFilters: List<PropertyFilter>?) = apply {
+        fun propertyFilters(propertyFilters: List<PropertyFilter>) = apply {
             body.propertyFilters(propertyFilters)
         }
 
@@ -419,8 +565,9 @@ constructor(
          * A list of filters to match events to this billable metric. Each filter defines a rule on
          * an event property. All rules must pass for the event to match the billable metric.
          */
-        fun propertyFilters(propertyFilters: Optional<List<PropertyFilter>>) =
-            propertyFilters(propertyFilters.orElse(null))
+        fun propertyFilters(propertyFilters: JsonField<List<PropertyFilter>>) = apply {
+            body.propertyFilters(propertyFilters)
+        }
 
         /**
          * A list of filters to match events to this billable metric. Each filter defines a rule on
@@ -435,14 +582,33 @@ constructor(
          * aggregation_type, event_type_filter, property_filters, aggregation_key, and group_keys.
          * If provided, these other fields must be omitted.
          */
-        fun sql(sql: String?) = apply { body.sql(sql) }
+        fun sql(sql: String) = apply { body.sql(sql) }
 
         /**
          * The SQL query associated with the billable metric. This field is mutually exclusive with
          * aggregation_type, event_type_filter, property_filters, aggregation_key, and group_keys.
          * If provided, these other fields must be omitted.
          */
-        fun sql(sql: Optional<String>) = sql(sql.orElse(null))
+        fun sql(sql: JsonField<String>) = apply { body.sql(sql) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -542,25 +708,6 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
         fun build(): BillableMetricCreateParams =
             BillableMetricCreateParams(
                 body.build(),
@@ -656,6 +803,14 @@ constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomFields = apply {
+            if (!validated) {
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 

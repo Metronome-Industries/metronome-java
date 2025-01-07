@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -34,11 +35,14 @@ constructor(
     /** Optional list of entity types to return keys for */
     fun entities(): Optional<List<Entity>> = body.entities()
 
+    /** Optional list of entity types to return keys for */
+    fun _entities(): JsonField<List<Entity>> = body._entities()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomFieldListKeysBody = body
 
@@ -56,18 +60,34 @@ constructor(
     class CustomFieldListKeysBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("entities") private val entities: List<Entity>?,
+        @JsonProperty("entities")
+        @ExcludeMissing
+        private val entities: JsonField<List<Entity>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Optional list of entity types to return keys for */
+        fun entities(): Optional<List<Entity>> =
+            Optional.ofNullable(entities.getNullable("entities"))
+
+        /** Optional list of entity types to return keys for */
         @JsonProperty("entities")
-        fun entities(): Optional<List<Entity>> = Optional.ofNullable(entities)
+        @ExcludeMissing
+        fun _entities(): JsonField<List<Entity>> = entities
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomFieldListKeysBody = apply {
+            if (!validated) {
+                entities()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -78,26 +98,35 @@ constructor(
 
         class Builder {
 
-            private var entities: MutableList<Entity>? = null
+            private var entities: JsonField<MutableList<Entity>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(customFieldListKeysBody: CustomFieldListKeysBody) = apply {
-                entities = customFieldListKeysBody.entities?.toMutableList()
+                entities = customFieldListKeysBody.entities.map { it.toMutableList() }
                 additionalProperties = customFieldListKeysBody.additionalProperties.toMutableMap()
             }
 
             /** Optional list of entity types to return keys for */
-            fun entities(entities: List<Entity>?) = apply {
-                this.entities = entities?.toMutableList()
+            fun entities(entities: List<Entity>) = entities(JsonField.of(entities))
+
+            /** Optional list of entity types to return keys for */
+            fun entities(entities: JsonField<List<Entity>>) = apply {
+                this.entities = entities.map { it.toMutableList() }
             }
 
             /** Optional list of entity types to return keys for */
-            fun entities(entities: Optional<List<Entity>>) = entities(entities.orElse(null))
-
-            /** Optional list of entity types to return keys for */
             fun addEntity(entity: Entity) = apply {
-                entities = (entities ?: mutableListOf()).apply { add(entity) }
+                entities =
+                    (entities ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(entity)
+                    }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -120,7 +149,10 @@ constructor(
             }
 
             fun build(): CustomFieldListKeysBody =
-                CustomFieldListKeysBody(entities?.toImmutable(), additionalProperties.toImmutable())
+                CustomFieldListKeysBody(
+                    (entities ?: JsonMissing.of()).map { it.toImmutable() },
+                    additionalProperties.toImmutable()
+                )
         }
 
         override fun equals(other: Any?): Boolean {
@@ -171,13 +203,32 @@ constructor(
         fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         /** Optional list of entity types to return keys for */
-        fun entities(entities: List<Entity>?) = apply { body.entities(entities) }
+        fun entities(entities: List<Entity>) = apply { body.entities(entities) }
 
         /** Optional list of entity types to return keys for */
-        fun entities(entities: Optional<List<Entity>>) = entities(entities.orElse(null))
+        fun entities(entities: JsonField<List<Entity>>) = apply { body.entities(entities) }
 
         /** Optional list of entity types to return keys for */
         fun addEntity(entity: Entity) = apply { body.addEntity(entity) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -275,25 +326,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomFieldListKeysParams =

@@ -64,21 +64,25 @@ private constructor(
 
     fun status(): Optional<Status> = Optional.ofNullable(status.getNullable("status"))
 
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    @JsonProperty("timestamp") @ExcludeMissing fun _timestamp() = timestamp
+    @JsonProperty("timestamp")
+    @ExcludeMissing
+    fun _timestamp(): JsonField<OffsetDateTime> = timestamp
 
-    @JsonProperty("action") @ExcludeMissing fun _action() = action
+    @JsonProperty("action") @ExcludeMissing fun _action(): JsonField<String> = action
 
-    @JsonProperty("actor") @ExcludeMissing fun _actor() = actor
+    @JsonProperty("actor") @ExcludeMissing fun _actor(): JsonField<Actor> = actor
 
-    @JsonProperty("description") @ExcludeMissing fun _description() = description
+    @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
-    @JsonProperty("resource_id") @ExcludeMissing fun _resourceId() = resourceId
+    @JsonProperty("resource_id") @ExcludeMissing fun _resourceId(): JsonField<String> = resourceId
 
-    @JsonProperty("resource_type") @ExcludeMissing fun _resourceType() = resourceType
+    @JsonProperty("resource_type")
+    @ExcludeMissing
+    fun _resourceType(): JsonField<String> = resourceType
 
-    @JsonProperty("status") @ExcludeMissing fun _status() = status
+    @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<Status> = status
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -109,8 +113,8 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var timestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var timestamp: JsonField<OffsetDateTime>? = null
         private var action: JsonField<String> = JsonMissing.of()
         private var actor: JsonField<Actor> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
@@ -187,8 +191,8 @@ private constructor(
 
         fun build(): AuditLogListResponse =
             AuditLogListResponse(
-                id,
-                timestamp,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(timestamp) { "`timestamp` is required but was not set" },
                 action,
                 actor,
                 description,
@@ -220,11 +224,11 @@ private constructor(
 
         fun email(): Optional<String> = Optional.ofNullable(email.getNullable("email"))
 
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-        @JsonProperty("email") @ExcludeMissing fun _email() = email
+        @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -250,8 +254,8 @@ private constructor(
 
         class Builder {
 
-            private var id: JsonField<String> = JsonMissing.of()
-            private var name: JsonField<String> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var name: JsonField<String>? = null
             private var email: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -296,8 +300,8 @@ private constructor(
 
             fun build(): Actor =
                 Actor(
-                    id,
-                    name,
+                    checkNotNull(id) { "`id` is required but was not set" },
+                    checkNotNull(name) { "`name` is required but was not set" },
                     email,
                     additionalProperties.toImmutable(),
                 )

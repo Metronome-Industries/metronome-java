@@ -72,6 +72,19 @@ private constructor(
 
         fun baseUrl(baseUrl: String) = apply { this.baseUrl = baseUrl }
 
+        fun responseValidation(responseValidation: Boolean) = apply {
+            this.responseValidation = responseValidation
+        }
+
+        fun maxRetries(maxRetries: Int) = apply { this.maxRetries = maxRetries }
+
+        fun bearerToken(bearerToken: String) = apply { this.bearerToken = bearerToken }
+
+        fun webhookSecret(webhookSecret: String?) = apply { this.webhookSecret = webhookSecret }
+
+        fun webhookSecret(webhookSecret: Optional<String>) =
+            webhookSecret(webhookSecret.orElse(null))
+
         fun headers(headers: Headers) = apply {
             this.headers.clear()
             putAllHeaders(headers)
@@ -151,19 +164,6 @@ private constructor(
         fun removeQueryParams(key: String) = apply { queryParams.remove(key) }
 
         fun removeAllQueryParams(keys: Set<String>) = apply { queryParams.removeAll(keys) }
-
-        fun responseValidation(responseValidation: Boolean) = apply {
-            this.responseValidation = responseValidation
-        }
-
-        fun maxRetries(maxRetries: Int) = apply { this.maxRetries = maxRetries }
-
-        fun bearerToken(bearerToken: String) = apply { this.bearerToken = bearerToken }
-
-        fun webhookSecret(webhookSecret: String?) = apply { this.webhookSecret = webhookSecret }
-
-        fun webhookSecret(webhookSecret: Optional<String>) =
-            webhookSecret(webhookSecret.orElse(null))
 
         fun fromEnv() = apply {
             System.getenv("METRONOME_BEARER_TOKEN")?.let { bearerToken(it) }

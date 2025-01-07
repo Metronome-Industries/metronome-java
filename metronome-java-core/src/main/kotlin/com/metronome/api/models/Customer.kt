@@ -55,23 +55,27 @@ private constructor(
         Optional.ofNullable(customFields.getNullable("custom_fields"))
 
     /** the Metronome ID of the customer */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /**
      * (deprecated, use ingest_aliases instead) the first ID (Metronome or ingest alias) that can be
      * used in usage events
      */
-    @JsonProperty("external_id") @ExcludeMissing fun _externalId() = externalId
+    @JsonProperty("external_id") @ExcludeMissing fun _externalId(): JsonField<String> = externalId
 
     /**
      * aliases for this customer that can be used instead of the Metronome customer ID in usage
      * events
      */
-    @JsonProperty("ingest_aliases") @ExcludeMissing fun _ingestAliases() = ingestAliases
+    @JsonProperty("ingest_aliases")
+    @ExcludeMissing
+    fun _ingestAliases(): JsonField<List<String>> = ingestAliases
 
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    fun _customFields(): JsonField<CustomFields> = customFields
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -99,10 +103,10 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var externalId: JsonField<String> = JsonMissing.of()
-        private var ingestAliases: JsonField<List<String>> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var externalId: JsonField<String>? = null
+        private var ingestAliases: JsonField<MutableList<String>>? = null
+        private var name: JsonField<String>? = null
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -110,7 +114,7 @@ private constructor(
         internal fun from(customer: Customer) = apply {
             id = customer.id
             externalId = customer.externalId
-            ingestAliases = customer.ingestAliases
+            ingestAliases = customer.ingestAliases.map { it.toMutableList() }
             name = customer.name
             customFields = customer.customFields
             additionalProperties = customer.additionalProperties.toMutableMap()
@@ -145,7 +149,24 @@ private constructor(
          * events
          */
         fun ingestAliases(ingestAliases: JsonField<List<String>>) = apply {
-            this.ingestAliases = ingestAliases
+            this.ingestAliases = ingestAliases.map { it.toMutableList() }
+        }
+
+        /**
+         * aliases for this customer that can be used instead of the Metronome customer ID in usage
+         * events
+         */
+        fun addIngestAlias(ingestAlias: String) = apply {
+            ingestAliases =
+                (ingestAliases ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(ingestAlias)
+                }
         }
 
         fun name(name: String) = name(JsonField.of(name))
@@ -179,10 +200,11 @@ private constructor(
 
         fun build(): Customer =
             Customer(
-                id,
-                externalId,
-                ingestAliases.map { it.toImmutable() },
-                name,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(externalId) { "`externalId` is required but was not set" },
+                checkNotNull(ingestAliases) { "`ingestAliases` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(name) { "`name` is required but was not set" },
                 customFields,
                 additionalProperties.toImmutable(),
             )

@@ -34,9 +34,9 @@ private constructor(
 
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage.getNullable("next_page"))
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Data>> = data
 
-    @JsonProperty("next_page") @ExcludeMissing fun _nextPage() = nextPage
+    @JsonProperty("next_page") @ExcludeMissing fun _nextPage(): JsonField<String> = nextPage
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -61,13 +61,13 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<List<Data>> = JsonMissing.of()
-        private var nextPage: JsonField<String> = JsonMissing.of()
+        private var data: JsonField<MutableList<Data>>? = null
+        private var nextPage: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(creditGrantListEntriesResponse: CreditGrantListEntriesResponse) = apply {
-            data = creditGrantListEntriesResponse.data
+            data = creditGrantListEntriesResponse.data.map { it.toMutableList() }
             nextPage = creditGrantListEntriesResponse.nextPage
             additionalProperties =
                 creditGrantListEntriesResponse.additionalProperties.toMutableMap()
@@ -75,9 +75,26 @@ private constructor(
 
         fun data(data: List<Data>) = data(JsonField.of(data))
 
-        fun data(data: JsonField<List<Data>>) = apply { this.data = data }
+        fun data(data: JsonField<List<Data>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
 
-        fun nextPage(nextPage: String) = nextPage(JsonField.of(nextPage))
+        fun addData(data: Data) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(data)
+                }
+        }
+
+        fun nextPage(nextPage: String?) = nextPage(JsonField.ofNullable(nextPage))
+
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         fun nextPage(nextPage: JsonField<String>) = apply { this.nextPage = nextPage }
 
@@ -102,8 +119,9 @@ private constructor(
 
         fun build(): CreditGrantListEntriesResponse =
             CreditGrantListEntriesResponse(
-                data.map { it.toImmutable() },
-                nextPage,
+                checkNotNull(data) { "`data` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(nextPage) { "`nextPage` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }
@@ -126,9 +144,11 @@ private constructor(
 
         fun ledgers(): List<Ledger> = ledgers.getRequired("ledgers")
 
-        @JsonProperty("customer_id") @ExcludeMissing fun _customerId() = customerId
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
 
-        @JsonProperty("ledgers") @ExcludeMissing fun _ledgers() = ledgers
+        @JsonProperty("ledgers") @ExcludeMissing fun _ledgers(): JsonField<List<Ledger>> = ledgers
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -153,14 +173,14 @@ private constructor(
 
         class Builder {
 
-            private var customerId: JsonField<String> = JsonMissing.of()
-            private var ledgers: JsonField<List<Ledger>> = JsonMissing.of()
+            private var customerId: JsonField<String>? = null
+            private var ledgers: JsonField<MutableList<Ledger>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(data: Data) = apply {
                 customerId = data.customerId
-                ledgers = data.ledgers
+                ledgers = data.ledgers.map { it.toMutableList() }
                 additionalProperties = data.additionalProperties.toMutableMap()
             }
 
@@ -170,7 +190,22 @@ private constructor(
 
             fun ledgers(ledgers: List<Ledger>) = ledgers(JsonField.of(ledgers))
 
-            fun ledgers(ledgers: JsonField<List<Ledger>>) = apply { this.ledgers = ledgers }
+            fun ledgers(ledgers: JsonField<List<Ledger>>) = apply {
+                this.ledgers = ledgers.map { it.toMutableList() }
+            }
+
+            fun addLedger(ledger: Ledger) = apply {
+                ledgers =
+                    (ledgers ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(ledger)
+                    }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -193,8 +228,9 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    customerId,
-                    ledgers.map { it.toImmutable() },
+                    checkNotNull(customerId) { "`customerId` is required but was not set" },
+                    checkNotNull(ledgers) { "`ledgers` is required but was not set" }
+                        .map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -234,18 +270,26 @@ private constructor(
 
             fun startingBalance(): StartingBalance = startingBalance.getRequired("starting_balance")
 
-            @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+            @JsonProperty("credit_type")
+            @ExcludeMissing
+            fun _creditType(): JsonField<CreditTypeData> = creditType
 
             /** the effective balances at the end of the specified time window */
-            @JsonProperty("ending_balance") @ExcludeMissing fun _endingBalance() = endingBalance
+            @JsonProperty("ending_balance")
+            @ExcludeMissing
+            fun _endingBalance(): JsonField<EndingBalance> = endingBalance
 
-            @JsonProperty("entries") @ExcludeMissing fun _entries() = entries
+            @JsonProperty("entries")
+            @ExcludeMissing
+            fun _entries(): JsonField<List<CreditLedgerEntry>> = entries
 
-            @JsonProperty("pending_entries") @ExcludeMissing fun _pendingEntries() = pendingEntries
+            @JsonProperty("pending_entries")
+            @ExcludeMissing
+            fun _pendingEntries(): JsonField<List<CreditLedgerEntry>> = pendingEntries
 
             @JsonProperty("starting_balance")
             @ExcludeMissing
-            fun _startingBalance() = startingBalance
+            fun _startingBalance(): JsonField<StartingBalance> = startingBalance
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -273,19 +317,19 @@ private constructor(
 
             class Builder {
 
-                private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
-                private var endingBalance: JsonField<EndingBalance> = JsonMissing.of()
-                private var entries: JsonField<List<CreditLedgerEntry>> = JsonMissing.of()
-                private var pendingEntries: JsonField<List<CreditLedgerEntry>> = JsonMissing.of()
-                private var startingBalance: JsonField<StartingBalance> = JsonMissing.of()
+                private var creditType: JsonField<CreditTypeData>? = null
+                private var endingBalance: JsonField<EndingBalance>? = null
+                private var entries: JsonField<MutableList<CreditLedgerEntry>>? = null
+                private var pendingEntries: JsonField<MutableList<CreditLedgerEntry>>? = null
+                private var startingBalance: JsonField<StartingBalance>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(ledger: Ledger) = apply {
                     creditType = ledger.creditType
                     endingBalance = ledger.endingBalance
-                    entries = ledger.entries
-                    pendingEntries = ledger.pendingEntries
+                    entries = ledger.entries.map { it.toMutableList() }
+                    pendingEntries = ledger.pendingEntries.map { it.toMutableList() }
                     startingBalance = ledger.startingBalance
                     additionalProperties = ledger.additionalProperties.toMutableMap()
                 }
@@ -308,14 +352,40 @@ private constructor(
                 fun entries(entries: List<CreditLedgerEntry>) = entries(JsonField.of(entries))
 
                 fun entries(entries: JsonField<List<CreditLedgerEntry>>) = apply {
-                    this.entries = entries
+                    this.entries = entries.map { it.toMutableList() }
+                }
+
+                fun addEntry(entry: CreditLedgerEntry) = apply {
+                    entries =
+                        (entries ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(entry)
+                        }
                 }
 
                 fun pendingEntries(pendingEntries: List<CreditLedgerEntry>) =
                     pendingEntries(JsonField.of(pendingEntries))
 
                 fun pendingEntries(pendingEntries: JsonField<List<CreditLedgerEntry>>) = apply {
-                    this.pendingEntries = pendingEntries
+                    this.pendingEntries = pendingEntries.map { it.toMutableList() }
+                }
+
+                fun addPendingEntry(pendingEntry: CreditLedgerEntry) = apply {
+                    pendingEntries =
+                        (pendingEntries ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(pendingEntry)
+                        }
                 }
 
                 fun startingBalance(startingBalance: StartingBalance) =
@@ -349,11 +419,19 @@ private constructor(
 
                 fun build(): Ledger =
                     Ledger(
-                        creditType,
-                        endingBalance,
-                        entries.map { it.toImmutable() },
-                        pendingEntries.map { it.toImmutable() },
-                        startingBalance,
+                        checkNotNull(creditType) { "`creditType` is required but was not set" },
+                        checkNotNull(endingBalance) {
+                            "`endingBalance` is required but was not set"
+                        },
+                        checkNotNull(entries) { "`entries` is required but was not set" }
+                            .map { it.toImmutable() },
+                        checkNotNull(pendingEntries) {
+                                "`pendingEntries` is required but was not set"
+                            }
+                            .map { it.toImmutable() },
+                        checkNotNull(startingBalance) {
+                            "`startingBalance` is required but was not set"
+                        },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -399,7 +477,9 @@ private constructor(
                  * the ending_before request parameter (if supplied) or the current billing period's
                  * end date
                  */
-                @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
+                @JsonProperty("effective_at")
+                @ExcludeMissing
+                fun _effectiveAt(): JsonField<OffsetDateTime> = effectiveAt
 
                 /**
                  * the ending balance, including the balance of all grants that have not expired
@@ -408,7 +488,7 @@ private constructor(
                  */
                 @JsonProperty("excluding_pending")
                 @ExcludeMissing
-                fun _excludingPending() = excludingPending
+                fun _excludingPending(): JsonField<Double> = excludingPending
 
                 /**
                  * the excluding_pending balance plus any pending invoice deductions and expirations
@@ -416,7 +496,7 @@ private constructor(
                  */
                 @JsonProperty("including_pending")
                 @ExcludeMissing
-                fun _includingPending() = includingPending
+                fun _includingPending(): JsonField<Double> = includingPending
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -442,9 +522,9 @@ private constructor(
 
                 class Builder {
 
-                    private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
-                    private var excludingPending: JsonField<Double> = JsonMissing.of()
-                    private var includingPending: JsonField<Double> = JsonMissing.of()
+                    private var effectiveAt: JsonField<OffsetDateTime>? = null
+                    private var excludingPending: JsonField<Double>? = null
+                    private var includingPending: JsonField<Double>? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -526,9 +606,15 @@ private constructor(
 
                     fun build(): EndingBalance =
                         EndingBalance(
-                            effectiveAt,
-                            excludingPending,
-                            includingPending,
+                            checkNotNull(effectiveAt) {
+                                "`effectiveAt` is required but was not set"
+                            },
+                            checkNotNull(excludingPending) {
+                                "`excludingPending` is required but was not set"
+                            },
+                            checkNotNull(includingPending) {
+                                "`includingPending` is required but was not set"
+                            },
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -590,7 +676,9 @@ private constructor(
                  * the starting_on request parameter (if supplied) or the first credit grant's
                  * effective_at date
                  */
-                @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
+                @JsonProperty("effective_at")
+                @ExcludeMissing
+                fun _effectiveAt(): JsonField<OffsetDateTime> = effectiveAt
 
                 /**
                  * the starting balance, including all posted grants, deductions, and expirations
@@ -598,7 +686,7 @@ private constructor(
                  */
                 @JsonProperty("excluding_pending")
                 @ExcludeMissing
-                fun _excludingPending() = excludingPending
+                fun _excludingPending(): JsonField<Double> = excludingPending
 
                 /**
                  * the excluding_pending balance plus any pending activity that has not been posted
@@ -606,7 +694,7 @@ private constructor(
                  */
                 @JsonProperty("including_pending")
                 @ExcludeMissing
-                fun _includingPending() = includingPending
+                fun _includingPending(): JsonField<Double> = includingPending
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -632,9 +720,9 @@ private constructor(
 
                 class Builder {
 
-                    private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
-                    private var excludingPending: JsonField<Double> = JsonMissing.of()
-                    private var includingPending: JsonField<Double> = JsonMissing.of()
+                    private var effectiveAt: JsonField<OffsetDateTime>? = null
+                    private var excludingPending: JsonField<Double>? = null
+                    private var includingPending: JsonField<Double>? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -714,9 +802,15 @@ private constructor(
 
                     fun build(): StartingBalance =
                         StartingBalance(
-                            effectiveAt,
-                            excludingPending,
-                            includingPending,
+                            checkNotNull(effectiveAt) {
+                                "`effectiveAt` is required but was not set"
+                            },
+                            checkNotNull(excludingPending) {
+                                "`excludingPending` is required but was not set"
+                            },
+                            checkNotNull(includingPending) {
+                                "`includingPending` is required but was not set"
+                            },
                             additionalProperties.toImmutable(),
                         )
                 }

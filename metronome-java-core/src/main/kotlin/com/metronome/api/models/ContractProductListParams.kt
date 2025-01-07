@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -38,11 +39,14 @@ constructor(
     /** Filter options for the product list */
     fun archiveFilter(): Optional<ArchiveFilter> = body.archiveFilter()
 
+    /** Filter options for the product list */
+    fun _archiveFilter(): JsonField<ArchiveFilter> = body._archiveFilter()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): ContractProductListBody = body
 
@@ -61,18 +65,34 @@ constructor(
     class ContractProductListBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("archive_filter") private val archiveFilter: ArchiveFilter?,
+        @JsonProperty("archive_filter")
+        @ExcludeMissing
+        private val archiveFilter: JsonField<ArchiveFilter> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Filter options for the product list */
+        fun archiveFilter(): Optional<ArchiveFilter> =
+            Optional.ofNullable(archiveFilter.getNullable("archive_filter"))
+
+        /** Filter options for the product list */
         @JsonProperty("archive_filter")
-        fun archiveFilter(): Optional<ArchiveFilter> = Optional.ofNullable(archiveFilter)
+        @ExcludeMissing
+        fun _archiveFilter(): JsonField<ArchiveFilter> = archiveFilter
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ContractProductListBody = apply {
+            if (!validated) {
+                archiveFilter()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -83,7 +103,7 @@ constructor(
 
         class Builder {
 
-            private var archiveFilter: ArchiveFilter? = null
+            private var archiveFilter: JsonField<ArchiveFilter> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -93,13 +113,13 @@ constructor(
             }
 
             /** Filter options for the product list */
-            fun archiveFilter(archiveFilter: ArchiveFilter?) = apply {
-                this.archiveFilter = archiveFilter
-            }
+            fun archiveFilter(archiveFilter: ArchiveFilter) =
+                archiveFilter(JsonField.of(archiveFilter))
 
             /** Filter options for the product list */
-            fun archiveFilter(archiveFilter: Optional<ArchiveFilter>) =
-                archiveFilter(archiveFilter.orElse(null))
+            fun archiveFilter(archiveFilter: JsonField<ArchiveFilter>) = apply {
+                this.archiveFilter = archiveFilter
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -184,13 +204,33 @@ constructor(
         fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         /** Filter options for the product list */
-        fun archiveFilter(archiveFilter: ArchiveFilter?) = apply {
+        fun archiveFilter(archiveFilter: ArchiveFilter) = apply {
             body.archiveFilter(archiveFilter)
         }
 
         /** Filter options for the product list */
-        fun archiveFilter(archiveFilter: Optional<ArchiveFilter>) =
-            archiveFilter(archiveFilter.orElse(null))
+        fun archiveFilter(archiveFilter: JsonField<ArchiveFilter>) = apply {
+            body.archiveFilter(archiveFilter)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -288,25 +328,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractProductListParams =

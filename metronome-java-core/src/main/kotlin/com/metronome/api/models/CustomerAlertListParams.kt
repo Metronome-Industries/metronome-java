@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -37,11 +38,17 @@ constructor(
     /** Optionally filter by alert status. If absent, only enabled alerts will be returned. */
     fun alertStatuses(): Optional<List<AlertStatus>> = body.alertStatuses()
 
+    /** The Metronome ID of the customer */
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    /** Optionally filter by alert status. If absent, only enabled alerts will be returned. */
+    fun _alertStatuses(): JsonField<List<AlertStatus>> = body._alertStatuses()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomerAlertListBody = body
 
@@ -59,22 +66,46 @@ constructor(
     class CustomerAlertListBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("customer_id") private val customerId: String,
-        @JsonProperty("alert_statuses") private val alertStatuses: List<AlertStatus>?,
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("alert_statuses")
+        @ExcludeMissing
+        private val alertStatuses: JsonField<List<AlertStatus>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The Metronome ID of the customer */
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
+
+        /** Optionally filter by alert status. If absent, only enabled alerts will be returned. */
+        fun alertStatuses(): Optional<List<AlertStatus>> =
+            Optional.ofNullable(alertStatuses.getNullable("alert_statuses"))
+
+        /** The Metronome ID of the customer */
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
 
         /** Optionally filter by alert status. If absent, only enabled alerts will be returned. */
         @JsonProperty("alert_statuses")
-        fun alertStatuses(): Optional<List<AlertStatus>> = Optional.ofNullable(alertStatuses)
+        @ExcludeMissing
+        fun _alertStatuses(): JsonField<List<AlertStatus>> = alertStatuses
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomerAlertListBody = apply {
+            if (!validated) {
+                customerId()
+                alertStatuses()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -85,38 +116,50 @@ constructor(
 
         class Builder {
 
-            private var customerId: String? = null
-            private var alertStatuses: MutableList<AlertStatus>? = null
+            private var customerId: JsonField<String>? = null
+            private var alertStatuses: JsonField<MutableList<AlertStatus>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(customerAlertListBody: CustomerAlertListBody) = apply {
                 customerId = customerAlertListBody.customerId
-                alertStatuses = customerAlertListBody.alertStatuses?.toMutableList()
+                alertStatuses = customerAlertListBody.alertStatuses.map { it.toMutableList() }
                 additionalProperties = customerAlertListBody.additionalProperties.toMutableMap()
             }
 
             /** The Metronome ID of the customer */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            /** The Metronome ID of the customer */
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /**
              * Optionally filter by alert status. If absent, only enabled alerts will be returned.
              */
-            fun alertStatuses(alertStatuses: List<AlertStatus>?) = apply {
-                this.alertStatuses = alertStatuses?.toMutableList()
+            fun alertStatuses(alertStatuses: List<AlertStatus>) =
+                alertStatuses(JsonField.of(alertStatuses))
+
+            /**
+             * Optionally filter by alert status. If absent, only enabled alerts will be returned.
+             */
+            fun alertStatuses(alertStatuses: JsonField<List<AlertStatus>>) = apply {
+                this.alertStatuses = alertStatuses.map { it.toMutableList() }
             }
-
-            /**
-             * Optionally filter by alert status. If absent, only enabled alerts will be returned.
-             */
-            fun alertStatuses(alertStatuses: Optional<List<AlertStatus>>) =
-                alertStatuses(alertStatuses.orElse(null))
 
             /**
              * Optionally filter by alert status. If absent, only enabled alerts will be returned.
              */
             fun addAlertStatus(alertStatus: AlertStatus) = apply {
-                alertStatuses = (alertStatuses ?: mutableListOf()).apply { add(alertStatus) }
+                alertStatuses =
+                    (alertStatuses ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(alertStatus)
+                    }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -141,7 +184,7 @@ constructor(
             fun build(): CustomerAlertListBody =
                 CustomerAlertListBody(
                     checkNotNull(customerId) { "`customerId` is required but was not set" },
-                    alertStatuses?.toImmutable(),
+                    (alertStatuses ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -196,17 +239,40 @@ constructor(
         /** The Metronome ID of the customer */
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
+        /** The Metronome ID of the customer */
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
+
         /** Optionally filter by alert status. If absent, only enabled alerts will be returned. */
-        fun alertStatuses(alertStatuses: List<AlertStatus>?) = apply {
+        fun alertStatuses(alertStatuses: List<AlertStatus>) = apply {
             body.alertStatuses(alertStatuses)
         }
 
         /** Optionally filter by alert status. If absent, only enabled alerts will be returned. */
-        fun alertStatuses(alertStatuses: Optional<List<AlertStatus>>) =
-            alertStatuses(alertStatuses.orElse(null))
+        fun alertStatuses(alertStatuses: JsonField<List<AlertStatus>>) = apply {
+            body.alertStatuses(alertStatuses)
+        }
 
         /** Optionally filter by alert status. If absent, only enabled alerts will be returned. */
         fun addAlertStatus(alertStatus: AlertStatus) = apply { body.addAlertStatus(alertStatus) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -304,25 +370,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerAlertListParams =

@@ -141,63 +141,81 @@ private constructor(
     fun usageFilter(): Optional<UsageFilter> =
         Optional.ofNullable(usageFilter.getNullable("usage_filter"))
 
-    @JsonProperty("commits") @ExcludeMissing fun _commits() = commits
+    @JsonProperty("commits") @ExcludeMissing fun _commits(): JsonField<List<Commit>> = commits
 
-    @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
-    @JsonProperty("created_by") @ExcludeMissing fun _createdBy() = createdBy
+    @JsonProperty("created_by") @ExcludeMissing fun _createdBy(): JsonField<String> = createdBy
 
-    @JsonProperty("overrides") @ExcludeMissing fun _overrides() = overrides
+    @JsonProperty("overrides")
+    @ExcludeMissing
+    fun _overrides(): JsonField<List<Override>> = overrides
 
-    @JsonProperty("scheduled_charges") @ExcludeMissing fun _scheduledCharges() = scheduledCharges
+    @JsonProperty("scheduled_charges")
+    @ExcludeMissing
+    fun _scheduledCharges(): JsonField<List<ScheduledCharge>> = scheduledCharges
 
-    @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+    @JsonProperty("starting_at")
+    @ExcludeMissing
+    fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
-    @JsonProperty("transitions") @ExcludeMissing fun _transitions() = transitions
+    @JsonProperty("transitions")
+    @ExcludeMissing
+    fun _transitions(): JsonField<List<Transition>> = transitions
 
     @JsonProperty("usage_statement_schedule")
     @ExcludeMissing
-    fun _usageStatementSchedule() = usageStatementSchedule
+    fun _usageStatementSchedule(): JsonField<UsageStatementSchedule> = usageStatementSchedule
 
-    @JsonProperty("credits") @ExcludeMissing fun _credits() = credits
+    @JsonProperty("credits") @ExcludeMissing fun _credits(): JsonField<List<Credit>> = credits
 
     /** This field's availability is dependent on your client's configuration. */
-    @JsonProperty("discounts") @ExcludeMissing fun _discounts() = discounts
+    @JsonProperty("discounts")
+    @ExcludeMissing
+    fun _discounts(): JsonField<List<Discount>> = discounts
 
-    @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
+    @JsonProperty("ending_before")
+    @ExcludeMissing
+    fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     @JsonProperty("net_payment_terms_days")
     @ExcludeMissing
-    fun _netPaymentTermsDays() = netPaymentTermsDays
+    fun _netPaymentTermsDays(): JsonField<Double> = netPaymentTermsDays
 
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("netsuite_sales_order_id")
     @ExcludeMissing
-    fun _netsuiteSalesOrderId() = netsuiteSalesOrderId
+    fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
 
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("professional_services")
     @ExcludeMissing
-    fun _professionalServices() = professionalServices
+    fun _professionalServices(): JsonField<List<ProService>> = professionalServices
 
-    @JsonProperty("rate_card_id") @ExcludeMissing fun _rateCardId() = rateCardId
+    @JsonProperty("rate_card_id") @ExcludeMissing fun _rateCardId(): JsonField<String> = rateCardId
 
     /** This field's availability is dependent on your client's configuration. */
-    @JsonProperty("reseller_royalties") @ExcludeMissing fun _resellerRoyalties() = resellerRoyalties
+    @JsonProperty("reseller_royalties")
+    @ExcludeMissing
+    fun _resellerRoyalties(): JsonField<List<ResellerRoyalty>> = resellerRoyalties
 
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("salesforce_opportunity_id")
     @ExcludeMissing
-    fun _salesforceOpportunityId() = salesforceOpportunityId
+    fun _salesforceOpportunityId(): JsonField<String> = salesforceOpportunityId
 
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("total_contract_value")
     @ExcludeMissing
-    fun _totalContractValue() = totalContractValue
+    fun _totalContractValue(): JsonField<Double> = totalContractValue
 
-    @JsonProperty("usage_filter") @ExcludeMissing fun _usageFilter() = usageFilter
+    @JsonProperty("usage_filter")
+    @ExcludeMissing
+    fun _usageFilter(): JsonField<UsageFilter> = usageFilter
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -240,23 +258,23 @@ private constructor(
 
     class Builder {
 
-        private var commits: JsonField<List<Commit>> = JsonMissing.of()
-        private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var createdBy: JsonField<String> = JsonMissing.of()
-        private var overrides: JsonField<List<Override>> = JsonMissing.of()
-        private var scheduledCharges: JsonField<List<ScheduledCharge>> = JsonMissing.of()
-        private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var transitions: JsonField<List<Transition>> = JsonMissing.of()
-        private var usageStatementSchedule: JsonField<UsageStatementSchedule> = JsonMissing.of()
-        private var credits: JsonField<List<Credit>> = JsonMissing.of()
-        private var discounts: JsonField<List<Discount>> = JsonMissing.of()
+        private var commits: JsonField<MutableList<Commit>>? = null
+        private var createdAt: JsonField<OffsetDateTime>? = null
+        private var createdBy: JsonField<String>? = null
+        private var overrides: JsonField<MutableList<Override>>? = null
+        private var scheduledCharges: JsonField<MutableList<ScheduledCharge>>? = null
+        private var startingAt: JsonField<OffsetDateTime>? = null
+        private var transitions: JsonField<MutableList<Transition>>? = null
+        private var usageStatementSchedule: JsonField<UsageStatementSchedule>? = null
+        private var credits: JsonField<MutableList<Credit>>? = null
+        private var discounts: JsonField<MutableList<Discount>>? = null
         private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
         private var netPaymentTermsDays: JsonField<Double> = JsonMissing.of()
         private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
-        private var professionalServices: JsonField<List<ProService>> = JsonMissing.of()
+        private var professionalServices: JsonField<MutableList<ProService>>? = null
         private var rateCardId: JsonField<String> = JsonMissing.of()
-        private var resellerRoyalties: JsonField<List<ResellerRoyalty>> = JsonMissing.of()
+        private var resellerRoyalties: JsonField<MutableList<ResellerRoyalty>>? = null
         private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
         private var totalContractValue: JsonField<Double> = JsonMissing.of()
         private var usageFilter: JsonField<UsageFilter> = JsonMissing.of()
@@ -264,23 +282,25 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(contractWithoutAmendments: ContractWithoutAmendments) = apply {
-            commits = contractWithoutAmendments.commits
+            commits = contractWithoutAmendments.commits.map { it.toMutableList() }
             createdAt = contractWithoutAmendments.createdAt
             createdBy = contractWithoutAmendments.createdBy
-            overrides = contractWithoutAmendments.overrides
-            scheduledCharges = contractWithoutAmendments.scheduledCharges
+            overrides = contractWithoutAmendments.overrides.map { it.toMutableList() }
+            scheduledCharges = contractWithoutAmendments.scheduledCharges.map { it.toMutableList() }
             startingAt = contractWithoutAmendments.startingAt
-            transitions = contractWithoutAmendments.transitions
+            transitions = contractWithoutAmendments.transitions.map { it.toMutableList() }
             usageStatementSchedule = contractWithoutAmendments.usageStatementSchedule
-            credits = contractWithoutAmendments.credits
-            discounts = contractWithoutAmendments.discounts
+            credits = contractWithoutAmendments.credits.map { it.toMutableList() }
+            discounts = contractWithoutAmendments.discounts.map { it.toMutableList() }
             endingBefore = contractWithoutAmendments.endingBefore
             name = contractWithoutAmendments.name
             netPaymentTermsDays = contractWithoutAmendments.netPaymentTermsDays
             netsuiteSalesOrderId = contractWithoutAmendments.netsuiteSalesOrderId
-            professionalServices = contractWithoutAmendments.professionalServices
+            professionalServices =
+                contractWithoutAmendments.professionalServices.map { it.toMutableList() }
             rateCardId = contractWithoutAmendments.rateCardId
-            resellerRoyalties = contractWithoutAmendments.resellerRoyalties
+            resellerRoyalties =
+                contractWithoutAmendments.resellerRoyalties.map { it.toMutableList() }
             salesforceOpportunityId = contractWithoutAmendments.salesforceOpportunityId
             totalContractValue = contractWithoutAmendments.totalContractValue
             usageFilter = contractWithoutAmendments.usageFilter
@@ -289,7 +309,22 @@ private constructor(
 
         fun commits(commits: List<Commit>) = commits(JsonField.of(commits))
 
-        fun commits(commits: JsonField<List<Commit>>) = apply { this.commits = commits }
+        fun commits(commits: JsonField<List<Commit>>) = apply {
+            this.commits = commits.map { it.toMutableList() }
+        }
+
+        fun addCommit(commit: Commit) = apply {
+            commits =
+                (commits ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(commit)
+                }
+        }
 
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
@@ -301,13 +336,41 @@ private constructor(
 
         fun overrides(overrides: List<Override>) = overrides(JsonField.of(overrides))
 
-        fun overrides(overrides: JsonField<List<Override>>) = apply { this.overrides = overrides }
+        fun overrides(overrides: JsonField<List<Override>>) = apply {
+            this.overrides = overrides.map { it.toMutableList() }
+        }
+
+        fun addOverride(override: Override) = apply {
+            overrides =
+                (overrides ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(override)
+                }
+        }
 
         fun scheduledCharges(scheduledCharges: List<ScheduledCharge>) =
             scheduledCharges(JsonField.of(scheduledCharges))
 
         fun scheduledCharges(scheduledCharges: JsonField<List<ScheduledCharge>>) = apply {
-            this.scheduledCharges = scheduledCharges
+            this.scheduledCharges = scheduledCharges.map { it.toMutableList() }
+        }
+
+        fun addScheduledCharge(scheduledCharge: ScheduledCharge) = apply {
+            scheduledCharges =
+                (scheduledCharges ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(scheduledCharge)
+                }
         }
 
         fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
@@ -319,7 +382,20 @@ private constructor(
         fun transitions(transitions: List<Transition>) = transitions(JsonField.of(transitions))
 
         fun transitions(transitions: JsonField<List<Transition>>) = apply {
-            this.transitions = transitions
+            this.transitions = transitions.map { it.toMutableList() }
+        }
+
+        fun addTransition(transition: Transition) = apply {
+            transitions =
+                (transitions ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(transition)
+                }
         }
 
         fun usageStatementSchedule(usageStatementSchedule: UsageStatementSchedule) =
@@ -332,13 +408,44 @@ private constructor(
 
         fun credits(credits: List<Credit>) = credits(JsonField.of(credits))
 
-        fun credits(credits: JsonField<List<Credit>>) = apply { this.credits = credits }
+        fun credits(credits: JsonField<List<Credit>>) = apply {
+            this.credits = credits.map { it.toMutableList() }
+        }
+
+        fun addCredit(credit: Credit) = apply {
+            credits =
+                (credits ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(credit)
+                }
+        }
 
         /** This field's availability is dependent on your client's configuration. */
         fun discounts(discounts: List<Discount>) = discounts(JsonField.of(discounts))
 
         /** This field's availability is dependent on your client's configuration. */
-        fun discounts(discounts: JsonField<List<Discount>>) = apply { this.discounts = discounts }
+        fun discounts(discounts: JsonField<List<Discount>>) = apply {
+            this.discounts = discounts.map { it.toMutableList() }
+        }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun addDiscount(discount: Discount) = apply {
+            discounts =
+                (discounts ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(discount)
+                }
+        }
 
         fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
 
@@ -372,7 +479,21 @@ private constructor(
 
         /** This field's availability is dependent on your client's configuration. */
         fun professionalServices(professionalServices: JsonField<List<ProService>>) = apply {
-            this.professionalServices = professionalServices
+            this.professionalServices = professionalServices.map { it.toMutableList() }
+        }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun addProfessionalService(professionalService: ProService) = apply {
+            professionalServices =
+                (professionalServices ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(professionalService)
+                }
         }
 
         fun rateCardId(rateCardId: String) = rateCardId(JsonField.of(rateCardId))
@@ -385,7 +506,21 @@ private constructor(
 
         /** This field's availability is dependent on your client's configuration. */
         fun resellerRoyalties(resellerRoyalties: JsonField<List<ResellerRoyalty>>) = apply {
-            this.resellerRoyalties = resellerRoyalties
+            this.resellerRoyalties = resellerRoyalties.map { it.toMutableList() }
+        }
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun addResellerRoyalty(resellerRoyalty: ResellerRoyalty) = apply {
+            resellerRoyalties =
+                (resellerRoyalties ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(resellerRoyalty)
+                }
         }
 
         /** This field's availability is dependent on your client's configuration. */
@@ -433,23 +568,29 @@ private constructor(
 
         fun build(): ContractWithoutAmendments =
             ContractWithoutAmendments(
-                commits.map { it.toImmutable() },
-                createdAt,
-                createdBy,
-                overrides.map { it.toImmutable() },
-                scheduledCharges.map { it.toImmutable() },
-                startingAt,
-                transitions.map { it.toImmutable() },
-                usageStatementSchedule,
-                credits.map { it.toImmutable() },
-                discounts.map { it.toImmutable() },
+                checkNotNull(commits) { "`commits` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(createdAt) { "`createdAt` is required but was not set" },
+                checkNotNull(createdBy) { "`createdBy` is required but was not set" },
+                checkNotNull(overrides) { "`overrides` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(scheduledCharges) { "`scheduledCharges` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                checkNotNull(transitions) { "`transitions` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(usageStatementSchedule) {
+                    "`usageStatementSchedule` is required but was not set"
+                },
+                (credits ?: JsonMissing.of()).map { it.toImmutable() },
+                (discounts ?: JsonMissing.of()).map { it.toImmutable() },
                 endingBefore,
                 name,
                 netPaymentTermsDays,
                 netsuiteSalesOrderId,
-                professionalServices.map { it.toImmutable() },
+                (professionalServices ?: JsonMissing.of()).map { it.toImmutable() },
                 rateCardId,
-                resellerRoyalties.map { it.toImmutable() },
+                (resellerRoyalties ?: JsonMissing.of()).map { it.toImmutable() },
                 salesforceOpportunityId,
                 totalContractValue,
                 usageFilter,
@@ -478,11 +619,15 @@ private constructor(
 
         fun type(): Type = type.getRequired("type")
 
-        @JsonProperty("from_contract_id") @ExcludeMissing fun _fromContractId() = fromContractId
+        @JsonProperty("from_contract_id")
+        @ExcludeMissing
+        fun _fromContractId(): JsonField<String> = fromContractId
 
-        @JsonProperty("to_contract_id") @ExcludeMissing fun _toContractId() = toContractId
+        @JsonProperty("to_contract_id")
+        @ExcludeMissing
+        fun _toContractId(): JsonField<String> = toContractId
 
-        @JsonProperty("type") @ExcludeMissing fun _type() = type
+        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -508,9 +653,9 @@ private constructor(
 
         class Builder {
 
-            private var fromContractId: JsonField<String> = JsonMissing.of()
-            private var toContractId: JsonField<String> = JsonMissing.of()
-            private var type: JsonField<Type> = JsonMissing.of()
+            private var fromContractId: JsonField<String>? = null
+            private var toContractId: JsonField<String>? = null
+            private var type: JsonField<Type>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -559,9 +704,9 @@ private constructor(
 
             fun build(): Transition =
                 Transition(
-                    fromContractId,
-                    toContractId,
-                    type,
+                    checkNotNull(fromContractId) { "`fromContractId` is required but was not set" },
+                    checkNotNull(toContractId) { "`toContractId` is required but was not set" },
+                    checkNotNull(type) { "`type` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -664,9 +809,11 @@ private constructor(
         /** Contract usage statements follow a selected cadence based on this date. */
         @JsonProperty("billing_anchor_date")
         @ExcludeMissing
-        fun _billingAnchorDate() = billingAnchorDate
+        fun _billingAnchorDate(): JsonField<OffsetDateTime> = billingAnchorDate
 
-        @JsonProperty("frequency") @ExcludeMissing fun _frequency() = frequency
+        @JsonProperty("frequency")
+        @ExcludeMissing
+        fun _frequency(): JsonField<Frequency> = frequency
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -691,8 +838,8 @@ private constructor(
 
         class Builder {
 
-            private var billingAnchorDate: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var frequency: JsonField<Frequency> = JsonMissing.of()
+            private var billingAnchorDate: JsonField<OffsetDateTime>? = null
+            private var frequency: JsonField<Frequency>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -736,8 +883,10 @@ private constructor(
 
             fun build(): UsageStatementSchedule =
                 UsageStatementSchedule(
-                    billingAnchorDate,
-                    frequency,
+                    checkNotNull(billingAnchorDate) {
+                        "`billingAnchorDate` is required but was not set"
+                    },
+                    checkNotNull(frequency) { "`frequency` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -905,43 +1054,55 @@ private constructor(
         fun resellerContractValue(): Optional<Double> =
             Optional.ofNullable(resellerContractValue.getNullable("reseller_contract_value"))
 
-        @JsonProperty("fraction") @ExcludeMissing fun _fraction() = fraction
+        @JsonProperty("fraction") @ExcludeMissing fun _fraction(): JsonField<Double> = fraction
 
         @JsonProperty("netsuite_reseller_id")
         @ExcludeMissing
-        fun _netsuiteResellerId() = netsuiteResellerId
+        fun _netsuiteResellerId(): JsonField<String> = netsuiteResellerId
 
-        @JsonProperty("reseller_type") @ExcludeMissing fun _resellerType() = resellerType
+        @JsonProperty("reseller_type")
+        @ExcludeMissing
+        fun _resellerType(): JsonField<ResellerType> = resellerType
 
-        @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         @JsonProperty("applicable_product_ids")
         @ExcludeMissing
-        fun _applicableProductIds() = applicableProductIds
+        fun _applicableProductIds(): JsonField<List<String>> = applicableProductIds
 
         @JsonProperty("applicable_product_tags")
         @ExcludeMissing
-        fun _applicableProductTags() = applicableProductTags
+        fun _applicableProductTags(): JsonField<List<String>> = applicableProductTags
 
         @JsonProperty("aws_account_number")
         @ExcludeMissing
-        fun _awsAccountNumber() = awsAccountNumber
+        fun _awsAccountNumber(): JsonField<String> = awsAccountNumber
 
-        @JsonProperty("aws_offer_id") @ExcludeMissing fun _awsOfferId() = awsOfferId
+        @JsonProperty("aws_offer_id")
+        @ExcludeMissing
+        fun _awsOfferId(): JsonField<String> = awsOfferId
 
         @JsonProperty("aws_payer_reference_id")
         @ExcludeMissing
-        fun _awsPayerReferenceId() = awsPayerReferenceId
+        fun _awsPayerReferenceId(): JsonField<String> = awsPayerReferenceId
 
-        @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
-        @JsonProperty("gcp_account_id") @ExcludeMissing fun _gcpAccountId() = gcpAccountId
+        @JsonProperty("gcp_account_id")
+        @ExcludeMissing
+        fun _gcpAccountId(): JsonField<String> = gcpAccountId
 
-        @JsonProperty("gcp_offer_id") @ExcludeMissing fun _gcpOfferId() = gcpOfferId
+        @JsonProperty("gcp_offer_id")
+        @ExcludeMissing
+        fun _gcpOfferId(): JsonField<String> = gcpOfferId
 
         @JsonProperty("reseller_contract_value")
         @ExcludeMissing
-        fun _resellerContractValue() = resellerContractValue
+        fun _resellerContractValue(): JsonField<Double> = resellerContractValue
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -977,12 +1138,12 @@ private constructor(
 
         class Builder {
 
-            private var fraction: JsonField<Double> = JsonMissing.of()
-            private var netsuiteResellerId: JsonField<String> = JsonMissing.of()
-            private var resellerType: JsonField<ResellerType> = JsonMissing.of()
-            private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var applicableProductIds: JsonField<List<String>> = JsonMissing.of()
-            private var applicableProductTags: JsonField<List<String>> = JsonMissing.of()
+            private var fraction: JsonField<Double>? = null
+            private var netsuiteResellerId: JsonField<String>? = null
+            private var resellerType: JsonField<ResellerType>? = null
+            private var startingAt: JsonField<OffsetDateTime>? = null
+            private var applicableProductIds: JsonField<MutableList<String>>? = null
+            private var applicableProductTags: JsonField<MutableList<String>>? = null
             private var awsAccountNumber: JsonField<String> = JsonMissing.of()
             private var awsOfferId: JsonField<String> = JsonMissing.of()
             private var awsPayerReferenceId: JsonField<String> = JsonMissing.of()
@@ -998,8 +1159,10 @@ private constructor(
                 netsuiteResellerId = resellerRoyalty.netsuiteResellerId
                 resellerType = resellerRoyalty.resellerType
                 startingAt = resellerRoyalty.startingAt
-                applicableProductIds = resellerRoyalty.applicableProductIds
-                applicableProductTags = resellerRoyalty.applicableProductTags
+                applicableProductIds =
+                    resellerRoyalty.applicableProductIds.map { it.toMutableList() }
+                applicableProductTags =
+                    resellerRoyalty.applicableProductTags.map { it.toMutableList() }
                 awsAccountNumber = resellerRoyalty.awsAccountNumber
                 awsOfferId = resellerRoyalty.awsOfferId
                 awsPayerReferenceId = resellerRoyalty.awsPayerReferenceId
@@ -1037,14 +1200,40 @@ private constructor(
                 applicableProductIds(JsonField.of(applicableProductIds))
 
             fun applicableProductIds(applicableProductIds: JsonField<List<String>>) = apply {
-                this.applicableProductIds = applicableProductIds
+                this.applicableProductIds = applicableProductIds.map { it.toMutableList() }
+            }
+
+            fun addApplicableProductId(applicableProductId: String) = apply {
+                applicableProductIds =
+                    (applicableProductIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(applicableProductId)
+                    }
             }
 
             fun applicableProductTags(applicableProductTags: List<String>) =
                 applicableProductTags(JsonField.of(applicableProductTags))
 
             fun applicableProductTags(applicableProductTags: JsonField<List<String>>) = apply {
-                this.applicableProductTags = applicableProductTags
+                this.applicableProductTags = applicableProductTags.map { it.toMutableList() }
+            }
+
+            fun addApplicableProductTag(applicableProductTag: String) = apply {
+                applicableProductTags =
+                    (applicableProductTags ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(applicableProductTag)
+                    }
             }
 
             fun awsAccountNumber(awsAccountNumber: String) =
@@ -1110,12 +1299,14 @@ private constructor(
 
             fun build(): ResellerRoyalty =
                 ResellerRoyalty(
-                    fraction,
-                    netsuiteResellerId,
-                    resellerType,
-                    startingAt,
-                    applicableProductIds.map { it.toImmutable() },
-                    applicableProductTags.map { it.toImmutable() },
+                    checkNotNull(fraction) { "`fraction` is required but was not set" },
+                    checkNotNull(netsuiteResellerId) {
+                        "`netsuiteResellerId` is required but was not set"
+                    },
+                    checkNotNull(resellerType) { "`resellerType` is required but was not set" },
+                    checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                    (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     awsAccountNumber,
                     awsOfferId,
                     awsPayerReferenceId,
@@ -1238,11 +1429,15 @@ private constructor(
 
         fun updates(): List<Update> = updates.getRequired("updates")
 
-        @JsonProperty("current") @ExcludeMissing fun _current() = current
+        @JsonProperty("current")
+        @ExcludeMissing
+        fun _current(): JsonField<BaseUsageFilter> = current
 
-        @JsonProperty("initial") @ExcludeMissing fun _initial() = initial
+        @JsonProperty("initial")
+        @ExcludeMissing
+        fun _initial(): JsonField<BaseUsageFilter> = initial
 
-        @JsonProperty("updates") @ExcludeMissing fun _updates() = updates
+        @JsonProperty("updates") @ExcludeMissing fun _updates(): JsonField<List<Update>> = updates
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1268,20 +1463,22 @@ private constructor(
 
         class Builder {
 
-            private var current: JsonField<BaseUsageFilter> = JsonMissing.of()
-            private var initial: JsonField<BaseUsageFilter> = JsonMissing.of()
-            private var updates: JsonField<List<Update>> = JsonMissing.of()
+            private var current: JsonField<BaseUsageFilter>? = null
+            private var initial: JsonField<BaseUsageFilter>? = null
+            private var updates: JsonField<MutableList<Update>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(usageFilter: UsageFilter) = apply {
                 current = usageFilter.current
                 initial = usageFilter.initial
-                updates = usageFilter.updates
+                updates = usageFilter.updates.map { it.toMutableList() }
                 additionalProperties = usageFilter.additionalProperties.toMutableMap()
             }
 
-            fun current(current: BaseUsageFilter) = current(JsonField.of(current))
+            fun current(current: BaseUsageFilter?) = current(JsonField.ofNullable(current))
+
+            fun current(current: Optional<BaseUsageFilter>) = current(current.orElse(null))
 
             fun current(current: JsonField<BaseUsageFilter>) = apply { this.current = current }
 
@@ -1291,7 +1488,22 @@ private constructor(
 
             fun updates(updates: List<Update>) = updates(JsonField.of(updates))
 
-            fun updates(updates: JsonField<List<Update>>) = apply { this.updates = updates }
+            fun updates(updates: JsonField<List<Update>>) = apply {
+                this.updates = updates.map { it.toMutableList() }
+            }
+
+            fun addUpdate(update: Update) = apply {
+                updates =
+                    (updates ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(update)
+                    }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1314,9 +1526,10 @@ private constructor(
 
             fun build(): UsageFilter =
                 UsageFilter(
-                    current,
-                    initial,
-                    updates.map { it.toImmutable() },
+                    checkNotNull(current) { "`current` is required but was not set" },
+                    checkNotNull(initial) { "`initial` is required but was not set" },
+                    checkNotNull(updates) { "`updates` is required but was not set" }
+                        .map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -1344,11 +1557,15 @@ private constructor(
 
             fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
-            @JsonProperty("group_key") @ExcludeMissing fun _groupKey() = groupKey
+            @JsonProperty("group_key") @ExcludeMissing fun _groupKey(): JsonField<String> = groupKey
 
-            @JsonProperty("group_values") @ExcludeMissing fun _groupValues() = groupValues
+            @JsonProperty("group_values")
+            @ExcludeMissing
+            fun _groupValues(): JsonField<List<String>> = groupValues
 
-            @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+            @JsonProperty("starting_at")
+            @ExcludeMissing
+            fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1374,15 +1591,15 @@ private constructor(
 
             class Builder {
 
-                private var groupKey: JsonField<String> = JsonMissing.of()
-                private var groupValues: JsonField<List<String>> = JsonMissing.of()
-                private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var groupKey: JsonField<String>? = null
+                private var groupValues: JsonField<MutableList<String>>? = null
+                private var startingAt: JsonField<OffsetDateTime>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(update: Update) = apply {
                     groupKey = update.groupKey
-                    groupValues = update.groupValues
+                    groupValues = update.groupValues.map { it.toMutableList() }
                     startingAt = update.startingAt
                     additionalProperties = update.additionalProperties.toMutableMap()
                 }
@@ -1394,7 +1611,20 @@ private constructor(
                 fun groupValues(groupValues: List<String>) = groupValues(JsonField.of(groupValues))
 
                 fun groupValues(groupValues: JsonField<List<String>>) = apply {
-                    this.groupValues = groupValues
+                    this.groupValues = groupValues.map { it.toMutableList() }
+                }
+
+                fun addGroupValue(groupValue: String) = apply {
+                    groupValues =
+                        (groupValues ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(groupValue)
+                        }
                 }
 
                 fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
@@ -1427,9 +1657,10 @@ private constructor(
 
                 fun build(): Update =
                     Update(
-                        groupKey,
-                        groupValues.map { it.toImmutable() },
-                        startingAt,
+                        checkNotNull(groupKey) { "`groupKey` is required but was not set" },
+                        checkNotNull(groupValues) { "`groupValues` is required but was not set" }
+                            .map { it.toImmutable() },
+                        checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                         additionalProperties.toImmutable(),
                     )
             }

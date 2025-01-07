@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -40,11 +42,23 @@ constructor(
      */
     fun coveringDate(): Optional<OffsetDateTime> = body.coveringDate()
 
+    /** ID of the rate card whose named schedule is to be retrieved */
+    fun _rateCardId(): JsonField<String> = body._rateCardId()
+
+    /** The identifier for the schedule to be retrieved */
+    fun _scheduleName(): JsonField<String> = body._scheduleName()
+
+    /**
+     * If provided, at most one schedule segment will be returned (the one that covers this date).
+     * If not provided, all segments will be returned.
+     */
+    fun _coveringDate(): JsonField<OffsetDateTime> = body._coveringDate()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): ContractNamedScheduleRetrieveBody = body
 
@@ -56,29 +70,64 @@ constructor(
     class ContractNamedScheduleRetrieveBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("rate_card_id") private val rateCardId: String,
-        @JsonProperty("schedule_name") private val scheduleName: String,
-        @JsonProperty("covering_date") private val coveringDate: OffsetDateTime?,
+        @JsonProperty("rate_card_id")
+        @ExcludeMissing
+        private val rateCardId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("schedule_name")
+        @ExcludeMissing
+        private val scheduleName: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("covering_date")
+        @ExcludeMissing
+        private val coveringDate: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the rate card whose named schedule is to be retrieved */
-        @JsonProperty("rate_card_id") fun rateCardId(): String = rateCardId
+        fun rateCardId(): String = rateCardId.getRequired("rate_card_id")
 
         /** The identifier for the schedule to be retrieved */
-        @JsonProperty("schedule_name") fun scheduleName(): String = scheduleName
+        fun scheduleName(): String = scheduleName.getRequired("schedule_name")
+
+        /**
+         * If provided, at most one schedule segment will be returned (the one that covers this
+         * date). If not provided, all segments will be returned.
+         */
+        fun coveringDate(): Optional<OffsetDateTime> =
+            Optional.ofNullable(coveringDate.getNullable("covering_date"))
+
+        /** ID of the rate card whose named schedule is to be retrieved */
+        @JsonProperty("rate_card_id")
+        @ExcludeMissing
+        fun _rateCardId(): JsonField<String> = rateCardId
+
+        /** The identifier for the schedule to be retrieved */
+        @JsonProperty("schedule_name")
+        @ExcludeMissing
+        fun _scheduleName(): JsonField<String> = scheduleName
 
         /**
          * If provided, at most one schedule segment will be returned (the one that covers this
          * date). If not provided, all segments will be returned.
          */
         @JsonProperty("covering_date")
-        fun coveringDate(): Optional<OffsetDateTime> = Optional.ofNullable(coveringDate)
+        @ExcludeMissing
+        fun _coveringDate(): JsonField<OffsetDateTime> = coveringDate
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ContractNamedScheduleRetrieveBody = apply {
+            if (!validated) {
+                rateCardId()
+                scheduleName()
+                coveringDate()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -89,9 +138,9 @@ constructor(
 
         class Builder {
 
-            private var rateCardId: String? = null
-            private var scheduleName: String? = null
-            private var coveringDate: OffsetDateTime? = null
+            private var rateCardId: JsonField<String>? = null
+            private var scheduleName: JsonField<String>? = null
+            private var coveringDate: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -106,25 +155,33 @@ constructor(
             }
 
             /** ID of the rate card whose named schedule is to be retrieved */
-            fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
+            fun rateCardId(rateCardId: String) = rateCardId(JsonField.of(rateCardId))
+
+            /** ID of the rate card whose named schedule is to be retrieved */
+            fun rateCardId(rateCardId: JsonField<String>) = apply { this.rateCardId = rateCardId }
 
             /** The identifier for the schedule to be retrieved */
-            fun scheduleName(scheduleName: String) = apply { this.scheduleName = scheduleName }
+            fun scheduleName(scheduleName: String) = scheduleName(JsonField.of(scheduleName))
 
-            /**
-             * If provided, at most one schedule segment will be returned (the one that covers this
-             * date). If not provided, all segments will be returned.
-             */
-            fun coveringDate(coveringDate: OffsetDateTime?) = apply {
-                this.coveringDate = coveringDate
+            /** The identifier for the schedule to be retrieved */
+            fun scheduleName(scheduleName: JsonField<String>) = apply {
+                this.scheduleName = scheduleName
             }
 
             /**
              * If provided, at most one schedule segment will be returned (the one that covers this
              * date). If not provided, all segments will be returned.
              */
-            fun coveringDate(coveringDate: Optional<OffsetDateTime>) =
-                coveringDate(coveringDate.orElse(null))
+            fun coveringDate(coveringDate: OffsetDateTime) =
+                coveringDate(JsonField.of(coveringDate))
+
+            /**
+             * If provided, at most one schedule segment will be returned (the one that covers this
+             * date). If not provided, all segments will be returned.
+             */
+            fun coveringDate(coveringDate: JsonField<OffsetDateTime>) = apply {
+                this.coveringDate = coveringDate
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -200,21 +257,49 @@ constructor(
         /** ID of the rate card whose named schedule is to be retrieved */
         fun rateCardId(rateCardId: String) = apply { body.rateCardId(rateCardId) }
 
+        /** ID of the rate card whose named schedule is to be retrieved */
+        fun rateCardId(rateCardId: JsonField<String>) = apply { body.rateCardId(rateCardId) }
+
         /** The identifier for the schedule to be retrieved */
         fun scheduleName(scheduleName: String) = apply { body.scheduleName(scheduleName) }
 
-        /**
-         * If provided, at most one schedule segment will be returned (the one that covers this
-         * date). If not provided, all segments will be returned.
-         */
-        fun coveringDate(coveringDate: OffsetDateTime?) = apply { body.coveringDate(coveringDate) }
+        /** The identifier for the schedule to be retrieved */
+        fun scheduleName(scheduleName: JsonField<String>) = apply {
+            body.scheduleName(scheduleName)
+        }
 
         /**
          * If provided, at most one schedule segment will be returned (the one that covers this
          * date). If not provided, all segments will be returned.
          */
-        fun coveringDate(coveringDate: Optional<OffsetDateTime>) =
-            coveringDate(coveringDate.orElse(null))
+        fun coveringDate(coveringDate: OffsetDateTime) = apply { body.coveringDate(coveringDate) }
+
+        /**
+         * If provided, at most one schedule segment will be returned (the one that covers this
+         * date). If not provided, all segments will be returned.
+         */
+        fun coveringDate(coveringDate: JsonField<OffsetDateTime>) = apply {
+            body.coveringDate(coveringDate)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -312,25 +397,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractNamedScheduleRetrieveParams =

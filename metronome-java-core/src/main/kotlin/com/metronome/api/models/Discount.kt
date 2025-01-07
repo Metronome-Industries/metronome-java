@@ -46,18 +46,20 @@ private constructor(
     fun netsuiteSalesOrderId(): Optional<String> =
         Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
 
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    @JsonProperty("product") @ExcludeMissing fun _product() = product
+    @JsonProperty("product") @ExcludeMissing fun _product(): JsonField<Product> = product
 
-    @JsonProperty("schedule") @ExcludeMissing fun _schedule() = schedule
+    @JsonProperty("schedule")
+    @ExcludeMissing
+    fun _schedule(): JsonField<SchedulePointInTime> = schedule
 
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("netsuite_sales_order_id")
     @ExcludeMissing
-    fun _netsuiteSalesOrderId() = netsuiteSalesOrderId
+    fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -85,9 +87,9 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var product: JsonField<Product> = JsonMissing.of()
-        private var schedule: JsonField<SchedulePointInTime> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var product: JsonField<Product>? = null
+        private var schedule: JsonField<SchedulePointInTime>? = null
         private var name: JsonField<String> = JsonMissing.of()
         private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -148,9 +150,9 @@ private constructor(
 
         fun build(): Discount =
             Discount(
-                id,
-                product,
-                schedule,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(product) { "`product` is required but was not set" },
+                checkNotNull(schedule) { "`schedule` is required but was not set" },
                 name,
                 netsuiteSalesOrderId,
                 additionalProperties.toImmutable(),
@@ -173,9 +175,9 @@ private constructor(
 
         fun name(): String = name.getRequired("name")
 
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -200,8 +202,8 @@ private constructor(
 
         class Builder {
 
-            private var id: JsonField<String> = JsonMissing.of()
-            private var name: JsonField<String> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var name: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -240,8 +242,8 @@ private constructor(
 
             fun build(): Product =
                 Product(
-                    id,
-                    name,
+                    checkNotNull(id) { "`id` is required but was not set" },
+                    checkNotNull(name) { "`name` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }

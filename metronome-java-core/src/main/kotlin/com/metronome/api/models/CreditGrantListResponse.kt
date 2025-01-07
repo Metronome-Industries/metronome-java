@@ -130,59 +130,77 @@ private constructor(
         Optional.ofNullable(uniquenessKey.getNullable("uniqueness_key"))
 
     /** the Metronome ID of the credit grant */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /**
      * The effective balance of the grant as of the end of the customer's current billing period.
      * Expiration deductions will be included only if the grant expires before the end of the
      * current billing period.
      */
-    @JsonProperty("balance") @ExcludeMissing fun _balance() = balance
+    @JsonProperty("balance") @ExcludeMissing fun _balance(): JsonField<Balance> = balance
 
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    fun _customFields(): JsonField<CustomFields> = customFields
 
     /** the Metronome ID of the customer */
-    @JsonProperty("customer_id") @ExcludeMissing fun _customerId() = customerId
+    @JsonProperty("customer_id") @ExcludeMissing fun _customerId(): JsonField<String> = customerId
 
-    @JsonProperty("deductions") @ExcludeMissing fun _deductions() = deductions
+    @JsonProperty("deductions")
+    @ExcludeMissing
+    fun _deductions(): JsonField<List<CreditLedgerEntry>> = deductions
 
-    @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
+    @JsonProperty("effective_at")
+    @ExcludeMissing
+    fun _effectiveAt(): JsonField<OffsetDateTime> = effectiveAt
 
-    @JsonProperty("expires_at") @ExcludeMissing fun _expiresAt() = expiresAt
+    @JsonProperty("expires_at")
+    @ExcludeMissing
+    fun _expiresAt(): JsonField<OffsetDateTime> = expiresAt
 
     /** the amount of credits initially granted */
-    @JsonProperty("grant_amount") @ExcludeMissing fun _grantAmount() = grantAmount
+    @JsonProperty("grant_amount")
+    @ExcludeMissing
+    fun _grantAmount(): JsonField<GrantAmount> = grantAmount
 
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     /** the amount paid for this credit grant */
-    @JsonProperty("paid_amount") @ExcludeMissing fun _paidAmount() = paidAmount
+    @JsonProperty("paid_amount")
+    @ExcludeMissing
+    fun _paidAmount(): JsonField<PaidAmount> = paidAmount
 
-    @JsonProperty("pending_deductions") @ExcludeMissing fun _pendingDeductions() = pendingDeductions
+    @JsonProperty("pending_deductions")
+    @ExcludeMissing
+    fun _pendingDeductions(): JsonField<List<CreditLedgerEntry>> = pendingDeductions
 
-    @JsonProperty("priority") @ExcludeMissing fun _priority() = priority
+    @JsonProperty("priority") @ExcludeMissing fun _priority(): JsonField<Double> = priority
 
-    @JsonProperty("credit_grant_type") @ExcludeMissing fun _creditGrantType() = creditGrantType
+    @JsonProperty("credit_grant_type")
+    @ExcludeMissing
+    fun _creditGrantType(): JsonField<String> = creditGrantType
 
     /**
      * the Metronome ID of the invoice with the purchase charge for this credit grant, if applicable
      */
-    @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
+    @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId(): JsonField<String> = invoiceId
 
     /**
      * The products which these credits will be applied to. (If unspecified, the credits will be
      * applied to charges for all products.)
      */
-    @JsonProperty("products") @ExcludeMissing fun _products() = products
+    @JsonProperty("products") @ExcludeMissing fun _products(): JsonField<List<Product>> = products
 
-    @JsonProperty("reason") @ExcludeMissing fun _reason() = reason
+    @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
     /**
      * Prevents the creation of duplicates. If a request to create a record is made with a
      * previously used uniqueness key, a new record will not be created and the request will fail
      * with a 409 error.
      */
-    @JsonProperty("uniqueness_key") @ExcludeMissing fun _uniquenessKey() = uniquenessKey
+    @JsonProperty("uniqueness_key")
+    @ExcludeMissing
+    fun _uniquenessKey(): JsonField<String> = uniquenessKey
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -222,21 +240,21 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var balance: JsonField<Balance> = JsonMissing.of()
-        private var customFields: JsonField<CustomFields> = JsonMissing.of()
-        private var customerId: JsonField<String> = JsonMissing.of()
-        private var deductions: JsonField<List<CreditLedgerEntry>> = JsonMissing.of()
-        private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var grantAmount: JsonField<GrantAmount> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
-        private var paidAmount: JsonField<PaidAmount> = JsonMissing.of()
-        private var pendingDeductions: JsonField<List<CreditLedgerEntry>> = JsonMissing.of()
-        private var priority: JsonField<Double> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var balance: JsonField<Balance>? = null
+        private var customFields: JsonField<CustomFields>? = null
+        private var customerId: JsonField<String>? = null
+        private var deductions: JsonField<MutableList<CreditLedgerEntry>>? = null
+        private var effectiveAt: JsonField<OffsetDateTime>? = null
+        private var expiresAt: JsonField<OffsetDateTime>? = null
+        private var grantAmount: JsonField<GrantAmount>? = null
+        private var name: JsonField<String>? = null
+        private var paidAmount: JsonField<PaidAmount>? = null
+        private var pendingDeductions: JsonField<MutableList<CreditLedgerEntry>>? = null
+        private var priority: JsonField<Double>? = null
         private var creditGrantType: JsonField<String> = JsonMissing.of()
         private var invoiceId: JsonField<String> = JsonMissing.of()
-        private var products: JsonField<List<Product>> = JsonMissing.of()
+        private var products: JsonField<MutableList<Product>>? = null
         private var reason: JsonField<String> = JsonMissing.of()
         private var uniquenessKey: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -247,17 +265,17 @@ private constructor(
             balance = creditGrantListResponse.balance
             customFields = creditGrantListResponse.customFields
             customerId = creditGrantListResponse.customerId
-            deductions = creditGrantListResponse.deductions
+            deductions = creditGrantListResponse.deductions.map { it.toMutableList() }
             effectiveAt = creditGrantListResponse.effectiveAt
             expiresAt = creditGrantListResponse.expiresAt
             grantAmount = creditGrantListResponse.grantAmount
             name = creditGrantListResponse.name
             paidAmount = creditGrantListResponse.paidAmount
-            pendingDeductions = creditGrantListResponse.pendingDeductions
+            pendingDeductions = creditGrantListResponse.pendingDeductions.map { it.toMutableList() }
             priority = creditGrantListResponse.priority
             creditGrantType = creditGrantListResponse.creditGrantType
             invoiceId = creditGrantListResponse.invoiceId
-            products = creditGrantListResponse.products
+            products = creditGrantListResponse.products.map { it.toMutableList() }
             reason = creditGrantListResponse.reason
             uniquenessKey = creditGrantListResponse.uniquenessKey
             additionalProperties = creditGrantListResponse.additionalProperties.toMutableMap()
@@ -298,7 +316,20 @@ private constructor(
         fun deductions(deductions: List<CreditLedgerEntry>) = deductions(JsonField.of(deductions))
 
         fun deductions(deductions: JsonField<List<CreditLedgerEntry>>) = apply {
-            this.deductions = deductions
+            this.deductions = deductions.map { it.toMutableList() }
+        }
+
+        fun addDeduction(deduction: CreditLedgerEntry) = apply {
+            deductions =
+                (deductions ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(deduction)
+                }
         }
 
         fun effectiveAt(effectiveAt: OffsetDateTime) = effectiveAt(JsonField.of(effectiveAt))
@@ -333,15 +364,31 @@ private constructor(
             pendingDeductions(JsonField.of(pendingDeductions))
 
         fun pendingDeductions(pendingDeductions: JsonField<List<CreditLedgerEntry>>) = apply {
-            this.pendingDeductions = pendingDeductions
+            this.pendingDeductions = pendingDeductions.map { it.toMutableList() }
+        }
+
+        fun addPendingDeduction(pendingDeduction: CreditLedgerEntry) = apply {
+            pendingDeductions =
+                (pendingDeductions ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(pendingDeduction)
+                }
         }
 
         fun priority(priority: Double) = priority(JsonField.of(priority))
 
         fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
 
-        fun creditGrantType(creditGrantType: String) =
-            creditGrantType(JsonField.of(creditGrantType))
+        fun creditGrantType(creditGrantType: String?) =
+            creditGrantType(JsonField.ofNullable(creditGrantType))
+
+        fun creditGrantType(creditGrantType: Optional<String>) =
+            creditGrantType(creditGrantType.orElse(null))
 
         fun creditGrantType(creditGrantType: JsonField<String>) = apply {
             this.creditGrantType = creditGrantType
@@ -351,7 +398,13 @@ private constructor(
          * the Metronome ID of the invoice with the purchase charge for this credit grant, if
          * applicable
          */
-        fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
+        fun invoiceId(invoiceId: String?) = invoiceId(JsonField.ofNullable(invoiceId))
+
+        /**
+         * the Metronome ID of the invoice with the purchase charge for this credit grant, if
+         * applicable
+         */
+        fun invoiceId(invoiceId: Optional<String>) = invoiceId(invoiceId.orElse(null))
 
         /**
          * the Metronome ID of the invoice with the purchase charge for this credit grant, if
@@ -369,9 +422,30 @@ private constructor(
          * The products which these credits will be applied to. (If unspecified, the credits will be
          * applied to charges for all products.)
          */
-        fun products(products: JsonField<List<Product>>) = apply { this.products = products }
+        fun products(products: JsonField<List<Product>>) = apply {
+            this.products = products.map { it.toMutableList() }
+        }
 
-        fun reason(reason: String) = reason(JsonField.of(reason))
+        /**
+         * The products which these credits will be applied to. (If unspecified, the credits will be
+         * applied to charges for all products.)
+         */
+        fun addProduct(product: Product) = apply {
+            products =
+                (products ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(product)
+                }
+        }
+
+        fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
+
+        fun reason(reason: Optional<String>) = reason(reason.orElse(null))
 
         fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
@@ -380,7 +454,16 @@ private constructor(
          * previously used uniqueness key, a new record will not be created and the request will
          * fail with a 409 error.
          */
-        fun uniquenessKey(uniquenessKey: String) = uniquenessKey(JsonField.of(uniquenessKey))
+        fun uniquenessKey(uniquenessKey: String?) =
+            uniquenessKey(JsonField.ofNullable(uniquenessKey))
+
+        /**
+         * Prevents the creation of duplicates. If a request to create a record is made with a
+         * previously used uniqueness key, a new record will not be created and the request will
+         * fail with a 409 error.
+         */
+        fun uniquenessKey(uniquenessKey: Optional<String>) =
+            uniquenessKey(uniquenessKey.orElse(null))
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
@@ -412,21 +495,25 @@ private constructor(
 
         fun build(): CreditGrantListResponse =
             CreditGrantListResponse(
-                id,
-                balance,
-                customFields,
-                customerId,
-                deductions.map { it.toImmutable() },
-                effectiveAt,
-                expiresAt,
-                grantAmount,
-                name,
-                paidAmount,
-                pendingDeductions.map { it.toImmutable() },
-                priority,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(balance) { "`balance` is required but was not set" },
+                checkNotNull(customFields) { "`customFields` is required but was not set" },
+                checkNotNull(customerId) { "`customerId` is required but was not set" },
+                checkNotNull(deductions) { "`deductions` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(effectiveAt) { "`effectiveAt` is required but was not set" },
+                checkNotNull(expiresAt) { "`expiresAt` is required but was not set" },
+                checkNotNull(grantAmount) { "`grantAmount` is required but was not set" },
+                checkNotNull(name) { "`name` is required but was not set" },
+                checkNotNull(paidAmount) { "`paidAmount` is required but was not set" },
+                checkNotNull(pendingDeductions) {
+                        "`pendingDeductions` is required but was not set"
+                    }
+                    .map { it.toImmutable() },
+                checkNotNull(priority) { "`priority` is required but was not set" },
                 creditGrantType,
                 invoiceId,
-                products.map { it.toImmutable() },
+                (products ?: JsonMissing.of()).map { it.toImmutable() },
                 reason,
                 uniquenessKey,
                 additionalProperties.toImmutable(),
@@ -471,7 +558,9 @@ private constructor(
         fun includingPending(): Double = includingPending.getRequired("including_pending")
 
         /** The end_date of the customer's current billing period. */
-        @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
+        @JsonProperty("effective_at")
+        @ExcludeMissing
+        fun _effectiveAt(): JsonField<OffsetDateTime> = effectiveAt
 
         /**
          * The grant's current balance including all posted deductions. If the grant has expired,
@@ -479,7 +568,7 @@ private constructor(
          */
         @JsonProperty("excluding_pending")
         @ExcludeMissing
-        fun _excludingPending() = excludingPending
+        fun _excludingPending(): JsonField<Double> = excludingPending
 
         /**
          * The grant's current balance including all posted and pending deductions. If the grant
@@ -487,7 +576,7 @@ private constructor(
          */
         @JsonProperty("including_pending")
         @ExcludeMissing
-        fun _includingPending() = includingPending
+        fun _includingPending(): JsonField<Double> = includingPending
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -513,9 +602,9 @@ private constructor(
 
         class Builder {
 
-            private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var excludingPending: JsonField<Double> = JsonMissing.of()
-            private var includingPending: JsonField<Double> = JsonMissing.of()
+            private var effectiveAt: JsonField<OffsetDateTime>? = null
+            private var excludingPending: JsonField<Double>? = null
+            private var includingPending: JsonField<Double>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -587,9 +676,13 @@ private constructor(
 
             fun build(): Balance =
                 Balance(
-                    effectiveAt,
-                    excludingPending,
-                    includingPending,
+                    checkNotNull(effectiveAt) { "`effectiveAt` is required but was not set" },
+                    checkNotNull(excludingPending) {
+                        "`excludingPending` is required but was not set"
+                    },
+                    checkNotNull(includingPending) {
+                        "`includingPending` is required but was not set"
+                    },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -707,10 +800,12 @@ private constructor(
         /** the credit type for the amount granted */
         fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
-        @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
         /** the credit type for the amount granted */
-        @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+        @JsonProperty("credit_type")
+        @ExcludeMissing
+        fun _creditType(): JsonField<CreditTypeData> = creditType
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -735,8 +830,8 @@ private constructor(
 
         class Builder {
 
-            private var amount: JsonField<Double> = JsonMissing.of()
-            private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
+            private var amount: JsonField<Double>? = null
+            private var creditType: JsonField<CreditTypeData>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -779,8 +874,8 @@ private constructor(
 
             fun build(): GrantAmount =
                 GrantAmount(
-                    amount,
-                    creditType,
+                    checkNotNull(amount) { "`amount` is required but was not set" },
+                    checkNotNull(creditType) { "`creditType` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -823,10 +918,12 @@ private constructor(
         /** the credit type for the amount paid */
         fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
-        @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
         /** the credit type for the amount paid */
-        @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+        @JsonProperty("credit_type")
+        @ExcludeMissing
+        fun _creditType(): JsonField<CreditTypeData> = creditType
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -851,8 +948,8 @@ private constructor(
 
         class Builder {
 
-            private var amount: JsonField<Double> = JsonMissing.of()
-            private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
+            private var amount: JsonField<Double>? = null
+            private var creditType: JsonField<CreditTypeData>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -895,8 +992,8 @@ private constructor(
 
             fun build(): PaidAmount =
                 PaidAmount(
-                    amount,
-                    creditType,
+                    checkNotNull(amount) { "`amount` is required but was not set" },
+                    checkNotNull(creditType) { "`creditType` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -935,9 +1032,9 @@ private constructor(
 
         fun name(): String = name.getRequired("name")
 
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -962,8 +1059,8 @@ private constructor(
 
         class Builder {
 
-            private var id: JsonField<String> = JsonMissing.of()
-            private var name: JsonField<String> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var name: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -1002,8 +1099,8 @@ private constructor(
 
             fun build(): Product =
                 Product(
-                    id,
-                    name,
+                    checkNotNull(id) { "`id` is required but was not set" },
+                    checkNotNull(name) { "`name` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }

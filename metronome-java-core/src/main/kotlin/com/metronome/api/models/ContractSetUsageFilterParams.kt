@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -34,11 +36,21 @@ constructor(
 
     fun startingAt(): OffsetDateTime = body.startingAt()
 
+    fun _contractId(): JsonField<String> = body._contractId()
+
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    fun _groupKey(): JsonField<String> = body._groupKey()
+
+    fun _groupValues(): JsonField<List<String>> = body._groupValues()
+
+    fun _startingAt(): JsonField<OffsetDateTime> = body._startingAt()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): ContractSetUsageFilterBody = body
 
@@ -50,28 +62,69 @@ constructor(
     class ContractSetUsageFilterBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("contract_id") private val contractId: String,
-        @JsonProperty("customer_id") private val customerId: String,
-        @JsonProperty("group_key") private val groupKey: String,
-        @JsonProperty("group_values") private val groupValues: List<String>,
-        @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
+        @JsonProperty("contract_id")
+        @ExcludeMissing
+        private val contractId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("group_key")
+        @ExcludeMissing
+        private val groupKey: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("group_values")
+        @ExcludeMissing
+        private val groupValues: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("contract_id") fun contractId(): String = contractId
+        fun contractId(): String = contractId.getRequired("contract_id")
 
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
 
-        @JsonProperty("group_key") fun groupKey(): String = groupKey
+        fun groupKey(): String = groupKey.getRequired("group_key")
 
-        @JsonProperty("group_values") fun groupValues(): List<String> = groupValues
+        fun groupValues(): List<String> = groupValues.getRequired("group_values")
 
-        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+        fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+        @JsonProperty("contract_id")
+        @ExcludeMissing
+        fun _contractId(): JsonField<String> = contractId
+
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
+
+        @JsonProperty("group_key") @ExcludeMissing fun _groupKey(): JsonField<String> = groupKey
+
+        @JsonProperty("group_values")
+        @ExcludeMissing
+        fun _groupValues(): JsonField<List<String>> = groupValues
+
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ContractSetUsageFilterBody = apply {
+            if (!validated) {
+                contractId()
+                customerId()
+                groupKey()
+                groupValues()
+                startingAt()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -82,11 +135,11 @@ constructor(
 
         class Builder {
 
-            private var contractId: String? = null
-            private var customerId: String? = null
-            private var groupKey: String? = null
-            private var groupValues: MutableList<String>? = null
-            private var startingAt: OffsetDateTime? = null
+            private var contractId: JsonField<String>? = null
+            private var customerId: JsonField<String>? = null
+            private var groupKey: JsonField<String>? = null
+            private var groupValues: JsonField<MutableList<String>>? = null
+            private var startingAt: JsonField<OffsetDateTime>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -94,27 +147,48 @@ constructor(
                 contractId = contractSetUsageFilterBody.contractId
                 customerId = contractSetUsageFilterBody.customerId
                 groupKey = contractSetUsageFilterBody.groupKey
-                groupValues = contractSetUsageFilterBody.groupValues.toMutableList()
+                groupValues = contractSetUsageFilterBody.groupValues.map { it.toMutableList() }
                 startingAt = contractSetUsageFilterBody.startingAt
                 additionalProperties =
                     contractSetUsageFilterBody.additionalProperties.toMutableMap()
             }
 
-            fun contractId(contractId: String) = apply { this.contractId = contractId }
+            fun contractId(contractId: String) = contractId(JsonField.of(contractId))
 
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun contractId(contractId: JsonField<String>) = apply { this.contractId = contractId }
 
-            fun groupKey(groupKey: String) = apply { this.groupKey = groupKey }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
 
-            fun groupValues(groupValues: List<String>) = apply {
-                this.groupValues = groupValues.toMutableList()
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
+
+            fun groupKey(groupKey: String) = groupKey(JsonField.of(groupKey))
+
+            fun groupKey(groupKey: JsonField<String>) = apply { this.groupKey = groupKey }
+
+            fun groupValues(groupValues: List<String>) = groupValues(JsonField.of(groupValues))
+
+            fun groupValues(groupValues: JsonField<List<String>>) = apply {
+                this.groupValues = groupValues.map { it.toMutableList() }
             }
 
             fun addGroupValue(groupValue: String) = apply {
-                groupValues = (groupValues ?: mutableListOf()).apply { add(groupValue) }
+                groupValues =
+                    (groupValues ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(groupValue)
+                    }
             }
 
-            fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+            fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
+
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                this.startingAt = startingAt
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -141,7 +215,7 @@ constructor(
                     checkNotNull(customerId) { "`customerId` is required but was not set" },
                     checkNotNull(groupKey) { "`groupKey` is required but was not set" },
                     checkNotNull(groupValues) { "`groupValues` is required but was not set" }
-                        .toImmutable(),
+                        .map { it.toImmutable() },
                     checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
@@ -188,15 +262,48 @@ constructor(
 
         fun contractId(contractId: String) = apply { body.contractId(contractId) }
 
+        fun contractId(contractId: JsonField<String>) = apply { body.contractId(contractId) }
+
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
+
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
 
         fun groupKey(groupKey: String) = apply { body.groupKey(groupKey) }
 
+        fun groupKey(groupKey: JsonField<String>) = apply { body.groupKey(groupKey) }
+
         fun groupValues(groupValues: List<String>) = apply { body.groupValues(groupValues) }
+
+        fun groupValues(groupValues: JsonField<List<String>>) = apply {
+            body.groupValues(groupValues)
+        }
 
         fun addGroupValue(groupValue: String) = apply { body.addGroupValue(groupValue) }
 
         fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
+
+        fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+            body.startingAt(startingAt)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -294,25 +401,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractSetUsageFilterParams =

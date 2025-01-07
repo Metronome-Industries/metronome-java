@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -35,11 +36,17 @@ constructor(
 
     fun key(): String = body.key()
 
+    fun _enforceUniqueness(): JsonField<Boolean> = body._enforceUniqueness()
+
+    fun _entity(): JsonField<Entity> = body._entity()
+
+    fun _key(): JsonField<String> = body._key()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomFieldAddKeyBody = body
 
@@ -51,22 +58,45 @@ constructor(
     class CustomFieldAddKeyBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("enforce_uniqueness") private val enforceUniqueness: Boolean,
-        @JsonProperty("entity") private val entity: Entity,
-        @JsonProperty("key") private val key: String,
+        @JsonProperty("enforce_uniqueness")
+        @ExcludeMissing
+        private val enforceUniqueness: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("entity")
+        @ExcludeMissing
+        private val entity: JsonField<Entity> = JsonMissing.of(),
+        @JsonProperty("key") @ExcludeMissing private val key: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("enforce_uniqueness") fun enforceUniqueness(): Boolean = enforceUniqueness
+        fun enforceUniqueness(): Boolean = enforceUniqueness.getRequired("enforce_uniqueness")
 
-        @JsonProperty("entity") fun entity(): Entity = entity
+        fun entity(): Entity = entity.getRequired("entity")
 
-        @JsonProperty("key") fun key(): String = key
+        fun key(): String = key.getRequired("key")
+
+        @JsonProperty("enforce_uniqueness")
+        @ExcludeMissing
+        fun _enforceUniqueness(): JsonField<Boolean> = enforceUniqueness
+
+        @JsonProperty("entity") @ExcludeMissing fun _entity(): JsonField<Entity> = entity
+
+        @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomFieldAddKeyBody = apply {
+            if (!validated) {
+                enforceUniqueness()
+                entity()
+                key()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -77,9 +107,9 @@ constructor(
 
         class Builder {
 
-            private var enforceUniqueness: Boolean? = null
-            private var entity: Entity? = null
-            private var key: String? = null
+            private var enforceUniqueness: JsonField<Boolean>? = null
+            private var entity: JsonField<Entity>? = null
+            private var key: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -90,13 +120,20 @@ constructor(
                 additionalProperties = customFieldAddKeyBody.additionalProperties.toMutableMap()
             }
 
-            fun enforceUniqueness(enforceUniqueness: Boolean) = apply {
+            fun enforceUniqueness(enforceUniqueness: Boolean) =
+                enforceUniqueness(JsonField.of(enforceUniqueness))
+
+            fun enforceUniqueness(enforceUniqueness: JsonField<Boolean>) = apply {
                 this.enforceUniqueness = enforceUniqueness
             }
 
-            fun entity(entity: Entity) = apply { this.entity = entity }
+            fun entity(entity: Entity) = entity(JsonField.of(entity))
 
-            fun key(key: String) = apply { this.key = key }
+            fun entity(entity: JsonField<Entity>) = apply { this.entity = entity }
+
+            fun key(key: String) = key(JsonField.of(key))
+
+            fun key(key: JsonField<String>) = apply { this.key = key }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -171,9 +208,36 @@ constructor(
             body.enforceUniqueness(enforceUniqueness)
         }
 
+        fun enforceUniqueness(enforceUniqueness: JsonField<Boolean>) = apply {
+            body.enforceUniqueness(enforceUniqueness)
+        }
+
         fun entity(entity: Entity) = apply { body.entity(entity) }
 
+        fun entity(entity: JsonField<Entity>) = apply { body.entity(entity) }
+
         fun key(key: String) = apply { body.key(key) }
+
+        fun key(key: JsonField<String>) = apply { body.key(key) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -271,25 +335,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomFieldAddKeyParams =

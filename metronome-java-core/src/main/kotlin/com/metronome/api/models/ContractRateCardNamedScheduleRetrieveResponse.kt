@@ -29,7 +29,7 @@ private constructor(
 
     fun data(): List<Data> = data.getRequired("data")
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Data>> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -53,7 +53,7 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<List<Data>> = JsonMissing.of()
+        private var data: JsonField<MutableList<Data>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -61,14 +61,29 @@ private constructor(
             contractRateCardNamedScheduleRetrieveResponse:
                 ContractRateCardNamedScheduleRetrieveResponse
         ) = apply {
-            data = contractRateCardNamedScheduleRetrieveResponse.data
+            data = contractRateCardNamedScheduleRetrieveResponse.data.map { it.toMutableList() }
             additionalProperties =
                 contractRateCardNamedScheduleRetrieveResponse.additionalProperties.toMutableMap()
         }
 
         fun data(data: List<Data>) = data(JsonField.of(data))
 
-        fun data(data: JsonField<List<Data>>) = apply { this.data = data }
+        fun data(data: JsonField<List<Data>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
+
+        fun addData(data: Data) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(data)
+                }
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -91,7 +106,8 @@ private constructor(
 
         fun build(): ContractRateCardNamedScheduleRetrieveResponse =
             ContractRateCardNamedScheduleRetrieveResponse(
-                data.map { it.toImmutable() },
+                checkNotNull(data) { "`data` is required but was not set" }
+                    .map { it.toImmutable() },
                 additionalProperties.toImmutable()
             )
     }
@@ -113,14 +129,18 @@ private constructor(
 
         fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
+        @JsonProperty("value") @ExcludeMissing fun _value(): JsonValue = value
+
         fun endingBefore(): Optional<OffsetDateTime> =
             Optional.ofNullable(endingBefore.getNullable("ending_before"))
 
-        @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
-        @JsonProperty("value") @ExcludeMissing fun _value() = value
-
-        @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -145,8 +165,8 @@ private constructor(
 
         class Builder {
 
-            private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var value: JsonValue = JsonMissing.of()
+            private var startingAt: JsonField<OffsetDateTime>? = null
+            private var value: JsonValue? = null
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -194,8 +214,8 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    startingAt,
-                    value,
+                    checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                    checkNotNull(value) { "`value` is required but was not set" },
                     endingBefore,
                     additionalProperties.toImmutable(),
                 )

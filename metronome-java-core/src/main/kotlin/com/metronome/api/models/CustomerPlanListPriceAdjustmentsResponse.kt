@@ -50,15 +50,19 @@ private constructor(
 
     fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
 
-    @JsonProperty("charge_id") @ExcludeMissing fun _chargeId() = chargeId
+    @JsonProperty("charge_id") @ExcludeMissing fun _chargeId(): JsonField<String> = chargeId
 
-    @JsonProperty("charge_type") @ExcludeMissing fun _chargeType() = chargeType
+    @JsonProperty("charge_type")
+    @ExcludeMissing
+    fun _chargeType(): JsonField<ChargeType> = chargeType
 
-    @JsonProperty("prices") @ExcludeMissing fun _prices() = prices
+    @JsonProperty("prices") @ExcludeMissing fun _prices(): JsonField<List<Price>> = prices
 
-    @JsonProperty("start_period") @ExcludeMissing fun _startPeriod() = startPeriod
+    @JsonProperty("start_period")
+    @ExcludeMissing
+    fun _startPeriod(): JsonField<Double> = startPeriod
 
-    @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+    @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -86,10 +90,10 @@ private constructor(
 
     class Builder {
 
-        private var chargeId: JsonField<String> = JsonMissing.of()
-        private var chargeType: JsonField<ChargeType> = JsonMissing.of()
-        private var prices: JsonField<List<Price>> = JsonMissing.of()
-        private var startPeriod: JsonField<Double> = JsonMissing.of()
+        private var chargeId: JsonField<String>? = null
+        private var chargeType: JsonField<ChargeType>? = null
+        private var prices: JsonField<MutableList<Price>>? = null
+        private var startPeriod: JsonField<Double>? = null
         private var quantity: JsonField<Double> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -99,7 +103,7 @@ private constructor(
         ) = apply {
             chargeId = customerPlanListPriceAdjustmentsResponse.chargeId
             chargeType = customerPlanListPriceAdjustmentsResponse.chargeType
-            prices = customerPlanListPriceAdjustmentsResponse.prices
+            prices = customerPlanListPriceAdjustmentsResponse.prices.map { it.toMutableList() }
             startPeriod = customerPlanListPriceAdjustmentsResponse.startPeriod
             quantity = customerPlanListPriceAdjustmentsResponse.quantity
             additionalProperties =
@@ -116,7 +120,22 @@ private constructor(
 
         fun prices(prices: List<Price>) = prices(JsonField.of(prices))
 
-        fun prices(prices: JsonField<List<Price>>) = apply { this.prices = prices }
+        fun prices(prices: JsonField<List<Price>>) = apply {
+            this.prices = prices.map { it.toMutableList() }
+        }
+
+        fun addPrice(price: Price) = apply {
+            prices =
+                (prices ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(price)
+                }
+        }
 
         fun startPeriod(startPeriod: Double) = startPeriod(JsonField.of(startPeriod))
 
@@ -147,10 +166,11 @@ private constructor(
 
         fun build(): CustomerPlanListPriceAdjustmentsResponse =
             CustomerPlanListPriceAdjustmentsResponse(
-                chargeId,
-                chargeType,
-                prices.map { it.toImmutable() },
-                startPeriod,
+                checkNotNull(chargeId) { "`chargeId` is required but was not set" },
+                checkNotNull(chargeType) { "`chargeType` is required but was not set" },
+                checkNotNull(prices) { "`prices` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(startPeriod) { "`startPeriod` is required but was not set" },
                 quantity,
                 additionalProperties.toImmutable(),
             )
@@ -257,12 +277,14 @@ private constructor(
         fun value(): Optional<Double> = Optional.ofNullable(value.getNullable("value"))
 
         /** Determines how the value will be applied. */
-        @JsonProperty("adjustment_type") @ExcludeMissing fun _adjustmentType() = adjustmentType
+        @JsonProperty("adjustment_type")
+        @ExcludeMissing
+        fun _adjustmentType(): JsonField<AdjustmentType> = adjustmentType
 
         /** Used in pricing tiers. Indicates at what metric value the price applies. */
-        @JsonProperty("tier") @ExcludeMissing fun _tier() = tier
+        @JsonProperty("tier") @ExcludeMissing fun _tier(): JsonField<Double> = tier
 
-        @JsonProperty("value") @ExcludeMissing fun _value() = value
+        @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<Double> = value
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -288,7 +310,7 @@ private constructor(
 
         class Builder {
 
-            private var adjustmentType: JsonField<AdjustmentType> = JsonMissing.of()
+            private var adjustmentType: JsonField<AdjustmentType>? = null
             private var tier: JsonField<Double> = JsonMissing.of()
             private var value: JsonField<Double> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -341,7 +363,7 @@ private constructor(
 
             fun build(): Price =
                 Price(
-                    adjustmentType,
+                    checkNotNull(adjustmentType) { "`adjustmentType` is required but was not set" },
                     tier,
                     value,
                     additionalProperties.toImmutable(),

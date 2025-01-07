@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -48,11 +50,35 @@ constructor(
      */
     fun fiatCreditTypeId(): Optional<String> = body.fiatCreditTypeId()
 
+    /** Used only in UI/API. It is not exposed to end customers. */
+    fun _name(): JsonField<String> = body._name()
+
+    /**
+     * Reference this alias when creating a contract. If the same alias is assigned to multiple rate
+     * cards, it will reference the rate card to which it was most recently assigned. It is not
+     * exposed to end customers.
+     */
+    fun _aliases(): JsonField<List<Alias>> = body._aliases()
+
+    /** Required when using custom pricing units in rates. */
+    fun _creditTypeConversions(): JsonField<List<CreditTypeConversion>> =
+        body._creditTypeConversions()
+
+    fun _customFields(): JsonField<CustomFields> = body._customFields()
+
+    fun _description(): JsonField<String> = body._description()
+
+    /**
+     * The Metronome ID of the credit type to associate with the rate card, defaults to USD (cents)
+     * if not passed.
+     */
+    fun _fiatCreditTypeId(): JsonField<String> = body._fiatCreditTypeId()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): ContractRateCardCreateBody = body
 
@@ -64,48 +90,103 @@ constructor(
     class ContractRateCardCreateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("name") private val name: String,
-        @JsonProperty("aliases") private val aliases: List<Alias>?,
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("aliases")
+        @ExcludeMissing
+        private val aliases: JsonField<List<Alias>> = JsonMissing.of(),
         @JsonProperty("credit_type_conversions")
-        private val creditTypeConversions: List<CreditTypeConversion>?,
-        @JsonProperty("custom_fields") private val customFields: CustomFields?,
-        @JsonProperty("description") private val description: String?,
-        @JsonProperty("fiat_credit_type_id") private val fiatCreditTypeId: String?,
+        @ExcludeMissing
+        private val creditTypeConversions: JsonField<List<CreditTypeConversion>> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        private val description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("fiat_credit_type_id")
+        @ExcludeMissing
+        private val fiatCreditTypeId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Used only in UI/API. It is not exposed to end customers. */
-        @JsonProperty("name") fun name(): String = name
+        fun name(): String = name.getRequired("name")
 
         /**
          * Reference this alias when creating a contract. If the same alias is assigned to multiple
          * rate cards, it will reference the rate card to which it was most recently assigned. It is
          * not exposed to end customers.
          */
-        @JsonProperty("aliases") fun aliases(): Optional<List<Alias>> = Optional.ofNullable(aliases)
+        fun aliases(): Optional<List<Alias>> = Optional.ofNullable(aliases.getNullable("aliases"))
+
+        /** Required when using custom pricing units in rates. */
+        fun creditTypeConversions(): Optional<List<CreditTypeConversion>> =
+            Optional.ofNullable(creditTypeConversions.getNullable("credit_type_conversions"))
+
+        fun customFields(): Optional<CustomFields> =
+            Optional.ofNullable(customFields.getNullable("custom_fields"))
+
+        fun description(): Optional<String> =
+            Optional.ofNullable(description.getNullable("description"))
+
+        /**
+         * The Metronome ID of the credit type to associate with the rate card, defaults to USD
+         * (cents) if not passed.
+         */
+        fun fiatCreditTypeId(): Optional<String> =
+            Optional.ofNullable(fiatCreditTypeId.getNullable("fiat_credit_type_id"))
+
+        /** Used only in UI/API. It is not exposed to end customers. */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+        /**
+         * Reference this alias when creating a contract. If the same alias is assigned to multiple
+         * rate cards, it will reference the rate card to which it was most recently assigned. It is
+         * not exposed to end customers.
+         */
+        @JsonProperty("aliases") @ExcludeMissing fun _aliases(): JsonField<List<Alias>> = aliases
 
         /** Required when using custom pricing units in rates. */
         @JsonProperty("credit_type_conversions")
-        fun creditTypeConversions(): Optional<List<CreditTypeConversion>> =
-            Optional.ofNullable(creditTypeConversions)
+        @ExcludeMissing
+        fun _creditTypeConversions(): JsonField<List<CreditTypeConversion>> = creditTypeConversions
 
         @JsonProperty("custom_fields")
-        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+        @ExcludeMissing
+        fun _customFields(): JsonField<CustomFields> = customFields
 
         @JsonProperty("description")
-        fun description(): Optional<String> = Optional.ofNullable(description)
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
 
         /**
          * The Metronome ID of the credit type to associate with the rate card, defaults to USD
          * (cents) if not passed.
          */
         @JsonProperty("fiat_credit_type_id")
-        fun fiatCreditTypeId(): Optional<String> = Optional.ofNullable(fiatCreditTypeId)
+        @ExcludeMissing
+        fun _fiatCreditTypeId(): JsonField<String> = fiatCreditTypeId
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ContractRateCardCreateBody = apply {
+            if (!validated) {
+                name()
+                aliases().map { it.forEach { it.validate() } }
+                creditTypeConversions().map { it.forEach { it.validate() } }
+                customFields().map { it.validate() }
+                description()
+                fiatCreditTypeId()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -116,20 +197,20 @@ constructor(
 
         class Builder {
 
-            private var name: String? = null
-            private var aliases: MutableList<Alias>? = null
-            private var creditTypeConversions: MutableList<CreditTypeConversion>? = null
-            private var customFields: CustomFields? = null
-            private var description: String? = null
-            private var fiatCreditTypeId: String? = null
+            private var name: JsonField<String>? = null
+            private var aliases: JsonField<MutableList<Alias>>? = null
+            private var creditTypeConversions: JsonField<MutableList<CreditTypeConversion>>? = null
+            private var customFields: JsonField<CustomFields> = JsonMissing.of()
+            private var description: JsonField<String> = JsonMissing.of()
+            private var fiatCreditTypeId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(contractRateCardCreateBody: ContractRateCardCreateBody) = apply {
                 name = contractRateCardCreateBody.name
-                aliases = contractRateCardCreateBody.aliases?.toMutableList()
+                aliases = contractRateCardCreateBody.aliases.map { it.toMutableList() }
                 creditTypeConversions =
-                    contractRateCardCreateBody.creditTypeConversions?.toMutableList()
+                    contractRateCardCreateBody.creditTypeConversions.map { it.toMutableList() }
                 customFields = contractRateCardCreateBody.customFields
                 description = contractRateCardCreateBody.description
                 fiatCreditTypeId = contractRateCardCreateBody.fiatCreditTypeId
@@ -138,21 +219,26 @@ constructor(
             }
 
             /** Used only in UI/API. It is not exposed to end customers. */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = name(JsonField.of(name))
+
+            /** Used only in UI/API. It is not exposed to end customers. */
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             /**
              * Reference this alias when creating a contract. If the same alias is assigned to
              * multiple rate cards, it will reference the rate card to which it was most recently
              * assigned. It is not exposed to end customers.
              */
-            fun aliases(aliases: List<Alias>?) = apply { this.aliases = aliases?.toMutableList() }
+            fun aliases(aliases: List<Alias>) = aliases(JsonField.of(aliases))
 
             /**
              * Reference this alias when creating a contract. If the same alias is assigned to
              * multiple rate cards, it will reference the rate card to which it was most recently
              * assigned. It is not exposed to end customers.
              */
-            fun aliases(aliases: Optional<List<Alias>>) = aliases(aliases.orElse(null))
+            fun aliases(aliases: JsonField<List<Alias>>) = apply {
+                this.aliases = aliases.map { it.toMutableList() }
+            }
 
             /**
              * Reference this alias when creating a contract. If the same alias is assigned to
@@ -160,49 +246,69 @@ constructor(
              * assigned. It is not exposed to end customers.
              */
             fun addAlias(alias: Alias) = apply {
-                aliases = (aliases ?: mutableListOf()).apply { add(alias) }
+                aliases =
+                    (aliases ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(alias)
+                    }
             }
 
             /** Required when using custom pricing units in rates. */
-            fun creditTypeConversions(creditTypeConversions: List<CreditTypeConversion>?) = apply {
-                this.creditTypeConversions = creditTypeConversions?.toMutableList()
-            }
+            fun creditTypeConversions(creditTypeConversions: List<CreditTypeConversion>) =
+                creditTypeConversions(JsonField.of(creditTypeConversions))
 
             /** Required when using custom pricing units in rates. */
-            fun creditTypeConversions(creditTypeConversions: Optional<List<CreditTypeConversion>>) =
-                creditTypeConversions(creditTypeConversions.orElse(null))
+            fun creditTypeConversions(
+                creditTypeConversions: JsonField<List<CreditTypeConversion>>
+            ) = apply {
+                this.creditTypeConversions = creditTypeConversions.map { it.toMutableList() }
+            }
 
             /** Required when using custom pricing units in rates. */
             fun addCreditTypeConversion(creditTypeConversion: CreditTypeConversion) = apply {
                 creditTypeConversions =
-                    (creditTypeConversions ?: mutableListOf()).apply { add(creditTypeConversion) }
+                    (creditTypeConversions ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(creditTypeConversion)
+                    }
             }
 
-            fun customFields(customFields: CustomFields?) = apply {
+            fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+
+            fun customFields(customFields: JsonField<CustomFields>) = apply {
                 this.customFields = customFields
             }
 
-            fun customFields(customFields: Optional<CustomFields>) =
-                customFields(customFields.orElse(null))
+            fun description(description: String) = description(JsonField.of(description))
 
-            fun description(description: String?) = apply { this.description = description }
-
-            fun description(description: Optional<String>) = description(description.orElse(null))
-
-            /**
-             * The Metronome ID of the credit type to associate with the rate card, defaults to USD
-             * (cents) if not passed.
-             */
-            fun fiatCreditTypeId(fiatCreditTypeId: String?) = apply {
-                this.fiatCreditTypeId = fiatCreditTypeId
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
             }
 
             /**
              * The Metronome ID of the credit type to associate with the rate card, defaults to USD
              * (cents) if not passed.
              */
-            fun fiatCreditTypeId(fiatCreditTypeId: Optional<String>) =
-                fiatCreditTypeId(fiatCreditTypeId.orElse(null))
+            fun fiatCreditTypeId(fiatCreditTypeId: String) =
+                fiatCreditTypeId(JsonField.of(fiatCreditTypeId))
+
+            /**
+             * The Metronome ID of the credit type to associate with the rate card, defaults to USD
+             * (cents) if not passed.
+             */
+            fun fiatCreditTypeId(fiatCreditTypeId: JsonField<String>) = apply {
+                this.fiatCreditTypeId = fiatCreditTypeId
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -226,8 +332,8 @@ constructor(
             fun build(): ContractRateCardCreateBody =
                 ContractRateCardCreateBody(
                     checkNotNull(name) { "`name` is required but was not set" },
-                    aliases?.toImmutable(),
-                    creditTypeConversions?.toImmutable(),
+                    (aliases ?: JsonMissing.of()).map { it.toImmutable() },
+                    (creditTypeConversions ?: JsonMissing.of()).map { it.toImmutable() },
                     customFields,
                     description,
                     fiatCreditTypeId,
@@ -277,19 +383,22 @@ constructor(
         /** Used only in UI/API. It is not exposed to end customers. */
         fun name(name: String) = apply { body.name(name) }
 
-        /**
-         * Reference this alias when creating a contract. If the same alias is assigned to multiple
-         * rate cards, it will reference the rate card to which it was most recently assigned. It is
-         * not exposed to end customers.
-         */
-        fun aliases(aliases: List<Alias>?) = apply { body.aliases(aliases) }
+        /** Used only in UI/API. It is not exposed to end customers. */
+        fun name(name: JsonField<String>) = apply { body.name(name) }
 
         /**
          * Reference this alias when creating a contract. If the same alias is assigned to multiple
          * rate cards, it will reference the rate card to which it was most recently assigned. It is
          * not exposed to end customers.
          */
-        fun aliases(aliases: Optional<List<Alias>>) = aliases(aliases.orElse(null))
+        fun aliases(aliases: List<Alias>) = apply { body.aliases(aliases) }
+
+        /**
+         * Reference this alias when creating a contract. If the same alias is assigned to multiple
+         * rate cards, it will reference the rate card to which it was most recently assigned. It is
+         * not exposed to end customers.
+         */
+        fun aliases(aliases: JsonField<List<Alias>>) = apply { body.aliases(aliases) }
 
         /**
          * Reference this alias when creating a contract. If the same alias is assigned to multiple
@@ -299,33 +408,36 @@ constructor(
         fun addAlias(alias: Alias) = apply { body.addAlias(alias) }
 
         /** Required when using custom pricing units in rates. */
-        fun creditTypeConversions(creditTypeConversions: List<CreditTypeConversion>?) = apply {
+        fun creditTypeConversions(creditTypeConversions: List<CreditTypeConversion>) = apply {
             body.creditTypeConversions(creditTypeConversions)
         }
 
         /** Required when using custom pricing units in rates. */
-        fun creditTypeConversions(creditTypeConversions: Optional<List<CreditTypeConversion>>) =
-            creditTypeConversions(creditTypeConversions.orElse(null))
+        fun creditTypeConversions(creditTypeConversions: JsonField<List<CreditTypeConversion>>) =
+            apply {
+                body.creditTypeConversions(creditTypeConversions)
+            }
 
         /** Required when using custom pricing units in rates. */
         fun addCreditTypeConversion(creditTypeConversion: CreditTypeConversion) = apply {
             body.addCreditTypeConversion(creditTypeConversion)
         }
 
-        fun customFields(customFields: CustomFields?) = apply { body.customFields(customFields) }
+        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
 
-        fun customFields(customFields: Optional<CustomFields>) =
-            customFields(customFields.orElse(null))
+        fun customFields(customFields: JsonField<CustomFields>) = apply {
+            body.customFields(customFields)
+        }
 
-        fun description(description: String?) = apply { body.description(description) }
+        fun description(description: String) = apply { body.description(description) }
 
-        fun description(description: Optional<String>) = description(description.orElse(null))
+        fun description(description: JsonField<String>) = apply { body.description(description) }
 
         /**
          * The Metronome ID of the credit type to associate with the rate card, defaults to USD
          * (cents) if not passed.
          */
-        fun fiatCreditTypeId(fiatCreditTypeId: String?) = apply {
+        fun fiatCreditTypeId(fiatCreditTypeId: String) = apply {
             body.fiatCreditTypeId(fiatCreditTypeId)
         }
 
@@ -333,8 +445,28 @@ constructor(
          * The Metronome ID of the credit type to associate with the rate card, defaults to USD
          * (cents) if not passed.
          */
-        fun fiatCreditTypeId(fiatCreditTypeId: Optional<String>) =
-            fiatCreditTypeId(fiatCreditTypeId.orElse(null))
+        fun fiatCreditTypeId(fiatCreditTypeId: JsonField<String>) = apply {
+            body.fiatCreditTypeId(fiatCreditTypeId)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -434,25 +566,6 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
         fun build(): ContractRateCardCreateParams =
             ContractRateCardCreateParams(
                 body.build(),
@@ -465,24 +578,51 @@ constructor(
     class Alias
     @JsonCreator
     private constructor(
-        @JsonProperty("name") private val name: String,
-        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
-        @JsonProperty("starting_at") private val startingAt: OffsetDateTime?,
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("name") fun name(): String = name
+        fun name(): String = name.getRequired("name")
+
+        fun endingBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+        fun startingAt(): Optional<OffsetDateTime> =
+            Optional.ofNullable(startingAt.getNullable("starting_at"))
+
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         @JsonProperty("ending_before")
-        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
         @JsonProperty("starting_at")
-        fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): Alias = apply {
+            if (!validated) {
+                name()
+                endingBefore()
+                startingAt()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -493,9 +633,9 @@ constructor(
 
         class Builder {
 
-            private var name: String? = null
-            private var endingBefore: OffsetDateTime? = null
-            private var startingAt: OffsetDateTime? = null
+            private var name: JsonField<String>? = null
+            private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -506,19 +646,22 @@ constructor(
                 additionalProperties = alias.additionalProperties.toMutableMap()
             }
 
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = name(JsonField.of(name))
 
-            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
+            fun name(name: JsonField<String>) = apply { this.name = name }
+
+            fun endingBefore(endingBefore: OffsetDateTime) =
+                endingBefore(JsonField.of(endingBefore))
+
+            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
             }
 
-            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
-                endingBefore(endingBefore.orElse(null))
+            fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
-            fun startingAt(startingAt: OffsetDateTime?) = apply { this.startingAt = startingAt }
-
-            fun startingAt(startingAt: Optional<OffsetDateTime>) =
-                startingAt(startingAt.orElse(null))
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                this.startingAt = startingAt
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -570,20 +713,42 @@ constructor(
     class CreditTypeConversion
     @JsonCreator
     private constructor(
-        @JsonProperty("custom_credit_type_id") private val customCreditTypeId: String,
-        @JsonProperty("fiat_per_custom_credit") private val fiatPerCustomCredit: Double,
+        @JsonProperty("custom_credit_type_id")
+        @ExcludeMissing
+        private val customCreditTypeId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("fiat_per_custom_credit")
+        @ExcludeMissing
+        private val fiatPerCustomCredit: JsonField<Double> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("custom_credit_type_id") fun customCreditTypeId(): String = customCreditTypeId
+        fun customCreditTypeId(): String = customCreditTypeId.getRequired("custom_credit_type_id")
+
+        fun fiatPerCustomCredit(): Double =
+            fiatPerCustomCredit.getRequired("fiat_per_custom_credit")
+
+        @JsonProperty("custom_credit_type_id")
+        @ExcludeMissing
+        fun _customCreditTypeId(): JsonField<String> = customCreditTypeId
 
         @JsonProperty("fiat_per_custom_credit")
-        fun fiatPerCustomCredit(): Double = fiatPerCustomCredit
+        @ExcludeMissing
+        fun _fiatPerCustomCredit(): JsonField<Double> = fiatPerCustomCredit
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CreditTypeConversion = apply {
+            if (!validated) {
+                customCreditTypeId()
+                fiatPerCustomCredit()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -594,8 +759,8 @@ constructor(
 
         class Builder {
 
-            private var customCreditTypeId: String? = null
-            private var fiatPerCustomCredit: Double? = null
+            private var customCreditTypeId: JsonField<String>? = null
+            private var fiatPerCustomCredit: JsonField<Double>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -605,11 +770,17 @@ constructor(
                 additionalProperties = creditTypeConversion.additionalProperties.toMutableMap()
             }
 
-            fun customCreditTypeId(customCreditTypeId: String) = apply {
+            fun customCreditTypeId(customCreditTypeId: String) =
+                customCreditTypeId(JsonField.of(customCreditTypeId))
+
+            fun customCreditTypeId(customCreditTypeId: JsonField<String>) = apply {
                 this.customCreditTypeId = customCreditTypeId
             }
 
-            fun fiatPerCustomCredit(fiatPerCustomCredit: Double) = apply {
+            fun fiatPerCustomCredit(fiatPerCustomCredit: Double) =
+                fiatPerCustomCredit(JsonField.of(fiatPerCustomCredit))
+
+            fun fiatPerCustomCredit(fiatPerCustomCredit: JsonField<Double>) = apply {
                 this.fiatPerCustomCredit = fiatPerCustomCredit
             }
 
@@ -673,6 +844,14 @@ constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomFields = apply {
+            if (!validated) {
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 

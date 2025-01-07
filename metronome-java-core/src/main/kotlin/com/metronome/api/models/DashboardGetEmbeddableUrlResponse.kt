@@ -26,7 +26,7 @@ private constructor(
 
     fun data(): Data = data.getRequired("data")
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -50,7 +50,7 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<Data> = JsonMissing.of()
+        private var data: JsonField<Data>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -85,7 +85,10 @@ private constructor(
         }
 
         fun build(): DashboardGetEmbeddableUrlResponse =
-            DashboardGetEmbeddableUrlResponse(data, additionalProperties.toImmutable())
+            DashboardGetEmbeddableUrlResponse(
+                checkNotNull(data) { "`data` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     @NoAutoDetect
@@ -99,7 +102,7 @@ private constructor(
 
         fun url(): Optional<String> = Optional.ofNullable(url.getNullable("url"))
 
-        @JsonProperty("url") @ExcludeMissing fun _url() = url
+        @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
 
         @JsonAnyGetter
         @ExcludeMissing

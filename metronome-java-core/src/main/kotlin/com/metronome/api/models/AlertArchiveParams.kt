@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -30,11 +32,17 @@ constructor(
     /** If true, resets the uniqueness key on this alert so it can be re-used */
     fun releaseUniquenessKey(): Optional<Boolean> = body.releaseUniquenessKey()
 
+    /** The Metronome ID of the alert */
+    fun _id(): JsonField<String> = body._id()
+
+    /** If true, resets the uniqueness key on this alert so it can be re-used */
+    fun _releaseUniquenessKey(): JsonField<Boolean> = body._releaseUniquenessKey()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): AlertArchiveBody = body
 
@@ -46,22 +54,42 @@ constructor(
     class AlertArchiveBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("id") private val id: String,
-        @JsonProperty("release_uniqueness_key") private val releaseUniquenessKey: Boolean?,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("release_uniqueness_key")
+        @ExcludeMissing
+        private val releaseUniquenessKey: JsonField<Boolean> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The Metronome ID of the alert */
-        @JsonProperty("id") fun id(): String = id
+        fun id(): String = id.getRequired("id")
+
+        /** If true, resets the uniqueness key on this alert so it can be re-used */
+        fun releaseUniquenessKey(): Optional<Boolean> =
+            Optional.ofNullable(releaseUniquenessKey.getNullable("release_uniqueness_key"))
+
+        /** The Metronome ID of the alert */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /** If true, resets the uniqueness key on this alert so it can be re-used */
         @JsonProperty("release_uniqueness_key")
-        fun releaseUniquenessKey(): Optional<Boolean> = Optional.ofNullable(releaseUniquenessKey)
+        @ExcludeMissing
+        fun _releaseUniquenessKey(): JsonField<Boolean> = releaseUniquenessKey
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): AlertArchiveBody = apply {
+            if (!validated) {
+                id()
+                releaseUniquenessKey()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -72,8 +100,8 @@ constructor(
 
         class Builder {
 
-            private var id: String? = null
-            private var releaseUniquenessKey: Boolean? = null
+            private var id: JsonField<String>? = null
+            private var releaseUniquenessKey: JsonField<Boolean> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -84,21 +112,19 @@ constructor(
             }
 
             /** The Metronome ID of the alert */
-            fun id(id: String) = apply { this.id = id }
+            fun id(id: String) = id(JsonField.of(id))
 
-            /** If true, resets the uniqueness key on this alert so it can be re-used */
-            fun releaseUniquenessKey(releaseUniquenessKey: Boolean?) = apply {
-                this.releaseUniquenessKey = releaseUniquenessKey
-            }
+            /** The Metronome ID of the alert */
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** If true, resets the uniqueness key on this alert so it can be re-used */
             fun releaseUniquenessKey(releaseUniquenessKey: Boolean) =
-                releaseUniquenessKey(releaseUniquenessKey as Boolean?)
+                releaseUniquenessKey(JsonField.of(releaseUniquenessKey))
 
             /** If true, resets the uniqueness key on this alert so it can be re-used */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun releaseUniquenessKey(releaseUniquenessKey: Optional<Boolean>) =
-                releaseUniquenessKey(releaseUniquenessKey.orElse(null) as Boolean?)
+            fun releaseUniquenessKey(releaseUniquenessKey: JsonField<Boolean>) = apply {
+                this.releaseUniquenessKey = releaseUniquenessKey
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -169,19 +195,37 @@ constructor(
         /** The Metronome ID of the alert */
         fun id(id: String) = apply { body.id(id) }
 
+        /** The Metronome ID of the alert */
+        fun id(id: JsonField<String>) = apply { body.id(id) }
+
         /** If true, resets the uniqueness key on this alert so it can be re-used */
-        fun releaseUniquenessKey(releaseUniquenessKey: Boolean?) = apply {
+        fun releaseUniquenessKey(releaseUniquenessKey: Boolean) = apply {
             body.releaseUniquenessKey(releaseUniquenessKey)
         }
 
         /** If true, resets the uniqueness key on this alert so it can be re-used */
-        fun releaseUniquenessKey(releaseUniquenessKey: Boolean) =
-            releaseUniquenessKey(releaseUniquenessKey as Boolean?)
+        fun releaseUniquenessKey(releaseUniquenessKey: JsonField<Boolean>) = apply {
+            body.releaseUniquenessKey(releaseUniquenessKey)
+        }
 
-        /** If true, resets the uniqueness key on this alert so it can be re-used */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun releaseUniquenessKey(releaseUniquenessKey: Optional<Boolean>) =
-            releaseUniquenessKey(releaseUniquenessKey.orElse(null) as Boolean?)
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -279,25 +323,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): AlertArchiveParams =

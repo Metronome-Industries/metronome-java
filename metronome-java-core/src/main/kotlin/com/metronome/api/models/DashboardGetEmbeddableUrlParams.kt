@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -44,11 +45,25 @@ constructor(
     /** Optional dashboard specific options */
     fun dashboardOptions(): Optional<List<DashboardOption>> = body.dashboardOptions()
 
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    /** The type of dashboard to retrieve. */
+    fun _dashboard(): JsonField<Dashboard> = body._dashboard()
+
+    /** Optional list of billable metric group key overrides */
+    fun _bmGroupKeyOverrides(): JsonField<List<BmGroupKeyOverride>> = body._bmGroupKeyOverrides()
+
+    /** Optional list of colors to override */
+    fun _colorOverrides(): JsonField<List<ColorOverride>> = body._colorOverrides()
+
+    /** Optional dashboard specific options */
+    fun _dashboardOptions(): JsonField<List<DashboardOption>> = body._dashboardOptions()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): DashboardGetEmbeddableUrlBody = body
 
@@ -60,38 +75,82 @@ constructor(
     class DashboardGetEmbeddableUrlBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("customer_id") private val customerId: String,
-        @JsonProperty("dashboard") private val dashboard: Dashboard,
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("dashboard")
+        @ExcludeMissing
+        private val dashboard: JsonField<Dashboard> = JsonMissing.of(),
         @JsonProperty("bm_group_key_overrides")
-        private val bmGroupKeyOverrides: List<BmGroupKeyOverride>?,
-        @JsonProperty("color_overrides") private val colorOverrides: List<ColorOverride>?,
-        @JsonProperty("dashboard_options") private val dashboardOptions: List<DashboardOption>?,
+        @ExcludeMissing
+        private val bmGroupKeyOverrides: JsonField<List<BmGroupKeyOverride>> = JsonMissing.of(),
+        @JsonProperty("color_overrides")
+        @ExcludeMissing
+        private val colorOverrides: JsonField<List<ColorOverride>> = JsonMissing.of(),
+        @JsonProperty("dashboard_options")
+        @ExcludeMissing
+        private val dashboardOptions: JsonField<List<DashboardOption>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
 
         /** The type of dashboard to retrieve. */
-        @JsonProperty("dashboard") fun dashboard(): Dashboard = dashboard
+        fun dashboard(): Dashboard = dashboard.getRequired("dashboard")
+
+        /** Optional list of billable metric group key overrides */
+        fun bmGroupKeyOverrides(): Optional<List<BmGroupKeyOverride>> =
+            Optional.ofNullable(bmGroupKeyOverrides.getNullable("bm_group_key_overrides"))
+
+        /** Optional list of colors to override */
+        fun colorOverrides(): Optional<List<ColorOverride>> =
+            Optional.ofNullable(colorOverrides.getNullable("color_overrides"))
+
+        /** Optional dashboard specific options */
+        fun dashboardOptions(): Optional<List<DashboardOption>> =
+            Optional.ofNullable(dashboardOptions.getNullable("dashboard_options"))
+
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
+
+        /** The type of dashboard to retrieve. */
+        @JsonProperty("dashboard")
+        @ExcludeMissing
+        fun _dashboard(): JsonField<Dashboard> = dashboard
 
         /** Optional list of billable metric group key overrides */
         @JsonProperty("bm_group_key_overrides")
-        fun bmGroupKeyOverrides(): Optional<List<BmGroupKeyOverride>> =
-            Optional.ofNullable(bmGroupKeyOverrides)
+        @ExcludeMissing
+        fun _bmGroupKeyOverrides(): JsonField<List<BmGroupKeyOverride>> = bmGroupKeyOverrides
 
         /** Optional list of colors to override */
         @JsonProperty("color_overrides")
-        fun colorOverrides(): Optional<List<ColorOverride>> = Optional.ofNullable(colorOverrides)
+        @ExcludeMissing
+        fun _colorOverrides(): JsonField<List<ColorOverride>> = colorOverrides
 
         /** Optional dashboard specific options */
         @JsonProperty("dashboard_options")
-        fun dashboardOptions(): Optional<List<DashboardOption>> =
-            Optional.ofNullable(dashboardOptions)
+        @ExcludeMissing
+        fun _dashboardOptions(): JsonField<List<DashboardOption>> = dashboardOptions
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): DashboardGetEmbeddableUrlBody = apply {
+            if (!validated) {
+                customerId()
+                dashboard()
+                bmGroupKeyOverrides().map { it.forEach { it.validate() } }
+                colorOverrides().map { it.forEach { it.validate() } }
+                dashboardOptions().map { it.forEach { it.validate() } }
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -102,11 +161,11 @@ constructor(
 
         class Builder {
 
-            private var customerId: String? = null
-            private var dashboard: Dashboard? = null
-            private var bmGroupKeyOverrides: MutableList<BmGroupKeyOverride>? = null
-            private var colorOverrides: MutableList<ColorOverride>? = null
-            private var dashboardOptions: MutableList<DashboardOption>? = null
+            private var customerId: JsonField<String>? = null
+            private var dashboard: JsonField<Dashboard>? = null
+            private var bmGroupKeyOverrides: JsonField<MutableList<BmGroupKeyOverride>>? = null
+            private var colorOverrides: JsonField<MutableList<ColorOverride>>? = null
+            private var dashboardOptions: JsonField<MutableList<DashboardOption>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -115,61 +174,93 @@ constructor(
                     customerId = dashboardGetEmbeddableUrlBody.customerId
                     dashboard = dashboardGetEmbeddableUrlBody.dashboard
                     bmGroupKeyOverrides =
-                        dashboardGetEmbeddableUrlBody.bmGroupKeyOverrides?.toMutableList()
-                    colorOverrides = dashboardGetEmbeddableUrlBody.colorOverrides?.toMutableList()
+                        dashboardGetEmbeddableUrlBody.bmGroupKeyOverrides.map { it.toMutableList() }
+                    colorOverrides =
+                        dashboardGetEmbeddableUrlBody.colorOverrides.map { it.toMutableList() }
                     dashboardOptions =
-                        dashboardGetEmbeddableUrlBody.dashboardOptions?.toMutableList()
+                        dashboardGetEmbeddableUrlBody.dashboardOptions.map { it.toMutableList() }
                     additionalProperties =
                         dashboardGetEmbeddableUrlBody.additionalProperties.toMutableMap()
                 }
 
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /** The type of dashboard to retrieve. */
-            fun dashboard(dashboard: Dashboard) = apply { this.dashboard = dashboard }
+            fun dashboard(dashboard: Dashboard) = dashboard(JsonField.of(dashboard))
+
+            /** The type of dashboard to retrieve. */
+            fun dashboard(dashboard: JsonField<Dashboard>) = apply { this.dashboard = dashboard }
 
             /** Optional list of billable metric group key overrides */
-            fun bmGroupKeyOverrides(bmGroupKeyOverrides: List<BmGroupKeyOverride>?) = apply {
-                this.bmGroupKeyOverrides = bmGroupKeyOverrides?.toMutableList()
-            }
+            fun bmGroupKeyOverrides(bmGroupKeyOverrides: List<BmGroupKeyOverride>) =
+                bmGroupKeyOverrides(JsonField.of(bmGroupKeyOverrides))
 
             /** Optional list of billable metric group key overrides */
-            fun bmGroupKeyOverrides(bmGroupKeyOverrides: Optional<List<BmGroupKeyOverride>>) =
-                bmGroupKeyOverrides(bmGroupKeyOverrides.orElse(null))
+            fun bmGroupKeyOverrides(bmGroupKeyOverrides: JsonField<List<BmGroupKeyOverride>>) =
+                apply {
+                    this.bmGroupKeyOverrides = bmGroupKeyOverrides.map { it.toMutableList() }
+                }
 
             /** Optional list of billable metric group key overrides */
             fun addBmGroupKeyOverride(bmGroupKeyOverride: BmGroupKeyOverride) = apply {
                 bmGroupKeyOverrides =
-                    (bmGroupKeyOverrides ?: mutableListOf()).apply { add(bmGroupKeyOverride) }
+                    (bmGroupKeyOverrides ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(bmGroupKeyOverride)
+                    }
             }
 
             /** Optional list of colors to override */
-            fun colorOverrides(colorOverrides: List<ColorOverride>?) = apply {
-                this.colorOverrides = colorOverrides?.toMutableList()
-            }
+            fun colorOverrides(colorOverrides: List<ColorOverride>) =
+                colorOverrides(JsonField.of(colorOverrides))
 
             /** Optional list of colors to override */
-            fun colorOverrides(colorOverrides: Optional<List<ColorOverride>>) =
-                colorOverrides(colorOverrides.orElse(null))
+            fun colorOverrides(colorOverrides: JsonField<List<ColorOverride>>) = apply {
+                this.colorOverrides = colorOverrides.map { it.toMutableList() }
+            }
 
             /** Optional list of colors to override */
             fun addColorOverride(colorOverride: ColorOverride) = apply {
-                colorOverrides = (colorOverrides ?: mutableListOf()).apply { add(colorOverride) }
+                colorOverrides =
+                    (colorOverrides ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(colorOverride)
+                    }
             }
 
             /** Optional dashboard specific options */
-            fun dashboardOptions(dashboardOptions: List<DashboardOption>?) = apply {
-                this.dashboardOptions = dashboardOptions?.toMutableList()
-            }
+            fun dashboardOptions(dashboardOptions: List<DashboardOption>) =
+                dashboardOptions(JsonField.of(dashboardOptions))
 
             /** Optional dashboard specific options */
-            fun dashboardOptions(dashboardOptions: Optional<List<DashboardOption>>) =
-                dashboardOptions(dashboardOptions.orElse(null))
+            fun dashboardOptions(dashboardOptions: JsonField<List<DashboardOption>>) = apply {
+                this.dashboardOptions = dashboardOptions.map { it.toMutableList() }
+            }
 
             /** Optional dashboard specific options */
             fun addDashboardOption(dashboardOption: DashboardOption) = apply {
                 dashboardOptions =
-                    (dashboardOptions ?: mutableListOf()).apply { add(dashboardOption) }
+                    (dashboardOptions ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(dashboardOption)
+                    }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -195,9 +286,9 @@ constructor(
                 DashboardGetEmbeddableUrlBody(
                     checkNotNull(customerId) { "`customerId` is required but was not set" },
                     checkNotNull(dashboard) { "`dashboard` is required but was not set" },
-                    bmGroupKeyOverrides?.toImmutable(),
-                    colorOverrides?.toImmutable(),
-                    dashboardOptions?.toImmutable(),
+                    (bmGroupKeyOverrides ?: JsonMissing.of()).map { it.toImmutable() },
+                    (colorOverrides ?: JsonMissing.of()).map { it.toImmutable() },
+                    (dashboardOptions ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -246,17 +337,23 @@ constructor(
 
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
+
         /** The type of dashboard to retrieve. */
         fun dashboard(dashboard: Dashboard) = apply { body.dashboard(dashboard) }
 
+        /** The type of dashboard to retrieve. */
+        fun dashboard(dashboard: JsonField<Dashboard>) = apply { body.dashboard(dashboard) }
+
         /** Optional list of billable metric group key overrides */
-        fun bmGroupKeyOverrides(bmGroupKeyOverrides: List<BmGroupKeyOverride>?) = apply {
+        fun bmGroupKeyOverrides(bmGroupKeyOverrides: List<BmGroupKeyOverride>) = apply {
             body.bmGroupKeyOverrides(bmGroupKeyOverrides)
         }
 
         /** Optional list of billable metric group key overrides */
-        fun bmGroupKeyOverrides(bmGroupKeyOverrides: Optional<List<BmGroupKeyOverride>>) =
-            bmGroupKeyOverrides(bmGroupKeyOverrides.orElse(null))
+        fun bmGroupKeyOverrides(bmGroupKeyOverrides: JsonField<List<BmGroupKeyOverride>>) = apply {
+            body.bmGroupKeyOverrides(bmGroupKeyOverrides)
+        }
 
         /** Optional list of billable metric group key overrides */
         fun addBmGroupKeyOverride(bmGroupKeyOverride: BmGroupKeyOverride) = apply {
@@ -264,13 +361,14 @@ constructor(
         }
 
         /** Optional list of colors to override */
-        fun colorOverrides(colorOverrides: List<ColorOverride>?) = apply {
+        fun colorOverrides(colorOverrides: List<ColorOverride>) = apply {
             body.colorOverrides(colorOverrides)
         }
 
         /** Optional list of colors to override */
-        fun colorOverrides(colorOverrides: Optional<List<ColorOverride>>) =
-            colorOverrides(colorOverrides.orElse(null))
+        fun colorOverrides(colorOverrides: JsonField<List<ColorOverride>>) = apply {
+            body.colorOverrides(colorOverrides)
+        }
 
         /** Optional list of colors to override */
         fun addColorOverride(colorOverride: ColorOverride) = apply {
@@ -278,17 +376,37 @@ constructor(
         }
 
         /** Optional dashboard specific options */
-        fun dashboardOptions(dashboardOptions: List<DashboardOption>?) = apply {
+        fun dashboardOptions(dashboardOptions: List<DashboardOption>) = apply {
             body.dashboardOptions(dashboardOptions)
         }
 
         /** Optional dashboard specific options */
-        fun dashboardOptions(dashboardOptions: Optional<List<DashboardOption>>) =
-            dashboardOptions(dashboardOptions.orElse(null))
+        fun dashboardOptions(dashboardOptions: JsonField<List<DashboardOption>>) = apply {
+            body.dashboardOptions(dashboardOptions)
+        }
 
         /** Optional dashboard specific options */
         fun addDashboardOption(dashboardOption: DashboardOption) = apply {
             body.addDashboardOption(dashboardOption)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -389,25 +507,6 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
         fun build(): DashboardGetEmbeddableUrlParams =
             DashboardGetEmbeddableUrlParams(
                 body.build(),
@@ -483,31 +582,65 @@ constructor(
     class BmGroupKeyOverride
     @JsonCreator
     private constructor(
-        @JsonProperty("group_key_name") private val groupKeyName: String,
-        @JsonProperty("display_name") private val displayName: String?,
-        @JsonProperty("value_display_names") private val valueDisplayNames: ValueDisplayNames?,
+        @JsonProperty("group_key_name")
+        @ExcludeMissing
+        private val groupKeyName: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("display_name")
+        @ExcludeMissing
+        private val displayName: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("value_display_names")
+        @ExcludeMissing
+        private val valueDisplayNames: JsonField<ValueDisplayNames> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The name of the billable metric group key. */
-        @JsonProperty("group_key_name") fun groupKeyName(): String = groupKeyName
+        fun groupKeyName(): String = groupKeyName.getRequired("group_key_name")
+
+        /** The display name for the billable metric group key */
+        fun displayName(): Optional<String> =
+            Optional.ofNullable(displayName.getNullable("display_name"))
+
+        /**
+         * <key, value> pairs of the billable metric group key values and their display names. e.g.
+         * {"a": "Asia", "b": "Euro"}
+         */
+        fun valueDisplayNames(): Optional<ValueDisplayNames> =
+            Optional.ofNullable(valueDisplayNames.getNullable("value_display_names"))
+
+        /** The name of the billable metric group key. */
+        @JsonProperty("group_key_name")
+        @ExcludeMissing
+        fun _groupKeyName(): JsonField<String> = groupKeyName
 
         /** The display name for the billable metric group key */
         @JsonProperty("display_name")
-        fun displayName(): Optional<String> = Optional.ofNullable(displayName)
+        @ExcludeMissing
+        fun _displayName(): JsonField<String> = displayName
 
         /**
          * <key, value> pairs of the billable metric group key values and their display names. e.g.
          * {"a": "Asia", "b": "Euro"}
          */
         @JsonProperty("value_display_names")
-        fun valueDisplayNames(): Optional<ValueDisplayNames> =
-            Optional.ofNullable(valueDisplayNames)
+        @ExcludeMissing
+        fun _valueDisplayNames(): JsonField<ValueDisplayNames> = valueDisplayNames
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): BmGroupKeyOverride = apply {
+            if (!validated) {
+                groupKeyName()
+                displayName()
+                valueDisplayNames().map { it.validate() }
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -518,9 +651,9 @@ constructor(
 
         class Builder {
 
-            private var groupKeyName: String? = null
-            private var displayName: String? = null
-            private var valueDisplayNames: ValueDisplayNames? = null
+            private var groupKeyName: JsonField<String>? = null
+            private var displayName: JsonField<String> = JsonMissing.of()
+            private var valueDisplayNames: JsonField<ValueDisplayNames> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -532,28 +665,35 @@ constructor(
             }
 
             /** The name of the billable metric group key. */
-            fun groupKeyName(groupKeyName: String) = apply { this.groupKeyName = groupKeyName }
+            fun groupKeyName(groupKeyName: String) = groupKeyName(JsonField.of(groupKeyName))
+
+            /** The name of the billable metric group key. */
+            fun groupKeyName(groupKeyName: JsonField<String>) = apply {
+                this.groupKeyName = groupKeyName
+            }
 
             /** The display name for the billable metric group key */
-            fun displayName(displayName: String?) = apply { this.displayName = displayName }
+            fun displayName(displayName: String) = displayName(JsonField.of(displayName))
 
             /** The display name for the billable metric group key */
-            fun displayName(displayName: Optional<String>) = displayName(displayName.orElse(null))
-
-            /**
-             * <key, value> pairs of the billable metric group key values and their display names.
-             * e.g. {"a": "Asia", "b": "Euro"}
-             */
-            fun valueDisplayNames(valueDisplayNames: ValueDisplayNames?) = apply {
-                this.valueDisplayNames = valueDisplayNames
+            fun displayName(displayName: JsonField<String>) = apply {
+                this.displayName = displayName
             }
 
             /**
              * <key, value> pairs of the billable metric group key values and their display names.
              * e.g. {"a": "Asia", "b": "Euro"}
              */
-            fun valueDisplayNames(valueDisplayNames: Optional<ValueDisplayNames>) =
-                valueDisplayNames(valueDisplayNames.orElse(null))
+            fun valueDisplayNames(valueDisplayNames: ValueDisplayNames) =
+                valueDisplayNames(JsonField.of(valueDisplayNames))
+
+            /**
+             * <key, value> pairs of the billable metric group key values and their display names.
+             * e.g. {"a": "Asia", "b": "Euro"}
+             */
+            fun valueDisplayNames(valueDisplayNames: JsonField<ValueDisplayNames>) = apply {
+                this.valueDisplayNames = valueDisplayNames
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -598,6 +738,14 @@ constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): ValueDisplayNames = apply {
+                if (!validated) {
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -681,21 +829,39 @@ constructor(
     class ColorOverride
     @JsonCreator
     private constructor(
-        @JsonProperty("name") private val name: Name?,
-        @JsonProperty("value") private val value: String?,
+        @JsonProperty("name") @ExcludeMissing private val name: JsonField<Name> = JsonMissing.of(),
+        @JsonProperty("value")
+        @ExcludeMissing
+        private val value: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The color to override */
-        @JsonProperty("name") fun name(): Optional<Name> = Optional.ofNullable(name)
+        fun name(): Optional<Name> = Optional.ofNullable(name.getNullable("name"))
 
         /** Hex value representation of the color */
-        @JsonProperty("value") fun value(): Optional<String> = Optional.ofNullable(value)
+        fun value(): Optional<String> = Optional.ofNullable(value.getNullable("value"))
+
+        /** The color to override */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<Name> = name
+
+        /** Hex value representation of the color */
+        @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ColorOverride = apply {
+            if (!validated) {
+                name()
+                value()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -706,8 +872,8 @@ constructor(
 
         class Builder {
 
-            private var name: Name? = null
-            private var value: String? = null
+            private var name: JsonField<Name> = JsonMissing.of()
+            private var value: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -718,16 +884,16 @@ constructor(
             }
 
             /** The color to override */
-            fun name(name: Name?) = apply { this.name = name }
+            fun name(name: Name) = name(JsonField.of(name))
 
             /** The color to override */
-            fun name(name: Optional<Name>) = name(name.orElse(null))
+            fun name(name: JsonField<Name>) = apply { this.name = name }
 
             /** Hex value representation of the color */
-            fun value(value: String?) = apply { this.value = value }
+            fun value(value: String) = value(JsonField.of(value))
 
             /** Hex value representation of the color */
-            fun value(value: Optional<String>) = value(value.orElse(null))
+            fun value(value: JsonField<String>) = apply { this.value = value }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -937,21 +1103,39 @@ constructor(
     class DashboardOption
     @JsonCreator
     private constructor(
-        @JsonProperty("key") private val key: String,
-        @JsonProperty("value") private val value: String,
+        @JsonProperty("key") @ExcludeMissing private val key: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("value")
+        @ExcludeMissing
+        private val value: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The option key name */
-        @JsonProperty("key") fun key(): String = key
+        fun key(): String = key.getRequired("key")
 
         /** The option value */
-        @JsonProperty("value") fun value(): String = value
+        fun value(): String = value.getRequired("value")
+
+        /** The option key name */
+        @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
+
+        /** The option value */
+        @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): DashboardOption = apply {
+            if (!validated) {
+                key()
+                value()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -962,8 +1146,8 @@ constructor(
 
         class Builder {
 
-            private var key: String? = null
-            private var value: String? = null
+            private var key: JsonField<String>? = null
+            private var value: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -974,10 +1158,16 @@ constructor(
             }
 
             /** The option key name */
-            fun key(key: String) = apply { this.key = key }
+            fun key(key: String) = key(JsonField.of(key))
+
+            /** The option key name */
+            fun key(key: JsonField<String>) = apply { this.key = key }
 
             /** The option value */
-            fun value(value: String) = apply { this.value = value }
+            fun value(value: String) = value(JsonField.of(value))
+
+            /** The option value */
+            fun value(value: JsonField<String>) = apply { this.value = value }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()

@@ -43,13 +43,17 @@ private constructor(
     fun triggeredBy(): Optional<String> =
         Optional.ofNullable(triggeredBy.getNullable("triggered_by"))
 
-    @JsonProperty("alert") @ExcludeMissing fun _alert() = alert
+    @JsonProperty("alert") @ExcludeMissing fun _alert(): JsonField<Alert> = alert
 
     /** The status of the customer alert. If the alert is archived, null will be returned. */
-    @JsonProperty("customer_status") @ExcludeMissing fun _customerStatus() = customerStatus
+    @JsonProperty("customer_status")
+    @ExcludeMissing
+    fun _customerStatus(): JsonField<CustomerStatus> = customerStatus
 
     /** If present, indicates the reason the alert was triggered. */
-    @JsonProperty("triggered_by") @ExcludeMissing fun _triggeredBy() = triggeredBy
+    @JsonProperty("triggered_by")
+    @ExcludeMissing
+    fun _triggeredBy(): JsonField<String> = triggeredBy
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -75,8 +79,8 @@ private constructor(
 
     class Builder {
 
-        private var alert: JsonField<Alert> = JsonMissing.of()
-        private var customerStatus: JsonField<CustomerStatus> = JsonMissing.of()
+        private var alert: JsonField<Alert>? = null
+        private var customerStatus: JsonField<CustomerStatus>? = null
         private var triggeredBy: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -93,8 +97,12 @@ private constructor(
         fun alert(alert: JsonField<Alert>) = apply { this.alert = alert }
 
         /** The status of the customer alert. If the alert is archived, null will be returned. */
-        fun customerStatus(customerStatus: CustomerStatus) =
-            customerStatus(JsonField.of(customerStatus))
+        fun customerStatus(customerStatus: CustomerStatus?) =
+            customerStatus(JsonField.ofNullable(customerStatus))
+
+        /** The status of the customer alert. If the alert is archived, null will be returned. */
+        fun customerStatus(customerStatus: Optional<CustomerStatus>) =
+            customerStatus(customerStatus.orElse(null))
 
         /** The status of the customer alert. If the alert is archived, null will be returned. */
         fun customerStatus(customerStatus: JsonField<CustomerStatus>) = apply {
@@ -102,7 +110,10 @@ private constructor(
         }
 
         /** If present, indicates the reason the alert was triggered. */
-        fun triggeredBy(triggeredBy: String) = triggeredBy(JsonField.of(triggeredBy))
+        fun triggeredBy(triggeredBy: String?) = triggeredBy(JsonField.ofNullable(triggeredBy))
+
+        /** If present, indicates the reason the alert was triggered. */
+        fun triggeredBy(triggeredBy: Optional<String>) = triggeredBy(triggeredBy.orElse(null))
 
         /** If present, indicates the reason the alert was triggered. */
         fun triggeredBy(triggeredBy: JsonField<String>) = apply { this.triggeredBy = triggeredBy }
@@ -128,8 +139,8 @@ private constructor(
 
         fun build(): CustomerAlert =
             CustomerAlert(
-                alert,
-                customerStatus,
+                checkNotNull(alert) { "`alert` is required but was not set" },
+                checkNotNull(customerStatus) { "`customerStatus` is required but was not set" },
                 triggeredBy,
                 additionalProperties.toImmutable(),
             )
@@ -228,22 +239,24 @@ private constructor(
             Optional.ofNullable(uniquenessKey.getNullable("uniqueness_key"))
 
         /** the Metronome ID of the alert */
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /** Name of the alert */
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /** Status of the alert */
-        @JsonProperty("status") @ExcludeMissing fun _status() = status
+        @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<Status> = status
 
         /** Threshold value of the alert policy */
-        @JsonProperty("threshold") @ExcludeMissing fun _threshold() = threshold
+        @JsonProperty("threshold") @ExcludeMissing fun _threshold(): JsonField<Double> = threshold
 
         /** Type of the alert */
-        @JsonProperty("type") @ExcludeMissing fun _type() = type
+        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
         /** Timestamp for when the alert was last updated */
-        @JsonProperty("updated_at") @ExcludeMissing fun _updatedAt() = updatedAt
+        @JsonProperty("updated_at")
+        @ExcludeMissing
+        fun _updatedAt(): JsonField<OffsetDateTime> = updatedAt
 
         /**
          * An array of strings, representing a way to filter the credit grant this alert applies to,
@@ -252,32 +265,38 @@ private constructor(
          */
         @JsonProperty("credit_grant_type_filters")
         @ExcludeMissing
-        fun _creditGrantTypeFilters() = creditGrantTypeFilters
+        fun _creditGrantTypeFilters(): JsonField<List<String>> = creditGrantTypeFilters
 
-        @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+        @JsonProperty("credit_type")
+        @ExcludeMissing
+        fun _creditType(): JsonField<CreditTypeData> = creditType
 
         /** A list of custom field filters for alert types that support advanced filtering */
         @JsonProperty("custom_field_filters")
         @ExcludeMissing
-        fun _customFieldFilters() = customFieldFilters
+        fun _customFieldFilters(): JsonField<List<CustomFieldFilter>> = customFieldFilters
 
         /**
          * Scopes alert evaluation to a specific presentation group key on individual line items.
          * Only present for spend alerts.
          */
-        @JsonProperty("group_key_filter") @ExcludeMissing fun _groupKeyFilter() = groupKeyFilter
+        @JsonProperty("group_key_filter")
+        @ExcludeMissing
+        fun _groupKeyFilter(): JsonField<GroupKeyFilter> = groupKeyFilter
 
         /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
         @JsonProperty("invoice_types_filter")
         @ExcludeMissing
-        fun _invoiceTypesFilter() = invoiceTypesFilter
+        fun _invoiceTypesFilter(): JsonField<List<String>> = invoiceTypesFilter
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
          * previously used uniqueness key, a new record will not be created and the request will
          * fail with a 409 error.
          */
-        @JsonProperty("uniqueness_key") @ExcludeMissing fun _uniquenessKey() = uniquenessKey
+        @JsonProperty("uniqueness_key")
+        @ExcludeMissing
+        fun _uniquenessKey(): JsonField<String> = uniquenessKey
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -312,17 +331,17 @@ private constructor(
 
         class Builder {
 
-            private var id: JsonField<String> = JsonMissing.of()
-            private var name: JsonField<String> = JsonMissing.of()
-            private var status: JsonField<Status> = JsonMissing.of()
-            private var threshold: JsonField<Double> = JsonMissing.of()
-            private var type: JsonField<Type> = JsonMissing.of()
-            private var updatedAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var creditGrantTypeFilters: JsonField<List<String>> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var name: JsonField<String>? = null
+            private var status: JsonField<Status>? = null
+            private var threshold: JsonField<Double>? = null
+            private var type: JsonField<Type>? = null
+            private var updatedAt: JsonField<OffsetDateTime>? = null
+            private var creditGrantTypeFilters: JsonField<MutableList<String>>? = null
             private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
-            private var customFieldFilters: JsonField<List<CustomFieldFilter>> = JsonMissing.of()
+            private var customFieldFilters: JsonField<MutableList<CustomFieldFilter>>? = null
             private var groupKeyFilter: JsonField<GroupKeyFilter> = JsonMissing.of()
-            private var invoiceTypesFilter: JsonField<List<String>> = JsonMissing.of()
+            private var invoiceTypesFilter: JsonField<MutableList<String>>? = null
             private var uniquenessKey: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -334,11 +353,11 @@ private constructor(
                 threshold = alert.threshold
                 type = alert.type
                 updatedAt = alert.updatedAt
-                creditGrantTypeFilters = alert.creditGrantTypeFilters
+                creditGrantTypeFilters = alert.creditGrantTypeFilters.map { it.toMutableList() }
                 creditType = alert.creditType
-                customFieldFilters = alert.customFieldFilters
+                customFieldFilters = alert.customFieldFilters.map { it.toMutableList() }
                 groupKeyFilter = alert.groupKeyFilter
-                invoiceTypesFilter = alert.invoiceTypesFilter
+                invoiceTypesFilter = alert.invoiceTypesFilter.map { it.toMutableList() }
                 uniquenessKey = alert.uniquenessKey
                 additionalProperties = alert.additionalProperties.toMutableMap()
             }
@@ -395,10 +414,32 @@ private constructor(
              * defined for CreditPercentage and CreditBalance alerts
              */
             fun creditGrantTypeFilters(creditGrantTypeFilters: JsonField<List<String>>) = apply {
-                this.creditGrantTypeFilters = creditGrantTypeFilters
+                this.creditGrantTypeFilters = creditGrantTypeFilters.map { it.toMutableList() }
             }
 
-            fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
+            /**
+             * An array of strings, representing a way to filter the credit grant this alert applies
+             * to, by looking at the credit_grant_type field on the credit grant. This field is only
+             * defined for CreditPercentage and CreditBalance alerts
+             */
+            fun addCreditGrantTypeFilter(creditGrantTypeFilter: String) = apply {
+                creditGrantTypeFilters =
+                    (creditGrantTypeFilters ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(creditGrantTypeFilter)
+                    }
+            }
+
+            fun creditType(creditType: CreditTypeData?) =
+                creditType(JsonField.ofNullable(creditType))
+
+            fun creditType(creditType: Optional<CreditTypeData>) =
+                creditType(creditType.orElse(null))
 
             fun creditType(creditType: JsonField<CreditTypeData>) = apply {
                 this.creditType = creditType
@@ -410,7 +451,21 @@ private constructor(
 
             /** A list of custom field filters for alert types that support advanced filtering */
             fun customFieldFilters(customFieldFilters: JsonField<List<CustomFieldFilter>>) = apply {
-                this.customFieldFilters = customFieldFilters
+                this.customFieldFilters = customFieldFilters.map { it.toMutableList() }
+            }
+
+            /** A list of custom field filters for alert types that support advanced filtering */
+            fun addCustomFieldFilter(customFieldFilter: CustomFieldFilter) = apply {
+                customFieldFilters =
+                    (customFieldFilters ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(customFieldFilter)
+                    }
             }
 
             /**
@@ -438,7 +493,23 @@ private constructor(
              * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
              */
             fun invoiceTypesFilter(invoiceTypesFilter: JsonField<List<String>>) = apply {
-                this.invoiceTypesFilter = invoiceTypesFilter
+                this.invoiceTypesFilter = invoiceTypesFilter.map { it.toMutableList() }
+            }
+
+            /**
+             * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
+             */
+            fun addInvoiceTypesFilter(invoiceTypesFilter: String) = apply {
+                this.invoiceTypesFilter =
+                    (this.invoiceTypesFilter ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(invoiceTypesFilter)
+                    }
             }
 
             /**
@@ -478,17 +549,17 @@ private constructor(
 
             fun build(): Alert =
                 Alert(
-                    id,
-                    name,
-                    status,
-                    threshold,
-                    type,
-                    updatedAt,
-                    creditGrantTypeFilters.map { it.toImmutable() },
+                    checkNotNull(id) { "`id` is required but was not set" },
+                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkNotNull(status) { "`status` is required but was not set" },
+                    checkNotNull(threshold) { "`threshold` is required but was not set" },
+                    checkNotNull(type) { "`type` is required but was not set" },
+                    checkNotNull(updatedAt) { "`updatedAt` is required but was not set" },
+                    (creditGrantTypeFilters ?: JsonMissing.of()).map { it.toImmutable() },
                     creditType,
-                    customFieldFilters.map { it.toImmutable() },
+                    (customFieldFilters ?: JsonMissing.of()).map { it.toImmutable() },
                     groupKeyFilter,
-                    invoiceTypesFilter.map { it.toImmutable() },
+                    (invoiceTypesFilter ?: JsonMissing.of()).map { it.toImmutable() },
                     uniquenessKey,
                     additionalProperties.toImmutable(),
                 )
@@ -746,11 +817,11 @@ private constructor(
 
             fun value(): String = value.getRequired("value")
 
-            @JsonProperty("entity") @ExcludeMissing fun _entity() = entity
+            @JsonProperty("entity") @ExcludeMissing fun _entity(): JsonField<Entity> = entity
 
-            @JsonProperty("key") @ExcludeMissing fun _key() = key
+            @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
 
-            @JsonProperty("value") @ExcludeMissing fun _value() = value
+            @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -776,9 +847,9 @@ private constructor(
 
             class Builder {
 
-                private var entity: JsonField<Entity> = JsonMissing.of()
-                private var key: JsonField<String> = JsonMissing.of()
-                private var value: JsonField<String> = JsonMissing.of()
+                private var entity: JsonField<Entity>? = null
+                private var key: JsonField<String>? = null
+                private var value: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -825,9 +896,9 @@ private constructor(
 
                 fun build(): CustomFieldFilter =
                     CustomFieldFilter(
-                        entity,
-                        key,
-                        value,
+                        checkNotNull(entity) { "`entity` is required but was not set" },
+                        checkNotNull(key) { "`key` is required but was not set" },
+                        checkNotNull(value) { "`value` is required but was not set" },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -935,9 +1006,9 @@ private constructor(
 
             fun value(): String = value.getRequired("value")
 
-            @JsonProperty("key") @ExcludeMissing fun _key() = key
+            @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
 
-            @JsonProperty("value") @ExcludeMissing fun _value() = value
+            @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -962,8 +1033,8 @@ private constructor(
 
             class Builder {
 
-                private var key: JsonField<String> = JsonMissing.of()
-                private var value: JsonField<String> = JsonMissing.of()
+                private var key: JsonField<String>? = null
+                private var value: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -1005,8 +1076,8 @@ private constructor(
 
                 fun build(): GroupKeyFilter =
                     GroupKeyFilter(
-                        key,
-                        value,
+                        checkNotNull(key) { "`key` is required but was not set" },
+                        checkNotNull(value) { "`value` is required but was not set" },
                         additionalProperties.toImmutable(),
                     )
             }

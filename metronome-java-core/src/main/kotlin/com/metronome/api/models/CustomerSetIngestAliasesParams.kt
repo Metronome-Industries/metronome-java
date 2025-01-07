@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -32,11 +34,13 @@ constructor(
 
     fun ingestAliases(): List<String> = body.ingestAliases()
 
+    fun _ingestAliases(): JsonField<List<String>> = body._ingestAliases()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomerSetIngestAliasesBody = body
 
@@ -55,16 +59,31 @@ constructor(
     class CustomerSetIngestAliasesBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("ingest_aliases") private val ingestAliases: List<String>,
+        @JsonProperty("ingest_aliases")
+        @ExcludeMissing
+        private val ingestAliases: JsonField<List<String>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("ingest_aliases") fun ingestAliases(): List<String> = ingestAliases
+        fun ingestAliases(): List<String> = ingestAliases.getRequired("ingest_aliases")
+
+        @JsonProperty("ingest_aliases")
+        @ExcludeMissing
+        fun _ingestAliases(): JsonField<List<String>> = ingestAliases
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomerSetIngestAliasesBody = apply {
+            if (!validated) {
+                ingestAliases()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -75,22 +94,35 @@ constructor(
 
         class Builder {
 
-            private var ingestAliases: MutableList<String>? = null
+            private var ingestAliases: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(customerSetIngestAliasesBody: CustomerSetIngestAliasesBody) = apply {
-                ingestAliases = customerSetIngestAliasesBody.ingestAliases.toMutableList()
+                ingestAliases =
+                    customerSetIngestAliasesBody.ingestAliases.map { it.toMutableList() }
                 additionalProperties =
                     customerSetIngestAliasesBody.additionalProperties.toMutableMap()
             }
 
-            fun ingestAliases(ingestAliases: List<String>) = apply {
-                this.ingestAliases = ingestAliases.toMutableList()
+            fun ingestAliases(ingestAliases: List<String>) =
+                ingestAliases(JsonField.of(ingestAliases))
+
+            fun ingestAliases(ingestAliases: JsonField<List<String>>) = apply {
+                this.ingestAliases = ingestAliases.map { it.toMutableList() }
             }
 
             fun addIngestAlias(ingestAlias: String) = apply {
-                ingestAliases = (ingestAliases ?: mutableListOf()).apply { add(ingestAlias) }
+                ingestAliases =
+                    (ingestAliases ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(ingestAlias)
+                    }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -115,7 +147,7 @@ constructor(
             fun build(): CustomerSetIngestAliasesBody =
                 CustomerSetIngestAliasesBody(
                     checkNotNull(ingestAliases) { "`ingestAliases` is required but was not set" }
-                        .toImmutable(),
+                        .map { it.toImmutable() },
                     additionalProperties.toImmutable()
                 )
         }
@@ -166,7 +198,30 @@ constructor(
 
         fun ingestAliases(ingestAliases: List<String>) = apply { body.ingestAliases(ingestAliases) }
 
+        fun ingestAliases(ingestAliases: JsonField<List<String>>) = apply {
+            body.ingestAliases(ingestAliases)
+        }
+
         fun addIngestAlias(ingestAlias: String) = apply { body.addIngestAlias(ingestAlias) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -264,25 +319,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerSetIngestAliasesParams =

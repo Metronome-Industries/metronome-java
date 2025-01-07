@@ -34,9 +34,9 @@ private constructor(
 
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage.getNullable("next_page"))
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Data>> = data
 
-    @JsonProperty("next_page") @ExcludeMissing fun _nextPage() = nextPage
+    @JsonProperty("next_page") @ExcludeMissing fun _nextPage(): JsonField<String> = nextPage
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -61,22 +61,39 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<List<Data>> = JsonMissing.of()
-        private var nextPage: JsonField<String> = JsonMissing.of()
+        private var data: JsonField<MutableList<Data>>? = null
+        private var nextPage: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(usageListResponse: UsageListResponse) = apply {
-            data = usageListResponse.data
+            data = usageListResponse.data.map { it.toMutableList() }
             nextPage = usageListResponse.nextPage
             additionalProperties = usageListResponse.additionalProperties.toMutableMap()
         }
 
         fun data(data: List<Data>) = data(JsonField.of(data))
 
-        fun data(data: JsonField<List<Data>>) = apply { this.data = data }
+        fun data(data: JsonField<List<Data>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
 
-        fun nextPage(nextPage: String) = nextPage(JsonField.of(nextPage))
+        fun addData(data: Data) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(data)
+                }
+        }
+
+        fun nextPage(nextPage: String?) = nextPage(JsonField.ofNullable(nextPage))
+
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         fun nextPage(nextPage: JsonField<String>) = apply { this.nextPage = nextPage }
 
@@ -101,8 +118,9 @@ private constructor(
 
         fun build(): UsageListResponse =
             UsageListResponse(
-                data.map { it.toImmutable() },
-                nextPage,
+                checkNotNull(data) { "`data` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(nextPage) { "`nextPage` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }
@@ -156,25 +174,31 @@ private constructor(
 
         @JsonProperty("billable_metric_id")
         @ExcludeMissing
-        fun _billableMetricId() = billableMetricId
+        fun _billableMetricId(): JsonField<String> = billableMetricId
 
         @JsonProperty("billable_metric_name")
         @ExcludeMissing
-        fun _billableMetricName() = billableMetricName
+        fun _billableMetricName(): JsonField<String> = billableMetricName
 
-        @JsonProperty("customer_id") @ExcludeMissing fun _customerId() = customerId
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
 
-        @JsonProperty("end_timestamp") @ExcludeMissing fun _endTimestamp() = endTimestamp
+        @JsonProperty("end_timestamp")
+        @ExcludeMissing
+        fun _endTimestamp(): JsonField<OffsetDateTime> = endTimestamp
 
-        @JsonProperty("start_timestamp") @ExcludeMissing fun _startTimestamp() = startTimestamp
+        @JsonProperty("start_timestamp")
+        @ExcludeMissing
+        fun _startTimestamp(): JsonField<OffsetDateTime> = startTimestamp
 
-        @JsonProperty("value") @ExcludeMissing fun _value() = value
+        @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<Double> = value
 
         /**
          * Values will be either a number or null. Null indicates that there were no matches for the
          * group_by value.
          */
-        @JsonProperty("groups") @ExcludeMissing fun _groups() = groups
+        @JsonProperty("groups") @ExcludeMissing fun _groups(): JsonField<Groups> = groups
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -204,12 +228,12 @@ private constructor(
 
         class Builder {
 
-            private var billableMetricId: JsonField<String> = JsonMissing.of()
-            private var billableMetricName: JsonField<String> = JsonMissing.of()
-            private var customerId: JsonField<String> = JsonMissing.of()
-            private var endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var value: JsonField<Double> = JsonMissing.of()
+            private var billableMetricId: JsonField<String>? = null
+            private var billableMetricName: JsonField<String>? = null
+            private var customerId: JsonField<String>? = null
+            private var endTimestamp: JsonField<OffsetDateTime>? = null
+            private var startTimestamp: JsonField<OffsetDateTime>? = null
+            private var value: JsonField<Double>? = null
             private var groups: JsonField<Groups> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -257,7 +281,12 @@ private constructor(
                 this.startTimestamp = startTimestamp
             }
 
-            fun value(value: Double) = value(JsonField.of(value))
+            fun value(value: Double?) = value(JsonField.ofNullable(value))
+
+            fun value(value: Double) = value(value as Double?)
+
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun value(value: Optional<Double>) = value(value.orElse(null) as Double?)
 
             fun value(value: JsonField<Double>) = apply { this.value = value }
 
@@ -294,12 +323,16 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    billableMetricId,
-                    billableMetricName,
-                    customerId,
-                    endTimestamp,
-                    startTimestamp,
-                    value,
+                    checkNotNull(billableMetricId) {
+                        "`billableMetricId` is required but was not set"
+                    },
+                    checkNotNull(billableMetricName) {
+                        "`billableMetricName` is required but was not set"
+                    },
+                    checkNotNull(customerId) { "`customerId` is required but was not set" },
+                    checkNotNull(endTimestamp) { "`endTimestamp` is required but was not set" },
+                    checkNotNull(startTimestamp) { "`startTimestamp` is required but was not set" },
+                    checkNotNull(value) { "`value` is required but was not set" },
                     groups,
                     additionalProperties.toImmutable(),
                 )

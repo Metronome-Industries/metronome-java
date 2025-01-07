@@ -36,9 +36,9 @@ private constructor(
 
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage.getNullable("next_page"))
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Data>> = data
 
-    @JsonProperty("next_page") @ExcludeMissing fun _nextPage() = nextPage
+    @JsonProperty("next_page") @ExcludeMissing fun _nextPage(): JsonField<String> = nextPage
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -63,7 +63,7 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<List<Data>> = JsonMissing.of()
+        private var data: JsonField<MutableList<Data>>? = null
         private var nextPage: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -72,7 +72,7 @@ private constructor(
             contractRateCardRetrieveRateScheduleResponse:
                 ContractRateCardRetrieveRateScheduleResponse
         ) = apply {
-            data = contractRateCardRetrieveRateScheduleResponse.data
+            data = contractRateCardRetrieveRateScheduleResponse.data.map { it.toMutableList() }
             nextPage = contractRateCardRetrieveRateScheduleResponse.nextPage
             additionalProperties =
                 contractRateCardRetrieveRateScheduleResponse.additionalProperties.toMutableMap()
@@ -80,9 +80,26 @@ private constructor(
 
         fun data(data: List<Data>) = data(JsonField.of(data))
 
-        fun data(data: JsonField<List<Data>>) = apply { this.data = data }
+        fun data(data: JsonField<List<Data>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
 
-        fun nextPage(nextPage: String) = nextPage(JsonField.of(nextPage))
+        fun addData(data: Data) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(data)
+                }
+        }
+
+        fun nextPage(nextPage: String?) = nextPage(JsonField.ofNullable(nextPage))
+
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         fun nextPage(nextPage: JsonField<String>) = apply { this.nextPage = nextPage }
 
@@ -107,7 +124,8 @@ private constructor(
 
         fun build(): ContractRateCardRetrieveRateScheduleResponse =
             ContractRateCardRetrieveRateScheduleResponse(
-                data.map { it.toImmutable() },
+                checkNotNull(data) { "`data` is required but was not set" }
+                    .map { it.toImmutable() },
                 nextPage,
                 additionalProperties.toImmutable(),
             )
@@ -177,33 +195,43 @@ private constructor(
         fun pricingGroupValues(): Optional<PricingGroupValues> =
             Optional.ofNullable(pricingGroupValues.getNullable("pricing_group_values"))
 
-        @JsonProperty("entitled") @ExcludeMissing fun _entitled() = entitled
+        @JsonProperty("entitled") @ExcludeMissing fun _entitled(): JsonField<Boolean> = entitled
 
         @JsonProperty("product_custom_fields")
         @ExcludeMissing
-        fun _productCustomFields() = productCustomFields
+        fun _productCustomFields(): JsonField<ProductCustomFields> = productCustomFields
 
-        @JsonProperty("product_id") @ExcludeMissing fun _productId() = productId
+        @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
-        @JsonProperty("product_name") @ExcludeMissing fun _productName() = productName
+        @JsonProperty("product_name")
+        @ExcludeMissing
+        fun _productName(): JsonField<String> = productName
 
-        @JsonProperty("product_tags") @ExcludeMissing fun _productTags() = productTags
+        @JsonProperty("product_tags")
+        @ExcludeMissing
+        fun _productTags(): JsonField<List<String>> = productTags
 
-        @JsonProperty("rate") @ExcludeMissing fun _rate() = rate
+        @JsonProperty("rate") @ExcludeMissing fun _rate(): JsonField<Rate> = rate
 
-        @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         /**
          * A distinct rate on the rate card. You can choose to use this rate rather than list rate
          * when consuming a credit or commit.
          */
-        @JsonProperty("commit_rate") @ExcludeMissing fun _commitRate() = commitRate
+        @JsonProperty("commit_rate")
+        @ExcludeMissing
+        fun _commitRate(): JsonField<CommitRate> = commitRate
 
-        @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
         @JsonProperty("pricing_group_values")
         @ExcludeMissing
-        fun _pricingGroupValues() = pricingGroupValues
+        fun _pricingGroupValues(): JsonField<PricingGroupValues> = pricingGroupValues
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -236,13 +264,13 @@ private constructor(
 
         class Builder {
 
-            private var entitled: JsonField<Boolean> = JsonMissing.of()
-            private var productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of()
-            private var productId: JsonField<String> = JsonMissing.of()
-            private var productName: JsonField<String> = JsonMissing.of()
-            private var productTags: JsonField<List<String>> = JsonMissing.of()
-            private var rate: JsonField<Rate> = JsonMissing.of()
-            private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var entitled: JsonField<Boolean>? = null
+            private var productCustomFields: JsonField<ProductCustomFields>? = null
+            private var productId: JsonField<String>? = null
+            private var productName: JsonField<String>? = null
+            private var productTags: JsonField<MutableList<String>>? = null
+            private var rate: JsonField<Rate>? = null
+            private var startingAt: JsonField<OffsetDateTime>? = null
             private var commitRate: JsonField<CommitRate> = JsonMissing.of()
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
             private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
@@ -254,7 +282,7 @@ private constructor(
                 productCustomFields = data.productCustomFields
                 productId = data.productId
                 productName = data.productName
-                productTags = data.productTags
+                productTags = data.productTags.map { it.toMutableList() }
                 rate = data.rate
                 startingAt = data.startingAt
                 commitRate = data.commitRate
@@ -287,7 +315,20 @@ private constructor(
             fun productTags(productTags: List<String>) = productTags(JsonField.of(productTags))
 
             fun productTags(productTags: JsonField<List<String>>) = apply {
-                this.productTags = productTags
+                this.productTags = productTags.map { it.toMutableList() }
+            }
+
+            fun addProductTag(productTag: String) = apply {
+                productTags =
+                    (productTags ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(productTag)
+                    }
             }
 
             fun rate(rate: Rate) = rate(JsonField.of(rate))
@@ -349,13 +390,16 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    entitled,
-                    productCustomFields,
-                    productId,
-                    productName,
-                    productTags.map { it.toImmutable() },
-                    rate,
-                    startingAt,
+                    checkNotNull(entitled) { "`entitled` is required but was not set" },
+                    checkNotNull(productCustomFields) {
+                        "`productCustomFields` is required but was not set"
+                    },
+                    checkNotNull(productId) { "`productId` is required but was not set" },
+                    checkNotNull(productName) { "`productName` is required but was not set" },
+                    checkNotNull(productTags) { "`productTags` is required but was not set" }
+                        .map { it.toImmutable() },
+                    checkNotNull(rate) { "`rate` is required but was not set" },
+                    checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                     commitRate,
                     endingBefore,
                     pricingGroupValues,
@@ -472,13 +516,15 @@ private constructor(
             /** Only set for TIERED rate_type. */
             fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers.getNullable("tiers"))
 
-            @JsonProperty("rate_type") @ExcludeMissing fun _rateType() = rateType
+            @JsonProperty("rate_type")
+            @ExcludeMissing
+            fun _rateType(): JsonField<RateType> = rateType
 
             /** Commit rate price. For FLAT rate_type, this must be >=0. */
-            @JsonProperty("price") @ExcludeMissing fun _price() = price
+            @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Double> = price
 
             /** Only set for TIERED rate_type. */
-            @JsonProperty("tiers") @ExcludeMissing fun _tiers() = tiers
+            @JsonProperty("tiers") @ExcludeMissing fun _tiers(): JsonField<List<Tier>> = tiers
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -504,16 +550,16 @@ private constructor(
 
             class Builder {
 
-                private var rateType: JsonField<RateType> = JsonMissing.of()
+                private var rateType: JsonField<RateType>? = null
                 private var price: JsonField<Double> = JsonMissing.of()
-                private var tiers: JsonField<List<Tier>> = JsonMissing.of()
+                private var tiers: JsonField<MutableList<Tier>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(commitRate: CommitRate) = apply {
                     rateType = commitRate.rateType
                     price = commitRate.price
-                    tiers = commitRate.tiers
+                    tiers = commitRate.tiers.map { it.toMutableList() }
                     additionalProperties = commitRate.additionalProperties.toMutableMap()
                 }
 
@@ -531,7 +577,23 @@ private constructor(
                 fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
                 /** Only set for TIERED rate_type. */
-                fun tiers(tiers: JsonField<List<Tier>>) = apply { this.tiers = tiers }
+                fun tiers(tiers: JsonField<List<Tier>>) = apply {
+                    this.tiers = tiers.map { it.toMutableList() }
+                }
+
+                /** Only set for TIERED rate_type. */
+                fun addTier(tier: Tier) = apply {
+                    tiers =
+                        (tiers ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(tier)
+                        }
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -557,9 +619,9 @@ private constructor(
 
                 fun build(): CommitRate =
                     CommitRate(
-                        rateType,
+                        checkNotNull(rateType) { "`rateType` is required but was not set" },
                         price,
-                        tiers.map { it.toImmutable() },
+                        (tiers ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toImmutable(),
                     )
             }

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -73,11 +74,49 @@ constructor(
      */
     fun trialSpec(): Optional<TrialSpec> = body.trialSpec()
 
+    fun _planId(): JsonField<String> = body._planId()
+
+    /**
+     * RFC 3339 timestamp for when the plan becomes active for this customer. Must be at 0:00 UTC
+     * (midnight).
+     */
+    fun _startingOn(): JsonField<OffsetDateTime> = body._startingOn()
+
+    /**
+     * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00 UTC
+     * (midnight).
+     */
+    fun _endingBefore(): JsonField<OffsetDateTime> = body._endingBefore()
+
+    /** Number of days after issuance of invoice after which the invoice is due (e.g. Net 30). */
+    fun _netPaymentTermsDays(): JsonField<Double> = body._netPaymentTermsDays()
+
+    /**
+     * An optional list of overage rates that override the rates of the original plan configuration.
+     * These new rates will apply to all pricing ramps.
+     */
+    fun _overageRateAdjustments(): JsonField<List<OverageRateAdjustment>> =
+        body._overageRateAdjustments()
+
+    /**
+     * A list of price adjustments can be applied on top of the pricing in the plans. See the
+     * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
+     * for details.
+     */
+    fun _priceAdjustments(): JsonField<List<PriceAdjustment>> = body._priceAdjustments()
+
+    /**
+     * A custom trial can be set for the customer's plan. See the
+     * [trial configuration documentation](https://docs.metronome.com/provisioning/configure-trials/)
+     * for details.
+     */
+    fun _trialSpec(): JsonField<TrialSpec> = body._trialSpec()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomerPlanAddBody = body
 
@@ -96,46 +135,109 @@ constructor(
     class CustomerPlanAddBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("plan_id") private val planId: String,
-        @JsonProperty("starting_on") private val startingOn: OffsetDateTime,
-        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
-        @JsonProperty("net_payment_terms_days") private val netPaymentTermsDays: Double?,
+        @JsonProperty("plan_id")
+        @ExcludeMissing
+        private val planId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("starting_on")
+        @ExcludeMissing
+        private val startingOn: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("net_payment_terms_days")
+        @ExcludeMissing
+        private val netPaymentTermsDays: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("overage_rate_adjustments")
-        private val overageRateAdjustments: List<OverageRateAdjustment>?,
-        @JsonProperty("price_adjustments") private val priceAdjustments: List<PriceAdjustment>?,
-        @JsonProperty("trial_spec") private val trialSpec: TrialSpec?,
+        @ExcludeMissing
+        private val overageRateAdjustments: JsonField<List<OverageRateAdjustment>> =
+            JsonMissing.of(),
+        @JsonProperty("price_adjustments")
+        @ExcludeMissing
+        private val priceAdjustments: JsonField<List<PriceAdjustment>> = JsonMissing.of(),
+        @JsonProperty("trial_spec")
+        @ExcludeMissing
+        private val trialSpec: JsonField<TrialSpec> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("plan_id") fun planId(): String = planId
+        fun planId(): String = planId.getRequired("plan_id")
 
         /**
          * RFC 3339 timestamp for when the plan becomes active for this customer. Must be at 0:00
          * UTC (midnight).
          */
-        @JsonProperty("starting_on") fun startingOn(): OffsetDateTime = startingOn
+        fun startingOn(): OffsetDateTime = startingOn.getRequired("starting_on")
+
+        /**
+         * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
+         * UTC (midnight).
+         */
+        fun endingBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+        /**
+         * Number of days after issuance of invoice after which the invoice is due (e.g. Net 30).
+         */
+        fun netPaymentTermsDays(): Optional<Double> =
+            Optional.ofNullable(netPaymentTermsDays.getNullable("net_payment_terms_days"))
+
+        /**
+         * An optional list of overage rates that override the rates of the original plan
+         * configuration. These new rates will apply to all pricing ramps.
+         */
+        fun overageRateAdjustments(): Optional<List<OverageRateAdjustment>> =
+            Optional.ofNullable(overageRateAdjustments.getNullable("overage_rate_adjustments"))
+
+        /**
+         * A list of price adjustments can be applied on top of the pricing in the plans. See the
+         * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
+         * for details.
+         */
+        fun priceAdjustments(): Optional<List<PriceAdjustment>> =
+            Optional.ofNullable(priceAdjustments.getNullable("price_adjustments"))
+
+        /**
+         * A custom trial can be set for the customer's plan. See the
+         * [trial configuration documentation](https://docs.metronome.com/provisioning/configure-trials/)
+         * for details.
+         */
+        fun trialSpec(): Optional<TrialSpec> =
+            Optional.ofNullable(trialSpec.getNullable("trial_spec"))
+
+        @JsonProperty("plan_id") @ExcludeMissing fun _planId(): JsonField<String> = planId
+
+        /**
+         * RFC 3339 timestamp for when the plan becomes active for this customer. Must be at 0:00
+         * UTC (midnight).
+         */
+        @JsonProperty("starting_on")
+        @ExcludeMissing
+        fun _startingOn(): JsonField<OffsetDateTime> = startingOn
 
         /**
          * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
          * UTC (midnight).
          */
         @JsonProperty("ending_before")
-        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
         /**
          * Number of days after issuance of invoice after which the invoice is due (e.g. Net 30).
          */
         @JsonProperty("net_payment_terms_days")
-        fun netPaymentTermsDays(): Optional<Double> = Optional.ofNullable(netPaymentTermsDays)
+        @ExcludeMissing
+        fun _netPaymentTermsDays(): JsonField<Double> = netPaymentTermsDays
 
         /**
          * An optional list of overage rates that override the rates of the original plan
          * configuration. These new rates will apply to all pricing ramps.
          */
         @JsonProperty("overage_rate_adjustments")
-        fun overageRateAdjustments(): Optional<List<OverageRateAdjustment>> =
-            Optional.ofNullable(overageRateAdjustments)
+        @ExcludeMissing
+        fun _overageRateAdjustments(): JsonField<List<OverageRateAdjustment>> =
+            overageRateAdjustments
 
         /**
          * A list of price adjustments can be applied on top of the pricing in the plans. See the
@@ -143,8 +245,8 @@ constructor(
          * for details.
          */
         @JsonProperty("price_adjustments")
-        fun priceAdjustments(): Optional<List<PriceAdjustment>> =
-            Optional.ofNullable(priceAdjustments)
+        @ExcludeMissing
+        fun _priceAdjustments(): JsonField<List<PriceAdjustment>> = priceAdjustments
 
         /**
          * A custom trial can be set for the customer's plan. See the
@@ -152,11 +254,27 @@ constructor(
          * for details.
          */
         @JsonProperty("trial_spec")
-        fun trialSpec(): Optional<TrialSpec> = Optional.ofNullable(trialSpec)
+        @ExcludeMissing
+        fun _trialSpec(): JsonField<TrialSpec> = trialSpec
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomerPlanAddBody = apply {
+            if (!validated) {
+                planId()
+                startingOn()
+                endingBefore()
+                netPaymentTermsDays()
+                overageRateAdjustments().map { it.forEach { it.validate() } }
+                priceAdjustments().map { it.forEach { it.validate() } }
+                trialSpec().map { it.validate() }
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -167,13 +285,14 @@ constructor(
 
         class Builder {
 
-            private var planId: String? = null
-            private var startingOn: OffsetDateTime? = null
-            private var endingBefore: OffsetDateTime? = null
-            private var netPaymentTermsDays: Double? = null
-            private var overageRateAdjustments: MutableList<OverageRateAdjustment>? = null
-            private var priceAdjustments: MutableList<PriceAdjustment>? = null
-            private var trialSpec: TrialSpec? = null
+            private var planId: JsonField<String>? = null
+            private var startingOn: JsonField<OffsetDateTime>? = null
+            private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var netPaymentTermsDays: JsonField<Double> = JsonMissing.of()
+            private var overageRateAdjustments: JsonField<MutableList<OverageRateAdjustment>>? =
+                null
+            private var priceAdjustments: JsonField<MutableList<PriceAdjustment>>? = null
+            private var trialSpec: JsonField<TrialSpec> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -182,41 +301,44 @@ constructor(
                 startingOn = customerPlanAddBody.startingOn
                 endingBefore = customerPlanAddBody.endingBefore
                 netPaymentTermsDays = customerPlanAddBody.netPaymentTermsDays
-                overageRateAdjustments = customerPlanAddBody.overageRateAdjustments?.toMutableList()
-                priceAdjustments = customerPlanAddBody.priceAdjustments?.toMutableList()
+                overageRateAdjustments =
+                    customerPlanAddBody.overageRateAdjustments.map { it.toMutableList() }
+                priceAdjustments = customerPlanAddBody.priceAdjustments.map { it.toMutableList() }
                 trialSpec = customerPlanAddBody.trialSpec
                 additionalProperties = customerPlanAddBody.additionalProperties.toMutableMap()
             }
 
-            fun planId(planId: String) = apply { this.planId = planId }
+            fun planId(planId: String) = planId(JsonField.of(planId))
+
+            fun planId(planId: JsonField<String>) = apply { this.planId = planId }
 
             /**
              * RFC 3339 timestamp for when the plan becomes active for this customer. Must be at
              * 0:00 UTC (midnight).
              */
-            fun startingOn(startingOn: OffsetDateTime) = apply { this.startingOn = startingOn }
+            fun startingOn(startingOn: OffsetDateTime) = startingOn(JsonField.of(startingOn))
 
             /**
-             * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at
+             * RFC 3339 timestamp for when the plan becomes active for this customer. Must be at
              * 0:00 UTC (midnight).
              */
-            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
-                this.endingBefore = endingBefore
+            fun startingOn(startingOn: JsonField<OffsetDateTime>) = apply {
+                this.startingOn = startingOn
             }
 
             /**
              * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at
              * 0:00 UTC (midnight).
              */
-            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
-                endingBefore(endingBefore.orElse(null))
+            fun endingBefore(endingBefore: OffsetDateTime) =
+                endingBefore(JsonField.of(endingBefore))
 
             /**
-             * Number of days after issuance of invoice after which the invoice is due (e.g. Net
-             * 30).
+             * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at
+             * 0:00 UTC (midnight).
              */
-            fun netPaymentTermsDays(netPaymentTermsDays: Double?) = apply {
-                this.netPaymentTermsDays = netPaymentTermsDays
+            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+                this.endingBefore = endingBefore
             }
 
             /**
@@ -224,32 +346,32 @@ constructor(
              * 30).
              */
             fun netPaymentTermsDays(netPaymentTermsDays: Double) =
-                netPaymentTermsDays(netPaymentTermsDays as Double?)
+                netPaymentTermsDays(JsonField.of(netPaymentTermsDays))
 
             /**
              * Number of days after issuance of invoice after which the invoice is due (e.g. Net
              * 30).
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun netPaymentTermsDays(netPaymentTermsDays: Optional<Double>) =
-                netPaymentTermsDays(netPaymentTermsDays.orElse(null) as Double?)
+            fun netPaymentTermsDays(netPaymentTermsDays: JsonField<Double>) = apply {
+                this.netPaymentTermsDays = netPaymentTermsDays
+            }
 
             /**
              * An optional list of overage rates that override the rates of the original plan
              * configuration. These new rates will apply to all pricing ramps.
              */
-            fun overageRateAdjustments(overageRateAdjustments: List<OverageRateAdjustment>?) =
-                apply {
-                    this.overageRateAdjustments = overageRateAdjustments?.toMutableList()
-                }
+            fun overageRateAdjustments(overageRateAdjustments: List<OverageRateAdjustment>) =
+                overageRateAdjustments(JsonField.of(overageRateAdjustments))
 
             /**
              * An optional list of overage rates that override the rates of the original plan
              * configuration. These new rates will apply to all pricing ramps.
              */
             fun overageRateAdjustments(
-                overageRateAdjustments: Optional<List<OverageRateAdjustment>>
-            ) = overageRateAdjustments(overageRateAdjustments.orElse(null))
+                overageRateAdjustments: JsonField<List<OverageRateAdjustment>>
+            ) = apply {
+                this.overageRateAdjustments = overageRateAdjustments.map { it.toMutableList() }
+            }
 
             /**
              * An optional list of overage rates that override the rates of the original plan
@@ -257,7 +379,15 @@ constructor(
              */
             fun addOverageRateAdjustment(overageRateAdjustment: OverageRateAdjustment) = apply {
                 overageRateAdjustments =
-                    (overageRateAdjustments ?: mutableListOf()).apply { add(overageRateAdjustment) }
+                    (overageRateAdjustments ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(overageRateAdjustment)
+                    }
             }
 
             /**
@@ -266,9 +396,8 @@ constructor(
              * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
              * for details.
              */
-            fun priceAdjustments(priceAdjustments: List<PriceAdjustment>?) = apply {
-                this.priceAdjustments = priceAdjustments?.toMutableList()
-            }
+            fun priceAdjustments(priceAdjustments: List<PriceAdjustment>) =
+                priceAdjustments(JsonField.of(priceAdjustments))
 
             /**
              * A list of price adjustments can be applied on top of the pricing in the plans. See
@@ -276,8 +405,9 @@ constructor(
              * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
              * for details.
              */
-            fun priceAdjustments(priceAdjustments: Optional<List<PriceAdjustment>>) =
-                priceAdjustments(priceAdjustments.orElse(null))
+            fun priceAdjustments(priceAdjustments: JsonField<List<PriceAdjustment>>) = apply {
+                this.priceAdjustments = priceAdjustments.map { it.toMutableList() }
+            }
 
             /**
              * A list of price adjustments can be applied on top of the pricing in the plans. See
@@ -287,7 +417,15 @@ constructor(
              */
             fun addPriceAdjustment(priceAdjustment: PriceAdjustment) = apply {
                 priceAdjustments =
-                    (priceAdjustments ?: mutableListOf()).apply { add(priceAdjustment) }
+                    (priceAdjustments ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(priceAdjustment)
+                    }
             }
 
             /**
@@ -295,14 +433,14 @@ constructor(
              * [trial configuration documentation](https://docs.metronome.com/provisioning/configure-trials/)
              * for details.
              */
-            fun trialSpec(trialSpec: TrialSpec?) = apply { this.trialSpec = trialSpec }
+            fun trialSpec(trialSpec: TrialSpec) = trialSpec(JsonField.of(trialSpec))
 
             /**
              * A custom trial can be set for the customer's plan. See the
              * [trial configuration documentation](https://docs.metronome.com/provisioning/configure-trials/)
              * for details.
              */
-            fun trialSpec(trialSpec: Optional<TrialSpec>) = trialSpec(trialSpec.orElse(null))
+            fun trialSpec(trialSpec: JsonField<TrialSpec>) = apply { this.trialSpec = trialSpec }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -329,8 +467,8 @@ constructor(
                     checkNotNull(startingOn) { "`startingOn` is required but was not set" },
                     endingBefore,
                     netPaymentTermsDays,
-                    overageRateAdjustments?.toImmutable(),
-                    priceAdjustments?.toImmutable(),
+                    (overageRateAdjustments ?: JsonMissing.of()).map { it.toImmutable() },
+                    (priceAdjustments ?: JsonMissing.of()).map { it.toImmutable() },
                     trialSpec,
                     additionalProperties.toImmutable(),
                 )
@@ -381,6 +519,8 @@ constructor(
 
         fun planId(planId: String) = apply { body.planId(planId) }
 
+        fun planId(planId: JsonField<String>) = apply { body.planId(planId) }
+
         /**
          * RFC 3339 timestamp for when the plan becomes active for this customer. Must be at 0:00
          * UTC (midnight).
@@ -388,43 +528,46 @@ constructor(
         fun startingOn(startingOn: OffsetDateTime) = apply { body.startingOn(startingOn) }
 
         /**
-         * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
+         * RFC 3339 timestamp for when the plan becomes active for this customer. Must be at 0:00
          * UTC (midnight).
          */
-        fun endingBefore(endingBefore: OffsetDateTime?) = apply { body.endingBefore(endingBefore) }
+        fun startingOn(startingOn: JsonField<OffsetDateTime>) = apply {
+            body.startingOn(startingOn)
+        }
 
         /**
          * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
          * UTC (midnight).
          */
-        fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
-            endingBefore(endingBefore.orElse(null))
+        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
+
+        /**
+         * RFC 3339 timestamp for when the plan ends (exclusive) for this customer. Must be at 0:00
+         * UTC (midnight).
+         */
+        fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+            body.endingBefore(endingBefore)
+        }
 
         /**
          * Number of days after issuance of invoice after which the invoice is due (e.g. Net 30).
          */
-        fun netPaymentTermsDays(netPaymentTermsDays: Double?) = apply {
+        fun netPaymentTermsDays(netPaymentTermsDays: Double) = apply {
             body.netPaymentTermsDays(netPaymentTermsDays)
         }
 
         /**
          * Number of days after issuance of invoice after which the invoice is due (e.g. Net 30).
          */
-        fun netPaymentTermsDays(netPaymentTermsDays: Double) =
-            netPaymentTermsDays(netPaymentTermsDays as Double?)
-
-        /**
-         * Number of days after issuance of invoice after which the invoice is due (e.g. Net 30).
-         */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun netPaymentTermsDays(netPaymentTermsDays: Optional<Double>) =
-            netPaymentTermsDays(netPaymentTermsDays.orElse(null) as Double?)
+        fun netPaymentTermsDays(netPaymentTermsDays: JsonField<Double>) = apply {
+            body.netPaymentTermsDays(netPaymentTermsDays)
+        }
 
         /**
          * An optional list of overage rates that override the rates of the original plan
          * configuration. These new rates will apply to all pricing ramps.
          */
-        fun overageRateAdjustments(overageRateAdjustments: List<OverageRateAdjustment>?) = apply {
+        fun overageRateAdjustments(overageRateAdjustments: List<OverageRateAdjustment>) = apply {
             body.overageRateAdjustments(overageRateAdjustments)
         }
 
@@ -432,8 +575,10 @@ constructor(
          * An optional list of overage rates that override the rates of the original plan
          * configuration. These new rates will apply to all pricing ramps.
          */
-        fun overageRateAdjustments(overageRateAdjustments: Optional<List<OverageRateAdjustment>>) =
-            overageRateAdjustments(overageRateAdjustments.orElse(null))
+        fun overageRateAdjustments(overageRateAdjustments: JsonField<List<OverageRateAdjustment>>) =
+            apply {
+                body.overageRateAdjustments(overageRateAdjustments)
+            }
 
         /**
          * An optional list of overage rates that override the rates of the original plan
@@ -448,7 +593,7 @@ constructor(
          * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
          * for details.
          */
-        fun priceAdjustments(priceAdjustments: List<PriceAdjustment>?) = apply {
+        fun priceAdjustments(priceAdjustments: List<PriceAdjustment>) = apply {
             body.priceAdjustments(priceAdjustments)
         }
 
@@ -457,8 +602,9 @@ constructor(
          * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
          * for details.
          */
-        fun priceAdjustments(priceAdjustments: Optional<List<PriceAdjustment>>) =
-            priceAdjustments(priceAdjustments.orElse(null))
+        fun priceAdjustments(priceAdjustments: JsonField<List<PriceAdjustment>>) = apply {
+            body.priceAdjustments(priceAdjustments)
+        }
 
         /**
          * A list of price adjustments can be applied on top of the pricing in the plans. See the
@@ -474,14 +620,33 @@ constructor(
          * [trial configuration documentation](https://docs.metronome.com/provisioning/configure-trials/)
          * for details.
          */
-        fun trialSpec(trialSpec: TrialSpec?) = apply { body.trialSpec(trialSpec) }
+        fun trialSpec(trialSpec: TrialSpec) = apply { body.trialSpec(trialSpec) }
 
         /**
          * A custom trial can be set for the customer's plan. See the
          * [trial configuration documentation](https://docs.metronome.com/provisioning/configure-trials/)
          * for details.
          */
-        fun trialSpec(trialSpec: Optional<TrialSpec>) = trialSpec(trialSpec.orElse(null))
+        fun trialSpec(trialSpec: JsonField<TrialSpec>) = apply { body.trialSpec(trialSpec) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -581,25 +746,6 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
         fun build(): CustomerPlanAddParams =
             CustomerPlanAddParams(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
@@ -613,25 +759,55 @@ constructor(
     class OverageRateAdjustment
     @JsonCreator
     private constructor(
-        @JsonProperty("custom_credit_type_id") private val customCreditTypeId: String,
-        @JsonProperty("fiat_currency_credit_type_id") private val fiatCurrencyCreditTypeId: String,
-        @JsonProperty("to_fiat_conversion_factor") private val toFiatConversionFactor: Double,
+        @JsonProperty("custom_credit_type_id")
+        @ExcludeMissing
+        private val customCreditTypeId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("fiat_currency_credit_type_id")
+        @ExcludeMissing
+        private val fiatCurrencyCreditTypeId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("to_fiat_conversion_factor")
+        @ExcludeMissing
+        private val toFiatConversionFactor: JsonField<Double> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("custom_credit_type_id") fun customCreditTypeId(): String = customCreditTypeId
+        fun customCreditTypeId(): String = customCreditTypeId.getRequired("custom_credit_type_id")
+
+        fun fiatCurrencyCreditTypeId(): String =
+            fiatCurrencyCreditTypeId.getRequired("fiat_currency_credit_type_id")
+
+        /** The overage cost in fiat currency for each credit of the custom credit type. */
+        fun toFiatConversionFactor(): Double =
+            toFiatConversionFactor.getRequired("to_fiat_conversion_factor")
+
+        @JsonProperty("custom_credit_type_id")
+        @ExcludeMissing
+        fun _customCreditTypeId(): JsonField<String> = customCreditTypeId
 
         @JsonProperty("fiat_currency_credit_type_id")
-        fun fiatCurrencyCreditTypeId(): String = fiatCurrencyCreditTypeId
+        @ExcludeMissing
+        fun _fiatCurrencyCreditTypeId(): JsonField<String> = fiatCurrencyCreditTypeId
 
         /** The overage cost in fiat currency for each credit of the custom credit type. */
         @JsonProperty("to_fiat_conversion_factor")
-        fun toFiatConversionFactor(): Double = toFiatConversionFactor
+        @ExcludeMissing
+        fun _toFiatConversionFactor(): JsonField<Double> = toFiatConversionFactor
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): OverageRateAdjustment = apply {
+            if (!validated) {
+                customCreditTypeId()
+                fiatCurrencyCreditTypeId()
+                toFiatConversionFactor()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -642,9 +818,9 @@ constructor(
 
         class Builder {
 
-            private var customCreditTypeId: String? = null
-            private var fiatCurrencyCreditTypeId: String? = null
-            private var toFiatConversionFactor: Double? = null
+            private var customCreditTypeId: JsonField<String>? = null
+            private var fiatCurrencyCreditTypeId: JsonField<String>? = null
+            private var toFiatConversionFactor: JsonField<Double>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -655,16 +831,26 @@ constructor(
                 additionalProperties = overageRateAdjustment.additionalProperties.toMutableMap()
             }
 
-            fun customCreditTypeId(customCreditTypeId: String) = apply {
+            fun customCreditTypeId(customCreditTypeId: String) =
+                customCreditTypeId(JsonField.of(customCreditTypeId))
+
+            fun customCreditTypeId(customCreditTypeId: JsonField<String>) = apply {
                 this.customCreditTypeId = customCreditTypeId
             }
 
-            fun fiatCurrencyCreditTypeId(fiatCurrencyCreditTypeId: String) = apply {
+            fun fiatCurrencyCreditTypeId(fiatCurrencyCreditTypeId: String) =
+                fiatCurrencyCreditTypeId(JsonField.of(fiatCurrencyCreditTypeId))
+
+            fun fiatCurrencyCreditTypeId(fiatCurrencyCreditTypeId: JsonField<String>) = apply {
                 this.fiatCurrencyCreditTypeId = fiatCurrencyCreditTypeId
             }
 
             /** The overage cost in fiat currency for each credit of the custom credit type. */
-            fun toFiatConversionFactor(toFiatConversionFactor: Double) = apply {
+            fun toFiatConversionFactor(toFiatConversionFactor: Double) =
+                toFiatConversionFactor(JsonField.of(toFiatConversionFactor))
+
+            /** The overage cost in fiat currency for each credit of the custom credit type. */
+            fun toFiatConversionFactor(toFiatConversionFactor: JsonField<Double>) = apply {
                 this.toFiatConversionFactor = toFiatConversionFactor
             }
 
@@ -724,40 +910,91 @@ constructor(
     class PriceAdjustment
     @JsonCreator
     private constructor(
-        @JsonProperty("adjustment_type") private val adjustmentType: AdjustmentType,
-        @JsonProperty("charge_id") private val chargeId: String,
-        @JsonProperty("start_period") private val startPeriod: Double,
-        @JsonProperty("quantity") private val quantity: Double?,
-        @JsonProperty("tier") private val tier: Double?,
-        @JsonProperty("value") private val value: Double?,
+        @JsonProperty("adjustment_type")
+        @ExcludeMissing
+        private val adjustmentType: JsonField<AdjustmentType> = JsonMissing.of(),
+        @JsonProperty("charge_id")
+        @ExcludeMissing
+        private val chargeId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("start_period")
+        @ExcludeMissing
+        private val startPeriod: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("quantity")
+        @ExcludeMissing
+        private val quantity: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("tier")
+        @ExcludeMissing
+        private val tier: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("value")
+        @ExcludeMissing
+        private val value: JsonField<Double> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("adjustment_type") fun adjustmentType(): AdjustmentType = adjustmentType
+        fun adjustmentType(): AdjustmentType = adjustmentType.getRequired("adjustment_type")
 
-        @JsonProperty("charge_id") fun chargeId(): String = chargeId
+        fun chargeId(): String = chargeId.getRequired("charge_id")
 
         /**
          * Used in price ramps. Indicates how many billing periods pass before the charge applies.
          */
-        @JsonProperty("start_period") fun startPeriod(): Double = startPeriod
+        fun startPeriod(): Double = startPeriod.getRequired("start_period")
 
         /** the overridden quantity for a fixed charge */
-        @JsonProperty("quantity") fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
+        fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
 
         /** Used in pricing tiers. Indicates at what metric value the price applies. */
-        @JsonProperty("tier") fun tier(): Optional<Double> = Optional.ofNullable(tier)
+        fun tier(): Optional<Double> = Optional.ofNullable(tier.getNullable("tier"))
 
         /**
          * The amount of change to a price. Percentage and fixed adjustments can be positive or
          * negative. Percentage-based adjustments should be decimals, e.g. -0.05 for a 5% discount.
          */
-        @JsonProperty("value") fun value(): Optional<Double> = Optional.ofNullable(value)
+        fun value(): Optional<Double> = Optional.ofNullable(value.getNullable("value"))
+
+        @JsonProperty("adjustment_type")
+        @ExcludeMissing
+        fun _adjustmentType(): JsonField<AdjustmentType> = adjustmentType
+
+        @JsonProperty("charge_id") @ExcludeMissing fun _chargeId(): JsonField<String> = chargeId
+
+        /**
+         * Used in price ramps. Indicates how many billing periods pass before the charge applies.
+         */
+        @JsonProperty("start_period")
+        @ExcludeMissing
+        fun _startPeriod(): JsonField<Double> = startPeriod
+
+        /** the overridden quantity for a fixed charge */
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
+
+        /** Used in pricing tiers. Indicates at what metric value the price applies. */
+        @JsonProperty("tier") @ExcludeMissing fun _tier(): JsonField<Double> = tier
+
+        /**
+         * The amount of change to a price. Percentage and fixed adjustments can be positive or
+         * negative. Percentage-based adjustments should be decimals, e.g. -0.05 for a 5% discount.
+         */
+        @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<Double> = value
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): PriceAdjustment = apply {
+            if (!validated) {
+                adjustmentType()
+                chargeId()
+                startPeriod()
+                quantity()
+                tier()
+                value()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -768,12 +1005,12 @@ constructor(
 
         class Builder {
 
-            private var adjustmentType: AdjustmentType? = null
-            private var chargeId: String? = null
-            private var startPeriod: Double? = null
-            private var quantity: Double? = null
-            private var tier: Double? = null
-            private var value: Double? = null
+            private var adjustmentType: JsonField<AdjustmentType>? = null
+            private var chargeId: JsonField<String>? = null
+            private var startPeriod: JsonField<Double>? = null
+            private var quantity: JsonField<Double> = JsonMissing.of()
+            private var tier: JsonField<Double> = JsonMissing.of()
+            private var value: JsonField<Double> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -787,59 +1024,56 @@ constructor(
                 additionalProperties = priceAdjustment.additionalProperties.toMutableMap()
             }
 
-            fun adjustmentType(adjustmentType: AdjustmentType) = apply {
+            fun adjustmentType(adjustmentType: AdjustmentType) =
+                adjustmentType(JsonField.of(adjustmentType))
+
+            fun adjustmentType(adjustmentType: JsonField<AdjustmentType>) = apply {
                 this.adjustmentType = adjustmentType
             }
 
-            fun chargeId(chargeId: String) = apply { this.chargeId = chargeId }
+            fun chargeId(chargeId: String) = chargeId(JsonField.of(chargeId))
+
+            fun chargeId(chargeId: JsonField<String>) = apply { this.chargeId = chargeId }
 
             /**
              * Used in price ramps. Indicates how many billing periods pass before the charge
              * applies.
              */
-            fun startPeriod(startPeriod: Double) = apply { this.startPeriod = startPeriod }
+            fun startPeriod(startPeriod: Double) = startPeriod(JsonField.of(startPeriod))
+
+            /**
+             * Used in price ramps. Indicates how many billing periods pass before the charge
+             * applies.
+             */
+            fun startPeriod(startPeriod: JsonField<Double>) = apply {
+                this.startPeriod = startPeriod
+            }
 
             /** the overridden quantity for a fixed charge */
-            fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+            fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
             /** the overridden quantity for a fixed charge */
-            fun quantity(quantity: Double) = quantity(quantity as Double?)
-
-            /** the overridden quantity for a fixed charge */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun quantity(quantity: Optional<Double>) = quantity(quantity.orElse(null) as Double?)
+            fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
             /** Used in pricing tiers. Indicates at what metric value the price applies. */
-            fun tier(tier: Double?) = apply { this.tier = tier }
+            fun tier(tier: Double) = tier(JsonField.of(tier))
 
             /** Used in pricing tiers. Indicates at what metric value the price applies. */
-            fun tier(tier: Double) = tier(tier as Double?)
-
-            /** Used in pricing tiers. Indicates at what metric value the price applies. */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun tier(tier: Optional<Double>) = tier(tier.orElse(null) as Double?)
+            fun tier(tier: JsonField<Double>) = apply { this.tier = tier }
 
             /**
              * The amount of change to a price. Percentage and fixed adjustments can be positive or
              * negative. Percentage-based adjustments should be decimals, e.g. -0.05 for a 5%
              * discount.
              */
-            fun value(value: Double?) = apply { this.value = value }
+            fun value(value: Double) = value(JsonField.of(value))
 
             /**
              * The amount of change to a price. Percentage and fixed adjustments can be positive or
              * negative. Percentage-based adjustments should be decimals, e.g. -0.05 for a 5%
              * discount.
              */
-            fun value(value: Double) = value(value as Double?)
-
-            /**
-             * The amount of change to a price. Percentage and fixed adjustments can be positive or
-             * negative. Percentage-based adjustments should be decimals, e.g. -0.05 for a 5%
-             * discount.
-             */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun value(value: Optional<Double>) = value(value.orElse(null) as Double?)
+            fun value(value: JsonField<Double>) = apply { this.value = value }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -968,21 +1202,44 @@ constructor(
     class TrialSpec
     @JsonCreator
     private constructor(
-        @JsonProperty("length_in_days") private val lengthInDays: Double,
-        @JsonProperty("spending_cap") private val spendingCap: SpendingCap?,
+        @JsonProperty("length_in_days")
+        @ExcludeMissing
+        private val lengthInDays: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("spending_cap")
+        @ExcludeMissing
+        private val spendingCap: JsonField<SpendingCap> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Length of the trial period in days. */
-        @JsonProperty("length_in_days") fun lengthInDays(): Double = lengthInDays
+        fun lengthInDays(): Double = lengthInDays.getRequired("length_in_days")
+
+        fun spendingCap(): Optional<SpendingCap> =
+            Optional.ofNullable(spendingCap.getNullable("spending_cap"))
+
+        /** Length of the trial period in days. */
+        @JsonProperty("length_in_days")
+        @ExcludeMissing
+        fun _lengthInDays(): JsonField<Double> = lengthInDays
 
         @JsonProperty("spending_cap")
-        fun spendingCap(): Optional<SpendingCap> = Optional.ofNullable(spendingCap)
+        @ExcludeMissing
+        fun _spendingCap(): JsonField<SpendingCap> = spendingCap
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): TrialSpec = apply {
+            if (!validated) {
+                lengthInDays()
+                spendingCap().map { it.validate() }
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -993,8 +1250,8 @@ constructor(
 
         class Builder {
 
-            private var lengthInDays: Double? = null
-            private var spendingCap: SpendingCap? = null
+            private var lengthInDays: JsonField<Double>? = null
+            private var spendingCap: JsonField<SpendingCap> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -1005,12 +1262,18 @@ constructor(
             }
 
             /** Length of the trial period in days. */
-            fun lengthInDays(lengthInDays: Double) = apply { this.lengthInDays = lengthInDays }
+            fun lengthInDays(lengthInDays: Double) = lengthInDays(JsonField.of(lengthInDays))
 
-            fun spendingCap(spendingCap: SpendingCap?) = apply { this.spendingCap = spendingCap }
+            /** Length of the trial period in days. */
+            fun lengthInDays(lengthInDays: JsonField<Double>) = apply {
+                this.lengthInDays = lengthInDays
+            }
 
-            fun spendingCap(spendingCap: Optional<SpendingCap>) =
-                spendingCap(spendingCap.orElse(null))
+            fun spendingCap(spendingCap: SpendingCap) = spendingCap(JsonField.of(spendingCap))
+
+            fun spendingCap(spendingCap: JsonField<SpendingCap>) = apply {
+                this.spendingCap = spendingCap
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1043,8 +1306,12 @@ constructor(
         class SpendingCap
         @JsonCreator
         private constructor(
-            @JsonProperty("amount") private val amount: Double,
-            @JsonProperty("credit_type_id") private val creditTypeId: String,
+            @JsonProperty("amount")
+            @ExcludeMissing
+            private val amount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            private val creditTypeId: JsonField<String> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
@@ -1052,14 +1319,34 @@ constructor(
             /**
              * The credit amount in the given denomination based on the credit type, e.g. US cents.
              */
-            @JsonProperty("amount") fun amount(): Double = amount
+            fun amount(): Double = amount.getRequired("amount")
 
             /** The credit type ID for the spending cap. */
-            @JsonProperty("credit_type_id") fun creditTypeId(): String = creditTypeId
+            fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
+
+            /**
+             * The credit amount in the given denomination based on the credit type, e.g. US cents.
+             */
+            @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+
+            /** The credit type ID for the spending cap. */
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): SpendingCap = apply {
+                if (!validated) {
+                    amount()
+                    creditTypeId()
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -1070,8 +1357,8 @@ constructor(
 
             class Builder {
 
-                private var amount: Double? = null
-                private var creditTypeId: String? = null
+                private var amount: JsonField<Double>? = null
+                private var creditTypeId: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -1085,10 +1372,21 @@ constructor(
                  * The credit amount in the given denomination based on the credit type, e.g. US
                  * cents.
                  */
-                fun amount(amount: Double) = apply { this.amount = amount }
+                fun amount(amount: Double) = amount(JsonField.of(amount))
+
+                /**
+                 * The credit amount in the given denomination based on the credit type, e.g. US
+                 * cents.
+                 */
+                fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
                 /** The credit type ID for the spending cap. */
-                fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
+
+                /** The credit type ID for the spending cap. */
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()

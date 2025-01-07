@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -36,11 +38,20 @@ constructor(
     /** The Salesforce account ID for the customer */
     fun salesforceAccountId(): Optional<String> = body.salesforceAccountId()
 
+    /**
+     * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
+     * client-level config if unset, which defaults to true if unset.
+     */
+    fun _leaveStripeInvoicesInDraft(): JsonField<Boolean> = body._leaveStripeInvoicesInDraft()
+
+    /** The Salesforce account ID for the customer */
+    fun _salesforceAccountId(): JsonField<String> = body._salesforceAccountId()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomerUpdateConfigBody = body
 
@@ -60,8 +71,11 @@ constructor(
     @JsonCreator
     internal constructor(
         @JsonProperty("leave_stripe_invoices_in_draft")
-        private val leaveStripeInvoicesInDraft: Boolean?,
-        @JsonProperty("salesforce_account_id") private val salesforceAccountId: String?,
+        @ExcludeMissing
+        private val leaveStripeInvoicesInDraft: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("salesforce_account_id")
+        @ExcludeMissing
+        private val salesforceAccountId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -70,17 +84,41 @@ constructor(
          * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
          * client-level config if unset, which defaults to true if unset.
          */
-        @JsonProperty("leave_stripe_invoices_in_draft")
         fun leaveStripeInvoicesInDraft(): Optional<Boolean> =
-            Optional.ofNullable(leaveStripeInvoicesInDraft)
+            Optional.ofNullable(
+                leaveStripeInvoicesInDraft.getNullable("leave_stripe_invoices_in_draft")
+            )
+
+        /** The Salesforce account ID for the customer */
+        fun salesforceAccountId(): Optional<String> =
+            Optional.ofNullable(salesforceAccountId.getNullable("salesforce_account_id"))
+
+        /**
+         * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
+         * client-level config if unset, which defaults to true if unset.
+         */
+        @JsonProperty("leave_stripe_invoices_in_draft")
+        @ExcludeMissing
+        fun _leaveStripeInvoicesInDraft(): JsonField<Boolean> = leaveStripeInvoicesInDraft
 
         /** The Salesforce account ID for the customer */
         @JsonProperty("salesforce_account_id")
-        fun salesforceAccountId(): Optional<String> = Optional.ofNullable(salesforceAccountId)
+        @ExcludeMissing
+        fun _salesforceAccountId(): JsonField<String> = salesforceAccountId
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomerUpdateConfigBody = apply {
+            if (!validated) {
+                leaveStripeInvoicesInDraft()
+                salesforceAccountId()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -91,8 +129,8 @@ constructor(
 
         class Builder {
 
-            private var leaveStripeInvoicesInDraft: Boolean? = null
-            private var salesforceAccountId: String? = null
+            private var leaveStripeInvoicesInDraft: JsonField<Boolean> = JsonMissing.of()
+            private var salesforceAccountId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -106,9 +144,8 @@ constructor(
              * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
              * client-level config if unset, which defaults to true if unset.
              */
-            fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean?) = apply {
-                this.leaveStripeInvoicesInDraft = leaveStripeInvoicesInDraft
-            }
+            fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean?) =
+                leaveStripeInvoicesInDraft(JsonField.ofNullable(leaveStripeInvoicesInDraft))
 
             /**
              * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
@@ -125,14 +162,26 @@ constructor(
             fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Optional<Boolean>) =
                 leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft.orElse(null) as Boolean?)
 
-            /** The Salesforce account ID for the customer */
-            fun salesforceAccountId(salesforceAccountId: String?) = apply {
-                this.salesforceAccountId = salesforceAccountId
+            /**
+             * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
+             * client-level config if unset, which defaults to true if unset.
+             */
+            fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: JsonField<Boolean>) = apply {
+                this.leaveStripeInvoicesInDraft = leaveStripeInvoicesInDraft
             }
+
+            /** The Salesforce account ID for the customer */
+            fun salesforceAccountId(salesforceAccountId: String?) =
+                salesforceAccountId(JsonField.ofNullable(salesforceAccountId))
 
             /** The Salesforce account ID for the customer */
             fun salesforceAccountId(salesforceAccountId: Optional<String>) =
                 salesforceAccountId(salesforceAccountId.orElse(null))
+
+            /** The Salesforce account ID for the customer */
+            fun salesforceAccountId(salesforceAccountId: JsonField<String>) = apply {
+                this.salesforceAccountId = salesforceAccountId
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -227,6 +276,14 @@ constructor(
         fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Optional<Boolean>) =
             leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft.orElse(null) as Boolean?)
 
+        /**
+         * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
+         * client-level config if unset, which defaults to true if unset.
+         */
+        fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: JsonField<Boolean>) = apply {
+            body.leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft)
+        }
+
         /** The Salesforce account ID for the customer */
         fun salesforceAccountId(salesforceAccountId: String?) = apply {
             body.salesforceAccountId(salesforceAccountId)
@@ -235,6 +292,30 @@ constructor(
         /** The Salesforce account ID for the customer */
         fun salesforceAccountId(salesforceAccountId: Optional<String>) =
             salesforceAccountId(salesforceAccountId.orElse(null))
+
+        /** The Salesforce account ID for the customer */
+        fun salesforceAccountId(salesforceAccountId: JsonField<String>) = apply {
+            body.salesforceAccountId(salesforceAccountId)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -332,25 +413,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerUpdateConfigParams =

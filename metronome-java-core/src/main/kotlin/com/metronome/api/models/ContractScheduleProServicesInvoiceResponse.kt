@@ -27,7 +27,7 @@ private constructor(
 
     fun data(): List<Invoice> = data.getRequired("data")
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Invoice>> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -51,21 +51,36 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<List<Invoice>> = JsonMissing.of()
+        private var data: JsonField<MutableList<Invoice>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(
             contractScheduleProServicesInvoiceResponse: ContractScheduleProServicesInvoiceResponse
         ) = apply {
-            data = contractScheduleProServicesInvoiceResponse.data
+            data = contractScheduleProServicesInvoiceResponse.data.map { it.toMutableList() }
             additionalProperties =
                 contractScheduleProServicesInvoiceResponse.additionalProperties.toMutableMap()
         }
 
         fun data(data: List<Invoice>) = data(JsonField.of(data))
 
-        fun data(data: JsonField<List<Invoice>>) = apply { this.data = data }
+        fun data(data: JsonField<List<Invoice>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
+
+        fun addData(data: Invoice) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(data)
+                }
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -88,7 +103,8 @@ private constructor(
 
         fun build(): ContractScheduleProServicesInvoiceResponse =
             ContractScheduleProServicesInvoiceResponse(
-                data.map { it.toImmutable() },
+                checkNotNull(data) { "`data` is required but was not set" }
+                    .map { it.toImmutable() },
                 additionalProperties.toImmutable()
             )
     }

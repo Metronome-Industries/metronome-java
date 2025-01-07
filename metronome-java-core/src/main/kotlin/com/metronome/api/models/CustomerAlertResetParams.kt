@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -29,11 +31,17 @@ constructor(
     /** The Metronome ID of the customer */
     fun customerId(): String = body.customerId()
 
+    /** The Metronome ID of the alert */
+    fun _alertId(): JsonField<String> = body._alertId()
+
+    /** The Metronome ID of the customer */
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomerAlertResetBody = body
 
@@ -45,21 +53,43 @@ constructor(
     class CustomerAlertResetBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("alert_id") private val alertId: String,
-        @JsonProperty("customer_id") private val customerId: String,
+        @JsonProperty("alert_id")
+        @ExcludeMissing
+        private val alertId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The Metronome ID of the alert */
-        @JsonProperty("alert_id") fun alertId(): String = alertId
+        fun alertId(): String = alertId.getRequired("alert_id")
 
         /** The Metronome ID of the customer */
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
+
+        /** The Metronome ID of the alert */
+        @JsonProperty("alert_id") @ExcludeMissing fun _alertId(): JsonField<String> = alertId
+
+        /** The Metronome ID of the customer */
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomerAlertResetBody = apply {
+            if (!validated) {
+                alertId()
+                customerId()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -70,8 +100,8 @@ constructor(
 
         class Builder {
 
-            private var alertId: String? = null
-            private var customerId: String? = null
+            private var alertId: JsonField<String>? = null
+            private var customerId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -82,10 +112,16 @@ constructor(
             }
 
             /** The Metronome ID of the alert */
-            fun alertId(alertId: String) = apply { this.alertId = alertId }
+            fun alertId(alertId: String) = alertId(JsonField.of(alertId))
+
+            /** The Metronome ID of the alert */
+            fun alertId(alertId: JsonField<String>) = apply { this.alertId = alertId }
 
             /** The Metronome ID of the customer */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            /** The Metronome ID of the customer */
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -156,8 +192,33 @@ constructor(
         /** The Metronome ID of the alert */
         fun alertId(alertId: String) = apply { body.alertId(alertId) }
 
+        /** The Metronome ID of the alert */
+        fun alertId(alertId: JsonField<String>) = apply { body.alertId(alertId) }
+
         /** The Metronome ID of the customer */
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
+
+        /** The Metronome ID of the customer */
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -255,25 +316,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerAlertResetParams =

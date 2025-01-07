@@ -40,13 +40,15 @@ private constructor(
     fun customFields(): Optional<CustomFields> =
         Optional.ofNullable(customFields.getNullable("custom_fields"))
 
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    @JsonProperty("description") @ExcludeMissing fun _description() = description
+    @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    fun _customFields(): JsonField<CustomFields> = customFields
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -73,9 +75,9 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var description: JsonField<String> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var description: JsonField<String>? = null
+        private var name: JsonField<String>? = null
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -127,9 +129,9 @@ private constructor(
 
         fun build(): PlanListResponse =
             PlanListResponse(
-                id,
-                description,
-                name,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(description) { "`description` is required but was not set" },
+                checkNotNull(name) { "`name` is required but was not set" },
                 customFields,
                 additionalProperties.toImmutable(),
             )

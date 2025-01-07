@@ -71,29 +71,35 @@ private constructor(
     fun invoiceId(): Optional<String> = Optional.ofNullable(invoiceId.getNullable("invoice_id"))
 
     /** an amount representing the change to the customer's credit balance */
-    @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+    @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
-    @JsonProperty("created_by") @ExcludeMissing fun _createdBy() = createdBy
+    @JsonProperty("created_by") @ExcludeMissing fun _createdBy(): JsonField<String> = createdBy
 
     /** the credit grant this entry is related to */
-    @JsonProperty("credit_grant_id") @ExcludeMissing fun _creditGrantId() = creditGrantId
+    @JsonProperty("credit_grant_id")
+    @ExcludeMissing
+    fun _creditGrantId(): JsonField<String> = creditGrantId
 
-    @JsonProperty("effective_at") @ExcludeMissing fun _effectiveAt() = effectiveAt
+    @JsonProperty("effective_at")
+    @ExcludeMissing
+    fun _effectiveAt(): JsonField<OffsetDateTime> = effectiveAt
 
-    @JsonProperty("reason") @ExcludeMissing fun _reason() = reason
+    @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
     /**
      * the running balance for this credit type at the time of the ledger entry, including all
      * preceding charges
      */
-    @JsonProperty("running_balance") @ExcludeMissing fun _runningBalance() = runningBalance
+    @JsonProperty("running_balance")
+    @ExcludeMissing
+    fun _runningBalance(): JsonField<Double> = runningBalance
 
     /**
      * if this entry is a deduction, the Metronome ID of the invoice where the credit deduction was
      * consumed; if this entry is a grant, the Metronome ID of the invoice where the grant's
      * paid_amount was charged
      */
-    @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
+    @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId(): JsonField<String> = invoiceId
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -123,12 +129,12 @@ private constructor(
 
     class Builder {
 
-        private var amount: JsonField<Double> = JsonMissing.of()
-        private var createdBy: JsonField<String> = JsonMissing.of()
-        private var creditGrantId: JsonField<String> = JsonMissing.of()
-        private var effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var reason: JsonField<String> = JsonMissing.of()
-        private var runningBalance: JsonField<Double> = JsonMissing.of()
+        private var amount: JsonField<Double>? = null
+        private var createdBy: JsonField<String>? = null
+        private var creditGrantId: JsonField<String>? = null
+        private var effectiveAt: JsonField<OffsetDateTime>? = null
+        private var reason: JsonField<String>? = null
+        private var runningBalance: JsonField<Double>? = null
         private var invoiceId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -191,7 +197,14 @@ private constructor(
          * was consumed; if this entry is a grant, the Metronome ID of the invoice where the grant's
          * paid_amount was charged
          */
-        fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
+        fun invoiceId(invoiceId: String?) = invoiceId(JsonField.ofNullable(invoiceId))
+
+        /**
+         * if this entry is a deduction, the Metronome ID of the invoice where the credit deduction
+         * was consumed; if this entry is a grant, the Metronome ID of the invoice where the grant's
+         * paid_amount was charged
+         */
+        fun invoiceId(invoiceId: Optional<String>) = invoiceId(invoiceId.orElse(null))
 
         /**
          * if this entry is a deduction, the Metronome ID of the invoice where the credit deduction
@@ -221,12 +234,12 @@ private constructor(
 
         fun build(): CreditLedgerEntry =
             CreditLedgerEntry(
-                amount,
-                createdBy,
-                creditGrantId,
-                effectiveAt,
-                reason,
-                runningBalance,
+                checkNotNull(amount) { "`amount` is required but was not set" },
+                checkNotNull(createdBy) { "`createdBy` is required but was not set" },
+                checkNotNull(creditGrantId) { "`creditGrantId` is required but was not set" },
+                checkNotNull(effectiveAt) { "`effectiveAt` is required but was not set" },
+                checkNotNull(reason) { "`reason` is required but was not set" },
+                checkNotNull(runningBalance) { "`runningBalance` is required but was not set" },
                 invoiceId,
                 additionalProperties.toImmutable(),
             )

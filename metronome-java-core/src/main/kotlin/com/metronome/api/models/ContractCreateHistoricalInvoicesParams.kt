@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -32,11 +33,15 @@ constructor(
 
     fun preview(): Boolean = body.preview()
 
+    fun _invoices(): JsonField<List<Invoice>> = body._invoices()
+
+    fun _preview(): JsonField<Boolean> = body._preview()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): ContractCreateHistoricalInvoicesBody = body
 
@@ -48,19 +53,39 @@ constructor(
     class ContractCreateHistoricalInvoicesBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("invoices") private val invoices: List<Invoice>,
-        @JsonProperty("preview") private val preview: Boolean,
+        @JsonProperty("invoices")
+        @ExcludeMissing
+        private val invoices: JsonField<List<Invoice>> = JsonMissing.of(),
+        @JsonProperty("preview")
+        @ExcludeMissing
+        private val preview: JsonField<Boolean> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("invoices") fun invoices(): List<Invoice> = invoices
+        fun invoices(): List<Invoice> = invoices.getRequired("invoices")
 
-        @JsonProperty("preview") fun preview(): Boolean = preview
+        fun preview(): Boolean = preview.getRequired("preview")
+
+        @JsonProperty("invoices")
+        @ExcludeMissing
+        fun _invoices(): JsonField<List<Invoice>> = invoices
+
+        @JsonProperty("preview") @ExcludeMissing fun _preview(): JsonField<Boolean> = preview
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ContractCreateHistoricalInvoicesBody = apply {
+            if (!validated) {
+                invoices().forEach { it.validate() }
+                preview()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -71,29 +96,42 @@ constructor(
 
         class Builder {
 
-            private var invoices: MutableList<Invoice>? = null
-            private var preview: Boolean? = null
+            private var invoices: JsonField<MutableList<Invoice>>? = null
+            private var preview: JsonField<Boolean>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(
                 contractCreateHistoricalInvoicesBody: ContractCreateHistoricalInvoicesBody
             ) = apply {
-                invoices = contractCreateHistoricalInvoicesBody.invoices.toMutableList()
+                invoices = contractCreateHistoricalInvoicesBody.invoices.map { it.toMutableList() }
                 preview = contractCreateHistoricalInvoicesBody.preview
                 additionalProperties =
                     contractCreateHistoricalInvoicesBody.additionalProperties.toMutableMap()
             }
 
-            fun invoices(invoices: List<Invoice>) = apply {
-                this.invoices = invoices.toMutableList()
+            fun invoices(invoices: List<Invoice>) = invoices(JsonField.of(invoices))
+
+            fun invoices(invoices: JsonField<List<Invoice>>) = apply {
+                this.invoices = invoices.map { it.toMutableList() }
             }
 
             fun addInvoice(invoice: Invoice) = apply {
-                invoices = (invoices ?: mutableListOf()).apply { add(invoice) }
+                invoices =
+                    (invoices ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(invoice)
+                    }
             }
 
-            fun preview(preview: Boolean) = apply { this.preview = preview }
+            fun preview(preview: Boolean) = preview(JsonField.of(preview))
+
+            fun preview(preview: JsonField<Boolean>) = apply { this.preview = preview }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -117,7 +155,7 @@ constructor(
             fun build(): ContractCreateHistoricalInvoicesBody =
                 ContractCreateHistoricalInvoicesBody(
                     checkNotNull(invoices) { "`invoices` is required but was not set" }
-                        .toImmutable(),
+                        .map { it.toImmutable() },
                     checkNotNull(preview) { "`preview` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
@@ -168,9 +206,32 @@ constructor(
 
         fun invoices(invoices: List<Invoice>) = apply { body.invoices(invoices) }
 
+        fun invoices(invoices: JsonField<List<Invoice>>) = apply { body.invoices(invoices) }
+
         fun addInvoice(invoice: Invoice) = apply { body.addInvoice(invoice) }
 
         fun preview(preview: Boolean) = apply { body.preview(preview) }
+
+        fun preview(preview: JsonField<Boolean>) = apply { body.preview(preview) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -270,25 +331,6 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
         fun build(): ContractCreateHistoricalInvoicesParams =
             ContractCreateHistoricalInvoicesParams(
                 body.build(),
@@ -301,51 +343,127 @@ constructor(
     class Invoice
     @JsonCreator
     private constructor(
-        @JsonProperty("contract_id") private val contractId: String,
-        @JsonProperty("credit_type_id") private val creditTypeId: String,
-        @JsonProperty("customer_id") private val customerId: String,
-        @JsonProperty("exclusive_end_date") private val exclusiveEndDate: OffsetDateTime,
-        @JsonProperty("inclusive_start_date") private val inclusiveStartDate: OffsetDateTime,
-        @JsonProperty("issue_date") private val issueDate: OffsetDateTime,
-        @JsonProperty("usage_line_items") private val usageLineItems: List<UsageLineItem>,
-        @JsonProperty("billable_status") private val billableStatus: BillableStatus?,
+        @JsonProperty("contract_id")
+        @ExcludeMissing
+        private val contractId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("credit_type_id")
+        @ExcludeMissing
+        private val creditTypeId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("exclusive_end_date")
+        @ExcludeMissing
+        private val exclusiveEndDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("inclusive_start_date")
+        @ExcludeMissing
+        private val inclusiveStartDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("issue_date")
+        @ExcludeMissing
+        private val issueDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("usage_line_items")
+        @ExcludeMissing
+        private val usageLineItems: JsonField<List<UsageLineItem>> = JsonMissing.of(),
+        @JsonProperty("billable_status")
+        @ExcludeMissing
+        private val billableStatus: JsonField<BillableStatus> = JsonMissing.of(),
         @JsonProperty("breakdown_granularity")
-        private val breakdownGranularity: BreakdownGranularity?,
-        @JsonProperty("custom_fields") private val customFields: CustomFields?,
+        @ExcludeMissing
+        private val breakdownGranularity: JsonField<BreakdownGranularity> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("contract_id") fun contractId(): String = contractId
+        fun contractId(): String = contractId.getRequired("contract_id")
 
-        @JsonProperty("credit_type_id") fun creditTypeId(): String = creditTypeId
+        fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
 
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
+
+        fun exclusiveEndDate(): OffsetDateTime = exclusiveEndDate.getRequired("exclusive_end_date")
+
+        fun inclusiveStartDate(): OffsetDateTime =
+            inclusiveStartDate.getRequired("inclusive_start_date")
+
+        fun issueDate(): OffsetDateTime = issueDate.getRequired("issue_date")
+
+        fun usageLineItems(): List<UsageLineItem> = usageLineItems.getRequired("usage_line_items")
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun billableStatus(): Optional<BillableStatus> =
+            Optional.ofNullable(billableStatus.getNullable("billable_status"))
+
+        fun breakdownGranularity(): Optional<BreakdownGranularity> =
+            Optional.ofNullable(breakdownGranularity.getNullable("breakdown_granularity"))
+
+        fun customFields(): Optional<CustomFields> =
+            Optional.ofNullable(customFields.getNullable("custom_fields"))
+
+        @JsonProperty("contract_id")
+        @ExcludeMissing
+        fun _contractId(): JsonField<String> = contractId
+
+        @JsonProperty("credit_type_id")
+        @ExcludeMissing
+        fun _creditTypeId(): JsonField<String> = creditTypeId
+
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
 
         @JsonProperty("exclusive_end_date")
-        fun exclusiveEndDate(): OffsetDateTime = exclusiveEndDate
+        @ExcludeMissing
+        fun _exclusiveEndDate(): JsonField<OffsetDateTime> = exclusiveEndDate
 
         @JsonProperty("inclusive_start_date")
-        fun inclusiveStartDate(): OffsetDateTime = inclusiveStartDate
+        @ExcludeMissing
+        fun _inclusiveStartDate(): JsonField<OffsetDateTime> = inclusiveStartDate
 
-        @JsonProperty("issue_date") fun issueDate(): OffsetDateTime = issueDate
+        @JsonProperty("issue_date")
+        @ExcludeMissing
+        fun _issueDate(): JsonField<OffsetDateTime> = issueDate
 
-        @JsonProperty("usage_line_items") fun usageLineItems(): List<UsageLineItem> = usageLineItems
+        @JsonProperty("usage_line_items")
+        @ExcludeMissing
+        fun _usageLineItems(): JsonField<List<UsageLineItem>> = usageLineItems
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("billable_status")
-        fun billableStatus(): Optional<BillableStatus> = Optional.ofNullable(billableStatus)
+        @ExcludeMissing
+        fun _billableStatus(): JsonField<BillableStatus> = billableStatus
 
         @JsonProperty("breakdown_granularity")
-        fun breakdownGranularity(): Optional<BreakdownGranularity> =
-            Optional.ofNullable(breakdownGranularity)
+        @ExcludeMissing
+        fun _breakdownGranularity(): JsonField<BreakdownGranularity> = breakdownGranularity
 
         @JsonProperty("custom_fields")
-        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+        @ExcludeMissing
+        fun _customFields(): JsonField<CustomFields> = customFields
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): Invoice = apply {
+            if (!validated) {
+                contractId()
+                creditTypeId()
+                customerId()
+                exclusiveEndDate()
+                inclusiveStartDate()
+                issueDate()
+                usageLineItems().forEach { it.validate() }
+                billableStatus()
+                breakdownGranularity()
+                customFields().map { it.validate() }
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -356,16 +474,16 @@ constructor(
 
         class Builder {
 
-            private var contractId: String? = null
-            private var creditTypeId: String? = null
-            private var customerId: String? = null
-            private var exclusiveEndDate: OffsetDateTime? = null
-            private var inclusiveStartDate: OffsetDateTime? = null
-            private var issueDate: OffsetDateTime? = null
-            private var usageLineItems: MutableList<UsageLineItem>? = null
-            private var billableStatus: BillableStatus? = null
-            private var breakdownGranularity: BreakdownGranularity? = null
-            private var customFields: CustomFields? = null
+            private var contractId: JsonField<String>? = null
+            private var creditTypeId: JsonField<String>? = null
+            private var customerId: JsonField<String>? = null
+            private var exclusiveEndDate: JsonField<OffsetDateTime>? = null
+            private var inclusiveStartDate: JsonField<OffsetDateTime>? = null
+            private var issueDate: JsonField<OffsetDateTime>? = null
+            private var usageLineItems: JsonField<MutableList<UsageLineItem>>? = null
+            private var billableStatus: JsonField<BillableStatus> = JsonMissing.of()
+            private var breakdownGranularity: JsonField<BreakdownGranularity> = JsonMissing.of()
+            private var customFields: JsonField<CustomFields> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -376,59 +494,89 @@ constructor(
                 exclusiveEndDate = invoice.exclusiveEndDate
                 inclusiveStartDate = invoice.inclusiveStartDate
                 issueDate = invoice.issueDate
-                usageLineItems = invoice.usageLineItems.toMutableList()
+                usageLineItems = invoice.usageLineItems.map { it.toMutableList() }
                 billableStatus = invoice.billableStatus
                 breakdownGranularity = invoice.breakdownGranularity
                 customFields = invoice.customFields
                 additionalProperties = invoice.additionalProperties.toMutableMap()
             }
 
-            fun contractId(contractId: String) = apply { this.contractId = contractId }
+            fun contractId(contractId: String) = contractId(JsonField.of(contractId))
 
-            fun creditTypeId(creditTypeId: String) = apply { this.creditTypeId = creditTypeId }
+            fun contractId(contractId: JsonField<String>) = apply { this.contractId = contractId }
 
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
 
-            fun exclusiveEndDate(exclusiveEndDate: OffsetDateTime) = apply {
+            fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                this.creditTypeId = creditTypeId
+            }
+
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
+
+            fun exclusiveEndDate(exclusiveEndDate: OffsetDateTime) =
+                exclusiveEndDate(JsonField.of(exclusiveEndDate))
+
+            fun exclusiveEndDate(exclusiveEndDate: JsonField<OffsetDateTime>) = apply {
                 this.exclusiveEndDate = exclusiveEndDate
             }
 
-            fun inclusiveStartDate(inclusiveStartDate: OffsetDateTime) = apply {
+            fun inclusiveStartDate(inclusiveStartDate: OffsetDateTime) =
+                inclusiveStartDate(JsonField.of(inclusiveStartDate))
+
+            fun inclusiveStartDate(inclusiveStartDate: JsonField<OffsetDateTime>) = apply {
                 this.inclusiveStartDate = inclusiveStartDate
             }
 
-            fun issueDate(issueDate: OffsetDateTime) = apply { this.issueDate = issueDate }
+            fun issueDate(issueDate: OffsetDateTime) = issueDate(JsonField.of(issueDate))
 
-            fun usageLineItems(usageLineItems: List<UsageLineItem>) = apply {
-                this.usageLineItems = usageLineItems.toMutableList()
+            fun issueDate(issueDate: JsonField<OffsetDateTime>) = apply {
+                this.issueDate = issueDate
+            }
+
+            fun usageLineItems(usageLineItems: List<UsageLineItem>) =
+                usageLineItems(JsonField.of(usageLineItems))
+
+            fun usageLineItems(usageLineItems: JsonField<List<UsageLineItem>>) = apply {
+                this.usageLineItems = usageLineItems.map { it.toMutableList() }
             }
 
             fun addUsageLineItem(usageLineItem: UsageLineItem) = apply {
-                usageLineItems = (usageLineItems ?: mutableListOf()).apply { add(usageLineItem) }
+                usageLineItems =
+                    (usageLineItems ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(usageLineItem)
+                    }
             }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun billableStatus(billableStatus: BillableStatus?) = apply {
+            fun billableStatus(billableStatus: BillableStatus) =
+                billableStatus(JsonField.of(billableStatus))
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun billableStatus(billableStatus: JsonField<BillableStatus>) = apply {
                 this.billableStatus = billableStatus
             }
 
-            /** This field's availability is dependent on your client's configuration. */
-            fun billableStatus(billableStatus: Optional<BillableStatus>) =
-                billableStatus(billableStatus.orElse(null))
+            fun breakdownGranularity(breakdownGranularity: BreakdownGranularity) =
+                breakdownGranularity(JsonField.of(breakdownGranularity))
 
-            fun breakdownGranularity(breakdownGranularity: BreakdownGranularity?) = apply {
-                this.breakdownGranularity = breakdownGranularity
-            }
+            fun breakdownGranularity(breakdownGranularity: JsonField<BreakdownGranularity>) =
+                apply {
+                    this.breakdownGranularity = breakdownGranularity
+                }
 
-            fun breakdownGranularity(breakdownGranularity: Optional<BreakdownGranularity>) =
-                breakdownGranularity(breakdownGranularity.orElse(null))
+            fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
-            fun customFields(customFields: CustomFields?) = apply {
+            fun customFields(customFields: JsonField<CustomFields>) = apply {
                 this.customFields = customFields
             }
-
-            fun customFields(customFields: Optional<CustomFields>) =
-                customFields(customFields.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -462,7 +610,7 @@ constructor(
                     },
                     checkNotNull(issueDate) { "`issueDate` is required but was not set" },
                     checkNotNull(usageLineItems) { "`usageLineItems` is required but was not set" }
-                        .toImmutable(),
+                        .map { it.toImmutable() },
                     billableStatus,
                     breakdownGranularity,
                     customFields,
@@ -474,46 +622,100 @@ constructor(
         class UsageLineItem
         @JsonCreator
         private constructor(
-            @JsonProperty("exclusive_end_date") private val exclusiveEndDate: OffsetDateTime,
-            @JsonProperty("inclusive_start_date") private val inclusiveStartDate: OffsetDateTime,
-            @JsonProperty("product_id") private val productId: String,
+            @JsonProperty("exclusive_end_date")
+            @ExcludeMissing
+            private val exclusiveEndDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("inclusive_start_date")
+            @ExcludeMissing
+            private val inclusiveStartDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("product_id")
+            @ExcludeMissing
+            private val productId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("presentation_group_values")
-            private val presentationGroupValues: PresentationGroupValues?,
+            @ExcludeMissing
+            private val presentationGroupValues: JsonField<PresentationGroupValues> =
+                JsonMissing.of(),
             @JsonProperty("pricing_group_values")
-            private val pricingGroupValues: PricingGroupValues?,
-            @JsonProperty("quantity") private val quantity: Double?,
+            @ExcludeMissing
+            private val pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of(),
+            @JsonProperty("quantity")
+            @ExcludeMissing
+            private val quantity: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("subtotals_with_quantity")
-            private val subtotalsWithQuantity: List<SubtotalsWithQuantity>?,
+            @ExcludeMissing
+            private val subtotalsWithQuantity: JsonField<List<SubtotalsWithQuantity>> =
+                JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            fun exclusiveEndDate(): OffsetDateTime =
+                exclusiveEndDate.getRequired("exclusive_end_date")
+
+            fun inclusiveStartDate(): OffsetDateTime =
+                inclusiveStartDate.getRequired("inclusive_start_date")
+
+            fun productId(): String = productId.getRequired("product_id")
+
+            fun presentationGroupValues(): Optional<PresentationGroupValues> =
+                Optional.ofNullable(
+                    presentationGroupValues.getNullable("presentation_group_values")
+                )
+
+            fun pricingGroupValues(): Optional<PricingGroupValues> =
+                Optional.ofNullable(pricingGroupValues.getNullable("pricing_group_values"))
+
+            fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
+
+            fun subtotalsWithQuantity(): Optional<List<SubtotalsWithQuantity>> =
+                Optional.ofNullable(subtotalsWithQuantity.getNullable("subtotals_with_quantity"))
+
             @JsonProperty("exclusive_end_date")
-            fun exclusiveEndDate(): OffsetDateTime = exclusiveEndDate
+            @ExcludeMissing
+            fun _exclusiveEndDate(): JsonField<OffsetDateTime> = exclusiveEndDate
 
             @JsonProperty("inclusive_start_date")
-            fun inclusiveStartDate(): OffsetDateTime = inclusiveStartDate
+            @ExcludeMissing
+            fun _inclusiveStartDate(): JsonField<OffsetDateTime> = inclusiveStartDate
 
-            @JsonProperty("product_id") fun productId(): String = productId
+            @JsonProperty("product_id")
+            @ExcludeMissing
+            fun _productId(): JsonField<String> = productId
 
             @JsonProperty("presentation_group_values")
-            fun presentationGroupValues(): Optional<PresentationGroupValues> =
-                Optional.ofNullable(presentationGroupValues)
+            @ExcludeMissing
+            fun _presentationGroupValues(): JsonField<PresentationGroupValues> =
+                presentationGroupValues
 
             @JsonProperty("pricing_group_values")
-            fun pricingGroupValues(): Optional<PricingGroupValues> =
-                Optional.ofNullable(pricingGroupValues)
+            @ExcludeMissing
+            fun _pricingGroupValues(): JsonField<PricingGroupValues> = pricingGroupValues
 
-            @JsonProperty("quantity")
-            fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
+            @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
             @JsonProperty("subtotals_with_quantity")
-            fun subtotalsWithQuantity(): Optional<List<SubtotalsWithQuantity>> =
-                Optional.ofNullable(subtotalsWithQuantity)
+            @ExcludeMissing
+            fun _subtotalsWithQuantity(): JsonField<List<SubtotalsWithQuantity>> =
+                subtotalsWithQuantity
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): UsageLineItem = apply {
+                if (!validated) {
+                    exclusiveEndDate()
+                    inclusiveStartDate()
+                    productId()
+                    presentationGroupValues().map { it.validate() }
+                    pricingGroupValues().map { it.validate() }
+                    quantity()
+                    subtotalsWithQuantity().map { it.forEach { it.validate() } }
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -524,13 +726,15 @@ constructor(
 
             class Builder {
 
-                private var exclusiveEndDate: OffsetDateTime? = null
-                private var inclusiveStartDate: OffsetDateTime? = null
-                private var productId: String? = null
-                private var presentationGroupValues: PresentationGroupValues? = null
-                private var pricingGroupValues: PricingGroupValues? = null
-                private var quantity: Double? = null
-                private var subtotalsWithQuantity: MutableList<SubtotalsWithQuantity>? = null
+                private var exclusiveEndDate: JsonField<OffsetDateTime>? = null
+                private var inclusiveStartDate: JsonField<OffsetDateTime>? = null
+                private var productId: JsonField<String>? = null
+                private var presentationGroupValues: JsonField<PresentationGroupValues> =
+                    JsonMissing.of()
+                private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
+                private var quantity: JsonField<Double> = JsonMissing.of()
+                private var subtotalsWithQuantity: JsonField<MutableList<SubtotalsWithQuantity>>? =
+                    null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -541,57 +745,66 @@ constructor(
                     presentationGroupValues = usageLineItem.presentationGroupValues
                     pricingGroupValues = usageLineItem.pricingGroupValues
                     quantity = usageLineItem.quantity
-                    subtotalsWithQuantity = usageLineItem.subtotalsWithQuantity?.toMutableList()
+                    subtotalsWithQuantity =
+                        usageLineItem.subtotalsWithQuantity.map { it.toMutableList() }
                     additionalProperties = usageLineItem.additionalProperties.toMutableMap()
                 }
 
-                fun exclusiveEndDate(exclusiveEndDate: OffsetDateTime) = apply {
+                fun exclusiveEndDate(exclusiveEndDate: OffsetDateTime) =
+                    exclusiveEndDate(JsonField.of(exclusiveEndDate))
+
+                fun exclusiveEndDate(exclusiveEndDate: JsonField<OffsetDateTime>) = apply {
                     this.exclusiveEndDate = exclusiveEndDate
                 }
 
-                fun inclusiveStartDate(inclusiveStartDate: OffsetDateTime) = apply {
+                fun inclusiveStartDate(inclusiveStartDate: OffsetDateTime) =
+                    inclusiveStartDate(JsonField.of(inclusiveStartDate))
+
+                fun inclusiveStartDate(inclusiveStartDate: JsonField<OffsetDateTime>) = apply {
                     this.inclusiveStartDate = inclusiveStartDate
                 }
 
-                fun productId(productId: String) = apply { this.productId = productId }
+                fun productId(productId: String) = productId(JsonField.of(productId))
 
-                fun presentationGroupValues(presentationGroupValues: PresentationGroupValues?) =
-                    apply {
-                        this.presentationGroupValues = presentationGroupValues
-                    }
+                fun productId(productId: JsonField<String>) = apply { this.productId = productId }
+
+                fun presentationGroupValues(presentationGroupValues: PresentationGroupValues) =
+                    presentationGroupValues(JsonField.of(presentationGroupValues))
 
                 fun presentationGroupValues(
-                    presentationGroupValues: Optional<PresentationGroupValues>
-                ) = presentationGroupValues(presentationGroupValues.orElse(null))
+                    presentationGroupValues: JsonField<PresentationGroupValues>
+                ) = apply { this.presentationGroupValues = presentationGroupValues }
 
-                fun pricingGroupValues(pricingGroupValues: PricingGroupValues?) = apply {
+                fun pricingGroupValues(pricingGroupValues: PricingGroupValues) =
+                    pricingGroupValues(JsonField.of(pricingGroupValues))
+
+                fun pricingGroupValues(pricingGroupValues: JsonField<PricingGroupValues>) = apply {
                     this.pricingGroupValues = pricingGroupValues
                 }
 
-                fun pricingGroupValues(pricingGroupValues: Optional<PricingGroupValues>) =
-                    pricingGroupValues(pricingGroupValues.orElse(null))
+                fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-                fun quantity(quantity: Double?) = apply { this.quantity = quantity }
+                fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
-                fun quantity(quantity: Double) = quantity(quantity as Double?)
-
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                fun quantity(quantity: Optional<Double>) =
-                    quantity(quantity.orElse(null) as Double?)
-
-                fun subtotalsWithQuantity(subtotalsWithQuantity: List<SubtotalsWithQuantity>?) =
-                    apply {
-                        this.subtotalsWithQuantity = subtotalsWithQuantity?.toMutableList()
-                    }
+                fun subtotalsWithQuantity(subtotalsWithQuantity: List<SubtotalsWithQuantity>) =
+                    subtotalsWithQuantity(JsonField.of(subtotalsWithQuantity))
 
                 fun subtotalsWithQuantity(
-                    subtotalsWithQuantity: Optional<List<SubtotalsWithQuantity>>
-                ) = subtotalsWithQuantity(subtotalsWithQuantity.orElse(null))
+                    subtotalsWithQuantity: JsonField<List<SubtotalsWithQuantity>>
+                ) = apply {
+                    this.subtotalsWithQuantity = subtotalsWithQuantity.map { it.toMutableList() }
+                }
 
                 fun addSubtotalsWithQuantity(subtotalsWithQuantity: SubtotalsWithQuantity) = apply {
                     this.subtotalsWithQuantity =
-                        (this.subtotalsWithQuantity ?: mutableListOf()).apply {
-                            add(subtotalsWithQuantity)
+                        (this.subtotalsWithQuantity ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(subtotalsWithQuantity)
                         }
                 }
 
@@ -629,7 +842,7 @@ constructor(
                         presentationGroupValues,
                         pricingGroupValues,
                         quantity,
-                        subtotalsWithQuantity?.toImmutable(),
+                        (subtotalsWithQuantity ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -645,6 +858,14 @@ constructor(
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                private var validated: Boolean = false
+
+                fun validate(): PresentationGroupValues = apply {
+                    if (!validated) {
+                        validated = true
+                    }
+                }
 
                 fun toBuilder() = Builder().from(this)
 
@@ -719,6 +940,14 @@ constructor(
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+                private var validated: Boolean = false
+
+                fun validate(): PricingGroupValues = apply {
+                    if (!validated) {
+                        validated = true
+                    }
+                }
+
                 fun toBuilder() = Builder().from(this)
 
                 companion object {
@@ -784,25 +1013,53 @@ constructor(
             class SubtotalsWithQuantity
             @JsonCreator
             private constructor(
-                @JsonProperty("exclusive_end_date") private val exclusiveEndDate: OffsetDateTime,
+                @JsonProperty("exclusive_end_date")
+                @ExcludeMissing
+                private val exclusiveEndDate: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonProperty("inclusive_start_date")
-                private val inclusiveStartDate: OffsetDateTime,
-                @JsonProperty("quantity") private val quantity: Double,
+                @ExcludeMissing
+                private val inclusiveStartDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                private val quantity: JsonField<Double> = JsonMissing.of(),
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                fun exclusiveEndDate(): OffsetDateTime =
+                    exclusiveEndDate.getRequired("exclusive_end_date")
+
+                fun inclusiveStartDate(): OffsetDateTime =
+                    inclusiveStartDate.getRequired("inclusive_start_date")
+
+                fun quantity(): Double = quantity.getRequired("quantity")
+
                 @JsonProperty("exclusive_end_date")
-                fun exclusiveEndDate(): OffsetDateTime = exclusiveEndDate
+                @ExcludeMissing
+                fun _exclusiveEndDate(): JsonField<OffsetDateTime> = exclusiveEndDate
 
                 @JsonProperty("inclusive_start_date")
-                fun inclusiveStartDate(): OffsetDateTime = inclusiveStartDate
+                @ExcludeMissing
+                fun _inclusiveStartDate(): JsonField<OffsetDateTime> = inclusiveStartDate
 
-                @JsonProperty("quantity") fun quantity(): Double = quantity
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                fun _quantity(): JsonField<Double> = quantity
 
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                private var validated: Boolean = false
+
+                fun validate(): SubtotalsWithQuantity = apply {
+                    if (!validated) {
+                        exclusiveEndDate()
+                        inclusiveStartDate()
+                        quantity()
+                        validated = true
+                    }
+                }
 
                 fun toBuilder() = Builder().from(this)
 
@@ -813,9 +1070,9 @@ constructor(
 
                 class Builder {
 
-                    private var exclusiveEndDate: OffsetDateTime? = null
-                    private var inclusiveStartDate: OffsetDateTime? = null
-                    private var quantity: Double? = null
+                    private var exclusiveEndDate: JsonField<OffsetDateTime>? = null
+                    private var inclusiveStartDate: JsonField<OffsetDateTime>? = null
+                    private var quantity: JsonField<Double>? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -827,15 +1084,23 @@ constructor(
                             subtotalsWithQuantity.additionalProperties.toMutableMap()
                     }
 
-                    fun exclusiveEndDate(exclusiveEndDate: OffsetDateTime) = apply {
+                    fun exclusiveEndDate(exclusiveEndDate: OffsetDateTime) =
+                        exclusiveEndDate(JsonField.of(exclusiveEndDate))
+
+                    fun exclusiveEndDate(exclusiveEndDate: JsonField<OffsetDateTime>) = apply {
                         this.exclusiveEndDate = exclusiveEndDate
                     }
 
-                    fun inclusiveStartDate(inclusiveStartDate: OffsetDateTime) = apply {
+                    fun inclusiveStartDate(inclusiveStartDate: OffsetDateTime) =
+                        inclusiveStartDate(JsonField.of(inclusiveStartDate))
+
+                    fun inclusiveStartDate(inclusiveStartDate: JsonField<OffsetDateTime>) = apply {
                         this.inclusiveStartDate = inclusiveStartDate
                     }
 
-                    fun quantity(quantity: Double) = apply { this.quantity = quantity }
+                    fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+
+                    fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -1034,6 +1299,14 @@ constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): CustomFields = apply {
+                if (!validated) {
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 

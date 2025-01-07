@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -28,11 +30,16 @@ constructor(
     /** ID of the rate card to update */
     fun rateCardId(): String = body.rateCardId()
 
+    fun _productOrder(): JsonField<List<String>> = body._productOrder()
+
+    /** ID of the rate card to update */
+    fun _rateCardId(): JsonField<String> = body._rateCardId()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): ContractRateCardProductOrderSetBody = body
 
@@ -44,20 +51,43 @@ constructor(
     class ContractRateCardProductOrderSetBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("product_order") private val productOrder: List<String>,
-        @JsonProperty("rate_card_id") private val rateCardId: String,
+        @JsonProperty("product_order")
+        @ExcludeMissing
+        private val productOrder: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("rate_card_id")
+        @ExcludeMissing
+        private val rateCardId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("product_order") fun productOrder(): List<String> = productOrder
+        fun productOrder(): List<String> = productOrder.getRequired("product_order")
 
         /** ID of the rate card to update */
-        @JsonProperty("rate_card_id") fun rateCardId(): String = rateCardId
+        fun rateCardId(): String = rateCardId.getRequired("rate_card_id")
+
+        @JsonProperty("product_order")
+        @ExcludeMissing
+        fun _productOrder(): JsonField<List<String>> = productOrder
+
+        /** ID of the rate card to update */
+        @JsonProperty("rate_card_id")
+        @ExcludeMissing
+        fun _rateCardId(): JsonField<String> = rateCardId
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ContractRateCardProductOrderSetBody = apply {
+            if (!validated) {
+                productOrder()
+                rateCardId()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -68,31 +98,45 @@ constructor(
 
         class Builder {
 
-            private var productOrder: MutableList<String>? = null
-            private var rateCardId: String? = null
+            private var productOrder: JsonField<MutableList<String>>? = null
+            private var rateCardId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(
                 contractRateCardProductOrderSetBody: ContractRateCardProductOrderSetBody
             ) = apply {
-                productOrder = contractRateCardProductOrderSetBody.productOrder.toMutableList()
+                productOrder =
+                    contractRateCardProductOrderSetBody.productOrder.map { it.toMutableList() }
                 rateCardId = contractRateCardProductOrderSetBody.rateCardId
                 additionalProperties =
                     contractRateCardProductOrderSetBody.additionalProperties.toMutableMap()
             }
 
-            fun productOrder(productOrder: List<String>) = apply {
-                this.productOrder = productOrder.toMutableList()
+            fun productOrder(productOrder: List<String>) = productOrder(JsonField.of(productOrder))
+
+            fun productOrder(productOrder: JsonField<List<String>>) = apply {
+                this.productOrder = productOrder.map { it.toMutableList() }
             }
 
             fun addProductOrder(productOrder: String) = apply {
                 this.productOrder =
-                    (this.productOrder ?: mutableListOf()).apply { add(productOrder) }
+                    (this.productOrder ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(productOrder)
+                    }
             }
 
             /** ID of the rate card to update */
-            fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
+            fun rateCardId(rateCardId: String) = rateCardId(JsonField.of(rateCardId))
+
+            /** ID of the rate card to update */
+            fun rateCardId(rateCardId: JsonField<String>) = apply { this.rateCardId = rateCardId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -116,7 +160,7 @@ constructor(
             fun build(): ContractRateCardProductOrderSetBody =
                 ContractRateCardProductOrderSetBody(
                     checkNotNull(productOrder) { "`productOrder` is required but was not set" }
-                        .toImmutable(),
+                        .map { it.toImmutable() },
                     checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
@@ -167,10 +211,36 @@ constructor(
 
         fun productOrder(productOrder: List<String>) = apply { body.productOrder(productOrder) }
 
+        fun productOrder(productOrder: JsonField<List<String>>) = apply {
+            body.productOrder(productOrder)
+        }
+
         fun addProductOrder(productOrder: String) = apply { body.addProductOrder(productOrder) }
 
         /** ID of the rate card to update */
         fun rateCardId(rateCardId: String) = apply { body.rateCardId(rateCardId) }
+
+        /** ID of the rate card to update */
+        fun rateCardId(rateCardId: JsonField<String>) = apply { body.rateCardId(rateCardId) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -268,25 +338,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractRateCardProductOrderSetParams =

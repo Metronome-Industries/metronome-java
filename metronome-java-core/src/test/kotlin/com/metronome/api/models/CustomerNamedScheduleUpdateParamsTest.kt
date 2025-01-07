@@ -35,7 +35,7 @@ class CustomerNamedScheduleUpdateParamsTest {
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.scheduleName()).isEqualTo("my-schedule")
         assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
-        assertThat(body.value()).isEqualTo(JsonValue.from(mapOf("my_key" to "my_value")))
+        assertThat(body._value()).isEqualTo(JsonValue.from(mapOf("my_key" to "my_value")))
         assertThat(body.endingBefore()).contains(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
     }
 
@@ -53,6 +53,6 @@ class CustomerNamedScheduleUpdateParamsTest {
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.scheduleName()).isEqualTo("my-schedule")
         assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
-        assertThat(body.value()).isEqualTo(JsonValue.from(mapOf("my_key" to "my_value")))
+        assertThat(body._value()).isEqualTo(JsonValue.from(mapOf("my_key" to "my_value")))
     }
 }

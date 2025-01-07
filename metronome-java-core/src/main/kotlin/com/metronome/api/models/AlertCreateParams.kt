@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -96,11 +97,80 @@ constructor(
      */
     fun uniquenessKey(): Optional<String> = body.uniquenessKey()
 
+    /** Type of the alert */
+    fun _alertType(): JsonField<AlertType> = body._alertType()
+
+    /** Name of the alert */
+    fun _name(): JsonField<String> = body._name()
+
+    /**
+     * Threshold value of the alert policy. Depending upon the alert type, this number may represent
+     * a financial amount, the days remaining, or a percentage reached.
+     */
+    fun _threshold(): JsonField<Double> = body._threshold()
+
+    /**
+     * For alerts of type `usage_threshold_reached`, specifies which billable metric to track the
+     * usage for.
+     */
+    fun _billableMetricId(): JsonField<String> = body._billableMetricId()
+
+    /**
+     * An array of strings, representing a way to filter the credit grant this alert applies to, by
+     * looking at the credit_grant_type field on the credit grant. This field is only defined for
+     * CreditPercentage and CreditBalance alerts
+     */
+    fun _creditGrantTypeFilters(): JsonField<List<String>> = body._creditGrantTypeFilters()
+
+    fun _creditTypeId(): JsonField<String> = body._creditTypeId()
+
+    /**
+     * Only present for beta contract invoices. This field's availability is dependent on your
+     * client's configuration. A list of custom field filters for alert types that support advanced
+     * filtering
+     */
+    fun _customFieldFilters(): JsonField<List<CustomFieldFilter>> = body._customFieldFilters()
+
+    /**
+     * If provided, will create this alert for this specific customer. To create an alert for all
+     * customers, do not specify `customer_id` or `plan_id`.
+     */
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    /**
+     * If true, the alert will evaluate immediately on customers that already meet the alert
+     * threshold. If false, it will only evaluate on future customers that trigger the alert
+     * threshold. Defaults to true.
+     */
+    fun _evaluateOnCreate(): JsonField<Boolean> = body._evaluateOnCreate()
+
+    /**
+     * Scopes alert evaluation to a specific presentation group key on individual line items. Only
+     * present for spend alerts.
+     */
+    fun _groupKeyFilter(): JsonField<GroupKeyFilter> = body._groupKeyFilter()
+
+    /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
+    fun _invoiceTypesFilter(): JsonField<List<String>> = body._invoiceTypesFilter()
+
+    /**
+     * If provided, will create this alert for this specific plan. To create an alert for all
+     * customers, do not specify `customer_id` or `plan_id`.
+     */
+    fun _planId(): JsonField<String> = body._planId()
+
+    /**
+     * Prevents the creation of duplicates. If a request to create a record is made with a
+     * previously used uniqueness key, a new record will not be created and the request will fail
+     * with a 409 error.
+     */
+    fun _uniquenessKey(): JsonField<String> = body._uniquenessKey()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): AlertCreateBody = body
 
@@ -112,43 +182,148 @@ constructor(
     class AlertCreateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("alert_type") private val alertType: AlertType,
-        @JsonProperty("name") private val name: String,
-        @JsonProperty("threshold") private val threshold: Double,
-        @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+        @JsonProperty("alert_type")
+        @ExcludeMissing
+        private val alertType: JsonField<AlertType> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("threshold")
+        @ExcludeMissing
+        private val threshold: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("billable_metric_id")
+        @ExcludeMissing
+        private val billableMetricId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("credit_grant_type_filters")
-        private val creditGrantTypeFilters: List<String>?,
-        @JsonProperty("credit_type_id") private val creditTypeId: String?,
+        @ExcludeMissing
+        private val creditGrantTypeFilters: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("credit_type_id")
+        @ExcludeMissing
+        private val creditTypeId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("custom_field_filters")
-        private val customFieldFilters: List<CustomFieldFilter>?,
-        @JsonProperty("customer_id") private val customerId: String?,
-        @JsonProperty("evaluate_on_create") private val evaluateOnCreate: Boolean?,
-        @JsonProperty("group_key_filter") private val groupKeyFilter: GroupKeyFilter?,
-        @JsonProperty("invoice_types_filter") private val invoiceTypesFilter: List<String>?,
-        @JsonProperty("plan_id") private val planId: String?,
-        @JsonProperty("uniqueness_key") private val uniquenessKey: String?,
+        @ExcludeMissing
+        private val customFieldFilters: JsonField<List<CustomFieldFilter>> = JsonMissing.of(),
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("evaluate_on_create")
+        @ExcludeMissing
+        private val evaluateOnCreate: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("group_key_filter")
+        @ExcludeMissing
+        private val groupKeyFilter: JsonField<GroupKeyFilter> = JsonMissing.of(),
+        @JsonProperty("invoice_types_filter")
+        @ExcludeMissing
+        private val invoiceTypesFilter: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("plan_id")
+        @ExcludeMissing
+        private val planId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("uniqueness_key")
+        @ExcludeMissing
+        private val uniquenessKey: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Type of the alert */
-        @JsonProperty("alert_type") fun alertType(): AlertType = alertType
+        fun alertType(): AlertType = alertType.getRequired("alert_type")
 
         /** Name of the alert */
-        @JsonProperty("name") fun name(): String = name
+        fun name(): String = name.getRequired("name")
 
         /**
          * Threshold value of the alert policy. Depending upon the alert type, this number may
          * represent a financial amount, the days remaining, or a percentage reached.
          */
-        @JsonProperty("threshold") fun threshold(): Double = threshold
+        fun threshold(): Double = threshold.getRequired("threshold")
+
+        /**
+         * For alerts of type `usage_threshold_reached`, specifies which billable metric to track
+         * the usage for.
+         */
+        fun billableMetricId(): Optional<String> =
+            Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+
+        /**
+         * An array of strings, representing a way to filter the credit grant this alert applies to,
+         * by looking at the credit_grant_type field on the credit grant. This field is only defined
+         * for CreditPercentage and CreditBalance alerts
+         */
+        fun creditGrantTypeFilters(): Optional<List<String>> =
+            Optional.ofNullable(creditGrantTypeFilters.getNullable("credit_grant_type_filters"))
+
+        fun creditTypeId(): Optional<String> =
+            Optional.ofNullable(creditTypeId.getNullable("credit_type_id"))
+
+        /**
+         * Only present for beta contract invoices. This field's availability is dependent on your
+         * client's configuration. A list of custom field filters for alert types that support
+         * advanced filtering
+         */
+        fun customFieldFilters(): Optional<List<CustomFieldFilter>> =
+            Optional.ofNullable(customFieldFilters.getNullable("custom_field_filters"))
+
+        /**
+         * If provided, will create this alert for this specific customer. To create an alert for
+         * all customers, do not specify `customer_id` or `plan_id`.
+         */
+        fun customerId(): Optional<String> =
+            Optional.ofNullable(customerId.getNullable("customer_id"))
+
+        /**
+         * If true, the alert will evaluate immediately on customers that already meet the alert
+         * threshold. If false, it will only evaluate on future customers that trigger the alert
+         * threshold. Defaults to true.
+         */
+        fun evaluateOnCreate(): Optional<Boolean> =
+            Optional.ofNullable(evaluateOnCreate.getNullable("evaluate_on_create"))
+
+        /**
+         * Scopes alert evaluation to a specific presentation group key on individual line items.
+         * Only present for spend alerts.
+         */
+        fun groupKeyFilter(): Optional<GroupKeyFilter> =
+            Optional.ofNullable(groupKeyFilter.getNullable("group_key_filter"))
+
+        /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
+        fun invoiceTypesFilter(): Optional<List<String>> =
+            Optional.ofNullable(invoiceTypesFilter.getNullable("invoice_types_filter"))
+
+        /**
+         * If provided, will create this alert for this specific plan. To create an alert for all
+         * customers, do not specify `customer_id` or `plan_id`.
+         */
+        fun planId(): Optional<String> = Optional.ofNullable(planId.getNullable("plan_id"))
+
+        /**
+         * Prevents the creation of duplicates. If a request to create a record is made with a
+         * previously used uniqueness key, a new record will not be created and the request will
+         * fail with a 409 error.
+         */
+        fun uniquenessKey(): Optional<String> =
+            Optional.ofNullable(uniquenessKey.getNullable("uniqueness_key"))
+
+        /** Type of the alert */
+        @JsonProperty("alert_type")
+        @ExcludeMissing
+        fun _alertType(): JsonField<AlertType> = alertType
+
+        /** Name of the alert */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+        /**
+         * Threshold value of the alert policy. Depending upon the alert type, this number may
+         * represent a financial amount, the days remaining, or a percentage reached.
+         */
+        @JsonProperty("threshold") @ExcludeMissing fun _threshold(): JsonField<Double> = threshold
 
         /**
          * For alerts of type `usage_threshold_reached`, specifies which billable metric to track
          * the usage for.
          */
         @JsonProperty("billable_metric_id")
-        fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
+        @ExcludeMissing
+        fun _billableMetricId(): JsonField<String> = billableMetricId
 
         /**
          * An array of strings, representing a way to filter the credit grant this alert applies to,
@@ -156,11 +331,12 @@ constructor(
          * for CreditPercentage and CreditBalance alerts
          */
         @JsonProperty("credit_grant_type_filters")
-        fun creditGrantTypeFilters(): Optional<List<String>> =
-            Optional.ofNullable(creditGrantTypeFilters)
+        @ExcludeMissing
+        fun _creditGrantTypeFilters(): JsonField<List<String>> = creditGrantTypeFilters
 
         @JsonProperty("credit_type_id")
-        fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
+        @ExcludeMissing
+        fun _creditTypeId(): JsonField<String> = creditTypeId
 
         /**
          * Only present for beta contract invoices. This field's availability is dependent on your
@@ -168,15 +344,16 @@ constructor(
          * advanced filtering
          */
         @JsonProperty("custom_field_filters")
-        fun customFieldFilters(): Optional<List<CustomFieldFilter>> =
-            Optional.ofNullable(customFieldFilters)
+        @ExcludeMissing
+        fun _customFieldFilters(): JsonField<List<CustomFieldFilter>> = customFieldFilters
 
         /**
          * If provided, will create this alert for this specific customer. To create an alert for
          * all customers, do not specify `customer_id` or `plan_id`.
          */
         @JsonProperty("customer_id")
-        fun customerId(): Optional<String> = Optional.ofNullable(customerId)
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
 
         /**
          * If true, the alert will evaluate immediately on customers that already meet the alert
@@ -184,24 +361,27 @@ constructor(
          * threshold. Defaults to true.
          */
         @JsonProperty("evaluate_on_create")
-        fun evaluateOnCreate(): Optional<Boolean> = Optional.ofNullable(evaluateOnCreate)
+        @ExcludeMissing
+        fun _evaluateOnCreate(): JsonField<Boolean> = evaluateOnCreate
 
         /**
          * Scopes alert evaluation to a specific presentation group key on individual line items.
          * Only present for spend alerts.
          */
         @JsonProperty("group_key_filter")
-        fun groupKeyFilter(): Optional<GroupKeyFilter> = Optional.ofNullable(groupKeyFilter)
+        @ExcludeMissing
+        fun _groupKeyFilter(): JsonField<GroupKeyFilter> = groupKeyFilter
 
         /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
         @JsonProperty("invoice_types_filter")
-        fun invoiceTypesFilter(): Optional<List<String>> = Optional.ofNullable(invoiceTypesFilter)
+        @ExcludeMissing
+        fun _invoiceTypesFilter(): JsonField<List<String>> = invoiceTypesFilter
 
         /**
          * If provided, will create this alert for this specific plan. To create an alert for all
          * customers, do not specify `customer_id` or `plan_id`.
          */
-        @JsonProperty("plan_id") fun planId(): Optional<String> = Optional.ofNullable(planId)
+        @JsonProperty("plan_id") @ExcludeMissing fun _planId(): JsonField<String> = planId
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
@@ -209,11 +389,33 @@ constructor(
          * fail with a 409 error.
          */
         @JsonProperty("uniqueness_key")
-        fun uniquenessKey(): Optional<String> = Optional.ofNullable(uniquenessKey)
+        @ExcludeMissing
+        fun _uniquenessKey(): JsonField<String> = uniquenessKey
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): AlertCreateBody = apply {
+            if (!validated) {
+                alertType()
+                name()
+                threshold()
+                billableMetricId()
+                creditGrantTypeFilters()
+                creditTypeId()
+                customFieldFilters().map { it.forEach { it.validate() } }
+                customerId()
+                evaluateOnCreate()
+                groupKeyFilter().map { it.validate() }
+                invoiceTypesFilter()
+                planId()
+                uniquenessKey()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -224,19 +426,19 @@ constructor(
 
         class Builder {
 
-            private var alertType: AlertType? = null
-            private var name: String? = null
-            private var threshold: Double? = null
-            private var billableMetricId: String? = null
-            private var creditGrantTypeFilters: MutableList<String>? = null
-            private var creditTypeId: String? = null
-            private var customFieldFilters: MutableList<CustomFieldFilter>? = null
-            private var customerId: String? = null
-            private var evaluateOnCreate: Boolean? = null
-            private var groupKeyFilter: GroupKeyFilter? = null
-            private var invoiceTypesFilter: MutableList<String>? = null
-            private var planId: String? = null
-            private var uniquenessKey: String? = null
+            private var alertType: JsonField<AlertType>? = null
+            private var name: JsonField<String>? = null
+            private var threshold: JsonField<Double>? = null
+            private var billableMetricId: JsonField<String> = JsonMissing.of()
+            private var creditGrantTypeFilters: JsonField<MutableList<String>>? = null
+            private var creditTypeId: JsonField<String> = JsonMissing.of()
+            private var customFieldFilters: JsonField<MutableList<CustomFieldFilter>>? = null
+            private var customerId: JsonField<String> = JsonMissing.of()
+            private var evaluateOnCreate: JsonField<Boolean> = JsonMissing.of()
+            private var groupKeyFilter: JsonField<GroupKeyFilter> = JsonMissing.of()
+            private var invoiceTypesFilter: JsonField<MutableList<String>>? = null
+            private var planId: JsonField<String> = JsonMissing.of()
+            private var uniquenessKey: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -245,61 +447,74 @@ constructor(
                 name = alertCreateBody.name
                 threshold = alertCreateBody.threshold
                 billableMetricId = alertCreateBody.billableMetricId
-                creditGrantTypeFilters = alertCreateBody.creditGrantTypeFilters?.toMutableList()
+                creditGrantTypeFilters =
+                    alertCreateBody.creditGrantTypeFilters.map { it.toMutableList() }
                 creditTypeId = alertCreateBody.creditTypeId
-                customFieldFilters = alertCreateBody.customFieldFilters?.toMutableList()
+                customFieldFilters = alertCreateBody.customFieldFilters.map { it.toMutableList() }
                 customerId = alertCreateBody.customerId
                 evaluateOnCreate = alertCreateBody.evaluateOnCreate
                 groupKeyFilter = alertCreateBody.groupKeyFilter
-                invoiceTypesFilter = alertCreateBody.invoiceTypesFilter?.toMutableList()
+                invoiceTypesFilter = alertCreateBody.invoiceTypesFilter.map { it.toMutableList() }
                 planId = alertCreateBody.planId
                 uniquenessKey = alertCreateBody.uniquenessKey
                 additionalProperties = alertCreateBody.additionalProperties.toMutableMap()
             }
 
             /** Type of the alert */
-            fun alertType(alertType: AlertType) = apply { this.alertType = alertType }
+            fun alertType(alertType: AlertType) = alertType(JsonField.of(alertType))
+
+            /** Type of the alert */
+            fun alertType(alertType: JsonField<AlertType>) = apply { this.alertType = alertType }
 
             /** Name of the alert */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = name(JsonField.of(name))
+
+            /** Name of the alert */
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             /**
              * Threshold value of the alert policy. Depending upon the alert type, this number may
              * represent a financial amount, the days remaining, or a percentage reached.
              */
-            fun threshold(threshold: Double) = apply { this.threshold = threshold }
+            fun threshold(threshold: Double) = threshold(JsonField.of(threshold))
+
+            /**
+             * Threshold value of the alert policy. Depending upon the alert type, this number may
+             * represent a financial amount, the days remaining, or a percentage reached.
+             */
+            fun threshold(threshold: JsonField<Double>) = apply { this.threshold = threshold }
 
             /**
              * For alerts of type `usage_threshold_reached`, specifies which billable metric to
              * track the usage for.
              */
-            fun billableMetricId(billableMetricId: String?) = apply {
+            fun billableMetricId(billableMetricId: String) =
+                billableMetricId(JsonField.of(billableMetricId))
+
+            /**
+             * For alerts of type `usage_threshold_reached`, specifies which billable metric to
+             * track the usage for.
+             */
+            fun billableMetricId(billableMetricId: JsonField<String>) = apply {
                 this.billableMetricId = billableMetricId
             }
 
             /**
-             * For alerts of type `usage_threshold_reached`, specifies which billable metric to
-             * track the usage for.
+             * An array of strings, representing a way to filter the credit grant this alert applies
+             * to, by looking at the credit_grant_type field on the credit grant. This field is only
+             * defined for CreditPercentage and CreditBalance alerts
              */
-            fun billableMetricId(billableMetricId: Optional<String>) =
-                billableMetricId(billableMetricId.orElse(null))
+            fun creditGrantTypeFilters(creditGrantTypeFilters: List<String>) =
+                creditGrantTypeFilters(JsonField.of(creditGrantTypeFilters))
 
             /**
              * An array of strings, representing a way to filter the credit grant this alert applies
              * to, by looking at the credit_grant_type field on the credit grant. This field is only
              * defined for CreditPercentage and CreditBalance alerts
              */
-            fun creditGrantTypeFilters(creditGrantTypeFilters: List<String>?) = apply {
-                this.creditGrantTypeFilters = creditGrantTypeFilters?.toMutableList()
+            fun creditGrantTypeFilters(creditGrantTypeFilters: JsonField<List<String>>) = apply {
+                this.creditGrantTypeFilters = creditGrantTypeFilters.map { it.toMutableList() }
             }
-
-            /**
-             * An array of strings, representing a way to filter the credit grant this alert applies
-             * to, by looking at the credit_grant_type field on the credit grant. This field is only
-             * defined for CreditPercentage and CreditBalance alerts
-             */
-            fun creditGrantTypeFilters(creditGrantTypeFilters: Optional<List<String>>) =
-                creditGrantTypeFilters(creditGrantTypeFilters.orElse(null))
 
             /**
              * An array of strings, representing a way to filter the credit grant this alert applies
@@ -308,30 +523,39 @@ constructor(
              */
             fun addCreditGrantTypeFilter(creditGrantTypeFilter: String) = apply {
                 creditGrantTypeFilters =
-                    (creditGrantTypeFilters ?: mutableListOf()).apply { add(creditGrantTypeFilter) }
+                    (creditGrantTypeFilters ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(creditGrantTypeFilter)
+                    }
             }
 
-            fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+            fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
 
-            fun creditTypeId(creditTypeId: Optional<String>) =
-                creditTypeId(creditTypeId.orElse(null))
+            fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                this.creditTypeId = creditTypeId
+            }
 
             /**
              * Only present for beta contract invoices. This field's availability is dependent on
              * your client's configuration. A list of custom field filters for alert types that
              * support advanced filtering
              */
-            fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>?) = apply {
-                this.customFieldFilters = customFieldFilters?.toMutableList()
-            }
+            fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>) =
+                customFieldFilters(JsonField.of(customFieldFilters))
 
             /**
              * Only present for beta contract invoices. This field's availability is dependent on
              * your client's configuration. A list of custom field filters for alert types that
              * support advanced filtering
              */
-            fun customFieldFilters(customFieldFilters: Optional<List<CustomFieldFilter>>) =
-                customFieldFilters(customFieldFilters.orElse(null))
+            fun customFieldFilters(customFieldFilters: JsonField<List<CustomFieldFilter>>) = apply {
+                this.customFieldFilters = customFieldFilters.map { it.toMutableList() }
+            }
 
             /**
              * Only present for beta contract invoices. This field's availability is dependent on
@@ -340,29 +564,28 @@ constructor(
              */
             fun addCustomFieldFilter(customFieldFilter: CustomFieldFilter) = apply {
                 customFieldFilters =
-                    (customFieldFilters ?: mutableListOf()).apply { add(customFieldFilter) }
+                    (customFieldFilters ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(customFieldFilter)
+                    }
             }
 
             /**
              * If provided, will create this alert for this specific customer. To create an alert
              * for all customers, do not specify `customer_id` or `plan_id`.
              */
-            fun customerId(customerId: String?) = apply { this.customerId = customerId }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
 
             /**
              * If provided, will create this alert for this specific customer. To create an alert
              * for all customers, do not specify `customer_id` or `plan_id`.
              */
-            fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
-
-            /**
-             * If true, the alert will evaluate immediately on customers that already meet the alert
-             * threshold. If false, it will only evaluate on future customers that trigger the alert
-             * threshold. Defaults to true.
-             */
-            fun evaluateOnCreate(evaluateOnCreate: Boolean?) = apply {
-                this.evaluateOnCreate = evaluateOnCreate
-            }
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /**
              * If true, the alert will evaluate immediately on customers that already meet the alert
@@ -370,79 +593,88 @@ constructor(
              * threshold. Defaults to true.
              */
             fun evaluateOnCreate(evaluateOnCreate: Boolean) =
-                evaluateOnCreate(evaluateOnCreate as Boolean?)
+                evaluateOnCreate(JsonField.of(evaluateOnCreate))
 
             /**
              * If true, the alert will evaluate immediately on customers that already meet the alert
              * threshold. If false, it will only evaluate on future customers that trigger the alert
              * threshold. Defaults to true.
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun evaluateOnCreate(evaluateOnCreate: Optional<Boolean>) =
-                evaluateOnCreate(evaluateOnCreate.orElse(null) as Boolean?)
+            fun evaluateOnCreate(evaluateOnCreate: JsonField<Boolean>) = apply {
+                this.evaluateOnCreate = evaluateOnCreate
+            }
 
             /**
              * Scopes alert evaluation to a specific presentation group key on individual line
              * items. Only present for spend alerts.
              */
-            fun groupKeyFilter(groupKeyFilter: GroupKeyFilter?) = apply {
+            fun groupKeyFilter(groupKeyFilter: GroupKeyFilter) =
+                groupKeyFilter(JsonField.of(groupKeyFilter))
+
+            /**
+             * Scopes alert evaluation to a specific presentation group key on individual line
+             * items. Only present for spend alerts.
+             */
+            fun groupKeyFilter(groupKeyFilter: JsonField<GroupKeyFilter>) = apply {
                 this.groupKeyFilter = groupKeyFilter
             }
 
             /**
-             * Scopes alert evaluation to a specific presentation group key on individual line
-             * items. Only present for spend alerts.
+             * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
              */
-            fun groupKeyFilter(groupKeyFilter: Optional<GroupKeyFilter>) =
-                groupKeyFilter(groupKeyFilter.orElse(null))
+            fun invoiceTypesFilter(invoiceTypesFilter: List<String>) =
+                invoiceTypesFilter(JsonField.of(invoiceTypesFilter))
 
             /**
              * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
              */
-            fun invoiceTypesFilter(invoiceTypesFilter: List<String>?) = apply {
-                this.invoiceTypesFilter = invoiceTypesFilter?.toMutableList()
+            fun invoiceTypesFilter(invoiceTypesFilter: JsonField<List<String>>) = apply {
+                this.invoiceTypesFilter = invoiceTypesFilter.map { it.toMutableList() }
             }
-
-            /**
-             * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
-             */
-            fun invoiceTypesFilter(invoiceTypesFilter: Optional<List<String>>) =
-                invoiceTypesFilter(invoiceTypesFilter.orElse(null))
 
             /**
              * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
              */
             fun addInvoiceTypesFilter(invoiceTypesFilter: String) = apply {
                 this.invoiceTypesFilter =
-                    (this.invoiceTypesFilter ?: mutableListOf()).apply { add(invoiceTypesFilter) }
+                    (this.invoiceTypesFilter ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(invoiceTypesFilter)
+                    }
             }
 
             /**
              * If provided, will create this alert for this specific plan. To create an alert for
              * all customers, do not specify `customer_id` or `plan_id`.
              */
-            fun planId(planId: String?) = apply { this.planId = planId }
+            fun planId(planId: String) = planId(JsonField.of(planId))
 
             /**
              * If provided, will create this alert for this specific plan. To create an alert for
              * all customers, do not specify `customer_id` or `plan_id`.
              */
-            fun planId(planId: Optional<String>) = planId(planId.orElse(null))
+            fun planId(planId: JsonField<String>) = apply { this.planId = planId }
 
             /**
              * Prevents the creation of duplicates. If a request to create a record is made with a
              * previously used uniqueness key, a new record will not be created and the request will
              * fail with a 409 error.
              */
-            fun uniquenessKey(uniquenessKey: String?) = apply { this.uniquenessKey = uniquenessKey }
+            fun uniquenessKey(uniquenessKey: String) = uniquenessKey(JsonField.of(uniquenessKey))
 
             /**
              * Prevents the creation of duplicates. If a request to create a record is made with a
              * previously used uniqueness key, a new record will not be created and the request will
              * fail with a 409 error.
              */
-            fun uniquenessKey(uniquenessKey: Optional<String>) =
-                uniquenessKey(uniquenessKey.orElse(null))
+            fun uniquenessKey(uniquenessKey: JsonField<String>) = apply {
+                this.uniquenessKey = uniquenessKey
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -469,13 +701,13 @@ constructor(
                     checkNotNull(name) { "`name` is required but was not set" },
                     checkNotNull(threshold) { "`threshold` is required but was not set" },
                     billableMetricId,
-                    creditGrantTypeFilters?.toImmutable(),
+                    (creditGrantTypeFilters ?: JsonMissing.of()).map { it.toImmutable() },
                     creditTypeId,
-                    customFieldFilters?.toImmutable(),
+                    (customFieldFilters ?: JsonMissing.of()).map { it.toImmutable() },
                     customerId,
                     evaluateOnCreate,
                     groupKeyFilter,
-                    invoiceTypesFilter?.toImmutable(),
+                    (invoiceTypesFilter ?: JsonMissing.of()).map { it.toImmutable() },
                     planId,
                     uniquenessKey,
                     additionalProperties.toImmutable(),
@@ -524,8 +756,14 @@ constructor(
         /** Type of the alert */
         fun alertType(alertType: AlertType) = apply { body.alertType(alertType) }
 
+        /** Type of the alert */
+        fun alertType(alertType: JsonField<AlertType>) = apply { body.alertType(alertType) }
+
         /** Name of the alert */
         fun name(name: String) = apply { body.name(name) }
+
+        /** Name of the alert */
+        fun name(name: JsonField<String>) = apply { body.name(name) }
 
         /**
          * Threshold value of the alert policy. Depending upon the alert type, this number may
@@ -534,10 +772,16 @@ constructor(
         fun threshold(threshold: Double) = apply { body.threshold(threshold) }
 
         /**
+         * Threshold value of the alert policy. Depending upon the alert type, this number may
+         * represent a financial amount, the days remaining, or a percentage reached.
+         */
+        fun threshold(threshold: JsonField<Double>) = apply { body.threshold(threshold) }
+
+        /**
          * For alerts of type `usage_threshold_reached`, specifies which billable metric to track
          * the usage for.
          */
-        fun billableMetricId(billableMetricId: String?) = apply {
+        fun billableMetricId(billableMetricId: String) = apply {
             body.billableMetricId(billableMetricId)
         }
 
@@ -545,15 +789,16 @@ constructor(
          * For alerts of type `usage_threshold_reached`, specifies which billable metric to track
          * the usage for.
          */
-        fun billableMetricId(billableMetricId: Optional<String>) =
-            billableMetricId(billableMetricId.orElse(null))
+        fun billableMetricId(billableMetricId: JsonField<String>) = apply {
+            body.billableMetricId(billableMetricId)
+        }
 
         /**
          * An array of strings, representing a way to filter the credit grant this alert applies to,
          * by looking at the credit_grant_type field on the credit grant. This field is only defined
          * for CreditPercentage and CreditBalance alerts
          */
-        fun creditGrantTypeFilters(creditGrantTypeFilters: List<String>?) = apply {
+        fun creditGrantTypeFilters(creditGrantTypeFilters: List<String>) = apply {
             body.creditGrantTypeFilters(creditGrantTypeFilters)
         }
 
@@ -562,8 +807,9 @@ constructor(
          * by looking at the credit_grant_type field on the credit grant. This field is only defined
          * for CreditPercentage and CreditBalance alerts
          */
-        fun creditGrantTypeFilters(creditGrantTypeFilters: Optional<List<String>>) =
-            creditGrantTypeFilters(creditGrantTypeFilters.orElse(null))
+        fun creditGrantTypeFilters(creditGrantTypeFilters: JsonField<List<String>>) = apply {
+            body.creditGrantTypeFilters(creditGrantTypeFilters)
+        }
 
         /**
          * An array of strings, representing a way to filter the credit grant this alert applies to,
@@ -574,16 +820,18 @@ constructor(
             body.addCreditGrantTypeFilter(creditGrantTypeFilter)
         }
 
-        fun creditTypeId(creditTypeId: String?) = apply { body.creditTypeId(creditTypeId) }
+        fun creditTypeId(creditTypeId: String) = apply { body.creditTypeId(creditTypeId) }
 
-        fun creditTypeId(creditTypeId: Optional<String>) = creditTypeId(creditTypeId.orElse(null))
+        fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+            body.creditTypeId(creditTypeId)
+        }
 
         /**
          * Only present for beta contract invoices. This field's availability is dependent on your
          * client's configuration. A list of custom field filters for alert types that support
          * advanced filtering
          */
-        fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>?) = apply {
+        fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>) = apply {
             body.customFieldFilters(customFieldFilters)
         }
 
@@ -592,8 +840,9 @@ constructor(
          * client's configuration. A list of custom field filters for alert types that support
          * advanced filtering
          */
-        fun customFieldFilters(customFieldFilters: Optional<List<CustomFieldFilter>>) =
-            customFieldFilters(customFieldFilters.orElse(null))
+        fun customFieldFilters(customFieldFilters: JsonField<List<CustomFieldFilter>>) = apply {
+            body.customFieldFilters(customFieldFilters)
+        }
 
         /**
          * Only present for beta contract invoices. This field's availability is dependent on your
@@ -608,20 +857,20 @@ constructor(
          * If provided, will create this alert for this specific customer. To create an alert for
          * all customers, do not specify `customer_id` or `plan_id`.
          */
-        fun customerId(customerId: String?) = apply { body.customerId(customerId) }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /**
          * If provided, will create this alert for this specific customer. To create an alert for
          * all customers, do not specify `customer_id` or `plan_id`.
          */
-        fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
 
         /**
          * If true, the alert will evaluate immediately on customers that already meet the alert
          * threshold. If false, it will only evaluate on future customers that trigger the alert
          * threshold. Defaults to true.
          */
-        fun evaluateOnCreate(evaluateOnCreate: Boolean?) = apply {
+        fun evaluateOnCreate(evaluateOnCreate: Boolean) = apply {
             body.evaluateOnCreate(evaluateOnCreate)
         }
 
@@ -630,23 +879,15 @@ constructor(
          * threshold. If false, it will only evaluate on future customers that trigger the alert
          * threshold. Defaults to true.
          */
-        fun evaluateOnCreate(evaluateOnCreate: Boolean) =
-            evaluateOnCreate(evaluateOnCreate as Boolean?)
-
-        /**
-         * If true, the alert will evaluate immediately on customers that already meet the alert
-         * threshold. If false, it will only evaluate on future customers that trigger the alert
-         * threshold. Defaults to true.
-         */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun evaluateOnCreate(evaluateOnCreate: Optional<Boolean>) =
-            evaluateOnCreate(evaluateOnCreate.orElse(null) as Boolean?)
+        fun evaluateOnCreate(evaluateOnCreate: JsonField<Boolean>) = apply {
+            body.evaluateOnCreate(evaluateOnCreate)
+        }
 
         /**
          * Scopes alert evaluation to a specific presentation group key on individual line items.
          * Only present for spend alerts.
          */
-        fun groupKeyFilter(groupKeyFilter: GroupKeyFilter?) = apply {
+        fun groupKeyFilter(groupKeyFilter: GroupKeyFilter) = apply {
             body.groupKeyFilter(groupKeyFilter)
         }
 
@@ -654,17 +895,19 @@ constructor(
          * Scopes alert evaluation to a specific presentation group key on individual line items.
          * Only present for spend alerts.
          */
-        fun groupKeyFilter(groupKeyFilter: Optional<GroupKeyFilter>) =
-            groupKeyFilter(groupKeyFilter.orElse(null))
+        fun groupKeyFilter(groupKeyFilter: JsonField<GroupKeyFilter>) = apply {
+            body.groupKeyFilter(groupKeyFilter)
+        }
 
         /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
-        fun invoiceTypesFilter(invoiceTypesFilter: List<String>?) = apply {
+        fun invoiceTypesFilter(invoiceTypesFilter: List<String>) = apply {
             body.invoiceTypesFilter(invoiceTypesFilter)
         }
 
         /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
-        fun invoiceTypesFilter(invoiceTypesFilter: Optional<List<String>>) =
-            invoiceTypesFilter(invoiceTypesFilter.orElse(null))
+        fun invoiceTypesFilter(invoiceTypesFilter: JsonField<List<String>>) = apply {
+            body.invoiceTypesFilter(invoiceTypesFilter)
+        }
 
         /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
         fun addInvoiceTypesFilter(invoiceTypesFilter: String) = apply {
@@ -675,28 +918,48 @@ constructor(
          * If provided, will create this alert for this specific plan. To create an alert for all
          * customers, do not specify `customer_id` or `plan_id`.
          */
-        fun planId(planId: String?) = apply { body.planId(planId) }
+        fun planId(planId: String) = apply { body.planId(planId) }
 
         /**
          * If provided, will create this alert for this specific plan. To create an alert for all
          * customers, do not specify `customer_id` or `plan_id`.
          */
-        fun planId(planId: Optional<String>) = planId(planId.orElse(null))
+        fun planId(planId: JsonField<String>) = apply { body.planId(planId) }
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
          * previously used uniqueness key, a new record will not be created and the request will
          * fail with a 409 error.
          */
-        fun uniquenessKey(uniquenessKey: String?) = apply { body.uniquenessKey(uniquenessKey) }
+        fun uniquenessKey(uniquenessKey: String) = apply { body.uniquenessKey(uniquenessKey) }
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
          * previously used uniqueness key, a new record will not be created and the request will
          * fail with a 409 error.
          */
-        fun uniquenessKey(uniquenessKey: Optional<String>) =
-            uniquenessKey(uniquenessKey.orElse(null))
+        fun uniquenessKey(uniquenessKey: JsonField<String>) = apply {
+            body.uniquenessKey(uniquenessKey)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -794,25 +1057,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): AlertCreateParams =
@@ -990,22 +1234,43 @@ constructor(
     class CustomFieldFilter
     @JsonCreator
     private constructor(
-        @JsonProperty("entity") private val entity: Entity,
-        @JsonProperty("key") private val key: String,
-        @JsonProperty("value") private val value: String,
+        @JsonProperty("entity")
+        @ExcludeMissing
+        private val entity: JsonField<Entity> = JsonMissing.of(),
+        @JsonProperty("key") @ExcludeMissing private val key: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("value")
+        @ExcludeMissing
+        private val value: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("entity") fun entity(): Entity = entity
+        fun entity(): Entity = entity.getRequired("entity")
 
-        @JsonProperty("key") fun key(): String = key
+        fun key(): String = key.getRequired("key")
 
-        @JsonProperty("value") fun value(): String = value
+        fun value(): String = value.getRequired("value")
+
+        @JsonProperty("entity") @ExcludeMissing fun _entity(): JsonField<Entity> = entity
+
+        @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
+
+        @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomFieldFilter = apply {
+            if (!validated) {
+                entity()
+                key()
+                value()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -1016,9 +1281,9 @@ constructor(
 
         class Builder {
 
-            private var entity: Entity? = null
-            private var key: String? = null
-            private var value: String? = null
+            private var entity: JsonField<Entity>? = null
+            private var key: JsonField<String>? = null
+            private var value: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -1029,11 +1294,17 @@ constructor(
                 additionalProperties = customFieldFilter.additionalProperties.toMutableMap()
             }
 
-            fun entity(entity: Entity) = apply { this.entity = entity }
+            fun entity(entity: Entity) = entity(JsonField.of(entity))
 
-            fun key(key: String) = apply { this.key = key }
+            fun entity(entity: JsonField<Entity>) = apply { this.entity = entity }
 
-            fun value(value: String) = apply { this.value = value }
+            fun key(key: String) = key(JsonField.of(key))
+
+            fun key(key: JsonField<String>) = apply { this.key = key }
+
+            fun value(value: String) = value(JsonField.of(value))
+
+            fun value(value: JsonField<String>) = apply { this.value = value }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1152,19 +1423,35 @@ constructor(
     class GroupKeyFilter
     @JsonCreator
     private constructor(
-        @JsonProperty("key") private val key: String,
-        @JsonProperty("value") private val value: String,
+        @JsonProperty("key") @ExcludeMissing private val key: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("value")
+        @ExcludeMissing
+        private val value: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("key") fun key(): String = key
+        fun key(): String = key.getRequired("key")
 
-        @JsonProperty("value") fun value(): String = value
+        fun value(): String = value.getRequired("value")
+
+        @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
+
+        @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): GroupKeyFilter = apply {
+            if (!validated) {
+                key()
+                value()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -1175,8 +1462,8 @@ constructor(
 
         class Builder {
 
-            private var key: String? = null
-            private var value: String? = null
+            private var key: JsonField<String>? = null
+            private var value: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -1186,9 +1473,13 @@ constructor(
                 additionalProperties = groupKeyFilter.additionalProperties.toMutableMap()
             }
 
-            fun key(key: String) = apply { this.key = key }
+            fun key(key: String) = key(JsonField.of(key))
 
-            fun value(value: String) = apply { this.value = value }
+            fun key(key: JsonField<String>) = apply { this.key = key }
+
+            fun value(value: String) = value(JsonField.of(value))
+
+            fun value(value: JsonField<String>) = apply { this.value = value }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()

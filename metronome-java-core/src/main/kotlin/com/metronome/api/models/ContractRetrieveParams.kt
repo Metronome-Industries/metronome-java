@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -33,11 +35,20 @@ constructor(
      */
     fun includeLedgers(): Optional<Boolean> = body.includeLedgers()
 
+    fun _contractId(): JsonField<String> = body._contractId()
+
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    /**
+     * Include commit ledgers in the response. Setting this flag may cause the query to be slower.
+     */
+    fun _includeLedgers(): JsonField<Boolean> = body._includeLedgers()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): ContractRetrieveBody = body
 
@@ -49,27 +60,60 @@ constructor(
     class ContractRetrieveBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("contract_id") private val contractId: String,
-        @JsonProperty("customer_id") private val customerId: String,
-        @JsonProperty("include_ledgers") private val includeLedgers: Boolean?,
+        @JsonProperty("contract_id")
+        @ExcludeMissing
+        private val contractId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("include_ledgers")
+        @ExcludeMissing
+        private val includeLedgers: JsonField<Boolean> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("contract_id") fun contractId(): String = contractId
+        fun contractId(): String = contractId.getRequired("contract_id")
 
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
+
+        /**
+         * Include commit ledgers in the response. Setting this flag may cause the query to be
+         * slower.
+         */
+        fun includeLedgers(): Optional<Boolean> =
+            Optional.ofNullable(includeLedgers.getNullable("include_ledgers"))
+
+        @JsonProperty("contract_id")
+        @ExcludeMissing
+        fun _contractId(): JsonField<String> = contractId
+
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
         @JsonProperty("include_ledgers")
-        fun includeLedgers(): Optional<Boolean> = Optional.ofNullable(includeLedgers)
+        @ExcludeMissing
+        fun _includeLedgers(): JsonField<Boolean> = includeLedgers
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ContractRetrieveBody = apply {
+            if (!validated) {
+                contractId()
+                customerId()
+                includeLedgers()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -80,9 +124,9 @@ constructor(
 
         class Builder {
 
-            private var contractId: String? = null
-            private var customerId: String? = null
-            private var includeLedgers: Boolean? = null
+            private var contractId: JsonField<String>? = null
+            private var customerId: JsonField<String>? = null
+            private var includeLedgers: JsonField<Boolean> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -93,31 +137,28 @@ constructor(
                 additionalProperties = contractRetrieveBody.additionalProperties.toMutableMap()
             }
 
-            fun contractId(contractId: String) = apply { this.contractId = contractId }
+            fun contractId(contractId: String) = contractId(JsonField.of(contractId))
 
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun contractId(contractId: JsonField<String>) = apply { this.contractId = contractId }
+
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /**
              * Include commit ledgers in the response. Setting this flag may cause the query to be
              * slower.
              */
-            fun includeLedgers(includeLedgers: Boolean?) = apply {
+            fun includeLedgers(includeLedgers: Boolean) =
+                includeLedgers(JsonField.of(includeLedgers))
+
+            /**
+             * Include commit ledgers in the response. Setting this flag may cause the query to be
+             * slower.
+             */
+            fun includeLedgers(includeLedgers: JsonField<Boolean>) = apply {
                 this.includeLedgers = includeLedgers
             }
-
-            /**
-             * Include commit ledgers in the response. Setting this flag may cause the query to be
-             * slower.
-             */
-            fun includeLedgers(includeLedgers: Boolean) = includeLedgers(includeLedgers as Boolean?)
-
-            /**
-             * Include commit ledgers in the response. Setting this flag may cause the query to be
-             * slower.
-             */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun includeLedgers(includeLedgers: Optional<Boolean>) =
-                includeLedgers(includeLedgers.orElse(null) as Boolean?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -188,27 +229,44 @@ constructor(
 
         fun contractId(contractId: String) = apply { body.contractId(contractId) }
 
+        fun contractId(contractId: JsonField<String>) = apply { body.contractId(contractId) }
+
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
-        /**
-         * Include commit ledgers in the response. Setting this flag may cause the query to be
-         * slower.
-         */
-        fun includeLedgers(includeLedgers: Boolean?) = apply { body.includeLedgers(includeLedgers) }
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        fun includeLedgers(includeLedgers: Boolean) = includeLedgers(includeLedgers as Boolean?)
+        fun includeLedgers(includeLedgers: Boolean) = apply { body.includeLedgers(includeLedgers) }
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun includeLedgers(includeLedgers: Optional<Boolean>) =
-            includeLedgers(includeLedgers.orElse(null) as Boolean?)
+        fun includeLedgers(includeLedgers: JsonField<Boolean>) = apply {
+            body.includeLedgers(includeLedgers)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -306,25 +364,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractRetrieveParams =

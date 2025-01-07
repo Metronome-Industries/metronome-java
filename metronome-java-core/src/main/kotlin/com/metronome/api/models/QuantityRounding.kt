@@ -39,9 +39,13 @@ private constructor(
 
     fun roundingMethod(): RoundingMethod = roundingMethod.getRequired("rounding_method")
 
-    @JsonProperty("decimal_places") @ExcludeMissing fun _decimalPlaces() = decimalPlaces
+    @JsonProperty("decimal_places")
+    @ExcludeMissing
+    fun _decimalPlaces(): JsonField<Double> = decimalPlaces
 
-    @JsonProperty("rounding_method") @ExcludeMissing fun _roundingMethod() = roundingMethod
+    @JsonProperty("rounding_method")
+    @ExcludeMissing
+    fun _roundingMethod(): JsonField<RoundingMethod> = roundingMethod
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -66,8 +70,8 @@ private constructor(
 
     class Builder {
 
-        private var decimalPlaces: JsonField<Double> = JsonMissing.of()
-        private var roundingMethod: JsonField<RoundingMethod> = JsonMissing.of()
+        private var decimalPlaces: JsonField<Double>? = null
+        private var roundingMethod: JsonField<RoundingMethod>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -111,8 +115,8 @@ private constructor(
 
         fun build(): QuantityRounding =
             QuantityRounding(
-                decimalPlaces,
-                roundingMethod,
+                checkNotNull(decimalPlaces) { "`decimalPlaces` is required but was not set" },
+                checkNotNull(roundingMethod) { "`roundingMethod` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }

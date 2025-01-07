@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -49,11 +51,35 @@ constructor(
      */
     fun timestamp(): Optional<OffsetDateTime> = body.timestamp()
 
+    /** ID of the balance (commit or credit) to update. */
+    fun _id(): JsonField<String> = body._id()
+
+    /** Amount to add to the segment. A negative number will draw down from the balance. */
+    fun _amount(): JsonField<Double> = body._amount()
+
+    /** ID of the customer whose balance is to be updated. */
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    /** Reason for the manual adjustment. This will be displayed in the ledger. */
+    fun _reason(): JsonField<String> = body._reason()
+
+    /** ID of the segment to update. */
+    fun _segmentId(): JsonField<String> = body._segmentId()
+
+    /** ID of the contract to update. Leave blank to update a customer level balance. */
+    fun _contractId(): JsonField<String> = body._contractId()
+
+    /**
+     * RFC 3339 timestamp indicating when the manual adjustment takes place. If not provided, it
+     * will default to the start of the segment.
+     */
+    fun _timestamp(): JsonField<OffsetDateTime> = body._timestamp()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): ContractAddManualBalanceEntryBody = body
 
@@ -65,46 +91,103 @@ constructor(
     class ContractAddManualBalanceEntryBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("id") private val id: String,
-        @JsonProperty("amount") private val amount: Double,
-        @JsonProperty("customer_id") private val customerId: String,
-        @JsonProperty("reason") private val reason: String,
-        @JsonProperty("segment_id") private val segmentId: String,
-        @JsonProperty("contract_id") private val contractId: String?,
-        @JsonProperty("timestamp") private val timestamp: OffsetDateTime?,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("amount")
+        @ExcludeMissing
+        private val amount: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("reason")
+        @ExcludeMissing
+        private val reason: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("segment_id")
+        @ExcludeMissing
+        private val segmentId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("contract_id")
+        @ExcludeMissing
+        private val contractId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("timestamp")
+        @ExcludeMissing
+        private val timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the balance (commit or credit) to update. */
-        @JsonProperty("id") fun id(): String = id
+        fun id(): String = id.getRequired("id")
 
         /** Amount to add to the segment. A negative number will draw down from the balance. */
-        @JsonProperty("amount") fun amount(): Double = amount
+        fun amount(): Double = amount.getRequired("amount")
 
         /** ID of the customer whose balance is to be updated. */
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
 
         /** Reason for the manual adjustment. This will be displayed in the ledger. */
-        @JsonProperty("reason") fun reason(): String = reason
+        fun reason(): String = reason.getRequired("reason")
 
         /** ID of the segment to update. */
-        @JsonProperty("segment_id") fun segmentId(): String = segmentId
+        fun segmentId(): String = segmentId.getRequired("segment_id")
+
+        /** ID of the contract to update. Leave blank to update a customer level balance. */
+        fun contractId(): Optional<String> =
+            Optional.ofNullable(contractId.getNullable("contract_id"))
+
+        /**
+         * RFC 3339 timestamp indicating when the manual adjustment takes place. If not provided, it
+         * will default to the start of the segment.
+         */
+        fun timestamp(): Optional<OffsetDateTime> =
+            Optional.ofNullable(timestamp.getNullable("timestamp"))
+
+        /** ID of the balance (commit or credit) to update. */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /** Amount to add to the segment. A negative number will draw down from the balance. */
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+
+        /** ID of the customer whose balance is to be updated. */
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
+
+        /** Reason for the manual adjustment. This will be displayed in the ledger. */
+        @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
+
+        /** ID of the segment to update. */
+        @JsonProperty("segment_id") @ExcludeMissing fun _segmentId(): JsonField<String> = segmentId
 
         /** ID of the contract to update. Leave blank to update a customer level balance. */
         @JsonProperty("contract_id")
-        fun contractId(): Optional<String> = Optional.ofNullable(contractId)
+        @ExcludeMissing
+        fun _contractId(): JsonField<String> = contractId
 
         /**
          * RFC 3339 timestamp indicating when the manual adjustment takes place. If not provided, it
          * will default to the start of the segment.
          */
         @JsonProperty("timestamp")
-        fun timestamp(): Optional<OffsetDateTime> = Optional.ofNullable(timestamp)
+        @ExcludeMissing
+        fun _timestamp(): JsonField<OffsetDateTime> = timestamp
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ContractAddManualBalanceEntryBody = apply {
+            if (!validated) {
+                id()
+                amount()
+                customerId()
+                reason()
+                segmentId()
+                contractId()
+                timestamp()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -115,13 +198,13 @@ constructor(
 
         class Builder {
 
-            private var id: String? = null
-            private var amount: Double? = null
-            private var customerId: String? = null
-            private var reason: String? = null
-            private var segmentId: String? = null
-            private var contractId: String? = null
-            private var timestamp: OffsetDateTime? = null
+            private var id: JsonField<String>? = null
+            private var amount: JsonField<Double>? = null
+            private var customerId: JsonField<String>? = null
+            private var reason: JsonField<String>? = null
+            private var segmentId: JsonField<String>? = null
+            private var contractId: JsonField<String> = JsonMissing.of()
+            private var timestamp: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -140,37 +223,54 @@ constructor(
             }
 
             /** ID of the balance (commit or credit) to update. */
-            fun id(id: String) = apply { this.id = id }
+            fun id(id: String) = id(JsonField.of(id))
+
+            /** ID of the balance (commit or credit) to update. */
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** Amount to add to the segment. A negative number will draw down from the balance. */
-            fun amount(amount: Double) = apply { this.amount = amount }
+            fun amount(amount: Double) = amount(JsonField.of(amount))
+
+            /** Amount to add to the segment. A negative number will draw down from the balance. */
+            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
             /** ID of the customer whose balance is to be updated. */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            /** ID of the customer whose balance is to be updated. */
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /** Reason for the manual adjustment. This will be displayed in the ledger. */
-            fun reason(reason: String) = apply { this.reason = reason }
+            fun reason(reason: String) = reason(JsonField.of(reason))
+
+            /** Reason for the manual adjustment. This will be displayed in the ledger. */
+            fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
             /** ID of the segment to update. */
-            fun segmentId(segmentId: String) = apply { this.segmentId = segmentId }
+            fun segmentId(segmentId: String) = segmentId(JsonField.of(segmentId))
+
+            /** ID of the segment to update. */
+            fun segmentId(segmentId: JsonField<String>) = apply { this.segmentId = segmentId }
 
             /** ID of the contract to update. Leave blank to update a customer level balance. */
-            fun contractId(contractId: String?) = apply { this.contractId = contractId }
+            fun contractId(contractId: String) = contractId(JsonField.of(contractId))
 
             /** ID of the contract to update. Leave blank to update a customer level balance. */
-            fun contractId(contractId: Optional<String>) = contractId(contractId.orElse(null))
+            fun contractId(contractId: JsonField<String>) = apply { this.contractId = contractId }
 
             /**
              * RFC 3339 timestamp indicating when the manual adjustment takes place. If not
              * provided, it will default to the start of the segment.
              */
-            fun timestamp(timestamp: OffsetDateTime?) = apply { this.timestamp = timestamp }
+            fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
 
             /**
              * RFC 3339 timestamp indicating when the manual adjustment takes place. If not
              * provided, it will default to the start of the segment.
              */
-            fun timestamp(timestamp: Optional<OffsetDateTime>) = timestamp(timestamp.orElse(null))
+            fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
+                this.timestamp = timestamp
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -250,35 +350,69 @@ constructor(
         /** ID of the balance (commit or credit) to update. */
         fun id(id: String) = apply { body.id(id) }
 
+        /** ID of the balance (commit or credit) to update. */
+        fun id(id: JsonField<String>) = apply { body.id(id) }
+
         /** Amount to add to the segment. A negative number will draw down from the balance. */
         fun amount(amount: Double) = apply { body.amount(amount) }
+
+        /** Amount to add to the segment. A negative number will draw down from the balance. */
+        fun amount(amount: JsonField<Double>) = apply { body.amount(amount) }
 
         /** ID of the customer whose balance is to be updated. */
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
+        /** ID of the customer whose balance is to be updated. */
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
+
         /** Reason for the manual adjustment. This will be displayed in the ledger. */
         fun reason(reason: String) = apply { body.reason(reason) }
+
+        /** Reason for the manual adjustment. This will be displayed in the ledger. */
+        fun reason(reason: JsonField<String>) = apply { body.reason(reason) }
 
         /** ID of the segment to update. */
         fun segmentId(segmentId: String) = apply { body.segmentId(segmentId) }
 
-        /** ID of the contract to update. Leave blank to update a customer level balance. */
-        fun contractId(contractId: String?) = apply { body.contractId(contractId) }
+        /** ID of the segment to update. */
+        fun segmentId(segmentId: JsonField<String>) = apply { body.segmentId(segmentId) }
 
         /** ID of the contract to update. Leave blank to update a customer level balance. */
-        fun contractId(contractId: Optional<String>) = contractId(contractId.orElse(null))
+        fun contractId(contractId: String) = apply { body.contractId(contractId) }
+
+        /** ID of the contract to update. Leave blank to update a customer level balance. */
+        fun contractId(contractId: JsonField<String>) = apply { body.contractId(contractId) }
 
         /**
          * RFC 3339 timestamp indicating when the manual adjustment takes place. If not provided, it
          * will default to the start of the segment.
          */
-        fun timestamp(timestamp: OffsetDateTime?) = apply { body.timestamp(timestamp) }
+        fun timestamp(timestamp: OffsetDateTime) = apply { body.timestamp(timestamp) }
 
         /**
          * RFC 3339 timestamp indicating when the manual adjustment takes place. If not provided, it
          * will default to the start of the segment.
          */
-        fun timestamp(timestamp: Optional<OffsetDateTime>) = timestamp(timestamp.orElse(null))
+        fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply { body.timestamp(timestamp) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -376,25 +510,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractAddManualBalanceEntryParams =

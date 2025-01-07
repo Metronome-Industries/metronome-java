@@ -40,11 +40,15 @@ private constructor(
     fun startingAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(startingAt.getNullable("starting_at"))
 
-    @JsonProperty("group_key") @ExcludeMissing fun _groupKey() = groupKey
+    @JsonProperty("group_key") @ExcludeMissing fun _groupKey(): JsonField<String> = groupKey
 
-    @JsonProperty("group_values") @ExcludeMissing fun _groupValues() = groupValues
+    @JsonProperty("group_values")
+    @ExcludeMissing
+    fun _groupValues(): JsonField<List<String>> = groupValues
 
-    @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+    @JsonProperty("starting_at")
+    @ExcludeMissing
+    fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -70,15 +74,15 @@ private constructor(
 
     class Builder {
 
-        private var groupKey: JsonField<String> = JsonMissing.of()
-        private var groupValues: JsonField<List<String>> = JsonMissing.of()
+        private var groupKey: JsonField<String>? = null
+        private var groupValues: JsonField<MutableList<String>>? = null
         private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(baseUsageFilter: BaseUsageFilter) = apply {
             groupKey = baseUsageFilter.groupKey
-            groupValues = baseUsageFilter.groupValues
+            groupValues = baseUsageFilter.groupValues.map { it.toMutableList() }
             startingAt = baseUsageFilter.startingAt
             additionalProperties = baseUsageFilter.additionalProperties.toMutableMap()
         }
@@ -90,7 +94,20 @@ private constructor(
         fun groupValues(groupValues: List<String>) = groupValues(JsonField.of(groupValues))
 
         fun groupValues(groupValues: JsonField<List<String>>) = apply {
-            this.groupValues = groupValues
+            this.groupValues = groupValues.map { it.toMutableList() }
+        }
+
+        fun addGroupValue(groupValue: String) = apply {
+            groupValues =
+                (groupValues ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(groupValue)
+                }
         }
 
         fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
@@ -120,8 +137,9 @@ private constructor(
 
         fun build(): BaseUsageFilter =
             BaseUsageFilter(
-                groupKey,
-                groupValues.map { it.toImmutable() },
+                checkNotNull(groupKey) { "`groupKey` is required but was not set" },
+                checkNotNull(groupValues) { "`groupValues` is required but was not set" }
+                    .map { it.toImmutable() },
                 startingAt,
                 additionalProperties.toImmutable(),
             )

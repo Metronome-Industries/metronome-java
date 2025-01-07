@@ -185,81 +185,105 @@ private constructor(
 
     fun subtotal(): Optional<Double> = Optional.ofNullable(subtotal.getNullable("subtotal"))
 
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+    @JsonProperty("credit_type")
+    @ExcludeMissing
+    fun _creditType(): JsonField<CreditTypeData> = creditType
 
-    @JsonProperty("customer_id") @ExcludeMissing fun _customerId() = customerId
+    @JsonProperty("customer_id") @ExcludeMissing fun _customerId(): JsonField<String> = customerId
 
-    @JsonProperty("line_items") @ExcludeMissing fun _lineItems() = lineItems
+    @JsonProperty("line_items")
+    @ExcludeMissing
+    fun _lineItems(): JsonField<List<LineItem>> = lineItems
 
-    @JsonProperty("status") @ExcludeMissing fun _status() = status
+    @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<String> = status
 
-    @JsonProperty("total") @ExcludeMissing fun _total() = total
+    @JsonProperty("total") @ExcludeMissing fun _total(): JsonField<Double> = total
 
-    @JsonProperty("type") @ExcludeMissing fun _type() = type
+    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<String> = type
 
-    @JsonProperty("amendment_id") @ExcludeMissing fun _amendmentId() = amendmentId
+    @JsonProperty("amendment_id")
+    @ExcludeMissing
+    fun _amendmentId(): JsonField<String> = amendmentId
 
     /** This field's availability is dependent on your client's configuration. */
-    @JsonProperty("billable_status") @ExcludeMissing fun _billableStatus() = billableStatus
+    @JsonProperty("billable_status")
+    @ExcludeMissing
+    fun _billableStatus(): JsonField<BillableStatus> = billableStatus
 
     @JsonProperty("contract_custom_fields")
     @ExcludeMissing
-    fun _contractCustomFields() = contractCustomFields
+    fun _contractCustomFields(): JsonField<ContractCustomFields> = contractCustomFields
 
-    @JsonProperty("contract_id") @ExcludeMissing fun _contractId() = contractId
+    @JsonProperty("contract_id") @ExcludeMissing fun _contractId(): JsonField<String> = contractId
 
-    @JsonProperty("correction_record") @ExcludeMissing fun _correctionRecord() = correctionRecord
+    @JsonProperty("correction_record")
+    @ExcludeMissing
+    fun _correctionRecord(): JsonField<CorrectionRecord> = correctionRecord
 
     /** When the invoice was created (UTC). This field is present for correction invoices only. */
-    @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    fun _customFields(): JsonField<CustomFields> = customFields
 
     @JsonProperty("customer_custom_fields")
     @ExcludeMissing
-    fun _customerCustomFields() = customerCustomFields
+    fun _customerCustomFields(): JsonField<CustomerCustomFields> = customerCustomFields
 
     /** End of the usage period this invoice covers (UTC) */
-    @JsonProperty("end_timestamp") @ExcludeMissing fun _endTimestamp() = endTimestamp
+    @JsonProperty("end_timestamp")
+    @ExcludeMissing
+    fun _endTimestamp(): JsonField<OffsetDateTime> = endTimestamp
 
-    @JsonProperty("external_invoice") @ExcludeMissing fun _externalInvoice() = externalInvoice
+    @JsonProperty("external_invoice")
+    @ExcludeMissing
+    fun _externalInvoice(): JsonField<ExternalInvoice> = externalInvoice
 
     @JsonProperty("invoice_adjustments")
     @ExcludeMissing
-    fun _invoiceAdjustments() = invoiceAdjustments
+    fun _invoiceAdjustments(): JsonField<List<InvoiceAdjustment>> = invoiceAdjustments
 
     /** When the invoice was issued (UTC) */
-    @JsonProperty("issued_at") @ExcludeMissing fun _issuedAt() = issuedAt
+    @JsonProperty("issued_at") @ExcludeMissing fun _issuedAt(): JsonField<OffsetDateTime> = issuedAt
 
     @JsonProperty("net_payment_terms_days")
     @ExcludeMissing
-    fun _netPaymentTermsDays() = netPaymentTermsDays
+    fun _netPaymentTermsDays(): JsonField<Double> = netPaymentTermsDays
 
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("netsuite_sales_order_id")
     @ExcludeMissing
-    fun _netsuiteSalesOrderId() = netsuiteSalesOrderId
+    fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
 
-    @JsonProperty("plan_custom_fields") @ExcludeMissing fun _planCustomFields() = planCustomFields
+    @JsonProperty("plan_custom_fields")
+    @ExcludeMissing
+    fun _planCustomFields(): JsonField<PlanCustomFields> = planCustomFields
 
-    @JsonProperty("plan_id") @ExcludeMissing fun _planId() = planId
+    @JsonProperty("plan_id") @ExcludeMissing fun _planId(): JsonField<String> = planId
 
-    @JsonProperty("plan_name") @ExcludeMissing fun _planName() = planName
+    @JsonProperty("plan_name") @ExcludeMissing fun _planName(): JsonField<String> = planName
 
     /** only present for beta contract invoices with reseller royalties */
-    @JsonProperty("reseller_royalty") @ExcludeMissing fun _resellerRoyalty() = resellerRoyalty
+    @JsonProperty("reseller_royalty")
+    @ExcludeMissing
+    fun _resellerRoyalty(): JsonField<ResellerRoyalty> = resellerRoyalty
 
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("salesforce_opportunity_id")
     @ExcludeMissing
-    fun _salesforceOpportunityId() = salesforceOpportunityId
+    fun _salesforceOpportunityId(): JsonField<String> = salesforceOpportunityId
 
     /** Beginning of the usage period this invoice covers (UTC) */
-    @JsonProperty("start_timestamp") @ExcludeMissing fun _startTimestamp() = startTimestamp
+    @JsonProperty("start_timestamp")
+    @ExcludeMissing
+    fun _startTimestamp(): JsonField<OffsetDateTime> = startTimestamp
 
-    @JsonProperty("subtotal") @ExcludeMissing fun _subtotal() = subtotal
+    @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<Double> = subtotal
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -310,13 +334,13 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
-        private var customerId: JsonField<String> = JsonMissing.of()
-        private var lineItems: JsonField<List<LineItem>> = JsonMissing.of()
-        private var status: JsonField<String> = JsonMissing.of()
-        private var total: JsonField<Double> = JsonMissing.of()
-        private var type: JsonField<String> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var creditType: JsonField<CreditTypeData>? = null
+        private var customerId: JsonField<String>? = null
+        private var lineItems: JsonField<MutableList<LineItem>>? = null
+        private var status: JsonField<String>? = null
+        private var total: JsonField<Double>? = null
+        private var type: JsonField<String>? = null
         private var amendmentId: JsonField<String> = JsonMissing.of()
         private var billableStatus: JsonField<BillableStatus> = JsonMissing.of()
         private var contractCustomFields: JsonField<ContractCustomFields> = JsonMissing.of()
@@ -327,7 +351,7 @@ private constructor(
         private var customerCustomFields: JsonField<CustomerCustomFields> = JsonMissing.of()
         private var endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
         private var externalInvoice: JsonField<ExternalInvoice> = JsonMissing.of()
-        private var invoiceAdjustments: JsonField<List<InvoiceAdjustment>> = JsonMissing.of()
+        private var invoiceAdjustments: JsonField<MutableList<InvoiceAdjustment>>? = null
         private var issuedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var netPaymentTermsDays: JsonField<Double> = JsonMissing.of()
         private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
@@ -345,7 +369,7 @@ private constructor(
             id = invoice.id
             creditType = invoice.creditType
             customerId = invoice.customerId
-            lineItems = invoice.lineItems
+            lineItems = invoice.lineItems.map { it.toMutableList() }
             status = invoice.status
             total = invoice.total
             type = invoice.type
@@ -359,7 +383,7 @@ private constructor(
             customerCustomFields = invoice.customerCustomFields
             endTimestamp = invoice.endTimestamp
             externalInvoice = invoice.externalInvoice
-            invoiceAdjustments = invoice.invoiceAdjustments
+            invoiceAdjustments = invoice.invoiceAdjustments.map { it.toMutableList() }
             issuedAt = invoice.issuedAt
             netPaymentTermsDays = invoice.netPaymentTermsDays
             netsuiteSalesOrderId = invoice.netsuiteSalesOrderId
@@ -389,7 +413,22 @@ private constructor(
 
         fun lineItems(lineItems: List<LineItem>) = lineItems(JsonField.of(lineItems))
 
-        fun lineItems(lineItems: JsonField<List<LineItem>>) = apply { this.lineItems = lineItems }
+        fun lineItems(lineItems: JsonField<List<LineItem>>) = apply {
+            this.lineItems = lineItems.map { it.toMutableList() }
+        }
+
+        fun addLineItem(lineItem: LineItem) = apply {
+            lineItems =
+                (lineItems ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(lineItem)
+                }
+        }
 
         fun status(status: String) = status(JsonField.of(status))
 
@@ -465,8 +504,11 @@ private constructor(
             this.endTimestamp = endTimestamp
         }
 
-        fun externalInvoice(externalInvoice: ExternalInvoice) =
-            externalInvoice(JsonField.of(externalInvoice))
+        fun externalInvoice(externalInvoice: ExternalInvoice?) =
+            externalInvoice(JsonField.ofNullable(externalInvoice))
+
+        fun externalInvoice(externalInvoice: Optional<ExternalInvoice>) =
+            externalInvoice(externalInvoice.orElse(null))
 
         fun externalInvoice(externalInvoice: JsonField<ExternalInvoice>) = apply {
             this.externalInvoice = externalInvoice
@@ -476,7 +518,20 @@ private constructor(
             invoiceAdjustments(JsonField.of(invoiceAdjustments))
 
         fun invoiceAdjustments(invoiceAdjustments: JsonField<List<InvoiceAdjustment>>) = apply {
-            this.invoiceAdjustments = invoiceAdjustments
+            this.invoiceAdjustments = invoiceAdjustments.map { it.toMutableList() }
+        }
+
+        fun addInvoiceAdjustment(invoiceAdjustment: InvoiceAdjustment) = apply {
+            invoiceAdjustments =
+                (invoiceAdjustments ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(invoiceAdjustment)
+                }
         }
 
         /** When the invoice was issued (UTC) */
@@ -568,13 +623,14 @@ private constructor(
 
         fun build(): Invoice =
             Invoice(
-                id,
-                creditType,
-                customerId,
-                lineItems.map { it.toImmutable() },
-                status,
-                total,
-                type,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(creditType) { "`creditType` is required but was not set" },
+                checkNotNull(customerId) { "`customerId` is required but was not set" },
+                checkNotNull(lineItems) { "`lineItems` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(status) { "`status` is required but was not set" },
+                checkNotNull(total) { "`total` is required but was not set" },
+                checkNotNull(type) { "`type` is required but was not set" },
                 amendmentId,
                 billableStatus,
                 contractCustomFields,
@@ -585,7 +641,7 @@ private constructor(
                 customerCustomFields,
                 endTimestamp,
                 externalInvoice,
-                invoiceAdjustments.map { it.toImmutable() },
+                (invoiceAdjustments ?: JsonMissing.of()).map { it.toImmutable() },
                 issuedAt,
                 netPaymentTermsDays,
                 netsuiteSalesOrderId,
@@ -860,24 +916,26 @@ private constructor(
         /** only present for beta contract invoices */
         fun unitPrice(): Optional<Double> = Optional.ofNullable(unitPrice.getNullable("unit_price"))
 
-        @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+        @JsonProperty("credit_type")
+        @ExcludeMissing
+        fun _creditType(): JsonField<CreditTypeData> = creditType
 
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-        @JsonProperty("total") @ExcludeMissing fun _total() = total
+        @JsonProperty("total") @ExcludeMissing fun _total(): JsonField<Double> = total
 
         /** only present for beta contract invoices */
         @JsonProperty("applied_commit_or_credit")
         @ExcludeMissing
-        fun _appliedCommitOrCredit() = appliedCommitOrCredit
+        fun _appliedCommitOrCredit(): JsonField<AppliedCommitOrCredit> = appliedCommitOrCredit
 
         /** only present for beta contract invoices */
         @JsonProperty("commit_custom_fields")
         @ExcludeMissing
-        fun _commitCustomFields() = commitCustomFields
+        fun _commitCustomFields(): JsonField<CommitCustomFields> = commitCustomFields
 
         /** only present for beta contract invoices */
-        @JsonProperty("commit_id") @ExcludeMissing fun _commitId() = commitId
+        @JsonProperty("commit_id") @ExcludeMissing fun _commitId(): JsonField<String> = commitId
 
         /**
          * only present for beta contract invoices. This field's availability is dependent on your
@@ -885,7 +943,7 @@ private constructor(
          */
         @JsonProperty("commit_netsuite_item_id")
         @ExcludeMissing
-        fun _commitNetsuiteItemId() = commitNetsuiteItemId
+        fun _commitNetsuiteItemId(): JsonField<String> = commitNetsuiteItemId
 
         /**
          * only present for beta contract invoices. This field's availability is dependent on your
@@ -893,53 +951,69 @@ private constructor(
          */
         @JsonProperty("commit_netsuite_sales_order_id")
         @ExcludeMissing
-        fun _commitNetsuiteSalesOrderId() = commitNetsuiteSalesOrderId
+        fun _commitNetsuiteSalesOrderId(): JsonField<String> = commitNetsuiteSalesOrderId
 
         /** only present for beta contract invoices */
-        @JsonProperty("commit_segment_id") @ExcludeMissing fun _commitSegmentId() = commitSegmentId
+        @JsonProperty("commit_segment_id")
+        @ExcludeMissing
+        fun _commitSegmentId(): JsonField<String> = commitSegmentId
 
         /** only present for beta contract invoices */
-        @JsonProperty("commit_type") @ExcludeMissing fun _commitType() = commitType
+        @JsonProperty("commit_type")
+        @ExcludeMissing
+        fun _commitType(): JsonField<String> = commitType
 
-        @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
-
-        /** only present for beta contract invoices */
-        @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
-
-        @JsonProperty("group_key") @ExcludeMissing fun _groupKey() = groupKey
-
-        @JsonProperty("group_value") @ExcludeMissing fun _groupValue() = groupValue
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        fun _customFields(): JsonField<CustomFields> = customFields
 
         /** only present for beta contract invoices */
-        @JsonProperty("is_prorated") @ExcludeMissing fun _isProrated() = isProrated
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
+
+        @JsonProperty("group_key") @ExcludeMissing fun _groupKey(): JsonField<String> = groupKey
+
+        @JsonProperty("group_value")
+        @ExcludeMissing
+        fun _groupValue(): JsonField<String> = groupValue
+
+        /** only present for beta contract invoices */
+        @JsonProperty("is_prorated")
+        @ExcludeMissing
+        fun _isProrated(): JsonField<Boolean> = isProrated
 
         /**
          * Only present for contract invoices and when the include_list_prices query parameter is
          * set to true. This will include the list rate for the charge if applicable. Only present
          * for usage and subscription line items.
          */
-        @JsonProperty("list_price") @ExcludeMissing fun _listPrice() = listPrice
+        @JsonProperty("list_price") @ExcludeMissing fun _listPrice(): JsonField<Rate> = listPrice
 
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<String> = metadata
 
         /** The end date for the billing period on the invoice. */
         @JsonProperty("netsuite_invoice_billing_end")
         @ExcludeMissing
-        fun _netsuiteInvoiceBillingEnd() = netsuiteInvoiceBillingEnd
+        fun _netsuiteInvoiceBillingEnd(): JsonField<OffsetDateTime> = netsuiteInvoiceBillingEnd
 
         /** The start date for the billing period on the invoice. */
         @JsonProperty("netsuite_invoice_billing_start")
         @ExcludeMissing
-        fun _netsuiteInvoiceBillingStart() = netsuiteInvoiceBillingStart
+        fun _netsuiteInvoiceBillingStart(): JsonField<OffsetDateTime> = netsuiteInvoiceBillingStart
 
         /**
          * only present for beta contract invoices. This field's availability is dependent on your
          * client's configuration.
          */
-        @JsonProperty("netsuite_item_id") @ExcludeMissing fun _netsuiteItemId() = netsuiteItemId
+        @JsonProperty("netsuite_item_id")
+        @ExcludeMissing
+        fun _netsuiteItemId(): JsonField<String> = netsuiteItemId
 
         /** only present for beta contract invoices */
-        @JsonProperty("postpaid_commit") @ExcludeMissing fun _postpaidCommit() = postpaidCommit
+        @JsonProperty("postpaid_commit")
+        @ExcludeMissing
+        fun _postpaidCommit(): JsonField<PostpaidCommit> = postpaidCommit
 
         /**
          * if presentation groups are used, this will contain the values used to break down the line
@@ -947,53 +1021,63 @@ private constructor(
          */
         @JsonProperty("presentation_group_values")
         @ExcludeMissing
-        fun _presentationGroupValues() = presentationGroupValues
+        fun _presentationGroupValues(): JsonField<PresentationGroupValues> = presentationGroupValues
 
         /** if pricing groups are used, this will contain the values used to calculate the price */
         @JsonProperty("pricing_group_values")
         @ExcludeMissing
-        fun _pricingGroupValues() = pricingGroupValues
+        fun _pricingGroupValues(): JsonField<PricingGroupValues> = pricingGroupValues
 
         @JsonProperty("product_custom_fields")
         @ExcludeMissing
-        fun _productCustomFields() = productCustomFields
+        fun _productCustomFields(): JsonField<ProductCustomFields> = productCustomFields
 
-        @JsonProperty("product_id") @ExcludeMissing fun _productId() = productId
+        @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
-        @JsonProperty("product_type") @ExcludeMissing fun _productType() = productType
+        @JsonProperty("product_type")
+        @ExcludeMissing
+        fun _productType(): JsonField<String> = productType
 
         /** only present for beta contract invoices */
         @JsonProperty("professional_service_custom_fields")
         @ExcludeMissing
-        fun _professionalServiceCustomFields() = professionalServiceCustomFields
+        fun _professionalServiceCustomFields(): JsonField<ProfessionalServiceCustomFields> =
+            professionalServiceCustomFields
 
         /** only present for beta contract invoices */
         @JsonProperty("professional_service_id")
         @ExcludeMissing
-        fun _professionalServiceId() = professionalServiceId
+        fun _professionalServiceId(): JsonField<String> = professionalServiceId
 
-        @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
-        @JsonProperty("reseller_type") @ExcludeMissing fun _resellerType() = resellerType
+        @JsonProperty("reseller_type")
+        @ExcludeMissing
+        fun _resellerType(): JsonField<ResellerType> = resellerType
 
         @JsonProperty("scheduled_charge_custom_fields")
         @ExcludeMissing
-        fun _scheduledChargeCustomFields() = scheduledChargeCustomFields
+        fun _scheduledChargeCustomFields(): JsonField<ScheduledChargeCustomFields> =
+            scheduledChargeCustomFields
 
         /** only present for beta contract invoices */
         @JsonProperty("scheduled_charge_id")
         @ExcludeMissing
-        fun _scheduledChargeId() = scheduledChargeId
+        fun _scheduledChargeId(): JsonField<String> = scheduledChargeId
 
         /** only present for beta contract invoices */
-        @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
-        @JsonProperty("sub_line_items") @ExcludeMissing fun _subLineItems() = subLineItems
+        @JsonProperty("sub_line_items")
+        @ExcludeMissing
+        fun _subLineItems(): JsonField<List<SubLineItem>> = subLineItems
 
-        @JsonProperty("tier") @ExcludeMissing fun _tier() = tier
+        @JsonProperty("tier") @ExcludeMissing fun _tier(): JsonField<Tier> = tier
 
         /** only present for beta contract invoices */
-        @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice() = unitPrice
+        @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice(): JsonField<Double> = unitPrice
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1052,9 +1136,9 @@ private constructor(
 
         class Builder {
 
-            private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
-            private var name: JsonField<String> = JsonMissing.of()
-            private var total: JsonField<Double> = JsonMissing.of()
+            private var creditType: JsonField<CreditTypeData>? = null
+            private var name: JsonField<String>? = null
+            private var total: JsonField<Double>? = null
             private var appliedCommitOrCredit: JsonField<AppliedCommitOrCredit> = JsonMissing.of()
             private var commitCustomFields: JsonField<CommitCustomFields> = JsonMissing.of()
             private var commitId: JsonField<String> = JsonMissing.of()
@@ -1089,7 +1173,7 @@ private constructor(
                 JsonMissing.of()
             private var scheduledChargeId: JsonField<String> = JsonMissing.of()
             private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var subLineItems: JsonField<List<SubLineItem>> = JsonMissing.of()
+            private var subLineItems: JsonField<MutableList<SubLineItem>>? = null
             private var tier: JsonField<Tier> = JsonMissing.of()
             private var unitPrice: JsonField<Double> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -1129,7 +1213,7 @@ private constructor(
                 scheduledChargeCustomFields = lineItem.scheduledChargeCustomFields
                 scheduledChargeId = lineItem.scheduledChargeId
                 startingAt = lineItem.startingAt
-                subLineItems = lineItem.subLineItems
+                subLineItems = lineItem.subLineItems.map { it.toMutableList() }
                 tier = lineItem.tier
                 unitPrice = lineItem.unitPrice
                 additionalProperties = lineItem.additionalProperties.toMutableMap()
@@ -1238,7 +1322,9 @@ private constructor(
 
             fun groupKey(groupKey: JsonField<String>) = apply { this.groupKey = groupKey }
 
-            fun groupValue(groupValue: String) = groupValue(JsonField.of(groupValue))
+            fun groupValue(groupValue: String?) = groupValue(JsonField.ofNullable(groupValue))
+
+            fun groupValue(groupValue: Optional<String>) = groupValue(groupValue.orElse(null))
 
             fun groupValue(groupValue: JsonField<String>) = apply { this.groupValue = groupValue }
 
@@ -1412,7 +1498,20 @@ private constructor(
                 subLineItems(JsonField.of(subLineItems))
 
             fun subLineItems(subLineItems: JsonField<List<SubLineItem>>) = apply {
-                this.subLineItems = subLineItems
+                this.subLineItems = subLineItems.map { it.toMutableList() }
+            }
+
+            fun addSubLineItem(subLineItem: SubLineItem) = apply {
+                subLineItems =
+                    (subLineItems ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(subLineItem)
+                    }
             }
 
             fun tier(tier: Tier) = tier(JsonField.of(tier))
@@ -1446,9 +1545,9 @@ private constructor(
 
             fun build(): LineItem =
                 LineItem(
-                    creditType,
-                    name,
-                    total,
+                    checkNotNull(creditType) { "`creditType` is required but was not set" },
+                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkNotNull(total) { "`total` is required but was not set" },
                     appliedCommitOrCredit,
                     commitCustomFields,
                     commitId,
@@ -1479,7 +1578,7 @@ private constructor(
                     scheduledChargeCustomFields,
                     scheduledChargeId,
                     startingAt,
-                    subLineItems.map { it.toImmutable() },
+                    (subLineItems ?: JsonMissing.of()).map { it.toImmutable() },
                     tier,
                     unitPrice,
                     additionalProperties.toImmutable(),
@@ -1505,9 +1604,9 @@ private constructor(
 
             fun type(): Type = type.getRequired("type")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-            @JsonProperty("type") @ExcludeMissing fun _type() = type
+            @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1532,8 +1631,8 @@ private constructor(
 
             class Builder {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var type: JsonField<Type> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var type: JsonField<Type>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -1575,8 +1674,8 @@ private constructor(
 
                 fun build(): AppliedCommitOrCredit =
                     AppliedCommitOrCredit(
-                        id,
-                        type,
+                        checkNotNull(id) { "`id` is required but was not set" },
+                        checkNotNull(type) { "`type` is required but was not set" },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -1835,7 +1934,7 @@ private constructor(
 
             fun id(): String = id.getRequired("id")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1859,7 +1958,7 @@ private constructor(
 
             class Builder {
 
-                private var id: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -1894,7 +1993,11 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
-                fun build(): PostpaidCommit = PostpaidCommit(id, additionalProperties.toImmutable())
+                fun build(): PostpaidCommit =
+                    PostpaidCommit(
+                        checkNotNull(id) { "`id` is required but was not set" },
+                        additionalProperties.toImmutable()
+                    )
             }
 
             override fun equals(other: Any?): Boolean {
@@ -2471,34 +2574,44 @@ private constructor(
 
             fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers.getNullable("tiers"))
 
-            @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+            @JsonProperty("custom_fields")
+            @ExcludeMissing
+            fun _customFields(): JsonField<CustomFields> = customFields
 
-            @JsonProperty("name") @ExcludeMissing fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-            @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+            @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
-            @JsonProperty("subtotal") @ExcludeMissing fun _subtotal() = subtotal
+            @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<Double> = subtotal
 
-            @JsonProperty("charge_id") @ExcludeMissing fun _chargeId() = chargeId
+            @JsonProperty("charge_id") @ExcludeMissing fun _chargeId(): JsonField<String> = chargeId
 
-            @JsonProperty("credit_grant_id") @ExcludeMissing fun _creditGrantId() = creditGrantId
+            @JsonProperty("credit_grant_id")
+            @ExcludeMissing
+            fun _creditGrantId(): JsonField<String> = creditGrantId
 
             /** The end date for the charge (for seats charges only). */
-            @JsonProperty("end_date") @ExcludeMissing fun _endDate() = endDate
+            @JsonProperty("end_date")
+            @ExcludeMissing
+            fun _endDate(): JsonField<OffsetDateTime> = endDate
 
             /**
              * the unit price for this charge, present only if the charge is not tiered and the
              * quantity is nonzero
              */
-            @JsonProperty("price") @ExcludeMissing fun _price() = price
+            @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Double> = price
 
             /** The start date for the charge (for seats charges only). */
-            @JsonProperty("start_date") @ExcludeMissing fun _startDate() = startDate
+            @JsonProperty("start_date")
+            @ExcludeMissing
+            fun _startDate(): JsonField<OffsetDateTime> = startDate
 
             /** when the current tier started and ends (for tiered charges only) */
-            @JsonProperty("tier_period") @ExcludeMissing fun _tierPeriod() = tierPeriod
+            @JsonProperty("tier_period")
+            @ExcludeMissing
+            fun _tierPeriod(): JsonField<TierPeriod> = tierPeriod
 
-            @JsonProperty("tiers") @ExcludeMissing fun _tiers() = tiers
+            @JsonProperty("tiers") @ExcludeMissing fun _tiers(): JsonField<List<Tier>> = tiers
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -2532,17 +2645,17 @@ private constructor(
 
             class Builder {
 
-                private var customFields: JsonField<CustomFields> = JsonMissing.of()
-                private var name: JsonField<String> = JsonMissing.of()
-                private var quantity: JsonField<Double> = JsonMissing.of()
-                private var subtotal: JsonField<Double> = JsonMissing.of()
+                private var customFields: JsonField<CustomFields>? = null
+                private var name: JsonField<String>? = null
+                private var quantity: JsonField<Double>? = null
+                private var subtotal: JsonField<Double>? = null
                 private var chargeId: JsonField<String> = JsonMissing.of()
                 private var creditGrantId: JsonField<String> = JsonMissing.of()
                 private var endDate: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var price: JsonField<Double> = JsonMissing.of()
                 private var startDate: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var tierPeriod: JsonField<TierPeriod> = JsonMissing.of()
-                private var tiers: JsonField<List<Tier>> = JsonMissing.of()
+                private var tiers: JsonField<MutableList<Tier>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -2557,7 +2670,7 @@ private constructor(
                     price = subLineItem.price
                     startDate = subLineItem.startDate
                     tierPeriod = subLineItem.tierPeriod
-                    tiers = subLineItem.tiers
+                    tiers = subLineItem.tiers.map { it.toMutableList() }
                     additionalProperties = subLineItem.additionalProperties.toMutableMap()
                 }
 
@@ -2627,7 +2740,22 @@ private constructor(
 
                 fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
-                fun tiers(tiers: JsonField<List<Tier>>) = apply { this.tiers = tiers }
+                fun tiers(tiers: JsonField<List<Tier>>) = apply {
+                    this.tiers = tiers.map { it.toMutableList() }
+                }
+
+                fun addTier(tier: Tier) = apply {
+                    tiers =
+                        (tiers ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(tier)
+                        }
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -2653,17 +2781,17 @@ private constructor(
 
                 fun build(): SubLineItem =
                     SubLineItem(
-                        customFields,
-                        name,
-                        quantity,
-                        subtotal,
+                        checkNotNull(customFields) { "`customFields` is required but was not set" },
+                        checkNotNull(name) { "`name` is required but was not set" },
+                        checkNotNull(quantity) { "`quantity` is required but was not set" },
+                        checkNotNull(subtotal) { "`subtotal` is required but was not set" },
                         chargeId,
                         creditGrantId,
                         endDate,
                         price,
                         startDate,
                         tierPeriod,
-                        tiers.map { it.toImmutable() },
+                        (tiers ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -2766,9 +2894,13 @@ private constructor(
                 fun endingBefore(): Optional<OffsetDateTime> =
                     Optional.ofNullable(endingBefore.getNullable("ending_before"))
 
-                @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
-                @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -2793,7 +2925,7 @@ private constructor(
 
                 class Builder {
 
-                    private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
+                    private var startingAt: JsonField<OffsetDateTime>? = null
                     private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -2842,7 +2974,7 @@ private constructor(
 
                     fun build(): TierPeriod =
                         TierPeriod(
-                            startingAt,
+                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                             endingBefore,
                             additionalProperties.toImmutable(),
                         )
@@ -2895,14 +3027,20 @@ private constructor(
 
                 fun subtotal(): Double = subtotal.getRequired("subtotal")
 
-                @JsonProperty("price") @ExcludeMissing fun _price() = price
+                @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Double> = price
 
-                @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                fun _quantity(): JsonField<Double> = quantity
 
                 /** at what metric amount this tier begins */
-                @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                fun _startingAt(): JsonField<Double> = startingAt
 
-                @JsonProperty("subtotal") @ExcludeMissing fun _subtotal() = subtotal
+                @JsonProperty("subtotal")
+                @ExcludeMissing
+                fun _subtotal(): JsonField<Double> = subtotal
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -2929,10 +3067,10 @@ private constructor(
 
                 class Builder {
 
-                    private var price: JsonField<Double> = JsonMissing.of()
-                    private var quantity: JsonField<Double> = JsonMissing.of()
-                    private var startingAt: JsonField<Double> = JsonMissing.of()
-                    private var subtotal: JsonField<Double> = JsonMissing.of()
+                    private var price: JsonField<Double>? = null
+                    private var quantity: JsonField<Double>? = null
+                    private var startingAt: JsonField<Double>? = null
+                    private var subtotal: JsonField<Double>? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -2988,10 +3126,10 @@ private constructor(
 
                     fun build(): Tier =
                         Tier(
-                            price,
-                            quantity,
-                            startingAt,
-                            subtotal,
+                            checkNotNull(price) { "`price` is required but was not set" },
+                            checkNotNull(quantity) { "`quantity` is required but was not set" },
+                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                            checkNotNull(subtotal) { "`subtotal` is required but was not set" },
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -3055,11 +3193,13 @@ private constructor(
 
             fun size(): Optional<String> = Optional.ofNullable(size.getNullable("size"))
 
-            @JsonProperty("level") @ExcludeMissing fun _level() = level
+            @JsonProperty("level") @ExcludeMissing fun _level(): JsonField<Double> = level
 
-            @JsonProperty("starting_at") @ExcludeMissing fun _startingAt() = startingAt
+            @JsonProperty("starting_at")
+            @ExcludeMissing
+            fun _startingAt(): JsonField<String> = startingAt
 
-            @JsonProperty("size") @ExcludeMissing fun _size() = size
+            @JsonProperty("size") @ExcludeMissing fun _size(): JsonField<String> = size
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -3085,8 +3225,8 @@ private constructor(
 
             class Builder {
 
-                private var level: JsonField<Double> = JsonMissing.of()
-                private var startingAt: JsonField<String> = JsonMissing.of()
+                private var level: JsonField<Double>? = null
+                private var startingAt: JsonField<String>? = null
                 private var size: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -3108,7 +3248,9 @@ private constructor(
                     this.startingAt = startingAt
                 }
 
-                fun size(size: String) = size(JsonField.of(size))
+                fun size(size: String?) = size(JsonField.ofNullable(size))
+
+                fun size(size: Optional<String>) = size(size.orElse(null))
 
                 fun size(size: JsonField<String>) = apply { this.size = size }
 
@@ -3136,8 +3278,8 @@ private constructor(
 
                 fun build(): Tier =
                     Tier(
-                        level,
-                        startingAt,
+                        checkNotNull(level) { "`level` is required but was not set" },
+                        checkNotNull(startingAt) { "`startingAt` is required but was not set" },
                         size,
                         additionalProperties.toImmutable(),
                     )
@@ -3344,15 +3486,16 @@ private constructor(
 
         @JsonProperty("corrected_invoice_id")
         @ExcludeMissing
-        fun _correctedInvoiceId() = correctedInvoiceId
+        fun _correctedInvoiceId(): JsonField<String> = correctedInvoiceId
 
-        @JsonProperty("memo") @ExcludeMissing fun _memo() = memo
+        @JsonProperty("memo") @ExcludeMissing fun _memo(): JsonField<String> = memo
 
-        @JsonProperty("reason") @ExcludeMissing fun _reason() = reason
+        @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
         @JsonProperty("corrected_external_invoice")
         @ExcludeMissing
-        fun _correctedExternalInvoice() = correctedExternalInvoice
+        fun _correctedExternalInvoice(): JsonField<CorrectedExternalInvoice> =
+            correctedExternalInvoice
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -3379,9 +3522,9 @@ private constructor(
 
         class Builder {
 
-            private var correctedInvoiceId: JsonField<String> = JsonMissing.of()
-            private var memo: JsonField<String> = JsonMissing.of()
-            private var reason: JsonField<String> = JsonMissing.of()
+            private var correctedInvoiceId: JsonField<String>? = null
+            private var memo: JsonField<String>? = null
+            private var reason: JsonField<String>? = null
             private var correctedExternalInvoice: JsonField<CorrectedExternalInvoice> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -3438,9 +3581,11 @@ private constructor(
 
             fun build(): CorrectionRecord =
                 CorrectionRecord(
-                    correctedInvoiceId,
-                    memo,
-                    reason,
+                    checkNotNull(correctedInvoiceId) {
+                        "`correctedInvoiceId` is required but was not set"
+                    },
+                    checkNotNull(memo) { "`memo` is required but was not set" },
+                    checkNotNull(reason) { "`reason` is required but was not set" },
                     correctedExternalInvoice,
                     additionalProperties.toImmutable(),
                 )
@@ -3480,15 +3625,19 @@ private constructor(
 
             @JsonProperty("billing_provider_type")
             @ExcludeMissing
-            fun _billingProviderType() = billingProviderType
+            fun _billingProviderType(): JsonField<BillingProviderType> = billingProviderType
 
-            @JsonProperty("external_status") @ExcludeMissing fun _externalStatus() = externalStatus
+            @JsonProperty("external_status")
+            @ExcludeMissing
+            fun _externalStatus(): JsonField<ExternalStatus> = externalStatus
 
-            @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
+            @JsonProperty("invoice_id")
+            @ExcludeMissing
+            fun _invoiceId(): JsonField<String> = invoiceId
 
             @JsonProperty("issued_at_timestamp")
             @ExcludeMissing
-            fun _issuedAtTimestamp() = issuedAtTimestamp
+            fun _issuedAtTimestamp(): JsonField<OffsetDateTime> = issuedAtTimestamp
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -3515,7 +3664,7 @@ private constructor(
 
             class Builder {
 
-                private var billingProviderType: JsonField<BillingProviderType> = JsonMissing.of()
+                private var billingProviderType: JsonField<BillingProviderType>? = null
                 private var externalStatus: JsonField<ExternalStatus> = JsonMissing.of()
                 private var invoiceId: JsonField<String> = JsonMissing.of()
                 private var issuedAtTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -3581,7 +3730,9 @@ private constructor(
 
                 fun build(): CorrectedExternalInvoice =
                     CorrectedExternalInvoice(
-                        billingProviderType,
+                        checkNotNull(billingProviderType) {
+                            "`billingProviderType` is required but was not set"
+                        },
                         externalStatus,
                         invoiceId,
                         issuedAtTimestamp,
@@ -4017,15 +4168,17 @@ private constructor(
 
         @JsonProperty("billing_provider_type")
         @ExcludeMissing
-        fun _billingProviderType() = billingProviderType
+        fun _billingProviderType(): JsonField<BillingProviderType> = billingProviderType
 
-        @JsonProperty("external_status") @ExcludeMissing fun _externalStatus() = externalStatus
+        @JsonProperty("external_status")
+        @ExcludeMissing
+        fun _externalStatus(): JsonField<ExternalStatus> = externalStatus
 
-        @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
+        @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId(): JsonField<String> = invoiceId
 
         @JsonProperty("issued_at_timestamp")
         @ExcludeMissing
-        fun _issuedAtTimestamp() = issuedAtTimestamp
+        fun _issuedAtTimestamp(): JsonField<OffsetDateTime> = issuedAtTimestamp
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -4052,7 +4205,7 @@ private constructor(
 
         class Builder {
 
-            private var billingProviderType: JsonField<BillingProviderType> = JsonMissing.of()
+            private var billingProviderType: JsonField<BillingProviderType>? = null
             private var externalStatus: JsonField<ExternalStatus> = JsonMissing.of()
             private var invoiceId: JsonField<String> = JsonMissing.of()
             private var issuedAtTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -4113,7 +4266,9 @@ private constructor(
 
             fun build(): ExternalInvoice =
                 ExternalInvoice(
-                    billingProviderType,
+                    checkNotNull(billingProviderType) {
+                        "`billingProviderType` is required but was not set"
+                    },
                     externalStatus,
                     invoiceId,
                     issuedAtTimestamp,
@@ -4379,17 +4534,21 @@ private constructor(
         fun creditGrantId(): Optional<String> =
             Optional.ofNullable(creditGrantId.getNullable("credit_grant_id"))
 
-        @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+        @JsonProperty("credit_type")
+        @ExcludeMissing
+        fun _creditType(): JsonField<CreditTypeData> = creditType
 
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-        @JsonProperty("total") @ExcludeMissing fun _total() = total
+        @JsonProperty("total") @ExcludeMissing fun _total(): JsonField<Double> = total
 
         @JsonProperty("credit_grant_custom_fields")
         @ExcludeMissing
-        fun _creditGrantCustomFields() = creditGrantCustomFields
+        fun _creditGrantCustomFields(): JsonField<CreditGrantCustomFields> = creditGrantCustomFields
 
-        @JsonProperty("credit_grant_id") @ExcludeMissing fun _creditGrantId() = creditGrantId
+        @JsonProperty("credit_grant_id")
+        @ExcludeMissing
+        fun _creditGrantId(): JsonField<String> = creditGrantId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -4417,9 +4576,9 @@ private constructor(
 
         class Builder {
 
-            private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
-            private var name: JsonField<String> = JsonMissing.of()
-            private var total: JsonField<Double> = JsonMissing.of()
+            private var creditType: JsonField<CreditTypeData>? = null
+            private var name: JsonField<String>? = null
+            private var total: JsonField<Double>? = null
             private var creditGrantCustomFields: JsonField<CreditGrantCustomFields> =
                 JsonMissing.of()
             private var creditGrantId: JsonField<String> = JsonMissing.of()
@@ -4483,9 +4642,9 @@ private constructor(
 
             fun build(): InvoiceAdjustment =
                 InvoiceAdjustment(
-                    creditType,
-                    name,
-                    total,
+                    checkNotNull(creditType) { "`creditType` is required but was not set" },
+                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkNotNull(total) { "`total` is required but was not set" },
                     creditGrantCustomFields,
                     creditGrantId,
                     additionalProperties.toImmutable(),
@@ -4702,17 +4861,23 @@ private constructor(
         fun gcpOptions(): Optional<GcpOptions> =
             Optional.ofNullable(gcpOptions.getNullable("gcp_options"))
 
-        @JsonProperty("fraction") @ExcludeMissing fun _fraction() = fraction
+        @JsonProperty("fraction") @ExcludeMissing fun _fraction(): JsonField<String> = fraction
 
         @JsonProperty("netsuite_reseller_id")
         @ExcludeMissing
-        fun _netsuiteResellerId() = netsuiteResellerId
+        fun _netsuiteResellerId(): JsonField<String> = netsuiteResellerId
 
-        @JsonProperty("reseller_type") @ExcludeMissing fun _resellerType() = resellerType
+        @JsonProperty("reseller_type")
+        @ExcludeMissing
+        fun _resellerType(): JsonField<ResellerType> = resellerType
 
-        @JsonProperty("aws_options") @ExcludeMissing fun _awsOptions() = awsOptions
+        @JsonProperty("aws_options")
+        @ExcludeMissing
+        fun _awsOptions(): JsonField<AwsOptions> = awsOptions
 
-        @JsonProperty("gcp_options") @ExcludeMissing fun _gcpOptions() = gcpOptions
+        @JsonProperty("gcp_options")
+        @ExcludeMissing
+        fun _gcpOptions(): JsonField<GcpOptions> = gcpOptions
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -4740,9 +4905,9 @@ private constructor(
 
         class Builder {
 
-            private var fraction: JsonField<String> = JsonMissing.of()
-            private var netsuiteResellerId: JsonField<String> = JsonMissing.of()
-            private var resellerType: JsonField<ResellerType> = JsonMissing.of()
+            private var fraction: JsonField<String>? = null
+            private var netsuiteResellerId: JsonField<String>? = null
+            private var resellerType: JsonField<ResellerType>? = null
             private var awsOptions: JsonField<AwsOptions> = JsonMissing.of()
             private var gcpOptions: JsonField<GcpOptions> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -4807,9 +4972,11 @@ private constructor(
 
             fun build(): ResellerRoyalty =
                 ResellerRoyalty(
-                    fraction,
-                    netsuiteResellerId,
-                    resellerType,
+                    checkNotNull(fraction) { "`fraction` is required but was not set" },
+                    checkNotNull(netsuiteResellerId) {
+                        "`netsuiteResellerId` is required but was not set"
+                    },
+                    checkNotNull(resellerType) { "`resellerType` is required but was not set" },
                     awsOptions,
                     gcpOptions,
                     additionalProperties.toImmutable(),
@@ -4913,13 +5080,15 @@ private constructor(
 
             @JsonProperty("aws_account_number")
             @ExcludeMissing
-            fun _awsAccountNumber() = awsAccountNumber
+            fun _awsAccountNumber(): JsonField<String> = awsAccountNumber
 
-            @JsonProperty("aws_offer_id") @ExcludeMissing fun _awsOfferId() = awsOfferId
+            @JsonProperty("aws_offer_id")
+            @ExcludeMissing
+            fun _awsOfferId(): JsonField<String> = awsOfferId
 
             @JsonProperty("aws_payer_reference_id")
             @ExcludeMissing
-            fun _awsPayerReferenceId() = awsPayerReferenceId
+            fun _awsPayerReferenceId(): JsonField<String> = awsPayerReferenceId
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -5047,9 +5216,13 @@ private constructor(
             fun gcpOfferId(): Optional<String> =
                 Optional.ofNullable(gcpOfferId.getNullable("gcp_offer_id"))
 
-            @JsonProperty("gcp_account_id") @ExcludeMissing fun _gcpAccountId() = gcpAccountId
+            @JsonProperty("gcp_account_id")
+            @ExcludeMissing
+            fun _gcpAccountId(): JsonField<String> = gcpAccountId
 
-            @JsonProperty("gcp_offer_id") @ExcludeMissing fun _gcpOfferId() = gcpOfferId
+            @JsonProperty("gcp_offer_id")
+            @ExcludeMissing
+            fun _gcpOfferId(): JsonField<String> = gcpOfferId
 
             @JsonAnyGetter
             @ExcludeMissing

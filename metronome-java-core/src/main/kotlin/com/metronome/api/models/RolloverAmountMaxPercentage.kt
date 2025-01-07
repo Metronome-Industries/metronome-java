@@ -33,10 +33,10 @@ private constructor(
     fun value(): Double = value.getRequired("value")
 
     /** Rollover up to a percentage of the original credit grant amount. */
-    @JsonProperty("type") @ExcludeMissing fun _type() = type
+    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
     /** The maximum percentage (0-1) of the original credit grant to rollover. */
-    @JsonProperty("value") @ExcludeMissing fun _value() = value
+    @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<Double> = value
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -61,8 +61,8 @@ private constructor(
 
     class Builder {
 
-        private var type: JsonField<Type> = JsonMissing.of()
-        private var value: JsonField<Double> = JsonMissing.of()
+        private var type: JsonField<Type>? = null
+        private var value: JsonField<Double>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -105,8 +105,8 @@ private constructor(
 
         fun build(): RolloverAmountMaxPercentage =
             RolloverAmountMaxPercentage(
-                type,
-                value,
+                checkNotNull(type) { "`type` is required but was not set" },
+                checkNotNull(value) { "`value` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }

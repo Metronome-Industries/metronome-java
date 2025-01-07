@@ -34,9 +34,13 @@ private constructor(
 
     fun planDetails(): PlanDetails = planDetails.getRequired("plan_details")
 
-    @JsonProperty("customer_details") @ExcludeMissing fun _customerDetails() = customerDetails
+    @JsonProperty("customer_details")
+    @ExcludeMissing
+    fun _customerDetails(): JsonField<CustomerDetail> = customerDetails
 
-    @JsonProperty("plan_details") @ExcludeMissing fun _planDetails() = planDetails
+    @JsonProperty("plan_details")
+    @ExcludeMissing
+    fun _planDetails(): JsonField<PlanDetails> = planDetails
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -61,8 +65,8 @@ private constructor(
 
     class Builder {
 
-        private var customerDetails: JsonField<CustomerDetail> = JsonMissing.of()
-        private var planDetails: JsonField<PlanDetails> = JsonMissing.of()
+        private var customerDetails: JsonField<CustomerDetail>? = null
+        private var planDetails: JsonField<PlanDetails>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -106,8 +110,8 @@ private constructor(
 
         fun build(): PlanListCustomersResponse =
             PlanListCustomersResponse(
-                customerDetails,
-                planDetails,
+                checkNotNull(customerDetails) { "`customerDetails` is required but was not set" },
+                checkNotNull(planDetails) { "`planDetails` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }
@@ -151,19 +155,27 @@ private constructor(
         fun endingBefore(): Optional<OffsetDateTime> =
             Optional.ofNullable(endingBefore.getNullable("ending_before"))
 
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-        @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        fun _customFields(): JsonField<CustomFields> = customFields
 
-        @JsonProperty("customer_plan_id") @ExcludeMissing fun _customerPlanId() = customerPlanId
+        @JsonProperty("customer_plan_id")
+        @ExcludeMissing
+        fun _customerPlanId(): JsonField<String> = customerPlanId
 
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /** The start date of the plan */
-        @JsonProperty("starting_on") @ExcludeMissing fun _startingOn() = startingOn
+        @JsonProperty("starting_on")
+        @ExcludeMissing
+        fun _startingOn(): JsonField<OffsetDateTime> = startingOn
 
         /** The end date of the plan */
-        @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -192,11 +204,11 @@ private constructor(
 
         class Builder {
 
-            private var id: JsonField<String> = JsonMissing.of()
-            private var customFields: JsonField<CustomFields> = JsonMissing.of()
-            private var customerPlanId: JsonField<String> = JsonMissing.of()
-            private var name: JsonField<String> = JsonMissing.of()
-            private var startingOn: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var customFields: JsonField<CustomFields>? = null
+            private var customerPlanId: JsonField<String>? = null
+            private var name: JsonField<String>? = null
+            private var startingOn: JsonField<OffsetDateTime>? = null
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -241,8 +253,12 @@ private constructor(
             }
 
             /** The end date of the plan */
-            fun endingBefore(endingBefore: OffsetDateTime) =
-                endingBefore(JsonField.of(endingBefore))
+            fun endingBefore(endingBefore: OffsetDateTime?) =
+                endingBefore(JsonField.ofNullable(endingBefore))
+
+            /** The end date of the plan */
+            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+                endingBefore(endingBefore.orElse(null))
 
             /** The end date of the plan */
             fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
@@ -270,11 +286,11 @@ private constructor(
 
             fun build(): PlanDetails =
                 PlanDetails(
-                    id,
-                    customFields,
-                    customerPlanId,
-                    name,
-                    startingOn,
+                    checkNotNull(id) { "`id` is required but was not set" },
+                    checkNotNull(customFields) { "`customFields` is required but was not set" },
+                    checkNotNull(customerPlanId) { "`customerPlanId` is required but was not set" },
+                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkNotNull(startingOn) { "`startingOn` is required but was not set" },
                     endingBefore,
                     additionalProperties.toImmutable(),
                 )

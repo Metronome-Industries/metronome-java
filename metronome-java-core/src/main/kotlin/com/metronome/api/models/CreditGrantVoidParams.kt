@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -32,11 +34,19 @@ constructor(
     /** If true, void the purchase invoice associated with the grant */
     fun voidCreditPurchaseInvoice(): Optional<Boolean> = body.voidCreditPurchaseInvoice()
 
+    fun _id(): JsonField<String> = body._id()
+
+    /** If true, resets the uniqueness key on this grant so it can be re-used */
+    fun _releaseUniquenessKey(): JsonField<Boolean> = body._releaseUniquenessKey()
+
+    /** If true, void the purchase invoice associated with the grant */
+    fun _voidCreditPurchaseInvoice(): JsonField<Boolean> = body._voidCreditPurchaseInvoice()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CreditGrantVoidBody = body
 
@@ -48,28 +58,55 @@ constructor(
     class CreditGrantVoidBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("id") private val id: String,
-        @JsonProperty("release_uniqueness_key") private val releaseUniquenessKey: Boolean?,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("release_uniqueness_key")
+        @ExcludeMissing
+        private val releaseUniquenessKey: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("void_credit_purchase_invoice")
-        private val voidCreditPurchaseInvoice: Boolean?,
+        @ExcludeMissing
+        private val voidCreditPurchaseInvoice: JsonField<Boolean> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("id") fun id(): String = id
+        fun id(): String = id.getRequired("id")
+
+        /** If true, resets the uniqueness key on this grant so it can be re-used */
+        fun releaseUniquenessKey(): Optional<Boolean> =
+            Optional.ofNullable(releaseUniquenessKey.getNullable("release_uniqueness_key"))
+
+        /** If true, void the purchase invoice associated with the grant */
+        fun voidCreditPurchaseInvoice(): Optional<Boolean> =
+            Optional.ofNullable(
+                voidCreditPurchaseInvoice.getNullable("void_credit_purchase_invoice")
+            )
+
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /** If true, resets the uniqueness key on this grant so it can be re-used */
         @JsonProperty("release_uniqueness_key")
-        fun releaseUniquenessKey(): Optional<Boolean> = Optional.ofNullable(releaseUniquenessKey)
+        @ExcludeMissing
+        fun _releaseUniquenessKey(): JsonField<Boolean> = releaseUniquenessKey
 
         /** If true, void the purchase invoice associated with the grant */
         @JsonProperty("void_credit_purchase_invoice")
-        fun voidCreditPurchaseInvoice(): Optional<Boolean> =
-            Optional.ofNullable(voidCreditPurchaseInvoice)
+        @ExcludeMissing
+        fun _voidCreditPurchaseInvoice(): JsonField<Boolean> = voidCreditPurchaseInvoice
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CreditGrantVoidBody = apply {
+            if (!validated) {
+                id()
+                releaseUniquenessKey()
+                voidCreditPurchaseInvoice()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -80,9 +117,9 @@ constructor(
 
         class Builder {
 
-            private var id: String? = null
-            private var releaseUniquenessKey: Boolean? = null
-            private var voidCreditPurchaseInvoice: Boolean? = null
+            private var id: JsonField<String>? = null
+            private var releaseUniquenessKey: JsonField<Boolean> = JsonMissing.of()
+            private var voidCreditPurchaseInvoice: JsonField<Boolean> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -93,35 +130,27 @@ constructor(
                 additionalProperties = creditGrantVoidBody.additionalProperties.toMutableMap()
             }
 
-            fun id(id: String) = apply { this.id = id }
+            fun id(id: String) = id(JsonField.of(id))
 
-            /** If true, resets the uniqueness key on this grant so it can be re-used */
-            fun releaseUniquenessKey(releaseUniquenessKey: Boolean?) = apply {
-                this.releaseUniquenessKey = releaseUniquenessKey
-            }
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** If true, resets the uniqueness key on this grant so it can be re-used */
             fun releaseUniquenessKey(releaseUniquenessKey: Boolean) =
-                releaseUniquenessKey(releaseUniquenessKey as Boolean?)
+                releaseUniquenessKey(JsonField.of(releaseUniquenessKey))
 
             /** If true, resets the uniqueness key on this grant so it can be re-used */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun releaseUniquenessKey(releaseUniquenessKey: Optional<Boolean>) =
-                releaseUniquenessKey(releaseUniquenessKey.orElse(null) as Boolean?)
-
-            /** If true, void the purchase invoice associated with the grant */
-            fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Boolean?) = apply {
-                this.voidCreditPurchaseInvoice = voidCreditPurchaseInvoice
+            fun releaseUniquenessKey(releaseUniquenessKey: JsonField<Boolean>) = apply {
+                this.releaseUniquenessKey = releaseUniquenessKey
             }
 
             /** If true, void the purchase invoice associated with the grant */
             fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Boolean) =
-                voidCreditPurchaseInvoice(voidCreditPurchaseInvoice as Boolean?)
+                voidCreditPurchaseInvoice(JsonField.of(voidCreditPurchaseInvoice))
 
             /** If true, void the purchase invoice associated with the grant */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Optional<Boolean>) =
-                voidCreditPurchaseInvoice(voidCreditPurchaseInvoice.orElse(null) as Boolean?)
+            fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: JsonField<Boolean>) = apply {
+                this.voidCreditPurchaseInvoice = voidCreditPurchaseInvoice
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -192,33 +221,46 @@ constructor(
 
         fun id(id: String) = apply { body.id(id) }
 
+        fun id(id: JsonField<String>) = apply { body.id(id) }
+
         /** If true, resets the uniqueness key on this grant so it can be re-used */
-        fun releaseUniquenessKey(releaseUniquenessKey: Boolean?) = apply {
+        fun releaseUniquenessKey(releaseUniquenessKey: Boolean) = apply {
             body.releaseUniquenessKey(releaseUniquenessKey)
         }
 
         /** If true, resets the uniqueness key on this grant so it can be re-used */
-        fun releaseUniquenessKey(releaseUniquenessKey: Boolean) =
-            releaseUniquenessKey(releaseUniquenessKey as Boolean?)
-
-        /** If true, resets the uniqueness key on this grant so it can be re-used */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun releaseUniquenessKey(releaseUniquenessKey: Optional<Boolean>) =
-            releaseUniquenessKey(releaseUniquenessKey.orElse(null) as Boolean?)
+        fun releaseUniquenessKey(releaseUniquenessKey: JsonField<Boolean>) = apply {
+            body.releaseUniquenessKey(releaseUniquenessKey)
+        }
 
         /** If true, void the purchase invoice associated with the grant */
-        fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Boolean?) = apply {
+        fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Boolean) = apply {
             body.voidCreditPurchaseInvoice(voidCreditPurchaseInvoice)
         }
 
         /** If true, void the purchase invoice associated with the grant */
-        fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Boolean) =
-            voidCreditPurchaseInvoice(voidCreditPurchaseInvoice as Boolean?)
+        fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: JsonField<Boolean>) = apply {
+            body.voidCreditPurchaseInvoice(voidCreditPurchaseInvoice)
+        }
 
-        /** If true, void the purchase invoice associated with the grant */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun voidCreditPurchaseInvoice(voidCreditPurchaseInvoice: Optional<Boolean>) =
-            voidCreditPurchaseInvoice(voidCreditPurchaseInvoice.orElse(null) as Boolean?)
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -316,25 +358,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CreditGrantVoidParams =

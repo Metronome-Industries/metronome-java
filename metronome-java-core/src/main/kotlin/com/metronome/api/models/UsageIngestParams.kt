@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -178,30 +180,70 @@ constructor(
     class Usage
     @JsonCreator
     private constructor(
-        @JsonProperty("customer_id") private val customerId: String,
-        @JsonProperty("event_type") private val eventType: String,
-        @JsonProperty("timestamp") private val timestamp: String,
-        @JsonProperty("transaction_id") private val transactionId: String,
-        @JsonProperty("properties") private val properties: Properties?,
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("event_type")
+        @ExcludeMissing
+        private val eventType: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("timestamp")
+        @ExcludeMissing
+        private val timestamp: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("transaction_id")
+        @ExcludeMissing
+        private val transactionId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("properties")
+        @ExcludeMissing
+        private val properties: JsonField<Properties> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
 
-        @JsonProperty("event_type") fun eventType(): String = eventType
+        fun eventType(): String = eventType.getRequired("event_type")
 
         /** RFC 3339 formatted */
-        @JsonProperty("timestamp") fun timestamp(): String = timestamp
+        fun timestamp(): String = timestamp.getRequired("timestamp")
 
-        @JsonProperty("transaction_id") fun transactionId(): String = transactionId
+        fun transactionId(): String = transactionId.getRequired("transaction_id")
+
+        fun properties(): Optional<Properties> =
+            Optional.ofNullable(properties.getNullable("properties"))
+
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
+
+        @JsonProperty("event_type") @ExcludeMissing fun _eventType(): JsonField<String> = eventType
+
+        /** RFC 3339 formatted */
+        @JsonProperty("timestamp") @ExcludeMissing fun _timestamp(): JsonField<String> = timestamp
+
+        @JsonProperty("transaction_id")
+        @ExcludeMissing
+        fun _transactionId(): JsonField<String> = transactionId
 
         @JsonProperty("properties")
-        fun properties(): Optional<Properties> = Optional.ofNullable(properties)
+        @ExcludeMissing
+        fun _properties(): JsonField<Properties> = properties
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): Usage = apply {
+            if (!validated) {
+                customerId()
+                eventType()
+                timestamp()
+                transactionId()
+                properties().map { it.validate() }
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -212,11 +254,11 @@ constructor(
 
         class Builder {
 
-            private var customerId: String? = null
-            private var eventType: String? = null
-            private var timestamp: String? = null
-            private var transactionId: String? = null
-            private var properties: Properties? = null
+            private var customerId: JsonField<String>? = null
+            private var eventType: JsonField<String>? = null
+            private var timestamp: JsonField<String>? = null
+            private var transactionId: JsonField<String>? = null
+            private var properties: JsonField<Properties> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -229,18 +271,31 @@ constructor(
                 additionalProperties = usage.additionalProperties.toMutableMap()
             }
 
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
 
-            fun eventType(eventType: String) = apply { this.eventType = eventType }
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
+
+            fun eventType(eventType: String) = eventType(JsonField.of(eventType))
+
+            fun eventType(eventType: JsonField<String>) = apply { this.eventType = eventType }
 
             /** RFC 3339 formatted */
-            fun timestamp(timestamp: String) = apply { this.timestamp = timestamp }
+            fun timestamp(timestamp: String) = timestamp(JsonField.of(timestamp))
 
-            fun transactionId(transactionId: String) = apply { this.transactionId = transactionId }
+            /** RFC 3339 formatted */
+            fun timestamp(timestamp: JsonField<String>) = apply { this.timestamp = timestamp }
 
-            fun properties(properties: Properties?) = apply { this.properties = properties }
+            fun transactionId(transactionId: String) = transactionId(JsonField.of(transactionId))
 
-            fun properties(properties: Optional<Properties>) = properties(properties.orElse(null))
+            fun transactionId(transactionId: JsonField<String>) = apply {
+                this.transactionId = transactionId
+            }
+
+            fun properties(properties: Properties) = properties(JsonField.of(properties))
+
+            fun properties(properties: JsonField<Properties>) = apply {
+                this.properties = properties
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -283,6 +338,14 @@ constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): Properties = apply {
+                if (!validated) {
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 

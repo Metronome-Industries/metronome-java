@@ -34,11 +34,11 @@ private constructor(
 
     fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
 
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    @JsonProperty("is_currency") @ExcludeMissing fun _isCurrency() = isCurrency
+    @JsonProperty("is_currency") @ExcludeMissing fun _isCurrency(): JsonField<Boolean> = isCurrency
 
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     @JsonAnyGetter
     @ExcludeMissing

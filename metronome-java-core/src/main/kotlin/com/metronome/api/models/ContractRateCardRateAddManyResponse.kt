@@ -27,7 +27,7 @@ private constructor(
     fun data(): Id = data.getRequired("data")
 
     /** The ID of the rate card to which the rates were added. */
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Id> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -51,7 +51,7 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<Id> = JsonMissing.of()
+        private var data: JsonField<Id>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -89,7 +89,10 @@ private constructor(
         }
 
         fun build(): ContractRateCardRateAddManyResponse =
-            ContractRateCardRateAddManyResponse(data, additionalProperties.toImmutable())
+            ContractRateCardRateAddManyResponse(
+                checkNotNull(data) { "`data` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     override fun equals(other: Any?): Boolean {

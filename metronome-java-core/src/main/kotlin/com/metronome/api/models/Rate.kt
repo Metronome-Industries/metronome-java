@@ -87,40 +87,46 @@ private constructor(
     fun useListPrices(): Optional<Boolean> =
         Optional.ofNullable(useListPrices.getNullable("use_list_prices"))
 
-    @JsonProperty("rate_type") @ExcludeMissing fun _rateType() = rateType
+    @JsonProperty("rate_type") @ExcludeMissing fun _rateType(): JsonField<RateType> = rateType
 
-    @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+    @JsonProperty("credit_type")
+    @ExcludeMissing
+    fun _creditType(): JsonField<CreditTypeData> = creditType
 
     /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
-    @JsonProperty("custom_rate") @ExcludeMissing fun _customRate() = customRate
+    @JsonProperty("custom_rate")
+    @ExcludeMissing
+    fun _customRate(): JsonField<CustomRate> = customRate
 
     /**
      * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to true.
      */
-    @JsonProperty("is_prorated") @ExcludeMissing fun _isProrated() = isProrated
+    @JsonProperty("is_prorated") @ExcludeMissing fun _isProrated(): JsonField<Boolean> = isProrated
 
     /**
      * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this is a
      * decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
      */
-    @JsonProperty("price") @ExcludeMissing fun _price() = price
+    @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Double> = price
 
     /** if pricing groups are used, this will contain the values used to calculate the price */
     @JsonProperty("pricing_group_values")
     @ExcludeMissing
-    fun _pricingGroupValues() = pricingGroupValues
+    fun _pricingGroupValues(): JsonField<PricingGroupValues> = pricingGroupValues
 
     /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-    @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+    @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
     /** Only set for TIERED rate_type. */
-    @JsonProperty("tiers") @ExcludeMissing fun _tiers() = tiers
+    @JsonProperty("tiers") @ExcludeMissing fun _tiers(): JsonField<List<Tier>> = tiers
 
     /**
      * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using list
      * prices rather than the standard rates for this product on the contract.
      */
-    @JsonProperty("use_list_prices") @ExcludeMissing fun _useListPrices() = useListPrices
+    @JsonProperty("use_list_prices")
+    @ExcludeMissing
+    fun _useListPrices(): JsonField<Boolean> = useListPrices
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -152,14 +158,14 @@ private constructor(
 
     class Builder {
 
-        private var rateType: JsonField<RateType> = JsonMissing.of()
+        private var rateType: JsonField<RateType>? = null
         private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
         private var customRate: JsonField<CustomRate> = JsonMissing.of()
         private var isProrated: JsonField<Boolean> = JsonMissing.of()
         private var price: JsonField<Double> = JsonMissing.of()
         private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
         private var quantity: JsonField<Double> = JsonMissing.of()
-        private var tiers: JsonField<List<Tier>> = JsonMissing.of()
+        private var tiers: JsonField<MutableList<Tier>>? = null
         private var useListPrices: JsonField<Boolean> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -172,7 +178,7 @@ private constructor(
             price = rate.price
             pricingGroupValues = rate.pricingGroupValues
             quantity = rate.quantity
-            tiers = rate.tiers
+            tiers = rate.tiers.map { it.toMutableList() }
             useListPrices = rate.useListPrices
             additionalProperties = rate.additionalProperties.toMutableMap()
         }
@@ -236,7 +242,23 @@ private constructor(
         fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
         /** Only set for TIERED rate_type. */
-        fun tiers(tiers: JsonField<List<Tier>>) = apply { this.tiers = tiers }
+        fun tiers(tiers: JsonField<List<Tier>>) = apply {
+            this.tiers = tiers.map { it.toMutableList() }
+        }
+
+        /** Only set for TIERED rate_type. */
+        fun addTier(tier: Tier) = apply {
+            tiers =
+                (tiers ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(tier)
+                }
+        }
 
         /**
          * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
@@ -273,14 +295,14 @@ private constructor(
 
         fun build(): Rate =
             Rate(
-                rateType,
+                checkNotNull(rateType) { "`rateType` is required but was not set" },
                 creditType,
                 customRate,
                 isProrated,
                 price,
                 pricingGroupValues,
                 quantity,
-                tiers.map { it.toImmutable() },
+                (tiers ?: JsonMissing.of()).map { it.toImmutable() },
                 useListPrices,
                 additionalProperties.toImmutable(),
             )

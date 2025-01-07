@@ -90,26 +90,36 @@ private constructor(
     fun unitConversion(): Optional<UnitConversion> =
         Optional.ofNullable(unitConversion.getNullable("unit_conversion"))
 
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    @JsonProperty("charge_type") @ExcludeMissing fun _chargeType() = chargeType
+    @JsonProperty("charge_type")
+    @ExcludeMissing
+    fun _chargeType(): JsonField<ChargeType> = chargeType
 
-    @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+    @JsonProperty("credit_type")
+    @ExcludeMissing
+    fun _creditType(): JsonField<CreditTypeData> = creditType
 
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    fun _customFields(): JsonField<CustomFields> = customFields
 
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-    @JsonProperty("prices") @ExcludeMissing fun _prices() = prices
+    @JsonProperty("prices") @ExcludeMissing fun _prices(): JsonField<List<Price>> = prices
 
-    @JsonProperty("product_id") @ExcludeMissing fun _productId() = productId
+    @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
-    @JsonProperty("product_name") @ExcludeMissing fun _productName() = productName
+    @JsonProperty("product_name")
+    @ExcludeMissing
+    fun _productName(): JsonField<String> = productName
 
-    @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+    @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
     /** Used in price ramps. Indicates how many billing periods pass before the charge applies. */
-    @JsonProperty("start_period") @ExcludeMissing fun _startPeriod() = startPeriod
+    @JsonProperty("start_period")
+    @ExcludeMissing
+    fun _startPeriod(): JsonField<Double> = startPeriod
 
     /**
      * Used in pricing tiers. Indicates how often the tier resets. Default is 1 - the tier count
@@ -117,10 +127,12 @@ private constructor(
      */
     @JsonProperty("tier_reset_frequency")
     @ExcludeMissing
-    fun _tierResetFrequency() = tierResetFrequency
+    fun _tierResetFrequency(): JsonField<Double> = tierResetFrequency
 
     /** Specifies how quantities for usage based charges will be converted. */
-    @JsonProperty("unit_conversion") @ExcludeMissing fun _unitConversion() = unitConversion
+    @JsonProperty("unit_conversion")
+    @ExcludeMissing
+    fun _unitConversion(): JsonField<UnitConversion> = unitConversion
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -155,14 +167,14 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var chargeType: JsonField<ChargeType> = JsonMissing.of()
-        private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
-        private var customFields: JsonField<CustomFields> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
-        private var prices: JsonField<List<Price>> = JsonMissing.of()
-        private var productId: JsonField<String> = JsonMissing.of()
-        private var productName: JsonField<String> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var chargeType: JsonField<ChargeType>? = null
+        private var creditType: JsonField<CreditTypeData>? = null
+        private var customFields: JsonField<CustomFields>? = null
+        private var name: JsonField<String>? = null
+        private var prices: JsonField<MutableList<Price>>? = null
+        private var productId: JsonField<String>? = null
+        private var productName: JsonField<String>? = null
         private var quantity: JsonField<Double> = JsonMissing.of()
         private var startPeriod: JsonField<Double> = JsonMissing.of()
         private var tierResetFrequency: JsonField<Double> = JsonMissing.of()
@@ -176,7 +188,7 @@ private constructor(
             creditType = planListChargesResponse.creditType
             customFields = planListChargesResponse.customFields
             name = planListChargesResponse.name
-            prices = planListChargesResponse.prices
+            prices = planListChargesResponse.prices.map { it.toMutableList() }
             productId = planListChargesResponse.productId
             productName = planListChargesResponse.productName
             quantity = planListChargesResponse.quantity
@@ -212,7 +224,22 @@ private constructor(
 
         fun prices(prices: List<Price>) = prices(JsonField.of(prices))
 
-        fun prices(prices: JsonField<List<Price>>) = apply { this.prices = prices }
+        fun prices(prices: JsonField<List<Price>>) = apply {
+            this.prices = prices.map { it.toMutableList() }
+        }
+
+        fun addPrice(price: Price) = apply {
+            prices =
+                (prices ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(price)
+                }
+        }
 
         fun productId(productId: String) = productId(JsonField.of(productId))
 
@@ -281,14 +308,15 @@ private constructor(
 
         fun build(): PlanListChargesResponse =
             PlanListChargesResponse(
-                id,
-                chargeType,
-                creditType,
-                customFields,
-                name,
-                prices.map { it.toImmutable() },
-                productId,
-                productName,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(chargeType) { "`chargeType` is required but was not set" },
+                checkNotNull(creditType) { "`creditType` is required but was not set" },
+                checkNotNull(customFields) { "`customFields` is required but was not set" },
+                checkNotNull(name) { "`name` is required but was not set" },
+                checkNotNull(prices) { "`prices` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(productId) { "`productId` is required but was not set" },
+                checkNotNull(productName) { "`productName` is required but was not set" },
                 quantity,
                 startPeriod,
                 tierResetFrequency,
@@ -484,19 +512,19 @@ private constructor(
         fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
 
         /** Used in pricing tiers. Indicates at what metric value the price applies. */
-        @JsonProperty("tier") @ExcludeMissing fun _tier() = tier
+        @JsonProperty("tier") @ExcludeMissing fun _tier(): JsonField<Double> = tier
 
-        @JsonProperty("value") @ExcludeMissing fun _value() = value
+        @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<Double> = value
 
         @JsonProperty("collection_interval")
         @ExcludeMissing
-        fun _collectionInterval() = collectionInterval
+        fun _collectionInterval(): JsonField<Double> = collectionInterval
 
         @JsonProperty("collection_schedule")
         @ExcludeMissing
-        fun _collectionSchedule() = collectionSchedule
+        fun _collectionSchedule(): JsonField<String> = collectionSchedule
 
-        @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -524,8 +552,8 @@ private constructor(
 
         class Builder {
 
-            private var tier: JsonField<Double> = JsonMissing.of()
-            private var value: JsonField<Double> = JsonMissing.of()
+            private var tier: JsonField<Double>? = null
+            private var value: JsonField<Double>? = null
             private var collectionInterval: JsonField<Double> = JsonMissing.of()
             private var collectionSchedule: JsonField<String> = JsonMissing.of()
             private var quantity: JsonField<Double> = JsonMissing.of()
@@ -590,8 +618,8 @@ private constructor(
 
             fun build(): Price =
                 Price(
-                    tier,
-                    value,
+                    checkNotNull(tier) { "`tier` is required but was not set" },
+                    checkNotNull(value) { "`value` is required but was not set" },
                     collectionInterval,
                     collectionSchedule,
                     quantity,
@@ -643,7 +671,9 @@ private constructor(
             Optional.ofNullable(roundingBehavior.getNullable("rounding_behavior"))
 
         /** The conversion factor */
-        @JsonProperty("division_factor") @ExcludeMissing fun _divisionFactor() = divisionFactor
+        @JsonProperty("division_factor")
+        @ExcludeMissing
+        fun _divisionFactor(): JsonField<Double> = divisionFactor
 
         /**
          * Whether usage should be rounded down or up to the nearest whole number. If null, quantity
@@ -651,7 +681,7 @@ private constructor(
          */
         @JsonProperty("rounding_behavior")
         @ExcludeMissing
-        fun _roundingBehavior() = roundingBehavior
+        fun _roundingBehavior(): JsonField<RoundingBehavior> = roundingBehavior
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -676,7 +706,7 @@ private constructor(
 
         class Builder {
 
-            private var divisionFactor: JsonField<Double> = JsonMissing.of()
+            private var divisionFactor: JsonField<Double>? = null
             private var roundingBehavior: JsonField<RoundingBehavior> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -732,7 +762,7 @@ private constructor(
 
             fun build(): UnitConversion =
                 UnitConversion(
-                    divisionFactor,
+                    checkNotNull(divisionFactor) { "`divisionFactor` is required but was not set" },
                     roundingBehavior,
                     additionalProperties.toImmutable(),
                 )

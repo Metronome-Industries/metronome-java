@@ -29,7 +29,7 @@ private constructor(
 
     fun data(): Data = data.getRequired("data")
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -53,7 +53,7 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<Data> = JsonMissing.of()
+        private var data: JsonField<Data>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -89,7 +89,10 @@ private constructor(
         }
 
         fun build(): CustomerBillingConfigRetrieveResponse =
-            CustomerBillingConfigRetrieveResponse(data, additionalProperties.toImmutable())
+            CustomerBillingConfigRetrieveResponse(
+                checkNotNull(data) { "`data` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     @NoAutoDetect
@@ -178,11 +181,15 @@ private constructor(
          */
         @JsonProperty("aws_expiration_date")
         @ExcludeMissing
-        fun _awsExpirationDate() = awsExpirationDate
+        fun _awsExpirationDate(): JsonField<OffsetDateTime> = awsExpirationDate
 
-        @JsonProperty("aws_product_code") @ExcludeMissing fun _awsProductCode() = awsProductCode
+        @JsonProperty("aws_product_code")
+        @ExcludeMissing
+        fun _awsProductCode(): JsonField<String> = awsProductCode
 
-        @JsonProperty("aws_region") @ExcludeMissing fun _awsRegion() = awsRegion
+        @JsonProperty("aws_region")
+        @ExcludeMissing
+        fun _awsRegion(): JsonField<AwsRegion> = awsRegion
 
         /**
          * Subscription term start/end date for the customer. The expected format is RFC 3339 and
@@ -191,28 +198,32 @@ private constructor(
          */
         @JsonProperty("azure_expiration_date")
         @ExcludeMissing
-        fun _azureExpirationDate() = azureExpirationDate
+        fun _azureExpirationDate(): JsonField<OffsetDateTime> = azureExpirationDate
 
-        @JsonProperty("azure_plan_id") @ExcludeMissing fun _azurePlanId() = azurePlanId
+        @JsonProperty("azure_plan_id")
+        @ExcludeMissing
+        fun _azurePlanId(): JsonField<String> = azurePlanId
 
         /**
          * Subscription term start/end date for the customer. The expected format is RFC 3339 and
          * can be retrieved from
          * [Azure's Get Subscription API](https://learn.microsoft.com/en-us/partner-center/marketplace/partner-center-portal/pc-saas-fulfillment-subscription-api#get-subscription).
          */
-        @JsonProperty("azure_start_date") @ExcludeMissing fun _azureStartDate() = azureStartDate
+        @JsonProperty("azure_start_date")
+        @ExcludeMissing
+        fun _azureStartDate(): JsonField<OffsetDateTime> = azureStartDate
 
         @JsonProperty("azure_subscription_status")
         @ExcludeMissing
-        fun _azureSubscriptionStatus() = azureSubscriptionStatus
+        fun _azureSubscriptionStatus(): JsonField<AzureSubscriptionStatus> = azureSubscriptionStatus
 
         @JsonProperty("billing_provider_customer_id")
         @ExcludeMissing
-        fun _billingProviderCustomerId() = billingProviderCustomerId
+        fun _billingProviderCustomerId(): JsonField<String> = billingProviderCustomerId
 
         @JsonProperty("stripe_collection_method")
         @ExcludeMissing
-        fun _stripeCollectionMethod() = stripeCollectionMethod
+        fun _stripeCollectionMethod(): JsonField<StripeCollectionMethod> = stripeCollectionMethod
 
         @JsonAnyGetter
         @ExcludeMissing

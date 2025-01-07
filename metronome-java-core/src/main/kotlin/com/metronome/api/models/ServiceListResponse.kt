@@ -29,7 +29,7 @@ private constructor(
 
     fun services(): List<Service> = services.getRequired("services")
 
-    @JsonProperty("services") @ExcludeMissing fun _services() = services
+    @JsonProperty("services") @ExcludeMissing fun _services(): JsonField<List<Service>> = services
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -53,18 +53,33 @@ private constructor(
 
     class Builder {
 
-        private var services: JsonField<List<Service>> = JsonMissing.of()
+        private var services: JsonField<MutableList<Service>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(serviceListResponse: ServiceListResponse) = apply {
-            services = serviceListResponse.services
+            services = serviceListResponse.services.map { it.toMutableList() }
             additionalProperties = serviceListResponse.additionalProperties.toMutableMap()
         }
 
         fun services(services: List<Service>) = services(JsonField.of(services))
 
-        fun services(services: JsonField<List<Service>>) = apply { this.services = services }
+        fun services(services: JsonField<List<Service>>) = apply {
+            this.services = services.map { it.toMutableList() }
+        }
+
+        fun addService(service: Service) = apply {
+            services =
+                (services ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(service)
+                }
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -87,7 +102,8 @@ private constructor(
 
         fun build(): ServiceListResponse =
             ServiceListResponse(
-                services.map { it.toImmutable() },
+                checkNotNull(services) { "`services` is required but was not set" }
+                    .map { it.toImmutable() },
                 additionalProperties.toImmutable()
             )
     }
@@ -115,11 +131,11 @@ private constructor(
 
         fun usage(): Usage = usage.getRequired("usage")
 
-        @JsonProperty("ips") @ExcludeMissing fun _ips() = ips
+        @JsonProperty("ips") @ExcludeMissing fun _ips(): JsonField<List<String>> = ips
 
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-        @JsonProperty("usage") @ExcludeMissing fun _usage() = usage
+        @JsonProperty("usage") @ExcludeMissing fun _usage(): JsonField<Usage> = usage
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -145,14 +161,14 @@ private constructor(
 
         class Builder {
 
-            private var ips: JsonField<List<String>> = JsonMissing.of()
-            private var name: JsonField<String> = JsonMissing.of()
-            private var usage: JsonField<Usage> = JsonMissing.of()
+            private var ips: JsonField<MutableList<String>>? = null
+            private var name: JsonField<String>? = null
+            private var usage: JsonField<Usage>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(service: Service) = apply {
-                ips = service.ips
+                ips = service.ips.map { it.toMutableList() }
                 name = service.name
                 usage = service.usage
                 additionalProperties = service.additionalProperties.toMutableMap()
@@ -160,7 +176,22 @@ private constructor(
 
             fun ips(ips: List<String>) = ips(JsonField.of(ips))
 
-            fun ips(ips: JsonField<List<String>>) = apply { this.ips = ips }
+            fun ips(ips: JsonField<List<String>>) = apply {
+                this.ips = ips.map { it.toMutableList() }
+            }
+
+            fun addIp(ip: String) = apply {
+                ips =
+                    (ips ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(ip)
+                    }
+            }
 
             fun name(name: String) = name(JsonField.of(name))
 
@@ -191,9 +222,10 @@ private constructor(
 
             fun build(): Service =
                 Service(
-                    ips.map { it.toImmutable() },
-                    name,
-                    usage,
+                    checkNotNull(ips) { "`ips` is required but was not set" }
+                        .map { it.toImmutable() },
+                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkNotNull(usage) { "`usage` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }

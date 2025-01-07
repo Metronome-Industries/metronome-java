@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -32,11 +33,15 @@ constructor(
 
     fun rates(): List<Rate> = body.rates()
 
+    fun _rateCardId(): JsonField<String> = body._rateCardId()
+
+    fun _rates(): JsonField<List<Rate>> = body._rates()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): ContractRateCardRateAddManyBody = body
 
@@ -48,19 +53,39 @@ constructor(
     class ContractRateCardRateAddManyBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("rate_card_id") private val rateCardId: String,
-        @JsonProperty("rates") private val rates: List<Rate>,
+        @JsonProperty("rate_card_id")
+        @ExcludeMissing
+        private val rateCardId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("rates")
+        @ExcludeMissing
+        private val rates: JsonField<List<Rate>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("rate_card_id") fun rateCardId(): String = rateCardId
+        fun rateCardId(): String = rateCardId.getRequired("rate_card_id")
 
-        @JsonProperty("rates") fun rates(): List<Rate> = rates
+        fun rates(): List<Rate> = rates.getRequired("rates")
+
+        @JsonProperty("rate_card_id")
+        @ExcludeMissing
+        fun _rateCardId(): JsonField<String> = rateCardId
+
+        @JsonProperty("rates") @ExcludeMissing fun _rates(): JsonField<List<Rate>> = rates
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ContractRateCardRateAddManyBody = apply {
+            if (!validated) {
+                rateCardId()
+                rates().forEach { it.validate() }
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -71,25 +96,40 @@ constructor(
 
         class Builder {
 
-            private var rateCardId: String? = null
-            private var rates: MutableList<Rate>? = null
+            private var rateCardId: JsonField<String>? = null
+            private var rates: JsonField<MutableList<Rate>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(contractRateCardRateAddManyBody: ContractRateCardRateAddManyBody) =
                 apply {
                     rateCardId = contractRateCardRateAddManyBody.rateCardId
-                    rates = contractRateCardRateAddManyBody.rates.toMutableList()
+                    rates = contractRateCardRateAddManyBody.rates.map { it.toMutableList() }
                     additionalProperties =
                         contractRateCardRateAddManyBody.additionalProperties.toMutableMap()
                 }
 
-            fun rateCardId(rateCardId: String) = apply { this.rateCardId = rateCardId }
+            fun rateCardId(rateCardId: String) = rateCardId(JsonField.of(rateCardId))
 
-            fun rates(rates: List<Rate>) = apply { this.rates = rates.toMutableList() }
+            fun rateCardId(rateCardId: JsonField<String>) = apply { this.rateCardId = rateCardId }
+
+            fun rates(rates: List<Rate>) = rates(JsonField.of(rates))
+
+            fun rates(rates: JsonField<List<Rate>>) = apply {
+                this.rates = rates.map { it.toMutableList() }
+            }
 
             fun addRate(rate: Rate) = apply {
-                rates = (rates ?: mutableListOf()).apply { add(rate) }
+                rates =
+                    (rates ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(rate)
+                    }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -114,7 +154,8 @@ constructor(
             fun build(): ContractRateCardRateAddManyBody =
                 ContractRateCardRateAddManyBody(
                     checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
-                    checkNotNull(rates) { "`rates` is required but was not set" }.toImmutable(),
+                    checkNotNull(rates) { "`rates` is required but was not set" }
+                        .map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -163,9 +204,32 @@ constructor(
 
         fun rateCardId(rateCardId: String) = apply { body.rateCardId(rateCardId) }
 
+        fun rateCardId(rateCardId: JsonField<String>) = apply { body.rateCardId(rateCardId) }
+
         fun rates(rates: List<Rate>) = apply { body.rates(rates) }
 
+        fun rates(rates: JsonField<List<Rate>>) = apply { body.rates(rates) }
+
         fun addRate(rate: Rate) = apply { body.addRate(rate) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -265,25 +329,6 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
         fun build(): ContractRateCardRateAddManyParams =
             ContractRateCardRateAddManyParams(
                 body.build(),
@@ -296,40 +341,137 @@ constructor(
     class Rate
     @JsonCreator
     private constructor(
-        @JsonProperty("entitled") private val entitled: Boolean,
-        @JsonProperty("product_id") private val productId: String,
-        @JsonProperty("rate_type") private val rateType: RateType,
-        @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
-        @JsonProperty("commit_rate") private val commitRate: CommitRate?,
-        @JsonProperty("credit_type_id") private val creditTypeId: String?,
-        @JsonProperty("custom_rate") private val customRate: CustomRate?,
-        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
-        @JsonProperty("is_prorated") private val isProrated: Boolean?,
-        @JsonProperty("price") private val price: Double?,
-        @JsonProperty("pricing_group_values") private val pricingGroupValues: PricingGroupValues?,
-        @JsonProperty("quantity") private val quantity: Double?,
-        @JsonProperty("tiers") private val tiers: List<Tier>?,
-        @JsonProperty("use_list_prices") private val useListPrices: Boolean?,
+        @JsonProperty("entitled")
+        @ExcludeMissing
+        private val entitled: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("product_id")
+        @ExcludeMissing
+        private val productId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("rate_type")
+        @ExcludeMissing
+        private val rateType: JsonField<RateType> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("commit_rate")
+        @ExcludeMissing
+        private val commitRate: JsonField<CommitRate> = JsonMissing.of(),
+        @JsonProperty("credit_type_id")
+        @ExcludeMissing
+        private val creditTypeId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("custom_rate")
+        @ExcludeMissing
+        private val customRate: JsonField<CustomRate> = JsonMissing.of(),
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("is_prorated")
+        @ExcludeMissing
+        private val isProrated: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("price")
+        @ExcludeMissing
+        private val price: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("pricing_group_values")
+        @ExcludeMissing
+        private val pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of(),
+        @JsonProperty("quantity")
+        @ExcludeMissing
+        private val quantity: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("tiers")
+        @ExcludeMissing
+        private val tiers: JsonField<List<Tier>> = JsonMissing.of(),
+        @JsonProperty("use_list_prices")
+        @ExcludeMissing
+        private val useListPrices: JsonField<Boolean> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("entitled") fun entitled(): Boolean = entitled
+        fun entitled(): Boolean = entitled.getRequired("entitled")
 
         /** ID of the product to add a rate for */
-        @JsonProperty("product_id") fun productId(): String = productId
+        fun productId(): String = productId.getRequired("product_id")
 
-        @JsonProperty("rate_type") fun rateType(): RateType = rateType
+        fun rateType(): RateType = rateType.getRequired("rate_type")
 
         /** inclusive effective date */
-        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+        fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+        /**
+         * A distinct rate on the rate card. You can choose to use this rate rather than list rate
+         * when consuming a credit or commit.
+         */
+        fun commitRate(): Optional<CommitRate> =
+            Optional.ofNullable(commitRate.getNullable("commit_rate"))
+
+        /**
+         * "The Metronome ID of the credit type to associate with price, defaults to USD (cents) if
+         * not passed. Used by all rate_types except type PERCENTAGE. PERCENTAGE rates use the
+         * credit type of associated rates."
+         */
+        fun creditTypeId(): Optional<String> =
+            Optional.ofNullable(creditTypeId.getNullable("credit_type_id"))
+
+        /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
+        fun customRate(): Optional<CustomRate> =
+            Optional.ofNullable(customRate.getNullable("custom_rate"))
+
+        /** exclusive end date */
+        fun endingBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+        /**
+         * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
+         * true.
+         */
+        fun isProrated(): Optional<Boolean> =
+            Optional.ofNullable(isProrated.getNullable("is_prorated"))
+
+        /**
+         * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
+         * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+         */
+        fun price(): Optional<Double> = Optional.ofNullable(price.getNullable("price"))
+
+        /**
+         * Optional. List of pricing group key value pairs which will be used to calculate the
+         * price.
+         */
+        fun pricingGroupValues(): Optional<PricingGroupValues> =
+            Optional.ofNullable(pricingGroupValues.getNullable("pricing_group_values"))
+
+        /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+        fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
+
+        /** Only set for TIERED rate_type. */
+        fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers.getNullable("tiers"))
+
+        /**
+         * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
+         * list prices rather than the standard rates for this product on the contract.
+         */
+        fun useListPrices(): Optional<Boolean> =
+            Optional.ofNullable(useListPrices.getNullable("use_list_prices"))
+
+        @JsonProperty("entitled") @ExcludeMissing fun _entitled(): JsonField<Boolean> = entitled
+
+        /** ID of the product to add a rate for */
+        @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
+
+        @JsonProperty("rate_type") @ExcludeMissing fun _rateType(): JsonField<RateType> = rateType
+
+        /** inclusive effective date */
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         /**
          * A distinct rate on the rate card. You can choose to use this rate rather than list rate
          * when consuming a credit or commit.
          */
         @JsonProperty("commit_rate")
-        fun commitRate(): Optional<CommitRate> = Optional.ofNullable(commitRate)
+        @ExcludeMissing
+        fun _commitRate(): JsonField<CommitRate> = commitRate
 
         /**
          * "The Metronome ID of the credit type to associate with price, defaults to USD (cents) if
@@ -337,53 +479,80 @@ constructor(
          * credit type of associated rates."
          */
         @JsonProperty("credit_type_id")
-        fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
+        @ExcludeMissing
+        fun _creditTypeId(): JsonField<String> = creditTypeId
 
         /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
         @JsonProperty("custom_rate")
-        fun customRate(): Optional<CustomRate> = Optional.ofNullable(customRate)
+        @ExcludeMissing
+        fun _customRate(): JsonField<CustomRate> = customRate
 
         /** exclusive end date */
         @JsonProperty("ending_before")
-        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
         /**
          * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
          * true.
          */
         @JsonProperty("is_prorated")
-        fun isProrated(): Optional<Boolean> = Optional.ofNullable(isProrated)
+        @ExcludeMissing
+        fun _isProrated(): JsonField<Boolean> = isProrated
 
         /**
          * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
          * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
          */
-        @JsonProperty("price") fun price(): Optional<Double> = Optional.ofNullable(price)
+        @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Double> = price
 
         /**
          * Optional. List of pricing group key value pairs which will be used to calculate the
          * price.
          */
         @JsonProperty("pricing_group_values")
-        fun pricingGroupValues(): Optional<PricingGroupValues> =
-            Optional.ofNullable(pricingGroupValues)
+        @ExcludeMissing
+        fun _pricingGroupValues(): JsonField<PricingGroupValues> = pricingGroupValues
 
         /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-        @JsonProperty("quantity") fun quantity(): Optional<Double> = Optional.ofNullable(quantity)
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
         /** Only set for TIERED rate_type. */
-        @JsonProperty("tiers") fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers)
+        @JsonProperty("tiers") @ExcludeMissing fun _tiers(): JsonField<List<Tier>> = tiers
 
         /**
          * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
          * list prices rather than the standard rates for this product on the contract.
          */
         @JsonProperty("use_list_prices")
-        fun useListPrices(): Optional<Boolean> = Optional.ofNullable(useListPrices)
+        @ExcludeMissing
+        fun _useListPrices(): JsonField<Boolean> = useListPrices
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): Rate = apply {
+            if (!validated) {
+                entitled()
+                productId()
+                rateType()
+                startingAt()
+                commitRate().map { it.validate() }
+                creditTypeId()
+                customRate().map { it.validate() }
+                endingBefore()
+                isProrated()
+                price()
+                pricingGroupValues().map { it.validate() }
+                quantity()
+                tiers().map { it.forEach { it.validate() } }
+                useListPrices()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -394,20 +563,20 @@ constructor(
 
         class Builder {
 
-            private var entitled: Boolean? = null
-            private var productId: String? = null
-            private var rateType: RateType? = null
-            private var startingAt: OffsetDateTime? = null
-            private var commitRate: CommitRate? = null
-            private var creditTypeId: String? = null
-            private var customRate: CustomRate? = null
-            private var endingBefore: OffsetDateTime? = null
-            private var isProrated: Boolean? = null
-            private var price: Double? = null
-            private var pricingGroupValues: PricingGroupValues? = null
-            private var quantity: Double? = null
-            private var tiers: MutableList<Tier>? = null
-            private var useListPrices: Boolean? = null
+            private var entitled: JsonField<Boolean>? = null
+            private var productId: JsonField<String>? = null
+            private var rateType: JsonField<RateType>? = null
+            private var startingAt: JsonField<OffsetDateTime>? = null
+            private var commitRate: JsonField<CommitRate> = JsonMissing.of()
+            private var creditTypeId: JsonField<String> = JsonMissing.of()
+            private var customRate: JsonField<CustomRate> = JsonMissing.of()
+            private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var isProrated: JsonField<Boolean> = JsonMissing.of()
+            private var price: JsonField<Double> = JsonMissing.of()
+            private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
+            private var quantity: JsonField<Double> = JsonMissing.of()
+            private var tiers: JsonField<MutableList<Tier>>? = null
+            private var useListPrices: JsonField<Boolean> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -424,166 +593,166 @@ constructor(
                 price = rate.price
                 pricingGroupValues = rate.pricingGroupValues
                 quantity = rate.quantity
-                tiers = rate.tiers?.toMutableList()
+                tiers = rate.tiers.map { it.toMutableList() }
                 useListPrices = rate.useListPrices
                 additionalProperties = rate.additionalProperties.toMutableMap()
             }
 
-            fun entitled(entitled: Boolean) = apply { this.entitled = entitled }
+            fun entitled(entitled: Boolean) = entitled(JsonField.of(entitled))
+
+            fun entitled(entitled: JsonField<Boolean>) = apply { this.entitled = entitled }
 
             /** ID of the product to add a rate for */
-            fun productId(productId: String) = apply { this.productId = productId }
+            fun productId(productId: String) = productId(JsonField.of(productId))
 
-            fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+            /** ID of the product to add a rate for */
+            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
+
+            fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
+
+            fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
 
             /** inclusive effective date */
-            fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+            fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
+
+            /** inclusive effective date */
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                this.startingAt = startingAt
+            }
 
             /**
              * A distinct rate on the rate card. You can choose to use this rate rather than list
              * rate when consuming a credit or commit.
              */
-            fun commitRate(commitRate: CommitRate?) = apply { this.commitRate = commitRate }
+            fun commitRate(commitRate: CommitRate) = commitRate(JsonField.of(commitRate))
 
             /**
              * A distinct rate on the rate card. You can choose to use this rate rather than list
              * rate when consuming a credit or commit.
              */
-            fun commitRate(commitRate: Optional<CommitRate>) = commitRate(commitRate.orElse(null))
+            fun commitRate(commitRate: JsonField<CommitRate>) = apply {
+                this.commitRate = commitRate
+            }
 
             /**
              * "The Metronome ID of the credit type to associate with price, defaults to USD (cents)
              * if not passed. Used by all rate_types except type PERCENTAGE. PERCENTAGE rates use
              * the credit type of associated rates."
              */
-            fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+            fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
 
             /**
              * "The Metronome ID of the credit type to associate with price, defaults to USD (cents)
              * if not passed. Used by all rate_types except type PERCENTAGE. PERCENTAGE rates use
              * the credit type of associated rates."
              */
-            fun creditTypeId(creditTypeId: Optional<String>) =
-                creditTypeId(creditTypeId.orElse(null))
+            fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                this.creditTypeId = creditTypeId
+            }
 
             /**
              * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
              */
-            fun customRate(customRate: CustomRate?) = apply { this.customRate = customRate }
+            fun customRate(customRate: CustomRate) = customRate(JsonField.of(customRate))
 
             /**
              * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
              */
-            fun customRate(customRate: Optional<CustomRate>) = customRate(customRate.orElse(null))
+            fun customRate(customRate: JsonField<CustomRate>) = apply {
+                this.customRate = customRate
+            }
 
             /** exclusive end date */
-            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
+            fun endingBefore(endingBefore: OffsetDateTime) =
+                endingBefore(JsonField.of(endingBefore))
+
+            /** exclusive end date */
+            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
             }
 
-            /** exclusive end date */
-            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
-                endingBefore(endingBefore.orElse(null))
+            /**
+             * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
+             * to true.
+             */
+            fun isProrated(isProrated: Boolean) = isProrated(JsonField.of(isProrated))
 
             /**
              * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
              * to true.
              */
-            fun isProrated(isProrated: Boolean?) = apply { this.isProrated = isProrated }
-
-            /**
-             * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
-             * to true.
-             */
-            fun isProrated(isProrated: Boolean) = isProrated(isProrated as Boolean?)
-
-            /**
-             * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
-             * to true.
-             */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun isProrated(isProrated: Optional<Boolean>) =
-                isProrated(isProrated.orElse(null) as Boolean?)
+            fun isProrated(isProrated: JsonField<Boolean>) = apply { this.isProrated = isProrated }
 
             /**
              * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
              * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and
              * <=1.
              */
-            fun price(price: Double?) = apply { this.price = price }
+            fun price(price: Double) = price(JsonField.of(price))
 
             /**
              * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
              * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and
              * <=1.
              */
-            fun price(price: Double) = price(price as Double?)
-
-            /**
-             * Default price. For FLAT and SUBSCRIPTION rate_type, this must be >=0. For PERCENTAGE
-             * rate_type, this is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and
-             * <=1.
-             */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun price(price: Optional<Double>) = price(price.orElse(null) as Double?)
+            fun price(price: JsonField<Double>) = apply { this.price = price }
 
             /**
              * Optional. List of pricing group key value pairs which will be used to calculate the
              * price.
              */
-            fun pricingGroupValues(pricingGroupValues: PricingGroupValues?) = apply {
+            fun pricingGroupValues(pricingGroupValues: PricingGroupValues) =
+                pricingGroupValues(JsonField.of(pricingGroupValues))
+
+            /**
+             * Optional. List of pricing group key value pairs which will be used to calculate the
+             * price.
+             */
+            fun pricingGroupValues(pricingGroupValues: JsonField<PricingGroupValues>) = apply {
                 this.pricingGroupValues = pricingGroupValues
             }
 
-            /**
-             * Optional. List of pricing group key value pairs which will be used to calculate the
-             * price.
-             */
-            fun pricingGroupValues(pricingGroupValues: Optional<PricingGroupValues>) =
-                pricingGroupValues(pricingGroupValues.orElse(null))
+            /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+            fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
             /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-            fun quantity(quantity: Double?) = apply { this.quantity = quantity }
-
-            /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-            fun quantity(quantity: Double) = quantity(quantity as Double?)
-
-            /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun quantity(quantity: Optional<Double>) = quantity(quantity.orElse(null) as Double?)
+            fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
             /** Only set for TIERED rate_type. */
-            fun tiers(tiers: List<Tier>?) = apply { this.tiers = tiers?.toMutableList() }
+            fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
             /** Only set for TIERED rate_type. */
-            fun tiers(tiers: Optional<List<Tier>>) = tiers(tiers.orElse(null))
+            fun tiers(tiers: JsonField<List<Tier>>) = apply {
+                this.tiers = tiers.map { it.toMutableList() }
+            }
 
             /** Only set for TIERED rate_type. */
             fun addTier(tier: Tier) = apply {
-                tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                tiers =
+                    (tiers ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(tier)
+                    }
             }
 
             /**
              * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
              * list prices rather than the standard rates for this product on the contract.
              */
-            fun useListPrices(useListPrices: Boolean?) = apply {
+            fun useListPrices(useListPrices: Boolean) = useListPrices(JsonField.of(useListPrices))
+
+            /**
+             * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
+             * list prices rather than the standard rates for this product on the contract.
+             */
+            fun useListPrices(useListPrices: JsonField<Boolean>) = apply {
                 this.useListPrices = useListPrices
             }
-
-            /**
-             * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
-             * list prices rather than the standard rates for this product on the contract.
-             */
-            fun useListPrices(useListPrices: Boolean) = useListPrices(useListPrices as Boolean?)
-
-            /**
-             * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
-             * list prices rather than the standard rates for this product on the contract.
-             */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun useListPrices(useListPrices: Optional<Boolean>) =
-                useListPrices(useListPrices.orElse(null) as Boolean?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -618,7 +787,7 @@ constructor(
                     price,
                     pricingGroupValues,
                     quantity,
-                    tiers?.toImmutable(),
+                    (tiers ?: JsonMissing.of()).map { it.toImmutable() },
                     useListPrices,
                     additionalProperties.toImmutable(),
                 )
@@ -707,24 +876,51 @@ constructor(
         class CommitRate
         @JsonCreator
         private constructor(
-            @JsonProperty("rate_type") private val rateType: RateType,
-            @JsonProperty("price") private val price: Double?,
-            @JsonProperty("tiers") private val tiers: List<Tier>?,
+            @JsonProperty("rate_type")
+            @ExcludeMissing
+            private val rateType: JsonField<RateType> = JsonMissing.of(),
+            @JsonProperty("price")
+            @ExcludeMissing
+            private val price: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("tiers")
+            @ExcludeMissing
+            private val tiers: JsonField<List<Tier>> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            @JsonProperty("rate_type") fun rateType(): RateType = rateType
+            fun rateType(): RateType = rateType.getRequired("rate_type")
 
             /** Commit rate price. For FLAT rate_type, this must be >=0. */
-            @JsonProperty("price") fun price(): Optional<Double> = Optional.ofNullable(price)
+            fun price(): Optional<Double> = Optional.ofNullable(price.getNullable("price"))
 
             /** Only set for TIERED rate_type. */
-            @JsonProperty("tiers") fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers)
+            fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers.getNullable("tiers"))
+
+            @JsonProperty("rate_type")
+            @ExcludeMissing
+            fun _rateType(): JsonField<RateType> = rateType
+
+            /** Commit rate price. For FLAT rate_type, this must be >=0. */
+            @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Double> = price
+
+            /** Only set for TIERED rate_type. */
+            @JsonProperty("tiers") @ExcludeMissing fun _tiers(): JsonField<List<Tier>> = tiers
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): CommitRate = apply {
+                if (!validated) {
+                    rateType()
+                    price()
+                    tiers().map { it.forEach { it.validate() } }
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -735,40 +931,49 @@ constructor(
 
             class Builder {
 
-                private var rateType: RateType? = null
-                private var price: Double? = null
-                private var tiers: MutableList<Tier>? = null
+                private var rateType: JsonField<RateType>? = null
+                private var price: JsonField<Double> = JsonMissing.of()
+                private var tiers: JsonField<MutableList<Tier>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(commitRate: CommitRate) = apply {
                     rateType = commitRate.rateType
                     price = commitRate.price
-                    tiers = commitRate.tiers?.toMutableList()
+                    tiers = commitRate.tiers.map { it.toMutableList() }
                     additionalProperties = commitRate.additionalProperties.toMutableMap()
                 }
 
-                fun rateType(rateType: RateType) = apply { this.rateType = rateType }
+                fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
+
+                fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
 
                 /** Commit rate price. For FLAT rate_type, this must be >=0. */
-                fun price(price: Double?) = apply { this.price = price }
+                fun price(price: Double) = price(JsonField.of(price))
 
                 /** Commit rate price. For FLAT rate_type, this must be >=0. */
-                fun price(price: Double) = price(price as Double?)
-
-                /** Commit rate price. For FLAT rate_type, this must be >=0. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                fun price(price: Optional<Double>) = price(price.orElse(null) as Double?)
+                fun price(price: JsonField<Double>) = apply { this.price = price }
 
                 /** Only set for TIERED rate_type. */
-                fun tiers(tiers: List<Tier>?) = apply { this.tiers = tiers?.toMutableList() }
+                fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
                 /** Only set for TIERED rate_type. */
-                fun tiers(tiers: Optional<List<Tier>>) = tiers(tiers.orElse(null))
+                fun tiers(tiers: JsonField<List<Tier>>) = apply {
+                    this.tiers = tiers.map { it.toMutableList() }
+                }
 
                 /** Only set for TIERED rate_type. */
                 fun addTier(tier: Tier) = apply {
-                    tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                    tiers =
+                        (tiers ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(tier)
+                        }
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -797,7 +1002,7 @@ constructor(
                     CommitRate(
                         checkNotNull(rateType) { "`rateType` is required but was not set" },
                         price,
-                        tiers?.toImmutable(),
+                        (tiers ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -938,6 +1143,14 @@ constructor(
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+            private var validated: Boolean = false
+
+            fun validate(): CustomRate = apply {
+                if (!validated) {
+                    validated = true
+                }
+            }
+
             fun toBuilder() = Builder().from(this)
 
             companion object {
@@ -1011,6 +1224,14 @@ constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): PricingGroupValues = apply {
+                if (!validated) {
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 

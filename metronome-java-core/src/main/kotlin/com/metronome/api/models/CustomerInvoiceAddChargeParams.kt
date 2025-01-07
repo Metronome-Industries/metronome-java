@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -48,11 +50,32 @@ constructor(
 
     fun quantity(): Double = body.quantity()
 
+    /**
+     * The Metronome ID of the charge to add to the invoice. Note that the charge must be on a
+     * product that is not on the current plan, and the product must have only fixed charges.
+     */
+    fun _chargeId(): JsonField<String> = body._chargeId()
+
+    /** The Metronome ID of the customer plan to add the charge to. */
+    fun _customerPlanId(): JsonField<String> = body._customerPlanId()
+
+    fun _description(): JsonField<String> = body._description()
+
+    /** The start_timestamp of the invoice to add the charge to. */
+    fun _invoiceStartTimestamp(): JsonField<OffsetDateTime> = body._invoiceStartTimestamp()
+
+    /**
+     * The price of the charge. This price will match the currency on the invoice, e.g. USD cents.
+     */
+    fun _price(): JsonField<Double> = body._price()
+
+    fun _quantity(): JsonField<Double> = body._quantity()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomerInvoiceAddChargeBody = body
 
@@ -71,12 +94,24 @@ constructor(
     class CustomerInvoiceAddChargeBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("charge_id") private val chargeId: String,
-        @JsonProperty("customer_plan_id") private val customerPlanId: String,
-        @JsonProperty("description") private val description: String,
-        @JsonProperty("invoice_start_timestamp") private val invoiceStartTimestamp: OffsetDateTime,
-        @JsonProperty("price") private val price: Double,
-        @JsonProperty("quantity") private val quantity: Double,
+        @JsonProperty("charge_id")
+        @ExcludeMissing
+        private val chargeId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("customer_plan_id")
+        @ExcludeMissing
+        private val customerPlanId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        private val description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("invoice_start_timestamp")
+        @ExcludeMissing
+        private val invoiceStartTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("price")
+        @ExcludeMissing
+        private val price: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("quantity")
+        @ExcludeMissing
+        private val quantity: JsonField<Double> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -85,28 +120,70 @@ constructor(
          * The Metronome ID of the charge to add to the invoice. Note that the charge must be on a
          * product that is not on the current plan, and the product must have only fixed charges.
          */
-        @JsonProperty("charge_id") fun chargeId(): String = chargeId
+        fun chargeId(): String = chargeId.getRequired("charge_id")
 
         /** The Metronome ID of the customer plan to add the charge to. */
-        @JsonProperty("customer_plan_id") fun customerPlanId(): String = customerPlanId
+        fun customerPlanId(): String = customerPlanId.getRequired("customer_plan_id")
 
-        @JsonProperty("description") fun description(): String = description
+        fun description(): String = description.getRequired("description")
 
         /** The start_timestamp of the invoice to add the charge to. */
-        @JsonProperty("invoice_start_timestamp")
-        fun invoiceStartTimestamp(): OffsetDateTime = invoiceStartTimestamp
+        fun invoiceStartTimestamp(): OffsetDateTime =
+            invoiceStartTimestamp.getRequired("invoice_start_timestamp")
 
         /**
          * The price of the charge. This price will match the currency on the invoice, e.g. USD
          * cents.
          */
-        @JsonProperty("price") fun price(): Double = price
+        fun price(): Double = price.getRequired("price")
 
-        @JsonProperty("quantity") fun quantity(): Double = quantity
+        fun quantity(): Double = quantity.getRequired("quantity")
+
+        /**
+         * The Metronome ID of the charge to add to the invoice. Note that the charge must be on a
+         * product that is not on the current plan, and the product must have only fixed charges.
+         */
+        @JsonProperty("charge_id") @ExcludeMissing fun _chargeId(): JsonField<String> = chargeId
+
+        /** The Metronome ID of the customer plan to add the charge to. */
+        @JsonProperty("customer_plan_id")
+        @ExcludeMissing
+        fun _customerPlanId(): JsonField<String> = customerPlanId
+
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
+
+        /** The start_timestamp of the invoice to add the charge to. */
+        @JsonProperty("invoice_start_timestamp")
+        @ExcludeMissing
+        fun _invoiceStartTimestamp(): JsonField<OffsetDateTime> = invoiceStartTimestamp
+
+        /**
+         * The price of the charge. This price will match the currency on the invoice, e.g. USD
+         * cents.
+         */
+        @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Double> = price
+
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomerInvoiceAddChargeBody = apply {
+            if (!validated) {
+                chargeId()
+                customerPlanId()
+                description()
+                invoiceStartTimestamp()
+                price()
+                quantity()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -117,12 +194,12 @@ constructor(
 
         class Builder {
 
-            private var chargeId: String? = null
-            private var customerPlanId: String? = null
-            private var description: String? = null
-            private var invoiceStartTimestamp: OffsetDateTime? = null
-            private var price: Double? = null
-            private var quantity: Double? = null
+            private var chargeId: JsonField<String>? = null
+            private var customerPlanId: JsonField<String>? = null
+            private var description: JsonField<String>? = null
+            private var invoiceStartTimestamp: JsonField<OffsetDateTime>? = null
+            private var price: JsonField<Double>? = null
+            private var quantity: JsonField<Double>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -142,17 +219,36 @@ constructor(
              * a product that is not on the current plan, and the product must have only fixed
              * charges.
              */
-            fun chargeId(chargeId: String) = apply { this.chargeId = chargeId }
+            fun chargeId(chargeId: String) = chargeId(JsonField.of(chargeId))
+
+            /**
+             * The Metronome ID of the charge to add to the invoice. Note that the charge must be on
+             * a product that is not on the current plan, and the product must have only fixed
+             * charges.
+             */
+            fun chargeId(chargeId: JsonField<String>) = apply { this.chargeId = chargeId }
 
             /** The Metronome ID of the customer plan to add the charge to. */
-            fun customerPlanId(customerPlanId: String) = apply {
+            fun customerPlanId(customerPlanId: String) =
+                customerPlanId(JsonField.of(customerPlanId))
+
+            /** The Metronome ID of the customer plan to add the charge to. */
+            fun customerPlanId(customerPlanId: JsonField<String>) = apply {
                 this.customerPlanId = customerPlanId
             }
 
-            fun description(description: String) = apply { this.description = description }
+            fun description(description: String) = description(JsonField.of(description))
+
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
 
             /** The start_timestamp of the invoice to add the charge to. */
-            fun invoiceStartTimestamp(invoiceStartTimestamp: OffsetDateTime) = apply {
+            fun invoiceStartTimestamp(invoiceStartTimestamp: OffsetDateTime) =
+                invoiceStartTimestamp(JsonField.of(invoiceStartTimestamp))
+
+            /** The start_timestamp of the invoice to add the charge to. */
+            fun invoiceStartTimestamp(invoiceStartTimestamp: JsonField<OffsetDateTime>) = apply {
                 this.invoiceStartTimestamp = invoiceStartTimestamp
             }
 
@@ -160,9 +256,17 @@ constructor(
              * The price of the charge. This price will match the currency on the invoice, e.g. USD
              * cents.
              */
-            fun price(price: Double) = apply { this.price = price }
+            fun price(price: Double) = price(JsonField.of(price))
 
-            fun quantity(quantity: Double) = apply { this.quantity = quantity }
+            /**
+             * The price of the charge. This price will match the currency on the invoice, e.g. USD
+             * cents.
+             */
+            fun price(price: JsonField<Double>) = apply { this.price = price }
+
+            fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+
+            fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -247,13 +351,31 @@ constructor(
          */
         fun chargeId(chargeId: String) = apply { body.chargeId(chargeId) }
 
+        /**
+         * The Metronome ID of the charge to add to the invoice. Note that the charge must be on a
+         * product that is not on the current plan, and the product must have only fixed charges.
+         */
+        fun chargeId(chargeId: JsonField<String>) = apply { body.chargeId(chargeId) }
+
         /** The Metronome ID of the customer plan to add the charge to. */
         fun customerPlanId(customerPlanId: String) = apply { body.customerPlanId(customerPlanId) }
 
+        /** The Metronome ID of the customer plan to add the charge to. */
+        fun customerPlanId(customerPlanId: JsonField<String>) = apply {
+            body.customerPlanId(customerPlanId)
+        }
+
         fun description(description: String) = apply { body.description(description) }
+
+        fun description(description: JsonField<String>) = apply { body.description(description) }
 
         /** The start_timestamp of the invoice to add the charge to. */
         fun invoiceStartTimestamp(invoiceStartTimestamp: OffsetDateTime) = apply {
+            body.invoiceStartTimestamp(invoiceStartTimestamp)
+        }
+
+        /** The start_timestamp of the invoice to add the charge to. */
+        fun invoiceStartTimestamp(invoiceStartTimestamp: JsonField<OffsetDateTime>) = apply {
             body.invoiceStartTimestamp(invoiceStartTimestamp)
         }
 
@@ -263,7 +385,34 @@ constructor(
          */
         fun price(price: Double) = apply { body.price(price) }
 
+        /**
+         * The price of the charge. This price will match the currency on the invoice, e.g. USD
+         * cents.
+         */
+        fun price(price: JsonField<Double>) = apply { body.price(price) }
+
         fun quantity(quantity: Double) = apply { body.quantity(quantity) }
+
+        fun quantity(quantity: JsonField<Double>) = apply { body.quantity(quantity) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -361,25 +510,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerInvoiceAddChargeParams =

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -90,11 +91,74 @@ constructor(
 
     fun tags(): Optional<List<String>> = body.tags()
 
+    /** displayed on invoices */
+    fun _name(): JsonField<String> = body._name()
+
+    fun _type(): JsonField<Type> = body._type()
+
+    /** Required for USAGE products */
+    fun _billableMetricId(): JsonField<String> = body._billableMetricId()
+
+    /** Required for COMPOSITE products */
+    fun _compositeProductIds(): JsonField<List<String>> = body._compositeProductIds()
+
+    /** Required for COMPOSITE products */
+    fun _compositeTags(): JsonField<List<String>> = body._compositeTags()
+
+    /**
+     * Beta feature only available for composite products. If true, products with $0 will not be
+     * included when computing composite usage. Defaults to false
+     */
+    fun _excludeFreeUsage(): JsonField<Boolean> = body._excludeFreeUsage()
+
+    /** This field's availability is dependent on your client's configuration. Defaults to true. */
+    fun _isRefundable(): JsonField<Boolean> = body._isRefundable()
+
+    /** This field's availability is dependent on your client's configuration. */
+    fun _netsuiteInternalItemId(): JsonField<String> = body._netsuiteInternalItemId()
+
+    /** This field's availability is dependent on your client's configuration. */
+    fun _netsuiteOverageItemId(): JsonField<String> = body._netsuiteOverageItemId()
+
+    /**
+     * For USAGE products only. Groups usage line items on invoices. The superset of values in the
+     * pricing group key and presentation group key must be set as one compound group key on the
+     * billable metric.
+     */
+    fun _presentationGroupKey(): JsonField<List<String>> = body._presentationGroupKey()
+
+    /**
+     * For USAGE products only. If set, pricing for this product will be determined for each
+     * pricing_group_key value, as opposed to the product as a whole. The superset of values in the
+     * pricing group key and presentation group key must be set as one compound group key on the
+     * billable metric.
+     */
+    fun _pricingGroupKey(): JsonField<List<String>> = body._pricingGroupKey()
+
+    /**
+     * Optional. Only valid for USAGE products. If provided, the quantity will be converted using
+     * the provided conversion factor and operation. For example, if the operation is "multiply" and
+     * the conversion factor is 100, then the quantity will be multiplied by 100. This can be used
+     * in cases where data is sent in one unit and priced in another. For example, data could be
+     * sent in MB and priced in GB. In this case, the conversion factor would be 1024 and the
+     * operation would be "divide".
+     */
+    fun _quantityConversion(): JsonField<QuantityConversion> = body._quantityConversion()
+
+    /**
+     * Optional. Only valid for USAGE products. If provided, the quantity will be rounded using the
+     * provided rounding method and decimal places. For example, if the method is "round up" and the
+     * decimal places is 0, then the quantity will be rounded up to the nearest integer.
+     */
+    fun _quantityRounding(): JsonField<QuantityRounding> = body._quantityRounding()
+
+    fun _tags(): JsonField<List<String>> = body._tags()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): ContractProductCreateBody = body
 
@@ -106,61 +170,170 @@ constructor(
     class ContractProductCreateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("name") private val name: String,
-        @JsonProperty("type") private val type: Type,
-        @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-        @JsonProperty("composite_product_ids") private val compositeProductIds: List<String>?,
-        @JsonProperty("composite_tags") private val compositeTags: List<String>?,
-        @JsonProperty("exclude_free_usage") private val excludeFreeUsage: Boolean?,
-        @JsonProperty("is_refundable") private val isRefundable: Boolean?,
-        @JsonProperty("netsuite_internal_item_id") private val netsuiteInternalItemId: String?,
-        @JsonProperty("netsuite_overage_item_id") private val netsuiteOverageItemId: String?,
-        @JsonProperty("presentation_group_key") private val presentationGroupKey: List<String>?,
-        @JsonProperty("pricing_group_key") private val pricingGroupKey: List<String>?,
-        @JsonProperty("quantity_conversion") private val quantityConversion: QuantityConversion?,
-        @JsonProperty("quantity_rounding") private val quantityRounding: QuantityRounding?,
-        @JsonProperty("tags") private val tags: List<String>?,
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
+        @JsonProperty("billable_metric_id")
+        @ExcludeMissing
+        private val billableMetricId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("composite_product_ids")
+        @ExcludeMissing
+        private val compositeProductIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("composite_tags")
+        @ExcludeMissing
+        private val compositeTags: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("exclude_free_usage")
+        @ExcludeMissing
+        private val excludeFreeUsage: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("is_refundable")
+        @ExcludeMissing
+        private val isRefundable: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("netsuite_internal_item_id")
+        @ExcludeMissing
+        private val netsuiteInternalItemId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("netsuite_overage_item_id")
+        @ExcludeMissing
+        private val netsuiteOverageItemId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("presentation_group_key")
+        @ExcludeMissing
+        private val presentationGroupKey: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("pricing_group_key")
+        @ExcludeMissing
+        private val pricingGroupKey: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("quantity_conversion")
+        @ExcludeMissing
+        private val quantityConversion: JsonField<QuantityConversion> = JsonMissing.of(),
+        @JsonProperty("quantity_rounding")
+        @ExcludeMissing
+        private val quantityRounding: JsonField<QuantityRounding> = JsonMissing.of(),
+        @JsonProperty("tags")
+        @ExcludeMissing
+        private val tags: JsonField<List<String>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** displayed on invoices */
-        @JsonProperty("name") fun name(): String = name
+        fun name(): String = name.getRequired("name")
 
-        @JsonProperty("type") fun type(): Type = type
+        fun type(): Type = type.getRequired("type")
+
+        /** Required for USAGE products */
+        fun billableMetricId(): Optional<String> =
+            Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+
+        /** Required for COMPOSITE products */
+        fun compositeProductIds(): Optional<List<String>> =
+            Optional.ofNullable(compositeProductIds.getNullable("composite_product_ids"))
+
+        /** Required for COMPOSITE products */
+        fun compositeTags(): Optional<List<String>> =
+            Optional.ofNullable(compositeTags.getNullable("composite_tags"))
+
+        /**
+         * Beta feature only available for composite products. If true, products with $0 will not be
+         * included when computing composite usage. Defaults to false
+         */
+        fun excludeFreeUsage(): Optional<Boolean> =
+            Optional.ofNullable(excludeFreeUsage.getNullable("exclude_free_usage"))
+
+        /**
+         * This field's availability is dependent on your client's configuration. Defaults to true.
+         */
+        fun isRefundable(): Optional<Boolean> =
+            Optional.ofNullable(isRefundable.getNullable("is_refundable"))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteInternalItemId(): Optional<String> =
+            Optional.ofNullable(netsuiteInternalItemId.getNullable("netsuite_internal_item_id"))
+
+        /** This field's availability is dependent on your client's configuration. */
+        fun netsuiteOverageItemId(): Optional<String> =
+            Optional.ofNullable(netsuiteOverageItemId.getNullable("netsuite_overage_item_id"))
+
+        /**
+         * For USAGE products only. Groups usage line items on invoices. The superset of values in
+         * the pricing group key and presentation group key must be set as one compound group key on
+         * the billable metric.
+         */
+        fun presentationGroupKey(): Optional<List<String>> =
+            Optional.ofNullable(presentationGroupKey.getNullable("presentation_group_key"))
+
+        /**
+         * For USAGE products only. If set, pricing for this product will be determined for each
+         * pricing_group_key value, as opposed to the product as a whole. The superset of values in
+         * the pricing group key and presentation group key must be set as one compound group key on
+         * the billable metric.
+         */
+        fun pricingGroupKey(): Optional<List<String>> =
+            Optional.ofNullable(pricingGroupKey.getNullable("pricing_group_key"))
+
+        /**
+         * Optional. Only valid for USAGE products. If provided, the quantity will be converted
+         * using the provided conversion factor and operation. For example, if the operation is
+         * "multiply" and the conversion factor is 100, then the quantity will be multiplied by 100.
+         * This can be used in cases where data is sent in one unit and priced in another. For
+         * example, data could be sent in MB and priced in GB. In this case, the conversion factor
+         * would be 1024 and the operation would be "divide".
+         */
+        fun quantityConversion(): Optional<QuantityConversion> =
+            Optional.ofNullable(quantityConversion.getNullable("quantity_conversion"))
+
+        /**
+         * Optional. Only valid for USAGE products. If provided, the quantity will be rounded using
+         * the provided rounding method and decimal places. For example, if the method is "round up"
+         * and the decimal places is 0, then the quantity will be rounded up to the nearest integer.
+         */
+        fun quantityRounding(): Optional<QuantityRounding> =
+            Optional.ofNullable(quantityRounding.getNullable("quantity_rounding"))
+
+        fun tags(): Optional<List<String>> = Optional.ofNullable(tags.getNullable("tags"))
+
+        /** displayed on invoices */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
         /** Required for USAGE products */
         @JsonProperty("billable_metric_id")
-        fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
+        @ExcludeMissing
+        fun _billableMetricId(): JsonField<String> = billableMetricId
 
         /** Required for COMPOSITE products */
         @JsonProperty("composite_product_ids")
-        fun compositeProductIds(): Optional<List<String>> = Optional.ofNullable(compositeProductIds)
+        @ExcludeMissing
+        fun _compositeProductIds(): JsonField<List<String>> = compositeProductIds
 
         /** Required for COMPOSITE products */
         @JsonProperty("composite_tags")
-        fun compositeTags(): Optional<List<String>> = Optional.ofNullable(compositeTags)
+        @ExcludeMissing
+        fun _compositeTags(): JsonField<List<String>> = compositeTags
 
         /**
          * Beta feature only available for composite products. If true, products with $0 will not be
          * included when computing composite usage. Defaults to false
          */
         @JsonProperty("exclude_free_usage")
-        fun excludeFreeUsage(): Optional<Boolean> = Optional.ofNullable(excludeFreeUsage)
+        @ExcludeMissing
+        fun _excludeFreeUsage(): JsonField<Boolean> = excludeFreeUsage
 
         /**
          * This field's availability is dependent on your client's configuration. Defaults to true.
          */
         @JsonProperty("is_refundable")
-        fun isRefundable(): Optional<Boolean> = Optional.ofNullable(isRefundable)
+        @ExcludeMissing
+        fun _isRefundable(): JsonField<Boolean> = isRefundable
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_internal_item_id")
-        fun netsuiteInternalItemId(): Optional<String> = Optional.ofNullable(netsuiteInternalItemId)
+        @ExcludeMissing
+        fun _netsuiteInternalItemId(): JsonField<String> = netsuiteInternalItemId
 
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("netsuite_overage_item_id")
-        fun netsuiteOverageItemId(): Optional<String> = Optional.ofNullable(netsuiteOverageItemId)
+        @ExcludeMissing
+        fun _netsuiteOverageItemId(): JsonField<String> = netsuiteOverageItemId
 
         /**
          * For USAGE products only. Groups usage line items on invoices. The superset of values in
@@ -168,8 +341,8 @@ constructor(
          * the billable metric.
          */
         @JsonProperty("presentation_group_key")
-        fun presentationGroupKey(): Optional<List<String>> =
-            Optional.ofNullable(presentationGroupKey)
+        @ExcludeMissing
+        fun _presentationGroupKey(): JsonField<List<String>> = presentationGroupKey
 
         /**
          * For USAGE products only. If set, pricing for this product will be determined for each
@@ -178,7 +351,8 @@ constructor(
          * the billable metric.
          */
         @JsonProperty("pricing_group_key")
-        fun pricingGroupKey(): Optional<List<String>> = Optional.ofNullable(pricingGroupKey)
+        @ExcludeMissing
+        fun _pricingGroupKey(): JsonField<List<String>> = pricingGroupKey
 
         /**
          * Optional. Only valid for USAGE products. If provided, the quantity will be converted
@@ -189,8 +363,8 @@ constructor(
          * would be 1024 and the operation would be "divide".
          */
         @JsonProperty("quantity_conversion")
-        fun quantityConversion(): Optional<QuantityConversion> =
-            Optional.ofNullable(quantityConversion)
+        @ExcludeMissing
+        fun _quantityConversion(): JsonField<QuantityConversion> = quantityConversion
 
         /**
          * Optional. Only valid for USAGE products. If provided, the quantity will be rounded using
@@ -198,13 +372,36 @@ constructor(
          * and the decimal places is 0, then the quantity will be rounded up to the nearest integer.
          */
         @JsonProperty("quantity_rounding")
-        fun quantityRounding(): Optional<QuantityRounding> = Optional.ofNullable(quantityRounding)
+        @ExcludeMissing
+        fun _quantityRounding(): JsonField<QuantityRounding> = quantityRounding
 
-        @JsonProperty("tags") fun tags(): Optional<List<String>> = Optional.ofNullable(tags)
+        @JsonProperty("tags") @ExcludeMissing fun _tags(): JsonField<List<String>> = tags
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ContractProductCreateBody = apply {
+            if (!validated) {
+                name()
+                type()
+                billableMetricId()
+                compositeProductIds()
+                compositeTags()
+                excludeFreeUsage()
+                isRefundable()
+                netsuiteInternalItemId()
+                netsuiteOverageItemId()
+                presentationGroupKey()
+                pricingGroupKey()
+                quantityConversion().map { it.validate() }
+                quantityRounding().map { it.validate() }
+                tags()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -215,20 +412,20 @@ constructor(
 
         class Builder {
 
-            private var name: String? = null
-            private var type: Type? = null
-            private var billableMetricId: String? = null
-            private var compositeProductIds: MutableList<String>? = null
-            private var compositeTags: MutableList<String>? = null
-            private var excludeFreeUsage: Boolean? = null
-            private var isRefundable: Boolean? = null
-            private var netsuiteInternalItemId: String? = null
-            private var netsuiteOverageItemId: String? = null
-            private var presentationGroupKey: MutableList<String>? = null
-            private var pricingGroupKey: MutableList<String>? = null
-            private var quantityConversion: QuantityConversion? = null
-            private var quantityRounding: QuantityRounding? = null
-            private var tags: MutableList<String>? = null
+            private var name: JsonField<String>? = null
+            private var type: JsonField<Type>? = null
+            private var billableMetricId: JsonField<String> = JsonMissing.of()
+            private var compositeProductIds: JsonField<MutableList<String>>? = null
+            private var compositeTags: JsonField<MutableList<String>>? = null
+            private var excludeFreeUsage: JsonField<Boolean> = JsonMissing.of()
+            private var isRefundable: JsonField<Boolean> = JsonMissing.of()
+            private var netsuiteInternalItemId: JsonField<String> = JsonMissing.of()
+            private var netsuiteOverageItemId: JsonField<String> = JsonMissing.of()
+            private var presentationGroupKey: JsonField<MutableList<String>>? = null
+            private var pricingGroupKey: JsonField<MutableList<String>>? = null
+            private var quantityConversion: JsonField<QuantityConversion> = JsonMissing.of()
+            private var quantityRounding: JsonField<QuantityRounding> = JsonMissing.of()
+            private var tags: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -236,70 +433,86 @@ constructor(
                 name = contractProductCreateBody.name
                 type = contractProductCreateBody.type
                 billableMetricId = contractProductCreateBody.billableMetricId
-                compositeProductIds = contractProductCreateBody.compositeProductIds?.toMutableList()
-                compositeTags = contractProductCreateBody.compositeTags?.toMutableList()
+                compositeProductIds =
+                    contractProductCreateBody.compositeProductIds.map { it.toMutableList() }
+                compositeTags = contractProductCreateBody.compositeTags.map { it.toMutableList() }
                 excludeFreeUsage = contractProductCreateBody.excludeFreeUsage
                 isRefundable = contractProductCreateBody.isRefundable
                 netsuiteInternalItemId = contractProductCreateBody.netsuiteInternalItemId
                 netsuiteOverageItemId = contractProductCreateBody.netsuiteOverageItemId
                 presentationGroupKey =
-                    contractProductCreateBody.presentationGroupKey?.toMutableList()
-                pricingGroupKey = contractProductCreateBody.pricingGroupKey?.toMutableList()
+                    contractProductCreateBody.presentationGroupKey.map { it.toMutableList() }
+                pricingGroupKey =
+                    contractProductCreateBody.pricingGroupKey.map { it.toMutableList() }
                 quantityConversion = contractProductCreateBody.quantityConversion
                 quantityRounding = contractProductCreateBody.quantityRounding
-                tags = contractProductCreateBody.tags?.toMutableList()
+                tags = contractProductCreateBody.tags.map { it.toMutableList() }
                 additionalProperties = contractProductCreateBody.additionalProperties.toMutableMap()
             }
 
             /** displayed on invoices */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = name(JsonField.of(name))
 
-            fun type(type: Type) = apply { this.type = type }
+            /** displayed on invoices */
+            fun name(name: JsonField<String>) = apply { this.name = name }
+
+            fun type(type: Type) = type(JsonField.of(type))
+
+            fun type(type: JsonField<Type>) = apply { this.type = type }
 
             /** Required for USAGE products */
-            fun billableMetricId(billableMetricId: String?) = apply {
+            fun billableMetricId(billableMetricId: String) =
+                billableMetricId(JsonField.of(billableMetricId))
+
+            /** Required for USAGE products */
+            fun billableMetricId(billableMetricId: JsonField<String>) = apply {
                 this.billableMetricId = billableMetricId
             }
 
-            /** Required for USAGE products */
-            fun billableMetricId(billableMetricId: Optional<String>) =
-                billableMetricId(billableMetricId.orElse(null))
+            /** Required for COMPOSITE products */
+            fun compositeProductIds(compositeProductIds: List<String>) =
+                compositeProductIds(JsonField.of(compositeProductIds))
 
             /** Required for COMPOSITE products */
-            fun compositeProductIds(compositeProductIds: List<String>?) = apply {
-                this.compositeProductIds = compositeProductIds?.toMutableList()
+            fun compositeProductIds(compositeProductIds: JsonField<List<String>>) = apply {
+                this.compositeProductIds = compositeProductIds.map { it.toMutableList() }
             }
-
-            /** Required for COMPOSITE products */
-            fun compositeProductIds(compositeProductIds: Optional<List<String>>) =
-                compositeProductIds(compositeProductIds.orElse(null))
 
             /** Required for COMPOSITE products */
             fun addCompositeProductId(compositeProductId: String) = apply {
                 compositeProductIds =
-                    (compositeProductIds ?: mutableListOf()).apply { add(compositeProductId) }
+                    (compositeProductIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(compositeProductId)
+                    }
             }
 
             /** Required for COMPOSITE products */
-            fun compositeTags(compositeTags: List<String>?) = apply {
-                this.compositeTags = compositeTags?.toMutableList()
-            }
+            fun compositeTags(compositeTags: List<String>) =
+                compositeTags(JsonField.of(compositeTags))
 
             /** Required for COMPOSITE products */
-            fun compositeTags(compositeTags: Optional<List<String>>) =
-                compositeTags(compositeTags.orElse(null))
+            fun compositeTags(compositeTags: JsonField<List<String>>) = apply {
+                this.compositeTags = compositeTags.map { it.toMutableList() }
+            }
 
             /** Required for COMPOSITE products */
             fun addCompositeTag(compositeTag: String) = apply {
-                compositeTags = (compositeTags ?: mutableListOf()).apply { add(compositeTag) }
-            }
-
-            /**
-             * Beta feature only available for composite products. If true, products with $0 will
-             * not be included when computing composite usage. Defaults to false
-             */
-            fun excludeFreeUsage(excludeFreeUsage: Boolean?) = apply {
-                this.excludeFreeUsage = excludeFreeUsage
+                compositeTags =
+                    (compositeTags ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(compositeTag)
+                    }
             }
 
             /**
@@ -307,70 +520,64 @@ constructor(
              * not be included when computing composite usage. Defaults to false
              */
             fun excludeFreeUsage(excludeFreeUsage: Boolean) =
-                excludeFreeUsage(excludeFreeUsage as Boolean?)
+                excludeFreeUsage(JsonField.of(excludeFreeUsage))
 
             /**
              * Beta feature only available for composite products. If true, products with $0 will
              * not be included when computing composite usage. Defaults to false
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun excludeFreeUsage(excludeFreeUsage: Optional<Boolean>) =
-                excludeFreeUsage(excludeFreeUsage.orElse(null) as Boolean?)
+            fun excludeFreeUsage(excludeFreeUsage: JsonField<Boolean>) = apply {
+                this.excludeFreeUsage = excludeFreeUsage
+            }
 
             /**
              * This field's availability is dependent on your client's configuration. Defaults to
              * true.
              */
-            fun isRefundable(isRefundable: Boolean?) = apply { this.isRefundable = isRefundable }
+            fun isRefundable(isRefundable: Boolean) = isRefundable(JsonField.of(isRefundable))
 
             /**
              * This field's availability is dependent on your client's configuration. Defaults to
              * true.
              */
-            fun isRefundable(isRefundable: Boolean) = isRefundable(isRefundable as Boolean?)
-
-            /**
-             * This field's availability is dependent on your client's configuration. Defaults to
-             * true.
-             */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun isRefundable(isRefundable: Optional<Boolean>) =
-                isRefundable(isRefundable.orElse(null) as Boolean?)
+            fun isRefundable(isRefundable: JsonField<Boolean>) = apply {
+                this.isRefundable = isRefundable
+            }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteInternalItemId(netsuiteInternalItemId: String?) = apply {
+            fun netsuiteInternalItemId(netsuiteInternalItemId: String) =
+                netsuiteInternalItemId(JsonField.of(netsuiteInternalItemId))
+
+            /** This field's availability is dependent on your client's configuration. */
+            fun netsuiteInternalItemId(netsuiteInternalItemId: JsonField<String>) = apply {
                 this.netsuiteInternalItemId = netsuiteInternalItemId
             }
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteInternalItemId(netsuiteInternalItemId: Optional<String>) =
-                netsuiteInternalItemId(netsuiteInternalItemId.orElse(null))
+            fun netsuiteOverageItemId(netsuiteOverageItemId: String) =
+                netsuiteOverageItemId(JsonField.of(netsuiteOverageItemId))
 
             /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteOverageItemId(netsuiteOverageItemId: String?) = apply {
+            fun netsuiteOverageItemId(netsuiteOverageItemId: JsonField<String>) = apply {
                 this.netsuiteOverageItemId = netsuiteOverageItemId
             }
 
-            /** This field's availability is dependent on your client's configuration. */
-            fun netsuiteOverageItemId(netsuiteOverageItemId: Optional<String>) =
-                netsuiteOverageItemId(netsuiteOverageItemId.orElse(null))
+            /**
+             * For USAGE products only. Groups usage line items on invoices. The superset of values
+             * in the pricing group key and presentation group key must be set as one compound group
+             * key on the billable metric.
+             */
+            fun presentationGroupKey(presentationGroupKey: List<String>) =
+                presentationGroupKey(JsonField.of(presentationGroupKey))
 
             /**
              * For USAGE products only. Groups usage line items on invoices. The superset of values
              * in the pricing group key and presentation group key must be set as one compound group
              * key on the billable metric.
              */
-            fun presentationGroupKey(presentationGroupKey: List<String>?) = apply {
-                this.presentationGroupKey = presentationGroupKey?.toMutableList()
+            fun presentationGroupKey(presentationGroupKey: JsonField<List<String>>) = apply {
+                this.presentationGroupKey = presentationGroupKey.map { it.toMutableList() }
             }
-
-            /**
-             * For USAGE products only. Groups usage line items on invoices. The superset of values
-             * in the pricing group key and presentation group key must be set as one compound group
-             * key on the billable metric.
-             */
-            fun presentationGroupKey(presentationGroupKey: Optional<List<String>>) =
-                presentationGroupKey(presentationGroupKey.orElse(null))
 
             /**
              * For USAGE products only. Groups usage line items on invoices. The superset of values
@@ -379,8 +586,14 @@ constructor(
              */
             fun addPresentationGroupKey(presentationGroupKey: String) = apply {
                 this.presentationGroupKey =
-                    (this.presentationGroupKey ?: mutableListOf()).apply {
-                        add(presentationGroupKey)
+                    (this.presentationGroupKey ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(presentationGroupKey)
                     }
             }
 
@@ -390,9 +603,8 @@ constructor(
              * in the pricing group key and presentation group key must be set as one compound group
              * key on the billable metric.
              */
-            fun pricingGroupKey(pricingGroupKey: List<String>?) = apply {
-                this.pricingGroupKey = pricingGroupKey?.toMutableList()
-            }
+            fun pricingGroupKey(pricingGroupKey: List<String>) =
+                pricingGroupKey(JsonField.of(pricingGroupKey))
 
             /**
              * For USAGE products only. If set, pricing for this product will be determined for each
@@ -400,8 +612,9 @@ constructor(
              * in the pricing group key and presentation group key must be set as one compound group
              * key on the billable metric.
              */
-            fun pricingGroupKey(pricingGroupKey: Optional<List<String>>) =
-                pricingGroupKey(pricingGroupKey.orElse(null))
+            fun pricingGroupKey(pricingGroupKey: JsonField<List<String>>) = apply {
+                this.pricingGroupKey = pricingGroupKey.map { it.toMutableList() }
+            }
 
             /**
              * For USAGE products only. If set, pricing for this product will be determined for each
@@ -411,7 +624,15 @@ constructor(
              */
             fun addPricingGroupKey(pricingGroupKey: String) = apply {
                 this.pricingGroupKey =
-                    (this.pricingGroupKey ?: mutableListOf()).apply { add(pricingGroupKey) }
+                    (this.pricingGroupKey ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(pricingGroupKey)
+                    }
             }
 
             /**
@@ -422,9 +643,8 @@ constructor(
              * another. For example, data could be sent in MB and priced in GB. In this case, the
              * conversion factor would be 1024 and the operation would be "divide".
              */
-            fun quantityConversion(quantityConversion: QuantityConversion?) = apply {
-                this.quantityConversion = quantityConversion
-            }
+            fun quantityConversion(quantityConversion: QuantityConversion?) =
+                quantityConversion(JsonField.ofNullable(quantityConversion))
 
             /**
              * Optional. Only valid for USAGE products. If provided, the quantity will be converted
@@ -438,14 +658,25 @@ constructor(
                 quantityConversion(quantityConversion.orElse(null))
 
             /**
+             * Optional. Only valid for USAGE products. If provided, the quantity will be converted
+             * using the provided conversion factor and operation. For example, if the operation is
+             * "multiply" and the conversion factor is 100, then the quantity will be multiplied
+             * by 100. This can be used in cases where data is sent in one unit and priced in
+             * another. For example, data could be sent in MB and priced in GB. In this case, the
+             * conversion factor would be 1024 and the operation would be "divide".
+             */
+            fun quantityConversion(quantityConversion: JsonField<QuantityConversion>) = apply {
+                this.quantityConversion = quantityConversion
+            }
+
+            /**
              * Optional. Only valid for USAGE products. If provided, the quantity will be rounded
              * using the provided rounding method and decimal places. For example, if the method is
              * "round up" and the decimal places is 0, then the quantity will be rounded up to the
              * nearest integer.
              */
-            fun quantityRounding(quantityRounding: QuantityRounding?) = apply {
-                this.quantityRounding = quantityRounding
-            }
+            fun quantityRounding(quantityRounding: QuantityRounding?) =
+                quantityRounding(JsonField.ofNullable(quantityRounding))
 
             /**
              * Optional. Only valid for USAGE products. If provided, the quantity will be rounded
@@ -456,11 +687,34 @@ constructor(
             fun quantityRounding(quantityRounding: Optional<QuantityRounding>) =
                 quantityRounding(quantityRounding.orElse(null))
 
-            fun tags(tags: List<String>?) = apply { this.tags = tags?.toMutableList() }
+            /**
+             * Optional. Only valid for USAGE products. If provided, the quantity will be rounded
+             * using the provided rounding method and decimal places. For example, if the method is
+             * "round up" and the decimal places is 0, then the quantity will be rounded up to the
+             * nearest integer.
+             */
+            fun quantityRounding(quantityRounding: JsonField<QuantityRounding>) = apply {
+                this.quantityRounding = quantityRounding
+            }
 
-            fun tags(tags: Optional<List<String>>) = tags(tags.orElse(null))
+            fun tags(tags: List<String>) = tags(JsonField.of(tags))
 
-            fun addTag(tag: String) = apply { tags = (tags ?: mutableListOf()).apply { add(tag) } }
+            fun tags(tags: JsonField<List<String>>) = apply {
+                this.tags = tags.map { it.toMutableList() }
+            }
+
+            fun addTag(tag: String) = apply {
+                tags =
+                    (tags ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(tag)
+                    }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -486,17 +740,17 @@ constructor(
                     checkNotNull(name) { "`name` is required but was not set" },
                     checkNotNull(type) { "`type` is required but was not set" },
                     billableMetricId,
-                    compositeProductIds?.toImmutable(),
-                    compositeTags?.toImmutable(),
+                    (compositeProductIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    (compositeTags ?: JsonMissing.of()).map { it.toImmutable() },
                     excludeFreeUsage,
                     isRefundable,
                     netsuiteInternalItemId,
                     netsuiteOverageItemId,
-                    presentationGroupKey?.toImmutable(),
-                    pricingGroupKey?.toImmutable(),
+                    (presentationGroupKey ?: JsonMissing.of()).map { it.toImmutable() },
+                    (pricingGroupKey ?: JsonMissing.of()).map { it.toImmutable() },
                     quantityConversion,
                     quantityRounding,
-                    tags?.toImmutable(),
+                    (tags ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -543,25 +797,32 @@ constructor(
         /** displayed on invoices */
         fun name(name: String) = apply { body.name(name) }
 
+        /** displayed on invoices */
+        fun name(name: JsonField<String>) = apply { body.name(name) }
+
         fun type(type: Type) = apply { body.type(type) }
 
+        fun type(type: JsonField<Type>) = apply { body.type(type) }
+
         /** Required for USAGE products */
-        fun billableMetricId(billableMetricId: String?) = apply {
+        fun billableMetricId(billableMetricId: String) = apply {
             body.billableMetricId(billableMetricId)
         }
 
         /** Required for USAGE products */
-        fun billableMetricId(billableMetricId: Optional<String>) =
-            billableMetricId(billableMetricId.orElse(null))
+        fun billableMetricId(billableMetricId: JsonField<String>) = apply {
+            body.billableMetricId(billableMetricId)
+        }
 
         /** Required for COMPOSITE products */
-        fun compositeProductIds(compositeProductIds: List<String>?) = apply {
+        fun compositeProductIds(compositeProductIds: List<String>) = apply {
             body.compositeProductIds(compositeProductIds)
         }
 
         /** Required for COMPOSITE products */
-        fun compositeProductIds(compositeProductIds: Optional<List<String>>) =
-            compositeProductIds(compositeProductIds.orElse(null))
+        fun compositeProductIds(compositeProductIds: JsonField<List<String>>) = apply {
+            body.compositeProductIds(compositeProductIds)
+        }
 
         /** Required for COMPOSITE products */
         fun addCompositeProductId(compositeProductId: String) = apply {
@@ -569,13 +830,12 @@ constructor(
         }
 
         /** Required for COMPOSITE products */
-        fun compositeTags(compositeTags: List<String>?) = apply {
-            body.compositeTags(compositeTags)
-        }
+        fun compositeTags(compositeTags: List<String>) = apply { body.compositeTags(compositeTags) }
 
         /** Required for COMPOSITE products */
-        fun compositeTags(compositeTags: Optional<List<String>>) =
-            compositeTags(compositeTags.orElse(null))
+        fun compositeTags(compositeTags: JsonField<List<String>>) = apply {
+            body.compositeTags(compositeTags)
+        }
 
         /** Required for COMPOSITE products */
         fun addCompositeTag(compositeTag: String) = apply { body.addCompositeTag(compositeTag) }
@@ -584,7 +844,7 @@ constructor(
          * Beta feature only available for composite products. If true, products with $0 will not be
          * included when computing composite usage. Defaults to false
          */
-        fun excludeFreeUsage(excludeFreeUsage: Boolean?) = apply {
+        fun excludeFreeUsage(excludeFreeUsage: Boolean) = apply {
             body.excludeFreeUsage(excludeFreeUsage)
         }
 
@@ -592,58 +852,48 @@ constructor(
          * Beta feature only available for composite products. If true, products with $0 will not be
          * included when computing composite usage. Defaults to false
          */
-        fun excludeFreeUsage(excludeFreeUsage: Boolean) =
-            excludeFreeUsage(excludeFreeUsage as Boolean?)
-
-        /**
-         * Beta feature only available for composite products. If true, products with $0 will not be
-         * included when computing composite usage. Defaults to false
-         */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun excludeFreeUsage(excludeFreeUsage: Optional<Boolean>) =
-            excludeFreeUsage(excludeFreeUsage.orElse(null) as Boolean?)
+        fun excludeFreeUsage(excludeFreeUsage: JsonField<Boolean>) = apply {
+            body.excludeFreeUsage(excludeFreeUsage)
+        }
 
         /**
          * This field's availability is dependent on your client's configuration. Defaults to true.
          */
-        fun isRefundable(isRefundable: Boolean?) = apply { body.isRefundable(isRefundable) }
+        fun isRefundable(isRefundable: Boolean) = apply { body.isRefundable(isRefundable) }
 
         /**
          * This field's availability is dependent on your client's configuration. Defaults to true.
          */
-        fun isRefundable(isRefundable: Boolean) = isRefundable(isRefundable as Boolean?)
-
-        /**
-         * This field's availability is dependent on your client's configuration. Defaults to true.
-         */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun isRefundable(isRefundable: Optional<Boolean>) =
-            isRefundable(isRefundable.orElse(null) as Boolean?)
+        fun isRefundable(isRefundable: JsonField<Boolean>) = apply {
+            body.isRefundable(isRefundable)
+        }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteInternalItemId(netsuiteInternalItemId: String?) = apply {
+        fun netsuiteInternalItemId(netsuiteInternalItemId: String) = apply {
             body.netsuiteInternalItemId(netsuiteInternalItemId)
         }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteInternalItemId(netsuiteInternalItemId: Optional<String>) =
-            netsuiteInternalItemId(netsuiteInternalItemId.orElse(null))
+        fun netsuiteInternalItemId(netsuiteInternalItemId: JsonField<String>) = apply {
+            body.netsuiteInternalItemId(netsuiteInternalItemId)
+        }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteOverageItemId(netsuiteOverageItemId: String?) = apply {
+        fun netsuiteOverageItemId(netsuiteOverageItemId: String) = apply {
             body.netsuiteOverageItemId(netsuiteOverageItemId)
         }
 
         /** This field's availability is dependent on your client's configuration. */
-        fun netsuiteOverageItemId(netsuiteOverageItemId: Optional<String>) =
-            netsuiteOverageItemId(netsuiteOverageItemId.orElse(null))
+        fun netsuiteOverageItemId(netsuiteOverageItemId: JsonField<String>) = apply {
+            body.netsuiteOverageItemId(netsuiteOverageItemId)
+        }
 
         /**
          * For USAGE products only. Groups usage line items on invoices. The superset of values in
          * the pricing group key and presentation group key must be set as one compound group key on
          * the billable metric.
          */
-        fun presentationGroupKey(presentationGroupKey: List<String>?) = apply {
+        fun presentationGroupKey(presentationGroupKey: List<String>) = apply {
             body.presentationGroupKey(presentationGroupKey)
         }
 
@@ -652,8 +902,9 @@ constructor(
          * the pricing group key and presentation group key must be set as one compound group key on
          * the billable metric.
          */
-        fun presentationGroupKey(presentationGroupKey: Optional<List<String>>) =
-            presentationGroupKey(presentationGroupKey.orElse(null))
+        fun presentationGroupKey(presentationGroupKey: JsonField<List<String>>) = apply {
+            body.presentationGroupKey(presentationGroupKey)
+        }
 
         /**
          * For USAGE products only. Groups usage line items on invoices. The superset of values in
@@ -670,7 +921,7 @@ constructor(
          * the pricing group key and presentation group key must be set as one compound group key on
          * the billable metric.
          */
-        fun pricingGroupKey(pricingGroupKey: List<String>?) = apply {
+        fun pricingGroupKey(pricingGroupKey: List<String>) = apply {
             body.pricingGroupKey(pricingGroupKey)
         }
 
@@ -680,8 +931,9 @@ constructor(
          * the pricing group key and presentation group key must be set as one compound group key on
          * the billable metric.
          */
-        fun pricingGroupKey(pricingGroupKey: Optional<List<String>>) =
-            pricingGroupKey(pricingGroupKey.orElse(null))
+        fun pricingGroupKey(pricingGroupKey: JsonField<List<String>>) = apply {
+            body.pricingGroupKey(pricingGroupKey)
+        }
 
         /**
          * For USAGE products only. If set, pricing for this product will be determined for each
@@ -717,6 +969,18 @@ constructor(
             quantityConversion(quantityConversion.orElse(null))
 
         /**
+         * Optional. Only valid for USAGE products. If provided, the quantity will be converted
+         * using the provided conversion factor and operation. For example, if the operation is
+         * "multiply" and the conversion factor is 100, then the quantity will be multiplied by 100.
+         * This can be used in cases where data is sent in one unit and priced in another. For
+         * example, data could be sent in MB and priced in GB. In this case, the conversion factor
+         * would be 1024 and the operation would be "divide".
+         */
+        fun quantityConversion(quantityConversion: JsonField<QuantityConversion>) = apply {
+            body.quantityConversion(quantityConversion)
+        }
+
+        /**
          * Optional. Only valid for USAGE products. If provided, the quantity will be rounded using
          * the provided rounding method and decimal places. For example, if the method is "round up"
          * and the decimal places is 0, then the quantity will be rounded up to the nearest integer.
@@ -733,11 +997,39 @@ constructor(
         fun quantityRounding(quantityRounding: Optional<QuantityRounding>) =
             quantityRounding(quantityRounding.orElse(null))
 
-        fun tags(tags: List<String>?) = apply { body.tags(tags) }
+        /**
+         * Optional. Only valid for USAGE products. If provided, the quantity will be rounded using
+         * the provided rounding method and decimal places. For example, if the method is "round up"
+         * and the decimal places is 0, then the quantity will be rounded up to the nearest integer.
+         */
+        fun quantityRounding(quantityRounding: JsonField<QuantityRounding>) = apply {
+            body.quantityRounding(quantityRounding)
+        }
 
-        fun tags(tags: Optional<List<String>>) = tags(tags.orElse(null))
+        fun tags(tags: List<String>) = apply { body.tags(tags) }
+
+        fun tags(tags: JsonField<List<String>>) = apply { body.tags(tags) }
 
         fun addTag(tag: String) = apply { body.addTag(tag) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -835,25 +1127,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractProductCreateParams =

@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -40,15 +42,25 @@ constructor(
      * The value to set for the named schedule. The structure of this object is specific to the
      * named schedule.
      */
-    fun value(): JsonValue = body.value()
+    fun _value(): JsonValue = body._value()
 
     fun endingBefore(): Optional<OffsetDateTime> = body.endingBefore()
+
+    /** ID of the customer whose named schedule is to be updated */
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    /** The identifier for the schedule to be updated */
+    fun _scheduleName(): JsonField<String> = body._scheduleName()
+
+    fun _startingAt(): JsonField<OffsetDateTime> = body._startingAt()
+
+    fun _endingBefore(): JsonField<OffsetDateTime> = body._endingBefore()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomerNamedScheduleUpdateBody = body
 
@@ -60,35 +72,73 @@ constructor(
     class CustomerNamedScheduleUpdateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("customer_id") private val customerId: String,
-        @JsonProperty("schedule_name") private val scheduleName: String,
-        @JsonProperty("starting_at") private val startingAt: OffsetDateTime,
-        @JsonProperty("value") private val value: JsonValue,
-        @JsonProperty("ending_before") private val endingBefore: OffsetDateTime?,
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("schedule_name")
+        @ExcludeMissing
+        private val scheduleName: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("value") @ExcludeMissing private val value: JsonValue = JsonMissing.of(),
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the customer whose named schedule is to be updated */
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
 
         /** The identifier for the schedule to be updated */
-        @JsonProperty("schedule_name") fun scheduleName(): String = scheduleName
+        fun scheduleName(): String = scheduleName.getRequired("schedule_name")
 
-        @JsonProperty("starting_at") fun startingAt(): OffsetDateTime = startingAt
+        fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
         /**
          * The value to set for the named schedule. The structure of this object is specific to the
          * named schedule.
          */
-        @JsonProperty("value") fun value(): JsonValue = value
+        @JsonProperty("value") @ExcludeMissing fun _value(): JsonValue = value
+
+        fun endingBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+        /** ID of the customer whose named schedule is to be updated */
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
+
+        /** The identifier for the schedule to be updated */
+        @JsonProperty("schedule_name")
+        @ExcludeMissing
+        fun _scheduleName(): JsonField<String> = scheduleName
+
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         @JsonProperty("ending_before")
-        fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomerNamedScheduleUpdateBody = apply {
+            if (!validated) {
+                customerId()
+                scheduleName()
+                startingAt()
+                endingBefore()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -99,11 +149,11 @@ constructor(
 
         class Builder {
 
-            private var customerId: String? = null
-            private var scheduleName: String? = null
-            private var startingAt: OffsetDateTime? = null
+            private var customerId: JsonField<String>? = null
+            private var scheduleName: JsonField<String>? = null
+            private var startingAt: JsonField<OffsetDateTime>? = null
             private var value: JsonValue? = null
-            private var endingBefore: OffsetDateTime? = null
+            private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -119,12 +169,24 @@ constructor(
                 }
 
             /** ID of the customer whose named schedule is to be updated */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            /** ID of the customer whose named schedule is to be updated */
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /** The identifier for the schedule to be updated */
-            fun scheduleName(scheduleName: String) = apply { this.scheduleName = scheduleName }
+            fun scheduleName(scheduleName: String) = scheduleName(JsonField.of(scheduleName))
 
-            fun startingAt(startingAt: OffsetDateTime) = apply { this.startingAt = startingAt }
+            /** The identifier for the schedule to be updated */
+            fun scheduleName(scheduleName: JsonField<String>) = apply {
+                this.scheduleName = scheduleName
+            }
+
+            fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
+
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                this.startingAt = startingAt
+            }
 
             /**
              * The value to set for the named schedule. The structure of this object is specific to
@@ -132,12 +194,12 @@ constructor(
              */
             fun value(value: JsonValue) = apply { this.value = value }
 
-            fun endingBefore(endingBefore: OffsetDateTime?) = apply {
+            fun endingBefore(endingBefore: OffsetDateTime) =
+                endingBefore(JsonField.of(endingBefore))
+
+            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
             }
-
-            fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
-                endingBefore(endingBefore.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -214,10 +276,22 @@ constructor(
         /** ID of the customer whose named schedule is to be updated */
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
+        /** ID of the customer whose named schedule is to be updated */
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
+
         /** The identifier for the schedule to be updated */
         fun scheduleName(scheduleName: String) = apply { body.scheduleName(scheduleName) }
 
+        /** The identifier for the schedule to be updated */
+        fun scheduleName(scheduleName: JsonField<String>) = apply {
+            body.scheduleName(scheduleName)
+        }
+
         fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
+
+        fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+            body.startingAt(startingAt)
+        }
 
         /**
          * The value to set for the named schedule. The structure of this object is specific to the
@@ -225,10 +299,30 @@ constructor(
          */
         fun value(value: JsonValue) = apply { body.value(value) }
 
-        fun endingBefore(endingBefore: OffsetDateTime?) = apply { body.endingBefore(endingBefore) }
+        fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
 
-        fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
-            endingBefore(endingBefore.orElse(null))
+        fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+            body.endingBefore(endingBefore)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -326,25 +420,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerNamedScheduleUpdateParams =

@@ -72,26 +72,34 @@ private constructor(
     fun trialInfo(): Optional<TrialInfo> = Optional.ofNullable(trialInfo.getNullable("trial_info"))
 
     /** the ID of the customer plan */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    fun _customFields(): JsonField<CustomFields> = customFields
 
-    @JsonProperty("plan_description") @ExcludeMissing fun _planDescription() = planDescription
+    @JsonProperty("plan_description")
+    @ExcludeMissing
+    fun _planDescription(): JsonField<String> = planDescription
 
     /** the ID of the plan */
-    @JsonProperty("plan_id") @ExcludeMissing fun _planId() = planId
+    @JsonProperty("plan_id") @ExcludeMissing fun _planId(): JsonField<String> = planId
 
-    @JsonProperty("plan_name") @ExcludeMissing fun _planName() = planName
+    @JsonProperty("plan_name") @ExcludeMissing fun _planName(): JsonField<String> = planName
 
-    @JsonProperty("starting_on") @ExcludeMissing fun _startingOn() = startingOn
+    @JsonProperty("starting_on")
+    @ExcludeMissing
+    fun _startingOn(): JsonField<OffsetDateTime> = startingOn
 
-    @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
+    @JsonProperty("ending_before")
+    @ExcludeMissing
+    fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
     @JsonProperty("net_payment_terms_days")
     @ExcludeMissing
-    fun _netPaymentTermsDays() = netPaymentTermsDays
+    fun _netPaymentTermsDays(): JsonField<Double> = netPaymentTermsDays
 
-    @JsonProperty("trial_info") @ExcludeMissing fun _trialInfo() = trialInfo
+    @JsonProperty("trial_info") @ExcludeMissing fun _trialInfo(): JsonField<TrialInfo> = trialInfo
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -123,12 +131,12 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var customFields: JsonField<CustomFields> = JsonMissing.of()
-        private var planDescription: JsonField<String> = JsonMissing.of()
-        private var planId: JsonField<String> = JsonMissing.of()
-        private var planName: JsonField<String> = JsonMissing.of()
-        private var startingOn: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var customFields: JsonField<CustomFields>? = null
+        private var planDescription: JsonField<String>? = null
+        private var planId: JsonField<String>? = null
+        private var planName: JsonField<String>? = null
+        private var startingOn: JsonField<OffsetDateTime>? = null
         private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
         private var netPaymentTermsDays: JsonField<Double> = JsonMissing.of()
         private var trialInfo: JsonField<TrialInfo> = JsonMissing.of()
@@ -221,12 +229,12 @@ private constructor(
 
         fun build(): CustomerPlanListResponse =
             CustomerPlanListResponse(
-                id,
-                customFields,
-                planDescription,
-                planId,
-                planName,
-                startingOn,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(customFields) { "`customFields` is required but was not set" },
+                checkNotNull(planDescription) { "`planDescription` is required but was not set" },
+                checkNotNull(planId) { "`planId` is required but was not set" },
+                checkNotNull(planName) { "`planName` is required but was not set" },
+                checkNotNull(startingOn) { "`startingOn` is required but was not set" },
                 endingBefore,
                 netPaymentTermsDays,
                 trialInfo,
@@ -327,9 +335,13 @@ private constructor(
 
         fun spendingCaps(): List<SpendingCap> = spendingCaps.getRequired("spending_caps")
 
-        @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
-        @JsonProperty("spending_caps") @ExcludeMissing fun _spendingCaps() = spendingCaps
+        @JsonProperty("spending_caps")
+        @ExcludeMissing
+        fun _spendingCaps(): JsonField<List<SpendingCap>> = spendingCaps
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -354,14 +366,14 @@ private constructor(
 
         class Builder {
 
-            private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var spendingCaps: JsonField<List<SpendingCap>> = JsonMissing.of()
+            private var endingBefore: JsonField<OffsetDateTime>? = null
+            private var spendingCaps: JsonField<MutableList<SpendingCap>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(trialInfo: TrialInfo) = apply {
                 endingBefore = trialInfo.endingBefore
-                spendingCaps = trialInfo.spendingCaps
+                spendingCaps = trialInfo.spendingCaps.map { it.toMutableList() }
                 additionalProperties = trialInfo.additionalProperties.toMutableMap()
             }
 
@@ -376,7 +388,20 @@ private constructor(
                 spendingCaps(JsonField.of(spendingCaps))
 
             fun spendingCaps(spendingCaps: JsonField<List<SpendingCap>>) = apply {
-                this.spendingCaps = spendingCaps
+                this.spendingCaps = spendingCaps.map { it.toMutableList() }
+            }
+
+            fun addSpendingCap(spendingCap: SpendingCap) = apply {
+                spendingCaps =
+                    (spendingCaps ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(spendingCap)
+                    }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -400,8 +425,9 @@ private constructor(
 
             fun build(): TrialInfo =
                 TrialInfo(
-                    endingBefore,
-                    spendingCaps.map { it.toImmutable() },
+                    checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
+                    checkNotNull(spendingCaps) { "`spendingCaps` is required but was not set" }
+                        .map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -429,13 +455,15 @@ private constructor(
 
             fun creditType(): CreditTypeData = creditType.getRequired("credit_type")
 
-            @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+            @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
             @JsonProperty("amount_remaining")
             @ExcludeMissing
-            fun _amountRemaining() = amountRemaining
+            fun _amountRemaining(): JsonField<Double> = amountRemaining
 
-            @JsonProperty("credit_type") @ExcludeMissing fun _creditType() = creditType
+            @JsonProperty("credit_type")
+            @ExcludeMissing
+            fun _creditType(): JsonField<CreditTypeData> = creditType
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -461,9 +489,9 @@ private constructor(
 
             class Builder {
 
-                private var amount: JsonField<Double> = JsonMissing.of()
-                private var amountRemaining: JsonField<Double> = JsonMissing.of()
-                private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
+                private var amount: JsonField<Double>? = null
+                private var amountRemaining: JsonField<Double>? = null
+                private var creditType: JsonField<CreditTypeData>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -515,9 +543,11 @@ private constructor(
 
                 fun build(): SpendingCap =
                     SpendingCap(
-                        amount,
-                        amountRemaining,
-                        creditType,
+                        checkNotNull(amount) { "`amount` is required but was not set" },
+                        checkNotNull(amountRemaining) {
+                            "`amountRemaining` is required but was not set"
+                        },
+                        checkNotNull(creditType) { "`creditType` is required but was not set" },
                         additionalProperties.toImmutable(),
                     )
             }

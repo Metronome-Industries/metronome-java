@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -51,11 +53,29 @@ constructor(
      */
     fun selectors(): Optional<List<Selector>> = body.selectors()
 
+    /** ID of the contract to get the rate schedule for. */
+    fun _contractId(): JsonField<String> = body._contractId()
+
+    /** ID of the customer for whose contract to get the rate schedule for. */
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    /**
+     * optional timestamp which overlaps with the returned rate schedule segments. When not
+     * specified, the current timestamp will be used.
+     */
+    fun _at(): JsonField<OffsetDateTime> = body._at()
+
+    /**
+     * List of rate selectors, rates matching ANY of the selectors will be included in the response.
+     * Passing no selectors will result in all rates being returned.
+     */
+    fun _selectors(): JsonField<List<Selector>> = body._selectors()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): ContractRetrieveRateScheduleBody = body
 
@@ -74,36 +94,80 @@ constructor(
     class ContractRetrieveRateScheduleBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("contract_id") private val contractId: String,
-        @JsonProperty("customer_id") private val customerId: String,
-        @JsonProperty("at") private val at: OffsetDateTime?,
-        @JsonProperty("selectors") private val selectors: List<Selector>?,
+        @JsonProperty("contract_id")
+        @ExcludeMissing
+        private val contractId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("at")
+        @ExcludeMissing
+        private val at: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("selectors")
+        @ExcludeMissing
+        private val selectors: JsonField<List<Selector>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the contract to get the rate schedule for. */
-        @JsonProperty("contract_id") fun contractId(): String = contractId
+        fun contractId(): String = contractId.getRequired("contract_id")
 
         /** ID of the customer for whose contract to get the rate schedule for. */
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
 
         /**
          * optional timestamp which overlaps with the returned rate schedule segments. When not
          * specified, the current timestamp will be used.
          */
-        @JsonProperty("at") fun at(): Optional<OffsetDateTime> = Optional.ofNullable(at)
+        fun at(): Optional<OffsetDateTime> = Optional.ofNullable(at.getNullable("at"))
+
+        /**
+         * List of rate selectors, rates matching ANY of the selectors will be included in the
+         * response. Passing no selectors will result in all rates being returned.
+         */
+        fun selectors(): Optional<List<Selector>> =
+            Optional.ofNullable(selectors.getNullable("selectors"))
+
+        /** ID of the contract to get the rate schedule for. */
+        @JsonProperty("contract_id")
+        @ExcludeMissing
+        fun _contractId(): JsonField<String> = contractId
+
+        /** ID of the customer for whose contract to get the rate schedule for. */
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
+
+        /**
+         * optional timestamp which overlaps with the returned rate schedule segments. When not
+         * specified, the current timestamp will be used.
+         */
+        @JsonProperty("at") @ExcludeMissing fun _at(): JsonField<OffsetDateTime> = at
 
         /**
          * List of rate selectors, rates matching ANY of the selectors will be included in the
          * response. Passing no selectors will result in all rates being returned.
          */
         @JsonProperty("selectors")
-        fun selectors(): Optional<List<Selector>> = Optional.ofNullable(selectors)
+        @ExcludeMissing
+        fun _selectors(): JsonField<List<Selector>> = selectors
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ContractRetrieveRateScheduleBody = apply {
+            if (!validated) {
+                contractId()
+                customerId()
+                at()
+                selectors().map { it.forEach { it.validate() } }
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -114,10 +178,10 @@ constructor(
 
         class Builder {
 
-            private var contractId: String? = null
-            private var customerId: String? = null
-            private var at: OffsetDateTime? = null
-            private var selectors: MutableList<Selector>? = null
+            private var contractId: JsonField<String>? = null
+            private var customerId: JsonField<String>? = null
+            private var at: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var selectors: JsonField<MutableList<Selector>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -126,49 +190,65 @@ constructor(
                     contractId = contractRetrieveRateScheduleBody.contractId
                     customerId = contractRetrieveRateScheduleBody.customerId
                     at = contractRetrieveRateScheduleBody.at
-                    selectors = contractRetrieveRateScheduleBody.selectors?.toMutableList()
+                    selectors =
+                        contractRetrieveRateScheduleBody.selectors.map { it.toMutableList() }
                     additionalProperties =
                         contractRetrieveRateScheduleBody.additionalProperties.toMutableMap()
                 }
 
             /** ID of the contract to get the rate schedule for. */
-            fun contractId(contractId: String) = apply { this.contractId = contractId }
+            fun contractId(contractId: String) = contractId(JsonField.of(contractId))
+
+            /** ID of the contract to get the rate schedule for. */
+            fun contractId(contractId: JsonField<String>) = apply { this.contractId = contractId }
 
             /** ID of the customer for whose contract to get the rate schedule for. */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            /** ID of the customer for whose contract to get the rate schedule for. */
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /**
              * optional timestamp which overlaps with the returned rate schedule segments. When not
              * specified, the current timestamp will be used.
              */
-            fun at(at: OffsetDateTime?) = apply { this.at = at }
+            fun at(at: OffsetDateTime) = at(JsonField.of(at))
 
             /**
              * optional timestamp which overlaps with the returned rate schedule segments. When not
              * specified, the current timestamp will be used.
              */
-            fun at(at: Optional<OffsetDateTime>) = at(at.orElse(null))
+            fun at(at: JsonField<OffsetDateTime>) = apply { this.at = at }
 
             /**
              * List of rate selectors, rates matching ANY of the selectors will be included in the
              * response. Passing no selectors will result in all rates being returned.
              */
-            fun selectors(selectors: List<Selector>?) = apply {
-                this.selectors = selectors?.toMutableList()
+            fun selectors(selectors: List<Selector>) = selectors(JsonField.of(selectors))
+
+            /**
+             * List of rate selectors, rates matching ANY of the selectors will be included in the
+             * response. Passing no selectors will result in all rates being returned.
+             */
+            fun selectors(selectors: JsonField<List<Selector>>) = apply {
+                this.selectors = selectors.map { it.toMutableList() }
             }
 
             /**
              * List of rate selectors, rates matching ANY of the selectors will be included in the
              * response. Passing no selectors will result in all rates being returned.
              */
-            fun selectors(selectors: Optional<List<Selector>>) = selectors(selectors.orElse(null))
-
-            /**
-             * List of rate selectors, rates matching ANY of the selectors will be included in the
-             * response. Passing no selectors will result in all rates being returned.
-             */
             fun addSelector(selector: Selector) = apply {
-                selectors = (selectors ?: mutableListOf()).apply { add(selector) }
+                selectors =
+                    (selectors ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(selector)
+                    }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -195,7 +275,7 @@ constructor(
                     checkNotNull(contractId) { "`contractId` is required but was not set" },
                     checkNotNull(customerId) { "`customerId` is required but was not set" },
                     at,
-                    selectors?.toImmutable(),
+                    (selectors ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -265,38 +345,63 @@ constructor(
         /** ID of the contract to get the rate schedule for. */
         fun contractId(contractId: String) = apply { body.contractId(contractId) }
 
+        /** ID of the contract to get the rate schedule for. */
+        fun contractId(contractId: JsonField<String>) = apply { body.contractId(contractId) }
+
         /** ID of the customer for whose contract to get the rate schedule for. */
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
-        /**
-         * optional timestamp which overlaps with the returned rate schedule segments. When not
-         * specified, the current timestamp will be used.
-         */
-        fun at(at: OffsetDateTime?) = apply { body.at(at) }
+        /** ID of the customer for whose contract to get the rate schedule for. */
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
 
         /**
          * optional timestamp which overlaps with the returned rate schedule segments. When not
          * specified, the current timestamp will be used.
          */
-        fun at(at: Optional<OffsetDateTime>) = at(at.orElse(null))
+        fun at(at: OffsetDateTime) = apply { body.at(at) }
+
+        /**
+         * optional timestamp which overlaps with the returned rate schedule segments. When not
+         * specified, the current timestamp will be used.
+         */
+        fun at(at: JsonField<OffsetDateTime>) = apply { body.at(at) }
 
         /**
          * List of rate selectors, rates matching ANY of the selectors will be included in the
          * response. Passing no selectors will result in all rates being returned.
          */
-        fun selectors(selectors: List<Selector>?) = apply { body.selectors(selectors) }
+        fun selectors(selectors: List<Selector>) = apply { body.selectors(selectors) }
 
         /**
          * List of rate selectors, rates matching ANY of the selectors will be included in the
          * response. Passing no selectors will result in all rates being returned.
          */
-        fun selectors(selectors: Optional<List<Selector>>) = selectors(selectors.orElse(null))
+        fun selectors(selectors: JsonField<List<Selector>>) = apply { body.selectors(selectors) }
 
         /**
          * List of rate selectors, rates matching ANY of the selectors will be included in the
          * response. Passing no selectors will result in all rates being returned.
          */
         fun addSelector(selector: Selector) = apply { body.addSelector(selector) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -396,25 +501,6 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
         fun build(): ContractRetrieveRateScheduleParams =
             ContractRetrieveRateScheduleParams(
                 limit,
@@ -430,10 +516,18 @@ constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("partial_pricing_group_values")
-        private val partialPricingGroupValues: PartialPricingGroupValues?,
-        @JsonProperty("pricing_group_values") private val pricingGroupValues: PricingGroupValues?,
-        @JsonProperty("product_id") private val productId: String?,
-        @JsonProperty("product_tags") private val productTags: List<String>?,
+        @ExcludeMissing
+        private val partialPricingGroupValues: JsonField<PartialPricingGroupValues> =
+            JsonMissing.of(),
+        @JsonProperty("pricing_group_values")
+        @ExcludeMissing
+        private val pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of(),
+        @JsonProperty("product_id")
+        @ExcludeMissing
+        private val productId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("product_tags")
+        @ExcludeMissing
+        private val productTags: JsonField<List<String>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -442,31 +536,69 @@ constructor(
          * List of pricing group key value pairs, rates containing the matching key / value pairs
          * will be included in the response.
          */
-        @JsonProperty("partial_pricing_group_values")
         fun partialPricingGroupValues(): Optional<PartialPricingGroupValues> =
-            Optional.ofNullable(partialPricingGroupValues)
+            Optional.ofNullable(
+                partialPricingGroupValues.getNullable("partial_pricing_group_values")
+            )
+
+        /**
+         * List of pricing group key value pairs, rates matching all of the key / value pairs will
+         * be included in the response.
+         */
+        fun pricingGroupValues(): Optional<PricingGroupValues> =
+            Optional.ofNullable(pricingGroupValues.getNullable("pricing_group_values"))
+
+        /** Rates matching the product id will be included in the response. */
+        fun productId(): Optional<String> = Optional.ofNullable(productId.getNullable("product_id"))
+
+        /**
+         * List of product tags, rates matching any of the tags will be included in the response.
+         */
+        fun productTags(): Optional<List<String>> =
+            Optional.ofNullable(productTags.getNullable("product_tags"))
+
+        /**
+         * List of pricing group key value pairs, rates containing the matching key / value pairs
+         * will be included in the response.
+         */
+        @JsonProperty("partial_pricing_group_values")
+        @ExcludeMissing
+        fun _partialPricingGroupValues(): JsonField<PartialPricingGroupValues> =
+            partialPricingGroupValues
 
         /**
          * List of pricing group key value pairs, rates matching all of the key / value pairs will
          * be included in the response.
          */
         @JsonProperty("pricing_group_values")
-        fun pricingGroupValues(): Optional<PricingGroupValues> =
-            Optional.ofNullable(pricingGroupValues)
+        @ExcludeMissing
+        fun _pricingGroupValues(): JsonField<PricingGroupValues> = pricingGroupValues
 
         /** Rates matching the product id will be included in the response. */
-        @JsonProperty("product_id")
-        fun productId(): Optional<String> = Optional.ofNullable(productId)
+        @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
         /**
          * List of product tags, rates matching any of the tags will be included in the response.
          */
         @JsonProperty("product_tags")
-        fun productTags(): Optional<List<String>> = Optional.ofNullable(productTags)
+        @ExcludeMissing
+        fun _productTags(): JsonField<List<String>> = productTags
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): Selector = apply {
+            if (!validated) {
+                partialPricingGroupValues().map { it.validate() }
+                pricingGroupValues().map { it.validate() }
+                productId()
+                productTags()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -477,10 +609,11 @@ constructor(
 
         class Builder {
 
-            private var partialPricingGroupValues: PartialPricingGroupValues? = null
-            private var pricingGroupValues: PricingGroupValues? = null
-            private var productId: String? = null
-            private var productTags: MutableList<String>? = null
+            private var partialPricingGroupValues: JsonField<PartialPricingGroupValues> =
+                JsonMissing.of()
+            private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
+            private var productId: JsonField<String> = JsonMissing.of()
+            private var productTags: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -488,7 +621,7 @@ constructor(
                 partialPricingGroupValues = selector.partialPricingGroupValues
                 pricingGroupValues = selector.pricingGroupValues
                 productId = selector.productId
-                productTags = selector.productTags?.toMutableList()
+                productTags = selector.productTags.map { it.toMutableList() }
                 additionalProperties = selector.additionalProperties.toMutableMap()
             }
 
@@ -496,61 +629,67 @@ constructor(
              * List of pricing group key value pairs, rates containing the matching key / value
              * pairs will be included in the response.
              */
-            fun partialPricingGroupValues(partialPricingGroupValues: PartialPricingGroupValues?) =
-                apply {
-                    this.partialPricingGroupValues = partialPricingGroupValues
-                }
+            fun partialPricingGroupValues(partialPricingGroupValues: PartialPricingGroupValues) =
+                partialPricingGroupValues(JsonField.of(partialPricingGroupValues))
 
             /**
              * List of pricing group key value pairs, rates containing the matching key / value
              * pairs will be included in the response.
              */
             fun partialPricingGroupValues(
-                partialPricingGroupValues: Optional<PartialPricingGroupValues>
-            ) = partialPricingGroupValues(partialPricingGroupValues.orElse(null))
+                partialPricingGroupValues: JsonField<PartialPricingGroupValues>
+            ) = apply { this.partialPricingGroupValues = partialPricingGroupValues }
 
             /**
              * List of pricing group key value pairs, rates matching all of the key / value pairs
              * will be included in the response.
              */
-            fun pricingGroupValues(pricingGroupValues: PricingGroupValues?) = apply {
+            fun pricingGroupValues(pricingGroupValues: PricingGroupValues) =
+                pricingGroupValues(JsonField.of(pricingGroupValues))
+
+            /**
+             * List of pricing group key value pairs, rates matching all of the key / value pairs
+             * will be included in the response.
+             */
+            fun pricingGroupValues(pricingGroupValues: JsonField<PricingGroupValues>) = apply {
                 this.pricingGroupValues = pricingGroupValues
             }
 
-            /**
-             * List of pricing group key value pairs, rates matching all of the key / value pairs
-             * will be included in the response.
-             */
-            fun pricingGroupValues(pricingGroupValues: Optional<PricingGroupValues>) =
-                pricingGroupValues(pricingGroupValues.orElse(null))
+            /** Rates matching the product id will be included in the response. */
+            fun productId(productId: String) = productId(JsonField.of(productId))
 
             /** Rates matching the product id will be included in the response. */
-            fun productId(productId: String?) = apply { this.productId = productId }
-
-            /** Rates matching the product id will be included in the response. */
-            fun productId(productId: Optional<String>) = productId(productId.orElse(null))
+            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
             /**
              * List of product tags, rates matching any of the tags will be included in the
              * response.
              */
-            fun productTags(productTags: List<String>?) = apply {
-                this.productTags = productTags?.toMutableList()
+            fun productTags(productTags: List<String>) = productTags(JsonField.of(productTags))
+
+            /**
+             * List of product tags, rates matching any of the tags will be included in the
+             * response.
+             */
+            fun productTags(productTags: JsonField<List<String>>) = apply {
+                this.productTags = productTags.map { it.toMutableList() }
             }
-
-            /**
-             * List of product tags, rates matching any of the tags will be included in the
-             * response.
-             */
-            fun productTags(productTags: Optional<List<String>>) =
-                productTags(productTags.orElse(null))
 
             /**
              * List of product tags, rates matching any of the tags will be included in the
              * response.
              */
             fun addProductTag(productTag: String) = apply {
-                productTags = (productTags ?: mutableListOf()).apply { add(productTag) }
+                productTags =
+                    (productTags ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(productTag)
+                    }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -577,7 +716,7 @@ constructor(
                     partialPricingGroupValues,
                     pricingGroupValues,
                     productId,
-                    productTags?.toImmutable(),
+                    (productTags ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -597,6 +736,14 @@ constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): PartialPricingGroupValues = apply {
+                if (!validated) {
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -674,6 +821,14 @@ constructor(
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): PricingGroupValues = apply {
+                if (!validated) {
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 

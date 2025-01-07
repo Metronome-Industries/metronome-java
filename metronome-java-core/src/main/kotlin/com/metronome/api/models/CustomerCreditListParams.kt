@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -52,11 +54,38 @@ constructor(
     /** Include only credits that have any access on or after the provided date */
     fun startingAt(): Optional<OffsetDateTime> = body.startingAt()
 
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    /** Return only credits that have access schedules that "cover" the provided date */
+    fun _coveringDate(): JsonField<OffsetDateTime> = body._coveringDate()
+
+    fun _creditId(): JsonField<String> = body._creditId()
+
+    /** Include only credits that have any access before the provided date (exclusive) */
+    fun _effectiveBefore(): JsonField<OffsetDateTime> = body._effectiveBefore()
+
+    /** Include credits from archived contracts. */
+    fun _includeArchived(): JsonField<Boolean> = body._includeArchived()
+
+    /** Include credits on the contract level. */
+    fun _includeContractCredits(): JsonField<Boolean> = body._includeContractCredits()
+
+    /**
+     * Include credit ledgers in the response. Setting this flag may cause the query to be slower.
+     */
+    fun _includeLedgers(): JsonField<Boolean> = body._includeLedgers()
+
+    /** The next page token from a previous response. */
+    fun _nextPage(): JsonField<String> = body._nextPage()
+
+    /** Include only credits that have any access on or after the provided date */
+    fun _startingAt(): JsonField<OffsetDateTime> = body._startingAt()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomerCreditListBody = body
 
@@ -68,57 +97,133 @@ constructor(
     class CustomerCreditListBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("customer_id") private val customerId: String,
-        @JsonProperty("covering_date") private val coveringDate: OffsetDateTime?,
-        @JsonProperty("credit_id") private val creditId: String?,
-        @JsonProperty("effective_before") private val effectiveBefore: OffsetDateTime?,
-        @JsonProperty("include_archived") private val includeArchived: Boolean?,
-        @JsonProperty("include_contract_credits") private val includeContractCredits: Boolean?,
-        @JsonProperty("include_ledgers") private val includeLedgers: Boolean?,
-        @JsonProperty("next_page") private val nextPage: String?,
-        @JsonProperty("starting_at") private val startingAt: OffsetDateTime?,
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("covering_date")
+        @ExcludeMissing
+        private val coveringDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("credit_id")
+        @ExcludeMissing
+        private val creditId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("effective_before")
+        @ExcludeMissing
+        private val effectiveBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("include_archived")
+        @ExcludeMissing
+        private val includeArchived: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("include_contract_credits")
+        @ExcludeMissing
+        private val includeContractCredits: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("include_ledgers")
+        @ExcludeMissing
+        private val includeLedgers: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("next_page")
+        @ExcludeMissing
+        private val nextPage: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
+
+        /** Return only credits that have access schedules that "cover" the provided date */
+        fun coveringDate(): Optional<OffsetDateTime> =
+            Optional.ofNullable(coveringDate.getNullable("covering_date"))
+
+        fun creditId(): Optional<String> = Optional.ofNullable(creditId.getNullable("credit_id"))
+
+        /** Include only credits that have any access before the provided date (exclusive) */
+        fun effectiveBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(effectiveBefore.getNullable("effective_before"))
+
+        /** Include credits from archived contracts. */
+        fun includeArchived(): Optional<Boolean> =
+            Optional.ofNullable(includeArchived.getNullable("include_archived"))
+
+        /** Include credits on the contract level. */
+        fun includeContractCredits(): Optional<Boolean> =
+            Optional.ofNullable(includeContractCredits.getNullable("include_contract_credits"))
+
+        /**
+         * Include credit ledgers in the response. Setting this flag may cause the query to be
+         * slower.
+         */
+        fun includeLedgers(): Optional<Boolean> =
+            Optional.ofNullable(includeLedgers.getNullable("include_ledgers"))
+
+        /** The next page token from a previous response. */
+        fun nextPage(): Optional<String> = Optional.ofNullable(nextPage.getNullable("next_page"))
+
+        /** Include only credits that have any access on or after the provided date */
+        fun startingAt(): Optional<OffsetDateTime> =
+            Optional.ofNullable(startingAt.getNullable("starting_at"))
+
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
 
         /** Return only credits that have access schedules that "cover" the provided date */
         @JsonProperty("covering_date")
-        fun coveringDate(): Optional<OffsetDateTime> = Optional.ofNullable(coveringDate)
+        @ExcludeMissing
+        fun _coveringDate(): JsonField<OffsetDateTime> = coveringDate
 
-        @JsonProperty("credit_id") fun creditId(): Optional<String> = Optional.ofNullable(creditId)
+        @JsonProperty("credit_id") @ExcludeMissing fun _creditId(): JsonField<String> = creditId
 
         /** Include only credits that have any access before the provided date (exclusive) */
         @JsonProperty("effective_before")
-        fun effectiveBefore(): Optional<OffsetDateTime> = Optional.ofNullable(effectiveBefore)
+        @ExcludeMissing
+        fun _effectiveBefore(): JsonField<OffsetDateTime> = effectiveBefore
 
         /** Include credits from archived contracts. */
         @JsonProperty("include_archived")
-        fun includeArchived(): Optional<Boolean> = Optional.ofNullable(includeArchived)
+        @ExcludeMissing
+        fun _includeArchived(): JsonField<Boolean> = includeArchived
 
         /** Include credits on the contract level. */
         @JsonProperty("include_contract_credits")
-        fun includeContractCredits(): Optional<Boolean> =
-            Optional.ofNullable(includeContractCredits)
+        @ExcludeMissing
+        fun _includeContractCredits(): JsonField<Boolean> = includeContractCredits
 
         /**
          * Include credit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
         @JsonProperty("include_ledgers")
-        fun includeLedgers(): Optional<Boolean> = Optional.ofNullable(includeLedgers)
+        @ExcludeMissing
+        fun _includeLedgers(): JsonField<Boolean> = includeLedgers
 
         /** The next page token from a previous response. */
-        @JsonProperty("next_page") fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
+        @JsonProperty("next_page") @ExcludeMissing fun _nextPage(): JsonField<String> = nextPage
 
         /** Include only credits that have any access on or after the provided date */
         @JsonProperty("starting_at")
-        fun startingAt(): Optional<OffsetDateTime> = Optional.ofNullable(startingAt)
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomerCreditListBody = apply {
+            if (!validated) {
+                customerId()
+                coveringDate()
+                creditId()
+                effectiveBefore()
+                includeArchived()
+                includeContractCredits()
+                includeLedgers()
+                nextPage()
+                startingAt()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -129,15 +234,15 @@ constructor(
 
         class Builder {
 
-            private var customerId: String? = null
-            private var coveringDate: OffsetDateTime? = null
-            private var creditId: String? = null
-            private var effectiveBefore: OffsetDateTime? = null
-            private var includeArchived: Boolean? = null
-            private var includeContractCredits: Boolean? = null
-            private var includeLedgers: Boolean? = null
-            private var nextPage: String? = null
-            private var startingAt: OffsetDateTime? = null
+            private var customerId: JsonField<String>? = null
+            private var coveringDate: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var creditId: JsonField<String> = JsonMissing.of()
+            private var effectiveBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var includeArchived: JsonField<Boolean> = JsonMissing.of()
+            private var includeContractCredits: JsonField<Boolean> = JsonMissing.of()
+            private var includeLedgers: JsonField<Boolean> = JsonMissing.of()
+            private var nextPage: JsonField<String> = JsonMissing.of()
+            private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -154,92 +259,78 @@ constructor(
                 additionalProperties = customerCreditListBody.additionalProperties.toMutableMap()
             }
 
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /** Return only credits that have access schedules that "cover" the provided date */
-            fun coveringDate(coveringDate: OffsetDateTime?) = apply {
+            fun coveringDate(coveringDate: OffsetDateTime) =
+                coveringDate(JsonField.of(coveringDate))
+
+            /** Return only credits that have access schedules that "cover" the provided date */
+            fun coveringDate(coveringDate: JsonField<OffsetDateTime>) = apply {
                 this.coveringDate = coveringDate
             }
 
-            /** Return only credits that have access schedules that "cover" the provided date */
-            fun coveringDate(coveringDate: Optional<OffsetDateTime>) =
-                coveringDate(coveringDate.orElse(null))
+            fun creditId(creditId: String) = creditId(JsonField.of(creditId))
 
-            fun creditId(creditId: String?) = apply { this.creditId = creditId }
-
-            fun creditId(creditId: Optional<String>) = creditId(creditId.orElse(null))
+            fun creditId(creditId: JsonField<String>) = apply { this.creditId = creditId }
 
             /** Include only credits that have any access before the provided date (exclusive) */
-            fun effectiveBefore(effectiveBefore: OffsetDateTime?) = apply {
+            fun effectiveBefore(effectiveBefore: OffsetDateTime) =
+                effectiveBefore(JsonField.of(effectiveBefore))
+
+            /** Include only credits that have any access before the provided date (exclusive) */
+            fun effectiveBefore(effectiveBefore: JsonField<OffsetDateTime>) = apply {
                 this.effectiveBefore = effectiveBefore
-            }
-
-            /** Include only credits that have any access before the provided date (exclusive) */
-            fun effectiveBefore(effectiveBefore: Optional<OffsetDateTime>) =
-                effectiveBefore(effectiveBefore.orElse(null))
-
-            /** Include credits from archived contracts. */
-            fun includeArchived(includeArchived: Boolean?) = apply {
-                this.includeArchived = includeArchived
             }
 
             /** Include credits from archived contracts. */
             fun includeArchived(includeArchived: Boolean) =
-                includeArchived(includeArchived as Boolean?)
+                includeArchived(JsonField.of(includeArchived))
 
             /** Include credits from archived contracts. */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun includeArchived(includeArchived: Optional<Boolean>) =
-                includeArchived(includeArchived.orElse(null) as Boolean?)
-
-            /** Include credits on the contract level. */
-            fun includeContractCredits(includeContractCredits: Boolean?) = apply {
-                this.includeContractCredits = includeContractCredits
+            fun includeArchived(includeArchived: JsonField<Boolean>) = apply {
+                this.includeArchived = includeArchived
             }
 
             /** Include credits on the contract level. */
             fun includeContractCredits(includeContractCredits: Boolean) =
-                includeContractCredits(includeContractCredits as Boolean?)
+                includeContractCredits(JsonField.of(includeContractCredits))
 
             /** Include credits on the contract level. */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun includeContractCredits(includeContractCredits: Optional<Boolean>) =
-                includeContractCredits(includeContractCredits.orElse(null) as Boolean?)
-
-            /**
-             * Include credit ledgers in the response. Setting this flag may cause the query to be
-             * slower.
-             */
-            fun includeLedgers(includeLedgers: Boolean?) = apply {
-                this.includeLedgers = includeLedgers
+            fun includeContractCredits(includeContractCredits: JsonField<Boolean>) = apply {
+                this.includeContractCredits = includeContractCredits
             }
 
             /**
              * Include credit ledgers in the response. Setting this flag may cause the query to be
              * slower.
              */
-            fun includeLedgers(includeLedgers: Boolean) = includeLedgers(includeLedgers as Boolean?)
+            fun includeLedgers(includeLedgers: Boolean) =
+                includeLedgers(JsonField.of(includeLedgers))
 
             /**
              * Include credit ledgers in the response. Setting this flag may cause the query to be
              * slower.
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun includeLedgers(includeLedgers: Optional<Boolean>) =
-                includeLedgers(includeLedgers.orElse(null) as Boolean?)
+            fun includeLedgers(includeLedgers: JsonField<Boolean>) = apply {
+                this.includeLedgers = includeLedgers
+            }
 
             /** The next page token from a previous response. */
-            fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+            fun nextPage(nextPage: String) = nextPage(JsonField.of(nextPage))
 
             /** The next page token from a previous response. */
-            fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
+            fun nextPage(nextPage: JsonField<String>) = apply { this.nextPage = nextPage }
 
             /** Include only credits that have any access on or after the provided date */
-            fun startingAt(startingAt: OffsetDateTime?) = apply { this.startingAt = startingAt }
+            fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
             /** Include only credits that have any access on or after the provided date */
-            fun startingAt(startingAt: Optional<OffsetDateTime>) =
-                startingAt(startingAt.orElse(null))
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                this.startingAt = startingAt
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -316,84 +407,96 @@ constructor(
 
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
-        /** Return only credits that have access schedules that "cover" the provided date */
-        fun coveringDate(coveringDate: OffsetDateTime?) = apply { body.coveringDate(coveringDate) }
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
 
         /** Return only credits that have access schedules that "cover" the provided date */
-        fun coveringDate(coveringDate: Optional<OffsetDateTime>) =
-            coveringDate(coveringDate.orElse(null))
+        fun coveringDate(coveringDate: OffsetDateTime) = apply { body.coveringDate(coveringDate) }
 
-        fun creditId(creditId: String?) = apply { body.creditId(creditId) }
+        /** Return only credits that have access schedules that "cover" the provided date */
+        fun coveringDate(coveringDate: JsonField<OffsetDateTime>) = apply {
+            body.coveringDate(coveringDate)
+        }
 
-        fun creditId(creditId: Optional<String>) = creditId(creditId.orElse(null))
+        fun creditId(creditId: String) = apply { body.creditId(creditId) }
+
+        fun creditId(creditId: JsonField<String>) = apply { body.creditId(creditId) }
 
         /** Include only credits that have any access before the provided date (exclusive) */
-        fun effectiveBefore(effectiveBefore: OffsetDateTime?) = apply {
+        fun effectiveBefore(effectiveBefore: OffsetDateTime) = apply {
             body.effectiveBefore(effectiveBefore)
         }
 
         /** Include only credits that have any access before the provided date (exclusive) */
-        fun effectiveBefore(effectiveBefore: Optional<OffsetDateTime>) =
-            effectiveBefore(effectiveBefore.orElse(null))
+        fun effectiveBefore(effectiveBefore: JsonField<OffsetDateTime>) = apply {
+            body.effectiveBefore(effectiveBefore)
+        }
 
         /** Include credits from archived contracts. */
-        fun includeArchived(includeArchived: Boolean?) = apply {
+        fun includeArchived(includeArchived: Boolean) = apply {
             body.includeArchived(includeArchived)
         }
 
         /** Include credits from archived contracts. */
-        fun includeArchived(includeArchived: Boolean) = includeArchived(includeArchived as Boolean?)
-
-        /** Include credits from archived contracts. */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun includeArchived(includeArchived: Optional<Boolean>) =
-            includeArchived(includeArchived.orElse(null) as Boolean?)
+        fun includeArchived(includeArchived: JsonField<Boolean>) = apply {
+            body.includeArchived(includeArchived)
+        }
 
         /** Include credits on the contract level. */
-        fun includeContractCredits(includeContractCredits: Boolean?) = apply {
+        fun includeContractCredits(includeContractCredits: Boolean) = apply {
             body.includeContractCredits(includeContractCredits)
         }
 
         /** Include credits on the contract level. */
-        fun includeContractCredits(includeContractCredits: Boolean) =
-            includeContractCredits(includeContractCredits as Boolean?)
-
-        /** Include credits on the contract level. */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun includeContractCredits(includeContractCredits: Optional<Boolean>) =
-            includeContractCredits(includeContractCredits.orElse(null) as Boolean?)
+        fun includeContractCredits(includeContractCredits: JsonField<Boolean>) = apply {
+            body.includeContractCredits(includeContractCredits)
+        }
 
         /**
          * Include credit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        fun includeLedgers(includeLedgers: Boolean?) = apply { body.includeLedgers(includeLedgers) }
+        fun includeLedgers(includeLedgers: Boolean) = apply { body.includeLedgers(includeLedgers) }
 
         /**
          * Include credit ledgers in the response. Setting this flag may cause the query to be
          * slower.
          */
-        fun includeLedgers(includeLedgers: Boolean) = includeLedgers(includeLedgers as Boolean?)
-
-        /**
-         * Include credit ledgers in the response. Setting this flag may cause the query to be
-         * slower.
-         */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun includeLedgers(includeLedgers: Optional<Boolean>) =
-            includeLedgers(includeLedgers.orElse(null) as Boolean?)
+        fun includeLedgers(includeLedgers: JsonField<Boolean>) = apply {
+            body.includeLedgers(includeLedgers)
+        }
 
         /** The next page token from a previous response. */
-        fun nextPage(nextPage: String?) = apply { body.nextPage(nextPage) }
+        fun nextPage(nextPage: String) = apply { body.nextPage(nextPage) }
 
         /** The next page token from a previous response. */
-        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
+        fun nextPage(nextPage: JsonField<String>) = apply { body.nextPage(nextPage) }
 
         /** Include only credits that have any access on or after the provided date */
-        fun startingAt(startingAt: OffsetDateTime?) = apply { body.startingAt(startingAt) }
+        fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
 
         /** Include only credits that have any access on or after the provided date */
-        fun startingAt(startingAt: Optional<OffsetDateTime>) = startingAt(startingAt.orElse(null))
+        fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+            body.startingAt(startingAt)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -491,25 +594,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerCreditListParams =

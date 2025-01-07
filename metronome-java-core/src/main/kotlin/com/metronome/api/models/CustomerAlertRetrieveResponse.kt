@@ -27,7 +27,7 @@ private constructor(
 
     fun data(): CustomerAlert = data.getRequired("data")
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<CustomerAlert> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -51,7 +51,7 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<CustomerAlert> = JsonMissing.of()
+        private var data: JsonField<CustomerAlert>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -84,7 +84,10 @@ private constructor(
         }
 
         fun build(): CustomerAlertRetrieveResponse =
-            CustomerAlertRetrieveResponse(data, additionalProperties.toImmutable())
+            CustomerAlertRetrieveResponse(
+                checkNotNull(data) { "`data` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     override fun equals(other: Any?): Boolean {

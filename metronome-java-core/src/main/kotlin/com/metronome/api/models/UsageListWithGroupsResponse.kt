@@ -47,15 +47,19 @@ private constructor(
 
     fun value(): Optional<Double> = Optional.ofNullable(value.getNullable("value"))
 
-    @JsonProperty("ending_before") @ExcludeMissing fun _endingBefore() = endingBefore
+    @JsonProperty("ending_before")
+    @ExcludeMissing
+    fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
-    @JsonProperty("group_key") @ExcludeMissing fun _groupKey() = groupKey
+    @JsonProperty("group_key") @ExcludeMissing fun _groupKey(): JsonField<String> = groupKey
 
-    @JsonProperty("group_value") @ExcludeMissing fun _groupValue() = groupValue
+    @JsonProperty("group_value") @ExcludeMissing fun _groupValue(): JsonField<String> = groupValue
 
-    @JsonProperty("starting_on") @ExcludeMissing fun _startingOn() = startingOn
+    @JsonProperty("starting_on")
+    @ExcludeMissing
+    fun _startingOn(): JsonField<OffsetDateTime> = startingOn
 
-    @JsonProperty("value") @ExcludeMissing fun _value() = value
+    @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<Double> = value
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -83,11 +87,11 @@ private constructor(
 
     class Builder {
 
-        private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var groupKey: JsonField<String> = JsonMissing.of()
-        private var groupValue: JsonField<String> = JsonMissing.of()
-        private var startingOn: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var value: JsonField<Double> = JsonMissing.of()
+        private var endingBefore: JsonField<OffsetDateTime>? = null
+        private var groupKey: JsonField<String>? = null
+        private var groupValue: JsonField<String>? = null
+        private var startingOn: JsonField<OffsetDateTime>? = null
+        private var value: JsonField<Double>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -106,11 +110,15 @@ private constructor(
             this.endingBefore = endingBefore
         }
 
-        fun groupKey(groupKey: String) = groupKey(JsonField.of(groupKey))
+        fun groupKey(groupKey: String?) = groupKey(JsonField.ofNullable(groupKey))
+
+        fun groupKey(groupKey: Optional<String>) = groupKey(groupKey.orElse(null))
 
         fun groupKey(groupKey: JsonField<String>) = apply { this.groupKey = groupKey }
 
-        fun groupValue(groupValue: String) = groupValue(JsonField.of(groupValue))
+        fun groupValue(groupValue: String?) = groupValue(JsonField.ofNullable(groupValue))
+
+        fun groupValue(groupValue: Optional<String>) = groupValue(groupValue.orElse(null))
 
         fun groupValue(groupValue: JsonField<String>) = apply { this.groupValue = groupValue }
 
@@ -120,7 +128,12 @@ private constructor(
             this.startingOn = startingOn
         }
 
-        fun value(value: Double) = value(JsonField.of(value))
+        fun value(value: Double?) = value(JsonField.ofNullable(value))
+
+        fun value(value: Double) = value(value as Double?)
+
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun value(value: Optional<Double>) = value(value.orElse(null) as Double?)
 
         fun value(value: JsonField<Double>) = apply { this.value = value }
 
@@ -145,11 +158,11 @@ private constructor(
 
         fun build(): UsageListWithGroupsResponse =
             UsageListWithGroupsResponse(
-                endingBefore,
-                groupKey,
-                groupValue,
-                startingOn,
-                value,
+                checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
+                checkNotNull(groupKey) { "`groupKey` is required but was not set" },
+                checkNotNull(groupValue) { "`groupValue` is required but was not set" },
+                checkNotNull(startingOn) { "`startingOn` is required but was not set" },
+                checkNotNull(value) { "`value` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }

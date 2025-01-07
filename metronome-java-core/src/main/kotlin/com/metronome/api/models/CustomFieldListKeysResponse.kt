@@ -35,9 +35,9 @@ private constructor(
 
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage.getNullable("next_page"))
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Data>> = data
 
-    @JsonProperty("next_page") @ExcludeMissing fun _nextPage() = nextPage
+    @JsonProperty("next_page") @ExcludeMissing fun _nextPage(): JsonField<String> = nextPage
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -62,22 +62,39 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<List<Data>> = JsonMissing.of()
-        private var nextPage: JsonField<String> = JsonMissing.of()
+        private var data: JsonField<MutableList<Data>>? = null
+        private var nextPage: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(customFieldListKeysResponse: CustomFieldListKeysResponse) = apply {
-            data = customFieldListKeysResponse.data
+            data = customFieldListKeysResponse.data.map { it.toMutableList() }
             nextPage = customFieldListKeysResponse.nextPage
             additionalProperties = customFieldListKeysResponse.additionalProperties.toMutableMap()
         }
 
         fun data(data: List<Data>) = data(JsonField.of(data))
 
-        fun data(data: JsonField<List<Data>>) = apply { this.data = data }
+        fun data(data: JsonField<List<Data>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
 
-        fun nextPage(nextPage: String) = nextPage(JsonField.of(nextPage))
+        fun addData(data: Data) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(data)
+                }
+        }
+
+        fun nextPage(nextPage: String?) = nextPage(JsonField.ofNullable(nextPage))
+
+        fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
         fun nextPage(nextPage: JsonField<String>) = apply { this.nextPage = nextPage }
 
@@ -102,8 +119,9 @@ private constructor(
 
         fun build(): CustomFieldListKeysResponse =
             CustomFieldListKeysResponse(
-                data.map { it.toImmutable() },
-                nextPage,
+                checkNotNull(data) { "`data` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(nextPage) { "`nextPage` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }
@@ -131,11 +149,11 @@ private constructor(
 
         @JsonProperty("enforce_uniqueness")
         @ExcludeMissing
-        fun _enforceUniqueness() = enforceUniqueness
+        fun _enforceUniqueness(): JsonField<Boolean> = enforceUniqueness
 
-        @JsonProperty("entity") @ExcludeMissing fun _entity() = entity
+        @JsonProperty("entity") @ExcludeMissing fun _entity(): JsonField<Entity> = entity
 
-        @JsonProperty("key") @ExcludeMissing fun _key() = key
+        @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -161,9 +179,9 @@ private constructor(
 
         class Builder {
 
-            private var enforceUniqueness: JsonField<Boolean> = JsonMissing.of()
-            private var entity: JsonField<Entity> = JsonMissing.of()
-            private var key: JsonField<String> = JsonMissing.of()
+            private var enforceUniqueness: JsonField<Boolean>? = null
+            private var entity: JsonField<Entity>? = null
+            private var key: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -210,9 +228,11 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    enforceUniqueness,
-                    entity,
-                    key,
+                    checkNotNull(enforceUniqueness) {
+                        "`enforceUniqueness` is required but was not set"
+                    },
+                    checkNotNull(entity) { "`entity` is required but was not set" },
+                    checkNotNull(key) { "`key` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }

@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.ExcludeMissing
+import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -32,11 +34,20 @@ constructor(
     /** If false, the existing finalized invoices will remain after the contract is archived. */
     fun voidInvoices(): Boolean = body.voidInvoices()
 
+    /** ID of the contract to archive */
+    fun _contractId(): JsonField<String> = body._contractId()
+
+    /** ID of the customer whose contract is to be archived */
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    /** If false, the existing finalized invoices will remain after the contract is archived. */
+    fun _voidInvoices(): JsonField<Boolean> = body._voidInvoices()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): ContractArchiveBody = body
 
@@ -48,25 +59,57 @@ constructor(
     class ContractArchiveBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("contract_id") private val contractId: String,
-        @JsonProperty("customer_id") private val customerId: String,
-        @JsonProperty("void_invoices") private val voidInvoices: Boolean,
+        @JsonProperty("contract_id")
+        @ExcludeMissing
+        private val contractId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("void_invoices")
+        @ExcludeMissing
+        private val voidInvoices: JsonField<Boolean> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the contract to archive */
-        @JsonProperty("contract_id") fun contractId(): String = contractId
+        fun contractId(): String = contractId.getRequired("contract_id")
 
         /** ID of the customer whose contract is to be archived */
-        @JsonProperty("customer_id") fun customerId(): String = customerId
+        fun customerId(): String = customerId.getRequired("customer_id")
 
         /** If false, the existing finalized invoices will remain after the contract is archived. */
-        @JsonProperty("void_invoices") fun voidInvoices(): Boolean = voidInvoices
+        fun voidInvoices(): Boolean = voidInvoices.getRequired("void_invoices")
+
+        /** ID of the contract to archive */
+        @JsonProperty("contract_id")
+        @ExcludeMissing
+        fun _contractId(): JsonField<String> = contractId
+
+        /** ID of the customer whose contract is to be archived */
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
+
+        /** If false, the existing finalized invoices will remain after the contract is archived. */
+        @JsonProperty("void_invoices")
+        @ExcludeMissing
+        fun _voidInvoices(): JsonField<Boolean> = voidInvoices
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ContractArchiveBody = apply {
+            if (!validated) {
+                contractId()
+                customerId()
+                voidInvoices()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -77,9 +120,9 @@ constructor(
 
         class Builder {
 
-            private var contractId: String? = null
-            private var customerId: String? = null
-            private var voidInvoices: Boolean? = null
+            private var contractId: JsonField<String>? = null
+            private var customerId: JsonField<String>? = null
+            private var voidInvoices: JsonField<Boolean>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -91,15 +134,28 @@ constructor(
             }
 
             /** ID of the contract to archive */
-            fun contractId(contractId: String) = apply { this.contractId = contractId }
+            fun contractId(contractId: String) = contractId(JsonField.of(contractId))
+
+            /** ID of the contract to archive */
+            fun contractId(contractId: JsonField<String>) = apply { this.contractId = contractId }
 
             /** ID of the customer whose contract is to be archived */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            /** ID of the customer whose contract is to be archived */
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /**
              * If false, the existing finalized invoices will remain after the contract is archived.
              */
-            fun voidInvoices(voidInvoices: Boolean) = apply { this.voidInvoices = voidInvoices }
+            fun voidInvoices(voidInvoices: Boolean) = voidInvoices(JsonField.of(voidInvoices))
+
+            /**
+             * If false, the existing finalized invoices will remain after the contract is archived.
+             */
+            fun voidInvoices(voidInvoices: JsonField<Boolean>) = apply {
+                this.voidInvoices = voidInvoices
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -171,11 +227,41 @@ constructor(
         /** ID of the contract to archive */
         fun contractId(contractId: String) = apply { body.contractId(contractId) }
 
+        /** ID of the contract to archive */
+        fun contractId(contractId: JsonField<String>) = apply { body.contractId(contractId) }
+
         /** ID of the customer whose contract is to be archived */
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
+        /** ID of the customer whose contract is to be archived */
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
+
         /** If false, the existing finalized invoices will remain after the contract is archived. */
         fun voidInvoices(voidInvoices: Boolean) = apply { body.voidInvoices(voidInvoices) }
+
+        /** If false, the existing finalized invoices will remain after the contract is archived. */
+        fun voidInvoices(voidInvoices: JsonField<Boolean>) = apply {
+            body.voidInvoices(voidInvoices)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -273,25 +359,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ContractArchiveParams =

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -42,11 +43,21 @@ constructor(
 
     fun stripeCollectionMethod(): Optional<StripeCollectionMethod> = body.stripeCollectionMethod()
 
+    /** The customer ID in the billing provider's system. For Azure, this is the subscription ID. */
+    fun _billingProviderCustomerId(): JsonField<String> = body._billingProviderCustomerId()
+
+    fun _awsProductCode(): JsonField<String> = body._awsProductCode()
+
+    fun _awsRegion(): JsonField<AwsRegion> = body._awsRegion()
+
+    fun _stripeCollectionMethod(): JsonField<StripeCollectionMethod> =
+        body._stripeCollectionMethod()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomerBillingConfigCreateBody = body
 
@@ -66,11 +77,18 @@ constructor(
     class CustomerBillingConfigCreateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("billing_provider_customer_id") private val billingProviderCustomerId: String,
-        @JsonProperty("aws_product_code") private val awsProductCode: String?,
-        @JsonProperty("aws_region") private val awsRegion: AwsRegion?,
+        @JsonProperty("billing_provider_customer_id")
+        @ExcludeMissing
+        private val billingProviderCustomerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("aws_product_code")
+        @ExcludeMissing
+        private val awsProductCode: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("aws_region")
+        @ExcludeMissing
+        private val awsRegion: JsonField<AwsRegion> = JsonMissing.of(),
         @JsonProperty("stripe_collection_method")
-        private val stripeCollectionMethod: StripeCollectionMethod?,
+        @ExcludeMissing
+        private val stripeCollectionMethod: JsonField<StripeCollectionMethod> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -78,22 +96,52 @@ constructor(
         /**
          * The customer ID in the billing provider's system. For Azure, this is the subscription ID.
          */
+        fun billingProviderCustomerId(): String =
+            billingProviderCustomerId.getRequired("billing_provider_customer_id")
+
+        fun awsProductCode(): Optional<String> =
+            Optional.ofNullable(awsProductCode.getNullable("aws_product_code"))
+
+        fun awsRegion(): Optional<AwsRegion> =
+            Optional.ofNullable(awsRegion.getNullable("aws_region"))
+
+        fun stripeCollectionMethod(): Optional<StripeCollectionMethod> =
+            Optional.ofNullable(stripeCollectionMethod.getNullable("stripe_collection_method"))
+
+        /**
+         * The customer ID in the billing provider's system. For Azure, this is the subscription ID.
+         */
         @JsonProperty("billing_provider_customer_id")
-        fun billingProviderCustomerId(): String = billingProviderCustomerId
+        @ExcludeMissing
+        fun _billingProviderCustomerId(): JsonField<String> = billingProviderCustomerId
 
         @JsonProperty("aws_product_code")
-        fun awsProductCode(): Optional<String> = Optional.ofNullable(awsProductCode)
+        @ExcludeMissing
+        fun _awsProductCode(): JsonField<String> = awsProductCode
 
         @JsonProperty("aws_region")
-        fun awsRegion(): Optional<AwsRegion> = Optional.ofNullable(awsRegion)
+        @ExcludeMissing
+        fun _awsRegion(): JsonField<AwsRegion> = awsRegion
 
         @JsonProperty("stripe_collection_method")
-        fun stripeCollectionMethod(): Optional<StripeCollectionMethod> =
-            Optional.ofNullable(stripeCollectionMethod)
+        @ExcludeMissing
+        fun _stripeCollectionMethod(): JsonField<StripeCollectionMethod> = stripeCollectionMethod
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomerBillingConfigCreateBody = apply {
+            if (!validated) {
+                billingProviderCustomerId()
+                awsProductCode()
+                awsRegion()
+                stripeCollectionMethod()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -104,10 +152,10 @@ constructor(
 
         class Builder {
 
-            private var billingProviderCustomerId: String? = null
-            private var awsProductCode: String? = null
-            private var awsRegion: AwsRegion? = null
-            private var stripeCollectionMethod: StripeCollectionMethod? = null
+            private var billingProviderCustomerId: JsonField<String>? = null
+            private var awsProductCode: JsonField<String> = JsonMissing.of()
+            private var awsRegion: JsonField<AwsRegion> = JsonMissing.of()
+            private var stripeCollectionMethod: JsonField<StripeCollectionMethod> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -126,27 +174,35 @@ constructor(
              * The customer ID in the billing provider's system. For Azure, this is the subscription
              * ID.
              */
-            fun billingProviderCustomerId(billingProviderCustomerId: String) = apply {
+            fun billingProviderCustomerId(billingProviderCustomerId: String) =
+                billingProviderCustomerId(JsonField.of(billingProviderCustomerId))
+
+            /**
+             * The customer ID in the billing provider's system. For Azure, this is the subscription
+             * ID.
+             */
+            fun billingProviderCustomerId(billingProviderCustomerId: JsonField<String>) = apply {
                 this.billingProviderCustomerId = billingProviderCustomerId
             }
 
-            fun awsProductCode(awsProductCode: String?) = apply {
+            fun awsProductCode(awsProductCode: String) =
+                awsProductCode(JsonField.of(awsProductCode))
+
+            fun awsProductCode(awsProductCode: JsonField<String>) = apply {
                 this.awsProductCode = awsProductCode
             }
 
-            fun awsProductCode(awsProductCode: Optional<String>) =
-                awsProductCode(awsProductCode.orElse(null))
+            fun awsRegion(awsRegion: AwsRegion) = awsRegion(JsonField.of(awsRegion))
 
-            fun awsRegion(awsRegion: AwsRegion?) = apply { this.awsRegion = awsRegion }
+            fun awsRegion(awsRegion: JsonField<AwsRegion>) = apply { this.awsRegion = awsRegion }
 
-            fun awsRegion(awsRegion: Optional<AwsRegion>) = awsRegion(awsRegion.orElse(null))
+            fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) =
+                stripeCollectionMethod(JsonField.of(stripeCollectionMethod))
 
-            fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod?) = apply {
-                this.stripeCollectionMethod = stripeCollectionMethod
-            }
-
-            fun stripeCollectionMethod(stripeCollectionMethod: Optional<StripeCollectionMethod>) =
-                stripeCollectionMethod(stripeCollectionMethod.orElse(null))
+            fun stripeCollectionMethod(stripeCollectionMethod: JsonField<StripeCollectionMethod>) =
+                apply {
+                    this.stripeCollectionMethod = stripeCollectionMethod
+                }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -238,21 +294,50 @@ constructor(
             body.billingProviderCustomerId(billingProviderCustomerId)
         }
 
-        fun awsProductCode(awsProductCode: String?) = apply { body.awsProductCode(awsProductCode) }
+        /**
+         * The customer ID in the billing provider's system. For Azure, this is the subscription ID.
+         */
+        fun billingProviderCustomerId(billingProviderCustomerId: JsonField<String>) = apply {
+            body.billingProviderCustomerId(billingProviderCustomerId)
+        }
 
-        fun awsProductCode(awsProductCode: Optional<String>) =
-            awsProductCode(awsProductCode.orElse(null))
+        fun awsProductCode(awsProductCode: String) = apply { body.awsProductCode(awsProductCode) }
 
-        fun awsRegion(awsRegion: AwsRegion?) = apply { body.awsRegion(awsRegion) }
+        fun awsProductCode(awsProductCode: JsonField<String>) = apply {
+            body.awsProductCode(awsProductCode)
+        }
 
-        fun awsRegion(awsRegion: Optional<AwsRegion>) = awsRegion(awsRegion.orElse(null))
+        fun awsRegion(awsRegion: AwsRegion) = apply { body.awsRegion(awsRegion) }
 
-        fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod?) = apply {
+        fun awsRegion(awsRegion: JsonField<AwsRegion>) = apply { body.awsRegion(awsRegion) }
+
+        fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) = apply {
             body.stripeCollectionMethod(stripeCollectionMethod)
         }
 
-        fun stripeCollectionMethod(stripeCollectionMethod: Optional<StripeCollectionMethod>) =
-            stripeCollectionMethod(stripeCollectionMethod.orElse(null))
+        fun stripeCollectionMethod(stripeCollectionMethod: JsonField<StripeCollectionMethod>) =
+            apply {
+                body.stripeCollectionMethod(stripeCollectionMethod)
+            }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -350,25 +435,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CustomerBillingConfigCreateParams =

@@ -28,9 +28,9 @@ private constructor(
 
     fun name(): String = name.getRequired("name")
 
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -55,8 +55,8 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var name: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -95,8 +95,8 @@ private constructor(
 
         fun build(): CreditTypeData =
             CreditTypeData(
-                id,
-                name,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(name) { "`name` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }

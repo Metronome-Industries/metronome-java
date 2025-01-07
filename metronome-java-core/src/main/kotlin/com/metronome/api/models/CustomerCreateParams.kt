@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -43,11 +44,27 @@ constructor(
     /** Aliases that can be used to refer to this customer in usage events */
     fun ingestAliases(): Optional<List<String>> = body.ingestAliases()
 
+    /** This will be truncated to 160 characters if the provided name is longer. */
+    fun _name(): JsonField<String> = body._name()
+
+    fun _billingConfig(): JsonField<BillingConfig> = body._billingConfig()
+
+    fun _customFields(): JsonField<CustomFields> = body._customFields()
+
+    /**
+     * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this customer
+     * in usage events
+     */
+    fun _externalId(): JsonField<String> = body._externalId()
+
+    /** Aliases that can be used to refer to this customer in usage events */
+    fun _ingestAliases(): JsonField<List<String>> = body._ingestAliases()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomerCreateBody = body
 
@@ -59,38 +76,85 @@ constructor(
     class CustomerCreateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("name") private val name: String,
-        @JsonProperty("billing_config") private val billingConfig: BillingConfig?,
-        @JsonProperty("custom_fields") private val customFields: CustomFields?,
-        @JsonProperty("external_id") private val externalId: String?,
-        @JsonProperty("ingest_aliases") private val ingestAliases: List<String>?,
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("billing_config")
+        @ExcludeMissing
+        private val billingConfig: JsonField<BillingConfig> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("external_id")
+        @ExcludeMissing
+        private val externalId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("ingest_aliases")
+        @ExcludeMissing
+        private val ingestAliases: JsonField<List<String>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** This will be truncated to 160 characters if the provided name is longer. */
-        @JsonProperty("name") fun name(): String = name
+        fun name(): String = name.getRequired("name")
+
+        fun billingConfig(): Optional<BillingConfig> =
+            Optional.ofNullable(billingConfig.getNullable("billing_config"))
+
+        fun customFields(): Optional<CustomFields> =
+            Optional.ofNullable(customFields.getNullable("custom_fields"))
+
+        /**
+         * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
+         * customer in usage events
+         */
+        fun externalId(): Optional<String> =
+            Optional.ofNullable(externalId.getNullable("external_id"))
+
+        /** Aliases that can be used to refer to this customer in usage events */
+        fun ingestAliases(): Optional<List<String>> =
+            Optional.ofNullable(ingestAliases.getNullable("ingest_aliases"))
+
+        /** This will be truncated to 160 characters if the provided name is longer. */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         @JsonProperty("billing_config")
-        fun billingConfig(): Optional<BillingConfig> = Optional.ofNullable(billingConfig)
+        @ExcludeMissing
+        fun _billingConfig(): JsonField<BillingConfig> = billingConfig
 
         @JsonProperty("custom_fields")
-        fun customFields(): Optional<CustomFields> = Optional.ofNullable(customFields)
+        @ExcludeMissing
+        fun _customFields(): JsonField<CustomFields> = customFields
 
         /**
          * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
          * customer in usage events
          */
         @JsonProperty("external_id")
-        fun externalId(): Optional<String> = Optional.ofNullable(externalId)
+        @ExcludeMissing
+        fun _externalId(): JsonField<String> = externalId
 
         /** Aliases that can be used to refer to this customer in usage events */
         @JsonProperty("ingest_aliases")
-        fun ingestAliases(): Optional<List<String>> = Optional.ofNullable(ingestAliases)
+        @ExcludeMissing
+        fun _ingestAliases(): JsonField<List<String>> = ingestAliases
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomerCreateBody = apply {
+            if (!validated) {
+                name()
+                billingConfig().map { it.validate() }
+                customFields().map { it.validate() }
+                externalId()
+                ingestAliases()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -101,11 +165,11 @@ constructor(
 
         class Builder {
 
-            private var name: String? = null
-            private var billingConfig: BillingConfig? = null
-            private var customFields: CustomFields? = null
-            private var externalId: String? = null
-            private var ingestAliases: MutableList<String>? = null
+            private var name: JsonField<String>? = null
+            private var billingConfig: JsonField<BillingConfig> = JsonMissing.of()
+            private var customFields: JsonField<CustomFields> = JsonMissing.of()
+            private var externalId: JsonField<String> = JsonMissing.of()
+            private var ingestAliases: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -114,51 +178,62 @@ constructor(
                 billingConfig = customerCreateBody.billingConfig
                 customFields = customerCreateBody.customFields
                 externalId = customerCreateBody.externalId
-                ingestAliases = customerCreateBody.ingestAliases?.toMutableList()
+                ingestAliases = customerCreateBody.ingestAliases.map { it.toMutableList() }
                 additionalProperties = customerCreateBody.additionalProperties.toMutableMap()
             }
 
             /** This will be truncated to 160 characters if the provided name is longer. */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = name(JsonField.of(name))
 
-            fun billingConfig(billingConfig: BillingConfig?) = apply {
+            /** This will be truncated to 160 characters if the provided name is longer. */
+            fun name(name: JsonField<String>) = apply { this.name = name }
+
+            fun billingConfig(billingConfig: BillingConfig) =
+                billingConfig(JsonField.of(billingConfig))
+
+            fun billingConfig(billingConfig: JsonField<BillingConfig>) = apply {
                 this.billingConfig = billingConfig
             }
 
-            fun billingConfig(billingConfig: Optional<BillingConfig>) =
-                billingConfig(billingConfig.orElse(null))
+            fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
-            fun customFields(customFields: CustomFields?) = apply {
+            fun customFields(customFields: JsonField<CustomFields>) = apply {
                 this.customFields = customFields
             }
 
-            fun customFields(customFields: Optional<CustomFields>) =
-                customFields(customFields.orElse(null))
+            /**
+             * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
+             * customer in usage events
+             */
+            fun externalId(externalId: String) = externalId(JsonField.of(externalId))
 
             /**
              * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
              * customer in usage events
              */
-            fun externalId(externalId: String?) = apply { this.externalId = externalId }
-
-            /**
-             * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
-             * customer in usage events
-             */
-            fun externalId(externalId: Optional<String>) = externalId(externalId.orElse(null))
+            fun externalId(externalId: JsonField<String>) = apply { this.externalId = externalId }
 
             /** Aliases that can be used to refer to this customer in usage events */
-            fun ingestAliases(ingestAliases: List<String>?) = apply {
-                this.ingestAliases = ingestAliases?.toMutableList()
+            fun ingestAliases(ingestAliases: List<String>) =
+                ingestAliases(JsonField.of(ingestAliases))
+
+            /** Aliases that can be used to refer to this customer in usage events */
+            fun ingestAliases(ingestAliases: JsonField<List<String>>) = apply {
+                this.ingestAliases = ingestAliases.map { it.toMutableList() }
             }
 
             /** Aliases that can be used to refer to this customer in usage events */
-            fun ingestAliases(ingestAliases: Optional<List<String>>) =
-                ingestAliases(ingestAliases.orElse(null))
-
-            /** Aliases that can be used to refer to this customer in usage events */
             fun addIngestAlias(ingestAlias: String) = apply {
-                ingestAliases = (ingestAliases ?: mutableListOf()).apply { add(ingestAlias) }
+                ingestAliases =
+                    (ingestAliases ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(ingestAlias)
+                    }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -186,7 +261,7 @@ constructor(
                     billingConfig,
                     customFields,
                     externalId,
-                    ingestAliases?.toImmutable(),
+                    (ingestAliases ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -233,41 +308,64 @@ constructor(
         /** This will be truncated to 160 characters if the provided name is longer. */
         fun name(name: String) = apply { body.name(name) }
 
-        fun billingConfig(billingConfig: BillingConfig?) = apply {
+        /** This will be truncated to 160 characters if the provided name is longer. */
+        fun name(name: JsonField<String>) = apply { body.name(name) }
+
+        fun billingConfig(billingConfig: BillingConfig) = apply {
             body.billingConfig(billingConfig)
         }
 
-        fun billingConfig(billingConfig: Optional<BillingConfig>) =
-            billingConfig(billingConfig.orElse(null))
+        fun billingConfig(billingConfig: JsonField<BillingConfig>) = apply {
+            body.billingConfig(billingConfig)
+        }
 
-        fun customFields(customFields: CustomFields?) = apply { body.customFields(customFields) }
+        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
 
-        fun customFields(customFields: Optional<CustomFields>) =
-            customFields(customFields.orElse(null))
-
-        /**
-         * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
-         * customer in usage events
-         */
-        fun externalId(externalId: String?) = apply { body.externalId(externalId) }
+        fun customFields(customFields: JsonField<CustomFields>) = apply {
+            body.customFields(customFields)
+        }
 
         /**
          * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
          * customer in usage events
          */
-        fun externalId(externalId: Optional<String>) = externalId(externalId.orElse(null))
+        fun externalId(externalId: String) = apply { body.externalId(externalId) }
+
+        /**
+         * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
+         * customer in usage events
+         */
+        fun externalId(externalId: JsonField<String>) = apply { body.externalId(externalId) }
 
         /** Aliases that can be used to refer to this customer in usage events */
-        fun ingestAliases(ingestAliases: List<String>?) = apply {
+        fun ingestAliases(ingestAliases: List<String>) = apply { body.ingestAliases(ingestAliases) }
+
+        /** Aliases that can be used to refer to this customer in usage events */
+        fun ingestAliases(ingestAliases: JsonField<List<String>>) = apply {
             body.ingestAliases(ingestAliases)
         }
 
         /** Aliases that can be used to refer to this customer in usage events */
-        fun ingestAliases(ingestAliases: Optional<List<String>>) =
-            ingestAliases(ingestAliases.orElse(null))
-
-        /** Aliases that can be used to refer to this customer in usage events */
         fun addIngestAlias(ingestAlias: String) = apply { body.addIngestAlias(ingestAlias) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -367,25 +465,6 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
         fun build(): CustomerCreateParams =
             CustomerCreateParams(
                 body.build(),
@@ -398,35 +477,76 @@ constructor(
     class BillingConfig
     @JsonCreator
     private constructor(
-        @JsonProperty("billing_provider_customer_id") private val billingProviderCustomerId: String,
-        @JsonProperty("billing_provider_type") private val billingProviderType: BillingProviderType,
-        @JsonProperty("aws_product_code") private val awsProductCode: String?,
-        @JsonProperty("aws_region") private val awsRegion: AwsRegion?,
+        @JsonProperty("billing_provider_customer_id")
+        @ExcludeMissing
+        private val billingProviderCustomerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("billing_provider_type")
+        @ExcludeMissing
+        private val billingProviderType: JsonField<BillingProviderType> = JsonMissing.of(),
+        @JsonProperty("aws_product_code")
+        @ExcludeMissing
+        private val awsProductCode: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("aws_region")
+        @ExcludeMissing
+        private val awsRegion: JsonField<AwsRegion> = JsonMissing.of(),
         @JsonProperty("stripe_collection_method")
-        private val stripeCollectionMethod: StripeCollectionMethod?,
+        @ExcludeMissing
+        private val stripeCollectionMethod: JsonField<StripeCollectionMethod> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        fun billingProviderCustomerId(): String =
+            billingProviderCustomerId.getRequired("billing_provider_customer_id")
+
+        fun billingProviderType(): BillingProviderType =
+            billingProviderType.getRequired("billing_provider_type")
+
+        fun awsProductCode(): Optional<String> =
+            Optional.ofNullable(awsProductCode.getNullable("aws_product_code"))
+
+        fun awsRegion(): Optional<AwsRegion> =
+            Optional.ofNullable(awsRegion.getNullable("aws_region"))
+
+        fun stripeCollectionMethod(): Optional<StripeCollectionMethod> =
+            Optional.ofNullable(stripeCollectionMethod.getNullable("stripe_collection_method"))
+
         @JsonProperty("billing_provider_customer_id")
-        fun billingProviderCustomerId(): String = billingProviderCustomerId
+        @ExcludeMissing
+        fun _billingProviderCustomerId(): JsonField<String> = billingProviderCustomerId
 
         @JsonProperty("billing_provider_type")
-        fun billingProviderType(): BillingProviderType = billingProviderType
+        @ExcludeMissing
+        fun _billingProviderType(): JsonField<BillingProviderType> = billingProviderType
 
         @JsonProperty("aws_product_code")
-        fun awsProductCode(): Optional<String> = Optional.ofNullable(awsProductCode)
+        @ExcludeMissing
+        fun _awsProductCode(): JsonField<String> = awsProductCode
 
         @JsonProperty("aws_region")
-        fun awsRegion(): Optional<AwsRegion> = Optional.ofNullable(awsRegion)
+        @ExcludeMissing
+        fun _awsRegion(): JsonField<AwsRegion> = awsRegion
 
         @JsonProperty("stripe_collection_method")
-        fun stripeCollectionMethod(): Optional<StripeCollectionMethod> =
-            Optional.ofNullable(stripeCollectionMethod)
+        @ExcludeMissing
+        fun _stripeCollectionMethod(): JsonField<StripeCollectionMethod> = stripeCollectionMethod
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): BillingConfig = apply {
+            if (!validated) {
+                billingProviderCustomerId()
+                billingProviderType()
+                awsProductCode()
+                awsRegion()
+                stripeCollectionMethod()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -437,11 +557,11 @@ constructor(
 
         class Builder {
 
-            private var billingProviderCustomerId: String? = null
-            private var billingProviderType: BillingProviderType? = null
-            private var awsProductCode: String? = null
-            private var awsRegion: AwsRegion? = null
-            private var stripeCollectionMethod: StripeCollectionMethod? = null
+            private var billingProviderCustomerId: JsonField<String>? = null
+            private var billingProviderType: JsonField<BillingProviderType>? = null
+            private var awsProductCode: JsonField<String> = JsonMissing.of()
+            private var awsRegion: JsonField<AwsRegion> = JsonMissing.of()
+            private var stripeCollectionMethod: JsonField<StripeCollectionMethod> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -454,31 +574,38 @@ constructor(
                 additionalProperties = billingConfig.additionalProperties.toMutableMap()
             }
 
-            fun billingProviderCustomerId(billingProviderCustomerId: String) = apply {
+            fun billingProviderCustomerId(billingProviderCustomerId: String) =
+                billingProviderCustomerId(JsonField.of(billingProviderCustomerId))
+
+            fun billingProviderCustomerId(billingProviderCustomerId: JsonField<String>) = apply {
                 this.billingProviderCustomerId = billingProviderCustomerId
             }
 
-            fun billingProviderType(billingProviderType: BillingProviderType) = apply {
+            fun billingProviderType(billingProviderType: BillingProviderType) =
+                billingProviderType(JsonField.of(billingProviderType))
+
+            fun billingProviderType(billingProviderType: JsonField<BillingProviderType>) = apply {
                 this.billingProviderType = billingProviderType
             }
 
-            fun awsProductCode(awsProductCode: String?) = apply {
+            fun awsProductCode(awsProductCode: String) =
+                awsProductCode(JsonField.of(awsProductCode))
+
+            fun awsProductCode(awsProductCode: JsonField<String>) = apply {
                 this.awsProductCode = awsProductCode
             }
 
-            fun awsProductCode(awsProductCode: Optional<String>) =
-                awsProductCode(awsProductCode.orElse(null))
+            fun awsRegion(awsRegion: AwsRegion) = awsRegion(JsonField.of(awsRegion))
 
-            fun awsRegion(awsRegion: AwsRegion?) = apply { this.awsRegion = awsRegion }
+            fun awsRegion(awsRegion: JsonField<AwsRegion>) = apply { this.awsRegion = awsRegion }
 
-            fun awsRegion(awsRegion: Optional<AwsRegion>) = awsRegion(awsRegion.orElse(null))
+            fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) =
+                stripeCollectionMethod(JsonField.of(stripeCollectionMethod))
 
-            fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod?) = apply {
-                this.stripeCollectionMethod = stripeCollectionMethod
-            }
-
-            fun stripeCollectionMethod(stripeCollectionMethod: Optional<StripeCollectionMethod>) =
-                stripeCollectionMethod(stripeCollectionMethod.orElse(null))
+            fun stripeCollectionMethod(stripeCollectionMethod: JsonField<StripeCollectionMethod>) =
+                apply {
+                    this.stripeCollectionMethod = stripeCollectionMethod
+                }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -892,6 +1019,14 @@ constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomFields = apply {
+            if (!validated) {
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 

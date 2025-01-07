@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.http.Headers
@@ -39,11 +40,17 @@ constructor(
 
     fun entityId(): String = body.entityId()
 
+    fun _customFields(): JsonField<CustomFields> = body._customFields()
+
+    fun _entity(): JsonField<Entity> = body._entity()
+
+    fun _entityId(): JsonField<String> = body._entityId()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CustomFieldSetValuesBody = body
 
@@ -55,22 +62,47 @@ constructor(
     class CustomFieldSetValuesBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("custom_fields") private val customFields: CustomFields,
-        @JsonProperty("entity") private val entity: Entity,
-        @JsonProperty("entity_id") private val entityId: String,
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("entity")
+        @ExcludeMissing
+        private val entity: JsonField<Entity> = JsonMissing.of(),
+        @JsonProperty("entity_id")
+        @ExcludeMissing
+        private val entityId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("custom_fields") fun customFields(): CustomFields = customFields
+        fun customFields(): CustomFields = customFields.getRequired("custom_fields")
 
-        @JsonProperty("entity") fun entity(): Entity = entity
+        fun entity(): Entity = entity.getRequired("entity")
 
-        @JsonProperty("entity_id") fun entityId(): String = entityId
+        fun entityId(): String = entityId.getRequired("entity_id")
+
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        fun _customFields(): JsonField<CustomFields> = customFields
+
+        @JsonProperty("entity") @ExcludeMissing fun _entity(): JsonField<Entity> = entity
+
+        @JsonProperty("entity_id") @ExcludeMissing fun _entityId(): JsonField<String> = entityId
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomFieldSetValuesBody = apply {
+            if (!validated) {
+                customFields().validate()
+                entity()
+                entityId()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -81,9 +113,9 @@ constructor(
 
         class Builder {
 
-            private var customFields: CustomFields? = null
-            private var entity: Entity? = null
-            private var entityId: String? = null
+            private var customFields: JsonField<CustomFields>? = null
+            private var entity: JsonField<Entity>? = null
+            private var entityId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -94,13 +126,19 @@ constructor(
                 additionalProperties = customFieldSetValuesBody.additionalProperties.toMutableMap()
             }
 
-            fun customFields(customFields: CustomFields) = apply {
+            fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
+
+            fun customFields(customFields: JsonField<CustomFields>) = apply {
                 this.customFields = customFields
             }
 
-            fun entity(entity: Entity) = apply { this.entity = entity }
+            fun entity(entity: Entity) = entity(JsonField.of(entity))
 
-            fun entityId(entityId: String) = apply { this.entityId = entityId }
+            fun entity(entity: JsonField<Entity>) = apply { this.entity = entity }
+
+            fun entityId(entityId: String) = entityId(JsonField.of(entityId))
+
+            fun entityId(entityId: JsonField<String>) = apply { this.entityId = entityId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -171,9 +209,36 @@ constructor(
 
         fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
 
+        fun customFields(customFields: JsonField<CustomFields>) = apply {
+            body.customFields(customFields)
+        }
+
         fun entity(entity: Entity) = apply { body.entity(entity) }
 
+        fun entity(entity: JsonField<Entity>) = apply { body.entity(entity) }
+
         fun entityId(entityId: String) = apply { body.entityId(entityId) }
+
+        fun entityId(entityId: JsonField<String>) = apply { body.entityId(entityId) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -273,25 +338,6 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
         fun build(): CustomFieldSetValuesParams =
             CustomFieldSetValuesParams(
                 body.build(),
@@ -311,6 +357,14 @@ constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomFields = apply {
+            if (!validated) {
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 

@@ -71,30 +71,32 @@ private constructor(
     fun netsuiteSalesOrderId(): Optional<String> =
         Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
 
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /** Maximum amount for the term. */
-    @JsonProperty("max_amount") @ExcludeMissing fun _maxAmount() = maxAmount
+    @JsonProperty("max_amount") @ExcludeMissing fun _maxAmount(): JsonField<Double> = maxAmount
 
-    @JsonProperty("product_id") @ExcludeMissing fun _productId() = productId
+    @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
     /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
-    @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+    @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
     /**
      * Unit price for the charge. Will be multiplied by quantity to determine the amount and must be
      * specified.
      */
-    @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice() = unitPrice
+    @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice(): JsonField<Double> = unitPrice
 
-    @JsonProperty("custom_fields") @ExcludeMissing fun _customFields() = customFields
+    @JsonProperty("custom_fields")
+    @ExcludeMissing
+    fun _customFields(): JsonField<CustomFields> = customFields
 
-    @JsonProperty("description") @ExcludeMissing fun _description() = description
+    @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("netsuite_sales_order_id")
     @ExcludeMissing
-    fun _netsuiteSalesOrderId() = netsuiteSalesOrderId
+    fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -125,11 +127,11 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var maxAmount: JsonField<Double> = JsonMissing.of()
-        private var productId: JsonField<String> = JsonMissing.of()
-        private var quantity: JsonField<Double> = JsonMissing.of()
-        private var unitPrice: JsonField<Double> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var maxAmount: JsonField<Double>? = null
+        private var productId: JsonField<String>? = null
+        private var quantity: JsonField<Double>? = null
+        private var unitPrice: JsonField<Double>? = null
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
         private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
@@ -220,11 +222,11 @@ private constructor(
 
         fun build(): ProService =
             ProService(
-                id,
-                maxAmount,
-                productId,
-                quantity,
-                unitPrice,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(maxAmount) { "`maxAmount` is required but was not set" },
+                checkNotNull(productId) { "`productId` is required but was not set" },
+                checkNotNull(quantity) { "`quantity` is required but was not set" },
+                checkNotNull(unitPrice) { "`unitPrice` is required but was not set" },
                 customFields,
                 description,
                 netsuiteSalesOrderId,

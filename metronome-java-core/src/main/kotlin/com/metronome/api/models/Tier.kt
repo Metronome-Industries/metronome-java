@@ -29,9 +29,9 @@ private constructor(
 
     fun size(): Optional<Double> = Optional.ofNullable(size.getNullable("size"))
 
-    @JsonProperty("price") @ExcludeMissing fun _price() = price
+    @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Double> = price
 
-    @JsonProperty("size") @ExcludeMissing fun _size() = size
+    @JsonProperty("size") @ExcludeMissing fun _size(): JsonField<Double> = size
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -56,7 +56,7 @@ private constructor(
 
     class Builder {
 
-        private var price: JsonField<Double> = JsonMissing.of()
+        private var price: JsonField<Double>? = null
         private var size: JsonField<Double> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -96,7 +96,7 @@ private constructor(
 
         fun build(): Tier =
             Tier(
-                price,
+                checkNotNull(price) { "`price` is required but was not set" },
                 size,
                 additionalProperties.toImmutable(),
             )
