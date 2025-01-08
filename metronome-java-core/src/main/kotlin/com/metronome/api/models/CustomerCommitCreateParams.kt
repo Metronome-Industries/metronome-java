@@ -43,6 +43,10 @@ constructor(
      */
     fun priority(): Double = body.priority()
 
+    /**
+     * ID of the fixed product associated with the commit. This is required because products are
+     * used to invoice the commit amount.
+     */
     fun productId(): String = body.productId()
 
     fun type(): Type = body.type()
@@ -114,6 +118,10 @@ constructor(
      */
     fun _priority(): JsonField<Double> = body._priority()
 
+    /**
+     * ID of the fixed product associated with the commit. This is required because products are
+     * used to invoice the commit amount.
+     */
     fun _productId(): JsonField<String> = body._productId()
 
     fun _type(): JsonField<Type> = body._type()
@@ -254,6 +262,10 @@ constructor(
          */
         fun priority(): Double = priority.getRequired("priority")
 
+        /**
+         * ID of the fixed product associated with the commit. This is required because products are
+         * used to invoice the commit amount.
+         */
         fun productId(): String = productId.getRequired("product_id")
 
         fun type(): Type = type.getRequired("type")
@@ -342,6 +354,10 @@ constructor(
          */
         @JsonProperty("priority") @ExcludeMissing fun _priority(): JsonField<Double> = priority
 
+        /**
+         * ID of the fixed product associated with the commit. This is required because products are
+         * used to invoice the commit amount.
+         */
         @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
         @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
@@ -535,8 +551,16 @@ constructor(
              */
             fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
 
+            /**
+             * ID of the fixed product associated with the commit. This is required because products
+             * are used to invoice the commit amount.
+             */
             fun productId(productId: String) = productId(JsonField.of(productId))
 
+            /**
+             * ID of the fixed product associated with the commit. This is required because products
+             * are used to invoice the commit amount.
+             */
             fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
             fun type(type: Type) = type(JsonField.of(type))
@@ -846,8 +870,16 @@ constructor(
          */
         fun priority(priority: JsonField<Double>) = apply { body.priority(priority) }
 
+        /**
+         * ID of the fixed product associated with the commit. This is required because products are
+         * used to invoice the commit amount.
+         */
         fun productId(productId: String) = apply { body.productId(productId) }
 
+        /**
+         * ID of the fixed product associated with the commit. This is required because products are
+         * used to invoice the commit amount.
+         */
         fun productId(productId: JsonField<String>) = apply { body.productId(productId) }
 
         fun type(type: Type) = apply { body.type(type) }
