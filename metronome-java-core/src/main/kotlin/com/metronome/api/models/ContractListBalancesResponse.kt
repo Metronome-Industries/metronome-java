@@ -101,6 +101,10 @@ private constructor(
                 }
         }
 
+        fun addData(commit: Commit) = addData(Data.ofCommit(commit))
+
+        fun addData(credit: Credit) = addData(Data.ofCredit(credit))
+
         fun nextPage(nextPage: String?) = nextPage(JsonField.ofNullable(nextPage))
 
         fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))

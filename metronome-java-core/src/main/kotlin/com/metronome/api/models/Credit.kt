@@ -411,6 +411,55 @@ private constructor(
                 }
         }
 
+        /**
+         * A list of ordered events that impact the balance of a credit. For example, an invoice
+         * deduction or an expiration.
+         */
+        fun addLedger(creditSegmentStartLedgerEntry: Ledger.CreditSegmentStartLedgerEntry) =
+            addLedger(Ledger.ofCreditSegmentStartLedgerEntry(creditSegmentStartLedgerEntry))
+
+        /**
+         * A list of ordered events that impact the balance of a credit. For example, an invoice
+         * deduction or an expiration.
+         */
+        fun addLedger(
+            creditAutomatedInvoiceDeductionLedgerEntry:
+                Ledger.CreditAutomatedInvoiceDeductionLedgerEntry
+        ) =
+            addLedger(
+                Ledger.ofCreditAutomatedInvoiceDeductionLedgerEntry(
+                    creditAutomatedInvoiceDeductionLedgerEntry
+                )
+            )
+
+        /**
+         * A list of ordered events that impact the balance of a credit. For example, an invoice
+         * deduction or an expiration.
+         */
+        fun addLedger(creditExpirationLedgerEntry: Ledger.CreditExpirationLedgerEntry) =
+            addLedger(Ledger.ofCreditExpirationLedgerEntry(creditExpirationLedgerEntry))
+
+        /**
+         * A list of ordered events that impact the balance of a credit. For example, an invoice
+         * deduction or an expiration.
+         */
+        fun addLedger(creditCanceledLedgerEntry: Ledger.CreditCanceledLedgerEntry) =
+            addLedger(Ledger.ofCreditCanceledLedgerEntry(creditCanceledLedgerEntry))
+
+        /**
+         * A list of ordered events that impact the balance of a credit. For example, an invoice
+         * deduction or an expiration.
+         */
+        fun addLedger(creditCreditedLedgerEntry: Ledger.CreditCreditedLedgerEntry) =
+            addLedger(Ledger.ofCreditCreditedLedgerEntry(creditCreditedLedgerEntry))
+
+        /**
+         * A list of ordered events that impact the balance of a credit. For example, an invoice
+         * deduction or an expiration.
+         */
+        fun addLedger(creditManualLedgerEntry: Ledger.CreditManualLedgerEntry) =
+            addLedger(Ledger.ofCreditManualLedgerEntry(creditManualLedgerEntry))
+
         fun name(name: String) = name(JsonField.of(name))
 
         fun name(name: JsonField<String>) = apply { this.name = name }

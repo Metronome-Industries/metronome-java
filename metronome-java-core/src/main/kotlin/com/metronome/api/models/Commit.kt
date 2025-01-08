@@ -507,6 +507,129 @@ private constructor(
                 }
         }
 
+        /**
+         * A list of ordered events that impact the balance of a commit. For example, an invoice
+         * deduction or a rollover.
+         */
+        fun addLedger(
+            prepaidCommitSegmentStartLedgerEntry: Ledger.PrepaidCommitSegmentStartLedgerEntry
+        ) =
+            addLedger(
+                Ledger.ofPrepaidCommitSegmentStartLedgerEntry(prepaidCommitSegmentStartLedgerEntry)
+            )
+
+        /**
+         * A list of ordered events that impact the balance of a commit. For example, an invoice
+         * deduction or a rollover.
+         */
+        fun addLedger(
+            prepaidCommitAutomatedInvoiceDeductionLedgerEntry:
+                Ledger.PrepaidCommitAutomatedInvoiceDeductionLedgerEntry
+        ) =
+            addLedger(
+                Ledger.ofPrepaidCommitAutomatedInvoiceDeductionLedgerEntry(
+                    prepaidCommitAutomatedInvoiceDeductionLedgerEntry
+                )
+            )
+
+        /**
+         * A list of ordered events that impact the balance of a commit. For example, an invoice
+         * deduction or a rollover.
+         */
+        fun addLedger(prepaidCommitRolloverLedgerEntry: Ledger.PrepaidCommitRolloverLedgerEntry) =
+            addLedger(Ledger.ofPrepaidCommitRolloverLedgerEntry(prepaidCommitRolloverLedgerEntry))
+
+        /**
+         * A list of ordered events that impact the balance of a commit. For example, an invoice
+         * deduction or a rollover.
+         */
+        fun addLedger(
+            prepaidCommitExpirationLedgerEntry: Ledger.PrepaidCommitExpirationLedgerEntry
+        ) =
+            addLedger(
+                Ledger.ofPrepaidCommitExpirationLedgerEntry(prepaidCommitExpirationLedgerEntry)
+            )
+
+        /**
+         * A list of ordered events that impact the balance of a commit. For example, an invoice
+         * deduction or a rollover.
+         */
+        fun addLedger(prepaidCommitCanceledLedgerEntry: Ledger.PrepaidCommitCanceledLedgerEntry) =
+            addLedger(Ledger.ofPrepaidCommitCanceledLedgerEntry(prepaidCommitCanceledLedgerEntry))
+
+        /**
+         * A list of ordered events that impact the balance of a commit. For example, an invoice
+         * deduction or a rollover.
+         */
+        fun addLedger(prepaidCommitCreditedLedgerEntry: Ledger.PrepaidCommitCreditedLedgerEntry) =
+            addLedger(Ledger.ofPrepaidCommitCreditedLedgerEntry(prepaidCommitCreditedLedgerEntry))
+
+        /**
+         * A list of ordered events that impact the balance of a commit. For example, an invoice
+         * deduction or a rollover.
+         */
+        fun addLedger(
+            postpaidCommitInitialBalanceLedgerEntry: Ledger.PostpaidCommitInitialBalanceLedgerEntry
+        ) =
+            addLedger(
+                Ledger.ofPostpaidCommitInitialBalanceLedgerEntry(
+                    postpaidCommitInitialBalanceLedgerEntry
+                )
+            )
+
+        /**
+         * A list of ordered events that impact the balance of a commit. For example, an invoice
+         * deduction or a rollover.
+         */
+        fun addLedger(
+            postpaidCommitAutomatedInvoiceDeductionLedgerEntry:
+                Ledger.PostpaidCommitAutomatedInvoiceDeductionLedgerEntry
+        ) =
+            addLedger(
+                Ledger.ofPostpaidCommitAutomatedInvoiceDeductionLedgerEntry(
+                    postpaidCommitAutomatedInvoiceDeductionLedgerEntry
+                )
+            )
+
+        /**
+         * A list of ordered events that impact the balance of a commit. For example, an invoice
+         * deduction or a rollover.
+         */
+        fun addLedger(postpaidCommitRolloverLedgerEntry: Ledger.PostpaidCommitRolloverLedgerEntry) =
+            addLedger(Ledger.ofPostpaidCommitRolloverLedgerEntry(postpaidCommitRolloverLedgerEntry))
+
+        /**
+         * A list of ordered events that impact the balance of a commit. For example, an invoice
+         * deduction or a rollover.
+         */
+        fun addLedger(postpaidCommitTrueupLedgerEntry: Ledger.PostpaidCommitTrueupLedgerEntry) =
+            addLedger(Ledger.ofPostpaidCommitTrueupLedgerEntry(postpaidCommitTrueupLedgerEntry))
+
+        /**
+         * A list of ordered events that impact the balance of a commit. For example, an invoice
+         * deduction or a rollover.
+         */
+        fun addLedger(prepaidCommitManualLedgerEntry: Ledger.PrepaidCommitManualLedgerEntry) =
+            addLedger(Ledger.ofPrepaidCommitManualLedgerEntry(prepaidCommitManualLedgerEntry))
+
+        /**
+         * A list of ordered events that impact the balance of a commit. For example, an invoice
+         * deduction or a rollover.
+         */
+        fun addLedger(postpaidCommitManualLedgerEntry: Ledger.PostpaidCommitManualLedgerEntry) =
+            addLedger(Ledger.ofPostpaidCommitManualLedgerEntry(postpaidCommitManualLedgerEntry))
+
+        /**
+         * A list of ordered events that impact the balance of a commit. For example, an invoice
+         * deduction or a rollover.
+         */
+        fun addLedger(
+            postpaidCommitExpirationLedgerEntry: Ledger.PostpaidCommitExpirationLedgerEntry
+        ) =
+            addLedger(
+                Ledger.ofPostpaidCommitExpirationLedgerEntry(postpaidCommitExpirationLedgerEntry)
+            )
+
         fun name(name: String) = name(JsonField.of(name))
 
         fun name(name: JsonField<String>) = apply { this.name = name }
