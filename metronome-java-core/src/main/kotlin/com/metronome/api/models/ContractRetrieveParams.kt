@@ -31,6 +31,12 @@ constructor(
     fun customerId(): String = body.customerId()
 
     /**
+     * Include the balance of credits and commits in the response. Setting this flag may cause the
+     * query to be slower.
+     */
+    fun includeBalance(): Optional<Boolean> = body.includeBalance()
+
+    /**
      * Include commit ledgers in the response. Setting this flag may cause the query to be slower.
      */
     fun includeLedgers(): Optional<Boolean> = body.includeLedgers()
@@ -38,6 +44,12 @@ constructor(
     fun _contractId(): JsonField<String> = body._contractId()
 
     fun _customerId(): JsonField<String> = body._customerId()
+
+    /**
+     * Include the balance of credits and commits in the response. Setting this flag may cause the
+     * query to be slower.
+     */
+    fun _includeBalance(): JsonField<Boolean> = body._includeBalance()
 
     /**
      * Include commit ledgers in the response. Setting this flag may cause the query to be slower.
@@ -66,6 +78,9 @@ constructor(
         @JsonProperty("customer_id")
         @ExcludeMissing
         private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("include_balance")
+        @ExcludeMissing
+        private val includeBalance: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("include_ledgers")
         @ExcludeMissing
         private val includeLedgers: JsonField<Boolean> = JsonMissing.of(),
@@ -76,6 +91,13 @@ constructor(
         fun contractId(): String = contractId.getRequired("contract_id")
 
         fun customerId(): String = customerId.getRequired("customer_id")
+
+        /**
+         * Include the balance of credits and commits in the response. Setting this flag may cause
+         * the query to be slower.
+         */
+        fun includeBalance(): Optional<Boolean> =
+            Optional.ofNullable(includeBalance.getNullable("include_balance"))
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
@@ -91,6 +113,14 @@ constructor(
         @JsonProperty("customer_id")
         @ExcludeMissing
         fun _customerId(): JsonField<String> = customerId
+
+        /**
+         * Include the balance of credits and commits in the response. Setting this flag may cause
+         * the query to be slower.
+         */
+        @JsonProperty("include_balance")
+        @ExcludeMissing
+        fun _includeBalance(): JsonField<Boolean> = includeBalance
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be
@@ -110,6 +140,7 @@ constructor(
             if (!validated) {
                 contractId()
                 customerId()
+                includeBalance()
                 includeLedgers()
                 validated = true
             }
@@ -126,6 +157,7 @@ constructor(
 
             private var contractId: JsonField<String>? = null
             private var customerId: JsonField<String>? = null
+            private var includeBalance: JsonField<Boolean> = JsonMissing.of()
             private var includeLedgers: JsonField<Boolean> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -133,6 +165,7 @@ constructor(
             internal fun from(contractRetrieveBody: ContractRetrieveBody) = apply {
                 contractId = contractRetrieveBody.contractId
                 customerId = contractRetrieveBody.customerId
+                includeBalance = contractRetrieveBody.includeBalance
                 includeLedgers = contractRetrieveBody.includeLedgers
                 additionalProperties = contractRetrieveBody.additionalProperties.toMutableMap()
             }
@@ -144,6 +177,21 @@ constructor(
             fun customerId(customerId: String) = customerId(JsonField.of(customerId))
 
             fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
+
+            /**
+             * Include the balance of credits and commits in the response. Setting this flag may
+             * cause the query to be slower.
+             */
+            fun includeBalance(includeBalance: Boolean) =
+                includeBalance(JsonField.of(includeBalance))
+
+            /**
+             * Include the balance of credits and commits in the response. Setting this flag may
+             * cause the query to be slower.
+             */
+            fun includeBalance(includeBalance: JsonField<Boolean>) = apply {
+                this.includeBalance = includeBalance
+            }
 
             /**
              * Include commit ledgers in the response. Setting this flag may cause the query to be
@@ -183,6 +231,7 @@ constructor(
                 ContractRetrieveBody(
                     checkNotNull(contractId) { "`contractId` is required but was not set" },
                     checkNotNull(customerId) { "`customerId` is required but was not set" },
+                    includeBalance,
                     includeLedgers,
                     additionalProperties.toImmutable(),
                 )
@@ -193,17 +242,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractRetrieveBody && contractId == other.contractId && customerId == other.customerId && includeLedgers == other.includeLedgers && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractRetrieveBody && contractId == other.contractId && customerId == other.customerId && includeBalance == other.includeBalance && includeLedgers == other.includeLedgers && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(contractId, customerId, includeLedgers, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(contractId, customerId, includeBalance, includeLedgers, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractRetrieveBody{contractId=$contractId, customerId=$customerId, includeLedgers=$includeLedgers, additionalProperties=$additionalProperties}"
+            "ContractRetrieveBody{contractId=$contractId, customerId=$customerId, includeBalance=$includeBalance, includeLedgers=$includeLedgers, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -234,6 +283,20 @@ constructor(
         fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
+
+        /**
+         * Include the balance of credits and commits in the response. Setting this flag may cause
+         * the query to be slower.
+         */
+        fun includeBalance(includeBalance: Boolean) = apply { body.includeBalance(includeBalance) }
+
+        /**
+         * Include the balance of credits and commits in the response. Setting this flag may cause
+         * the query to be slower.
+         */
+        fun includeBalance(includeBalance: JsonField<Boolean>) = apply {
+            body.includeBalance(includeBalance)
+        }
 
         /**
          * Include commit ledgers in the response. Setting this flag may cause the query to be

@@ -50,6 +50,9 @@ private constructor(
     @JsonProperty("applicable_product_tags")
     @ExcludeMissing
     private val applicableProductTags: JsonField<List<String>> = JsonMissing.of(),
+    @JsonProperty("balance")
+    @ExcludeMissing
+    private val balance: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("contract")
     @ExcludeMissing
     private val contract: JsonField<Contract> = JsonMissing.of(),
@@ -99,6 +102,17 @@ private constructor(
 
     fun applicableProductTags(): Optional<List<String>> =
         Optional.ofNullable(applicableProductTags.getNullable("applicable_product_tags"))
+
+    /**
+     * The current balance of the credit or commit. This balance reflects the amount of credit or
+     * commit that the customer has access to use at this moment - thus, expired and upcoming credit
+     * or commit segments contribute 0 to the balance. The balance will match the sum of all ledger
+     * entries with the exception of the case where the sum of negative manual ledger entries
+     * exceeds the positive amount remaining on the credit or commit - in that case, the balance
+     * will be 0. All manual ledger entries associated with active credit or commit segments are
+     * included in the balance, including future-dated manual ledger entries.
+     */
+    fun balance(): Optional<Double> = Optional.ofNullable(balance.getNullable("balance"))
 
     fun contract(): Optional<Contract> = Optional.ofNullable(contract.getNullable("contract"))
 
@@ -163,6 +177,17 @@ private constructor(
     @ExcludeMissing
     fun _applicableProductTags(): JsonField<List<String>> = applicableProductTags
 
+    /**
+     * The current balance of the credit or commit. This balance reflects the amount of credit or
+     * commit that the customer has access to use at this moment - thus, expired and upcoming credit
+     * or commit segments contribute 0 to the balance. The balance will match the sum of all ledger
+     * entries with the exception of the case where the sum of negative manual ledger entries
+     * exceeds the positive amount remaining on the credit or commit - in that case, the balance
+     * will be 0. All manual ledger entries associated with active credit or commit segments are
+     * included in the balance, including future-dated manual ledger entries.
+     */
+    @JsonProperty("balance") @ExcludeMissing fun _balance(): JsonField<Double> = balance
+
     @JsonProperty("contract") @ExcludeMissing fun _contract(): JsonField<Contract> = contract
 
     @JsonProperty("custom_fields")
@@ -221,6 +246,7 @@ private constructor(
             applicableContractIds()
             applicableProductIds()
             applicableProductTags()
+            balance()
             contract().map { it.validate() }
             customFields().map { it.validate() }
             description()
@@ -251,6 +277,7 @@ private constructor(
         private var applicableContractIds: JsonField<MutableList<String>>? = null
         private var applicableProductIds: JsonField<MutableList<String>>? = null
         private var applicableProductTags: JsonField<MutableList<String>>? = null
+        private var balance: JsonField<Double> = JsonMissing.of()
         private var contract: JsonField<Contract> = JsonMissing.of()
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
@@ -272,6 +299,7 @@ private constructor(
             applicableContractIds = credit.applicableContractIds.map { it.toMutableList() }
             applicableProductIds = credit.applicableProductIds.map { it.toMutableList() }
             applicableProductTags = credit.applicableProductTags.map { it.toMutableList() }
+            balance = credit.balance
             contract = credit.contract
             customFields = credit.customFields
             description = credit.description
@@ -365,6 +393,28 @@ private constructor(
                         .add(applicableProductTag)
                 }
         }
+
+        /**
+         * The current balance of the credit or commit. This balance reflects the amount of credit
+         * or commit that the customer has access to use at this moment - thus, expired and upcoming
+         * credit or commit segments contribute 0 to the balance. The balance will match the sum of
+         * all ledger entries with the exception of the case where the sum of negative manual ledger
+         * entries exceeds the positive amount remaining on the credit or commit - in that case, the
+         * balance will be 0. All manual ledger entries associated with active credit or commit
+         * segments are included in the balance, including future-dated manual ledger entries.
+         */
+        fun balance(balance: Double) = balance(JsonField.of(balance))
+
+        /**
+         * The current balance of the credit or commit. This balance reflects the amount of credit
+         * or commit that the customer has access to use at this moment - thus, expired and upcoming
+         * credit or commit segments contribute 0 to the balance. The balance will match the sum of
+         * all ledger entries with the exception of the case where the sum of negative manual ledger
+         * entries exceeds the positive amount remaining on the credit or commit - in that case, the
+         * balance will be 0. All manual ledger entries associated with active credit or commit
+         * segments are included in the balance, including future-dated manual ledger entries.
+         */
+        fun balance(balance: JsonField<Double>) = apply { this.balance = balance }
 
         fun contract(contract: Contract) = contract(JsonField.of(contract))
 
@@ -542,6 +592,7 @@ private constructor(
                 (applicableContractIds ?: JsonMissing.of()).map { it.toImmutable() },
                 (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                 (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
+                balance,
                 contract,
                 customFields,
                 description,
@@ -2475,15 +2526,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Credit && id == other.id && product == other.product && type == other.type && accessSchedule == other.accessSchedule && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && contract == other.contract && customFields == other.customFields && description == other.description && ledger == other.ledger && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && priority == other.priority && rateType == other.rateType && salesforceOpportunityId == other.salesforceOpportunityId && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Credit && id == other.id && product == other.product && type == other.type && accessSchedule == other.accessSchedule && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && balance == other.balance && contract == other.contract && customFields == other.customFields && description == other.description && ledger == other.ledger && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && priority == other.priority && rateType == other.rateType && salesforceOpportunityId == other.salesforceOpportunityId && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, product, type, accessSchedule, applicableContractIds, applicableProductIds, applicableProductTags, contract, customFields, description, ledger, name, netsuiteSalesOrderId, priority, rateType, salesforceOpportunityId, uniquenessKey, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, product, type, accessSchedule, applicableContractIds, applicableProductIds, applicableProductTags, balance, contract, customFields, description, ledger, name, netsuiteSalesOrderId, priority, rateType, salesforceOpportunityId, uniquenessKey, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Credit{id=$id, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, contract=$contract, customFields=$customFields, description=$description, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
+        "Credit{id=$id, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, balance=$balance, contract=$contract, customFields=$customFields, description=$description, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
 }

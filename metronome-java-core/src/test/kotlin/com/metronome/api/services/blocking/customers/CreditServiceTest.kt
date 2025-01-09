@@ -83,6 +83,7 @@ class CreditServiceTest {
                     .creditId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
                     .effectiveBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .includeArchived(true)
+                    .includeBalance(true)
                     .includeContractCredits(true)
                     .includeLedgers(true)
                     .nextPage("next_page")

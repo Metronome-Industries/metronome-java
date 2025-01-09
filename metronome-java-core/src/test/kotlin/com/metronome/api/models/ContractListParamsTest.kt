@@ -14,6 +14,7 @@ class ContractListParamsTest {
             .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
             .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .includeArchived(true)
+            .includeBalance(true)
             .includeLedgers(true)
             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .build()
@@ -26,6 +27,7 @@ class ContractListParamsTest {
                 .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .includeArchived(true)
+                .includeBalance(true)
                 .includeLedgers(true)
                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
@@ -34,6 +36,7 @@ class ContractListParamsTest {
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.coveringDate()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(body.includeArchived()).contains(true)
+        assertThat(body.includeBalance()).contains(true)
         assertThat(body.includeLedgers()).contains(true)
         assertThat(body.startingAt()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
     }

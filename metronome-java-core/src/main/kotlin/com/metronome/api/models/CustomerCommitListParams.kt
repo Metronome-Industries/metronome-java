@@ -40,6 +40,9 @@ constructor(
     /** Include commits from archived contracts. */
     fun includeArchived(): Optional<Boolean> = body.includeArchived()
 
+    /** Include the balance in the response. Setting this flag may cause the query to be slower. */
+    fun includeBalance(): Optional<Boolean> = body.includeBalance()
+
     /** Include commits on the contract level. */
     fun includeContractCommits(): Optional<Boolean> = body.includeContractCommits()
 
@@ -66,6 +69,9 @@ constructor(
 
     /** Include commits from archived contracts. */
     fun _includeArchived(): JsonField<Boolean> = body._includeArchived()
+
+    /** Include the balance in the response. Setting this flag may cause the query to be slower. */
+    fun _includeBalance(): JsonField<Boolean> = body._includeBalance()
 
     /** Include commits on the contract level. */
     fun _includeContractCommits(): JsonField<Boolean> = body._includeContractCommits()
@@ -112,6 +118,9 @@ constructor(
         @JsonProperty("include_archived")
         @ExcludeMissing
         private val includeArchived: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("include_balance")
+        @ExcludeMissing
+        private val includeBalance: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("include_contract_commits")
         @ExcludeMissing
         private val includeContractCommits: JsonField<Boolean> = JsonMissing.of(),
@@ -143,6 +152,12 @@ constructor(
         /** Include commits from archived contracts. */
         fun includeArchived(): Optional<Boolean> =
             Optional.ofNullable(includeArchived.getNullable("include_archived"))
+
+        /**
+         * Include the balance in the response. Setting this flag may cause the query to be slower.
+         */
+        fun includeBalance(): Optional<Boolean> =
+            Optional.ofNullable(includeBalance.getNullable("include_balance"))
 
         /** Include commits on the contract level. */
         fun includeContractCommits(): Optional<Boolean> =
@@ -183,6 +198,13 @@ constructor(
         @ExcludeMissing
         fun _includeArchived(): JsonField<Boolean> = includeArchived
 
+        /**
+         * Include the balance in the response. Setting this flag may cause the query to be slower.
+         */
+        @JsonProperty("include_balance")
+        @ExcludeMissing
+        fun _includeBalance(): JsonField<Boolean> = includeBalance
+
         /** Include commits on the contract level. */
         @JsonProperty("include_contract_commits")
         @ExcludeMissing
@@ -217,6 +239,7 @@ constructor(
                 coveringDate()
                 effectiveBefore()
                 includeArchived()
+                includeBalance()
                 includeContractCommits()
                 includeLedgers()
                 nextPage()
@@ -239,6 +262,7 @@ constructor(
             private var coveringDate: JsonField<OffsetDateTime> = JsonMissing.of()
             private var effectiveBefore: JsonField<OffsetDateTime> = JsonMissing.of()
             private var includeArchived: JsonField<Boolean> = JsonMissing.of()
+            private var includeBalance: JsonField<Boolean> = JsonMissing.of()
             private var includeContractCommits: JsonField<Boolean> = JsonMissing.of()
             private var includeLedgers: JsonField<Boolean> = JsonMissing.of()
             private var nextPage: JsonField<String> = JsonMissing.of()
@@ -252,6 +276,7 @@ constructor(
                 coveringDate = customerCommitListBody.coveringDate
                 effectiveBefore = customerCommitListBody.effectiveBefore
                 includeArchived = customerCommitListBody.includeArchived
+                includeBalance = customerCommitListBody.includeBalance
                 includeContractCommits = customerCommitListBody.includeContractCommits
                 includeLedgers = customerCommitListBody.includeLedgers
                 nextPage = customerCommitListBody.nextPage
@@ -292,6 +317,21 @@ constructor(
             /** Include commits from archived contracts. */
             fun includeArchived(includeArchived: JsonField<Boolean>) = apply {
                 this.includeArchived = includeArchived
+            }
+
+            /**
+             * Include the balance in the response. Setting this flag may cause the query to be
+             * slower.
+             */
+            fun includeBalance(includeBalance: Boolean) =
+                includeBalance(JsonField.of(includeBalance))
+
+            /**
+             * Include the balance in the response. Setting this flag may cause the query to be
+             * slower.
+             */
+            fun includeBalance(includeBalance: JsonField<Boolean>) = apply {
+                this.includeBalance = includeBalance
             }
 
             /** Include commits on the contract level. */
@@ -358,6 +398,7 @@ constructor(
                     coveringDate,
                     effectiveBefore,
                     includeArchived,
+                    includeBalance,
                     includeContractCommits,
                     includeLedgers,
                     nextPage,
@@ -371,17 +412,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerCommitListBody && customerId == other.customerId && commitId == other.commitId && coveringDate == other.coveringDate && effectiveBefore == other.effectiveBefore && includeArchived == other.includeArchived && includeContractCommits == other.includeContractCommits && includeLedgers == other.includeLedgers && nextPage == other.nextPage && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomerCommitListBody && customerId == other.customerId && commitId == other.commitId && coveringDate == other.coveringDate && effectiveBefore == other.effectiveBefore && includeArchived == other.includeArchived && includeBalance == other.includeBalance && includeContractCommits == other.includeContractCommits && includeLedgers == other.includeLedgers && nextPage == other.nextPage && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(customerId, commitId, coveringDate, effectiveBefore, includeArchived, includeContractCommits, includeLedgers, nextPage, startingAt, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(customerId, commitId, coveringDate, effectiveBefore, includeArchived, includeBalance, includeContractCommits, includeLedgers, nextPage, startingAt, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerCommitListBody{customerId=$customerId, commitId=$commitId, coveringDate=$coveringDate, effectiveBefore=$effectiveBefore, includeArchived=$includeArchived, includeContractCommits=$includeContractCommits, includeLedgers=$includeLedgers, nextPage=$nextPage, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+            "CustomerCommitListBody{customerId=$customerId, commitId=$commitId, coveringDate=$coveringDate, effectiveBefore=$effectiveBefore, includeArchived=$includeArchived, includeBalance=$includeBalance, includeContractCommits=$includeContractCommits, includeLedgers=$includeLedgers, nextPage=$nextPage, startingAt=$startingAt, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -439,6 +480,18 @@ constructor(
         /** Include commits from archived contracts. */
         fun includeArchived(includeArchived: JsonField<Boolean>) = apply {
             body.includeArchived(includeArchived)
+        }
+
+        /**
+         * Include the balance in the response. Setting this flag may cause the query to be slower.
+         */
+        fun includeBalance(includeBalance: Boolean) = apply { body.includeBalance(includeBalance) }
+
+        /**
+         * Include the balance in the response. Setting this flag may cause the query to be slower.
+         */
+        fun includeBalance(includeBalance: JsonField<Boolean>) = apply {
+            body.includeBalance(includeBalance)
         }
 
         /** Include commits on the contract level. */

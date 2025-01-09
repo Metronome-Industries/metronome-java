@@ -121,6 +121,7 @@ class CommitServiceTest {
                     .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .effectiveBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .includeArchived(true)
+                    .includeBalance(true)
                     .includeContractCommits(true)
                     .includeLedgers(true)
                     .nextPage("next_page")

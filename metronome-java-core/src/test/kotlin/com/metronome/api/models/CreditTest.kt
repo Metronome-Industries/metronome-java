@@ -44,6 +44,7 @@ class CreditTest {
                 .applicableContractIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                 .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                 .applicableProductTags(listOf("string"))
+                .balance(0.0)
                 .contract(
                     Credit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
                 )
@@ -111,6 +112,7 @@ class CreditTest {
         assertThat(credit.applicableProductIds().get())
             .containsExactly("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(credit.applicableProductTags().get()).containsExactly("string")
+        assertThat(credit.balance()).contains(0.0)
         assertThat(credit.contract())
             .contains(Credit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
         assertThat(credit.customFields())

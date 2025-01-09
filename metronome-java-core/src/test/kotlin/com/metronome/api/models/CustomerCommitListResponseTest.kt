@@ -52,6 +52,7 @@ class CustomerCommitListResponseTest {
                             .applicableContractIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                             .applicableProductTags(listOf("string"))
+                            .balance(0.0)
                             .contract(
                                 Commit.Contract.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -168,6 +169,7 @@ class CustomerCommitListResponseTest {
                     .applicableContractIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                     .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
                     .applicableProductTags(listOf("string"))
+                    .balance(0.0)
                     .contract(
                         Commit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
                     )
