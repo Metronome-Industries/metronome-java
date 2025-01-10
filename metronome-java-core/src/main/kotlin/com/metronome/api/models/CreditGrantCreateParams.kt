@@ -1305,11 +1305,13 @@ constructor(
                 this.rolloverAmount = rolloverAmount
             }
 
+            /** Specify how much to rollover to the rollover credit grant */
             fun rolloverAmount(rolloverAmountMaxPercentage: RolloverAmountMaxPercentage) =
                 rolloverAmount(
                     RolloverAmount.ofRolloverAmountMaxPercentage(rolloverAmountMaxPercentage)
                 )
 
+            /** Specify how much to rollover to the rollover credit grant */
             fun rolloverAmount(rolloverAmountMaxAmount: RolloverAmountMaxAmount) =
                 rolloverAmount(RolloverAmount.ofRolloverAmountMaxAmount(rolloverAmountMaxAmount))
 
