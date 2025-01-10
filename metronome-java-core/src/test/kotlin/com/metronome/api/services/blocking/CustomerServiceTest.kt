@@ -40,6 +40,7 @@ class CustomerServiceTest {
                                 CustomerCreateParams.BillingConfig.BillingProviderType
                                     .AWS_MARKETPLACE
                             )
+                            .awsIsSubscriptionProduct(true)
                             .awsProductCode("aws_product_code")
                             .awsRegion(CustomerCreateParams.BillingConfig.AwsRegion.AF_SOUTH_1)
                             .stripeCollectionMethod(
@@ -52,6 +53,37 @@ class CustomerServiceTest {
                         CustomerCreateParams.CustomFields.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
+                    )
+                    .customerBillingProviderConfigurations(
+                        listOf(
+                            CustomerCreateParams.CustomerBillingProviderConfiguration.builder()
+                                .billingProvider(
+                                    CustomerCreateParams.CustomerBillingProviderConfiguration
+                                        .BillingProvider
+                                        .AWS_MARKETPLACE
+                                )
+                                .configuration(
+                                    CustomerCreateParams.CustomerBillingProviderConfiguration
+                                        .Configuration
+                                        .builder()
+                                        .putAdditionalProperty(
+                                            "stripe_customer_id",
+                                            JsonValue.from("bar")
+                                        )
+                                        .putAdditionalProperty(
+                                            "stripe_collection_method",
+                                            JsonValue.from("bar")
+                                        )
+                                        .build()
+                                )
+                                .deliveryMethod(
+                                    CustomerCreateParams.CustomerBillingProviderConfiguration
+                                        .DeliveryMethod
+                                        .DIRECT_TO_BILLING_PROVIDER
+                                )
+                                .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
                     )
                     .externalId("x")
                     .ingestAliases(listOf("team@example.com"))

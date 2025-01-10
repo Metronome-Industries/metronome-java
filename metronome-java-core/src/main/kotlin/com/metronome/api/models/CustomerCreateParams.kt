@@ -35,6 +35,10 @@ constructor(
 
     fun customFields(): Optional<CustomFields> = body.customFields()
 
+    fun customerBillingProviderConfigurations():
+        Optional<List<CustomerBillingProviderConfiguration>> =
+        body.customerBillingProviderConfigurations()
+
     /**
      * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this customer
      * in usage events
@@ -50,6 +54,10 @@ constructor(
     fun _billingConfig(): JsonField<BillingConfig> = body._billingConfig()
 
     fun _customFields(): JsonField<CustomFields> = body._customFields()
+
+    fun _customerBillingProviderConfigurations():
+        JsonField<List<CustomerBillingProviderConfiguration>> =
+        body._customerBillingProviderConfigurations()
 
     /**
      * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this customer
@@ -85,6 +93,11 @@ constructor(
         @JsonProperty("custom_fields")
         @ExcludeMissing
         private val customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("customer_billing_provider_configurations")
+        @ExcludeMissing
+        private val customerBillingProviderConfigurations:
+            JsonField<List<CustomerBillingProviderConfiguration>> =
+            JsonMissing.of(),
         @JsonProperty("external_id")
         @ExcludeMissing
         private val externalId: JsonField<String> = JsonMissing.of(),
@@ -103,6 +116,14 @@ constructor(
 
         fun customFields(): Optional<CustomFields> =
             Optional.ofNullable(customFields.getNullable("custom_fields"))
+
+        fun customerBillingProviderConfigurations():
+            Optional<List<CustomerBillingProviderConfiguration>> =
+            Optional.ofNullable(
+                customerBillingProviderConfigurations.getNullable(
+                    "customer_billing_provider_configurations"
+                )
+            )
 
         /**
          * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
@@ -125,6 +146,12 @@ constructor(
         @JsonProperty("custom_fields")
         @ExcludeMissing
         fun _customFields(): JsonField<CustomFields> = customFields
+
+        @JsonProperty("customer_billing_provider_configurations")
+        @ExcludeMissing
+        fun _customerBillingProviderConfigurations():
+            JsonField<List<CustomerBillingProviderConfiguration>> =
+            customerBillingProviderConfigurations
 
         /**
          * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
@@ -153,6 +180,7 @@ constructor(
             name()
             billingConfig().ifPresent { it.validate() }
             customFields().ifPresent { it.validate() }
+            customerBillingProviderConfigurations().ifPresent { it.forEach { it.validate() } }
             externalId()
             ingestAliases()
             validated = true
@@ -170,6 +198,9 @@ constructor(
             private var name: JsonField<String>? = null
             private var billingConfig: JsonField<BillingConfig> = JsonMissing.of()
             private var customFields: JsonField<CustomFields> = JsonMissing.of()
+            private var customerBillingProviderConfigurations:
+                JsonField<MutableList<CustomerBillingProviderConfiguration>>? =
+                null
             private var externalId: JsonField<String> = JsonMissing.of()
             private var ingestAliases: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -179,6 +210,10 @@ constructor(
                 name = customerCreateBody.name
                 billingConfig = customerCreateBody.billingConfig
                 customFields = customerCreateBody.customFields
+                customerBillingProviderConfigurations =
+                    customerCreateBody.customerBillingProviderConfigurations.map {
+                        it.toMutableList()
+                    }
                 externalId = customerCreateBody.externalId
                 ingestAliases = customerCreateBody.ingestAliases.map { it.toMutableList() }
                 additionalProperties = customerCreateBody.additionalProperties.toMutableMap()
@@ -201,6 +236,36 @@ constructor(
 
             fun customFields(customFields: JsonField<CustomFields>) = apply {
                 this.customFields = customFields
+            }
+
+            fun customerBillingProviderConfigurations(
+                customerBillingProviderConfigurations: List<CustomerBillingProviderConfiguration>
+            ) =
+                customerBillingProviderConfigurations(
+                    JsonField.of(customerBillingProviderConfigurations)
+                )
+
+            fun customerBillingProviderConfigurations(
+                customerBillingProviderConfigurations:
+                    JsonField<List<CustomerBillingProviderConfiguration>>
+            ) = apply {
+                this.customerBillingProviderConfigurations =
+                    customerBillingProviderConfigurations.map { it.toMutableList() }
+            }
+
+            fun addCustomerBillingProviderConfiguration(
+                customerBillingProviderConfiguration: CustomerBillingProviderConfiguration
+            ) = apply {
+                customerBillingProviderConfigurations =
+                    (customerBillingProviderConfigurations ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(customerBillingProviderConfiguration)
+                    }
             }
 
             /**
@@ -262,6 +327,9 @@ constructor(
                     checkNotNull(name) { "`name` is required but was not set" },
                     billingConfig,
                     customFields,
+                    (customerBillingProviderConfigurations ?: JsonMissing.of()).map {
+                        it.toImmutable()
+                    },
                     externalId,
                     (ingestAliases ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
@@ -273,17 +341,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerCreateBody && name == other.name && billingConfig == other.billingConfig && customFields == other.customFields && externalId == other.externalId && ingestAliases == other.ingestAliases && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CustomerCreateBody && name == other.name && billingConfig == other.billingConfig && customFields == other.customFields && customerBillingProviderConfigurations == other.customerBillingProviderConfigurations && externalId == other.externalId && ingestAliases == other.ingestAliases && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(name, billingConfig, customFields, externalId, ingestAliases, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(name, billingConfig, customFields, customerBillingProviderConfigurations, externalId, ingestAliases, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerCreateBody{name=$name, billingConfig=$billingConfig, customFields=$customFields, externalId=$externalId, ingestAliases=$ingestAliases, additionalProperties=$additionalProperties}"
+            "CustomerCreateBody{name=$name, billingConfig=$billingConfig, customFields=$customFields, customerBillingProviderConfigurations=$customerBillingProviderConfigurations, externalId=$externalId, ingestAliases=$ingestAliases, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -325,6 +393,25 @@ constructor(
 
         fun customFields(customFields: JsonField<CustomFields>) = apply {
             body.customFields(customFields)
+        }
+
+        fun customerBillingProviderConfigurations(
+            customerBillingProviderConfigurations: List<CustomerBillingProviderConfiguration>
+        ) = apply {
+            body.customerBillingProviderConfigurations(customerBillingProviderConfigurations)
+        }
+
+        fun customerBillingProviderConfigurations(
+            customerBillingProviderConfigurations:
+                JsonField<List<CustomerBillingProviderConfiguration>>
+        ) = apply {
+            body.customerBillingProviderConfigurations(customerBillingProviderConfigurations)
+        }
+
+        fun addCustomerBillingProviderConfiguration(
+            customerBillingProviderConfiguration: CustomerBillingProviderConfiguration
+        ) = apply {
+            body.addCustomerBillingProviderConfiguration(customerBillingProviderConfiguration)
         }
 
         /**
@@ -485,6 +572,9 @@ constructor(
         @JsonProperty("billing_provider_type")
         @ExcludeMissing
         private val billingProviderType: JsonField<BillingProviderType> = JsonMissing.of(),
+        @JsonProperty("aws_is_subscription_product")
+        @ExcludeMissing
+        private val awsIsSubscriptionProduct: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("aws_product_code")
         @ExcludeMissing
         private val awsProductCode: JsonField<String> = JsonMissing.of(),
@@ -504,6 +594,10 @@ constructor(
         fun billingProviderType(): BillingProviderType =
             billingProviderType.getRequired("billing_provider_type")
 
+        /** True if the aws_product_code is a SAAS subscription product, false otherwise. */
+        fun awsIsSubscriptionProduct(): Optional<Boolean> =
+            Optional.ofNullable(awsIsSubscriptionProduct.getNullable("aws_is_subscription_product"))
+
         fun awsProductCode(): Optional<String> =
             Optional.ofNullable(awsProductCode.getNullable("aws_product_code"))
 
@@ -520,6 +614,11 @@ constructor(
         @JsonProperty("billing_provider_type")
         @ExcludeMissing
         fun _billingProviderType(): JsonField<BillingProviderType> = billingProviderType
+
+        /** True if the aws_product_code is a SAAS subscription product, false otherwise. */
+        @JsonProperty("aws_is_subscription_product")
+        @ExcludeMissing
+        fun _awsIsSubscriptionProduct(): JsonField<Boolean> = awsIsSubscriptionProduct
 
         @JsonProperty("aws_product_code")
         @ExcludeMissing
@@ -546,6 +645,7 @@ constructor(
 
             billingProviderCustomerId()
             billingProviderType()
+            awsIsSubscriptionProduct()
             awsProductCode()
             awsRegion()
             stripeCollectionMethod()
@@ -563,6 +663,7 @@ constructor(
 
             private var billingProviderCustomerId: JsonField<String>? = null
             private var billingProviderType: JsonField<BillingProviderType>? = null
+            private var awsIsSubscriptionProduct: JsonField<Boolean> = JsonMissing.of()
             private var awsProductCode: JsonField<String> = JsonMissing.of()
             private var awsRegion: JsonField<AwsRegion> = JsonMissing.of()
             private var stripeCollectionMethod: JsonField<StripeCollectionMethod> = JsonMissing.of()
@@ -572,6 +673,7 @@ constructor(
             internal fun from(billingConfig: BillingConfig) = apply {
                 billingProviderCustomerId = billingConfig.billingProviderCustomerId
                 billingProviderType = billingConfig.billingProviderType
+                awsIsSubscriptionProduct = billingConfig.awsIsSubscriptionProduct
                 awsProductCode = billingConfig.awsProductCode
                 awsRegion = billingConfig.awsRegion
                 stripeCollectionMethod = billingConfig.stripeCollectionMethod
@@ -590,6 +692,15 @@ constructor(
 
             fun billingProviderType(billingProviderType: JsonField<BillingProviderType>) = apply {
                 this.billingProviderType = billingProviderType
+            }
+
+            /** True if the aws_product_code is a SAAS subscription product, false otherwise. */
+            fun awsIsSubscriptionProduct(awsIsSubscriptionProduct: Boolean) =
+                awsIsSubscriptionProduct(JsonField.of(awsIsSubscriptionProduct))
+
+            /** True if the aws_product_code is a SAAS subscription product, false otherwise. */
+            fun awsIsSubscriptionProduct(awsIsSubscriptionProduct: JsonField<Boolean>) = apply {
+                this.awsIsSubscriptionProduct = awsIsSubscriptionProduct
             }
 
             fun awsProductCode(awsProductCode: String) =
@@ -638,6 +749,7 @@ constructor(
                     checkNotNull(billingProviderType) {
                         "`billingProviderType` is required but was not set"
                     },
+                    awsIsSubscriptionProduct,
                     awsProductCode,
                     awsRegion,
                     stripeCollectionMethod,
@@ -999,17 +1111,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is BillingConfig && billingProviderCustomerId == other.billingProviderCustomerId && billingProviderType == other.billingProviderType && awsProductCode == other.awsProductCode && awsRegion == other.awsRegion && stripeCollectionMethod == other.stripeCollectionMethod && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is BillingConfig && billingProviderCustomerId == other.billingProviderCustomerId && billingProviderType == other.billingProviderType && awsIsSubscriptionProduct == other.awsIsSubscriptionProduct && awsProductCode == other.awsProductCode && awsRegion == other.awsRegion && stripeCollectionMethod == other.stripeCollectionMethod && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(billingProviderCustomerId, billingProviderType, awsProductCode, awsRegion, stripeCollectionMethod, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(billingProviderCustomerId, billingProviderType, awsIsSubscriptionProduct, awsProductCode, awsRegion, stripeCollectionMethod, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "BillingConfig{billingProviderCustomerId=$billingProviderCustomerId, billingProviderType=$billingProviderType, awsProductCode=$awsProductCode, awsRegion=$awsRegion, stripeCollectionMethod=$stripeCollectionMethod, additionalProperties=$additionalProperties}"
+            "BillingConfig{billingProviderCustomerId=$billingProviderCustomerId, billingProviderType=$billingProviderType, awsIsSubscriptionProduct=$awsIsSubscriptionProduct, awsProductCode=$awsProductCode, awsRegion=$awsRegion, stripeCollectionMethod=$stripeCollectionMethod, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -1087,6 +1199,465 @@ constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
+    }
+
+    @NoAutoDetect
+    class CustomerBillingProviderConfiguration
+    @JsonCreator
+    private constructor(
+        @JsonProperty("billing_provider")
+        @ExcludeMissing
+        private val billingProvider: JsonField<BillingProvider> = JsonMissing.of(),
+        @JsonProperty("configuration")
+        @ExcludeMissing
+        private val configuration: JsonField<Configuration> = JsonMissing.of(),
+        @JsonProperty("delivery_method")
+        @ExcludeMissing
+        private val deliveryMethod: JsonField<DeliveryMethod> = JsonMissing.of(),
+        @JsonProperty("delivery_method_id")
+        @ExcludeMissing
+        private val deliveryMethodId: JsonField<String> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    ) {
+
+        /** The billing provider set for this configuration. */
+        fun billingProvider(): BillingProvider = billingProvider.getRequired("billing_provider")
+
+        /**
+         * Configuration for the billing provider. The structure of this object is specific to the
+         * billing provider and delivery provider combination. Defaults to an empty object, however,
+         * for most billing provider + delivery method combinations, it will not be a valid
+         * configuration.
+         */
+        fun configuration(): Optional<Configuration> =
+            Optional.ofNullable(configuration.getNullable("configuration"))
+
+        /**
+         * The method to use for delivering invoices to this customer. If not provided, the
+         * `delivery_method_id` must be provided.
+         */
+        fun deliveryMethod(): Optional<DeliveryMethod> =
+            Optional.ofNullable(deliveryMethod.getNullable("delivery_method"))
+
+        /**
+         * ID of the delivery method to use for this customer. If not provided, the
+         * `delivery_method` must be provided.
+         */
+        fun deliveryMethodId(): Optional<String> =
+            Optional.ofNullable(deliveryMethodId.getNullable("delivery_method_id"))
+
+        /** The billing provider set for this configuration. */
+        @JsonProperty("billing_provider")
+        @ExcludeMissing
+        fun _billingProvider(): JsonField<BillingProvider> = billingProvider
+
+        /**
+         * Configuration for the billing provider. The structure of this object is specific to the
+         * billing provider and delivery provider combination. Defaults to an empty object, however,
+         * for most billing provider + delivery method combinations, it will not be a valid
+         * configuration.
+         */
+        @JsonProperty("configuration")
+        @ExcludeMissing
+        fun _configuration(): JsonField<Configuration> = configuration
+
+        /**
+         * The method to use for delivering invoices to this customer. If not provided, the
+         * `delivery_method_id` must be provided.
+         */
+        @JsonProperty("delivery_method")
+        @ExcludeMissing
+        fun _deliveryMethod(): JsonField<DeliveryMethod> = deliveryMethod
+
+        /**
+         * ID of the delivery method to use for this customer. If not provided, the
+         * `delivery_method` must be provided.
+         */
+        @JsonProperty("delivery_method_id")
+        @ExcludeMissing
+        fun _deliveryMethodId(): JsonField<String> = deliveryMethodId
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomerBillingProviderConfiguration = apply {
+            if (validated) {
+                return@apply
+            }
+
+            billingProvider()
+            configuration().ifPresent { it.validate() }
+            deliveryMethod()
+            deliveryMethodId()
+            validated = true
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var billingProvider: JsonField<BillingProvider>? = null
+            private var configuration: JsonField<Configuration> = JsonMissing.of()
+            private var deliveryMethod: JsonField<DeliveryMethod> = JsonMissing.of()
+            private var deliveryMethodId: JsonField<String> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(
+                customerBillingProviderConfiguration: CustomerBillingProviderConfiguration
+            ) = apply {
+                billingProvider = customerBillingProviderConfiguration.billingProvider
+                configuration = customerBillingProviderConfiguration.configuration
+                deliveryMethod = customerBillingProviderConfiguration.deliveryMethod
+                deliveryMethodId = customerBillingProviderConfiguration.deliveryMethodId
+                additionalProperties =
+                    customerBillingProviderConfiguration.additionalProperties.toMutableMap()
+            }
+
+            /** The billing provider set for this configuration. */
+            fun billingProvider(billingProvider: BillingProvider) =
+                billingProvider(JsonField.of(billingProvider))
+
+            /** The billing provider set for this configuration. */
+            fun billingProvider(billingProvider: JsonField<BillingProvider>) = apply {
+                this.billingProvider = billingProvider
+            }
+
+            /**
+             * Configuration for the billing provider. The structure of this object is specific to
+             * the billing provider and delivery provider combination. Defaults to an empty object,
+             * however, for most billing provider + delivery method combinations, it will not be a
+             * valid configuration.
+             */
+            fun configuration(configuration: Configuration) =
+                configuration(JsonField.of(configuration))
+
+            /**
+             * Configuration for the billing provider. The structure of this object is specific to
+             * the billing provider and delivery provider combination. Defaults to an empty object,
+             * however, for most billing provider + delivery method combinations, it will not be a
+             * valid configuration.
+             */
+            fun configuration(configuration: JsonField<Configuration>) = apply {
+                this.configuration = configuration
+            }
+
+            /**
+             * The method to use for delivering invoices to this customer. If not provided, the
+             * `delivery_method_id` must be provided.
+             */
+            fun deliveryMethod(deliveryMethod: DeliveryMethod) =
+                deliveryMethod(JsonField.of(deliveryMethod))
+
+            /**
+             * The method to use for delivering invoices to this customer. If not provided, the
+             * `delivery_method_id` must be provided.
+             */
+            fun deliveryMethod(deliveryMethod: JsonField<DeliveryMethod>) = apply {
+                this.deliveryMethod = deliveryMethod
+            }
+
+            /**
+             * ID of the delivery method to use for this customer. If not provided, the
+             * `delivery_method` must be provided.
+             */
+            fun deliveryMethodId(deliveryMethodId: String) =
+                deliveryMethodId(JsonField.of(deliveryMethodId))
+
+            /**
+             * ID of the delivery method to use for this customer. If not provided, the
+             * `delivery_method` must be provided.
+             */
+            fun deliveryMethodId(deliveryMethodId: JsonField<String>) = apply {
+                this.deliveryMethodId = deliveryMethodId
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            fun build(): CustomerBillingProviderConfiguration =
+                CustomerBillingProviderConfiguration(
+                    checkNotNull(billingProvider) {
+                        "`billingProvider` is required but was not set"
+                    },
+                    configuration,
+                    deliveryMethod,
+                    deliveryMethodId,
+                    additionalProperties.toImmutable(),
+                )
+        }
+
+        class BillingProvider
+        @JsonCreator
+        private constructor(
+            private val value: JsonField<String>,
+        ) : Enum {
+
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val AWS_MARKETPLACE = of("aws_marketplace")
+
+                @JvmField val AZURE_MARKETPLACE = of("azure_marketplace")
+
+                @JvmField val GCP_MARKETPLACE = of("gcp_marketplace")
+
+                @JvmField val STRIPE = of("stripe")
+
+                @JvmField val NETSUITE = of("netsuite")
+
+                @JvmStatic fun of(value: String) = BillingProvider(JsonField.of(value))
+            }
+
+            enum class Known {
+                AWS_MARKETPLACE,
+                AZURE_MARKETPLACE,
+                GCP_MARKETPLACE,
+                STRIPE,
+                NETSUITE,
+            }
+
+            enum class Value {
+                AWS_MARKETPLACE,
+                AZURE_MARKETPLACE,
+                GCP_MARKETPLACE,
+                STRIPE,
+                NETSUITE,
+                _UNKNOWN,
+            }
+
+            fun value(): Value =
+                when (this) {
+                    AWS_MARKETPLACE -> Value.AWS_MARKETPLACE
+                    AZURE_MARKETPLACE -> Value.AZURE_MARKETPLACE
+                    GCP_MARKETPLACE -> Value.GCP_MARKETPLACE
+                    STRIPE -> Value.STRIPE
+                    NETSUITE -> Value.NETSUITE
+                    else -> Value._UNKNOWN
+                }
+
+            fun known(): Known =
+                when (this) {
+                    AWS_MARKETPLACE -> Known.AWS_MARKETPLACE
+                    AZURE_MARKETPLACE -> Known.AZURE_MARKETPLACE
+                    GCP_MARKETPLACE -> Known.GCP_MARKETPLACE
+                    STRIPE -> Known.STRIPE
+                    NETSUITE -> Known.NETSUITE
+                    else -> throw MetronomeInvalidDataException("Unknown BillingProvider: $value")
+                }
+
+            fun asString(): String = _value().asStringOrThrow()
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is BillingProvider && value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        /**
+         * Configuration for the billing provider. The structure of this object is specific to the
+         * billing provider and delivery provider combination. Defaults to an empty object, however,
+         * for most billing provider + delivery method combinations, it will not be a valid
+         * configuration.
+         */
+        @NoAutoDetect
+        class Configuration
+        @JsonCreator
+        private constructor(
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        ) {
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): Configuration = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(configuration: Configuration) = apply {
+                    additionalProperties = configuration.additionalProperties.toMutableMap()
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                fun build(): Configuration = Configuration(additionalProperties.toImmutable())
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Configuration && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() = "Configuration{additionalProperties=$additionalProperties}"
+        }
+
+        class DeliveryMethod
+        @JsonCreator
+        private constructor(
+            private val value: JsonField<String>,
+        ) : Enum {
+
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val DIRECT_TO_BILLING_PROVIDER = of("direct_to_billing_provider")
+
+                @JvmField val AWS_SQS = of("aws_sqs")
+
+                @JvmField val TACKLE = of("tackle")
+
+                @JvmField val AWS_SNS = of("aws_sns")
+
+                @JvmStatic fun of(value: String) = DeliveryMethod(JsonField.of(value))
+            }
+
+            enum class Known {
+                DIRECT_TO_BILLING_PROVIDER,
+                AWS_SQS,
+                TACKLE,
+                AWS_SNS,
+            }
+
+            enum class Value {
+                DIRECT_TO_BILLING_PROVIDER,
+                AWS_SQS,
+                TACKLE,
+                AWS_SNS,
+                _UNKNOWN,
+            }
+
+            fun value(): Value =
+                when (this) {
+                    DIRECT_TO_BILLING_PROVIDER -> Value.DIRECT_TO_BILLING_PROVIDER
+                    AWS_SQS -> Value.AWS_SQS
+                    TACKLE -> Value.TACKLE
+                    AWS_SNS -> Value.AWS_SNS
+                    else -> Value._UNKNOWN
+                }
+
+            fun known(): Known =
+                when (this) {
+                    DIRECT_TO_BILLING_PROVIDER -> Known.DIRECT_TO_BILLING_PROVIDER
+                    AWS_SQS -> Known.AWS_SQS
+                    TACKLE -> Known.TACKLE
+                    AWS_SNS -> Known.AWS_SNS
+                    else -> throw MetronomeInvalidDataException("Unknown DeliveryMethod: $value")
+                }
+
+            fun asString(): String = _value().asStringOrThrow()
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is DeliveryMethod && value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CustomerBillingProviderConfiguration && billingProvider == other.billingProvider && configuration == other.configuration && deliveryMethod == other.deliveryMethod && deliveryMethodId == other.deliveryMethodId && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(billingProvider, configuration, deliveryMethod, deliveryMethodId, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "CustomerBillingProviderConfiguration{billingProvider=$billingProvider, configuration=$configuration, deliveryMethod=$deliveryMethod, deliveryMethodId=$deliveryMethodId, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
