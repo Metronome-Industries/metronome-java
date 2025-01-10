@@ -24,6 +24,9 @@ class AuditLogListResponse
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("request")
+    @ExcludeMissing
+    private val request: JsonField<Request> = JsonMissing.of(),
     @JsonProperty("timestamp")
     @ExcludeMissing
     private val timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -48,6 +51,8 @@ private constructor(
 
     fun id(): String = id.getRequired("id")
 
+    fun request(): Request = request.getRequired("request")
+
     fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
 
     fun action(): Optional<String> = Optional.ofNullable(action.getNullable("action"))
@@ -65,6 +70,8 @@ private constructor(
     fun status(): Optional<Status> = Optional.ofNullable(status.getNullable("status"))
 
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+    @JsonProperty("request") @ExcludeMissing fun _request(): JsonField<Request> = request
 
     @JsonProperty("timestamp")
     @ExcludeMissing
@@ -93,6 +100,7 @@ private constructor(
     fun validate(): AuditLogListResponse = apply {
         if (!validated) {
             id()
+            request().validate()
             timestamp()
             action()
             actor().map { it.validate() }
@@ -114,6 +122,7 @@ private constructor(
     class Builder {
 
         private var id: JsonField<String>? = null
+        private var request: JsonField<Request>? = null
         private var timestamp: JsonField<OffsetDateTime>? = null
         private var action: JsonField<String> = JsonMissing.of()
         private var actor: JsonField<Actor> = JsonMissing.of()
@@ -126,6 +135,7 @@ private constructor(
         @JvmSynthetic
         internal fun from(auditLogListResponse: AuditLogListResponse) = apply {
             id = auditLogListResponse.id
+            request = auditLogListResponse.request
             timestamp = auditLogListResponse.timestamp
             action = auditLogListResponse.action
             actor = auditLogListResponse.actor
@@ -139,6 +149,10 @@ private constructor(
         fun id(id: String) = id(JsonField.of(id))
 
         fun id(id: JsonField<String>) = apply { this.id = id }
+
+        fun request(request: Request) = request(JsonField.of(request))
+
+        fun request(request: JsonField<Request>) = apply { this.request = request }
 
         fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
 
@@ -192,6 +206,7 @@ private constructor(
         fun build(): AuditLogListResponse =
             AuditLogListResponse(
                 checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(request) { "`request` is required but was not set" },
                 checkNotNull(timestamp) { "`timestamp` is required but was not set" },
                 action,
                 actor,
@@ -201,6 +216,126 @@ private constructor(
                 status,
                 additionalProperties.toImmutable(),
             )
+    }
+
+    @NoAutoDetect
+    class Request
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("ip") @ExcludeMissing private val ip: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("user_agent")
+        @ExcludeMissing
+        private val userAgent: JsonField<String> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    ) {
+
+        fun id(): String = id.getRequired("id")
+
+        fun ip(): Optional<String> = Optional.ofNullable(ip.getNullable("ip"))
+
+        fun userAgent(): Optional<String> = Optional.ofNullable(userAgent.getNullable("user_agent"))
+
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        @JsonProperty("ip") @ExcludeMissing fun _ip(): JsonField<String> = ip
+
+        @JsonProperty("user_agent") @ExcludeMissing fun _userAgent(): JsonField<String> = userAgent
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): Request = apply {
+            if (!validated) {
+                id()
+                ip()
+                userAgent()
+                validated = true
+            }
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var id: JsonField<String>? = null
+            private var ip: JsonField<String> = JsonMissing.of()
+            private var userAgent: JsonField<String> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(request: Request) = apply {
+                id = request.id
+                ip = request.ip
+                userAgent = request.userAgent
+                additionalProperties = request.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun ip(ip: String) = ip(JsonField.of(ip))
+
+            fun ip(ip: JsonField<String>) = apply { this.ip = ip }
+
+            fun userAgent(userAgent: String) = userAgent(JsonField.of(userAgent))
+
+            fun userAgent(userAgent: JsonField<String>) = apply { this.userAgent = userAgent }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            fun build(): Request =
+                Request(
+                    checkNotNull(id) { "`id` is required but was not set" },
+                    ip,
+                    userAgent,
+                    additionalProperties.toImmutable(),
+                )
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Request && id == other.id && ip == other.ip && userAgent == other.userAgent && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, ip, userAgent, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Request{id=$id, ip=$ip, userAgent=$userAgent, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -393,15 +528,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is AuditLogListResponse && id == other.id && timestamp == other.timestamp && action == other.action && actor == other.actor && description == other.description && resourceId == other.resourceId && resourceType == other.resourceType && status == other.status && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is AuditLogListResponse && id == other.id && request == other.request && timestamp == other.timestamp && action == other.action && actor == other.actor && description == other.description && resourceId == other.resourceId && resourceType == other.resourceType && status == other.status && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, timestamp, action, actor, description, resourceId, resourceType, status, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, request, timestamp, action, actor, description, resourceId, resourceType, status, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "AuditLogListResponse{id=$id, timestamp=$timestamp, action=$action, actor=$actor, description=$description, resourceId=$resourceId, resourceType=$resourceType, status=$status, additionalProperties=$additionalProperties}"
+        "AuditLogListResponse{id=$id, request=$request, timestamp=$timestamp, action=$action, actor=$actor, description=$description, resourceId=$resourceId, resourceType=$resourceType, status=$status, additionalProperties=$additionalProperties}"
 }

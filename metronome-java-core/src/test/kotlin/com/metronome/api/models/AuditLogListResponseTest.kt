@@ -13,6 +13,13 @@ class AuditLogListResponseTest {
         val auditLogListResponse =
             AuditLogListResponse.builder()
                 .id("id")
+                .request(
+                    AuditLogListResponse.Request.builder()
+                        .id("id")
+                        .ip("ip")
+                        .userAgent("user_agent")
+                        .build()
+                )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .action("action")
                 .actor(
@@ -29,6 +36,14 @@ class AuditLogListResponseTest {
                 .build()
         assertThat(auditLogListResponse).isNotNull
         assertThat(auditLogListResponse.id()).isEqualTo("id")
+        assertThat(auditLogListResponse.request())
+            .isEqualTo(
+                AuditLogListResponse.Request.builder()
+                    .id("id")
+                    .ip("ip")
+                    .userAgent("user_agent")
+                    .build()
+            )
         assertThat(auditLogListResponse.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(auditLogListResponse.action()).contains("action")
