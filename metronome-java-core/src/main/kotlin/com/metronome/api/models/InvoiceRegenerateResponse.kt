@@ -35,10 +35,12 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): InvoiceRegenerateResponse = apply {
-        if (!validated) {
-            data().map { it.validate() }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().ifPresent { it.validate() }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -108,10 +110,12 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Data = apply {
-            if (!validated) {
-                id()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

@@ -45,11 +45,13 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CreditGrantListEntriesResponse = apply {
-        if (!validated) {
-            data().forEach { it.validate() }
-            nextPage()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().forEach { it.validate() }
+        nextPage()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -157,11 +159,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Data = apply {
-            if (!validated) {
-                customerId()
-                ledgers().forEach { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            customerId()
+            ledgers().forEach { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -298,14 +302,16 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Ledger = apply {
-                if (!validated) {
-                    creditType().validate()
-                    endingBalance().validate()
-                    entries().forEach { it.validate() }
-                    pendingEntries().forEach { it.validate() }
-                    startingBalance().validate()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                creditType().validate()
+                endingBalance().validate()
+                entries().forEach { it.validate() }
+                pendingEntries().forEach { it.validate() }
+                startingBalance().validate()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -505,12 +511,14 @@ private constructor(
                 private var validated: Boolean = false
 
                 fun validate(): EndingBalance = apply {
-                    if (!validated) {
-                        effectiveAt()
-                        excludingPending()
-                        includingPending()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    effectiveAt()
+                    excludingPending()
+                    includingPending()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -703,12 +711,14 @@ private constructor(
                 private var validated: Boolean = false
 
                 fun validate(): StartingBalance = apply {
-                    if (!validated) {
-                        effectiveAt()
-                        excludingPending()
-                        includingPending()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    effectiveAt()
+                    excludingPending()
+                    includingPending()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)

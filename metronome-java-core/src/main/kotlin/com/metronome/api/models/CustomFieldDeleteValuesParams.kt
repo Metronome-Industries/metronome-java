@@ -87,12 +87,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFieldDeleteValuesBody = apply {
-            if (!validated) {
-                entity()
-                entityId()
-                keys()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            entity()
+            entityId()
+            keys()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

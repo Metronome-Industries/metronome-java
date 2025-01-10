@@ -34,10 +34,12 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Id = apply {
-        if (!validated) {
-            id()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

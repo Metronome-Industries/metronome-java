@@ -340,23 +340,25 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerCreditCreateBody = apply {
-            if (!validated) {
-                accessSchedule().validate()
-                customerId()
-                priority()
-                productId()
-                applicableContractIds()
-                applicableProductIds()
-                applicableProductTags()
-                customFields().map { it.validate() }
-                description()
-                name()
-                netsuiteSalesOrderId()
-                rateType()
-                salesforceOpportunityId()
-                uniquenessKey()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            accessSchedule().validate()
+            customerId()
+            priority()
+            productId()
+            applicableContractIds()
+            applicableProductIds()
+            applicableProductTags()
+            customFields().ifPresent { it.validate() }
+            description()
+            name()
+            netsuiteSalesOrderId()
+            rateType()
+            salesforceOpportunityId()
+            uniquenessKey()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -989,11 +991,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): AccessSchedule = apply {
-            if (!validated) {
-                scheduleItems().forEach { it.validate() }
-                creditTypeId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            scheduleItems().forEach { it.validate() }
+            creditTypeId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1116,12 +1120,14 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): ScheduleItem = apply {
-                if (!validated) {
-                    amount()
-                    endingBefore()
-                    startingAt()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                endingBefore()
+                startingAt()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1249,9 +1255,11 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

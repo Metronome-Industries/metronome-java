@@ -137,13 +137,15 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractRetrieveBody = apply {
-            if (!validated) {
-                contractId()
-                customerId()
-                includeBalance()
-                includeLedgers()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            contractId()
+            customerId()
+            includeBalance()
+            includeLedgers()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

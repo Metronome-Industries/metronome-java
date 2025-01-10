@@ -264,16 +264,18 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerPlanAddBody = apply {
-            if (!validated) {
-                planId()
-                startingOn()
-                endingBefore()
-                netPaymentTermsDays()
-                overageRateAdjustments().map { it.forEach { it.validate() } }
-                priceAdjustments().map { it.forEach { it.validate() } }
-                trialSpec().map { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            planId()
+            startingOn()
+            endingBefore()
+            netPaymentTermsDays()
+            overageRateAdjustments().ifPresent { it.forEach { it.validate() } }
+            priceAdjustments().ifPresent { it.forEach { it.validate() } }
+            trialSpec().ifPresent { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -801,12 +803,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): OverageRateAdjustment = apply {
-            if (!validated) {
-                customCreditTypeId()
-                fiatCurrencyCreditTypeId()
-                toFiatConversionFactor()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            customCreditTypeId()
+            fiatCurrencyCreditTypeId()
+            toFiatConversionFactor()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -985,15 +989,17 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): PriceAdjustment = apply {
-            if (!validated) {
-                adjustmentType()
-                chargeId()
-                startPeriod()
-                quantity()
-                tier()
-                value()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            adjustmentType()
+            chargeId()
+            startPeriod()
+            quantity()
+            tier()
+            value()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1234,11 +1240,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): TrialSpec = apply {
-            if (!validated) {
-                lengthInDays()
-                spendingCap().map { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            lengthInDays()
+            spendingCap().ifPresent { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1341,11 +1349,13 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): SpendingCap = apply {
-                if (!validated) {
-                    amount()
-                    creditTypeId()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                creditTypeId()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

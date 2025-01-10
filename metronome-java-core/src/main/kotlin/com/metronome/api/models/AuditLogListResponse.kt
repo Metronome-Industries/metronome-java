@@ -98,18 +98,20 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): AuditLogListResponse = apply {
-        if (!validated) {
-            id()
-            request().validate()
-            timestamp()
-            action()
-            actor().map { it.validate() }
-            description()
-            resourceId()
-            resourceType()
-            status()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        request().validate()
+        timestamp()
+        action()
+        actor().ifPresent { it.validate() }
+        description()
+        resourceId()
+        resourceType()
+        status()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -250,12 +252,14 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Request = apply {
-            if (!validated) {
-                id()
-                ip()
-                userAgent()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            ip()
+            userAgent()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -372,12 +376,14 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Actor = apply {
-            if (!validated) {
-                id()
-                name()
-                email()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            name()
+            email()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

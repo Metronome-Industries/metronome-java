@@ -399,22 +399,24 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): AlertCreateBody = apply {
-            if (!validated) {
-                alertType()
-                name()
-                threshold()
-                billableMetricId()
-                creditGrantTypeFilters()
-                creditTypeId()
-                customFieldFilters().map { it.forEach { it.validate() } }
-                customerId()
-                evaluateOnCreate()
-                groupKeyFilter().map { it.validate() }
-                invoiceTypesFilter()
-                planId()
-                uniquenessKey()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            alertType()
+            name()
+            threshold()
+            billableMetricId()
+            creditGrantTypeFilters()
+            creditTypeId()
+            customFieldFilters().ifPresent { it.forEach { it.validate() } }
+            customerId()
+            evaluateOnCreate()
+            groupKeyFilter().ifPresent { it.validate() }
+            invoiceTypesFilter()
+            planId()
+            uniquenessKey()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1264,12 +1266,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFieldFilter = apply {
-            if (!validated) {
-                entity()
-                key()
-                value()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            entity()
+            key()
+            value()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1446,11 +1450,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): GroupKeyFilter = apply {
-            if (!validated) {
-                key()
-                value()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            key()
+            value()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

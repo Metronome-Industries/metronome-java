@@ -138,13 +138,15 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractRateCardNamedScheduleRetrieveBody = apply {
-            if (!validated) {
-                contractId()
-                customerId()
-                scheduleName()
-                coveringDate()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            contractId()
+            customerId()
+            scheduleName()
+            coveringDate()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

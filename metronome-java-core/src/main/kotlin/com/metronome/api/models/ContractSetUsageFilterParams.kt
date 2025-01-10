@@ -116,14 +116,16 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractSetUsageFilterBody = apply {
-            if (!validated) {
-                contractId()
-                customerId()
-                groupKey()
-                groupValues()
-                startingAt()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            contractId()
+            customerId()
+            groupKey()
+            groupValues()
+            startingAt()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

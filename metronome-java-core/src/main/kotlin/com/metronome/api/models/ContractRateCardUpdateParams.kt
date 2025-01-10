@@ -131,13 +131,15 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractRateCardUpdateBody = apply {
-            if (!validated) {
-                rateCardId()
-                aliases().map { it.forEach { it.validate() } }
-                description()
-                name()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            rateCardId()
+            aliases().ifPresent { it.forEach { it.validate() } }
+            description()
+            name()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -489,12 +491,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): Alias = apply {
-            if (!validated) {
-                name()
-                endingBefore()
-                startingAt()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            name()
+            endingBefore()
+            startingAt()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

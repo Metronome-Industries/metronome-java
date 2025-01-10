@@ -57,13 +57,15 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): PlanListResponse = apply {
-        if (!validated) {
-            id()
-            description()
-            name()
-            customFields().map { it.validate() }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        description()
+        name()
+        customFields().ifPresent { it.validate() }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -152,9 +154,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

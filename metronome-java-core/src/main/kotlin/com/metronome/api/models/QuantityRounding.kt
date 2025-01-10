@@ -54,11 +54,13 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): QuantityRounding = apply {
-        if (!validated) {
-            decimalPlaces()
-            roundingMethod()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        decimalPlaces()
+        roundingMethod()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

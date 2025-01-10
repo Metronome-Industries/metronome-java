@@ -291,32 +291,34 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Commit = apply {
-        if (!validated) {
-            id()
-            product().validate()
-            type()
-            accessSchedule().map { it.validate() }
-            amount()
-            applicableContractIds()
-            applicableProductIds()
-            applicableProductTags()
-            balance()
-            contract().map { it.validate() }
-            customFields().map { it.validate() }
-            description()
-            invoiceContract().map { it.validate() }
-            invoiceSchedule().map { it.validate() }
-            ledger()
-            name()
-            netsuiteSalesOrderId()
-            priority()
-            rateType()
-            rolledOverFrom().map { it.validate() }
-            rolloverFraction()
-            salesforceOpportunityId()
-            uniquenessKey()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        product().validate()
+        type()
+        accessSchedule().ifPresent { it.validate() }
+        amount()
+        applicableContractIds()
+        applicableProductIds()
+        applicableProductTags()
+        balance()
+        contract().ifPresent { it.validate() }
+        customFields().ifPresent { it.validate() }
+        description()
+        invoiceContract().ifPresent { it.validate() }
+        invoiceSchedule().ifPresent { it.validate() }
+        ledger().ifPresent { it.forEach { it.validate() } }
+        name()
+        netsuiteSalesOrderId()
+        priority()
+        rateType()
+        rolledOverFrom().ifPresent { it.validate() }
+        rolloverFraction()
+        salesforceOpportunityId()
+        uniquenessKey()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -823,11 +825,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Product = apply {
-            if (!validated) {
-                id()
-                name()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            name()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -980,10 +984,12 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Contract = apply {
-            if (!validated) {
-                id()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1066,9 +1072,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1147,10 +1155,12 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): InvoiceContract = apply {
-            if (!validated) {
-                id()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1246,8 +1256,6 @@ private constructor(
             null,
         private val _json: JsonValue? = null,
     ) {
-
-        private var validated: Boolean = false
 
         fun prepaidCommitSegmentStartLedgerEntry(): Optional<PrepaidCommitSegmentStartLedgerEntry> =
             Optional.ofNullable(prepaidCommitSegmentStartLedgerEntry)
@@ -1419,40 +1427,98 @@ private constructor(
             }
         }
 
+        private var validated: Boolean = false
+
         fun validate(): Ledger = apply {
-            if (!validated) {
-                if (
-                    prepaidCommitSegmentStartLedgerEntry == null &&
-                        prepaidCommitAutomatedInvoiceDeductionLedgerEntry == null &&
-                        prepaidCommitRolloverLedgerEntry == null &&
-                        prepaidCommitExpirationLedgerEntry == null &&
-                        prepaidCommitCanceledLedgerEntry == null &&
-                        prepaidCommitCreditedLedgerEntry == null &&
-                        postpaidCommitInitialBalanceLedgerEntry == null &&
-                        postpaidCommitAutomatedInvoiceDeductionLedgerEntry == null &&
-                        postpaidCommitRolloverLedgerEntry == null &&
-                        postpaidCommitTrueupLedgerEntry == null &&
-                        prepaidCommitManualLedgerEntry == null &&
-                        postpaidCommitManualLedgerEntry == null &&
-                        postpaidCommitExpirationLedgerEntry == null
-                ) {
-                    throw MetronomeInvalidDataException("Unknown Ledger: $_json")
-                }
-                prepaidCommitSegmentStartLedgerEntry?.validate()
-                prepaidCommitAutomatedInvoiceDeductionLedgerEntry?.validate()
-                prepaidCommitRolloverLedgerEntry?.validate()
-                prepaidCommitExpirationLedgerEntry?.validate()
-                prepaidCommitCanceledLedgerEntry?.validate()
-                prepaidCommitCreditedLedgerEntry?.validate()
-                postpaidCommitInitialBalanceLedgerEntry?.validate()
-                postpaidCommitAutomatedInvoiceDeductionLedgerEntry?.validate()
-                postpaidCommitRolloverLedgerEntry?.validate()
-                postpaidCommitTrueupLedgerEntry?.validate()
-                prepaidCommitManualLedgerEntry?.validate()
-                postpaidCommitManualLedgerEntry?.validate()
-                postpaidCommitExpirationLedgerEntry?.validate()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            accept(
+                object : Visitor<Unit> {
+                    override fun visitPrepaidCommitSegmentStartLedgerEntry(
+                        prepaidCommitSegmentStartLedgerEntry: PrepaidCommitSegmentStartLedgerEntry
+                    ) {
+                        prepaidCommitSegmentStartLedgerEntry.validate()
+                    }
+
+                    override fun visitPrepaidCommitAutomatedInvoiceDeductionLedgerEntry(
+                        prepaidCommitAutomatedInvoiceDeductionLedgerEntry:
+                            PrepaidCommitAutomatedInvoiceDeductionLedgerEntry
+                    ) {
+                        prepaidCommitAutomatedInvoiceDeductionLedgerEntry.validate()
+                    }
+
+                    override fun visitPrepaidCommitRolloverLedgerEntry(
+                        prepaidCommitRolloverLedgerEntry: PrepaidCommitRolloverLedgerEntry
+                    ) {
+                        prepaidCommitRolloverLedgerEntry.validate()
+                    }
+
+                    override fun visitPrepaidCommitExpirationLedgerEntry(
+                        prepaidCommitExpirationLedgerEntry: PrepaidCommitExpirationLedgerEntry
+                    ) {
+                        prepaidCommitExpirationLedgerEntry.validate()
+                    }
+
+                    override fun visitPrepaidCommitCanceledLedgerEntry(
+                        prepaidCommitCanceledLedgerEntry: PrepaidCommitCanceledLedgerEntry
+                    ) {
+                        prepaidCommitCanceledLedgerEntry.validate()
+                    }
+
+                    override fun visitPrepaidCommitCreditedLedgerEntry(
+                        prepaidCommitCreditedLedgerEntry: PrepaidCommitCreditedLedgerEntry
+                    ) {
+                        prepaidCommitCreditedLedgerEntry.validate()
+                    }
+
+                    override fun visitPostpaidCommitInitialBalanceLedgerEntry(
+                        postpaidCommitInitialBalanceLedgerEntry:
+                            PostpaidCommitInitialBalanceLedgerEntry
+                    ) {
+                        postpaidCommitInitialBalanceLedgerEntry.validate()
+                    }
+
+                    override fun visitPostpaidCommitAutomatedInvoiceDeductionLedgerEntry(
+                        postpaidCommitAutomatedInvoiceDeductionLedgerEntry:
+                            PostpaidCommitAutomatedInvoiceDeductionLedgerEntry
+                    ) {
+                        postpaidCommitAutomatedInvoiceDeductionLedgerEntry.validate()
+                    }
+
+                    override fun visitPostpaidCommitRolloverLedgerEntry(
+                        postpaidCommitRolloverLedgerEntry: PostpaidCommitRolloverLedgerEntry
+                    ) {
+                        postpaidCommitRolloverLedgerEntry.validate()
+                    }
+
+                    override fun visitPostpaidCommitTrueupLedgerEntry(
+                        postpaidCommitTrueupLedgerEntry: PostpaidCommitTrueupLedgerEntry
+                    ) {
+                        postpaidCommitTrueupLedgerEntry.validate()
+                    }
+
+                    override fun visitPrepaidCommitManualLedgerEntry(
+                        prepaidCommitManualLedgerEntry: PrepaidCommitManualLedgerEntry
+                    ) {
+                        prepaidCommitManualLedgerEntry.validate()
+                    }
+
+                    override fun visitPostpaidCommitManualLedgerEntry(
+                        postpaidCommitManualLedgerEntry: PostpaidCommitManualLedgerEntry
+                    ) {
+                        postpaidCommitManualLedgerEntry.validate()
+                    }
+
+                    override fun visitPostpaidCommitExpirationLedgerEntry(
+                        postpaidCommitExpirationLedgerEntry: PostpaidCommitExpirationLedgerEntry
+                    ) {
+                        postpaidCommitExpirationLedgerEntry.validate()
+                    }
+                }
+            )
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {
@@ -1831,13 +1897,15 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PrepaidCommitSegmentStartLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    segmentId()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                segmentId()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2042,14 +2110,16 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PrepaidCommitAutomatedInvoiceDeductionLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    invoiceId()
-                    segmentId()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                invoiceId()
+                segmentId()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2267,14 +2337,16 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PrepaidCommitRolloverLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    newContractId()
-                    segmentId()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                newContractId()
+                segmentId()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2482,13 +2554,15 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PrepaidCommitExpirationLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    segmentId()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                segmentId()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2693,14 +2767,16 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PrepaidCommitCanceledLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    invoiceId()
-                    segmentId()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                invoiceId()
+                segmentId()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2912,14 +2988,16 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PrepaidCommitCreditedLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    invoiceId()
-                    segmentId()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                invoiceId()
+                segmentId()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -3113,12 +3191,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PostpaidCommitInitialBalanceLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -3317,14 +3397,16 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PostpaidCommitAutomatedInvoiceDeductionLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    invoiceId()
-                    segmentId()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                invoiceId()
+                segmentId()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -3542,14 +3624,16 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PostpaidCommitRolloverLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    newContractId()
-                    segmentId()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                newContractId()
+                segmentId()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -3757,13 +3841,15 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PostpaidCommitTrueupLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    invoiceId()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                invoiceId()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -3957,13 +4043,15 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PrepaidCommitManualLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    reason()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                reason()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -4156,13 +4244,15 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PostpaidCommitManualLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    reason()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                reason()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -4349,12 +4439,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PostpaidCommitExpirationLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -4585,11 +4677,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): RolledOverFrom = apply {
-            if (!validated) {
-                commitId()
-                contractId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            commitId()
+            contractId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

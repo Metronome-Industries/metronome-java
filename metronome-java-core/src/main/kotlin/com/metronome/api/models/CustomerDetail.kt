@@ -107,16 +107,18 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CustomerDetail = apply {
-        if (!validated) {
-            id()
-            customFields().validate()
-            customerConfig().validate()
-            externalId()
-            ingestAliases()
-            name()
-            currentBillableStatus().map { it.validate() }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        customFields().validate()
+        customerConfig().validate()
+        externalId()
+        ingestAliases()
+        name()
+        currentBillableStatus().ifPresent { it.validate() }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -272,9 +274,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -359,10 +363,12 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerConfig = apply {
-            if (!validated) {
-                salesforceAccountId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            salesforceAccountId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -475,11 +481,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CurrentBillableStatus = apply {
-            if (!validated) {
-                value()
-                effectiveAt()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            value()
+            effectiveAt()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

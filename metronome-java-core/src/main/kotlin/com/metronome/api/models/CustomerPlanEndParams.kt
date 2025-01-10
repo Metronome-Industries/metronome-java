@@ -162,12 +162,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerPlanEndBody = apply {
-            if (!validated) {
-                endingBefore()
-                voidInvoices()
-                voidStripeInvoices()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            endingBefore()
+            voidInvoices()
+            voidStripeInvoices()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

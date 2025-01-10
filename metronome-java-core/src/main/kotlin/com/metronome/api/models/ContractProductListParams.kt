@@ -88,10 +88,12 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractProductListBody = apply {
-            if (!validated) {
-                archiveFilter()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            archiveFilter()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

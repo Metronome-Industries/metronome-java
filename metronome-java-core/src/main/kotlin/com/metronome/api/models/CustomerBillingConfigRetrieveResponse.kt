@@ -38,10 +38,12 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CustomerBillingConfigRetrieveResponse = apply {
-        if (!validated) {
-            data().validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().validate()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -232,18 +234,20 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Data = apply {
-            if (!validated) {
-                awsExpirationDate()
-                awsProductCode()
-                awsRegion()
-                azureExpirationDate()
-                azurePlanId()
-                azureStartDate()
-                azureSubscriptionStatus()
-                billingProviderCustomerId()
-                stripeCollectionMethod()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            awsExpirationDate()
+            awsProductCode()
+            awsRegion()
+            azureExpirationDate()
+            azurePlanId()
+            azureStartDate()
+            azureSubscriptionStatus()
+            billingProviderCustomerId()
+            stripeCollectionMethod()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

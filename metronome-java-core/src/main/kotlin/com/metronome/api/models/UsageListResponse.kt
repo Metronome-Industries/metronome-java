@@ -45,11 +45,13 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): UsageListResponse = apply {
-        if (!validated) {
-            data().forEach { it.validate() }
-            nextPage()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().forEach { it.validate() }
+        nextPage()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -207,16 +209,18 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Data = apply {
-            if (!validated) {
-                billableMetricId()
-                billableMetricName()
-                customerId()
-                endTimestamp()
-                startTimestamp()
-                value()
-                groups().map { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            billableMetricId()
+            billableMetricName()
+            customerId()
+            endTimestamp()
+            startTimestamp()
+            value()
+            groups().ifPresent { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -357,9 +361,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Groups = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

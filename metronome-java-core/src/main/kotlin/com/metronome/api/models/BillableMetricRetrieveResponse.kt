@@ -38,10 +38,12 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): BillableMetricRetrieveResponse = apply {
-        if (!validated) {
-            data().validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().validate()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -239,19 +241,21 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Data = apply {
-            if (!validated) {
-                id()
-                name()
-                aggregationKey()
-                aggregationType()
-                archivedAt()
-                customFields().map { it.validate() }
-                eventTypeFilter().map { it.validate() }
-                groupKeys()
-                propertyFilters().map { it.forEach { it.validate() } }
-                sql()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            name()
+            aggregationKey()
+            aggregationType()
+            archivedAt()
+            customFields().ifPresent { it.validate() }
+            eventTypeFilter().ifPresent { it.validate() }
+            groupKeys()
+            propertyFilters().ifPresent { it.forEach { it.validate() } }
+            sql()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -551,9 +555,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CustomFields = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

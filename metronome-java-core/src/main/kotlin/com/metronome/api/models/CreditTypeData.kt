@@ -39,11 +39,13 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CreditTypeData = apply {
-        if (!validated) {
-            id()
-            name()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        name()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

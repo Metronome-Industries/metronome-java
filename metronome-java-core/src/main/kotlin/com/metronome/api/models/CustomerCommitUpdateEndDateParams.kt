@@ -146,13 +146,15 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerCommitUpdateEndDateBody = apply {
-            if (!validated) {
-                commitId()
-                customerId()
-                accessEndingBefore()
-                invoicesEndingBefore()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            commitId()
+            customerId()
+            accessEndingBefore()
+            invoicesEndingBefore()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

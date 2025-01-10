@@ -67,12 +67,14 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): QuantityConversion = apply {
-        if (!validated) {
-            conversionFactor()
-            operation()
-            name()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        conversionFactor()
+        operation()
+        name()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

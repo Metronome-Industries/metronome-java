@@ -79,10 +79,12 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerSetIngestAliasesBody = apply {
-            if (!validated) {
-                ingestAliases()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            ingestAliases()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

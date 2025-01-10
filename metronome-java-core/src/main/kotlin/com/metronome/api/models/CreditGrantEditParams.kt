@@ -118,13 +118,15 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CreditGrantEditBody = apply {
-            if (!validated) {
-                id()
-                creditGrantType()
-                expiresAt()
-                name()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            creditGrantType()
+            expiresAt()
+            name()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

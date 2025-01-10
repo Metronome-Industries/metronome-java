@@ -55,11 +55,13 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): ContractListBalancesResponse = apply {
-        if (!validated) {
-            data()
-            nextPage()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().forEach { it.validate() }
+        nextPage()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -148,8 +150,6 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        private var validated: Boolean = false
-
         fun commit(): Optional<Commit> = Optional.ofNullable(commit)
 
         fun credit(): Optional<Credit> = Optional.ofNullable(credit)
@@ -172,15 +172,25 @@ private constructor(
             }
         }
 
+        private var validated: Boolean = false
+
         fun validate(): Data = apply {
-            if (!validated) {
-                if (commit == null && credit == null) {
-                    throw MetronomeInvalidDataException("Unknown Data: $_json")
-                }
-                commit?.validate()
-                credit?.validate()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            accept(
+                object : Visitor<Unit> {
+                    override fun visitCommit(commit: Commit) {
+                        commit.validate()
+                    }
+
+                    override fun visitCredit(credit: Credit) {
+                        credit.validate()
+                    }
+                }
+            )
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

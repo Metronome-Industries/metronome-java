@@ -108,16 +108,18 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CreditLedgerEntry = apply {
-        if (!validated) {
-            amount()
-            createdBy()
-            creditGrantId()
-            effectiveAt()
-            reason()
-            runningBalance()
-            invoiceId()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        amount()
+        createdBy()
+        creditGrantId()
+        effectiveAt()
+        reason()
+        runningBalance()
+        invoiceId()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

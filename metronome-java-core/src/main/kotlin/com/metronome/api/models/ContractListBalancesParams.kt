@@ -229,19 +229,21 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractListBalancesBody = apply {
-            if (!validated) {
-                customerId()
-                id()
-                coveringDate()
-                effectiveBefore()
-                includeArchived()
-                includeBalance()
-                includeContractBalances()
-                includeLedgers()
-                nextPage()
-                startingAt()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            customerId()
+            id()
+            coveringDate()
+            effectiveBefore()
+            includeArchived()
+            includeBalance()
+            includeContractBalances()
+            includeLedgers()
+            nextPage()
+            startingAt()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

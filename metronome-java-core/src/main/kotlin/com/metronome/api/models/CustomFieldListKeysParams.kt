@@ -83,10 +83,12 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFieldListKeysBody = apply {
-            if (!validated) {
-                entities()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            entities()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

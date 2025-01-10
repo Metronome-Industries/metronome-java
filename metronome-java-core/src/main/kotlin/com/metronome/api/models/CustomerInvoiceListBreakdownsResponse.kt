@@ -342,39 +342,41 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CustomerInvoiceListBreakdownsResponse = apply {
-        if (!validated) {
-            id()
-            creditType().validate()
-            customerId()
-            lineItems().forEach { it.validate() }
-            status()
-            total()
-            type()
-            amendmentId()
-            billableStatus()
-            contractCustomFields().map { it.validate() }
-            contractId()
-            correctionRecord().map { it.validate() }
-            createdAt()
-            customFields().map { it.validate() }
-            customerCustomFields().map { it.validate() }
-            endTimestamp()
-            externalInvoice().map { it.validate() }
-            invoiceAdjustments().map { it.forEach { it.validate() } }
-            issuedAt()
-            netPaymentTermsDays()
-            netsuiteSalesOrderId()
-            planCustomFields().map { it.validate() }
-            planId()
-            planName()
-            resellerRoyalty().map { it.validate() }
-            salesforceOpportunityId()
-            startTimestamp()
-            subtotal()
-            breakdownEndTimestamp()
-            breakdownStartTimestamp()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        creditType().validate()
+        customerId()
+        lineItems().forEach { it.validate() }
+        status()
+        total()
+        type()
+        amendmentId()
+        billableStatus()
+        contractCustomFields().ifPresent { it.validate() }
+        contractId()
+        correctionRecord().ifPresent { it.validate() }
+        createdAt()
+        customFields().ifPresent { it.validate() }
+        customerCustomFields().ifPresent { it.validate() }
+        endTimestamp()
+        externalInvoice().ifPresent { it.validate() }
+        invoiceAdjustments().ifPresent { it.forEach { it.validate() } }
+        issuedAt()
+        netPaymentTermsDays()
+        netsuiteSalesOrderId()
+        planCustomFields().ifPresent { it.validate() }
+        planId()
+        planName()
+        resellerRoyalty().ifPresent { it.validate() }
+        salesforceOpportunityId()
+        startTimestamp()
+        subtotal()
+        breakdownEndTimestamp()
+        breakdownStartTimestamp()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

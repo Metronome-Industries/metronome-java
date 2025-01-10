@@ -49,11 +49,13 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): PlanListCustomersResponse = apply {
-        if (!validated) {
-            customerDetails().validate()
-            planDetails().validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        customerDetails().validate()
+        planDetails().validate()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -184,15 +186,17 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): PlanDetails = apply {
-            if (!validated) {
-                id()
-                customFields().validate()
-                customerPlanId()
-                name()
-                startingOn()
-                endingBefore()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            customFields().validate()
+            customerPlanId()
+            name()
+            startingOn()
+            endingBefore()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -311,9 +315,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CustomFields = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

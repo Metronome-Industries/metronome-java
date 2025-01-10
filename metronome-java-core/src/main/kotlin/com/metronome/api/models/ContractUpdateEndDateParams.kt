@@ -118,12 +118,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractUpdateEndDateBody = apply {
-            if (!validated) {
-                contractId()
-                customerId()
-                endingBefore()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            contractId()
+            customerId()
+            endingBefore()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

@@ -68,14 +68,16 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Discount = apply {
-        if (!validated) {
-            id()
-            product().validate()
-            schedule().validate()
-            name()
-            netsuiteSalesOrderId()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        product().validate()
+        schedule().validate()
+        name()
+        netsuiteSalesOrderId()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -186,11 +188,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Product = apply {
-            if (!validated) {
-                id()
-                name()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            name()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

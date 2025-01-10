@@ -103,12 +103,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractArchiveBody = apply {
-            if (!validated) {
-                contractId()
-                customerId()
-                voidInvoices()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            contractId()
+            customerId()
+            voidInvoices()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

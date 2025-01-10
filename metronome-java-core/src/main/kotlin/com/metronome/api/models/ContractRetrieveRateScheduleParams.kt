@@ -160,13 +160,15 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractRetrieveRateScheduleBody = apply {
-            if (!validated) {
-                contractId()
-                customerId()
-                at()
-                selectors().map { it.forEach { it.validate() } }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            contractId()
+            customerId()
+            at()
+            selectors().ifPresent { it.forEach { it.validate() } }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -591,13 +593,15 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): Selector = apply {
-            if (!validated) {
-                partialPricingGroupValues().map { it.validate() }
-                pricingGroupValues().map { it.validate() }
-                productId()
-                productTags()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            partialPricingGroupValues().ifPresent { it.validate() }
+            pricingGroupValues().ifPresent { it.validate() }
+            productId()
+            productTags()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -740,9 +744,11 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): PartialPricingGroupValues = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -825,9 +831,11 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): PricingGroupValues = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

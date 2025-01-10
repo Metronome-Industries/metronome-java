@@ -478,33 +478,35 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractCreateBody = apply {
-            if (!validated) {
-                customerId()
-                startingAt()
-                billingProviderConfiguration().map { it.validate() }
-                commits().map { it.forEach { it.validate() } }
-                credits().map { it.forEach { it.validate() } }
-                customFields().map { it.validate() }
-                discounts().map { it.forEach { it.validate() } }
-                endingBefore()
-                multiplierOverridePrioritization()
-                name()
-                netPaymentTermsDays()
-                netsuiteSalesOrderId()
-                overrides().map { it.forEach { it.validate() } }
-                professionalServices().map { it.forEach { it.validate() } }
-                rateCardAlias()
-                rateCardId()
-                resellerRoyalties().map { it.forEach { it.validate() } }
-                salesforceOpportunityId()
-                scheduledCharges().map { it.forEach { it.validate() } }
-                totalContractValue()
-                transition().map { it.validate() }
-                uniquenessKey()
-                usageFilter().map { it.validate() }
-                usageStatementSchedule().map { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            customerId()
+            startingAt()
+            billingProviderConfiguration().ifPresent { it.validate() }
+            commits().ifPresent { it.forEach { it.validate() } }
+            credits().ifPresent { it.forEach { it.validate() } }
+            customFields().ifPresent { it.validate() }
+            discounts().ifPresent { it.forEach { it.validate() } }
+            endingBefore()
+            multiplierOverridePrioritization()
+            name()
+            netPaymentTermsDays()
+            netsuiteSalesOrderId()
+            overrides().ifPresent { it.forEach { it.validate() } }
+            professionalServices().ifPresent { it.forEach { it.validate() } }
+            rateCardAlias()
+            rateCardId()
+            resellerRoyalties().ifPresent { it.forEach { it.validate() } }
+            salesforceOpportunityId()
+            scheduledCharges().ifPresent { it.forEach { it.validate() } }
+            totalContractValue()
+            transition().ifPresent { it.validate() }
+            uniquenessKey()
+            usageFilter().ifPresent { it.validate() }
+            usageStatementSchedule().ifPresent { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1347,12 +1349,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): BillingProviderConfiguration = apply {
-            if (!validated) {
-                billingProvider()
-                billingProviderConfigurationId()
-                deliveryMethod()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            billingProvider()
+            billingProviderConfigurationId()
+            deliveryMethod()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1794,24 +1798,26 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): Commit = apply {
-            if (!validated) {
-                productId()
-                type()
-                accessSchedule().map { it.validate() }
-                amount()
-                applicableProductIds()
-                applicableProductTags()
-                customFields().map { it.validate() }
-                description()
-                invoiceSchedule().map { it.validate() }
-                name()
-                netsuiteSalesOrderId()
-                priority()
-                rateType()
-                rolloverFraction()
-                temporaryId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            productId()
+            type()
+            accessSchedule().ifPresent { it.validate() }
+            amount()
+            applicableProductIds()
+            applicableProductTags()
+            customFields().ifPresent { it.validate() }
+            description()
+            invoiceSchedule().ifPresent { it.validate() }
+            name()
+            netsuiteSalesOrderId()
+            priority()
+            rateType()
+            rolloverFraction()
+            temporaryId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -2177,11 +2183,13 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): AccessSchedule = apply {
-                if (!validated) {
-                    scheduleItems().forEach { it.validate() }
-                    creditTypeId()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                scheduleItems().forEach { it.validate() }
+                creditTypeId()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2309,12 +2317,14 @@ constructor(
                 private var validated: Boolean = false
 
                 fun validate(): ScheduleItem = apply {
-                    if (!validated) {
-                        amount()
-                        endingBefore()
-                        startingAt()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    amount()
+                    endingBefore()
+                    startingAt()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -2445,9 +2455,11 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): CustomFields = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2573,12 +2585,14 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): InvoiceSchedule = apply {
-                if (!validated) {
-                    creditTypeId()
-                    recurringSchedule().map { it.validate() }
-                    scheduleItems().map { it.forEach { it.validate() } }
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                creditTypeId()
+                recurringSchedule().ifPresent { it.validate() }
+                scheduleItems().ifPresent { it.forEach { it.validate() } }
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2796,16 +2810,18 @@ constructor(
                 private var validated: Boolean = false
 
                 fun validate(): RecurringSchedule = apply {
-                    if (!validated) {
-                        amountDistribution()
-                        endingBefore()
-                        frequency()
-                        startingAt()
-                        amount()
-                        quantity()
-                        unitPrice()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    amountDistribution()
+                    endingBefore()
+                    frequency()
+                    startingAt()
+                    amount()
+                    quantity()
+                    unitPrice()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -3187,13 +3203,15 @@ constructor(
                 private var validated: Boolean = false
 
                 fun validate(): ScheduleItem = apply {
-                    if (!validated) {
-                        timestamp()
-                        amount()
-                        quantity()
-                        unitPrice()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    timestamp()
+                    amount()
+                    quantity()
+                    unitPrice()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -3555,19 +3573,21 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): Credit = apply {
-            if (!validated) {
-                accessSchedule().validate()
-                productId()
-                applicableProductIds()
-                applicableProductTags()
-                customFields().map { it.validate() }
-                description()
-                name()
-                netsuiteSalesOrderId()
-                priority()
-                rateType()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            accessSchedule().validate()
+            productId()
+            applicableProductIds()
+            applicableProductTags()
+            customFields().ifPresent { it.validate() }
+            description()
+            name()
+            netsuiteSalesOrderId()
+            priority()
+            rateType()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -3798,11 +3818,13 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): AccessSchedule = apply {
-                if (!validated) {
-                    scheduleItems().forEach { it.validate() }
-                    creditTypeId()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                scheduleItems().forEach { it.validate() }
+                creditTypeId()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -3930,12 +3952,14 @@ constructor(
                 private var validated: Boolean = false
 
                 fun validate(): ScheduleItem = apply {
-                    if (!validated) {
-                        amount()
-                        endingBefore()
-                        startingAt()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    amount()
+                    endingBefore()
+                    startingAt()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -4066,9 +4090,11 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): CustomFields = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -4231,9 +4257,11 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -4343,13 +4371,15 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): Discount = apply {
-            if (!validated) {
-                productId()
-                schedule().validate()
-                name()
-                netsuiteSalesOrderId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            productId()
+            schedule().validate()
+            name()
+            netsuiteSalesOrderId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -4490,12 +4520,14 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): Schedule = apply {
-                if (!validated) {
-                    creditTypeId()
-                    recurringSchedule().map { it.validate() }
-                    scheduleItems().map { it.forEach { it.validate() } }
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                creditTypeId()
+                recurringSchedule().ifPresent { it.validate() }
+                scheduleItems().ifPresent { it.forEach { it.validate() } }
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -4713,16 +4745,18 @@ constructor(
                 private var validated: Boolean = false
 
                 fun validate(): RecurringSchedule = apply {
-                    if (!validated) {
-                        amountDistribution()
-                        endingBefore()
-                        frequency()
-                        startingAt()
-                        amount()
-                        quantity()
-                        unitPrice()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    amountDistribution()
+                    endingBefore()
+                    frequency()
+                    startingAt()
+                    amount()
+                    quantity()
+                    unitPrice()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -5104,13 +5138,15 @@ constructor(
                 private var validated: Boolean = false
 
                 fun validate(): ScheduleItem = apply {
-                    if (!validated) {
-                        timestamp()
-                        amount()
-                        quantity()
-                        unitPrice()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    timestamp()
+                    amount()
+                    quantity()
+                    unitPrice()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -5525,22 +5561,24 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): Override = apply {
-            if (!validated) {
-                startingAt()
-                applicableProductTags()
-                endingBefore()
-                entitled()
-                isCommitSpecific()
-                multiplier()
-                overrideSpecifiers().map { it.forEach { it.validate() } }
-                overwriteRate().map { it.validate() }
-                priority()
-                productId()
-                target()
-                tiers().map { it.forEach { it.validate() } }
-                type()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            startingAt()
+            applicableProductTags()
+            endingBefore()
+            entitled()
+            isCommitSpecific()
+            multiplier()
+            overrideSpecifiers().ifPresent { it.forEach { it.validate() } }
+            overwriteRate().ifPresent { it.validate() }
+            priority()
+            productId()
+            target()
+            tiers().ifPresent { it.forEach { it.validate() } }
+            type()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -5917,14 +5955,16 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): OverrideSpecifier = apply {
-                if (!validated) {
-                    commitIds()
-                    presentationGroupValues().map { it.validate() }
-                    pricingGroupValues().map { it.validate() }
-                    productId()
-                    productTags()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                commitIds()
+                presentationGroupValues().ifPresent { it.validate() }
+                pricingGroupValues().ifPresent { it.validate() }
+                productId()
+                productTags()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -6116,9 +6156,11 @@ constructor(
                 private var validated: Boolean = false
 
                 fun validate(): PresentationGroupValues = apply {
-                    if (!validated) {
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -6201,9 +6243,11 @@ constructor(
                 private var validated: Boolean = false
 
                 fun validate(): PricingGroupValues = apply {
-                    if (!validated) {
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -6387,16 +6431,18 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): OverwriteRate = apply {
-                if (!validated) {
-                    rateType()
-                    creditTypeId()
-                    customRate().map { it.validate() }
-                    isProrated()
-                    price()
-                    quantity()
-                    tiers().map { it.forEach { it.validate() } }
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                rateType()
+                creditTypeId()
+                customRate().ifPresent { it.validate() }
+                isProrated()
+                price()
+                quantity()
+                tiers().ifPresent { it.forEach { it.validate() } }
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -6635,9 +6681,11 @@ constructor(
                 private var validated: Boolean = false
 
                 fun validate(): CustomRate = apply {
-                    if (!validated) {
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -6816,11 +6864,13 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): Tier = apply {
-                if (!validated) {
-                    multiplier()
-                    size()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                multiplier()
+                size()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -7069,16 +7119,18 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ProfessionalService = apply {
-            if (!validated) {
-                maxAmount()
-                productId()
-                quantity()
-                unitPrice()
-                customFields().map { it.validate() }
-                description()
-                netsuiteSalesOrderId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            maxAmount()
+            productId()
+            quantity()
+            unitPrice()
+            customFields().ifPresent { it.validate() }
+            description()
+            netsuiteSalesOrderId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -7211,9 +7263,11 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): CustomFields = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -7405,19 +7459,21 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ResellerRoyalty = apply {
-            if (!validated) {
-                fraction()
-                netsuiteResellerId()
-                resellerType()
-                startingAt()
-                applicableProductIds()
-                applicableProductTags()
-                awsOptions().map { it.validate() }
-                endingBefore()
-                gcpOptions().map { it.validate() }
-                resellerContractValue()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            fraction()
+            netsuiteResellerId()
+            resellerType()
+            startingAt()
+            applicableProductIds()
+            applicableProductTags()
+            awsOptions().ifPresent { it.validate() }
+            endingBefore()
+            gcpOptions().ifPresent { it.validate() }
+            resellerContractValue()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -7704,12 +7760,14 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): AwsOptions = apply {
-                if (!validated) {
-                    awsAccountNumber()
-                    awsOfferId()
-                    awsPayerReferenceId()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                awsAccountNumber()
+                awsOfferId()
+                awsPayerReferenceId()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -7838,11 +7896,13 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): GcpOptions = apply {
-                if (!validated) {
-                    gcpAccountId()
-                    gcpOfferId()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                gcpAccountId()
+                gcpOfferId()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -7995,13 +8055,15 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ScheduledCharge = apply {
-            if (!validated) {
-                productId()
-                schedule().validate()
-                name()
-                netsuiteSalesOrderId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            productId()
+            schedule().validate()
+            name()
+            netsuiteSalesOrderId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -8142,12 +8204,14 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): Schedule = apply {
-                if (!validated) {
-                    creditTypeId()
-                    recurringSchedule().map { it.validate() }
-                    scheduleItems().map { it.forEach { it.validate() } }
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                creditTypeId()
+                recurringSchedule().ifPresent { it.validate() }
+                scheduleItems().ifPresent { it.forEach { it.validate() } }
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -8365,16 +8429,18 @@ constructor(
                 private var validated: Boolean = false
 
                 fun validate(): RecurringSchedule = apply {
-                    if (!validated) {
-                        amountDistribution()
-                        endingBefore()
-                        frequency()
-                        startingAt()
-                        amount()
-                        quantity()
-                        unitPrice()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    amountDistribution()
+                    endingBefore()
+                    frequency()
+                    startingAt()
+                    amount()
+                    quantity()
+                    unitPrice()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -8756,13 +8822,15 @@ constructor(
                 private var validated: Boolean = false
 
                 fun validate(): ScheduleItem = apply {
-                    if (!validated) {
-                        timestamp()
-                        amount()
-                        quantity()
-                        unitPrice()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    timestamp()
+                    amount()
+                    quantity()
+                    unitPrice()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -8968,12 +9036,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): Transition = apply {
-            if (!validated) {
-                fromContractId()
-                type()
-                futureInvoiceBehavior().map { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            fromContractId()
+            type()
+            futureInvoiceBehavior().ifPresent { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -9134,10 +9204,12 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): FutureInvoiceBehavior = apply {
-                if (!validated) {
-                    trueup()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                trueup()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -9374,13 +9446,15 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): UsageStatementSchedule = apply {
-            if (!validated) {
-                frequency()
-                billingAnchorDate()
-                day()
-                invoiceGenerationStartingAt()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            frequency()
+            billingAnchorDate()
+            day()
+            invoiceGenerationStartingAt()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

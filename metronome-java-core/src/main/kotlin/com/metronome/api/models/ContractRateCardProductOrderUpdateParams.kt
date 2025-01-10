@@ -82,11 +82,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractRateCardProductOrderUpdateBody = apply {
-            if (!validated) {
-                productMoves().forEach { it.validate() }
-                rateCardId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            productMoves().forEach { it.validate() }
+            rateCardId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -385,11 +387,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ProductMove = apply {
-            if (!validated) {
-                position()
-                productId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            position()
+            productId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

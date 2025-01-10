@@ -195,23 +195,25 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CustomerListBillableMetricsResponse = apply {
-        if (!validated) {
-            id()
-            name()
-            aggregate()
-            aggregateKeys()
-            aggregationKey()
-            aggregationType()
-            archivedAt()
-            customFields().map { it.validate() }
-            eventTypeFilter().map { it.validate() }
-            filter().map { it.validate() }
-            groupBy()
-            groupKeys()
-            propertyFilters().map { it.forEach { it.validate() } }
-            sql()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        name()
+        aggregate()
+        aggregateKeys()
+        aggregationKey()
+        aggregationType()
+        archivedAt()
+        customFields().ifPresent { it.validate() }
+        eventTypeFilter().ifPresent { it.validate() }
+        filter().ifPresent { it.validate() }
+        groupBy()
+        groupKeys()
+        propertyFilters().ifPresent { it.forEach { it.validate() } }
+        sql()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -579,9 +581,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -655,9 +659,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Filter = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

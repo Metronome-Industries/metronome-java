@@ -91,13 +91,15 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): PropertyFilter = apply {
-        if (!validated) {
-            name()
-            exists()
-            inValues()
-            notInValues()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        name()
+        exists()
+        inValues()
+        notInValues()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

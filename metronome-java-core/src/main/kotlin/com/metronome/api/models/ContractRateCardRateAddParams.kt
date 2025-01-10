@@ -370,24 +370,26 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractRateCardRateAddBody = apply {
-            if (!validated) {
-                entitled()
-                productId()
-                rateCardId()
-                rateType()
-                startingAt()
-                commitRate().map { it.validate() }
-                creditTypeId()
-                customRate().map { it.validate() }
-                endingBefore()
-                isProrated()
-                price()
-                pricingGroupValues().map { it.validate() }
-                quantity()
-                tiers().map { it.forEach { it.validate() } }
-                useListPrices()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            entitled()
+            productId()
+            rateCardId()
+            rateType()
+            startingAt()
+            commitRate().ifPresent { it.validate() }
+            creditTypeId()
+            customRate().ifPresent { it.validate() }
+            endingBefore()
+            isProrated()
+            price()
+            pricingGroupValues().ifPresent { it.validate() }
+            quantity()
+            tiers().ifPresent { it.forEach { it.validate() } }
+            useListPrices()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1062,12 +1064,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CommitRate = apply {
-            if (!validated) {
-                rateType()
-                price()
-                tiers().map { it.forEach { it.validate() } }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            rateType()
+            price()
+            tiers().ifPresent { it.forEach { it.validate() } }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1291,9 +1295,11 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomRate = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1369,9 +1375,11 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): PricingGroupValues = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

@@ -80,11 +80,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractCreateHistoricalInvoicesBody = apply {
-            if (!validated) {
-                invoices().forEach { it.validate() }
-                preview()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            invoices().forEach { it.validate() }
+            preview()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -450,19 +452,21 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): Invoice = apply {
-            if (!validated) {
-                contractId()
-                creditTypeId()
-                customerId()
-                exclusiveEndDate()
-                inclusiveStartDate()
-                issueDate()
-                usageLineItems().forEach { it.validate() }
-                billableStatus()
-                breakdownGranularity()
-                customFields().map { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            contractId()
+            creditTypeId()
+            customerId()
+            exclusiveEndDate()
+            inclusiveStartDate()
+            issueDate()
+            usageLineItems().forEach { it.validate() }
+            billableStatus()
+            breakdownGranularity()
+            customFields().ifPresent { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -705,16 +709,18 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): UsageLineItem = apply {
-                if (!validated) {
-                    exclusiveEndDate()
-                    inclusiveStartDate()
-                    productId()
-                    presentationGroupValues().map { it.validate() }
-                    pricingGroupValues().map { it.validate() }
-                    quantity()
-                    subtotalsWithQuantity().map { it.forEach { it.validate() } }
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                exclusiveEndDate()
+                inclusiveStartDate()
+                productId()
+                presentationGroupValues().ifPresent { it.validate() }
+                pricingGroupValues().ifPresent { it.validate() }
+                quantity()
+                subtotalsWithQuantity().ifPresent { it.forEach { it.validate() } }
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -862,9 +868,11 @@ constructor(
                 private var validated: Boolean = false
 
                 fun validate(): PresentationGroupValues = apply {
-                    if (!validated) {
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -943,9 +951,11 @@ constructor(
                 private var validated: Boolean = false
 
                 fun validate(): PricingGroupValues = apply {
-                    if (!validated) {
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -1053,12 +1063,14 @@ constructor(
                 private var validated: Boolean = false
 
                 fun validate(): SubtotalsWithQuantity = apply {
-                    if (!validated) {
-                        exclusiveEndDate()
-                        inclusiveStartDate()
-                        quantity()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    exclusiveEndDate()
+                    inclusiveStartDate()
+                    quantity()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -1303,9 +1315,11 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): CustomFields = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

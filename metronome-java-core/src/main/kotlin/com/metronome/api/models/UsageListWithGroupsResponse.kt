@@ -68,14 +68,16 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): UsageListWithGroupsResponse = apply {
-        if (!validated) {
-            endingBefore()
-            groupKey()
-            groupValue()
-            startingOn()
-            value()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        endingBefore()
+        groupKey()
+        groupValue()
+        startingOn()
+        value()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

@@ -243,17 +243,19 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): BillableMetricCreateBody = apply {
-            if (!validated) {
-                name()
-                aggregationKey()
-                aggregationType()
-                customFields().map { it.validate() }
-                eventTypeFilter().map { it.validate() }
-                groupKeys()
-                propertyFilters().map { it.forEach { it.validate() } }
-                sql()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            name()
+            aggregationKey()
+            aggregationType()
+            customFields().ifPresent { it.validate() }
+            eventTypeFilter().ifPresent { it.validate() }
+            groupKeys()
+            propertyFilters().ifPresent { it.forEach { it.validate() } }
+            sql()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -807,9 +809,11 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

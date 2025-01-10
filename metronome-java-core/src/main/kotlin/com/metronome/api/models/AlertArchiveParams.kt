@@ -84,11 +84,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): AlertArchiveBody = apply {
-            if (!validated) {
-                id()
-                releaseUniquenessKey()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            releaseUniquenessKey()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

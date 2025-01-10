@@ -187,14 +187,16 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CreditGrantListBody = apply {
-            if (!validated) {
-                creditGrantIds()
-                creditTypeIds()
-                customerIds()
-                effectiveBefore()
-                notExpiringBefore()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            creditGrantIds()
+            creditTypeIds()
+            customerIds()
+            effectiveBefore()
+            notExpiringBefore()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

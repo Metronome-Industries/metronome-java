@@ -57,12 +57,14 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): BaseUsageFilter = apply {
-        if (!validated) {
-            groupKey()
-            groupValues()
-            startingAt()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        groupKey()
+        groupValues()
+        startingAt()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

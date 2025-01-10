@@ -47,11 +47,13 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): ContractRateCardRetrieveRateScheduleResponse = apply {
-        if (!validated) {
-            data().forEach { it.validate() }
-            nextPage()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().forEach { it.validate() }
+        nextPage()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -240,19 +242,21 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Data = apply {
-            if (!validated) {
-                entitled()
-                productCustomFields().validate()
-                productId()
-                productName()
-                productTags()
-                rate().validate()
-                startingAt()
-                commitRate().map { it.validate() }
-                endingBefore()
-                pricingGroupValues().map { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            entitled()
+            productCustomFields().validate()
+            productId()
+            productName()
+            productTags()
+            rate().validate()
+            startingAt()
+            commitRate().ifPresent { it.validate() }
+            endingBefore()
+            pricingGroupValues().ifPresent { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -422,9 +426,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): ProductCustomFields = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -533,12 +539,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CommitRate = apply {
-                if (!validated) {
-                    rateType()
-                    price()
-                    tiers().map { it.forEach { it.validate() } }
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                rateType()
+                price()
+                tiers().ifPresent { it.forEach { it.validate() } }
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -764,9 +772,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PricingGroupValues = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

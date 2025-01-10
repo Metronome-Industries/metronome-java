@@ -209,26 +209,28 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CreditGrantListResponse = apply {
-        if (!validated) {
-            id()
-            balance().validate()
-            customFields().validate()
-            customerId()
-            deductions().forEach { it.validate() }
-            effectiveAt()
-            expiresAt()
-            grantAmount().validate()
-            name()
-            paidAmount().validate()
-            pendingDeductions().forEach { it.validate() }
-            priority()
-            creditGrantType()
-            invoiceId()
-            products().map { it.forEach { it.validate() } }
-            reason()
-            uniquenessKey()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        balance().validate()
+        customFields().validate()
+        customerId()
+        deductions().forEach { it.validate() }
+        effectiveAt()
+        expiresAt()
+        grantAmount().validate()
+        name()
+        paidAmount().validate()
+        pendingDeductions().forEach { it.validate() }
+        priority()
+        creditGrantType()
+        invoiceId()
+        products().ifPresent { it.forEach { it.validate() } }
+        reason()
+        uniquenessKey()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -585,12 +587,14 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Balance = apply {
-            if (!validated) {
-                effectiveAt()
-                excludingPending()
-                includingPending()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            effectiveAt()
+            excludingPending()
+            includingPending()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -720,9 +724,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -814,11 +820,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): GrantAmount = apply {
-            if (!validated) {
-                amount()
-                creditType().validate()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            amount()
+            creditType().validate()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -932,11 +940,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): PaidAmount = apply {
-            if (!validated) {
-                amount()
-                creditType().validate()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            amount()
+            creditType().validate()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1043,11 +1053,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Product = apply {
-            if (!validated) {
-                id()
-                name()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            name()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

@@ -100,11 +100,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerAlertListBody = apply {
-            if (!validated) {
-                customerId()
-                alertStatuses()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            customerId()
+            alertStatuses()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

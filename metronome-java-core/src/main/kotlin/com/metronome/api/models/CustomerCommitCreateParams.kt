@@ -445,26 +445,28 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerCommitCreateBody = apply {
-            if (!validated) {
-                accessSchedule().validate()
-                customerId()
-                priority()
-                productId()
-                type()
-                applicableContractIds()
-                applicableProductIds()
-                applicableProductTags()
-                customFields().map { it.validate() }
-                description()
-                invoiceContractId()
-                invoiceSchedule().map { it.validate() }
-                name()
-                netsuiteSalesOrderId()
-                rateType()
-                salesforceOpportunityId()
-                uniquenessKey()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            accessSchedule().validate()
+            customerId()
+            priority()
+            productId()
+            type()
+            applicableContractIds()
+            applicableProductIds()
+            applicableProductTags()
+            customFields().ifPresent { it.validate() }
+            description()
+            invoiceContractId()
+            invoiceSchedule().ifPresent { it.validate() }
+            name()
+            netsuiteSalesOrderId()
+            rateType()
+            salesforceOpportunityId()
+            uniquenessKey()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1219,11 +1221,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): AccessSchedule = apply {
-            if (!validated) {
-                scheduleItems().forEach { it.validate() }
-                creditTypeId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            scheduleItems().forEach { it.validate() }
+            creditTypeId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1346,12 +1350,14 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): ScheduleItem = apply {
-                if (!validated) {
-                    amount()
-                    endingBefore()
-                    startingAt()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                endingBefore()
+                startingAt()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1536,9 +1542,11 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1660,12 +1668,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): InvoiceSchedule = apply {
-            if (!validated) {
-                creditTypeId()
-                recurringSchedule().map { it.validate() }
-                scheduleItems().map { it.forEach { it.validate() } }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            creditTypeId()
+            recurringSchedule().ifPresent { it.validate() }
+            scheduleItems().ifPresent { it.forEach { it.validate() } }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1875,16 +1885,18 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): RecurringSchedule = apply {
-                if (!validated) {
-                    amountDistribution()
-                    endingBefore()
-                    frequency()
-                    startingAt()
-                    amount()
-                    quantity()
-                    unitPrice()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amountDistribution()
+                endingBefore()
+                frequency()
+                startingAt()
+                amount()
+                quantity()
+                unitPrice()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2249,13 +2261,15 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): ScheduleItem = apply {
-                if (!validated) {
-                    timestamp()
-                    amount()
-                    quantity()
-                    unitPrice()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                timestamp()
+                amount()
+                quantity()
+                unitPrice()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

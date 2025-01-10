@@ -233,25 +233,27 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): ProductListItemState = apply {
-        if (!validated) {
-            createdAt()
-            createdBy()
-            name()
-            billableMetricId()
-            compositeProductIds()
-            compositeTags()
-            excludeFreeUsage()
-            isRefundable()
-            netsuiteInternalItemId()
-            netsuiteOverageItemId()
-            presentationGroupKey()
-            pricingGroupKey()
-            quantityConversion().map { it.validate() }
-            quantityRounding().map { it.validate() }
-            startingAt()
-            tags()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        createdAt()
+        createdBy()
+        name()
+        billableMetricId()
+        compositeProductIds()
+        compositeTags()
+        excludeFreeUsage()
+        isRefundable()
+        netsuiteInternalItemId()
+        netsuiteOverageItemId()
+        presentationGroupKey()
+        pricingGroupKey()
+        quantityConversion().ifPresent { it.validate() }
+        quantityRounding().ifPresent { it.validate() }
+        startingAt()
+        tags()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

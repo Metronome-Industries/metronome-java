@@ -74,11 +74,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFieldRemoveKeyBody = apply {
-            if (!validated) {
-                entity()
-                key()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            entity()
+            key()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

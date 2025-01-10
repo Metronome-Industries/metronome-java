@@ -93,8 +93,6 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        private var validated: Boolean = false
-
         fun nextPage(): Optional<String> = Optional.ofNullable(nextPage.getNullable("next_page"))
 
         fun data(): List<CustomerDetail> = data.getNullable("data") ?: listOf()
@@ -109,12 +107,16 @@ private constructor(
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+        private var validated: Boolean = false
+
         fun validate(): Response = apply {
-            if (!validated) {
-                nextPage()
-                data().map { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            nextPage()
+            data().map { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

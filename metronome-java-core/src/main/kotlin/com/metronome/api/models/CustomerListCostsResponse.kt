@@ -57,12 +57,14 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CustomerListCostsResponse = apply {
-        if (!validated) {
-            creditTypes().validate()
-            endTimestamp()
-            startTimestamp()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        creditTypes().validate()
+        endTimestamp()
+        startTimestamp()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -149,9 +151,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CreditTypes = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

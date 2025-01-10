@@ -134,13 +134,15 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerBillingConfigCreateBody = apply {
-            if (!validated) {
-                billingProviderCustomerId()
-                awsProductCode()
-                awsRegion()
-                stripeCollectionMethod()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            billingProviderCustomerId()
+            awsProductCode()
+            awsRegion()
+            stripeCollectionMethod()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

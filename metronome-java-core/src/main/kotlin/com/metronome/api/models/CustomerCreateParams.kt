@@ -146,14 +146,16 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerCreateBody = apply {
-            if (!validated) {
-                name()
-                billingConfig().map { it.validate() }
-                customFields().map { it.validate() }
-                externalId()
-                ingestAliases()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            name()
+            billingConfig().ifPresent { it.validate() }
+            customFields().ifPresent { it.validate() }
+            externalId()
+            ingestAliases()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -538,14 +540,16 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): BillingConfig = apply {
-            if (!validated) {
-                billingProviderCustomerId()
-                billingProviderType()
-                awsProductCode()
-                awsRegion()
-                stripeCollectionMethod()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            billingProviderCustomerId()
+            billingProviderType()
+            awsProductCode()
+            awsRegion()
+            stripeCollectionMethod()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1023,9 +1027,11 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

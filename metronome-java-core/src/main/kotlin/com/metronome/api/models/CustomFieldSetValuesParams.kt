@@ -96,12 +96,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFieldSetValuesBody = apply {
-            if (!validated) {
-                customFields().validate()
-                entity()
-                entityId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            customFields().validate()
+            entity()
+            entityId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -361,9 +363,11 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

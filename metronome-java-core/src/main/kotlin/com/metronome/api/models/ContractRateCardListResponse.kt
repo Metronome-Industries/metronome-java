@@ -102,18 +102,20 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): ContractRateCardListResponse = apply {
-        if (!validated) {
-            id()
-            createdAt()
-            createdBy()
-            name()
-            aliases().map { it.forEach { it.validate() } }
-            creditTypeConversions().map { it.forEach { it.validate() } }
-            customFields().map { it.validate() }
-            description()
-            fiatCreditType().map { it.validate() }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        createdAt()
+        createdBy()
+        name()
+        aliases().ifPresent { it.forEach { it.validate() } }
+        creditTypeConversions().ifPresent { it.forEach { it.validate() } }
+        customFields().ifPresent { it.validate() }
+        description()
+        fiatCreditType().ifPresent { it.validate() }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -300,12 +302,14 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Alias = apply {
-            if (!validated) {
-                name()
-                endingBefore()
-                startingAt()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            name()
+            endingBefore()
+            startingAt()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -427,11 +431,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CreditTypeConversion = apply {
-            if (!validated) {
-                customCreditType().validate()
-                fiatPerCustomCredit()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            customCreditType().validate()
+            fiatPerCustomCredit()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -532,9 +538,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

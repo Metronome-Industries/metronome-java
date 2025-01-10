@@ -494,24 +494,26 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractProductUpdateBody = apply {
-            if (!validated) {
-                productId()
-                startingAt()
-                billableMetricId()
-                compositeProductIds()
-                compositeTags()
-                excludeFreeUsage()
-                isRefundable()
-                name()
-                netsuiteInternalItemId()
-                netsuiteOverageItemId()
-                presentationGroupKey()
-                pricingGroupKey()
-                quantityConversion().map { it.validate() }
-                quantityRounding().map { it.validate() }
-                tags()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            productId()
+            startingAt()
+            billableMetricId()
+            compositeProductIds()
+            compositeTags()
+            excludeFreeUsage()
+            isRefundable()
+            name()
+            netsuiteInternalItemId()
+            netsuiteOverageItemId()
+            presentationGroupKey()
+            pricingGroupKey()
+            quantityConversion().ifPresent { it.validate() }
+            quantityRounding().ifPresent { it.validate() }
+            tags()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

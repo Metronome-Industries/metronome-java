@@ -84,16 +84,18 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): PlanDetail = apply {
-        if (!validated) {
-            id()
-            customFields().validate()
-            name()
-            creditGrants().map { it.forEach { it.validate() } }
-            description()
-            minimums().map { it.forEach { it.validate() } }
-            overageRates().map { it.forEach { it.validate() } }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        customFields().validate()
+        name()
+        creditGrants().ifPresent { it.forEach { it.validate() } }
+        description()
+        minimums().ifPresent { it.forEach { it.validate() } }
+        overageRates().ifPresent { it.forEach { it.validate() } }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -248,9 +250,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -420,20 +424,22 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CreditGrant = apply {
-            if (!validated) {
-                amountGranted()
-                amountGrantedCreditType().validate()
-                amountPaid()
-                amountPaidCreditType().validate()
-                effectiveDuration()
-                name()
-                priority()
-                sendInvoice()
-                reason()
-                recurrenceDuration()
-                recurrenceInterval()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            amountGranted()
+            amountGrantedCreditType().validate()
+            amountPaid()
+            amountPaidCreditType().validate()
+            effectiveDuration()
+            name()
+            priority()
+            sendInvoice()
+            reason()
+            recurrenceDuration()
+            recurrenceInterval()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -651,13 +657,15 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Minimum = apply {
-            if (!validated) {
-                creditType().validate()
-                name()
-                startPeriod()
-                value()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            creditType().validate()
+            name()
+            startPeriod()
+            value()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -817,13 +825,15 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): OverageRate = apply {
-            if (!validated) {
-                creditType().validate()
-                fiatCreditType().validate()
-                startPeriod()
-                toFiatConversionFactor()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            creditType().validate()
+            fiatCreditType().validate()
+            startPeriod()
+            toFiatConversionFactor()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

@@ -238,27 +238,29 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Credit = apply {
-        if (!validated) {
-            id()
-            product().validate()
-            type()
-            accessSchedule().map { it.validate() }
-            applicableContractIds()
-            applicableProductIds()
-            applicableProductTags()
-            balance()
-            contract().map { it.validate() }
-            customFields().map { it.validate() }
-            description()
-            ledger()
-            name()
-            netsuiteSalesOrderId()
-            priority()
-            rateType()
-            salesforceOpportunityId()
-            uniquenessKey()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        product().validate()
+        type()
+        accessSchedule().ifPresent { it.validate() }
+        applicableContractIds()
+        applicableProductIds()
+        applicableProductTags()
+        balance()
+        contract().ifPresent { it.validate() }
+        customFields().ifPresent { it.validate() }
+        description()
+        ledger().ifPresent { it.forEach { it.validate() } }
+        name()
+        netsuiteSalesOrderId()
+        priority()
+        rateType()
+        salesforceOpportunityId()
+        uniquenessKey()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -634,11 +636,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Product = apply {
-            if (!validated) {
-                id()
-                name()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            name()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -785,10 +789,12 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Contract = apply {
-            if (!validated) {
-                id()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -871,9 +877,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -945,8 +953,6 @@ private constructor(
         private val creditManualLedgerEntry: CreditManualLedgerEntry? = null,
         private val _json: JsonValue? = null,
     ) {
-
-        private var validated: Boolean = false
 
         fun creditSegmentStartLedgerEntry(): Optional<CreditSegmentStartLedgerEntry> =
             Optional.ofNullable(creditSegmentStartLedgerEntry)
@@ -1023,26 +1029,54 @@ private constructor(
             }
         }
 
+        private var validated: Boolean = false
+
         fun validate(): Ledger = apply {
-            if (!validated) {
-                if (
-                    creditSegmentStartLedgerEntry == null &&
-                        creditAutomatedInvoiceDeductionLedgerEntry == null &&
-                        creditExpirationLedgerEntry == null &&
-                        creditCanceledLedgerEntry == null &&
-                        creditCreditedLedgerEntry == null &&
-                        creditManualLedgerEntry == null
-                ) {
-                    throw MetronomeInvalidDataException("Unknown Ledger: $_json")
-                }
-                creditSegmentStartLedgerEntry?.validate()
-                creditAutomatedInvoiceDeductionLedgerEntry?.validate()
-                creditExpirationLedgerEntry?.validate()
-                creditCanceledLedgerEntry?.validate()
-                creditCreditedLedgerEntry?.validate()
-                creditManualLedgerEntry?.validate()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            accept(
+                object : Visitor<Unit> {
+                    override fun visitCreditSegmentStartLedgerEntry(
+                        creditSegmentStartLedgerEntry: CreditSegmentStartLedgerEntry
+                    ) {
+                        creditSegmentStartLedgerEntry.validate()
+                    }
+
+                    override fun visitCreditAutomatedInvoiceDeductionLedgerEntry(
+                        creditAutomatedInvoiceDeductionLedgerEntry:
+                            CreditAutomatedInvoiceDeductionLedgerEntry
+                    ) {
+                        creditAutomatedInvoiceDeductionLedgerEntry.validate()
+                    }
+
+                    override fun visitCreditExpirationLedgerEntry(
+                        creditExpirationLedgerEntry: CreditExpirationLedgerEntry
+                    ) {
+                        creditExpirationLedgerEntry.validate()
+                    }
+
+                    override fun visitCreditCanceledLedgerEntry(
+                        creditCanceledLedgerEntry: CreditCanceledLedgerEntry
+                    ) {
+                        creditCanceledLedgerEntry.validate()
+                    }
+
+                    override fun visitCreditCreditedLedgerEntry(
+                        creditCreditedLedgerEntry: CreditCreditedLedgerEntry
+                    ) {
+                        creditCreditedLedgerEntry.validate()
+                    }
+
+                    override fun visitCreditManualLedgerEntry(
+                        creditManualLedgerEntry: CreditManualLedgerEntry
+                    ) {
+                        creditManualLedgerEntry.validate()
+                    }
+                }
+            )
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {
@@ -1251,13 +1285,15 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CreditSegmentStartLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    segmentId()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                segmentId()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1461,14 +1497,16 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CreditAutomatedInvoiceDeductionLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    invoiceId()
-                    segmentId()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                invoiceId()
+                segmentId()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1677,13 +1715,15 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CreditExpirationLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    segmentId()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                segmentId()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1887,14 +1927,16 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CreditCanceledLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    invoiceId()
-                    segmentId()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                invoiceId()
+                segmentId()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2104,14 +2146,16 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CreditCreditedLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    invoiceId()
-                    segmentId()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                invoiceId()
+                segmentId()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2310,13 +2354,15 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CreditManualLedgerEntry = apply {
-                if (!validated) {
-                    amount()
-                    reason()
-                    timestamp()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                reason()
+                timestamp()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

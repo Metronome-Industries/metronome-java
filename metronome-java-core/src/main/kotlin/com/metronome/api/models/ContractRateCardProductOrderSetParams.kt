@@ -82,11 +82,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractRateCardProductOrderSetBody = apply {
-            if (!validated) {
-                productOrder()
-                rateCardId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            productOrder()
+            rateCardId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

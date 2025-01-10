@@ -71,14 +71,16 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CustomerPlanListPriceAdjustmentsResponse = apply {
-        if (!validated) {
-            chargeId()
-            chargeType()
-            prices().forEach { it.validate() }
-            startPeriod()
-            quantity()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        chargeId()
+        chargeType()
+        prices().forEach { it.validate() }
+        startPeriod()
+        quantity()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -293,12 +295,14 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Price = apply {
-            if (!validated) {
-                adjustmentType()
-                tier()
-                value()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            adjustmentType()
+            tier()
+            value()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

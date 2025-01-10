@@ -40,11 +40,13 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Tier = apply {
-        if (!validated) {
-            price()
-            size()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        price()
+        size()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

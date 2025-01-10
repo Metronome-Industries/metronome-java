@@ -100,12 +100,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CreditGrantVoidBody = apply {
-            if (!validated) {
-                id()
-                releaseUniquenessKey()
-                voidCreditPurchaseInvoice()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            releaseUniquenessKey()
+            voidCreditPurchaseInvoice()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

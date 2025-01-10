@@ -156,15 +156,17 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractScheduleProServicesInvoiceBody = apply {
-            if (!validated) {
-                contractId()
-                customerId()
-                issuedAt()
-                lineItems().forEach { it.validate() }
-                netsuiteInvoiceHeaderEnd()
-                netsuiteInvoiceHeaderStart()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            contractId()
+            customerId()
+            issuedAt()
+            lineItems().forEach { it.validate() }
+            netsuiteInvoiceHeaderEnd()
+            netsuiteInvoiceHeaderStart()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -610,17 +612,19 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): LineItem = apply {
-            if (!validated) {
-                professionalServiceId()
-                amendmentId()
-                amount()
-                metadata()
-                netsuiteInvoiceBillingEnd()
-                netsuiteInvoiceBillingStart()
-                quantity()
-                unitPrice()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            professionalServiceId()
+            amendmentId()
+            amount()
+            metadata()
+            netsuiteInvoiceBillingEnd()
+            netsuiteInvoiceBillingStart()
+            quantity()
+            unitPrice()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

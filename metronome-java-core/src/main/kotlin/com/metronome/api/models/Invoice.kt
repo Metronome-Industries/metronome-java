@@ -292,37 +292,39 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Invoice = apply {
-        if (!validated) {
-            id()
-            creditType().validate()
-            customerId()
-            lineItems().forEach { it.validate() }
-            status()
-            total()
-            type()
-            amendmentId()
-            billableStatus()
-            contractCustomFields().map { it.validate() }
-            contractId()
-            correctionRecord().map { it.validate() }
-            createdAt()
-            customFields().map { it.validate() }
-            customerCustomFields().map { it.validate() }
-            endTimestamp()
-            externalInvoice().map { it.validate() }
-            invoiceAdjustments().map { it.forEach { it.validate() } }
-            issuedAt()
-            netPaymentTermsDays()
-            netsuiteSalesOrderId()
-            planCustomFields().map { it.validate() }
-            planId()
-            planName()
-            resellerRoyalty().map { it.validate() }
-            salesforceOpportunityId()
-            startTimestamp()
-            subtotal()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        creditType().validate()
+        customerId()
+        lineItems().forEach { it.validate() }
+        status()
+        total()
+        type()
+        amendmentId()
+        billableStatus()
+        contractCustomFields().ifPresent { it.validate() }
+        contractId()
+        correctionRecord().ifPresent { it.validate() }
+        createdAt()
+        customFields().ifPresent { it.validate() }
+        customerCustomFields().ifPresent { it.validate() }
+        endTimestamp()
+        externalInvoice().ifPresent { it.validate() }
+        invoiceAdjustments().ifPresent { it.forEach { it.validate() } }
+        issuedAt()
+        netPaymentTermsDays()
+        netsuiteSalesOrderId()
+        planCustomFields().ifPresent { it.validate() }
+        planId()
+        planName()
+        resellerRoyalty().ifPresent { it.validate() }
+        salesforceOpportunityId()
+        startTimestamp()
+        subtotal()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -1086,45 +1088,47 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): LineItem = apply {
-            if (!validated) {
-                creditType().validate()
-                name()
-                total()
-                appliedCommitOrCredit().map { it.validate() }
-                commitCustomFields().map { it.validate() }
-                commitId()
-                commitNetsuiteItemId()
-                commitNetsuiteSalesOrderId()
-                commitSegmentId()
-                commitType()
-                customFields().map { it.validate() }
-                endingBefore()
-                groupKey()
-                groupValue()
-                isProrated()
-                listPrice().map { it.validate() }
-                metadata()
-                netsuiteInvoiceBillingEnd()
-                netsuiteInvoiceBillingStart()
-                netsuiteItemId()
-                postpaidCommit().map { it.validate() }
-                presentationGroupValues().map { it.validate() }
-                pricingGroupValues().map { it.validate() }
-                productCustomFields().map { it.validate() }
-                productId()
-                productType()
-                professionalServiceCustomFields().map { it.validate() }
-                professionalServiceId()
-                quantity()
-                resellerType()
-                scheduledChargeCustomFields().map { it.validate() }
-                scheduledChargeId()
-                startingAt()
-                subLineItems().map { it.forEach { it.validate() } }
-                tier().map { it.validate() }
-                unitPrice()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            creditType().validate()
+            name()
+            total()
+            appliedCommitOrCredit().ifPresent { it.validate() }
+            commitCustomFields().ifPresent { it.validate() }
+            commitId()
+            commitNetsuiteItemId()
+            commitNetsuiteSalesOrderId()
+            commitSegmentId()
+            commitType()
+            customFields().ifPresent { it.validate() }
+            endingBefore()
+            groupKey()
+            groupValue()
+            isProrated()
+            listPrice().ifPresent { it.validate() }
+            metadata()
+            netsuiteInvoiceBillingEnd()
+            netsuiteInvoiceBillingStart()
+            netsuiteItemId()
+            postpaidCommit().ifPresent { it.validate() }
+            presentationGroupValues().ifPresent { it.validate() }
+            pricingGroupValues().ifPresent { it.validate() }
+            productCustomFields().ifPresent { it.validate() }
+            productId()
+            productType()
+            professionalServiceCustomFields().ifPresent { it.validate() }
+            professionalServiceId()
+            quantity()
+            resellerType()
+            scheduledChargeCustomFields().ifPresent { it.validate() }
+            scheduledChargeId()
+            startingAt()
+            subLineItems().ifPresent { it.forEach { it.validate() } }
+            tier().ifPresent { it.validate() }
+            unitPrice()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1615,11 +1619,13 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): AppliedCommitOrCredit = apply {
-                if (!validated) {
-                    id()
-                    type()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                type()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1777,9 +1783,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CommitCustomFields = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1857,9 +1865,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CustomFields = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1943,10 +1953,12 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PostpaidCommit = apply {
-                if (!validated) {
-                    id()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2037,9 +2049,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PresentationGroupValues = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2119,9 +2133,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PricingGroupValues = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2199,9 +2215,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): ProductCustomFields = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2280,9 +2298,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): ProfessionalServiceCustomFields = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2432,9 +2452,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): ScheduledChargeCustomFields = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2620,20 +2642,22 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): SubLineItem = apply {
-                if (!validated) {
-                    customFields().validate()
-                    name()
-                    quantity()
-                    subtotal()
-                    chargeId()
-                    creditGrantId()
-                    endDate()
-                    price()
-                    startDate()
-                    tierPeriod().map { it.validate() }
-                    tiers().map { it.forEach { it.validate() } }
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                customFields().validate()
+                name()
+                quantity()
+                subtotal()
+                chargeId()
+                creditGrantId()
+                endDate()
+                price()
+                startDate()
+                tierPeriod().ifPresent { it.validate() }
+                tiers().ifPresent { it.forEach { it.validate() } }
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2811,9 +2835,11 @@ private constructor(
                 private var validated: Boolean = false
 
                 fun validate(): CustomFields = apply {
-                    if (!validated) {
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -2909,11 +2935,13 @@ private constructor(
                 private var validated: Boolean = false
 
                 fun validate(): TierPeriod = apply {
-                    if (!validated) {
-                        startingAt()
-                        endingBefore()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    startingAt()
+                    endingBefore()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -3049,13 +3077,15 @@ private constructor(
                 private var validated: Boolean = false
 
                 fun validate(): Tier = apply {
-                    if (!validated) {
-                        price()
-                        quantity()
-                        startingAt()
-                        subtotal()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    price()
+                    quantity()
+                    startingAt()
+                    subtotal()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -3208,12 +3238,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Tier = apply {
-                if (!validated) {
-                    level()
-                    startingAt()
-                    size()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                level()
+                startingAt()
+                size()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -3393,9 +3425,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractCustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -3504,13 +3538,15 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CorrectionRecord = apply {
-            if (!validated) {
-                correctedInvoiceId()
-                memo()
-                reason()
-                correctedExternalInvoice().map { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            correctedInvoiceId()
+            memo()
+            reason()
+            correctedExternalInvoice().ifPresent { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -3646,13 +3682,15 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CorrectedExternalInvoice = apply {
-                if (!validated) {
-                    billingProviderType()
-                    externalStatus()
-                    invoiceId()
-                    issuedAtTimestamp()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                billingProviderType()
+                externalStatus()
+                invoiceId()
+                issuedAtTimestamp()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -3999,9 +4037,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -4074,9 +4114,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerCustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -4187,13 +4229,15 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): ExternalInvoice = apply {
-            if (!validated) {
-                billingProviderType()
-                externalStatus()
-                invoiceId()
-                issuedAtTimestamp()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            billingProviderType()
+            externalStatus()
+            invoiceId()
+            issuedAtTimestamp()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -4557,14 +4601,16 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): InvoiceAdjustment = apply {
-            if (!validated) {
-                creditType().validate()
-                name()
-                total()
-                creditGrantCustomFields().map { it.validate() }
-                creditGrantId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            creditType().validate()
+            name()
+            total()
+            creditGrantCustomFields().ifPresent { it.validate() }
+            creditGrantId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -4666,9 +4712,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CreditGrantCustomFields = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -4765,9 +4813,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): PlanCustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -4886,14 +4936,16 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): ResellerRoyalty = apply {
-            if (!validated) {
-                fraction()
-                netsuiteResellerId()
-                resellerType()
-                awsOptions().map { it.validate() }
-                gcpOptions().map { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            fraction()
+            netsuiteResellerId()
+            resellerType()
+            awsOptions().ifPresent { it.validate() }
+            gcpOptions().ifPresent { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -5097,12 +5149,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): AwsOptions = apply {
-                if (!validated) {
-                    awsAccountNumber()
-                    awsOfferId()
-                    awsPayerReferenceId()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                awsAccountNumber()
+                awsOfferId()
+                awsPayerReferenceId()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -5231,11 +5285,13 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): GcpOptions = apply {
-                if (!validated) {
-                    gcpAccountId()
-                    gcpOfferId()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                gcpAccountId()
+                gcpOfferId()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

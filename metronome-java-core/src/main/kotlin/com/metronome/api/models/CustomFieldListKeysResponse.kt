@@ -46,11 +46,13 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CustomFieldListKeysResponse = apply {
-        if (!validated) {
-            data().forEach { it.validate() }
-            nextPage()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().forEach { it.validate() }
+        nextPage()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -162,12 +164,14 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Data = apply {
-            if (!validated) {
-                enforceUniqueness()
-                entity()
-                key()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            enforceUniqueness()
+            entity()
+            key()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

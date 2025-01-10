@@ -233,19 +233,21 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerCommitListBody = apply {
-            if (!validated) {
-                customerId()
-                commitId()
-                coveringDate()
-                effectiveBefore()
-                includeArchived()
-                includeBalance()
-                includeContractCommits()
-                includeLedgers()
-                nextPage()
-                startingAt()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            customerId()
+            commitId()
+            coveringDate()
+            effectiveBefore()
+            includeArchived()
+            includeBalance()
+            includeContractCommits()
+            includeLedgers()
+            nextPage()
+            startingAt()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

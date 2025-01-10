@@ -64,11 +64,13 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): EventTypeFilter = apply {
-        if (!validated) {
-            inValues()
-            notInValues()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        inValues()
+        notInValues()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

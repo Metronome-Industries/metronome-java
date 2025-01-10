@@ -62,12 +62,14 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CustomerAlert = apply {
-        if (!validated) {
-            alert().validate()
-            customerStatus()
-            triggeredBy()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        alert().validate()
+        customerStatus()
+        triggeredBy()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -305,21 +307,23 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Alert = apply {
-            if (!validated) {
-                id()
-                name()
-                status()
-                threshold()
-                type()
-                updatedAt()
-                creditGrantTypeFilters()
-                creditType().map { it.validate() }
-                customFieldFilters().map { it.forEach { it.validate() } }
-                groupKeyFilter().map { it.validate() }
-                invoiceTypesFilter()
-                uniquenessKey()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            name()
+            status()
+            threshold()
+            type()
+            updatedAt()
+            creditGrantTypeFilters()
+            creditType().ifPresent { it.validate() }
+            customFieldFilters().ifPresent { it.forEach { it.validate() } }
+            groupKeyFilter().ifPresent { it.validate() }
+            invoiceTypesFilter()
+            uniquenessKey()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -830,12 +834,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CustomFieldFilter = apply {
-                if (!validated) {
-                    entity()
-                    key()
-                    value()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                entity()
+                key()
+                value()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1017,11 +1023,13 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): GroupKeyFilter = apply {
-                if (!validated) {
-                    key()
-                    value()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                key()
+                value()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

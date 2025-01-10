@@ -235,14 +235,16 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): Usage = apply {
-            if (!validated) {
-                customerId()
-                eventType()
-                timestamp()
-                transactionId()
-                properties().map { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            customerId()
+            eventType()
+            timestamp()
+            transactionId()
+            properties().ifPresent { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -342,9 +344,11 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): Properties = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

@@ -47,12 +47,14 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CreditGrantListCreditTypesResponse = apply {
-        if (!validated) {
-            id()
-            isCurrency()
-            name()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        isCurrency()
+        name()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

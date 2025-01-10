@@ -108,18 +108,20 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CustomerPlanListResponse = apply {
-        if (!validated) {
-            id()
-            customFields().validate()
-            planDescription()
-            planId()
-            planName()
-            startingOn()
-            endingBefore()
-            netPaymentTermsDays()
-            trialInfo().map { it.validate() }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        customFields().validate()
+        planDescription()
+        planId()
+        planName()
+        startingOn()
+        endingBefore()
+        netPaymentTermsDays()
+        trialInfo().ifPresent { it.validate() }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -257,9 +259,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -350,11 +354,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): TrialInfo = apply {
-            if (!validated) {
-                endingBefore()
-                spendingCaps().forEach { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            endingBefore()
+            spendingCaps().forEach { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -472,12 +478,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): SpendingCap = apply {
-                if (!validated) {
-                    amount()
-                    amountRemaining()
-                    creditType().validate()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                amountRemaining()
+                creditType().validate()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

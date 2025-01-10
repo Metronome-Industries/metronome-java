@@ -88,16 +88,18 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): ContractProductListResponse = apply {
-        if (!validated) {
-            id()
-            current().validate()
-            initial().validate()
-            type()
-            updates().forEach { it.validate() }
-            archivedAt()
-            customFields().map { it.validate() }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        current().validate()
+        initial().validate()
+        type()
+        updates().forEach { it.validate() }
+        archivedAt()
+        customFields().ifPresent { it.validate() }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -504,25 +506,27 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Update = apply {
-            if (!validated) {
-                createdAt()
-                createdBy()
-                billableMetricId()
-                compositeProductIds()
-                compositeTags()
-                excludeFreeUsage()
-                isRefundable()
-                name()
-                netsuiteInternalItemId()
-                netsuiteOverageItemId()
-                presentationGroupKey()
-                pricingGroupKey()
-                quantityConversion().map { it.validate() }
-                quantityRounding().map { it.validate() }
-                startingAt()
-                tags()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            createdAt()
+            createdBy()
+            billableMetricId()
+            compositeProductIds()
+            compositeTags()
+            excludeFreeUsage()
+            isRefundable()
+            name()
+            netsuiteInternalItemId()
+            netsuiteOverageItemId()
+            presentationGroupKey()
+            pricingGroupKey()
+            quantityConversion().ifPresent { it.validate() }
+            quantityRounding().ifPresent { it.validate() }
+            startingAt()
+            tags()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -899,9 +903,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

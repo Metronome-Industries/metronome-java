@@ -215,30 +215,32 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Override = apply {
-        if (!validated) {
-            id()
-            startingAt()
-            applicableProductTags()
-            creditType().map { it.validate() }
-            endingBefore()
-            entitled()
-            isCommitSpecific()
-            isProrated()
-            multiplier()
-            overrideSpecifiers().map { it.forEach { it.validate() } }
-            overrideTiers().map { it.forEach { it.validate() } }
-            overwriteRate().map { it.validate() }
-            price()
-            priority()
-            product().map { it.validate() }
-            quantity()
-            rateType()
-            target()
-            tiers().map { it.forEach { it.validate() } }
-            type()
-            value().map { it.validate() }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        startingAt()
+        applicableProductTags()
+        creditType().ifPresent { it.validate() }
+        endingBefore()
+        entitled()
+        isCommitSpecific()
+        isProrated()
+        multiplier()
+        overrideSpecifiers().ifPresent { it.forEach { it.validate() } }
+        overrideTiers().ifPresent { it.forEach { it.validate() } }
+        overwriteRate().ifPresent { it.validate() }
+        price()
+        priority()
+        product().ifPresent { it.validate() }
+        quantity()
+        rateType()
+        target()
+        tiers().ifPresent { it.forEach { it.validate() } }
+        type()
+        value().ifPresent { it.validate() }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -588,14 +590,16 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): OverrideSpecifier = apply {
-            if (!validated) {
-                commitIds()
-                presentationGroupValues().map { it.validate() }
-                pricingGroupValues().map { it.validate() }
-                productId()
-                productTags()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            commitIds()
+            presentationGroupValues().ifPresent { it.validate() }
+            pricingGroupValues().ifPresent { it.validate() }
+            productId()
+            productTags()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -726,9 +730,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PresentationGroupValues = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -807,9 +813,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PricingGroupValues = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -921,11 +929,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): OverrideTier = apply {
-            if (!validated) {
-                multiplier()
-                size()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            multiplier()
+            size()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1096,16 +1106,18 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): OverwriteRate = apply {
-            if (!validated) {
-                rateType()
-                creditType().map { it.validate() }
-                customRate().map { it.validate() }
-                isProrated()
-                price()
-                quantity()
-                tiers().map { it.forEach { it.validate() } }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            rateType()
+            creditType().ifPresent { it.validate() }
+            customRate().ifPresent { it.validate() }
+            isProrated()
+            price()
+            quantity()
+            tiers().ifPresent { it.forEach { it.validate() } }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1335,9 +1347,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CustomRate = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1443,11 +1457,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Product = apply {
-            if (!validated) {
-                id()
-                name()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            name()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1734,9 +1750,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Value = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

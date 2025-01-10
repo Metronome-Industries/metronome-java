@@ -177,16 +177,18 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ContractAddManualBalanceEntryBody = apply {
-            if (!validated) {
-                id()
-                amount()
-                customerId()
-                reason()
-                segmentId()
-                contractId()
-                timestamp()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            amount()
+            customerId()
+            reason()
+            segmentId()
+            contractId()
+            timestamp()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

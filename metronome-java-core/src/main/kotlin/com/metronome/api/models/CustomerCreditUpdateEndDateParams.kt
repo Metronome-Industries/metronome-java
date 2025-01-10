@@ -115,12 +115,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerCreditUpdateEndDateBody = apply {
-            if (!validated) {
-                accessEndingBefore()
-                creditId()
-                customerId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            accessEndingBefore()
+            creditId()
+            customerId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

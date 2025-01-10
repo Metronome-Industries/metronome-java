@@ -113,11 +113,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerUpdateConfigBody = apply {
-            if (!validated) {
-                leaveStripeInvoicesInDraft()
-                salesforceAccountId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            leaveStripeInvoicesInDraft()
+            salesforceAccountId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

@@ -206,16 +206,18 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): UsageListWithGroupsBody = apply {
-            if (!validated) {
-                billableMetricId()
-                customerId()
-                windowSize()
-                currentPeriod()
-                endingBefore()
-                groupBy().map { it.validate() }
-                startingOn()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            billableMetricId()
+            customerId()
+            windowSize()
+            currentPeriod()
+            endingBefore()
+            groupBy().ifPresent { it.validate() }
+            startingOn()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -686,11 +688,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): GroupBy = apply {
-            if (!validated) {
-                key()
-                values()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            key()
+            values()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

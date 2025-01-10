@@ -35,10 +35,12 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): DashboardGetEmbeddableUrlResponse = apply {
-        if (!validated) {
-            data().validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().validate()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -111,10 +113,12 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Data = apply {
-            if (!validated) {
-                url()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            url()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

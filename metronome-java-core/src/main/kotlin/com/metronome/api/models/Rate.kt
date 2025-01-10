@@ -135,18 +135,20 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Rate = apply {
-        if (!validated) {
-            rateType()
-            creditType().map { it.validate() }
-            customRate().map { it.validate() }
-            isProrated()
-            price()
-            pricingGroupValues().map { it.validate() }
-            quantity()
-            tiers().map { it.forEach { it.validate() } }
-            useListPrices()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        rateType()
+        creditType().ifPresent { it.validate() }
+        customRate().ifPresent { it.validate() }
+        isProrated()
+        price()
+        pricingGroupValues().ifPresent { it.validate() }
+        quantity()
+        tiers().ifPresent { it.forEach { it.validate() } }
+        useListPrices()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -399,9 +401,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomRate = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -475,9 +479,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): PricingGroupValues = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

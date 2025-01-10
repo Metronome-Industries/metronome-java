@@ -131,13 +131,15 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerNamedScheduleUpdateBody = apply {
-            if (!validated) {
-                customerId()
-                scheduleName()
-                startingAt()
-                endingBefore()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            customerId()
+            scheduleName()
+            startingAt()
+            endingBefore()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

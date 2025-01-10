@@ -142,14 +142,16 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): DashboardGetEmbeddableUrlBody = apply {
-            if (!validated) {
-                customerId()
-                dashboard()
-                bmGroupKeyOverrides().map { it.forEach { it.validate() } }
-                colorOverrides().map { it.forEach { it.validate() } }
-                dashboardOptions().map { it.forEach { it.validate() } }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            customerId()
+            dashboard()
+            bmGroupKeyOverrides().ifPresent { it.forEach { it.validate() } }
+            colorOverrides().ifPresent { it.forEach { it.validate() } }
+            dashboardOptions().ifPresent { it.forEach { it.validate() } }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -634,12 +636,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): BmGroupKeyOverride = apply {
-            if (!validated) {
-                groupKeyName()
-                displayName()
-                valueDisplayNames().map { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            groupKeyName()
+            displayName()
+            valueDisplayNames().ifPresent { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -742,9 +746,11 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): ValueDisplayNames = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -856,11 +862,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ColorOverride = apply {
-            if (!validated) {
-                name()
-                value()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            name()
+            value()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1130,11 +1138,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): DashboardOption = apply {
-            if (!validated) {
-                key()
-                value()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            key()
+            value()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

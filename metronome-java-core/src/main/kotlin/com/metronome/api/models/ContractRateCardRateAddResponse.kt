@@ -37,10 +37,12 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): ContractRateCardRateAddResponse = apply {
-        if (!validated) {
-            data().validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().validate()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -236,19 +238,21 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Data = apply {
-            if (!validated) {
-                rateType()
-                commitRate().map { it.validate() }
-                creditType().map { it.validate() }
-                customRate().map { it.validate() }
-                isProrated()
-                price()
-                pricingGroupValues().map { it.validate() }
-                quantity()
-                tiers().map { it.forEach { it.validate() } }
-                useListPrices()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            rateType()
+            commitRate().ifPresent { it.validate() }
+            creditType().ifPresent { it.validate() }
+            customRate().ifPresent { it.validate() }
+            isProrated()
+            price()
+            pricingGroupValues().ifPresent { it.validate() }
+            quantity()
+            tiers().ifPresent { it.forEach { it.validate() } }
+            useListPrices()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -588,12 +592,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CommitRate = apply {
-                if (!validated) {
-                    rateType()
-                    price()
-                    tiers().map { it.forEach { it.validate() } }
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                rateType()
+                price()
+                tiers().ifPresent { it.forEach { it.validate() } }
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -820,9 +826,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CustomRate = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -899,9 +907,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): PricingGroupValues = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

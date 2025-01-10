@@ -90,12 +90,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFieldAddKeyBody = apply {
-            if (!validated) {
-                enforceUniqueness()
-                entity()
-                key()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            enforceUniqueness()
+            entity()
+            key()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

@@ -50,11 +50,13 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): ScheduleDuration = apply {
-        if (!validated) {
-            scheduleItems().forEach { it.validate() }
-            creditType().map { it.validate() }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        scheduleItems().forEach { it.validate() }
+        creditType().ifPresent { it.validate() }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -176,13 +178,15 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): ScheduleItem = apply {
-            if (!validated) {
-                id()
-                amount()
-                endingBefore()
-                startingAt()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            amount()
+            endingBefore()
+            startingAt()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

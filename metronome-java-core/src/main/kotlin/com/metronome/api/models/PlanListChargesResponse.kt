@@ -141,21 +141,23 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): PlanListChargesResponse = apply {
-        if (!validated) {
-            id()
-            chargeType()
-            creditType().validate()
-            customFields().validate()
-            name()
-            prices().forEach { it.validate() }
-            productId()
-            productName()
-            quantity()
-            startPeriod()
-            tierResetFrequency()
-            unitConversion().map { it.validate() }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        chargeType()
+        creditType().validate()
+        customFields().validate()
+        name()
+        prices().forEach { it.validate() }
+        productId()
+        productName()
+        quantity()
+        startPeriod()
+        tierResetFrequency()
+        unitConversion().ifPresent { it.validate() }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -415,9 +417,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -533,14 +537,16 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Price = apply {
-            if (!validated) {
-                tier()
-                value()
-                collectionInterval()
-                collectionSchedule()
-                quantity()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            tier()
+            value()
+            collectionInterval()
+            collectionSchedule()
+            quantity()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -690,11 +696,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): UnitConversion = apply {
-            if (!validated) {
-                divisionFactor()
-                roundingBehavior()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            divisionFactor()
+            roundingBehavior()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

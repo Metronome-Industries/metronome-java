@@ -45,11 +45,13 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): RolloverAmountMaxPercentage = apply {
-        if (!validated) {
-            type()
-            value()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        type()
+        value()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

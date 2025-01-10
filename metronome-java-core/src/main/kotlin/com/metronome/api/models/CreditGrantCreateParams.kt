@@ -340,23 +340,25 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CreditGrantCreateBody = apply {
-            if (!validated) {
-                customerId()
-                expiresAt()
-                grantAmount().validate()
-                name()
-                paidAmount().validate()
-                priority()
-                creditGrantType()
-                customFields().map { it.validate() }
-                effectiveAt()
-                invoiceDate()
-                productIds()
-                reason()
-                rolloverSettings().map { it.validate() }
-                uniquenessKey()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            customerId()
+            expiresAt()
+            grantAmount().validate()
+            name()
+            paidAmount().validate()
+            priority()
+            creditGrantType()
+            customFields().ifPresent { it.validate() }
+            effectiveAt()
+            invoiceDate()
+            productIds()
+            reason()
+            rolloverSettings().ifPresent { it.validate() }
+            uniquenessKey()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -913,11 +915,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): GrantAmount = apply {
-            if (!validated) {
-                amount()
-                creditTypeId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            amount()
+            creditTypeId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1031,11 +1035,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): PaidAmount = apply {
-            if (!validated) {
-                amount()
-                creditTypeId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            amount()
+            creditTypeId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1131,9 +1137,11 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1246,12 +1254,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): RolloverSettings = apply {
-            if (!validated) {
-                expiresAt()
-                priority()
-                rolloverAmount()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            expiresAt()
+            priority()
+            rolloverAmount().validate()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1353,8 +1363,6 @@ constructor(
             private val _json: JsonValue? = null,
         ) {
 
-            private var validated: Boolean = false
-
             fun rolloverAmountMaxPercentage(): Optional<RolloverAmountMaxPercentage> =
                 Optional.ofNullable(rolloverAmountMaxPercentage)
 
@@ -1383,15 +1391,29 @@ constructor(
                 }
             }
 
+            private var validated: Boolean = false
+
             fun validate(): RolloverAmount = apply {
-                if (!validated) {
-                    if (rolloverAmountMaxPercentage == null && rolloverAmountMaxAmount == null) {
-                        throw MetronomeInvalidDataException("Unknown RolloverAmount: $_json")
-                    }
-                    rolloverAmountMaxPercentage?.validate()
-                    rolloverAmountMaxAmount?.validate()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                accept(
+                    object : Visitor<Unit> {
+                        override fun visitRolloverAmountMaxPercentage(
+                            rolloverAmountMaxPercentage: RolloverAmountMaxPercentage
+                        ) {
+                            rolloverAmountMaxPercentage.validate()
+                        }
+
+                        override fun visitRolloverAmountMaxAmount(
+                            rolloverAmountMaxAmount: RolloverAmountMaxAmount
+                        ) {
+                            rolloverAmountMaxAmount.validate()
+                        }
+                    }
+                )
+                validated = true
             }
 
             override fun equals(other: Any?): Boolean {

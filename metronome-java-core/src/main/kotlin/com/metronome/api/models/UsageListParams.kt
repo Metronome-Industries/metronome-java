@@ -188,14 +188,16 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): UsageListBody = apply {
-            if (!validated) {
-                endingBefore()
-                startingOn()
-                windowSize()
-                billableMetrics().map { it.forEach { it.validate() } }
-                customerIds()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            endingBefore()
+            startingOn()
+            windowSize()
+            billableMetrics().ifPresent { it.forEach { it.validate() } }
+            customerIds()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -679,11 +681,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): BillableMetric = apply {
-            if (!validated) {
-                id()
-                groupBy().map { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            groupBy().ifPresent { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -780,11 +784,13 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): GroupBy = apply {
-                if (!validated) {
-                    key()
-                    values()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                key()
+                values()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

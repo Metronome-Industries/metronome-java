@@ -38,10 +38,12 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): ServiceListResponse = apply {
-        if (!validated) {
-            services().forEach { it.validate() }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        services().forEach { it.validate() }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -144,12 +146,14 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Service = apply {
-            if (!validated) {
-                ips()
-                name()
-                usage()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            ips()
+            name()
+            usage()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

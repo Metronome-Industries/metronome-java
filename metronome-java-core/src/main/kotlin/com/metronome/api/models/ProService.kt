@@ -105,17 +105,19 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): ProService = apply {
-        if (!validated) {
-            id()
-            maxAmount()
-            productId()
-            quantity()
-            unitPrice()
-            customFields().map { it.validate() }
-            description()
-            netsuiteSalesOrderId()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        maxAmount()
+        productId()
+        quantity()
+        unitPrice()
+        customFields().ifPresent { it.validate() }
+        description()
+        netsuiteSalesOrderId()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -249,9 +251,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomFields = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

@@ -38,10 +38,12 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): ContractRateCardNamedScheduleRetrieveResponse = apply {
-        if (!validated) {
-            data().forEach { it.validate() }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().forEach { it.validate() }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -149,11 +151,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Data = apply {
-            if (!validated) {
-                startingAt()
-                endingBefore()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            startingAt()
+            endingBefore()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

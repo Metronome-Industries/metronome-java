@@ -174,15 +174,17 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerInvoiceAddChargeBody = apply {
-            if (!validated) {
-                chargeId()
-                customerPlanId()
-                description()
-                invoiceStartTimestamp()
-                price()
-                quantity()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            chargeId()
+            customerPlanId()
+            description()
+            invoiceStartTimestamp()
+            price()
+            quantity()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
