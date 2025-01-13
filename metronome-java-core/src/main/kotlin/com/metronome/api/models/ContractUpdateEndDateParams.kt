@@ -34,6 +34,14 @@ constructor(
     fun customerId(): String = body.customerId()
 
     /**
+     * If true, allows setting the contract end date earlier than the end_timestamp of existing
+     * finalized invoices. Finalized invoices will be unchanged; if you want to incorporate the new
+     * end date, you can void and regenerate finalized usage invoices. Defaults to false.
+     */
+    fun allowEndingBeforeFinalizedInvoice(): Optional<Boolean> =
+        body.allowEndingBeforeFinalizedInvoice()
+
+    /**
      * RFC 3339 timestamp indicating when the contract will end (exclusive). If not provided, the
      * contract will be updated to be open-ended.
      */
@@ -44,6 +52,14 @@ constructor(
 
     /** ID of the customer whose contract is to be updated */
     fun _customerId(): JsonField<String> = body._customerId()
+
+    /**
+     * If true, allows setting the contract end date earlier than the end_timestamp of existing
+     * finalized invoices. Finalized invoices will be unchanged; if you want to incorporate the new
+     * end date, you can void and regenerate finalized usage invoices. Defaults to false.
+     */
+    fun _allowEndingBeforeFinalizedInvoice(): JsonField<Boolean> =
+        body._allowEndingBeforeFinalizedInvoice()
 
     /**
      * RFC 3339 timestamp indicating when the contract will end (exclusive). If not provided, the
@@ -73,6 +89,9 @@ constructor(
         @JsonProperty("customer_id")
         @ExcludeMissing
         private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("allow_ending_before_finalized_invoice")
+        @ExcludeMissing
+        private val allowEndingBeforeFinalizedInvoice: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("ending_before")
         @ExcludeMissing
         private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -85,6 +104,18 @@ constructor(
 
         /** ID of the customer whose contract is to be updated */
         fun customerId(): String = customerId.getRequired("customer_id")
+
+        /**
+         * If true, allows setting the contract end date earlier than the end_timestamp of existing
+         * finalized invoices. Finalized invoices will be unchanged; if you want to incorporate the
+         * new end date, you can void and regenerate finalized usage invoices. Defaults to false.
+         */
+        fun allowEndingBeforeFinalizedInvoice(): Optional<Boolean> =
+            Optional.ofNullable(
+                allowEndingBeforeFinalizedInvoice.getNullable(
+                    "allow_ending_before_finalized_invoice"
+                )
+            )
 
         /**
          * RFC 3339 timestamp indicating when the contract will end (exclusive). If not provided,
@@ -102,6 +133,16 @@ constructor(
         @JsonProperty("customer_id")
         @ExcludeMissing
         fun _customerId(): JsonField<String> = customerId
+
+        /**
+         * If true, allows setting the contract end date earlier than the end_timestamp of existing
+         * finalized invoices. Finalized invoices will be unchanged; if you want to incorporate the
+         * new end date, you can void and regenerate finalized usage invoices. Defaults to false.
+         */
+        @JsonProperty("allow_ending_before_finalized_invoice")
+        @ExcludeMissing
+        fun _allowEndingBeforeFinalizedInvoice(): JsonField<Boolean> =
+            allowEndingBeforeFinalizedInvoice
 
         /**
          * RFC 3339 timestamp indicating when the contract will end (exclusive). If not provided,
@@ -124,6 +165,7 @@ constructor(
 
             contractId()
             customerId()
+            allowEndingBeforeFinalizedInvoice()
             endingBefore()
             validated = true
         }
@@ -139,6 +181,7 @@ constructor(
 
             private var contractId: JsonField<String>? = null
             private var customerId: JsonField<String>? = null
+            private var allowEndingBeforeFinalizedInvoice: JsonField<Boolean> = JsonMissing.of()
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -146,6 +189,8 @@ constructor(
             internal fun from(contractUpdateEndDateBody: ContractUpdateEndDateBody) = apply {
                 contractId = contractUpdateEndDateBody.contractId
                 customerId = contractUpdateEndDateBody.customerId
+                allowEndingBeforeFinalizedInvoice =
+                    contractUpdateEndDateBody.allowEndingBeforeFinalizedInvoice
                 endingBefore = contractUpdateEndDateBody.endingBefore
                 additionalProperties = contractUpdateEndDateBody.additionalProperties.toMutableMap()
             }
@@ -161,6 +206,25 @@ constructor(
 
             /** ID of the customer whose contract is to be updated */
             fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
+
+            /**
+             * If true, allows setting the contract end date earlier than the end_timestamp of
+             * existing finalized invoices. Finalized invoices will be unchanged; if you want to
+             * incorporate the new end date, you can void and regenerate finalized usage invoices.
+             * Defaults to false.
+             */
+            fun allowEndingBeforeFinalizedInvoice(allowEndingBeforeFinalizedInvoice: Boolean) =
+                allowEndingBeforeFinalizedInvoice(JsonField.of(allowEndingBeforeFinalizedInvoice))
+
+            /**
+             * If true, allows setting the contract end date earlier than the end_timestamp of
+             * existing finalized invoices. Finalized invoices will be unchanged; if you want to
+             * incorporate the new end date, you can void and regenerate finalized usage invoices.
+             * Defaults to false.
+             */
+            fun allowEndingBeforeFinalizedInvoice(
+                allowEndingBeforeFinalizedInvoice: JsonField<Boolean>
+            ) = apply { this.allowEndingBeforeFinalizedInvoice = allowEndingBeforeFinalizedInvoice }
 
             /**
              * RFC 3339 timestamp indicating when the contract will end (exclusive). If not
@@ -200,6 +264,7 @@ constructor(
                 ContractUpdateEndDateBody(
                     checkNotNull(contractId) { "`contractId` is required but was not set" },
                     checkNotNull(customerId) { "`customerId` is required but was not set" },
+                    allowEndingBeforeFinalizedInvoice,
                     endingBefore,
                     additionalProperties.toImmutable(),
                 )
@@ -210,17 +275,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractUpdateEndDateBody && contractId == other.contractId && customerId == other.customerId && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractUpdateEndDateBody && contractId == other.contractId && customerId == other.customerId && allowEndingBeforeFinalizedInvoice == other.allowEndingBeforeFinalizedInvoice && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(contractId, customerId, endingBefore, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(contractId, customerId, allowEndingBeforeFinalizedInvoice, endingBefore, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractUpdateEndDateBody{contractId=$contractId, customerId=$customerId, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
+            "ContractUpdateEndDateBody{contractId=$contractId, customerId=$customerId, allowEndingBeforeFinalizedInvoice=$allowEndingBeforeFinalizedInvoice, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -255,6 +320,24 @@ constructor(
 
         /** ID of the customer whose contract is to be updated */
         fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
+
+        /**
+         * If true, allows setting the contract end date earlier than the end_timestamp of existing
+         * finalized invoices. Finalized invoices will be unchanged; if you want to incorporate the
+         * new end date, you can void and regenerate finalized usage invoices. Defaults to false.
+         */
+        fun allowEndingBeforeFinalizedInvoice(allowEndingBeforeFinalizedInvoice: Boolean) = apply {
+            body.allowEndingBeforeFinalizedInvoice(allowEndingBeforeFinalizedInvoice)
+        }
+
+        /**
+         * If true, allows setting the contract end date earlier than the end_timestamp of existing
+         * finalized invoices. Finalized invoices will be unchanged; if you want to incorporate the
+         * new end date, you can void and regenerate finalized usage invoices. Defaults to false.
+         */
+        fun allowEndingBeforeFinalizedInvoice(
+            allowEndingBeforeFinalizedInvoice: JsonField<Boolean>
+        ) = apply { body.allowEndingBeforeFinalizedInvoice(allowEndingBeforeFinalizedInvoice) }
 
         /**
          * RFC 3339 timestamp indicating when the contract will end (exclusive). If not provided,
