@@ -140,6 +140,10 @@ private constructor(
         private val customerBillingProviderConfiguration:
             JsonField<CustomerBillingProviderConfiguration> =
             JsonMissing.of(),
+        @JsonProperty("scheduled_charges_on_usage_invoices")
+        @ExcludeMissing
+        private val scheduledChargesOnUsageInvoices: JsonField<ScheduledChargesOnUsageInvoices> =
+            JsonMissing.of(),
         @JsonProperty("uniqueness_key")
         @ExcludeMissing
         private val uniquenessKey: JsonField<String> = JsonMissing.of(),
@@ -173,6 +177,17 @@ private constructor(
                 customerBillingProviderConfiguration.getNullable(
                     "customer_billing_provider_configuration"
                 )
+            )
+
+        /**
+         * Determines which scheduled and commit charges to consolidate onto the Contract's usage
+         * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
+         * consolidation to occur. This field cannot be modified after a Contract has been created.
+         * If this field is omitted, charges will appear on a separate invoice from usage charges.
+         */
+        fun scheduledChargesOnUsageInvoices(): Optional<ScheduledChargesOnUsageInvoices> =
+            Optional.ofNullable(
+                scheduledChargesOnUsageInvoices.getNullable("scheduled_charges_on_usage_invoices")
             )
 
         /**
@@ -220,6 +235,17 @@ private constructor(
             JsonField<CustomerBillingProviderConfiguration> = customerBillingProviderConfiguration
 
         /**
+         * Determines which scheduled and commit charges to consolidate onto the Contract's usage
+         * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
+         * consolidation to occur. This field cannot be modified after a Contract has been created.
+         * If this field is omitted, charges will appear on a separate invoice from usage charges.
+         */
+        @JsonProperty("scheduled_charges_on_usage_invoices")
+        @ExcludeMissing
+        fun _scheduledChargesOnUsageInvoices(): JsonField<ScheduledChargesOnUsageInvoices> =
+            scheduledChargesOnUsageInvoices
+
+        /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
          * previously used uniqueness key, a new record will not be created and the request will
          * fail with a 409 error.
@@ -247,6 +273,7 @@ private constructor(
             archivedAt()
             customFields().ifPresent { it.validate() }
             customerBillingProviderConfiguration().ifPresent { it.validate() }
+            scheduledChargesOnUsageInvoices()
             uniquenessKey()
             validated = true
         }
@@ -270,6 +297,9 @@ private constructor(
             private var customerBillingProviderConfiguration:
                 JsonField<CustomerBillingProviderConfiguration> =
                 JsonMissing.of()
+            private var scheduledChargesOnUsageInvoices:
+                JsonField<ScheduledChargesOnUsageInvoices> =
+                JsonMissing.of()
             private var uniquenessKey: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -283,6 +313,7 @@ private constructor(
                 archivedAt = data.archivedAt
                 customFields = data.customFields
                 customerBillingProviderConfiguration = data.customerBillingProviderConfiguration
+                scheduledChargesOnUsageInvoices = data.scheduledChargesOnUsageInvoices
                 uniquenessKey = data.uniquenessKey
                 additionalProperties = data.additionalProperties.toMutableMap()
             }
@@ -363,6 +394,28 @@ private constructor(
             }
 
             /**
+             * Determines which scheduled and commit charges to consolidate onto the Contract's
+             * usage invoice. The charge's `timestamp` must match the usage invoice's
+             * `ending_before` date for consolidation to occur. This field cannot be modified after
+             * a Contract has been created. If this field is omitted, charges will appear on a
+             * separate invoice from usage charges.
+             */
+            fun scheduledChargesOnUsageInvoices(
+                scheduledChargesOnUsageInvoices: ScheduledChargesOnUsageInvoices
+            ) = scheduledChargesOnUsageInvoices(JsonField.of(scheduledChargesOnUsageInvoices))
+
+            /**
+             * Determines which scheduled and commit charges to consolidate onto the Contract's
+             * usage invoice. The charge's `timestamp` must match the usage invoice's
+             * `ending_before` date for consolidation to occur. This field cannot be modified after
+             * a Contract has been created. If this field is omitted, charges will appear on a
+             * separate invoice from usage charges.
+             */
+            fun scheduledChargesOnUsageInvoices(
+                scheduledChargesOnUsageInvoices: JsonField<ScheduledChargesOnUsageInvoices>
+            ) = apply { this.scheduledChargesOnUsageInvoices = scheduledChargesOnUsageInvoices }
+
+            /**
              * Prevents the creation of duplicates. If a request to create a record is made with a
              * previously used uniqueness key, a new record will not be created and the request will
              * fail with a 409 error.
@@ -407,6 +460,7 @@ private constructor(
                     archivedAt,
                     customFields,
                     customerBillingProviderConfiguration,
+                    scheduledChargesOnUsageInvoices,
                     uniquenessKey,
                     additionalProperties.toImmutable(),
                 )
@@ -1625,22 +1679,77 @@ private constructor(
                 "CustomerBillingProviderConfiguration{billingProvider=$billingProvider, deliveryMethod=$deliveryMethod, additionalProperties=$additionalProperties}"
         }
 
+        class ScheduledChargesOnUsageInvoices
+        @JsonCreator
+        private constructor(
+            private val value: JsonField<String>,
+        ) : Enum {
+
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val ALL = of("ALL")
+
+                @JvmStatic
+                fun of(value: String) = ScheduledChargesOnUsageInvoices(JsonField.of(value))
+            }
+
+            enum class Known {
+                ALL,
+            }
+
+            enum class Value {
+                ALL,
+                _UNKNOWN,
+            }
+
+            fun value(): Value =
+                when (this) {
+                    ALL -> Value.ALL
+                    else -> Value._UNKNOWN
+                }
+
+            fun known(): Known =
+                when (this) {
+                    ALL -> Known.ALL
+                    else ->
+                        throw MetronomeInvalidDataException(
+                            "Unknown ScheduledChargesOnUsageInvoices: $value"
+                        )
+                }
+
+            fun asString(): String = _value().asStringOrThrow()
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is ScheduledChargesOnUsageInvoices && value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Data && id == other.id && amendments == other.amendments && current == other.current && customerId == other.customerId && initial == other.initial && archivedAt == other.archivedAt && customFields == other.customFields && customerBillingProviderConfiguration == other.customerBillingProviderConfiguration && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && id == other.id && amendments == other.amendments && current == other.current && customerId == other.customerId && initial == other.initial && archivedAt == other.archivedAt && customFields == other.customFields && customerBillingProviderConfiguration == other.customerBillingProviderConfiguration && scheduledChargesOnUsageInvoices == other.scheduledChargesOnUsageInvoices && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, amendments, current, customerId, initial, archivedAt, customFields, customerBillingProviderConfiguration, uniquenessKey, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, amendments, current, customerId, initial, archivedAt, customFields, customerBillingProviderConfiguration, scheduledChargesOnUsageInvoices, uniquenessKey, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Data{id=$id, amendments=$amendments, current=$current, customerId=$customerId, initial=$initial, archivedAt=$archivedAt, customFields=$customFields, customerBillingProviderConfiguration=$customerBillingProviderConfiguration, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
+            "Data{id=$id, amendments=$amendments, current=$current, customerId=$customerId, initial=$initial, archivedAt=$archivedAt, customFields=$customFields, customerBillingProviderConfiguration=$customerBillingProviderConfiguration, scheduledChargesOnUsageInvoices=$scheduledChargesOnUsageInvoices, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

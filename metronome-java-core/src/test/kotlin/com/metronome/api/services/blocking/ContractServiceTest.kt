@@ -439,6 +439,9 @@ class ContractServiceTest {
                                 .build()
                         )
                     )
+                    .scheduledChargesOnUsageInvoices(
+                        ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
+                    )
                     .totalContractValue(0.0)
                     .transition(
                         ContractCreateParams.Transition.builder()

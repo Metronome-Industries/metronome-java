@@ -439,6 +439,9 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
+                .scheduledChargesOnUsageInvoices(
+                    ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
+                )
                 .totalContractValue(0.0)
                 .transition(
                     ContractCreateParams.Transition.builder()
@@ -865,6 +868,9 @@ class ErrorHandlingTest {
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .build()
                     )
+                )
+                .scheduledChargesOnUsageInvoices(
+                    ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
                 )
                 .totalContractValue(0.0)
                 .transition(
@@ -1294,6 +1300,9 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
+                .scheduledChargesOnUsageInvoices(
+                    ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
+                )
                 .totalContractValue(0.0)
                 .transition(
                     ContractCreateParams.Transition.builder()
@@ -1721,6 +1730,9 @@ class ErrorHandlingTest {
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .build()
                     )
+                )
+                .scheduledChargesOnUsageInvoices(
+                    ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
                 )
                 .totalContractValue(0.0)
                 .transition(
@@ -2154,6 +2166,9 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
+                .scheduledChargesOnUsageInvoices(
+                    ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
+                )
                 .totalContractValue(0.0)
                 .transition(
                     ContractCreateParams.Transition.builder()
@@ -2581,6 +2596,9 @@ class ErrorHandlingTest {
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .build()
                     )
+                )
+                .scheduledChargesOnUsageInvoices(
+                    ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
                 )
                 .totalContractValue(0.0)
                 .transition(
@@ -3014,6 +3032,9 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
+                .scheduledChargesOnUsageInvoices(
+                    ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
+                )
                 .totalContractValue(0.0)
                 .transition(
                     ContractCreateParams.Transition.builder()
@@ -3441,6 +3462,9 @@ class ErrorHandlingTest {
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .build()
                     )
+                )
+                .scheduledChargesOnUsageInvoices(
+                    ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
                 )
                 .totalContractValue(0.0)
                 .transition(
@@ -3873,6 +3897,9 @@ class ErrorHandlingTest {
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .build()
                     )
+                )
+                .scheduledChargesOnUsageInvoices(
+                    ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
                 )
                 .totalContractValue(0.0)
                 .transition(
@@ -4307,6 +4334,9 @@ class ErrorHandlingTest {
                             .build()
                     )
                 )
+                .scheduledChargesOnUsageInvoices(
+                    ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
+                )
                 .totalContractValue(0.0)
                 .transition(
                     ContractCreateParams.Transition.builder()
@@ -4733,6 +4763,9 @@ class ErrorHandlingTest {
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .build()
                     )
+                )
+                .scheduledChargesOnUsageInvoices(
+                    ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
                 )
                 .totalContractValue(0.0)
                 .transition(

@@ -85,6 +85,15 @@ constructor(
 
     fun scheduledCharges(): Optional<List<ScheduledCharge>> = body.scheduledCharges()
 
+    /**
+     * Determines which scheduled and commit charges to consolidate onto the Contract's usage
+     * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
+     * consolidation to occur. This field cannot be modified after a Contract has been created. If
+     * this field is omitted, charges will appear on a separate invoice from usage charges.
+     */
+    fun scheduledChargesOnUsageInvoices(): Optional<ScheduledChargesOnUsageInvoices> =
+        body.scheduledChargesOnUsageInvoices()
+
     /** This field's availability is dependent on your client's configuration. */
     fun totalContractValue(): Optional<Double> = body.totalContractValue()
 
@@ -155,6 +164,15 @@ constructor(
     fun _salesforceOpportunityId(): JsonField<String> = body._salesforceOpportunityId()
 
     fun _scheduledCharges(): JsonField<List<ScheduledCharge>> = body._scheduledCharges()
+
+    /**
+     * Determines which scheduled and commit charges to consolidate onto the Contract's usage
+     * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
+     * consolidation to occur. This field cannot be modified after a Contract has been created. If
+     * this field is omitted, charges will appear on a separate invoice from usage charges.
+     */
+    fun _scheduledChargesOnUsageInvoices(): JsonField<ScheduledChargesOnUsageInvoices> =
+        body._scheduledChargesOnUsageInvoices()
 
     /** This field's availability is dependent on your client's configuration. */
     fun _totalContractValue(): JsonField<Double> = body._totalContractValue()
@@ -248,6 +266,10 @@ constructor(
         @JsonProperty("scheduled_charges")
         @ExcludeMissing
         private val scheduledCharges: JsonField<List<ScheduledCharge>> = JsonMissing.of(),
+        @JsonProperty("scheduled_charges_on_usage_invoices")
+        @ExcludeMissing
+        private val scheduledChargesOnUsageInvoices: JsonField<ScheduledChargesOnUsageInvoices> =
+            JsonMissing.of(),
         @JsonProperty("total_contract_value")
         @ExcludeMissing
         private val totalContractValue: JsonField<Double> = JsonMissing.of(),
@@ -337,6 +359,17 @@ constructor(
 
         fun scheduledCharges(): Optional<List<ScheduledCharge>> =
             Optional.ofNullable(scheduledCharges.getNullable("scheduled_charges"))
+
+        /**
+         * Determines which scheduled and commit charges to consolidate onto the Contract's usage
+         * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
+         * consolidation to occur. This field cannot be modified after a Contract has been created.
+         * If this field is omitted, charges will appear on a separate invoice from usage charges.
+         */
+        fun scheduledChargesOnUsageInvoices(): Optional<ScheduledChargesOnUsageInvoices> =
+            Optional.ofNullable(
+                scheduledChargesOnUsageInvoices.getNullable("scheduled_charges_on_usage_invoices")
+            )
 
         /** This field's availability is dependent on your client's configuration. */
         fun totalContractValue(): Optional<Double> =
@@ -446,6 +479,17 @@ constructor(
         @ExcludeMissing
         fun _scheduledCharges(): JsonField<List<ScheduledCharge>> = scheduledCharges
 
+        /**
+         * Determines which scheduled and commit charges to consolidate onto the Contract's usage
+         * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
+         * consolidation to occur. This field cannot be modified after a Contract has been created.
+         * If this field is omitted, charges will appear on a separate invoice from usage charges.
+         */
+        @JsonProperty("scheduled_charges_on_usage_invoices")
+        @ExcludeMissing
+        fun _scheduledChargesOnUsageInvoices(): JsonField<ScheduledChargesOnUsageInvoices> =
+            scheduledChargesOnUsageInvoices
+
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("total_contract_value")
         @ExcludeMissing
@@ -502,6 +546,7 @@ constructor(
             resellerRoyalties().ifPresent { it.forEach { it.validate() } }
             salesforceOpportunityId()
             scheduledCharges().ifPresent { it.forEach { it.validate() } }
+            scheduledChargesOnUsageInvoices()
             totalContractValue()
             transition().ifPresent { it.validate() }
             uniquenessKey()
@@ -541,6 +586,9 @@ constructor(
             private var resellerRoyalties: JsonField<MutableList<ResellerRoyalty>>? = null
             private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
             private var scheduledCharges: JsonField<MutableList<ScheduledCharge>>? = null
+            private var scheduledChargesOnUsageInvoices:
+                JsonField<ScheduledChargesOnUsageInvoices> =
+                JsonMissing.of()
             private var totalContractValue: JsonField<Double> = JsonMissing.of()
             private var transition: JsonField<Transition> = JsonMissing.of()
             private var uniquenessKey: JsonField<String> = JsonMissing.of()
@@ -571,6 +619,7 @@ constructor(
                 resellerRoyalties = contractCreateBody.resellerRoyalties.map { it.toMutableList() }
                 salesforceOpportunityId = contractCreateBody.salesforceOpportunityId
                 scheduledCharges = contractCreateBody.scheduledCharges.map { it.toMutableList() }
+                scheduledChargesOnUsageInvoices = contractCreateBody.scheduledChargesOnUsageInvoices
                 totalContractValue = contractCreateBody.totalContractValue
                 transition = contractCreateBody.transition
                 uniquenessKey = contractCreateBody.uniquenessKey
@@ -827,6 +876,28 @@ constructor(
                     }
             }
 
+            /**
+             * Determines which scheduled and commit charges to consolidate onto the Contract's
+             * usage invoice. The charge's `timestamp` must match the usage invoice's
+             * `ending_before` date for consolidation to occur. This field cannot be modified after
+             * a Contract has been created. If this field is omitted, charges will appear on a
+             * separate invoice from usage charges.
+             */
+            fun scheduledChargesOnUsageInvoices(
+                scheduledChargesOnUsageInvoices: ScheduledChargesOnUsageInvoices
+            ) = scheduledChargesOnUsageInvoices(JsonField.of(scheduledChargesOnUsageInvoices))
+
+            /**
+             * Determines which scheduled and commit charges to consolidate onto the Contract's
+             * usage invoice. The charge's `timestamp` must match the usage invoice's
+             * `ending_before` date for consolidation to occur. This field cannot be modified after
+             * a Contract has been created. If this field is omitted, charges will appear on a
+             * separate invoice from usage charges.
+             */
+            fun scheduledChargesOnUsageInvoices(
+                scheduledChargesOnUsageInvoices: JsonField<ScheduledChargesOnUsageInvoices>
+            ) = apply { this.scheduledChargesOnUsageInvoices = scheduledChargesOnUsageInvoices }
+
             /** This field's availability is dependent on your client's configuration. */
             fun totalContractValue(totalContractValue: Double) =
                 totalContractValue(JsonField.of(totalContractValue))
@@ -912,6 +983,7 @@ constructor(
                     (resellerRoyalties ?: JsonMissing.of()).map { it.toImmutable() },
                     salesforceOpportunityId,
                     (scheduledCharges ?: JsonMissing.of()).map { it.toImmutable() },
+                    scheduledChargesOnUsageInvoices,
                     totalContractValue,
                     transition,
                     uniquenessKey,
@@ -926,17 +998,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractCreateBody && customerId == other.customerId && startingAt == other.startingAt && billingProviderConfiguration == other.billingProviderConfiguration && commits == other.commits && credits == other.credits && customFields == other.customFields && discounts == other.discounts && endingBefore == other.endingBefore && multiplierOverridePrioritization == other.multiplierOverridePrioritization && name == other.name && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && overrides == other.overrides && professionalServices == other.professionalServices && rateCardAlias == other.rateCardAlias && rateCardId == other.rateCardId && resellerRoyalties == other.resellerRoyalties && salesforceOpportunityId == other.salesforceOpportunityId && scheduledCharges == other.scheduledCharges && totalContractValue == other.totalContractValue && transition == other.transition && uniquenessKey == other.uniquenessKey && usageFilter == other.usageFilter && usageStatementSchedule == other.usageStatementSchedule && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ContractCreateBody && customerId == other.customerId && startingAt == other.startingAt && billingProviderConfiguration == other.billingProviderConfiguration && commits == other.commits && credits == other.credits && customFields == other.customFields && discounts == other.discounts && endingBefore == other.endingBefore && multiplierOverridePrioritization == other.multiplierOverridePrioritization && name == other.name && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && overrides == other.overrides && professionalServices == other.professionalServices && rateCardAlias == other.rateCardAlias && rateCardId == other.rateCardId && resellerRoyalties == other.resellerRoyalties && salesforceOpportunityId == other.salesforceOpportunityId && scheduledCharges == other.scheduledCharges && scheduledChargesOnUsageInvoices == other.scheduledChargesOnUsageInvoices && totalContractValue == other.totalContractValue && transition == other.transition && uniquenessKey == other.uniquenessKey && usageFilter == other.usageFilter && usageStatementSchedule == other.usageStatementSchedule && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(customerId, startingAt, billingProviderConfiguration, commits, credits, customFields, discounts, endingBefore, multiplierOverridePrioritization, name, netPaymentTermsDays, netsuiteSalesOrderId, overrides, professionalServices, rateCardAlias, rateCardId, resellerRoyalties, salesforceOpportunityId, scheduledCharges, totalContractValue, transition, uniquenessKey, usageFilter, usageStatementSchedule, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(customerId, startingAt, billingProviderConfiguration, commits, credits, customFields, discounts, endingBefore, multiplierOverridePrioritization, name, netPaymentTermsDays, netsuiteSalesOrderId, overrides, professionalServices, rateCardAlias, rateCardId, resellerRoyalties, salesforceOpportunityId, scheduledCharges, scheduledChargesOnUsageInvoices, totalContractValue, transition, uniquenessKey, usageFilter, usageStatementSchedule, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractCreateBody{customerId=$customerId, startingAt=$startingAt, billingProviderConfiguration=$billingProviderConfiguration, commits=$commits, credits=$credits, customFields=$customFields, discounts=$discounts, endingBefore=$endingBefore, multiplierOverridePrioritization=$multiplierOverridePrioritization, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, overrides=$overrides, professionalServices=$professionalServices, rateCardAlias=$rateCardAlias, rateCardId=$rateCardId, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledCharges=$scheduledCharges, totalContractValue=$totalContractValue, transition=$transition, uniquenessKey=$uniquenessKey, usageFilter=$usageFilter, usageStatementSchedule=$usageStatementSchedule, additionalProperties=$additionalProperties}"
+            "ContractCreateBody{customerId=$customerId, startingAt=$startingAt, billingProviderConfiguration=$billingProviderConfiguration, commits=$commits, credits=$credits, customFields=$customFields, discounts=$discounts, endingBefore=$endingBefore, multiplierOverridePrioritization=$multiplierOverridePrioritization, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, overrides=$overrides, professionalServices=$professionalServices, rateCardAlias=$rateCardAlias, rateCardId=$rateCardId, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledCharges=$scheduledCharges, scheduledChargesOnUsageInvoices=$scheduledChargesOnUsageInvoices, totalContractValue=$totalContractValue, transition=$transition, uniquenessKey=$uniquenessKey, usageFilter=$usageFilter, usageStatementSchedule=$usageStatementSchedule, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -1129,6 +1201,26 @@ constructor(
         fun addScheduledCharge(scheduledCharge: ScheduledCharge) = apply {
             body.addScheduledCharge(scheduledCharge)
         }
+
+        /**
+         * Determines which scheduled and commit charges to consolidate onto the Contract's usage
+         * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
+         * consolidation to occur. This field cannot be modified after a Contract has been created.
+         * If this field is omitted, charges will appear on a separate invoice from usage charges.
+         */
+        fun scheduledChargesOnUsageInvoices(
+            scheduledChargesOnUsageInvoices: ScheduledChargesOnUsageInvoices
+        ) = apply { body.scheduledChargesOnUsageInvoices(scheduledChargesOnUsageInvoices) }
+
+        /**
+         * Determines which scheduled and commit charges to consolidate onto the Contract's usage
+         * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
+         * consolidation to occur. This field cannot be modified after a Contract has been created.
+         * If this field is omitted, charges will appear on a separate invoice from usage charges.
+         */
+        fun scheduledChargesOnUsageInvoices(
+            scheduledChargesOnUsageInvoices: JsonField<ScheduledChargesOnUsageInvoices>
+        ) = apply { body.scheduledChargesOnUsageInvoices(scheduledChargesOnUsageInvoices) }
 
         /** This field's availability is dependent on your client's configuration. */
         fun totalContractValue(totalContractValue: Double) = apply {
@@ -8970,6 +9062,60 @@ constructor(
 
         override fun toString() =
             "ScheduledCharge{productId=$productId, schedule=$schedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, additionalProperties=$additionalProperties}"
+    }
+
+    class ScheduledChargesOnUsageInvoices
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
+
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val ALL = of("ALL")
+
+            @JvmStatic fun of(value: String) = ScheduledChargesOnUsageInvoices(JsonField.of(value))
+        }
+
+        enum class Known {
+            ALL,
+        }
+
+        enum class Value {
+            ALL,
+            _UNKNOWN,
+        }
+
+        fun value(): Value =
+            when (this) {
+                ALL -> Value.ALL
+                else -> Value._UNKNOWN
+            }
+
+        fun known(): Known =
+            when (this) {
+                ALL -> Known.ALL
+                else ->
+                    throw MetronomeInvalidDataException(
+                        "Unknown ScheduledChargesOnUsageInvoices: $value"
+                    )
+            }
+
+        fun asString(): String = _value().asStringOrThrow()
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is ScheduledChargesOnUsageInvoices && value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
     }
 
     @NoAutoDetect
