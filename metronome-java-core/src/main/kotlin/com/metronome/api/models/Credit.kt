@@ -21,6 +21,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.getOrThrow
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
@@ -587,9 +588,9 @@ private constructor(
 
         fun build(): Credit =
             Credit(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(product) { "`product` is required but was not set" },
-                checkNotNull(type) { "`type` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("product", product),
+                checkRequired("type", type),
                 accessSchedule,
                 (applicableContractIds ?: JsonMissing.of()).map { it.toImmutable() },
                 (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
@@ -694,8 +695,8 @@ private constructor(
 
             fun build(): Product =
                 Product(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("id", id),
+                    checkRequired("name", name),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -839,10 +840,7 @@ private constructor(
             }
 
             fun build(): Contract =
-                Contract(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    additionalProperties.toImmutable()
-                )
+                Contract(checkRequired("id", id), additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -1364,10 +1362,10 @@ private constructor(
 
                 fun build(): CreditSegmentStartLedgerEntry =
                     CreditSegmentStartLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(segmentId) { "`segmentId` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("segmentId", segmentId),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -1586,11 +1584,11 @@ private constructor(
 
                 fun build(): CreditAutomatedInvoiceDeductionLedgerEntry =
                     CreditAutomatedInvoiceDeductionLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
-                        checkNotNull(segmentId) { "`segmentId` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("invoiceId", invoiceId),
+                        checkRequired("segmentId", segmentId),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -1794,10 +1792,10 @@ private constructor(
 
                 fun build(): CreditExpirationLedgerEntry =
                     CreditExpirationLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(segmentId) { "`segmentId` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("segmentId", segmentId),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -2012,11 +2010,11 @@ private constructor(
 
                 fun build(): CreditCanceledLedgerEntry =
                     CreditCanceledLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
-                        checkNotNull(segmentId) { "`segmentId` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("invoiceId", invoiceId),
+                        checkRequired("segmentId", segmentId),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -2231,11 +2229,11 @@ private constructor(
 
                 fun build(): CreditCreditedLedgerEntry =
                     CreditCreditedLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
-                        checkNotNull(segmentId) { "`segmentId` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("invoiceId", invoiceId),
+                        checkRequired("segmentId", segmentId),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -2432,10 +2430,10 @@ private constructor(
 
                 fun build(): CreditManualLedgerEntry =
                     CreditManualLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(reason) { "`reason` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("reason", reason),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }

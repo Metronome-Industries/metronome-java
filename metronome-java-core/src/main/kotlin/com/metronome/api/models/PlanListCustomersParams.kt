@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.metronome.api.core.Enum
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -238,7 +239,7 @@ constructor(
 
         fun build(): PlanListCustomersParams =
             PlanListCustomersParams(
-                checkNotNull(planId) { "`planId` is required but was not set" },
+                checkRequired("planId", planId),
                 limit,
                 nextPage,
                 status,

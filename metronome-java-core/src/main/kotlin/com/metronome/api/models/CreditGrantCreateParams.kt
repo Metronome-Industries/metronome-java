@@ -20,6 +20,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.getOrThrow
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
@@ -572,12 +573,12 @@ constructor(
 
             fun build(): CreditGrantCreateBody =
                 CreditGrantCreateBody(
-                    checkNotNull(customerId) { "`customerId` is required but was not set" },
-                    checkNotNull(expiresAt) { "`expiresAt` is required but was not set" },
-                    checkNotNull(grantAmount) { "`grantAmount` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(paidAmount) { "`paidAmount` is required but was not set" },
-                    checkNotNull(priority) { "`priority` is required but was not set" },
+                    checkRequired("customerId", customerId),
+                    checkRequired("expiresAt", expiresAt),
+                    checkRequired("grantAmount", grantAmount),
+                    checkRequired("name", name),
+                    checkRequired("paidAmount", paidAmount),
+                    checkRequired("priority", priority),
                     creditGrantType,
                     customFields,
                     effectiveAt,
@@ -977,8 +978,8 @@ constructor(
 
             fun build(): GrantAmount =
                 GrantAmount(
-                    checkNotNull(amount) { "`amount` is required but was not set" },
-                    checkNotNull(creditTypeId) { "`creditTypeId` is required but was not set" },
+                    checkRequired("amount", amount),
+                    checkRequired("creditTypeId", creditTypeId),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -1097,8 +1098,8 @@ constructor(
 
             fun build(): PaidAmount =
                 PaidAmount(
-                    checkNotNull(amount) { "`amount` is required but was not set" },
-                    checkNotNull(creditTypeId) { "`creditTypeId` is required but was not set" },
+                    checkRequired("amount", amount),
+                    checkRequired("creditTypeId", creditTypeId),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -1346,9 +1347,9 @@ constructor(
 
             fun build(): RolloverSettings =
                 RolloverSettings(
-                    checkNotNull(expiresAt) { "`expiresAt` is required but was not set" },
-                    checkNotNull(priority) { "`priority` is required but was not set" },
-                    checkNotNull(rolloverAmount) { "`rolloverAmount` is required but was not set" },
+                    checkRequired("expiresAt", expiresAt),
+                    checkRequired("priority", priority),
+                    checkRequired("rolloverAmount", rolloverAmount),
                     additionalProperties.toImmutable(),
                 )
         }

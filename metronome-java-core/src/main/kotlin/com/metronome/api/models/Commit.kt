@@ -21,6 +21,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.getOrThrow
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
@@ -771,9 +772,9 @@ private constructor(
 
         fun build(): Commit =
             Commit(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(product) { "`product` is required but was not set" },
-                checkNotNull(type) { "`type` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("product", product),
+                checkRequired("type", type),
                 accessSchedule,
                 amount,
                 (applicableContractIds ?: JsonMissing.of()).map { it.toImmutable() },
@@ -883,8 +884,8 @@ private constructor(
 
             fun build(): Product =
                 Product(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("id", id),
+                    checkRequired("name", name),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -1034,10 +1035,7 @@ private constructor(
             }
 
             fun build(): Contract =
-                Contract(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    additionalProperties.toImmutable()
-                )
+                Contract(checkRequired("id", id), additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -1205,10 +1203,7 @@ private constructor(
             }
 
             fun build(): InvoiceContract =
-                InvoiceContract(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    additionalProperties.toImmutable()
-                )
+                InvoiceContract(checkRequired("id", id), additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -1977,10 +1972,10 @@ private constructor(
 
                 fun build(): PrepaidCommitSegmentStartLedgerEntry =
                     PrepaidCommitSegmentStartLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(segmentId) { "`segmentId` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("segmentId", segmentId),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -2199,11 +2194,11 @@ private constructor(
 
                 fun build(): PrepaidCommitAutomatedInvoiceDeductionLedgerEntry =
                     PrepaidCommitAutomatedInvoiceDeductionLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
-                        checkNotNull(segmentId) { "`segmentId` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("invoiceId", invoiceId),
+                        checkRequired("segmentId", segmentId),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -2427,13 +2422,11 @@ private constructor(
 
                 fun build(): PrepaidCommitRolloverLedgerEntry =
                     PrepaidCommitRolloverLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(newContractId) {
-                            "`newContractId` is required but was not set"
-                        },
-                        checkNotNull(segmentId) { "`segmentId` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("newContractId", newContractId),
+                        checkRequired("segmentId", segmentId),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -2634,10 +2627,10 @@ private constructor(
 
                 fun build(): PrepaidCommitExpirationLedgerEntry =
                     PrepaidCommitExpirationLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(segmentId) { "`segmentId` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("segmentId", segmentId),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -2854,11 +2847,11 @@ private constructor(
 
                 fun build(): PrepaidCommitCanceledLedgerEntry =
                     PrepaidCommitCanceledLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
-                        checkNotNull(segmentId) { "`segmentId` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("invoiceId", invoiceId),
+                        checkRequired("segmentId", segmentId),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -3075,11 +3068,11 @@ private constructor(
 
                 fun build(): PrepaidCommitCreditedLedgerEntry =
                     PrepaidCommitCreditedLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
-                        checkNotNull(segmentId) { "`segmentId` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("invoiceId", invoiceId),
+                        checkRequired("segmentId", segmentId),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -3264,9 +3257,9 @@ private constructor(
 
                 fun build(): PostpaidCommitInitialBalanceLedgerEntry =
                     PostpaidCommitInitialBalanceLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -3486,11 +3479,11 @@ private constructor(
 
                 fun build(): PostpaidCommitAutomatedInvoiceDeductionLedgerEntry =
                     PostpaidCommitAutomatedInvoiceDeductionLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
-                        checkNotNull(segmentId) { "`segmentId` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("invoiceId", invoiceId),
+                        checkRequired("segmentId", segmentId),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -3714,13 +3707,11 @@ private constructor(
 
                 fun build(): PostpaidCommitRolloverLedgerEntry =
                     PostpaidCommitRolloverLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(newContractId) {
-                            "`newContractId` is required but was not set"
-                        },
-                        checkNotNull(segmentId) { "`segmentId` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("newContractId", newContractId),
+                        checkRequired("segmentId", segmentId),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -3921,10 +3912,10 @@ private constructor(
 
                 fun build(): PostpaidCommitTrueupLedgerEntry =
                     PostpaidCommitTrueupLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("invoiceId", invoiceId),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -4122,10 +4113,10 @@ private constructor(
 
                 fun build(): PrepaidCommitManualLedgerEntry =
                     PrepaidCommitManualLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(reason) { "`reason` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("reason", reason),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -4324,10 +4315,10 @@ private constructor(
 
                 fun build(): PostpaidCommitManualLedgerEntry =
                     PostpaidCommitManualLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(reason) { "`reason` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("reason", reason),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -4512,9 +4503,9 @@ private constructor(
 
                 fun build(): PostpaidCommitExpirationLedgerEntry =
                     PostpaidCommitExpirationLedgerEntry(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(timestamp) { "`timestamp` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("timestamp", timestamp),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -4735,8 +4726,8 @@ private constructor(
 
             fun build(): RolledOverFrom =
                 RolledOverFrom(
-                    checkNotNull(commitId) { "`commitId` is required but was not set" },
-                    checkNotNull(contractId) { "`contractId` is required but was not set" },
+                    checkRequired("commitId", commitId),
+                    checkRequired("contractId", contractId),
                     additionalProperties.toImmutable(),
                 )
         }

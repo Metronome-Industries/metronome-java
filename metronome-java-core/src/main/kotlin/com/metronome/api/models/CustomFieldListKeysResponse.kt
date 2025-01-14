@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -121,9 +122,8 @@ private constructor(
 
         fun build(): CustomFieldListKeysResponse =
             CustomFieldListKeysResponse(
-                checkNotNull(data) { "`data` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(nextPage) { "`nextPage` is required but was not set" },
+                checkRequired("data", data).map { it.toImmutable() },
+                checkRequired("nextPage", nextPage),
                 additionalProperties.toImmutable(),
             )
     }
@@ -232,11 +232,9 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    checkNotNull(enforceUniqueness) {
-                        "`enforceUniqueness` is required but was not set"
-                    },
-                    checkNotNull(entity) { "`entity` is required but was not set" },
-                    checkNotNull(key) { "`key` is required but was not set" },
+                    checkRequired("enforceUniqueness", enforceUniqueness),
+                    checkRequired("entity", entity),
+                    checkRequired("key", key),
                     additionalProperties.toImmutable(),
                 )
         }

@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
@@ -152,9 +153,9 @@ private constructor(
 
         fun build(): Discount =
             Discount(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(product) { "`product` is required but was not set" },
-                checkNotNull(schedule) { "`schedule` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("product", product),
+                checkRequired("schedule", schedule),
                 name,
                 netsuiteSalesOrderId,
                 additionalProperties.toImmutable(),
@@ -246,8 +247,8 @@ private constructor(
 
             fun build(): Product =
                 Product(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("id", id),
+                    checkRequired("name", name),
                     additionalProperties.toImmutable(),
                 )
         }

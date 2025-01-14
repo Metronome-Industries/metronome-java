@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
@@ -231,12 +232,12 @@ private constructor(
 
         fun build(): CustomerPlanListResponse =
             CustomerPlanListResponse(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(customFields) { "`customFields` is required but was not set" },
-                checkNotNull(planDescription) { "`planDescription` is required but was not set" },
-                checkNotNull(planId) { "`planId` is required but was not set" },
-                checkNotNull(planName) { "`planName` is required but was not set" },
-                checkNotNull(startingOn) { "`startingOn` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("customFields", customFields),
+                checkRequired("planDescription", planDescription),
+                checkRequired("planId", planId),
+                checkRequired("planName", planName),
+                checkRequired("startingOn", startingOn),
                 endingBefore,
                 netPaymentTermsDays,
                 trialInfo,
@@ -431,9 +432,8 @@ private constructor(
 
             fun build(): TrialInfo =
                 TrialInfo(
-                    checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
-                    checkNotNull(spendingCaps) { "`spendingCaps` is required but was not set" }
-                        .map { it.toImmutable() },
+                    checkRequired("endingBefore", endingBefore),
+                    checkRequired("spendingCaps", spendingCaps).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -551,11 +551,9 @@ private constructor(
 
                 fun build(): SpendingCap =
                     SpendingCap(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(amountRemaining) {
-                            "`amountRemaining` is required but was not set"
-                        },
-                        checkNotNull(creditType) { "`creditType` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("amountRemaining", amountRemaining),
+                        checkRequired("creditType", creditType),
                         additionalProperties.toImmutable(),
                     )
             }

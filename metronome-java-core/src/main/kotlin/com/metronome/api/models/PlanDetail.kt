@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
@@ -224,9 +225,9 @@ private constructor(
 
         fun build(): PlanDetail =
             PlanDetail(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(customFields) { "`customFields` is required but was not set" },
-                checkNotNull(name) { "`name` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("customFields", customFields),
+                checkRequired("name", name),
                 (creditGrants ?: JsonMissing.of()).map { it.toImmutable() },
                 description,
                 (minimums ?: JsonMissing.of()).map { it.toImmutable() },
@@ -565,20 +566,14 @@ private constructor(
 
             fun build(): CreditGrant =
                 CreditGrant(
-                    checkNotNull(amountGranted) { "`amountGranted` is required but was not set" },
-                    checkNotNull(amountGrantedCreditType) {
-                        "`amountGrantedCreditType` is required but was not set"
-                    },
-                    checkNotNull(amountPaid) { "`amountPaid` is required but was not set" },
-                    checkNotNull(amountPaidCreditType) {
-                        "`amountPaidCreditType` is required but was not set"
-                    },
-                    checkNotNull(effectiveDuration) {
-                        "`effectiveDuration` is required but was not set"
-                    },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(priority) { "`priority` is required but was not set" },
-                    checkNotNull(sendInvoice) { "`sendInvoice` is required but was not set" },
+                    checkRequired("amountGranted", amountGranted),
+                    checkRequired("amountGrantedCreditType", amountGrantedCreditType),
+                    checkRequired("amountPaid", amountPaid),
+                    checkRequired("amountPaidCreditType", amountPaidCreditType),
+                    checkRequired("effectiveDuration", effectiveDuration),
+                    checkRequired("name", name),
+                    checkRequired("priority", priority),
+                    checkRequired("sendInvoice", sendInvoice),
                     reason,
                     recurrenceDuration,
                     recurrenceInterval,
@@ -741,10 +736,10 @@ private constructor(
 
             fun build(): Minimum =
                 Minimum(
-                    checkNotNull(creditType) { "`creditType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(startPeriod) { "`startPeriod` is required but was not set" },
-                    checkNotNull(value) { "`value` is required but was not set" },
+                    checkRequired("creditType", creditType),
+                    checkRequired("name", name),
+                    checkRequired("startPeriod", startPeriod),
+                    checkRequired("value", value),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -915,12 +910,10 @@ private constructor(
 
             fun build(): OverageRate =
                 OverageRate(
-                    checkNotNull(creditType) { "`creditType` is required but was not set" },
-                    checkNotNull(fiatCreditType) { "`fiatCreditType` is required but was not set" },
-                    checkNotNull(startPeriod) { "`startPeriod` is required but was not set" },
-                    checkNotNull(toFiatConversionFactor) {
-                        "`toFiatConversionFactor` is required but was not set"
-                    },
+                    checkRequired("creditType", creditType),
+                    checkRequired("fiatCreditType", fiatCreditType),
+                    checkRequired("startPeriod", startPeriod),
+                    checkRequired("toFiatConversionFactor", toFiatConversionFactor),
                     additionalProperties.toImmutable(),
                 )
         }

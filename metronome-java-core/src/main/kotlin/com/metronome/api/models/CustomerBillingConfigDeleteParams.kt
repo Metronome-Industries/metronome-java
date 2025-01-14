@@ -7,6 +7,7 @@ import com.metronome.api.core.Enum
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.toImmutable
@@ -209,10 +210,8 @@ constructor(
 
         fun build(): CustomerBillingConfigDeleteParams =
             CustomerBillingConfigDeleteParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(billingProviderType) {
-                    "`billingProviderType` is required but was not set"
-                },
+                checkRequired("customerId", customerId),
+                checkRequired("billingProviderType", billingProviderType),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),

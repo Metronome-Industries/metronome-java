@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
@@ -139,9 +140,8 @@ private constructor(
 
         fun build(): BaseUsageFilter =
             BaseUsageFilter(
-                checkNotNull(groupKey) { "`groupKey` is required but was not set" },
-                checkNotNull(groupValues) { "`groupValues` is required but was not set" }
-                    .map { it.toImmutable() },
+                checkRequired("groupKey", groupKey),
+                checkRequired("groupValues", groupValues).map { it.toImmutable() },
                 startingAt,
                 additionalProperties.toImmutable(),
             )

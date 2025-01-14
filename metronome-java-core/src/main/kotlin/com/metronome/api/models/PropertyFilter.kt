@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
@@ -235,7 +236,7 @@ private constructor(
 
         fun build(): PropertyFilter =
             PropertyFilter(
-                checkNotNull(name) { "`name` is required but was not set" },
+                checkRequired("name", name),
                 exists,
                 (inValues ?: JsonMissing.of()).map { it.toImmutable() },
                 (notInValues ?: JsonMissing.of()).map { it.toImmutable() },

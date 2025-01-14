@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -570,20 +571,14 @@ private constructor(
 
         fun build(): ContractWithoutAmendments =
             ContractWithoutAmendments(
-                checkNotNull(commits) { "`commits` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(createdAt) { "`createdAt` is required but was not set" },
-                checkNotNull(createdBy) { "`createdBy` is required but was not set" },
-                checkNotNull(overrides) { "`overrides` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(scheduledCharges) { "`scheduledCharges` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(startingAt) { "`startingAt` is required but was not set" },
-                checkNotNull(transitions) { "`transitions` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(usageStatementSchedule) {
-                    "`usageStatementSchedule` is required but was not set"
-                },
+                checkRequired("commits", commits).map { it.toImmutable() },
+                checkRequired("createdAt", createdAt),
+                checkRequired("createdBy", createdBy),
+                checkRequired("overrides", overrides).map { it.toImmutable() },
+                checkRequired("scheduledCharges", scheduledCharges).map { it.toImmutable() },
+                checkRequired("startingAt", startingAt),
+                checkRequired("transitions", transitions).map { it.toImmutable() },
+                checkRequired("usageStatementSchedule", usageStatementSchedule),
                 (credits ?: JsonMissing.of()).map { it.toImmutable() },
                 (discounts ?: JsonMissing.of()).map { it.toImmutable() },
                 endingBefore,
@@ -708,9 +703,9 @@ private constructor(
 
             fun build(): Transition =
                 Transition(
-                    checkNotNull(fromContractId) { "`fromContractId` is required but was not set" },
-                    checkNotNull(toContractId) { "`toContractId` is required but was not set" },
-                    checkNotNull(type) { "`type` is required but was not set" },
+                    checkRequired("fromContractId", fromContractId),
+                    checkRequired("toContractId", toContractId),
+                    checkRequired("type", type),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -889,10 +884,8 @@ private constructor(
 
             fun build(): UsageStatementSchedule =
                 UsageStatementSchedule(
-                    checkNotNull(billingAnchorDate) {
-                        "`billingAnchorDate` is required but was not set"
-                    },
-                    checkNotNull(frequency) { "`frequency` is required but was not set" },
+                    checkRequired("billingAnchorDate", billingAnchorDate),
+                    checkRequired("frequency", frequency),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -1307,12 +1300,10 @@ private constructor(
 
             fun build(): ResellerRoyalty =
                 ResellerRoyalty(
-                    checkNotNull(fraction) { "`fraction` is required but was not set" },
-                    checkNotNull(netsuiteResellerId) {
-                        "`netsuiteResellerId` is required but was not set"
-                    },
-                    checkNotNull(resellerType) { "`resellerType` is required but was not set" },
-                    checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                    checkRequired("fraction", fraction),
+                    checkRequired("netsuiteResellerId", netsuiteResellerId),
+                    checkRequired("resellerType", resellerType),
+                    checkRequired("startingAt", startingAt),
                     (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     awsAccountNumber,
@@ -1536,10 +1527,9 @@ private constructor(
 
             fun build(): UsageFilter =
                 UsageFilter(
-                    checkNotNull(current) { "`current` is required but was not set" },
-                    checkNotNull(initial) { "`initial` is required but was not set" },
-                    checkNotNull(updates) { "`updates` is required but was not set" }
-                        .map { it.toImmutable() },
+                    checkRequired("current", current),
+                    checkRequired("initial", initial),
+                    checkRequired("updates", updates).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -1669,10 +1659,9 @@ private constructor(
 
                 fun build(): Update =
                     Update(
-                        checkNotNull(groupKey) { "`groupKey` is required but was not set" },
-                        checkNotNull(groupValues) { "`groupValues` is required but was not set" }
-                            .map { it.toImmutable() },
-                        checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                        checkRequired("groupKey", groupKey),
+                        checkRequired("groupValues", groupValues).map { it.toImmutable() },
+                        checkRequired("startingAt", startingAt),
                         additionalProperties.toImmutable(),
                     )
             }

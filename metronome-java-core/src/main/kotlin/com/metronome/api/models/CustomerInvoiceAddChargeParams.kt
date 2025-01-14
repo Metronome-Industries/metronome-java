@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.immutableEmptyMap
@@ -291,14 +292,12 @@ constructor(
 
             fun build(): CustomerInvoiceAddChargeBody =
                 CustomerInvoiceAddChargeBody(
-                    checkNotNull(chargeId) { "`chargeId` is required but was not set" },
-                    checkNotNull(customerPlanId) { "`customerPlanId` is required but was not set" },
-                    checkNotNull(description) { "`description` is required but was not set" },
-                    checkNotNull(invoiceStartTimestamp) {
-                        "`invoiceStartTimestamp` is required but was not set"
-                    },
-                    checkNotNull(price) { "`price` is required but was not set" },
-                    checkNotNull(quantity) { "`quantity` is required but was not set" },
+                    checkRequired("chargeId", chargeId),
+                    checkRequired("customerPlanId", customerPlanId),
+                    checkRequired("description", description),
+                    checkRequired("invoiceStartTimestamp", invoiceStartTimestamp),
+                    checkRequired("price", price),
+                    checkRequired("quantity", quantity),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -516,7 +515,7 @@ constructor(
 
         fun build(): CustomerInvoiceAddChargeParams =
             CustomerInvoiceAddChargeParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
+                checkRequired("customerId", customerId),
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),

@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
@@ -131,9 +132,9 @@ private constructor(
 
         fun build(): PlanListResponse =
             PlanListResponse(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(description) { "`description` is required but was not set" },
-                checkNotNull(name) { "`name` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("description", description),
+                checkRequired("name", name),
                 customFields,
                 additionalProperties.toImmutable(),
             )

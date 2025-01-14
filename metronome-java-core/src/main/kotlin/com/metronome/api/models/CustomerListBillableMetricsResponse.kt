@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -473,8 +474,8 @@ private constructor(
 
         fun build(): CustomerListBillableMetricsResponse =
             CustomerListBillableMetricsResponse(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(name) { "`name` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("name", name),
                 aggregate,
                 (aggregateKeys ?: JsonMissing.of()).map { it.toImmutable() },
                 aggregationKey,

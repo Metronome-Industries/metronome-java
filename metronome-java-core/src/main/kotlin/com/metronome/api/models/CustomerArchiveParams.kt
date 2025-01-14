@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.immutableEmptyMap
@@ -111,10 +112,7 @@ constructor(
             }
 
             fun build(): CustomerArchiveBody =
-                CustomerArchiveBody(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    additionalProperties.toImmutable()
-                )
+                CustomerArchiveBody(checkRequired("id", id), additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {

@@ -20,6 +20,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.getOrThrow
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
@@ -134,9 +135,8 @@ private constructor(
 
         fun build(): ContractListBalancesResponse =
             ContractListBalancesResponse(
-                checkNotNull(data) { "`data` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(nextPage) { "`nextPage` is required but was not set" },
+                checkRequired("data", data).map { it.toImmutable() },
+                checkRequired("nextPage", nextPage),
                 additionalProperties.toImmutable(),
             )
     }

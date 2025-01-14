@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.immutableEmptyMap
@@ -168,10 +169,9 @@ constructor(
 
             fun build(): CustomFieldDeleteValuesBody =
                 CustomFieldDeleteValuesBody(
-                    checkNotNull(entity) { "`entity` is required but was not set" },
-                    checkNotNull(entityId) { "`entityId` is required but was not set" },
-                    checkNotNull(keys) { "`keys` is required but was not set" }
-                        .map { it.toImmutable() },
+                    checkRequired("entity", entity),
+                    checkRequired("entityId", entityId),
+                    checkRequired("keys", keys).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }

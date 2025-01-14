@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -247,13 +248,12 @@ private constructor(
 
         fun build(): CustomerDetail =
             CustomerDetail(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(customFields) { "`customFields` is required but was not set" },
-                checkNotNull(customerConfig) { "`customerConfig` is required but was not set" },
-                checkNotNull(externalId) { "`externalId` is required but was not set" },
-                checkNotNull(ingestAliases) { "`ingestAliases` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(name) { "`name` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("customFields", customFields),
+                checkRequired("customerConfig", customerConfig),
+                checkRequired("externalId", externalId),
+                checkRequired("ingestAliases", ingestAliases).map { it.toImmutable() },
+                checkRequired("name", name),
                 currentBillableStatus,
                 additionalProperties.toImmutable(),
             )
@@ -423,9 +423,7 @@ private constructor(
 
             fun build(): CustomerConfig =
                 CustomerConfig(
-                    checkNotNull(salesforceAccountId) {
-                        "`salesforceAccountId` is required but was not set"
-                    },
+                    checkRequired("salesforceAccountId", salesforceAccountId),
                     additionalProperties.toImmutable()
                 )
         }
@@ -545,7 +543,7 @@ private constructor(
 
             fun build(): CurrentBillableStatus =
                 CurrentBillableStatus(
-                    checkNotNull(value) { "`value` is required but was not set" },
+                    checkRequired("value", value),
                     effectiveAt,
                     additionalProperties.toImmutable(),
                 )

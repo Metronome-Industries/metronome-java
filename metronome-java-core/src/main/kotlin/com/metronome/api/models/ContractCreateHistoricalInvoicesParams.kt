@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.immutableEmptyMap
@@ -156,9 +157,8 @@ constructor(
 
             fun build(): ContractCreateHistoricalInvoicesBody =
                 ContractCreateHistoricalInvoicesBody(
-                    checkNotNull(invoices) { "`invoices` is required but was not set" }
-                        .map { it.toImmutable() },
-                    checkNotNull(preview) { "`preview` is required but was not set" },
+                    checkRequired("invoices", invoices).map { it.toImmutable() },
+                    checkRequired("preview", preview),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -603,18 +603,13 @@ constructor(
 
             fun build(): Invoice =
                 Invoice(
-                    checkNotNull(contractId) { "`contractId` is required but was not set" },
-                    checkNotNull(creditTypeId) { "`creditTypeId` is required but was not set" },
-                    checkNotNull(customerId) { "`customerId` is required but was not set" },
-                    checkNotNull(exclusiveEndDate) {
-                        "`exclusiveEndDate` is required but was not set"
-                    },
-                    checkNotNull(inclusiveStartDate) {
-                        "`inclusiveStartDate` is required but was not set"
-                    },
-                    checkNotNull(issueDate) { "`issueDate` is required but was not set" },
-                    checkNotNull(usageLineItems) { "`usageLineItems` is required but was not set" }
-                        .map { it.toImmutable() },
+                    checkRequired("contractId", contractId),
+                    checkRequired("creditTypeId", creditTypeId),
+                    checkRequired("customerId", customerId),
+                    checkRequired("exclusiveEndDate", exclusiveEndDate),
+                    checkRequired("inclusiveStartDate", inclusiveStartDate),
+                    checkRequired("issueDate", issueDate),
+                    checkRequired("usageLineItems", usageLineItems).map { it.toImmutable() },
                     billableStatus,
                     breakdownGranularity,
                     customFields,
@@ -838,13 +833,9 @@ constructor(
 
                 fun build(): UsageLineItem =
                     UsageLineItem(
-                        checkNotNull(exclusiveEndDate) {
-                            "`exclusiveEndDate` is required but was not set"
-                        },
-                        checkNotNull(inclusiveStartDate) {
-                            "`inclusiveStartDate` is required but was not set"
-                        },
-                        checkNotNull(productId) { "`productId` is required but was not set" },
+                        checkRequired("exclusiveEndDate", exclusiveEndDate),
+                        checkRequired("inclusiveStartDate", inclusiveStartDate),
+                        checkRequired("productId", productId),
                         presentationGroupValues,
                         pricingGroupValues,
                         quantity,
@@ -1138,13 +1129,9 @@ constructor(
 
                     fun build(): SubtotalsWithQuantity =
                         SubtotalsWithQuantity(
-                            checkNotNull(exclusiveEndDate) {
-                                "`exclusiveEndDate` is required but was not set"
-                            },
-                            checkNotNull(inclusiveStartDate) {
-                                "`inclusiveStartDate` is required but was not set"
-                            },
-                            checkNotNull(quantity) { "`quantity` is required but was not set" },
+                            checkRequired("exclusiveEndDate", exclusiveEndDate),
+                            checkRequired("inclusiveStartDate", inclusiveStartDate),
+                            checkRequired("quantity", quantity),
                             additionalProperties.toImmutable(),
                         )
                 }

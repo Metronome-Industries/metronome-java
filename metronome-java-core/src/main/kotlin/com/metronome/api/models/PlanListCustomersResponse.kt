@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
@@ -112,8 +113,8 @@ private constructor(
 
         fun build(): PlanListCustomersResponse =
             PlanListCustomersResponse(
-                checkNotNull(customerDetails) { "`customerDetails` is required but was not set" },
-                checkNotNull(planDetails) { "`planDetails` is required but was not set" },
+                checkRequired("customerDetails", customerDetails),
+                checkRequired("planDetails", planDetails),
                 additionalProperties.toImmutable(),
             )
     }
@@ -290,11 +291,11 @@ private constructor(
 
             fun build(): PlanDetails =
                 PlanDetails(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(customFields) { "`customFields` is required but was not set" },
-                    checkNotNull(customerPlanId) { "`customerPlanId` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(startingOn) { "`startingOn` is required but was not set" },
+                    checkRequired("id", id),
+                    checkRequired("customFields", customFields),
+                    checkRequired("customerPlanId", customerPlanId),
+                    checkRequired("name", name),
+                    checkRequired("startingOn", startingOn),
                     endingBefore,
                     additionalProperties.toImmutable(),
                 )

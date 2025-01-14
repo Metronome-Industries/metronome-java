@@ -3,6 +3,7 @@
 package com.metronome.api.models
 
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import java.time.OffsetDateTime
@@ -226,9 +227,9 @@ constructor(
 
         fun build(): CustomerListCostsParams =
             CustomerListCostsParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
-                checkNotNull(startingOn) { "`startingOn` is required but was not set" },
+                checkRequired("customerId", customerId),
+                checkRequired("endingBefore", endingBefore),
+                checkRequired("startingOn", startingOn),
                 limit,
                 nextPage,
                 additionalHeaders.build(),

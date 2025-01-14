@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.immutableEmptyMap
@@ -280,11 +281,10 @@ constructor(
 
             fun build(): ContractScheduleProServicesInvoiceBody =
                 ContractScheduleProServicesInvoiceBody(
-                    checkNotNull(contractId) { "`contractId` is required but was not set" },
-                    checkNotNull(customerId) { "`customerId` is required but was not set" },
-                    checkNotNull(issuedAt) { "`issuedAt` is required but was not set" },
-                    checkNotNull(lineItems) { "`lineItems` is required but was not set" }
-                        .map { it.toImmutable() },
+                    checkRequired("contractId", contractId),
+                    checkRequired("customerId", customerId),
+                    checkRequired("issuedAt", issuedAt),
+                    checkRequired("lineItems", lineItems).map { it.toImmutable() },
                     netsuiteInvoiceHeaderEnd,
                     netsuiteInvoiceHeaderStart,
                     additionalProperties.toImmutable(),
@@ -748,9 +748,7 @@ constructor(
 
             fun build(): LineItem =
                 LineItem(
-                    checkNotNull(professionalServiceId) {
-                        "`professionalServiceId` is required but was not set"
-                    },
+                    checkRequired("professionalServiceId", professionalServiceId),
                     amendmentId,
                     amount,
                     metadata,

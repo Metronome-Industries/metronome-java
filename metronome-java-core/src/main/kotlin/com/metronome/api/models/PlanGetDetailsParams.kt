@@ -3,6 +3,7 @@
 package com.metronome.api.models
 
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import java.util.Objects
@@ -155,7 +156,7 @@ constructor(
 
         fun build(): PlanGetDetailsParams =
             PlanGetDetailsParams(
-                checkNotNull(planId) { "`planId` is required but was not set" },
+                checkRequired("planId", planId),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )

@@ -3,6 +3,7 @@
 package com.metronome.api.models
 
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import java.util.Objects
@@ -157,7 +158,7 @@ constructor(
 
         fun build(): BillableMetricRetrieveParams =
             BillableMetricRetrieveParams(
-                checkNotNull(billableMetricId) { "`billableMetricId` is required but was not set" },
+                checkRequired("billableMetricId", billableMetricId),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )

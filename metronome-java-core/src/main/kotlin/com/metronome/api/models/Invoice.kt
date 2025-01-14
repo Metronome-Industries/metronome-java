@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -625,14 +626,13 @@ private constructor(
 
         fun build(): Invoice =
             Invoice(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(creditType) { "`creditType` is required but was not set" },
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(lineItems) { "`lineItems` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(status) { "`status` is required but was not set" },
-                checkNotNull(total) { "`total` is required but was not set" },
-                checkNotNull(type) { "`type` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("creditType", creditType),
+                checkRequired("customerId", customerId),
+                checkRequired("lineItems", lineItems).map { it.toImmutable() },
+                checkRequired("status", status),
+                checkRequired("total", total),
+                checkRequired("type", type),
                 amendmentId,
                 billableStatus,
                 contractCustomFields,
@@ -1549,9 +1549,9 @@ private constructor(
 
             fun build(): LineItem =
                 LineItem(
-                    checkNotNull(creditType) { "`creditType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(total) { "`total` is required but was not set" },
+                    checkRequired("creditType", creditType),
+                    checkRequired("name", name),
+                    checkRequired("total", total),
                     appliedCommitOrCredit,
                     commitCustomFields,
                     commitId,
@@ -1680,8 +1680,8 @@ private constructor(
 
                 fun build(): AppliedCommitOrCredit =
                     AppliedCommitOrCredit(
-                        checkNotNull(id) { "`id` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("id", id),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -2006,10 +2006,7 @@ private constructor(
                 }
 
                 fun build(): PostpaidCommit =
-                    PostpaidCommit(
-                        checkNotNull(id) { "`id` is required but was not set" },
-                        additionalProperties.toImmutable()
-                    )
+                    PostpaidCommit(checkRequired("id", id), additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -2805,10 +2802,10 @@ private constructor(
 
                 fun build(): SubLineItem =
                     SubLineItem(
-                        checkNotNull(customFields) { "`customFields` is required but was not set" },
-                        checkNotNull(name) { "`name` is required but was not set" },
-                        checkNotNull(quantity) { "`quantity` is required but was not set" },
-                        checkNotNull(subtotal) { "`subtotal` is required but was not set" },
+                        checkRequired("customFields", customFields),
+                        checkRequired("name", name),
+                        checkRequired("quantity", quantity),
+                        checkRequired("subtotal", subtotal),
                         chargeId,
                         creditGrantId,
                         endDate,
@@ -3002,7 +2999,7 @@ private constructor(
 
                     fun build(): TierPeriod =
                         TierPeriod(
-                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                            checkRequired("startingAt", startingAt),
                             endingBefore,
                             additionalProperties.toImmutable(),
                         )
@@ -3156,10 +3153,10 @@ private constructor(
 
                     fun build(): Tier =
                         Tier(
-                            checkNotNull(price) { "`price` is required but was not set" },
-                            checkNotNull(quantity) { "`quantity` is required but was not set" },
-                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
-                            checkNotNull(subtotal) { "`subtotal` is required but was not set" },
+                            checkRequired("price", price),
+                            checkRequired("quantity", quantity),
+                            checkRequired("startingAt", startingAt),
+                            checkRequired("subtotal", subtotal),
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -3310,8 +3307,8 @@ private constructor(
 
                 fun build(): Tier =
                     Tier(
-                        checkNotNull(level) { "`level` is required but was not set" },
-                        checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                        checkRequired("level", level),
+                        checkRequired("startingAt", startingAt),
                         size,
                         additionalProperties.toImmutable(),
                     )
@@ -3617,11 +3614,9 @@ private constructor(
 
             fun build(): CorrectionRecord =
                 CorrectionRecord(
-                    checkNotNull(correctedInvoiceId) {
-                        "`correctedInvoiceId` is required but was not set"
-                    },
-                    checkNotNull(memo) { "`memo` is required but was not set" },
-                    checkNotNull(reason) { "`reason` is required but was not set" },
+                    checkRequired("correctedInvoiceId", correctedInvoiceId),
+                    checkRequired("memo", memo),
+                    checkRequired("reason", reason),
                     correctedExternalInvoice,
                     additionalProperties.toImmutable(),
                 )
@@ -3768,9 +3763,7 @@ private constructor(
 
                 fun build(): CorrectedExternalInvoice =
                     CorrectedExternalInvoice(
-                        checkNotNull(billingProviderType) {
-                            "`billingProviderType` is required but was not set"
-                        },
+                        checkRequired("billingProviderType", billingProviderType),
                         externalStatus,
                         invoiceId,
                         issuedAtTimestamp,
@@ -4310,9 +4303,7 @@ private constructor(
 
             fun build(): ExternalInvoice =
                 ExternalInvoice(
-                    checkNotNull(billingProviderType) {
-                        "`billingProviderType` is required but was not set"
-                    },
+                    checkRequired("billingProviderType", billingProviderType),
                     externalStatus,
                     invoiceId,
                     issuedAtTimestamp,
@@ -4688,9 +4679,9 @@ private constructor(
 
             fun build(): InvoiceAdjustment =
                 InvoiceAdjustment(
-                    checkNotNull(creditType) { "`creditType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(total) { "`total` is required but was not set" },
+                    checkRequired("creditType", creditType),
+                    checkRequired("name", name),
+                    checkRequired("total", total),
                     creditGrantCustomFields,
                     creditGrantId,
                     additionalProperties.toImmutable(),
@@ -5024,11 +5015,9 @@ private constructor(
 
             fun build(): ResellerRoyalty =
                 ResellerRoyalty(
-                    checkNotNull(fraction) { "`fraction` is required but was not set" },
-                    checkNotNull(netsuiteResellerId) {
-                        "`netsuiteResellerId` is required but was not set"
-                    },
-                    checkNotNull(resellerType) { "`resellerType` is required but was not set" },
+                    checkRequired("fraction", fraction),
+                    checkRequired("netsuiteResellerId", netsuiteResellerId),
+                    checkRequired("resellerType", resellerType),
                     awsOptions,
                     gcpOptions,
                     additionalProperties.toImmutable(),

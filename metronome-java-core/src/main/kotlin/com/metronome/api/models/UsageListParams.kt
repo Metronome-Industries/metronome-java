@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.immutableEmptyMap
@@ -339,9 +340,9 @@ constructor(
 
             fun build(): UsageListBody =
                 UsageListBody(
-                    checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
-                    checkNotNull(startingOn) { "`startingOn` is required but was not set" },
-                    checkNotNull(windowSize) { "`windowSize` is required but was not set" },
+                    checkRequired("endingBefore", endingBefore),
+                    checkRequired("startingOn", startingOn),
+                    checkRequired("windowSize", windowSize),
                     (billableMetrics ?: JsonMissing.of()).map { it.toImmutable() },
                     (customerIds ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
@@ -739,7 +740,7 @@ constructor(
 
             fun build(): BillableMetric =
                 BillableMetric(
-                    checkNotNull(id) { "`id` is required but was not set" },
+                    checkRequired("id", id),
                     groupBy,
                     additionalProperties.toImmutable(),
                 )
@@ -874,7 +875,7 @@ constructor(
 
                 fun build(): GroupBy =
                     GroupBy(
-                        checkNotNull(key) { "`key` is required but was not set" },
+                        checkRequired("key", key),
                         (values ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toImmutable(),
                     )

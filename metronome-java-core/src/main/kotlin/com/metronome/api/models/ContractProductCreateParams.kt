@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.immutableEmptyMap
@@ -739,8 +740,8 @@ constructor(
 
             fun build(): ContractProductCreateBody =
                 ContractProductCreateBody(
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(type) { "`type` is required but was not set" },
+                    checkRequired("name", name),
+                    checkRequired("type", type),
                     billableMetricId,
                     (compositeProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (compositeTags ?: JsonMissing.of()).map { it.toImmutable() },

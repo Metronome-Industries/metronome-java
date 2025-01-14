@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.immutableEmptyMap
@@ -565,9 +566,9 @@ constructor(
 
             fun build(): ContractAmendBody =
                 ContractAmendBody(
-                    checkNotNull(contractId) { "`contractId` is required but was not set" },
-                    checkNotNull(customerId) { "`customerId` is required but was not set" },
-                    checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                    checkRequired("contractId", contractId),
+                    checkRequired("customerId", customerId),
+                    checkRequired("startingAt", startingAt),
                     (commits ?: JsonMissing.of()).map { it.toImmutable() },
                     (credits ?: JsonMissing.of()).map { it.toImmutable() },
                     customFields,
@@ -1343,8 +1344,8 @@ constructor(
 
             fun build(): Commit =
                 Commit(
-                    checkNotNull(productId) { "`productId` is required but was not set" },
-                    checkNotNull(type) { "`type` is required but was not set" },
+                    checkRequired("productId", productId),
+                    checkRequired("type", type),
                     accessSchedule,
                     amount,
                     (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
@@ -1540,10 +1541,7 @@ constructor(
 
                 fun build(): AccessSchedule =
                     AccessSchedule(
-                        checkNotNull(scheduleItems) {
-                                "`scheduleItems` is required but was not set"
-                            }
-                            .map { it.toImmutable() },
+                        checkRequired("scheduleItems", scheduleItems).map { it.toImmutable() },
                         creditTypeId,
                         additionalProperties.toImmutable(),
                     )
@@ -1671,11 +1669,9 @@ constructor(
 
                     fun build(): ScheduleItem =
                         ScheduleItem(
-                            checkNotNull(amount) { "`amount` is required but was not set" },
-                            checkNotNull(endingBefore) {
-                                "`endingBefore` is required but was not set"
-                            },
-                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                            checkRequired("amount", amount),
+                            checkRequired("endingBefore", endingBefore),
+                            checkRequired("startingAt", startingAt),
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -2230,14 +2226,10 @@ constructor(
 
                     fun build(): RecurringSchedule =
                         RecurringSchedule(
-                            checkNotNull(amountDistribution) {
-                                "`amountDistribution` is required but was not set"
-                            },
-                            checkNotNull(endingBefore) {
-                                "`endingBefore` is required but was not set"
-                            },
-                            checkNotNull(frequency) { "`frequency` is required but was not set" },
-                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                            checkRequired("amountDistribution", amountDistribution),
+                            checkRequired("endingBefore", endingBefore),
+                            checkRequired("frequency", frequency),
+                            checkRequired("startingAt", startingAt),
                             amount,
                             quantity,
                             unitPrice,
@@ -2590,7 +2582,7 @@ constructor(
 
                     fun build(): ScheduleItem =
                         ScheduleItem(
-                            checkNotNull(timestamp) { "`timestamp` is required but was not set" },
+                            checkRequired("timestamp", timestamp),
                             amount,
                             quantity,
                             unitPrice,
@@ -3043,8 +3035,8 @@ constructor(
 
             fun build(): Credit =
                 Credit(
-                    checkNotNull(accessSchedule) { "`accessSchedule` is required but was not set" },
-                    checkNotNull(productId) { "`productId` is required but was not set" },
+                    checkRequired("accessSchedule", accessSchedule),
+                    checkRequired("productId", productId),
                     (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     customFields,
@@ -3175,10 +3167,7 @@ constructor(
 
                 fun build(): AccessSchedule =
                     AccessSchedule(
-                        checkNotNull(scheduleItems) {
-                                "`scheduleItems` is required but was not set"
-                            }
-                            .map { it.toImmutable() },
+                        checkRequired("scheduleItems", scheduleItems).map { it.toImmutable() },
                         creditTypeId,
                         additionalProperties.toImmutable(),
                     )
@@ -3306,11 +3295,9 @@ constructor(
 
                     fun build(): ScheduleItem =
                         ScheduleItem(
-                            checkNotNull(amount) { "`amount` is required but was not set" },
-                            checkNotNull(endingBefore) {
-                                "`endingBefore` is required but was not set"
-                            },
-                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                            checkRequired("amount", amount),
+                            checkRequired("endingBefore", endingBefore),
+                            checkRequired("startingAt", startingAt),
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -3728,8 +3715,8 @@ constructor(
 
             fun build(): Discount =
                 Discount(
-                    checkNotNull(productId) { "`productId` is required but was not set" },
-                    checkNotNull(schedule) { "`schedule` is required but was not set" },
+                    checkRequired("productId", productId),
+                    checkRequired("schedule", schedule),
                     name,
                     netsuiteSalesOrderId,
                     additionalProperties.toImmutable(),
@@ -4165,14 +4152,10 @@ constructor(
 
                     fun build(): RecurringSchedule =
                         RecurringSchedule(
-                            checkNotNull(amountDistribution) {
-                                "`amountDistribution` is required but was not set"
-                            },
-                            checkNotNull(endingBefore) {
-                                "`endingBefore` is required but was not set"
-                            },
-                            checkNotNull(frequency) { "`frequency` is required but was not set" },
-                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                            checkRequired("amountDistribution", amountDistribution),
+                            checkRequired("endingBefore", endingBefore),
+                            checkRequired("frequency", frequency),
+                            checkRequired("startingAt", startingAt),
                             amount,
                             quantity,
                             unitPrice,
@@ -4525,7 +4508,7 @@ constructor(
 
                     fun build(): ScheduleItem =
                         ScheduleItem(
-                            checkNotNull(timestamp) { "`timestamp` is required but was not set" },
+                            checkRequired("timestamp", timestamp),
                             amount,
                             quantity,
                             unitPrice,
@@ -5049,7 +5032,7 @@ constructor(
 
             fun build(): Override =
                 Override(
-                    checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                    checkRequired("startingAt", startingAt),
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     endingBefore,
                     entitled,
@@ -5793,7 +5776,7 @@ constructor(
 
                 fun build(): OverwriteRate =
                     OverwriteRate(
-                        checkNotNull(rateType) { "`rateType` is required but was not set" },
+                        checkRequired("rateType", rateType),
                         creditTypeId,
                         customRate,
                         isProrated,
@@ -6143,7 +6126,7 @@ constructor(
 
                 fun build(): Tier =
                     Tier(
-                        checkNotNull(multiplier) { "`multiplier` is required but was not set" },
+                        checkRequired("multiplier", multiplier),
                         size,
                         additionalProperties.toImmutable(),
                     )
@@ -6453,10 +6436,10 @@ constructor(
 
             fun build(): ProfessionalService =
                 ProfessionalService(
-                    checkNotNull(maxAmount) { "`maxAmount` is required but was not set" },
-                    checkNotNull(productId) { "`productId` is required but was not set" },
-                    checkNotNull(quantity) { "`quantity` is required but was not set" },
-                    checkNotNull(unitPrice) { "`unitPrice` is required but was not set" },
+                    checkRequired("maxAmount", maxAmount),
+                    checkRequired("productId", productId),
+                    checkRequired("quantity", quantity),
+                    checkRequired("unitPrice", unitPrice),
                     customFields,
                     description,
                     netsuiteSalesOrderId,
@@ -6856,7 +6839,7 @@ constructor(
 
             fun build(): ResellerRoyalty =
                 ResellerRoyalty(
-                    checkNotNull(resellerType) { "`resellerType` is required but was not set" },
+                    checkRequired("resellerType", resellerType),
                     (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     awsOptions,
@@ -7360,8 +7343,8 @@ constructor(
 
             fun build(): ScheduledCharge =
                 ScheduledCharge(
-                    checkNotNull(productId) { "`productId` is required but was not set" },
-                    checkNotNull(schedule) { "`schedule` is required but was not set" },
+                    checkRequired("productId", productId),
+                    checkRequired("schedule", schedule),
                     name,
                     netsuiteSalesOrderId,
                     additionalProperties.toImmutable(),
@@ -7797,14 +7780,10 @@ constructor(
 
                     fun build(): RecurringSchedule =
                         RecurringSchedule(
-                            checkNotNull(amountDistribution) {
-                                "`amountDistribution` is required but was not set"
-                            },
-                            checkNotNull(endingBefore) {
-                                "`endingBefore` is required but was not set"
-                            },
-                            checkNotNull(frequency) { "`frequency` is required but was not set" },
-                            checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                            checkRequired("amountDistribution", amountDistribution),
+                            checkRequired("endingBefore", endingBefore),
+                            checkRequired("frequency", frequency),
+                            checkRequired("startingAt", startingAt),
                             amount,
                             quantity,
                             unitPrice,
@@ -8157,7 +8136,7 @@ constructor(
 
                     fun build(): ScheduleItem =
                         ScheduleItem(
-                            checkNotNull(timestamp) { "`timestamp` is required but was not set" },
+                            checkRequired("timestamp", timestamp),
                             amount,
                             quantity,
                             unitPrice,

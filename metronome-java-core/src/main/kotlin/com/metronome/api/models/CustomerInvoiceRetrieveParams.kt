@@ -3,6 +3,7 @@
 package com.metronome.api.models
 
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import java.util.Objects
@@ -192,8 +193,8 @@ constructor(
 
         fun build(): CustomerInvoiceRetrieveParams =
             CustomerInvoiceRetrieveParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
+                checkRequired("customerId", customerId),
+                checkRequired("invoiceId", invoiceId),
                 skipZeroQtyLineItems,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),

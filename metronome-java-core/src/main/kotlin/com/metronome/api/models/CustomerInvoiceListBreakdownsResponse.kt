@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
@@ -703,14 +704,13 @@ private constructor(
 
         fun build(): CustomerInvoiceListBreakdownsResponse =
             CustomerInvoiceListBreakdownsResponse(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(creditType) { "`creditType` is required but was not set" },
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(lineItems) { "`lineItems` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(status) { "`status` is required but was not set" },
-                checkNotNull(total) { "`total` is required but was not set" },
-                checkNotNull(type) { "`type` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("creditType", creditType),
+                checkRequired("customerId", customerId),
+                checkRequired("lineItems", lineItems).map { it.toImmutable() },
+                checkRequired("status", status),
+                checkRequired("total", total),
+                checkRequired("type", type),
                 amendmentId,
                 billableStatus,
                 contractCustomFields,
@@ -732,12 +732,8 @@ private constructor(
                 salesforceOpportunityId,
                 startTimestamp,
                 subtotal,
-                checkNotNull(breakdownEndTimestamp) {
-                    "`breakdownEndTimestamp` is required but was not set"
-                },
-                checkNotNull(breakdownStartTimestamp) {
-                    "`breakdownStartTimestamp` is required but was not set"
-                },
+                checkRequired("breakdownEndTimestamp", breakdownEndTimestamp),
+                checkRequired("breakdownStartTimestamp", breakdownStartTimestamp),
                 additionalProperties.toImmutable(),
             )
     }

@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -90,7 +91,7 @@ private constructor(
 
         fun build(): ContractRateCardRateAddResponse =
             ContractRateCardRateAddResponse(
-                checkNotNull(data) { "`data` is required but was not set" },
+                checkRequired("data", data),
                 additionalProperties.toImmutable()
             )
     }
@@ -427,7 +428,7 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    checkNotNull(rateType) { "`rateType` is required but was not set" },
+                    checkRequired("rateType", rateType),
                     commitRate,
                     creditType,
                     customRate,
@@ -680,7 +681,7 @@ private constructor(
 
                 fun build(): CommitRate =
                     CommitRate(
-                        checkNotNull(rateType) { "`rateType` is required but was not set" },
+                        checkRequired("rateType", rateType),
                         price,
                         (tiers ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toImmutable(),

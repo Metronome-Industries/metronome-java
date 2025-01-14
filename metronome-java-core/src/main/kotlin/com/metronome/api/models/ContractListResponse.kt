@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -106,8 +107,7 @@ private constructor(
 
         fun build(): ContractListResponse =
             ContractListResponse(
-                checkNotNull(data) { "`data` is required but was not set" }
-                    .map { it.toImmutable() },
+                checkRequired("data", data).map { it.toImmutable() },
                 additionalProperties.toImmutable()
             )
     }
@@ -399,12 +399,11 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(amendments) { "`amendments` is required but was not set" }
-                        .map { it.toImmutable() },
-                    checkNotNull(current) { "`current` is required but was not set" },
-                    checkNotNull(customerId) { "`customerId` is required but was not set" },
-                    checkNotNull(initial) { "`initial` is required but was not set" },
+                    checkRequired("id", id),
+                    checkRequired("amendments", amendments).map { it.toImmutable() },
+                    checkRequired("current", current),
+                    checkRequired("customerId", customerId),
+                    checkRequired("initial", initial),
                     archivedAt,
                     customFields,
                     customerBillingProviderConfiguration,
@@ -832,18 +831,15 @@ private constructor(
 
                 fun build(): Amendment =
                     Amendment(
-                        checkNotNull(id) { "`id` is required but was not set" },
-                        checkNotNull(commits) { "`commits` is required but was not set" }
-                            .map { it.toImmutable() },
-                        checkNotNull(createdAt) { "`createdAt` is required but was not set" },
-                        checkNotNull(createdBy) { "`createdBy` is required but was not set" },
-                        checkNotNull(overrides) { "`overrides` is required but was not set" }
-                            .map { it.toImmutable() },
-                        checkNotNull(scheduledCharges) {
-                                "`scheduledCharges` is required but was not set"
-                            }
-                            .map { it.toImmutable() },
-                        checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                        checkRequired("id", id),
+                        checkRequired("commits", commits).map { it.toImmutable() },
+                        checkRequired("createdAt", createdAt),
+                        checkRequired("createdBy", createdBy),
+                        checkRequired("overrides", overrides).map { it.toImmutable() },
+                        checkRequired("scheduledCharges", scheduledCharges).map {
+                            it.toImmutable()
+                        },
+                        checkRequired("startingAt", startingAt),
                         (credits ?: JsonMissing.of()).map { it.toImmutable() },
                         (discounts ?: JsonMissing.of()).map { it.toImmutable() },
                         netsuiteSalesOrderId,
@@ -1135,9 +1131,7 @@ private constructor(
 
                     fun build(): ResellerRoyalty =
                         ResellerRoyalty(
-                            checkNotNull(resellerType) {
-                                "`resellerType` is required but was not set"
-                            },
+                            checkRequired("resellerType", resellerType),
                             awsAccountNumber,
                             awsOfferId,
                             awsPayerReferenceId,
@@ -1443,12 +1437,8 @@ private constructor(
 
                 fun build(): CustomerBillingProviderConfiguration =
                     CustomerBillingProviderConfiguration(
-                        checkNotNull(billingProvider) {
-                            "`billingProvider` is required but was not set"
-                        },
-                        checkNotNull(deliveryMethod) {
-                            "`deliveryMethod` is required but was not set"
-                        },
+                        checkRequired("billingProvider", billingProvider),
+                        checkRequired("deliveryMethod", deliveryMethod),
                         additionalProperties.toImmutable(),
                     )
             }

@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -207,9 +208,9 @@ private constructor(
 
         fun build(): AuditLogListResponse =
             AuditLogListResponse(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(request) { "`request` is required but was not set" },
-                checkNotNull(timestamp) { "`timestamp` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("request", request),
+                checkRequired("timestamp", timestamp),
                 action,
                 actor,
                 description,
@@ -317,7 +318,7 @@ private constructor(
 
             fun build(): Request =
                 Request(
-                    checkNotNull(id) { "`id` is required but was not set" },
+                    checkRequired("id", id),
                     ip,
                     userAgent,
                     additionalProperties.toImmutable(),
@@ -441,8 +442,8 @@ private constructor(
 
             fun build(): Actor =
                 Actor(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("id", id),
+                    checkRequired("name", name),
                     email,
                     additionalProperties.toImmutable(),
                 )

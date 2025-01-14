@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
@@ -121,9 +122,8 @@ private constructor(
 
         fun build(): CreditGrantListEntriesResponse =
             CreditGrantListEntriesResponse(
-                checkNotNull(data) { "`data` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(nextPage) { "`nextPage` is required but was not set" },
+                checkRequired("data", data).map { it.toImmutable() },
+                checkRequired("nextPage", nextPage),
                 additionalProperties.toImmutable(),
             )
     }
@@ -232,9 +232,8 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    checkNotNull(customerId) { "`customerId` is required but was not set" },
-                    checkNotNull(ledgers) { "`ledgers` is required but was not set" }
-                        .map { it.toImmutable() },
+                    checkRequired("customerId", customerId),
+                    checkRequired("ledgers", ledgers).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -425,19 +424,11 @@ private constructor(
 
                 fun build(): Ledger =
                     Ledger(
-                        checkNotNull(creditType) { "`creditType` is required but was not set" },
-                        checkNotNull(endingBalance) {
-                            "`endingBalance` is required but was not set"
-                        },
-                        checkNotNull(entries) { "`entries` is required but was not set" }
-                            .map { it.toImmutable() },
-                        checkNotNull(pendingEntries) {
-                                "`pendingEntries` is required but was not set"
-                            }
-                            .map { it.toImmutable() },
-                        checkNotNull(startingBalance) {
-                            "`startingBalance` is required but was not set"
-                        },
+                        checkRequired("creditType", creditType),
+                        checkRequired("endingBalance", endingBalance),
+                        checkRequired("entries", entries).map { it.toImmutable() },
+                        checkRequired("pendingEntries", pendingEntries).map { it.toImmutable() },
+                        checkRequired("startingBalance", startingBalance),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -614,15 +605,9 @@ private constructor(
 
                     fun build(): EndingBalance =
                         EndingBalance(
-                            checkNotNull(effectiveAt) {
-                                "`effectiveAt` is required but was not set"
-                            },
-                            checkNotNull(excludingPending) {
-                                "`excludingPending` is required but was not set"
-                            },
-                            checkNotNull(includingPending) {
-                                "`includingPending` is required but was not set"
-                            },
+                            checkRequired("effectiveAt", effectiveAt),
+                            checkRequired("excludingPending", excludingPending),
+                            checkRequired("includingPending", includingPending),
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -812,15 +797,9 @@ private constructor(
 
                     fun build(): StartingBalance =
                         StartingBalance(
-                            checkNotNull(effectiveAt) {
-                                "`effectiveAt` is required but was not set"
-                            },
-                            checkNotNull(excludingPending) {
-                                "`excludingPending` is required but was not set"
-                            },
-                            checkNotNull(includingPending) {
-                                "`includingPending` is required but was not set"
-                            },
+                            checkRequired("effectiveAt", effectiveAt),
+                            checkRequired("excludingPending", excludingPending),
+                            checkRequired("includingPending", includingPending),
                             additionalProperties.toImmutable(),
                         )
                 }

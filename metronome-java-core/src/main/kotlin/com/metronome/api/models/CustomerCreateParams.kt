@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.immutableEmptyMap
@@ -324,7 +325,7 @@ constructor(
 
             fun build(): CustomerCreateBody =
                 CustomerCreateBody(
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("name", name),
                     billingConfig,
                     customFields,
                     (customerBillingProviderConfigurations ?: JsonMissing.of()).map {
@@ -743,12 +744,8 @@ constructor(
 
             fun build(): BillingConfig =
                 BillingConfig(
-                    checkNotNull(billingProviderCustomerId) {
-                        "`billingProviderCustomerId` is required but was not set"
-                    },
-                    checkNotNull(billingProviderType) {
-                        "`billingProviderType` is required but was not set"
-                    },
+                    checkRequired("billingProviderCustomerId", billingProviderCustomerId),
+                    checkRequired("billingProviderType", billingProviderType),
                     awsIsSubscriptionProduct,
                     awsProductCode,
                     awsRegion,
@@ -1402,9 +1399,7 @@ constructor(
 
             fun build(): CustomerBillingProviderConfiguration =
                 CustomerBillingProviderConfiguration(
-                    checkNotNull(billingProvider) {
-                        "`billingProvider` is required but was not set"
-                    },
+                    checkRequired("billingProvider", billingProvider),
                     configuration,
                     deliveryMethod,
                     deliveryMethodId,

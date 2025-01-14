@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
@@ -105,8 +106,7 @@ private constructor(
 
         fun build(): ContractCreateHistoricalInvoicesResponse =
             ContractCreateHistoricalInvoicesResponse(
-                checkNotNull(data) { "`data` is required but was not set" }
-                    .map { it.toImmutable() },
+                checkRequired("data", data).map { it.toImmutable() },
                 additionalProperties.toImmutable()
             )
     }

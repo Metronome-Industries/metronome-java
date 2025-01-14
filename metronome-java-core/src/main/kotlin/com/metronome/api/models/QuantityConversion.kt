@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -141,8 +142,8 @@ private constructor(
 
         fun build(): QuantityConversion =
             QuantityConversion(
-                checkNotNull(conversionFactor) { "`conversionFactor` is required but was not set" },
-                checkNotNull(operation) { "`operation` is required but was not set" },
+                checkRequired("conversionFactor", conversionFactor),
+                checkRequired("operation", operation),
                 name,
                 additionalProperties.toImmutable(),
             )

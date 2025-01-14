@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.immutableEmptyMap
@@ -465,8 +466,8 @@ constructor(
 
             fun build(): CustomerPlanAddBody =
                 CustomerPlanAddBody(
-                    checkNotNull(planId) { "`planId` is required but was not set" },
-                    checkNotNull(startingOn) { "`startingOn` is required but was not set" },
+                    checkRequired("planId", planId),
+                    checkRequired("startingOn", startingOn),
                     endingBefore,
                     netPaymentTermsDays,
                     (overageRateAdjustments ?: JsonMissing.of()).map { it.toImmutable() },
@@ -750,7 +751,7 @@ constructor(
 
         fun build(): CustomerPlanAddParams =
             CustomerPlanAddParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
+                checkRequired("customerId", customerId),
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -879,15 +880,9 @@ constructor(
 
             fun build(): OverageRateAdjustment =
                 OverageRateAdjustment(
-                    checkNotNull(customCreditTypeId) {
-                        "`customCreditTypeId` is required but was not set"
-                    },
-                    checkNotNull(fiatCurrencyCreditTypeId) {
-                        "`fiatCurrencyCreditTypeId` is required but was not set"
-                    },
-                    checkNotNull(toFiatConversionFactor) {
-                        "`toFiatConversionFactor` is required but was not set"
-                    },
+                    checkRequired("customCreditTypeId", customCreditTypeId),
+                    checkRequired("fiatCurrencyCreditTypeId", fiatCurrencyCreditTypeId),
+                    checkRequired("toFiatConversionFactor", toFiatConversionFactor),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -1102,9 +1097,9 @@ constructor(
 
             fun build(): PriceAdjustment =
                 PriceAdjustment(
-                    checkNotNull(adjustmentType) { "`adjustmentType` is required but was not set" },
-                    checkNotNull(chargeId) { "`chargeId` is required but was not set" },
-                    checkNotNull(startPeriod) { "`startPeriod` is required but was not set" },
+                    checkRequired("adjustmentType", adjustmentType),
+                    checkRequired("chargeId", chargeId),
+                    checkRequired("startPeriod", startPeriod),
                     quantity,
                     tier,
                     value,
@@ -1304,7 +1299,7 @@ constructor(
 
             fun build(): TrialSpec =
                 TrialSpec(
-                    checkNotNull(lengthInDays) { "`lengthInDays` is required but was not set" },
+                    checkRequired("lengthInDays", lengthInDays),
                     spendingCap,
                     additionalProperties.toImmutable(),
                 )
@@ -1422,8 +1417,8 @@ constructor(
 
                 fun build(): SpendingCap =
                     SpendingCap(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(creditTypeId) { "`creditTypeId` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("creditTypeId", creditTypeId),
                         additionalProperties.toImmutable(),
                     )
             }

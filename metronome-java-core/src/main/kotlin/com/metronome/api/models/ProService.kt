@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.util.Objects
@@ -224,11 +225,11 @@ private constructor(
 
         fun build(): ProService =
             ProService(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(maxAmount) { "`maxAmount` is required but was not set" },
-                checkNotNull(productId) { "`productId` is required but was not set" },
-                checkNotNull(quantity) { "`quantity` is required but was not set" },
-                checkNotNull(unitPrice) { "`unitPrice` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("maxAmount", maxAmount),
+                checkRequired("productId", productId),
+                checkRequired("quantity", quantity),
+                checkRequired("unitPrice", unitPrice),
                 customFields,
                 description,
                 netsuiteSalesOrderId,

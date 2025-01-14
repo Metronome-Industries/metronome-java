@@ -171,8 +171,8 @@ private constructor(
         }
 
         fun build(): ClientOptions {
-            checkNotNull(httpClient) { "`httpClient` is required but was not set" }
-            checkNotNull(bearerToken) { "`bearerToken` is required but was not set" }
+            checkRequired("httpClient", httpClient)
+            checkRequired("bearerToken", bearerToken)
 
             val headers = Headers.builder()
             val queryParams = QueryParams.builder()

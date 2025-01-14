@@ -4,6 +4,7 @@ package com.metronome.api.models
 
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import java.util.Objects
@@ -189,7 +190,7 @@ constructor(
 
         fun build(): ContractRateCardListParams =
             ContractRateCardListParams(
-                checkNotNull(body) { "`body` is required but was not set" },
+                checkRequired("body", body),
                 limit,
                 nextPage,
                 additionalHeaders.build(),

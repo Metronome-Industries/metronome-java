@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -104,8 +105,7 @@ private constructor(
 
         fun build(): ServiceListResponse =
             ServiceListResponse(
-                checkNotNull(services) { "`services` is required but was not set" }
-                    .map { it.toImmutable() },
+                checkRequired("services", services).map { it.toImmutable() },
                 additionalProperties.toImmutable()
             )
     }
@@ -226,10 +226,9 @@ private constructor(
 
             fun build(): Service =
                 Service(
-                    checkNotNull(ips) { "`ips` is required but was not set" }
-                        .map { it.toImmutable() },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(usage) { "`usage` is required but was not set" },
+                    checkRequired("ips", ips).map { it.toImmutable() },
+                    checkRequired("name", name),
+                    checkRequired("usage", usage),
                     additionalProperties.toImmutable(),
                 )
         }

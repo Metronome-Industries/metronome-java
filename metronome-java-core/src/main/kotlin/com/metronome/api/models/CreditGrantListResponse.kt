@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
@@ -497,22 +498,18 @@ private constructor(
 
         fun build(): CreditGrantListResponse =
             CreditGrantListResponse(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(balance) { "`balance` is required but was not set" },
-                checkNotNull(customFields) { "`customFields` is required but was not set" },
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(deductions) { "`deductions` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(effectiveAt) { "`effectiveAt` is required but was not set" },
-                checkNotNull(expiresAt) { "`expiresAt` is required but was not set" },
-                checkNotNull(grantAmount) { "`grantAmount` is required but was not set" },
-                checkNotNull(name) { "`name` is required but was not set" },
-                checkNotNull(paidAmount) { "`paidAmount` is required but was not set" },
-                checkNotNull(pendingDeductions) {
-                        "`pendingDeductions` is required but was not set"
-                    }
-                    .map { it.toImmutable() },
-                checkNotNull(priority) { "`priority` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("balance", balance),
+                checkRequired("customFields", customFields),
+                checkRequired("customerId", customerId),
+                checkRequired("deductions", deductions).map { it.toImmutable() },
+                checkRequired("effectiveAt", effectiveAt),
+                checkRequired("expiresAt", expiresAt),
+                checkRequired("grantAmount", grantAmount),
+                checkRequired("name", name),
+                checkRequired("paidAmount", paidAmount),
+                checkRequired("pendingDeductions", pendingDeductions).map { it.toImmutable() },
+                checkRequired("priority", priority),
                 creditGrantType,
                 invoiceId,
                 (products ?: JsonMissing.of()).map { it.toImmutable() },
@@ -680,13 +677,9 @@ private constructor(
 
             fun build(): Balance =
                 Balance(
-                    checkNotNull(effectiveAt) { "`effectiveAt` is required but was not set" },
-                    checkNotNull(excludingPending) {
-                        "`excludingPending` is required but was not set"
-                    },
-                    checkNotNull(includingPending) {
-                        "`includingPending` is required but was not set"
-                    },
+                    checkRequired("effectiveAt", effectiveAt),
+                    checkRequired("excludingPending", excludingPending),
+                    checkRequired("includingPending", includingPending),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -882,8 +875,8 @@ private constructor(
 
             fun build(): GrantAmount =
                 GrantAmount(
-                    checkNotNull(amount) { "`amount` is required but was not set" },
-                    checkNotNull(creditType) { "`creditType` is required but was not set" },
+                    checkRequired("amount", amount),
+                    checkRequired("creditType", creditType),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -1002,8 +995,8 @@ private constructor(
 
             fun build(): PaidAmount =
                 PaidAmount(
-                    checkNotNull(amount) { "`amount` is required but was not set" },
-                    checkNotNull(creditType) { "`creditType` is required but was not set" },
+                    checkRequired("amount", amount),
+                    checkRequired("creditType", creditType),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -1111,8 +1104,8 @@ private constructor(
 
             fun build(): Product =
                 Product(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("id", id),
+                    checkRequired("name", name),
                     additionalProperties.toImmutable(),
                 )
         }

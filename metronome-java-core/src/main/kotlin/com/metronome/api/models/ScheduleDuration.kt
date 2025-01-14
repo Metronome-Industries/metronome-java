@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
@@ -126,8 +127,7 @@ private constructor(
 
         fun build(): ScheduleDuration =
             ScheduleDuration(
-                checkNotNull(scheduleItems) { "`scheduleItems` is required but was not set" }
-                    .map { it.toImmutable() },
+                checkRequired("scheduleItems", scheduleItems).map { it.toImmutable() },
                 creditType,
                 additionalProperties.toImmutable(),
             )
@@ -255,10 +255,10 @@ private constructor(
 
             fun build(): ScheduleItem =
                 ScheduleItem(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(amount) { "`amount` is required but was not set" },
-                    checkNotNull(endingBefore) { "`endingBefore` is required but was not set" },
-                    checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                    checkRequired("id", id),
+                    checkRequired("amount", amount),
+                    checkRequired("endingBefore", endingBefore),
+                    checkRequired("startingAt", startingAt),
                     additionalProperties.toImmutable(),
                 )
         }

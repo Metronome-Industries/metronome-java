@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.immutableEmptyMap
@@ -286,8 +287,8 @@ constructor(
 
             fun build(): DashboardGetEmbeddableUrlBody =
                 DashboardGetEmbeddableUrlBody(
-                    checkNotNull(customerId) { "`customerId` is required but was not set" },
-                    checkNotNull(dashboard) { "`dashboard` is required but was not set" },
+                    checkRequired("customerId", customerId),
+                    checkRequired("dashboard", dashboard),
                     (bmGroupKeyOverrides ?: JsonMissing.of()).map { it.toImmutable() },
                     (colorOverrides ?: JsonMissing.of()).map { it.toImmutable() },
                     (dashboardOptions ?: JsonMissing.of()).map { it.toImmutable() },
@@ -720,7 +721,7 @@ constructor(
 
             fun build(): BmGroupKeyOverride =
                 BmGroupKeyOverride(
-                    checkNotNull(groupKeyName) { "`groupKeyName` is required but was not set" },
+                    checkRequired("groupKeyName", groupKeyName),
                     displayName,
                     valueDisplayNames,
                     additionalProperties.toImmutable(),
@@ -1200,8 +1201,8 @@ constructor(
 
             fun build(): DashboardOption =
                 DashboardOption(
-                    checkNotNull(key) { "`key` is required but was not set" },
-                    checkNotNull(value) { "`value` is required but was not set" },
+                    checkRequired("key", key),
+                    checkRequired("value", value),
                     additionalProperties.toImmutable(),
                 )
         }

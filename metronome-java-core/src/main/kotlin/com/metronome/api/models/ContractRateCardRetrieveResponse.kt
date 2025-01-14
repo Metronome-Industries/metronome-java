@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
@@ -89,7 +90,7 @@ private constructor(
 
         fun build(): ContractRateCardRetrieveResponse =
             ContractRateCardRetrieveResponse(
-                checkNotNull(data) { "`data` is required but was not set" },
+                checkRequired("data", data),
                 additionalProperties.toImmutable()
             )
     }
@@ -333,10 +334,10 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(createdAt) { "`createdAt` is required but was not set" },
-                    checkNotNull(createdBy) { "`createdBy` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("id", id),
+                    checkRequired("createdAt", createdAt),
+                    checkRequired("createdBy", createdBy),
+                    checkRequired("name", name),
                     (aliases ?: JsonMissing.of()).map { it.toImmutable() },
                     (creditTypeConversions ?: JsonMissing.of()).map { it.toImmutable() },
                     customFields,
@@ -461,7 +462,7 @@ private constructor(
 
                 fun build(): Alias =
                     Alias(
-                        checkNotNull(name) { "`name` is required but was not set" },
+                        checkRequired("name", name),
                         endingBefore,
                         startingAt,
                         additionalProperties.toImmutable(),
@@ -588,12 +589,8 @@ private constructor(
 
                 fun build(): CreditTypeConversion =
                     CreditTypeConversion(
-                        checkNotNull(customCreditType) {
-                            "`customCreditType` is required but was not set"
-                        },
-                        checkNotNull(fiatPerCustomCredit) {
-                            "`fiatPerCustomCredit` is required but was not set"
-                        },
+                        checkRequired("customCreditType", customCreditType),
+                        checkRequired("fiatPerCustomCredit", fiatPerCustomCredit),
                         additionalProperties.toImmutable(),
                     )
             }

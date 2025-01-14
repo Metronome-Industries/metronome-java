@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
@@ -129,9 +130,9 @@ private constructor(
 
         fun build(): CustomerListCostsResponse =
             CustomerListCostsResponse(
-                checkNotNull(creditTypes) { "`creditTypes` is required but was not set" },
-                checkNotNull(endTimestamp) { "`endTimestamp` is required but was not set" },
-                checkNotNull(startTimestamp) { "`startTimestamp` is required but was not set" },
+                checkRequired("creditTypes", creditTypes),
+                checkRequired("endTimestamp", endTimestamp),
+                checkRequired("startTimestamp", startTimestamp),
                 additionalProperties.toImmutable(),
             )
     }

@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -141,8 +142,8 @@ private constructor(
 
         fun build(): CustomerAlert =
             CustomerAlert(
-                checkNotNull(alert) { "`alert` is required but was not set" },
-                checkNotNull(customerStatus) { "`customerStatus` is required but was not set" },
+                checkRequired("alert", alert),
+                checkRequired("customerStatus", customerStatus),
                 triggeredBy,
                 additionalProperties.toImmutable(),
             )
@@ -553,12 +554,12 @@ private constructor(
 
             fun build(): Alert =
                 Alert(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(status) { "`status` is required but was not set" },
-                    checkNotNull(threshold) { "`threshold` is required but was not set" },
-                    checkNotNull(type) { "`type` is required but was not set" },
-                    checkNotNull(updatedAt) { "`updatedAt` is required but was not set" },
+                    checkRequired("id", id),
+                    checkRequired("name", name),
+                    checkRequired("status", status),
+                    checkRequired("threshold", threshold),
+                    checkRequired("type", type),
+                    checkRequired("updatedAt", updatedAt),
                     (creditGrantTypeFilters ?: JsonMissing.of()).map { it.toImmutable() },
                     creditType,
                     (customFieldFilters ?: JsonMissing.of()).map { it.toImmutable() },
@@ -902,9 +903,9 @@ private constructor(
 
                 fun build(): CustomFieldFilter =
                     CustomFieldFilter(
-                        checkNotNull(entity) { "`entity` is required but was not set" },
-                        checkNotNull(key) { "`key` is required but was not set" },
-                        checkNotNull(value) { "`value` is required but was not set" },
+                        checkRequired("entity", entity),
+                        checkRequired("key", key),
+                        checkRequired("value", value),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -1084,8 +1085,8 @@ private constructor(
 
                 fun build(): GroupKeyFilter =
                     GroupKeyFilter(
-                        checkNotNull(key) { "`key` is required but was not set" },
-                        checkNotNull(value) { "`value` is required but was not set" },
+                        checkRequired("key", key),
+                        checkRequired("value", value),
                         additionalProperties.toImmutable(),
                     )
             }

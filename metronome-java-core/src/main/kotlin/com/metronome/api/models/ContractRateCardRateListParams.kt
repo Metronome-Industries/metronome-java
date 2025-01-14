@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.immutableEmptyMap
@@ -228,8 +229,8 @@ constructor(
 
             fun build(): ContractRateCardRateListBody =
                 ContractRateCardRateListBody(
-                    checkNotNull(at) { "`at` is required but was not set" },
-                    checkNotNull(rateCardId) { "`rateCardId` is required but was not set" },
+                    checkRequired("at", at),
+                    checkRequired("rateCardId", rateCardId),
                     (selectors ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )

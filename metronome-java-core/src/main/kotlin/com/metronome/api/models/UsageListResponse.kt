@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
@@ -120,9 +121,8 @@ private constructor(
 
         fun build(): UsageListResponse =
             UsageListResponse(
-                checkNotNull(data) { "`data` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(nextPage) { "`nextPage` is required but was not set" },
+                checkRequired("data", data).map { it.toImmutable() },
+                checkRequired("nextPage", nextPage),
                 additionalProperties.toImmutable(),
             )
     }
@@ -327,16 +327,12 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    checkNotNull(billableMetricId) {
-                        "`billableMetricId` is required but was not set"
-                    },
-                    checkNotNull(billableMetricName) {
-                        "`billableMetricName` is required but was not set"
-                    },
-                    checkNotNull(customerId) { "`customerId` is required but was not set" },
-                    checkNotNull(endTimestamp) { "`endTimestamp` is required but was not set" },
-                    checkNotNull(startTimestamp) { "`startTimestamp` is required but was not set" },
-                    checkNotNull(value) { "`value` is required but was not set" },
+                    checkRequired("billableMetricId", billableMetricId),
+                    checkRequired("billableMetricName", billableMetricName),
+                    checkRequired("customerId", customerId),
+                    checkRequired("endTimestamp", endTimestamp),
+                    checkRequired("startTimestamp", startTimestamp),
+                    checkRequired("value", value),
                     groups,
                     additionalProperties.toImmutable(),
                 )

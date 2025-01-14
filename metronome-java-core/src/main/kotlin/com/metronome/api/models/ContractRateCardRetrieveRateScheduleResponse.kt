@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -126,8 +127,7 @@ private constructor(
 
         fun build(): ContractRateCardRetrieveRateScheduleResponse =
             ContractRateCardRetrieveRateScheduleResponse(
-                checkNotNull(data) { "`data` is required but was not set" }
-                    .map { it.toImmutable() },
+                checkRequired("data", data).map { it.toImmutable() },
                 nextPage,
                 additionalProperties.toImmutable(),
             )
@@ -394,16 +394,13 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    checkNotNull(entitled) { "`entitled` is required but was not set" },
-                    checkNotNull(productCustomFields) {
-                        "`productCustomFields` is required but was not set"
-                    },
-                    checkNotNull(productId) { "`productId` is required but was not set" },
-                    checkNotNull(productName) { "`productName` is required but was not set" },
-                    checkNotNull(productTags) { "`productTags` is required but was not set" }
-                        .map { it.toImmutable() },
-                    checkNotNull(rate) { "`rate` is required but was not set" },
-                    checkNotNull(startingAt) { "`startingAt` is required but was not set" },
+                    checkRequired("entitled", entitled),
+                    checkRequired("productCustomFields", productCustomFields),
+                    checkRequired("productId", productId),
+                    checkRequired("productName", productName),
+                    checkRequired("productTags", productTags).map { it.toImmutable() },
+                    checkRequired("rate", rate),
+                    checkRequired("startingAt", startingAt),
                     commitRate,
                     endingBefore,
                     pricingGroupValues,
@@ -627,7 +624,7 @@ private constructor(
 
                 fun build(): CommitRate =
                     CommitRate(
-                        checkNotNull(rateType) { "`rateType` is required but was not set" },
+                        checkRequired("rateType", rateType),
                         price,
                         (tiers ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toImmutable(),

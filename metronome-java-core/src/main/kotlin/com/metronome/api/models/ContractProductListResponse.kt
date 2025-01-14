@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -202,12 +203,11 @@ private constructor(
 
         fun build(): ContractProductListResponse =
             ContractProductListResponse(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(current) { "`current` is required but was not set" },
-                checkNotNull(initial) { "`initial` is required but was not set" },
-                checkNotNull(type) { "`type` is required but was not set" },
-                checkNotNull(updates) { "`updates` is required but was not set" }
-                    .map { it.toImmutable() },
+                checkRequired("id", id),
+                checkRequired("current", current),
+                checkRequired("initial", initial),
+                checkRequired("type", type),
+                checkRequired("updates", updates).map { it.toImmutable() },
                 archivedAt,
                 customFields,
                 additionalProperties.toImmutable(),
@@ -850,8 +850,8 @@ private constructor(
 
             fun build(): Update =
                 Update(
-                    checkNotNull(createdAt) { "`createdAt` is required but was not set" },
-                    checkNotNull(createdBy) { "`createdBy` is required but was not set" },
+                    checkRequired("createdAt", createdAt),
+                    checkRequired("createdBy", createdBy),
                     billableMetricId,
                     (compositeProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (compositeTags ?: JsonMissing.of()).map { it.toImmutable() },

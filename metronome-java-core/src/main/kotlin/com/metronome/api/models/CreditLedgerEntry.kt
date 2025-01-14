@@ -11,6 +11,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import java.time.OffsetDateTime
@@ -236,12 +237,12 @@ private constructor(
 
         fun build(): CreditLedgerEntry =
             CreditLedgerEntry(
-                checkNotNull(amount) { "`amount` is required but was not set" },
-                checkNotNull(createdBy) { "`createdBy` is required but was not set" },
-                checkNotNull(creditGrantId) { "`creditGrantId` is required but was not set" },
-                checkNotNull(effectiveAt) { "`effectiveAt` is required but was not set" },
-                checkNotNull(reason) { "`reason` is required but was not set" },
-                checkNotNull(runningBalance) { "`runningBalance` is required but was not set" },
+                checkRequired("amount", amount),
+                checkRequired("createdBy", createdBy),
+                checkRequired("creditGrantId", creditGrantId),
+                checkRequired("effectiveAt", effectiveAt),
+                checkRequired("reason", reason),
+                checkRequired("runningBalance", runningBalance),
                 invoiceId,
                 additionalProperties.toImmutable(),
             )

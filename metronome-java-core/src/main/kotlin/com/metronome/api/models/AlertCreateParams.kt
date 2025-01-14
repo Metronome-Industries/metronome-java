@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.immutableEmptyMap
@@ -699,9 +700,9 @@ constructor(
 
             fun build(): AlertCreateBody =
                 AlertCreateBody(
-                    checkNotNull(alertType) { "`alertType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(threshold) { "`threshold` is required but was not set" },
+                    checkRequired("alertType", alertType),
+                    checkRequired("name", name),
+                    checkRequired("threshold", threshold),
                     billableMetricId,
                     (creditGrantTypeFilters ?: JsonMissing.of()).map { it.toImmutable() },
                     creditTypeId,
@@ -1331,9 +1332,9 @@ constructor(
 
             fun build(): CustomFieldFilter =
                 CustomFieldFilter(
-                    checkNotNull(entity) { "`entity` is required but was not set" },
-                    checkNotNull(key) { "`key` is required but was not set" },
-                    checkNotNull(value) { "`value` is required but was not set" },
+                    checkRequired("entity", entity),
+                    checkRequired("key", key),
+                    checkRequired("value", value),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -1508,8 +1509,8 @@ constructor(
 
             fun build(): GroupKeyFilter =
                 GroupKeyFilter(
-                    checkNotNull(key) { "`key` is required but was not set" },
-                    checkNotNull(value) { "`value` is required but was not set" },
+                    checkRequired("key", key),
+                    checkRequired("value", value),
                     additionalProperties.toImmutable(),
                 )
         }

@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -168,11 +169,10 @@ private constructor(
 
         fun build(): CustomerPlanListPriceAdjustmentsResponse =
             CustomerPlanListPriceAdjustmentsResponse(
-                checkNotNull(chargeId) { "`chargeId` is required but was not set" },
-                checkNotNull(chargeType) { "`chargeType` is required but was not set" },
-                checkNotNull(prices) { "`prices` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(startPeriod) { "`startPeriod` is required but was not set" },
+                checkRequired("chargeId", chargeId),
+                checkRequired("chargeType", chargeType),
+                checkRequired("prices", prices).map { it.toImmutable() },
+                checkRequired("startPeriod", startPeriod),
                 quantity,
                 additionalProperties.toImmutable(),
             )
@@ -367,7 +367,7 @@ private constructor(
 
             fun build(): Price =
                 Price(
-                    checkNotNull(adjustmentType) { "`adjustmentType` is required but was not set" },
+                    checkRequired("adjustmentType", adjustmentType),
                     tier,
                     value,
                     additionalProperties.toImmutable(),

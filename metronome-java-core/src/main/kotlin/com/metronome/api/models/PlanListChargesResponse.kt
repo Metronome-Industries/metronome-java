@@ -12,6 +12,7 @@ import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
@@ -310,15 +311,14 @@ private constructor(
 
         fun build(): PlanListChargesResponse =
             PlanListChargesResponse(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(chargeType) { "`chargeType` is required but was not set" },
-                checkNotNull(creditType) { "`creditType` is required but was not set" },
-                checkNotNull(customFields) { "`customFields` is required but was not set" },
-                checkNotNull(name) { "`name` is required but was not set" },
-                checkNotNull(prices) { "`prices` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(productId) { "`productId` is required but was not set" },
-                checkNotNull(productName) { "`productName` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("chargeType", chargeType),
+                checkRequired("creditType", creditType),
+                checkRequired("customFields", customFields),
+                checkRequired("name", name),
+                checkRequired("prices", prices).map { it.toImmutable() },
+                checkRequired("productId", productId),
+                checkRequired("productName", productName),
                 quantity,
                 startPeriod,
                 tierResetFrequency,
@@ -624,8 +624,8 @@ private constructor(
 
             fun build(): Price =
                 Price(
-                    checkNotNull(tier) { "`tier` is required but was not set" },
-                    checkNotNull(value) { "`value` is required but was not set" },
+                    checkRequired("tier", tier),
+                    checkRequired("value", value),
                     collectionInterval,
                     collectionSchedule,
                     quantity,
@@ -770,7 +770,7 @@ private constructor(
 
             fun build(): UnitConversion =
                 UnitConversion(
-                    checkNotNull(divisionFactor) { "`divisionFactor` is required but was not set" },
+                    checkRequired("divisionFactor", divisionFactor),
                     roundingBehavior,
                     additionalProperties.toImmutable(),
                 )
