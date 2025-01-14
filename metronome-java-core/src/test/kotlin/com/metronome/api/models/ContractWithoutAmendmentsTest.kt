@@ -443,9 +443,6 @@ class ContractWithoutAmendmentsTest {
                     )
                 )
                 .salesforceOpportunityId("salesforce_opportunity_id")
-                .scheduledChargesOnUsageInvoices(
-                    ContractWithoutAmendments.ScheduledChargesOnUsageInvoices.ALL
-                )
                 .totalContractValue(0.0)
                 .usageFilter(
                     ContractWithoutAmendments.UsageFilter.builder()
@@ -874,8 +871,6 @@ class ContractWithoutAmendmentsTest {
             )
         assertThat(contractWithoutAmendments.salesforceOpportunityId())
             .contains("salesforce_opportunity_id")
-        assertThat(contractWithoutAmendments.scheduledChargesOnUsageInvoices())
-            .contains(ContractWithoutAmendments.ScheduledChargesOnUsageInvoices.ALL)
         assertThat(contractWithoutAmendments.totalContractValue()).contains(0.0)
         assertThat(contractWithoutAmendments.usageFilter())
             .contains(

@@ -1111,9 +1111,6 @@ class ContractRetrieveResponseTest {
                                     )
                                 )
                                 .salesforceOpportunityId("salesforce_opportunity_id")
-                                .scheduledChargesOnUsageInvoices(
-                                    ContractWithoutAmendments.ScheduledChargesOnUsageInvoices.ALL
-                                )
                                 .totalContractValue(0.0)
                                 .usageFilter(
                                     ContractWithoutAmendments.UsageFilter.builder()
@@ -1706,9 +1703,6 @@ class ContractRetrieveResponseTest {
                                     )
                                 )
                                 .salesforceOpportunityId("salesforce_opportunity_id")
-                                .scheduledChargesOnUsageInvoices(
-                                    ContractWithoutAmendments.ScheduledChargesOnUsageInvoices.ALL
-                                )
                                 .totalContractValue(0.0)
                                 .usageFilter(
                                     ContractWithoutAmendments.UsageFilter.builder()
@@ -1770,9 +1764,6 @@ class ContractRetrieveResponseTest {
                                         .DIRECT_TO_BILLING_PROVIDER
                                 )
                                 .build()
-                        )
-                        .scheduledChargesOnUsageInvoices(
-                            ContractRetrieveResponse.Data.ScheduledChargesOnUsageInvoices.ALL
                         )
                         .uniquenessKey("x")
                         .build()
@@ -2834,9 +2825,6 @@ class ContractRetrieveResponseTest {
                                 )
                             )
                             .salesforceOpportunityId("salesforce_opportunity_id")
-                            .scheduledChargesOnUsageInvoices(
-                                ContractWithoutAmendments.ScheduledChargesOnUsageInvoices.ALL
-                            )
                             .totalContractValue(0.0)
                             .usageFilter(
                                 ContractWithoutAmendments.UsageFilter.builder()
@@ -3395,9 +3383,6 @@ class ContractRetrieveResponseTest {
                                 )
                             )
                             .salesforceOpportunityId("salesforce_opportunity_id")
-                            .scheduledChargesOnUsageInvoices(
-                                ContractWithoutAmendments.ScheduledChargesOnUsageInvoices.ALL
-                            )
                             .totalContractValue(0.0)
                             .usageFilter(
                                 ContractWithoutAmendments.UsageFilter.builder()
@@ -3453,9 +3438,6 @@ class ContractRetrieveResponseTest {
                                     .DIRECT_TO_BILLING_PROVIDER
                             )
                             .build()
-                    )
-                    .scheduledChargesOnUsageInvoices(
-                        ContractRetrieveResponse.Data.ScheduledChargesOnUsageInvoices.ALL
                     )
                     .uniquenessKey("x")
                     .build()

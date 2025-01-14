@@ -376,9 +376,6 @@ class ContractCreateParamsTest {
                         .build()
                 )
             )
-            .scheduledChargesOnUsageInvoices(
-                ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
-            )
             .totalContractValue(0.0)
             .transition(
                 ContractCreateParams.Transition.builder()
@@ -794,9 +791,6 @@ class ContractCreateParamsTest {
                             .build()
                     )
                 )
-                .scheduledChargesOnUsageInvoices(
-                    ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
-                )
                 .totalContractValue(0.0)
                 .transition(
                     ContractCreateParams.Transition.builder()
@@ -1205,8 +1199,6 @@ class ContractCreateParamsTest {
                         .build()
                 )
             )
-        assertThat(body.scheduledChargesOnUsageInvoices())
-            .contains(ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL)
         assertThat(body.totalContractValue()).contains(0.0)
         assertThat(body.transition())
             .contains(
