@@ -76,6 +76,10 @@ private constructor(
     @JsonProperty("salesforce_opportunity_id")
     @ExcludeMissing
     private val salesforceOpportunityId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("scheduled_charges_on_usage_invoices")
+    @ExcludeMissing
+    private val scheduledChargesOnUsageInvoices: JsonField<ScheduledChargesOnUsageInvoices> =
+        JsonMissing.of(),
     @JsonProperty("total_contract_value")
     @ExcludeMissing
     private val totalContractValue: JsonField<Double> = JsonMissing.of(),
@@ -134,6 +138,17 @@ private constructor(
     /** This field's availability is dependent on your client's configuration. */
     fun salesforceOpportunityId(): Optional<String> =
         Optional.ofNullable(salesforceOpportunityId.getNullable("salesforce_opportunity_id"))
+
+    /**
+     * Determines which scheduled and commit charges to consolidate onto the Contract's usage
+     * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
+     * consolidation to occur. This field cannot be modified after a Contract has been created. If
+     * this field is omitted, charges will appear on a separate invoice from usage charges.
+     */
+    fun scheduledChargesOnUsageInvoices(): Optional<ScheduledChargesOnUsageInvoices> =
+        Optional.ofNullable(
+            scheduledChargesOnUsageInvoices.getNullable("scheduled_charges_on_usage_invoices")
+        )
 
     /** This field's availability is dependent on your client's configuration. */
     fun totalContractValue(): Optional<Double> =
@@ -209,6 +224,17 @@ private constructor(
     @ExcludeMissing
     fun _salesforceOpportunityId(): JsonField<String> = salesforceOpportunityId
 
+    /**
+     * Determines which scheduled and commit charges to consolidate onto the Contract's usage
+     * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
+     * consolidation to occur. This field cannot be modified after a Contract has been created. If
+     * this field is omitted, charges will appear on a separate invoice from usage charges.
+     */
+    @JsonProperty("scheduled_charges_on_usage_invoices")
+    @ExcludeMissing
+    fun _scheduledChargesOnUsageInvoices(): JsonField<ScheduledChargesOnUsageInvoices> =
+        scheduledChargesOnUsageInvoices
+
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("total_contract_value")
     @ExcludeMissing
@@ -247,6 +273,7 @@ private constructor(
         rateCardId()
         resellerRoyalties().ifPresent { it.forEach { it.validate() } }
         salesforceOpportunityId()
+        scheduledChargesOnUsageInvoices()
         totalContractValue()
         usageFilter().ifPresent { it.validate() }
         validated = true
@@ -279,6 +306,8 @@ private constructor(
         private var rateCardId: JsonField<String> = JsonMissing.of()
         private var resellerRoyalties: JsonField<MutableList<ResellerRoyalty>>? = null
         private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
+        private var scheduledChargesOnUsageInvoices: JsonField<ScheduledChargesOnUsageInvoices> =
+            JsonMissing.of()
         private var totalContractValue: JsonField<Double> = JsonMissing.of()
         private var usageFilter: JsonField<UsageFilter> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -305,6 +334,8 @@ private constructor(
             resellerRoyalties =
                 contractWithoutAmendments.resellerRoyalties.map { it.toMutableList() }
             salesforceOpportunityId = contractWithoutAmendments.salesforceOpportunityId
+            scheduledChargesOnUsageInvoices =
+                contractWithoutAmendments.scheduledChargesOnUsageInvoices
             totalContractValue = contractWithoutAmendments.totalContractValue
             usageFilter = contractWithoutAmendments.usageFilter
             additionalProperties = contractWithoutAmendments.additionalProperties.toMutableMap()
@@ -535,6 +566,26 @@ private constructor(
             this.salesforceOpportunityId = salesforceOpportunityId
         }
 
+        /**
+         * Determines which scheduled and commit charges to consolidate onto the Contract's usage
+         * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
+         * consolidation to occur. This field cannot be modified after a Contract has been created.
+         * If this field is omitted, charges will appear on a separate invoice from usage charges.
+         */
+        fun scheduledChargesOnUsageInvoices(
+            scheduledChargesOnUsageInvoices: ScheduledChargesOnUsageInvoices
+        ) = scheduledChargesOnUsageInvoices(JsonField.of(scheduledChargesOnUsageInvoices))
+
+        /**
+         * Determines which scheduled and commit charges to consolidate onto the Contract's usage
+         * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
+         * consolidation to occur. This field cannot be modified after a Contract has been created.
+         * If this field is omitted, charges will appear on a separate invoice from usage charges.
+         */
+        fun scheduledChargesOnUsageInvoices(
+            scheduledChargesOnUsageInvoices: JsonField<ScheduledChargesOnUsageInvoices>
+        ) = apply { this.scheduledChargesOnUsageInvoices = scheduledChargesOnUsageInvoices }
+
         /** This field's availability is dependent on your client's configuration. */
         fun totalContractValue(totalContractValue: Double) =
             totalContractValue(JsonField.of(totalContractValue))
@@ -589,6 +640,7 @@ private constructor(
                 rateCardId,
                 (resellerRoyalties ?: JsonMissing.of()).map { it.toImmutable() },
                 salesforceOpportunityId,
+                scheduledChargesOnUsageInvoices,
                 totalContractValue,
                 usageFilter,
                 additionalProperties.toImmutable(),
@@ -1404,6 +1456,60 @@ private constructor(
             "ResellerRoyalty{fraction=$fraction, netsuiteResellerId=$netsuiteResellerId, resellerType=$resellerType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, awsAccountNumber=$awsAccountNumber, awsOfferId=$awsOfferId, awsPayerReferenceId=$awsPayerReferenceId, endingBefore=$endingBefore, gcpAccountId=$gcpAccountId, gcpOfferId=$gcpOfferId, resellerContractValue=$resellerContractValue, additionalProperties=$additionalProperties}"
     }
 
+    class ScheduledChargesOnUsageInvoices
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
+
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val ALL = of("ALL")
+
+            @JvmStatic fun of(value: String) = ScheduledChargesOnUsageInvoices(JsonField.of(value))
+        }
+
+        enum class Known {
+            ALL,
+        }
+
+        enum class Value {
+            ALL,
+            _UNKNOWN,
+        }
+
+        fun value(): Value =
+            when (this) {
+                ALL -> Value.ALL
+                else -> Value._UNKNOWN
+            }
+
+        fun known(): Known =
+            when (this) {
+                ALL -> Known.ALL
+                else ->
+                    throw MetronomeInvalidDataException(
+                        "Unknown ScheduledChargesOnUsageInvoices: $value"
+                    )
+            }
+
+        fun asString(): String = _value().asStringOrThrow()
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is ScheduledChargesOnUsageInvoices && value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
     @NoAutoDetect
     class UsageFilter
     @JsonCreator
@@ -1707,15 +1813,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractWithoutAmendments && commits == other.commits && createdAt == other.createdAt && createdBy == other.createdBy && overrides == other.overrides && scheduledCharges == other.scheduledCharges && startingAt == other.startingAt && transitions == other.transitions && usageStatementSchedule == other.usageStatementSchedule && credits == other.credits && discounts == other.discounts && endingBefore == other.endingBefore && name == other.name && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && professionalServices == other.professionalServices && rateCardId == other.rateCardId && resellerRoyalties == other.resellerRoyalties && salesforceOpportunityId == other.salesforceOpportunityId && totalContractValue == other.totalContractValue && usageFilter == other.usageFilter && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ContractWithoutAmendments && commits == other.commits && createdAt == other.createdAt && createdBy == other.createdBy && overrides == other.overrides && scheduledCharges == other.scheduledCharges && startingAt == other.startingAt && transitions == other.transitions && usageStatementSchedule == other.usageStatementSchedule && credits == other.credits && discounts == other.discounts && endingBefore == other.endingBefore && name == other.name && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && professionalServices == other.professionalServices && rateCardId == other.rateCardId && resellerRoyalties == other.resellerRoyalties && salesforceOpportunityId == other.salesforceOpportunityId && scheduledChargesOnUsageInvoices == other.scheduledChargesOnUsageInvoices && totalContractValue == other.totalContractValue && usageFilter == other.usageFilter && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(commits, createdAt, createdBy, overrides, scheduledCharges, startingAt, transitions, usageStatementSchedule, credits, discounts, endingBefore, name, netPaymentTermsDays, netsuiteSalesOrderId, professionalServices, rateCardId, resellerRoyalties, salesforceOpportunityId, totalContractValue, usageFilter, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(commits, createdAt, createdBy, overrides, scheduledCharges, startingAt, transitions, usageStatementSchedule, credits, discounts, endingBefore, name, netPaymentTermsDays, netsuiteSalesOrderId, professionalServices, rateCardId, resellerRoyalties, salesforceOpportunityId, scheduledChargesOnUsageInvoices, totalContractValue, usageFilter, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ContractWithoutAmendments{commits=$commits, createdAt=$createdAt, createdBy=$createdBy, overrides=$overrides, scheduledCharges=$scheduledCharges, startingAt=$startingAt, transitions=$transitions, usageStatementSchedule=$usageStatementSchedule, credits=$credits, discounts=$discounts, endingBefore=$endingBefore, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, professionalServices=$professionalServices, rateCardId=$rateCardId, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, totalContractValue=$totalContractValue, usageFilter=$usageFilter, additionalProperties=$additionalProperties}"
+        "ContractWithoutAmendments{commits=$commits, createdAt=$createdAt, createdBy=$createdBy, overrides=$overrides, scheduledCharges=$scheduledCharges, startingAt=$startingAt, transitions=$transitions, usageStatementSchedule=$usageStatementSchedule, credits=$credits, discounts=$discounts, endingBefore=$endingBefore, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, professionalServices=$professionalServices, rateCardId=$rateCardId, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledChargesOnUsageInvoices=$scheduledChargesOnUsageInvoices, totalContractValue=$totalContractValue, usageFilter=$usageFilter, additionalProperties=$additionalProperties}"
 }
