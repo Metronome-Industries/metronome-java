@@ -43,13 +43,10 @@ class CreditGrantCreateParamsTest {
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .priority(0.0)
                     .rolloverAmount(
-                        CreditGrantCreateParams.RolloverSettings.RolloverAmount
-                            .ofRolloverAmountMaxPercentage(
-                                RolloverAmountMaxPercentage.builder()
-                                    .type(RolloverAmountMaxPercentage.Type.MAX_PERCENTAGE)
-                                    .value(0.0)
-                                    .build()
-                            )
+                        RolloverAmountMaxPercentage.builder()
+                            .type(RolloverAmountMaxPercentage.Type.MAX_PERCENTAGE)
+                            .value(0.0)
+                            .build()
                     )
                     .build()
             )
@@ -92,13 +89,10 @@ class CreditGrantCreateParamsTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .priority(0.0)
                         .rolloverAmount(
-                            CreditGrantCreateParams.RolloverSettings.RolloverAmount
-                                .ofRolloverAmountMaxPercentage(
-                                    RolloverAmountMaxPercentage.builder()
-                                        .type(RolloverAmountMaxPercentage.Type.MAX_PERCENTAGE)
-                                        .value(0.0)
-                                        .build()
-                                )
+                            RolloverAmountMaxPercentage.builder()
+                                .type(RolloverAmountMaxPercentage.Type.MAX_PERCENTAGE)
+                                .value(0.0)
+                                .build()
                         )
                         .build()
                 )
@@ -141,13 +135,10 @@ class CreditGrantCreateParamsTest {
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .priority(0.0)
                     .rolloverAmount(
-                        CreditGrantCreateParams.RolloverSettings.RolloverAmount
-                            .ofRolloverAmountMaxPercentage(
-                                RolloverAmountMaxPercentage.builder()
-                                    .type(RolloverAmountMaxPercentage.Type.MAX_PERCENTAGE)
-                                    .value(0.0)
-                                    .build()
-                            )
+                        RolloverAmountMaxPercentage.builder()
+                            .type(RolloverAmountMaxPercentage.Type.MAX_PERCENTAGE)
+                            .value(0.0)
+                            .build()
                     )
                     .build()
             )
