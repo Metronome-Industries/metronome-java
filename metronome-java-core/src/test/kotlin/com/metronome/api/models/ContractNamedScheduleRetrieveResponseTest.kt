@@ -13,14 +13,12 @@ class ContractNamedScheduleRetrieveResponseTest {
     fun createContractNamedScheduleRetrieveResponse() {
         val contractNamedScheduleRetrieveResponse =
             ContractNamedScheduleRetrieveResponse.builder()
-                .data(
-                    listOf(
-                        ContractNamedScheduleRetrieveResponse.Data.builder()
-                            .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .value(JsonValue.from(mapOf<String, Any>()))
-                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .build()
-                    )
+                .addData(
+                    ContractNamedScheduleRetrieveResponse.Data.builder()
+                        .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .value(JsonValue.from(mapOf<String, Any>()))
+                        .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .build()
                 )
                 .build()
         assertThat(contractNamedScheduleRetrieveResponse).isNotNull

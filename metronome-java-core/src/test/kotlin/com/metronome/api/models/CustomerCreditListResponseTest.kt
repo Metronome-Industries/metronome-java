@@ -13,81 +13,73 @@ class CustomerCreditListResponseTest {
     fun createCustomerCreditListResponse() {
         val customerCreditListResponse =
             CustomerCreditListResponse.builder()
-                .data(
-                    listOf(
-                        Credit.builder()
-                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .product(
-                                Credit.Product.builder()
-                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .name("name")
-                                    .build()
-                            )
-                            .type(Credit.Type.CREDIT)
-                            .accessSchedule(
-                                ScheduleDuration.builder()
-                                    .scheduleItems(
-                                        listOf(
-                                            ScheduleDuration.ScheduleItem.builder()
-                                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                .amount(0.0)
-                                                .endingBefore(
-                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                                )
-                                                .startingAt(
-                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                                )
-                                                .build()
+                .addData(
+                    Credit.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .product(
+                            Credit.Product.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .name("name")
+                                .build()
+                        )
+                        .type(Credit.Type.CREDIT)
+                        .accessSchedule(
+                            ScheduleDuration.builder()
+                                .addScheduleItem(
+                                    ScheduleDuration.ScheduleItem.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .amount(0.0)
+                                        .endingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
-                                    )
-                                    .creditType(
-                                        CreditTypeData.builder()
-                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .name("name")
-                                            .build()
-                                    )
-                                    .build()
-                            )
-                            .applicableContractIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                            .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                            .applicableProductTags(listOf("string"))
-                            .balance(0.0)
-                            .contract(
-                                Credit.Contract.builder()
-                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .build()
-                            )
-                            .customFields(
-                                Credit.CustomFields.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                                    .build()
-                            )
-                            .description("description")
-                            .ledger(
-                                listOf(
-                                    Credit.Ledger.ofCreditSegmentStartLedgerEntry(
-                                        Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
-                                            .amount(0.0)
-                                            .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .timestamp(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .type(
-                                                Credit.Ledger.CreditSegmentStartLedgerEntry.Type
-                                                    .CREDIT_SEGMENT_START
-                                            )
-                                            .build()
-                                    )
+                                        .startingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .build()
                                 )
+                                .creditType(
+                                    CreditTypeData.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .name("name")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductTag("string")
+                        .balance(0.0)
+                        .contract(
+                            Credit.Contract.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .customFields(
+                            Credit.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .description("description")
+                        .addLedger(
+                            Credit.Ledger.ofCreditSegmentStartLedgerEntry(
+                                Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
+                                    .amount(0.0)
+                                    .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .type(
+                                        Credit.Ledger.CreditSegmentStartLedgerEntry.Type
+                                            .CREDIT_SEGMENT_START
+                                    )
+                                    .build()
                             )
-                            .name("name")
-                            .netsuiteSalesOrderId("netsuite_sales_order_id")
-                            .priority(0.0)
-                            .rateType(Credit.RateType.COMMIT_RATE)
-                            .salesforceOpportunityId("salesforce_opportunity_id")
-                            .uniquenessKey("x")
-                            .build()
-                    )
+                        )
+                        .name("name")
+                        .netsuiteSalesOrderId("netsuite_sales_order_id")
+                        .priority(0.0)
+                        .rateType(Credit.RateType.COMMIT_RATE)
+                        .salesforceOpportunityId("salesforce_opportunity_id")
+                        .uniquenessKey("x")
+                        .build()
                 )
                 .nextPage("next_page")
                 .build()
@@ -105,19 +97,13 @@ class CustomerCreditListResponseTest {
                     .type(Credit.Type.CREDIT)
                     .accessSchedule(
                         ScheduleDuration.builder()
-                            .scheduleItems(
-                                listOf(
-                                    ScheduleDuration.ScheduleItem.builder()
-                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .amount(0.0)
-                                        .endingBefore(
-                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                        )
-                                        .startingAt(
-                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                        )
-                                        .build()
-                                )
+                            .addScheduleItem(
+                                ScheduleDuration.ScheduleItem.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .amount(0.0)
+                                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .build()
                             )
                             .creditType(
                                 CreditTypeData.builder()
@@ -127,9 +113,9 @@ class CustomerCreditListResponseTest {
                             )
                             .build()
                     )
-                    .applicableContractIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                    .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                    .applicableProductTags(listOf("string"))
+                    .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addApplicableProductTag("string")
                     .balance(0.0)
                     .contract(
                         Credit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
@@ -140,19 +126,17 @@ class CustomerCreditListResponseTest {
                             .build()
                     )
                     .description("description")
-                    .ledger(
-                        listOf(
-                            Credit.Ledger.ofCreditSegmentStartLedgerEntry(
-                                Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
-                                    .amount(0.0)
-                                    .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .type(
-                                        Credit.Ledger.CreditSegmentStartLedgerEntry.Type
-                                            .CREDIT_SEGMENT_START
-                                    )
-                                    .build()
-                            )
+                    .addLedger(
+                        Credit.Ledger.ofCreditSegmentStartLedgerEntry(
+                            Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
+                                .amount(0.0)
+                                .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .type(
+                                    Credit.Ledger.CreditSegmentStartLedgerEntry.Type
+                                        .CREDIT_SEGMENT_START
+                                )
+                                .build()
                         )
                     )
                     .name("name")

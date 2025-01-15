@@ -18,17 +18,15 @@ class SchedulePointInTimeTest {
                         .name("name")
                         .build()
                 )
-                .scheduleItems(
-                    listOf(
-                        SchedulePointInTime.ScheduleItem.builder()
-                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .amount(0.0)
-                            .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .quantity(0.0)
-                            .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .unitPrice(0.0)
-                            .build()
-                    )
+                .addScheduleItem(
+                    SchedulePointInTime.ScheduleItem.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .amount(0.0)
+                        .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .quantity(0.0)
+                        .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .unitPrice(0.0)
+                        .build()
                 )
                 .build()
         assertThat(schedulePointInTime).isNotNull

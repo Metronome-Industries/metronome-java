@@ -14,14 +14,12 @@ class CustomerCommitCreateParamsTest {
         CustomerCommitCreateParams.builder()
             .accessSchedule(
                 CustomerCommitCreateParams.AccessSchedule.builder()
-                    .scheduleItems(
-                        listOf(
-                            CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
-                                .amount(1000.0)
-                                .endingBefore(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
-                                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-                                .build()
-                        )
+                    .addScheduleItem(
+                        CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
+                            .amount(1000.0)
+                            .endingBefore(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
+                            .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                            .build()
                     )
                     .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                     .build()
@@ -30,9 +28,9 @@ class CustomerCommitCreateParamsTest {
             .priority(100.0)
             .productId("f14d6729-6a44-4b13-9908-9387f1918790")
             .type(CustomerCommitCreateParams.Type.PREPAID)
-            .applicableContractIds(listOf("string"))
-            .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-            .applicableProductTags(listOf("string"))
+            .addApplicableContractId("string")
+            .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .addApplicableProductTag("string")
             .customFields(
                 CustomerCommitCreateParams.CustomFields.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -62,15 +60,13 @@ class CustomerCommitCreateParamsTest {
                             .unitPrice(0.0)
                             .build()
                     )
-                    .scheduleItems(
-                        listOf(
-                            CustomerCommitCreateParams.InvoiceSchedule.ScheduleItem.builder()
-                                .timestamp(OffsetDateTime.parse("2020-03-01T00:00:00.000Z"))
-                                .amount(0.0)
-                                .quantity(1.0)
-                                .unitPrice(10000000.0)
-                                .build()
-                        )
+                    .addScheduleItem(
+                        CustomerCommitCreateParams.InvoiceSchedule.ScheduleItem.builder()
+                            .timestamp(OffsetDateTime.parse("2020-03-01T00:00:00.000Z"))
+                            .amount(0.0)
+                            .quantity(1.0)
+                            .unitPrice(10000000.0)
+                            .build()
                     )
                     .build()
             )
@@ -88,14 +84,12 @@ class CustomerCommitCreateParamsTest {
             CustomerCommitCreateParams.builder()
                 .accessSchedule(
                     CustomerCommitCreateParams.AccessSchedule.builder()
-                        .scheduleItems(
-                            listOf(
-                                CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
-                                    .amount(1000.0)
-                                    .endingBefore(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
-                                    .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-                                    .build()
-                            )
+                        .addScheduleItem(
+                            CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
+                                .amount(1000.0)
+                                .endingBefore(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
+                                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                                .build()
                         )
                         .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                         .build()
@@ -104,9 +98,9 @@ class CustomerCommitCreateParamsTest {
                 .priority(100.0)
                 .productId("f14d6729-6a44-4b13-9908-9387f1918790")
                 .type(CustomerCommitCreateParams.Type.PREPAID)
-                .applicableContractIds(listOf("string"))
-                .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .applicableProductTags(listOf("string"))
+                .addApplicableContractId("string")
+                .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .addApplicableProductTag("string")
                 .customFields(
                     CustomerCommitCreateParams.CustomFields.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -136,15 +130,13 @@ class CustomerCommitCreateParamsTest {
                                 .unitPrice(0.0)
                                 .build()
                         )
-                        .scheduleItems(
-                            listOf(
-                                CustomerCommitCreateParams.InvoiceSchedule.ScheduleItem.builder()
-                                    .timestamp(OffsetDateTime.parse("2020-03-01T00:00:00.000Z"))
-                                    .amount(0.0)
-                                    .quantity(1.0)
-                                    .unitPrice(10000000.0)
-                                    .build()
-                            )
+                        .addScheduleItem(
+                            CustomerCommitCreateParams.InvoiceSchedule.ScheduleItem.builder()
+                                .timestamp(OffsetDateTime.parse("2020-03-01T00:00:00.000Z"))
+                                .amount(0.0)
+                                .quantity(1.0)
+                                .unitPrice(10000000.0)
+                                .build()
                         )
                         .build()
                 )
@@ -159,14 +151,12 @@ class CustomerCommitCreateParamsTest {
         assertThat(body.accessSchedule())
             .isEqualTo(
                 CustomerCommitCreateParams.AccessSchedule.builder()
-                    .scheduleItems(
-                        listOf(
-                            CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
-                                .amount(1000.0)
-                                .endingBefore(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
-                                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-                                .build()
-                        )
+                    .addScheduleItem(
+                        CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
+                            .amount(1000.0)
+                            .endingBefore(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
+                            .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                            .build()
                     )
                     .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                     .build()
@@ -210,15 +200,13 @@ class CustomerCommitCreateParamsTest {
                             .unitPrice(0.0)
                             .build()
                     )
-                    .scheduleItems(
-                        listOf(
-                            CustomerCommitCreateParams.InvoiceSchedule.ScheduleItem.builder()
-                                .timestamp(OffsetDateTime.parse("2020-03-01T00:00:00.000Z"))
-                                .amount(0.0)
-                                .quantity(1.0)
-                                .unitPrice(10000000.0)
-                                .build()
-                        )
+                    .addScheduleItem(
+                        CustomerCommitCreateParams.InvoiceSchedule.ScheduleItem.builder()
+                            .timestamp(OffsetDateTime.parse("2020-03-01T00:00:00.000Z"))
+                            .amount(0.0)
+                            .quantity(1.0)
+                            .unitPrice(10000000.0)
+                            .build()
                     )
                     .build()
             )
@@ -235,14 +223,12 @@ class CustomerCommitCreateParamsTest {
             CustomerCommitCreateParams.builder()
                 .accessSchedule(
                     CustomerCommitCreateParams.AccessSchedule.builder()
-                        .scheduleItems(
-                            listOf(
-                                CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
-                                    .amount(1000.0)
-                                    .endingBefore(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
-                                    .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-                                    .build()
-                            )
+                        .addScheduleItem(
+                            CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
+                                .amount(1000.0)
+                                .endingBefore(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
+                                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                                .build()
                         )
                         .build()
                 )
@@ -256,14 +242,12 @@ class CustomerCommitCreateParamsTest {
         assertThat(body.accessSchedule())
             .isEqualTo(
                 CustomerCommitCreateParams.AccessSchedule.builder()
-                    .scheduleItems(
-                        listOf(
-                            CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
-                                .amount(1000.0)
-                                .endingBefore(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
-                                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-                                .build()
-                        )
+                    .addScheduleItem(
+                        CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
+                            .amount(1000.0)
+                            .endingBefore(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
+                            .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                            .build()
                     )
                     .build()
             )

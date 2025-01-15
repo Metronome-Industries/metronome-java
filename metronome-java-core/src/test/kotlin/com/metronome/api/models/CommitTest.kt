@@ -23,15 +23,13 @@ class CommitTest {
                 .type(Commit.Type.PREPAID)
                 .accessSchedule(
                     ScheduleDuration.builder()
-                        .scheduleItems(
-                            listOf(
-                                ScheduleDuration.ScheduleItem.builder()
-                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .amount(0.0)
-                                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .build()
-                            )
+                        .addScheduleItem(
+                            ScheduleDuration.ScheduleItem.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .amount(0.0)
+                                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .build()
                         )
                         .creditType(
                             CreditTypeData.builder()
@@ -42,9 +40,9 @@ class CommitTest {
                         .build()
                 )
                 .amount(0.0)
-                .applicableContractIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .applicableProductTags(listOf("string"))
+                .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .addApplicableProductTag("string")
                 .balance(0.0)
                 .contract(
                     Commit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
@@ -68,33 +66,29 @@ class CommitTest {
                                 .name("name")
                                 .build()
                         )
-                        .scheduleItems(
-                            listOf(
-                                SchedulePointInTime.ScheduleItem.builder()
-                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .amount(0.0)
-                                    .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .quantity(0.0)
-                                    .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .unitPrice(0.0)
-                                    .build()
-                            )
+                        .addScheduleItem(
+                            SchedulePointInTime.ScheduleItem.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .amount(0.0)
+                                .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .quantity(0.0)
+                                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .unitPrice(0.0)
+                                .build()
                         )
                         .build()
                 )
-                .ledger(
-                    listOf(
-                        Commit.Ledger.ofPrepaidCommitSegmentStartLedgerEntry(
-                            Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry.builder()
-                                .amount(0.0)
-                                .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .type(
-                                    Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry.Type
-                                        .PREPAID_COMMIT_SEGMENT_START
-                                )
-                                .build()
-                        )
+                .addLedger(
+                    Commit.Ledger.ofPrepaidCommitSegmentStartLedgerEntry(
+                        Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry.builder()
+                            .amount(0.0)
+                            .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .type(
+                                Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry.Type
+                                    .PREPAID_COMMIT_SEGMENT_START
+                            )
+                            .build()
                     )
                 )
                 .name("name")
@@ -124,15 +118,13 @@ class CommitTest {
         assertThat(commit.accessSchedule())
             .contains(
                 ScheduleDuration.builder()
-                    .scheduleItems(
-                        listOf(
-                            ScheduleDuration.ScheduleItem.builder()
-                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .amount(0.0)
-                                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .build()
-                        )
+                    .addScheduleItem(
+                        ScheduleDuration.ScheduleItem.builder()
+                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .amount(0.0)
+                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .build()
                     )
                     .creditType(
                         CreditTypeData.builder()
@@ -171,17 +163,15 @@ class CommitTest {
                             .name("name")
                             .build()
                     )
-                    .scheduleItems(
-                        listOf(
-                            SchedulePointInTime.ScheduleItem.builder()
-                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .amount(0.0)
-                                .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .quantity(0.0)
-                                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .unitPrice(0.0)
-                                .build()
-                        )
+                    .addScheduleItem(
+                        SchedulePointInTime.ScheduleItem.builder()
+                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .amount(0.0)
+                            .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .quantity(0.0)
+                            .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .unitPrice(0.0)
+                            .build()
                     )
                     .build()
             )

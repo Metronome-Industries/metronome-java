@@ -29,22 +29,18 @@ class RateCardServiceTest {
             rateCardService.create(
                 ContractRateCardCreateParams.builder()
                     .name("My Rate Card")
-                    .aliases(
-                        listOf(
-                            ContractRateCardCreateParams.Alias.builder()
-                                .name("my-rate-card")
-                                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .build()
-                        )
+                    .addAlias(
+                        ContractRateCardCreateParams.Alias.builder()
+                            .name("my-rate-card")
+                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .build()
                     )
-                    .creditTypeConversions(
-                        listOf(
-                            ContractRateCardCreateParams.CreditTypeConversion.builder()
-                                .customCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
-                                .fiatPerCustomCredit(2.0)
-                                .build()
-                        )
+                    .addCreditTypeConversion(
+                        ContractRateCardCreateParams.CreditTypeConversion.builder()
+                            .customCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                            .fiatPerCustomCredit(2.0)
+                            .build()
                     )
                     .customFields(
                         ContractRateCardCreateParams.CustomFields.builder()
@@ -89,14 +85,12 @@ class RateCardServiceTest {
             rateCardService.update(
                 ContractRateCardUpdateParams.builder()
                     .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-                    .aliases(
-                        listOf(
-                            ContractRateCardUpdateParams.Alias.builder()
-                                .name("name")
-                                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .build()
-                        )
+                    .addAlias(
+                        ContractRateCardUpdateParams.Alias.builder()
+                            .name("name")
+                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .build()
                     )
                     .description("My Updated Rate Card Description")
                     .name("My Updated Rate Card")
@@ -140,30 +134,25 @@ class RateCardServiceTest {
                     .limit(1L)
                     .nextPage("next_page")
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .selectors(
-                        listOf(
-                            ContractRateCardRetrieveRateScheduleParams.Selector.builder()
-                                .partialPricingGroupValues(
-                                    ContractRateCardRetrieveRateScheduleParams.Selector
-                                        .PartialPricingGroupValues
-                                        .builder()
-                                        .putAdditionalProperty(
-                                            "region",
-                                            JsonValue.from("us-west-2")
-                                        )
-                                        .putAdditionalProperty("cloud", JsonValue.from("aws"))
-                                        .build()
-                                )
-                                .pricingGroupValues(
-                                    ContractRateCardRetrieveRateScheduleParams.Selector
-                                        .PricingGroupValues
-                                        .builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("string"))
-                                        .build()
-                                )
-                                .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
-                                .build()
-                        )
+                    .addSelector(
+                        ContractRateCardRetrieveRateScheduleParams.Selector.builder()
+                            .partialPricingGroupValues(
+                                ContractRateCardRetrieveRateScheduleParams.Selector
+                                    .PartialPricingGroupValues
+                                    .builder()
+                                    .putAdditionalProperty("region", JsonValue.from("us-west-2"))
+                                    .putAdditionalProperty("cloud", JsonValue.from("aws"))
+                                    .build()
+                            )
+                            .pricingGroupValues(
+                                ContractRateCardRetrieveRateScheduleParams.Selector
+                                    .PricingGroupValues
+                                    .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
+                            .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
+                            .build()
                     )
                     .build()
             )

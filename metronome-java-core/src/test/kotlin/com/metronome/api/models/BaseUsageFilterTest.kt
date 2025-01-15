@@ -13,7 +13,7 @@ class BaseUsageFilterTest {
         val baseUsageFilter =
             BaseUsageFilter.builder()
                 .groupKey("group_key")
-                .groupValues(listOf("string"))
+                .addGroupValue("string")
                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
         assertThat(baseUsageFilter).isNotNull

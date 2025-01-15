@@ -11,21 +11,19 @@ class ServiceListResponseTest {
     fun createServiceListResponse() {
         val serviceListResponse =
             ServiceListResponse.builder()
-                .services(
-                    listOf(
-                        ServiceListResponse.Service.builder()
-                            .ips(listOf("string"))
-                            .name("name")
-                            .usage(ServiceListResponse.Service.Usage.MAKES_CONNECTIONS_FROM)
-                            .build()
-                    )
+                .addService(
+                    ServiceListResponse.Service.builder()
+                        .addIp("string")
+                        .name("name")
+                        .usage(ServiceListResponse.Service.Usage.MAKES_CONNECTIONS_FROM)
+                        .build()
                 )
                 .build()
         assertThat(serviceListResponse).isNotNull
         assertThat(serviceListResponse.services())
             .containsExactly(
                 ServiceListResponse.Service.builder()
-                    .ips(listOf("string"))
+                    .addIp("string")
                     .name("name")
                     .usage(ServiceListResponse.Service.Usage.MAKES_CONNECTIONS_FROM)
                     .build()

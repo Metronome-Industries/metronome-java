@@ -13,16 +13,14 @@ class CustomerPlanListPriceAdjustmentsResponseTest {
             CustomerPlanListPriceAdjustmentsResponse.builder()
                 .chargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .chargeType(CustomerPlanListPriceAdjustmentsResponse.ChargeType.USAGE)
-                .prices(
-                    listOf(
-                        CustomerPlanListPriceAdjustmentsResponse.Price.builder()
-                            .adjustmentType(
-                                CustomerPlanListPriceAdjustmentsResponse.Price.AdjustmentType.FIXED
-                            )
-                            .tier(0.0)
-                            .value(0.0)
-                            .build()
-                    )
+                .addPrice(
+                    CustomerPlanListPriceAdjustmentsResponse.Price.builder()
+                        .adjustmentType(
+                            CustomerPlanListPriceAdjustmentsResponse.Price.AdjustmentType.FIXED
+                        )
+                        .tier(0.0)
+                        .value(0.0)
+                        .build()
                 )
                 .startPeriod(0.0)
                 .quantity(0.0)

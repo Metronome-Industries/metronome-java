@@ -49,28 +49,24 @@ class PlanServiceTest {
                     .startingOn(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
                     .endingBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                     .netPaymentTermsDays(0.0)
-                    .overageRateAdjustments(
-                        listOf(
-                            CustomerPlanAddParams.OverageRateAdjustment.builder()
-                                .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .fiatCurrencyCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .toFiatConversionFactor(0.0)
-                                .build()
-                        )
+                    .addOverageRateAdjustment(
+                        CustomerPlanAddParams.OverageRateAdjustment.builder()
+                            .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .fiatCurrencyCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .toFiatConversionFactor(0.0)
+                            .build()
                     )
-                    .priceAdjustments(
-                        listOf(
-                            CustomerPlanAddParams.PriceAdjustment.builder()
-                                .adjustmentType(
-                                    CustomerPlanAddParams.PriceAdjustment.AdjustmentType.PERCENTAGE
-                                )
-                                .chargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .startPeriod(0.0)
-                                .quantity(0.0)
-                                .tier(0.0)
-                                .value(0.0)
-                                .build()
-                        )
+                    .addPriceAdjustment(
+                        CustomerPlanAddParams.PriceAdjustment.builder()
+                            .adjustmentType(
+                                CustomerPlanAddParams.PriceAdjustment.AdjustmentType.PERCENTAGE
+                            )
+                            .chargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .startPeriod(0.0)
+                            .quantity(0.0)
+                            .tier(0.0)
+                            .value(0.0)
+                            .build()
                     )
                     .trialSpec(
                         CustomerPlanAddParams.TrialSpec.builder()

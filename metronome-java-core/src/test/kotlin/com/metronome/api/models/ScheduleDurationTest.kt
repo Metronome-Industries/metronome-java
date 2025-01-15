@@ -12,15 +12,13 @@ class ScheduleDurationTest {
     fun createScheduleDuration() {
         val scheduleDuration =
             ScheduleDuration.builder()
-                .scheduleItems(
-                    listOf(
-                        ScheduleDuration.ScheduleItem.builder()
-                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .amount(0.0)
-                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .build()
-                    )
+                .addScheduleItem(
+                    ScheduleDuration.ScheduleItem.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .amount(0.0)
+                        .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .build()
                 )
                 .creditType(
                     CreditTypeData.builder()

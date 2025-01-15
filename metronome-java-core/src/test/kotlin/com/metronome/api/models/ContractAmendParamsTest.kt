@@ -15,33 +15,318 @@ class ContractAmendParamsTest {
             .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
             .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-            .commits(
-                listOf(
+            .addCommit(
+                ContractAmendParams.Commit.builder()
+                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .type(ContractAmendParams.Commit.Type.PREPAID)
+                    .accessSchedule(
+                        ContractAmendParams.Commit.AccessSchedule.builder()
+                            .addScheduleItem(
+                                ContractAmendParams.Commit.AccessSchedule.ScheduleItem.builder()
+                                    .amount(0.0)
+                                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .build()
+                            )
+                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .build()
+                    )
+                    .amount(0.0)
+                    .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addApplicableProductTag("string")
+                    .customFields(
+                        ContractAmendParams.Commit.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .description("description")
+                    .invoiceSchedule(
+                        ContractAmendParams.Commit.InvoiceSchedule.builder()
+                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .recurringSchedule(
+                                ContractAmendParams.Commit.InvoiceSchedule.RecurringSchedule
+                                    .builder()
+                                    .amountDistribution(
+                                        ContractAmendParams.Commit.InvoiceSchedule.RecurringSchedule
+                                            .AmountDistribution
+                                            .DIVIDED
+                                    )
+                                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .frequency(
+                                        ContractAmendParams.Commit.InvoiceSchedule.RecurringSchedule
+                                            .Frequency
+                                            .MONTHLY
+                                    )
+                                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .amount(0.0)
+                                    .quantity(0.0)
+                                    .unitPrice(0.0)
+                                    .build()
+                            )
+                            .addScheduleItem(
+                                ContractAmendParams.Commit.InvoiceSchedule.ScheduleItem.builder()
+                                    .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .amount(0.0)
+                                    .quantity(0.0)
+                                    .unitPrice(0.0)
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .name("x")
+                    .netsuiteSalesOrderId("netsuite_sales_order_id")
+                    .priority(0.0)
+                    .rateType(ContractAmendParams.Commit.RateType.COMMIT_RATE)
+                    .rolloverFraction(0.0)
+                    .temporaryId("temporary_id")
+                    .build()
+            )
+            .addCredit(
+                ContractAmendParams.Credit.builder()
+                    .accessSchedule(
+                        ContractAmendParams.Credit.AccessSchedule.builder()
+                            .addScheduleItem(
+                                ContractAmendParams.Credit.AccessSchedule.ScheduleItem.builder()
+                                    .amount(0.0)
+                                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .build()
+                            )
+                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .build()
+                    )
+                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addApplicableProductTag("string")
+                    .customFields(
+                        ContractAmendParams.Credit.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .description("description")
+                    .name("x")
+                    .netsuiteSalesOrderId("netsuite_sales_order_id")
+                    .priority(0.0)
+                    .rateType(ContractAmendParams.Credit.RateType.COMMIT_RATE)
+                    .build()
+            )
+            .customFields(
+                ContractAmendParams.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
+            .addDiscount(
+                ContractAmendParams.Discount.builder()
+                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .schedule(
+                        ContractAmendParams.Discount.Schedule.builder()
+                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .recurringSchedule(
+                                ContractAmendParams.Discount.Schedule.RecurringSchedule.builder()
+                                    .amountDistribution(
+                                        ContractAmendParams.Discount.Schedule.RecurringSchedule
+                                            .AmountDistribution
+                                            .DIVIDED
+                                    )
+                                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .frequency(
+                                        ContractAmendParams.Discount.Schedule.RecurringSchedule
+                                            .Frequency
+                                            .MONTHLY
+                                    )
+                                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .amount(0.0)
+                                    .quantity(0.0)
+                                    .unitPrice(0.0)
+                                    .build()
+                            )
+                            .addScheduleItem(
+                                ContractAmendParams.Discount.Schedule.ScheduleItem.builder()
+                                    .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .amount(0.0)
+                                    .quantity(0.0)
+                                    .unitPrice(0.0)
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .name("x")
+                    .netsuiteSalesOrderId("netsuite_sales_order_id")
+                    .build()
+            )
+            .netsuiteSalesOrderId("netsuite_sales_order_id")
+            .addOverride(
+                ContractAmendParams.Override.builder()
+                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .addApplicableProductTag("string")
+                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .entitled(true)
+                    .isCommitSpecific(true)
+                    .multiplier(0.0)
+                    .addOverrideSpecifier(
+                        ContractAmendParams.Override.OverrideSpecifier.builder()
+                            .addCommitId("string")
+                            .presentationGroupValues(
+                                ContractAmendParams.Override.OverrideSpecifier
+                                    .PresentationGroupValues
+                                    .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
+                            .pricingGroupValues(
+                                ContractAmendParams.Override.OverrideSpecifier.PricingGroupValues
+                                    .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
+                            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .addProductTag("string")
+                            .build()
+                    )
+                    .overwriteRate(
+                        ContractAmendParams.Override.OverwriteRate.builder()
+                            .rateType(ContractAmendParams.Override.OverwriteRate.RateType.FLAT)
+                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .customRate(
+                                ContractAmendParams.Override.OverwriteRate.CustomRate.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .isProrated(true)
+                            .price(0.0)
+                            .quantity(0.0)
+                            .addTier(Tier.builder().price(0.0).size(0.0).build())
+                            .build()
+                    )
+                    .priority(0.0)
+                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .target(ContractAmendParams.Override.Target.COMMIT_RATE)
+                    .addTier(
+                        ContractAmendParams.Override.Tier.builder()
+                            .multiplier(0.0)
+                            .size(0.0)
+                            .build()
+                    )
+                    .type(ContractAmendParams.Override.Type.OVERWRITE)
+                    .build()
+            )
+            .addProfessionalService(
+                ContractAmendParams.ProfessionalService.builder()
+                    .maxAmount(0.0)
+                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .quantity(0.0)
+                    .unitPrice(0.0)
+                    .customFields(
+                        ContractAmendParams.ProfessionalService.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .description("description")
+                    .netsuiteSalesOrderId("netsuite_sales_order_id")
+                    .build()
+            )
+            .addResellerRoyalty(
+                ContractAmendParams.ResellerRoyalty.builder()
+                    .resellerType(ContractAmendParams.ResellerRoyalty.ResellerType.AWS)
+                    .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addApplicableProductTag("string")
+                    .awsOptions(
+                        ContractAmendParams.ResellerRoyalty.AwsOptions.builder()
+                            .awsAccountNumber("aws_account_number")
+                            .awsOfferId("aws_offer_id")
+                            .awsPayerReferenceId("aws_payer_reference_id")
+                            .build()
+                    )
+                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .fraction(0.0)
+                    .gcpOptions(
+                        ContractAmendParams.ResellerRoyalty.GcpOptions.builder()
+                            .gcpAccountId("gcp_account_id")
+                            .gcpOfferId("gcp_offer_id")
+                            .build()
+                    )
+                    .netsuiteResellerId("netsuite_reseller_id")
+                    .resellerContractValue(0.0)
+                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .build()
+            )
+            .salesforceOpportunityId("salesforce_opportunity_id")
+            .addScheduledCharge(
+                ContractAmendParams.ScheduledCharge.builder()
+                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .schedule(
+                        ContractAmendParams.ScheduledCharge.Schedule.builder()
+                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .recurringSchedule(
+                                ContractAmendParams.ScheduledCharge.Schedule.RecurringSchedule
+                                    .builder()
+                                    .amountDistribution(
+                                        ContractAmendParams.ScheduledCharge.Schedule
+                                            .RecurringSchedule
+                                            .AmountDistribution
+                                            .DIVIDED
+                                    )
+                                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .frequency(
+                                        ContractAmendParams.ScheduledCharge.Schedule
+                                            .RecurringSchedule
+                                            .Frequency
+                                            .MONTHLY
+                                    )
+                                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .amount(0.0)
+                                    .quantity(0.0)
+                                    .unitPrice(0.0)
+                                    .build()
+                            )
+                            .addScheduleItem(
+                                ContractAmendParams.ScheduledCharge.Schedule.ScheduleItem.builder()
+                                    .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .amount(0.0)
+                                    .quantity(0.0)
+                                    .unitPrice(0.0)
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .name("x")
+                    .netsuiteSalesOrderId("netsuite_sales_order_id")
+                    .build()
+            )
+            .totalContractValue(0.0)
+            .build()
+    }
+
+    @Test
+    fun getBody() {
+        val params =
+            ContractAmendParams.builder()
+                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                .addCommit(
                     ContractAmendParams.Commit.builder()
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .type(ContractAmendParams.Commit.Type.PREPAID)
                         .accessSchedule(
                             ContractAmendParams.Commit.AccessSchedule.builder()
-                                .scheduleItems(
-                                    listOf(
-                                        ContractAmendParams.Commit.AccessSchedule.ScheduleItem
-                                            .builder()
-                                            .amount(0.0)
-                                            .endingBefore(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .startingAt(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .build()
-                                    )
+                                .addScheduleItem(
+                                    ContractAmendParams.Commit.AccessSchedule.ScheduleItem.builder()
+                                        .amount(0.0)
+                                        .endingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .startingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .build()
                                 )
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
                         .amount(0.0)
-                        .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                        .applicableProductTags(listOf("string"))
+                        .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductTag("string")
                         .customFields(
                             ContractAmendParams.Commit.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -77,18 +362,14 @@ class ContractAmendParamsTest {
                                         .unitPrice(0.0)
                                         .build()
                                 )
-                                .scheduleItems(
-                                    listOf(
-                                        ContractAmendParams.Commit.InvoiceSchedule.ScheduleItem
-                                            .builder()
-                                            .timestamp(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .amount(0.0)
-                                            .quantity(0.0)
-                                            .unitPrice(0.0)
-                                            .build()
-                                    )
+                                .addScheduleItem(
+                                    ContractAmendParams.Commit.InvoiceSchedule.ScheduleItem
+                                        .builder()
+                                        .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                        .amount(0.0)
+                                        .quantity(0.0)
+                                        .unitPrice(0.0)
+                                        .build()
                                 )
                                 .build()
                         )
@@ -100,32 +381,27 @@ class ContractAmendParamsTest {
                         .temporaryId("temporary_id")
                         .build()
                 )
-            )
-            .credits(
-                listOf(
+                .addCredit(
                     ContractAmendParams.Credit.builder()
                         .accessSchedule(
                             ContractAmendParams.Credit.AccessSchedule.builder()
-                                .scheduleItems(
-                                    listOf(
-                                        ContractAmendParams.Credit.AccessSchedule.ScheduleItem
-                                            .builder()
-                                            .amount(0.0)
-                                            .endingBefore(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .startingAt(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .build()
-                                    )
+                                .addScheduleItem(
+                                    ContractAmendParams.Credit.AccessSchedule.ScheduleItem.builder()
+                                        .amount(0.0)
+                                        .endingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .startingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .build()
                                 )
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                        .applicableProductTags(listOf("string"))
+                        .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductTag("string")
                         .customFields(
                             ContractAmendParams.Credit.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -138,14 +414,12 @@ class ContractAmendParamsTest {
                         .rateType(ContractAmendParams.Credit.RateType.COMMIT_RATE)
                         .build()
                 )
-            )
-            .customFields(
-                ContractAmendParams.CustomFields.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
-            )
-            .discounts(
-                listOf(
+                .customFields(
+                    ContractAmendParams.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .addDiscount(
                     ContractAmendParams.Discount.builder()
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .schedule(
@@ -175,17 +449,13 @@ class ContractAmendParamsTest {
                                         .unitPrice(0.0)
                                         .build()
                                 )
-                                .scheduleItems(
-                                    listOf(
-                                        ContractAmendParams.Discount.Schedule.ScheduleItem.builder()
-                                            .timestamp(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .amount(0.0)
-                                            .quantity(0.0)
-                                            .unitPrice(0.0)
-                                            .build()
-                                    )
+                                .addScheduleItem(
+                                    ContractAmendParams.Discount.Schedule.ScheduleItem.builder()
+                                        .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                        .amount(0.0)
+                                        .quantity(0.0)
+                                        .unitPrice(0.0)
+                                        .build()
                                 )
                                 .build()
                         )
@@ -193,39 +463,35 @@ class ContractAmendParamsTest {
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .build()
                 )
-            )
-            .netsuiteSalesOrderId("netsuite_sales_order_id")
-            .overrides(
-                listOf(
+                .netsuiteSalesOrderId("netsuite_sales_order_id")
+                .addOverride(
                     ContractAmendParams.Override.builder()
                         .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .applicableProductTags(listOf("string"))
+                        .addApplicableProductTag("string")
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .entitled(true)
                         .isCommitSpecific(true)
                         .multiplier(0.0)
-                        .overrideSpecifiers(
-                            listOf(
-                                ContractAmendParams.Override.OverrideSpecifier.builder()
-                                    .commitIds(listOf("string"))
-                                    .presentationGroupValues(
-                                        ContractAmendParams.Override.OverrideSpecifier
-                                            .PresentationGroupValues
-                                            .builder()
-                                            .putAdditionalProperty("foo", JsonValue.from("string"))
-                                            .build()
-                                    )
-                                    .pricingGroupValues(
-                                        ContractAmendParams.Override.OverrideSpecifier
-                                            .PricingGroupValues
-                                            .builder()
-                                            .putAdditionalProperty("foo", JsonValue.from("string"))
-                                            .build()
-                                    )
-                                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .productTags(listOf("string"))
-                                    .build()
-                            )
+                        .addOverrideSpecifier(
+                            ContractAmendParams.Override.OverrideSpecifier.builder()
+                                .addCommitId("string")
+                                .presentationGroupValues(
+                                    ContractAmendParams.Override.OverrideSpecifier
+                                        .PresentationGroupValues
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .pricingGroupValues(
+                                    ContractAmendParams.Override.OverrideSpecifier
+                                        .PricingGroupValues
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .addProductTag("string")
+                                .build()
                         )
                         .overwriteRate(
                             ContractAmendParams.Override.OverwriteRate.builder()
@@ -239,26 +505,22 @@ class ContractAmendParamsTest {
                                 .isProrated(true)
                                 .price(0.0)
                                 .quantity(0.0)
-                                .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
+                                .addTier(Tier.builder().price(0.0).size(0.0).build())
                                 .build()
                         )
                         .priority(0.0)
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .target(ContractAmendParams.Override.Target.COMMIT_RATE)
-                        .tiers(
-                            listOf(
-                                ContractAmendParams.Override.Tier.builder()
-                                    .multiplier(0.0)
-                                    .size(0.0)
-                                    .build()
-                            )
+                        .addTier(
+                            ContractAmendParams.Override.Tier.builder()
+                                .multiplier(0.0)
+                                .size(0.0)
+                                .build()
                         )
                         .type(ContractAmendParams.Override.Type.OVERWRITE)
                         .build()
                 )
-            )
-            .professionalServices(
-                listOf(
+                .addProfessionalService(
                     ContractAmendParams.ProfessionalService.builder()
                         .maxAmount(0.0)
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -273,13 +535,11 @@ class ContractAmendParamsTest {
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .build()
                 )
-            )
-            .resellerRoyalties(
-                listOf(
+                .addResellerRoyalty(
                     ContractAmendParams.ResellerRoyalty.builder()
                         .resellerType(ContractAmendParams.ResellerRoyalty.ResellerType.AWS)
-                        .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                        .applicableProductTags(listOf("string"))
+                        .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductTag("string")
                         .awsOptions(
                             ContractAmendParams.ResellerRoyalty.AwsOptions.builder()
                                 .awsAccountNumber("aws_account_number")
@@ -300,10 +560,8 @@ class ContractAmendParamsTest {
                         .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
-            )
-            .salesforceOpportunityId("salesforce_opportunity_id")
-            .scheduledCharges(
-                listOf(
+                .salesforceOpportunityId("salesforce_opportunity_id")
+                .addScheduledCharge(
                     ContractAmendParams.ScheduledCharge.builder()
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .schedule(
@@ -335,390 +593,20 @@ class ContractAmendParamsTest {
                                         .unitPrice(0.0)
                                         .build()
                                 )
-                                .scheduleItems(
-                                    listOf(
-                                        ContractAmendParams.ScheduledCharge.Schedule.ScheduleItem
-                                            .builder()
-                                            .timestamp(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .amount(0.0)
-                                            .quantity(0.0)
-                                            .unitPrice(0.0)
-                                            .build()
-                                    )
+                                .addScheduleItem(
+                                    ContractAmendParams.ScheduledCharge.Schedule.ScheduleItem
+                                        .builder()
+                                        .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                        .amount(0.0)
+                                        .quantity(0.0)
+                                        .unitPrice(0.0)
+                                        .build()
                                 )
                                 .build()
                         )
                         .name("x")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .build()
-                )
-            )
-            .totalContractValue(0.0)
-            .build()
-    }
-
-    @Test
-    fun getBody() {
-        val params =
-            ContractAmendParams.builder()
-                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-                .commits(
-                    listOf(
-                        ContractAmendParams.Commit.builder()
-                            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .type(ContractAmendParams.Commit.Type.PREPAID)
-                            .accessSchedule(
-                                ContractAmendParams.Commit.AccessSchedule.builder()
-                                    .scheduleItems(
-                                        listOf(
-                                            ContractAmendParams.Commit.AccessSchedule.ScheduleItem
-                                                .builder()
-                                                .amount(0.0)
-                                                .endingBefore(
-                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                                )
-                                                .startingAt(
-                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                                )
-                                                .build()
-                                        )
-                                    )
-                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .build()
-                            )
-                            .amount(0.0)
-                            .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                            .applicableProductTags(listOf("string"))
-                            .customFields(
-                                ContractAmendParams.Commit.CustomFields.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                                    .build()
-                            )
-                            .description("description")
-                            .invoiceSchedule(
-                                ContractAmendParams.Commit.InvoiceSchedule.builder()
-                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .recurringSchedule(
-                                        ContractAmendParams.Commit.InvoiceSchedule.RecurringSchedule
-                                            .builder()
-                                            .amountDistribution(
-                                                ContractAmendParams.Commit.InvoiceSchedule
-                                                    .RecurringSchedule
-                                                    .AmountDistribution
-                                                    .DIVIDED
-                                            )
-                                            .endingBefore(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .frequency(
-                                                ContractAmendParams.Commit.InvoiceSchedule
-                                                    .RecurringSchedule
-                                                    .Frequency
-                                                    .MONTHLY
-                                            )
-                                            .startingAt(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .amount(0.0)
-                                            .quantity(0.0)
-                                            .unitPrice(0.0)
-                                            .build()
-                                    )
-                                    .scheduleItems(
-                                        listOf(
-                                            ContractAmendParams.Commit.InvoiceSchedule.ScheduleItem
-                                                .builder()
-                                                .timestamp(
-                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                                )
-                                                .amount(0.0)
-                                                .quantity(0.0)
-                                                .unitPrice(0.0)
-                                                .build()
-                                        )
-                                    )
-                                    .build()
-                            )
-                            .name("x")
-                            .netsuiteSalesOrderId("netsuite_sales_order_id")
-                            .priority(0.0)
-                            .rateType(ContractAmendParams.Commit.RateType.COMMIT_RATE)
-                            .rolloverFraction(0.0)
-                            .temporaryId("temporary_id")
-                            .build()
-                    )
-                )
-                .credits(
-                    listOf(
-                        ContractAmendParams.Credit.builder()
-                            .accessSchedule(
-                                ContractAmendParams.Credit.AccessSchedule.builder()
-                                    .scheduleItems(
-                                        listOf(
-                                            ContractAmendParams.Credit.AccessSchedule.ScheduleItem
-                                                .builder()
-                                                .amount(0.0)
-                                                .endingBefore(
-                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                                )
-                                                .startingAt(
-                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                                )
-                                                .build()
-                                        )
-                                    )
-                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .build()
-                            )
-                            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                            .applicableProductTags(listOf("string"))
-                            .customFields(
-                                ContractAmendParams.Credit.CustomFields.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                                    .build()
-                            )
-                            .description("description")
-                            .name("x")
-                            .netsuiteSalesOrderId("netsuite_sales_order_id")
-                            .priority(0.0)
-                            .rateType(ContractAmendParams.Credit.RateType.COMMIT_RATE)
-                            .build()
-                    )
-                )
-                .customFields(
-                    ContractAmendParams.CustomFields.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("string"))
-                        .build()
-                )
-                .discounts(
-                    listOf(
-                        ContractAmendParams.Discount.builder()
-                            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .schedule(
-                                ContractAmendParams.Discount.Schedule.builder()
-                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .recurringSchedule(
-                                        ContractAmendParams.Discount.Schedule.RecurringSchedule
-                                            .builder()
-                                            .amountDistribution(
-                                                ContractAmendParams.Discount.Schedule
-                                                    .RecurringSchedule
-                                                    .AmountDistribution
-                                                    .DIVIDED
-                                            )
-                                            .endingBefore(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .frequency(
-                                                ContractAmendParams.Discount.Schedule
-                                                    .RecurringSchedule
-                                                    .Frequency
-                                                    .MONTHLY
-                                            )
-                                            .startingAt(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .amount(0.0)
-                                            .quantity(0.0)
-                                            .unitPrice(0.0)
-                                            .build()
-                                    )
-                                    .scheduleItems(
-                                        listOf(
-                                            ContractAmendParams.Discount.Schedule.ScheduleItem
-                                                .builder()
-                                                .timestamp(
-                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                                )
-                                                .amount(0.0)
-                                                .quantity(0.0)
-                                                .unitPrice(0.0)
-                                                .build()
-                                        )
-                                    )
-                                    .build()
-                            )
-                            .name("x")
-                            .netsuiteSalesOrderId("netsuite_sales_order_id")
-                            .build()
-                    )
-                )
-                .netsuiteSalesOrderId("netsuite_sales_order_id")
-                .overrides(
-                    listOf(
-                        ContractAmendParams.Override.builder()
-                            .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .applicableProductTags(listOf("string"))
-                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .entitled(true)
-                            .isCommitSpecific(true)
-                            .multiplier(0.0)
-                            .overrideSpecifiers(
-                                listOf(
-                                    ContractAmendParams.Override.OverrideSpecifier.builder()
-                                        .commitIds(listOf("string"))
-                                        .presentationGroupValues(
-                                            ContractAmendParams.Override.OverrideSpecifier
-                                                .PresentationGroupValues
-                                                .builder()
-                                                .putAdditionalProperty(
-                                                    "foo",
-                                                    JsonValue.from("string")
-                                                )
-                                                .build()
-                                        )
-                                        .pricingGroupValues(
-                                            ContractAmendParams.Override.OverrideSpecifier
-                                                .PricingGroupValues
-                                                .builder()
-                                                .putAdditionalProperty(
-                                                    "foo",
-                                                    JsonValue.from("string")
-                                                )
-                                                .build()
-                                        )
-                                        .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .productTags(listOf("string"))
-                                        .build()
-                                )
-                            )
-                            .overwriteRate(
-                                ContractAmendParams.Override.OverwriteRate.builder()
-                                    .rateType(
-                                        ContractAmendParams.Override.OverwriteRate.RateType.FLAT
-                                    )
-                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .customRate(
-                                        ContractAmendParams.Override.OverwriteRate.CustomRate
-                                            .builder()
-                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                            .build()
-                                    )
-                                    .isProrated(true)
-                                    .price(0.0)
-                                    .quantity(0.0)
-                                    .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
-                                    .build()
-                            )
-                            .priority(0.0)
-                            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .target(ContractAmendParams.Override.Target.COMMIT_RATE)
-                            .tiers(
-                                listOf(
-                                    ContractAmendParams.Override.Tier.builder()
-                                        .multiplier(0.0)
-                                        .size(0.0)
-                                        .build()
-                                )
-                            )
-                            .type(ContractAmendParams.Override.Type.OVERWRITE)
-                            .build()
-                    )
-                )
-                .professionalServices(
-                    listOf(
-                        ContractAmendParams.ProfessionalService.builder()
-                            .maxAmount(0.0)
-                            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .quantity(0.0)
-                            .unitPrice(0.0)
-                            .customFields(
-                                ContractAmendParams.ProfessionalService.CustomFields.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                                    .build()
-                            )
-                            .description("description")
-                            .netsuiteSalesOrderId("netsuite_sales_order_id")
-                            .build()
-                    )
-                )
-                .resellerRoyalties(
-                    listOf(
-                        ContractAmendParams.ResellerRoyalty.builder()
-                            .resellerType(ContractAmendParams.ResellerRoyalty.ResellerType.AWS)
-                            .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                            .applicableProductTags(listOf("string"))
-                            .awsOptions(
-                                ContractAmendParams.ResellerRoyalty.AwsOptions.builder()
-                                    .awsAccountNumber("aws_account_number")
-                                    .awsOfferId("aws_offer_id")
-                                    .awsPayerReferenceId("aws_payer_reference_id")
-                                    .build()
-                            )
-                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .fraction(0.0)
-                            .gcpOptions(
-                                ContractAmendParams.ResellerRoyalty.GcpOptions.builder()
-                                    .gcpAccountId("gcp_account_id")
-                                    .gcpOfferId("gcp_offer_id")
-                                    .build()
-                            )
-                            .netsuiteResellerId("netsuite_reseller_id")
-                            .resellerContractValue(0.0)
-                            .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .build()
-                    )
-                )
-                .salesforceOpportunityId("salesforce_opportunity_id")
-                .scheduledCharges(
-                    listOf(
-                        ContractAmendParams.ScheduledCharge.builder()
-                            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .schedule(
-                                ContractAmendParams.ScheduledCharge.Schedule.builder()
-                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .recurringSchedule(
-                                        ContractAmendParams.ScheduledCharge.Schedule
-                                            .RecurringSchedule
-                                            .builder()
-                                            .amountDistribution(
-                                                ContractAmendParams.ScheduledCharge.Schedule
-                                                    .RecurringSchedule
-                                                    .AmountDistribution
-                                                    .DIVIDED
-                                            )
-                                            .endingBefore(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .frequency(
-                                                ContractAmendParams.ScheduledCharge.Schedule
-                                                    .RecurringSchedule
-                                                    .Frequency
-                                                    .MONTHLY
-                                            )
-                                            .startingAt(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .amount(0.0)
-                                            .quantity(0.0)
-                                            .unitPrice(0.0)
-                                            .build()
-                                    )
-                                    .scheduleItems(
-                                        listOf(
-                                            ContractAmendParams.ScheduledCharge.Schedule
-                                                .ScheduleItem
-                                                .builder()
-                                                .timestamp(
-                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                                )
-                                                .amount(0.0)
-                                                .quantity(0.0)
-                                                .unitPrice(0.0)
-                                                .build()
-                                        )
-                                    )
-                                    .build()
-                            )
-                            .name("x")
-                            .netsuiteSalesOrderId("netsuite_sales_order_id")
-                            .build()
-                    )
                 )
                 .totalContractValue(0.0)
                 .build()
@@ -735,26 +623,23 @@ class ContractAmendParamsTest {
                         .type(ContractAmendParams.Commit.Type.PREPAID)
                         .accessSchedule(
                             ContractAmendParams.Commit.AccessSchedule.builder()
-                                .scheduleItems(
-                                    listOf(
-                                        ContractAmendParams.Commit.AccessSchedule.ScheduleItem
-                                            .builder()
-                                            .amount(0.0)
-                                            .endingBefore(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .startingAt(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .build()
-                                    )
+                                .addScheduleItem(
+                                    ContractAmendParams.Commit.AccessSchedule.ScheduleItem.builder()
+                                        .amount(0.0)
+                                        .endingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .startingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .build()
                                 )
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
                         .amount(0.0)
-                        .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                        .applicableProductTags(listOf("string"))
+                        .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductTag("string")
                         .customFields(
                             ContractAmendParams.Commit.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -790,18 +675,14 @@ class ContractAmendParamsTest {
                                         .unitPrice(0.0)
                                         .build()
                                 )
-                                .scheduleItems(
-                                    listOf(
-                                        ContractAmendParams.Commit.InvoiceSchedule.ScheduleItem
-                                            .builder()
-                                            .timestamp(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .amount(0.0)
-                                            .quantity(0.0)
-                                            .unitPrice(0.0)
-                                            .build()
-                                    )
+                                .addScheduleItem(
+                                    ContractAmendParams.Commit.InvoiceSchedule.ScheduleItem
+                                        .builder()
+                                        .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                        .amount(0.0)
+                                        .quantity(0.0)
+                                        .unitPrice(0.0)
+                                        .build()
                                 )
                                 .build()
                         )
@@ -820,26 +701,23 @@ class ContractAmendParamsTest {
                     ContractAmendParams.Credit.builder()
                         .accessSchedule(
                             ContractAmendParams.Credit.AccessSchedule.builder()
-                                .scheduleItems(
-                                    listOf(
-                                        ContractAmendParams.Credit.AccessSchedule.ScheduleItem
-                                            .builder()
-                                            .amount(0.0)
-                                            .endingBefore(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .startingAt(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .build()
-                                    )
+                                .addScheduleItem(
+                                    ContractAmendParams.Credit.AccessSchedule.ScheduleItem.builder()
+                                        .amount(0.0)
+                                        .endingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .startingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .build()
                                 )
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                        .applicableProductTags(listOf("string"))
+                        .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductTag("string")
                         .customFields(
                             ContractAmendParams.Credit.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -891,17 +769,13 @@ class ContractAmendParamsTest {
                                         .unitPrice(0.0)
                                         .build()
                                 )
-                                .scheduleItems(
-                                    listOf(
-                                        ContractAmendParams.Discount.Schedule.ScheduleItem.builder()
-                                            .timestamp(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .amount(0.0)
-                                            .quantity(0.0)
-                                            .unitPrice(0.0)
-                                            .build()
-                                    )
+                                .addScheduleItem(
+                                    ContractAmendParams.Discount.Schedule.ScheduleItem.builder()
+                                        .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                        .amount(0.0)
+                                        .quantity(0.0)
+                                        .unitPrice(0.0)
+                                        .build()
                                 )
                                 .build()
                         )
@@ -916,33 +790,31 @@ class ContractAmendParamsTest {
                 listOf(
                     ContractAmendParams.Override.builder()
                         .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .applicableProductTags(listOf("string"))
+                        .addApplicableProductTag("string")
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .entitled(true)
                         .isCommitSpecific(true)
                         .multiplier(0.0)
-                        .overrideSpecifiers(
-                            listOf(
-                                ContractAmendParams.Override.OverrideSpecifier.builder()
-                                    .commitIds(listOf("string"))
-                                    .presentationGroupValues(
-                                        ContractAmendParams.Override.OverrideSpecifier
-                                            .PresentationGroupValues
-                                            .builder()
-                                            .putAdditionalProperty("foo", JsonValue.from("string"))
-                                            .build()
-                                    )
-                                    .pricingGroupValues(
-                                        ContractAmendParams.Override.OverrideSpecifier
-                                            .PricingGroupValues
-                                            .builder()
-                                            .putAdditionalProperty("foo", JsonValue.from("string"))
-                                            .build()
-                                    )
-                                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .productTags(listOf("string"))
-                                    .build()
-                            )
+                        .addOverrideSpecifier(
+                            ContractAmendParams.Override.OverrideSpecifier.builder()
+                                .addCommitId("string")
+                                .presentationGroupValues(
+                                    ContractAmendParams.Override.OverrideSpecifier
+                                        .PresentationGroupValues
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .pricingGroupValues(
+                                    ContractAmendParams.Override.OverrideSpecifier
+                                        .PricingGroupValues
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .addProductTag("string")
+                                .build()
                         )
                         .overwriteRate(
                             ContractAmendParams.Override.OverwriteRate.builder()
@@ -956,19 +828,17 @@ class ContractAmendParamsTest {
                                 .isProrated(true)
                                 .price(0.0)
                                 .quantity(0.0)
-                                .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
+                                .addTier(Tier.builder().price(0.0).size(0.0).build())
                                 .build()
                         )
                         .priority(0.0)
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .target(ContractAmendParams.Override.Target.COMMIT_RATE)
-                        .tiers(
-                            listOf(
-                                ContractAmendParams.Override.Tier.builder()
-                                    .multiplier(0.0)
-                                    .size(0.0)
-                                    .build()
-                            )
+                        .addTier(
+                            ContractAmendParams.Override.Tier.builder()
+                                .multiplier(0.0)
+                                .size(0.0)
+                                .build()
                         )
                         .type(ContractAmendParams.Override.Type.OVERWRITE)
                         .build()
@@ -997,8 +867,8 @@ class ContractAmendParamsTest {
                 listOf(
                     ContractAmendParams.ResellerRoyalty.builder()
                         .resellerType(ContractAmendParams.ResellerRoyalty.ResellerType.AWS)
-                        .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                        .applicableProductTags(listOf("string"))
+                        .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductTag("string")
                         .awsOptions(
                             ContractAmendParams.ResellerRoyalty.AwsOptions.builder()
                                 .awsAccountNumber("aws_account_number")
@@ -1055,18 +925,14 @@ class ContractAmendParamsTest {
                                         .unitPrice(0.0)
                                         .build()
                                 )
-                                .scheduleItems(
-                                    listOf(
-                                        ContractAmendParams.ScheduledCharge.Schedule.ScheduleItem
-                                            .builder()
-                                            .timestamp(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .amount(0.0)
-                                            .quantity(0.0)
-                                            .unitPrice(0.0)
-                                            .build()
-                                    )
+                                .addScheduleItem(
+                                    ContractAmendParams.ScheduledCharge.Schedule.ScheduleItem
+                                        .builder()
+                                        .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                        .amount(0.0)
+                                        .quantity(0.0)
+                                        .unitPrice(0.0)
+                                        .build()
                                 )
                                 .build()
                         )

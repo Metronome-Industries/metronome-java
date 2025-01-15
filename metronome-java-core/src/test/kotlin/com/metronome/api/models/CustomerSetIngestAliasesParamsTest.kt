@@ -11,7 +11,7 @@ class CustomerSetIngestAliasesParamsTest {
     fun createCustomerSetIngestAliasesParams() {
         CustomerSetIngestAliasesParams.builder()
             .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-            .ingestAliases(listOf("team@example.com"))
+            .addIngestAlias("team@example.com")
             .build()
     }
 
@@ -20,7 +20,7 @@ class CustomerSetIngestAliasesParamsTest {
         val params =
             CustomerSetIngestAliasesParams.builder()
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-                .ingestAliases(listOf("team@example.com"))
+                .addIngestAlias("team@example.com")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -32,7 +32,7 @@ class CustomerSetIngestAliasesParamsTest {
         val params =
             CustomerSetIngestAliasesParams.builder()
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-                .ingestAliases(listOf("team@example.com"))
+                .addIngestAlias("team@example.com")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -44,7 +44,7 @@ class CustomerSetIngestAliasesParamsTest {
         val params =
             CustomerSetIngestAliasesParams.builder()
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-                .ingestAliases(listOf("team@example.com"))
+                .addIngestAlias("team@example.com")
                 .build()
         assertThat(params).isNotNull
         // path param "customerId"

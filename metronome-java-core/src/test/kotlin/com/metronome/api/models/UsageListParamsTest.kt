@@ -16,20 +16,18 @@ class UsageListParamsTest {
             .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
             .windowSize(UsageListParams.WindowSize.HOUR)
             .nextPage("next_page")
-            .billableMetrics(
-                listOf(
-                    UsageListParams.BillableMetric.builder()
-                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .groupBy(
-                            UsageListParams.BillableMetric.GroupBy.builder()
-                                .key("key")
-                                .values(listOf("x"))
-                                .build()
-                        )
-                        .build()
-                )
+            .addBillableMetric(
+                UsageListParams.BillableMetric.builder()
+                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .groupBy(
+                        UsageListParams.BillableMetric.GroupBy.builder()
+                            .key("key")
+                            .addValue("x")
+                            .build()
+                    )
+                    .build()
             )
-            .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+            .addCustomerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .build()
     }
 
@@ -41,20 +39,18 @@ class UsageListParamsTest {
                 .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .windowSize(UsageListParams.WindowSize.HOUR)
                 .nextPage("next_page")
-                .billableMetrics(
-                    listOf(
-                        UsageListParams.BillableMetric.builder()
-                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .groupBy(
-                                UsageListParams.BillableMetric.GroupBy.builder()
-                                    .key("key")
-                                    .values(listOf("x"))
-                                    .build()
-                            )
-                            .build()
-                    )
+                .addBillableMetric(
+                    UsageListParams.BillableMetric.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .groupBy(
+                            UsageListParams.BillableMetric.GroupBy.builder()
+                                .key("key")
+                                .addValue("x")
+                                .build()
+                        )
+                        .build()
                 )
-                .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+                .addCustomerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .build()
         val expected = QueryParams.builder()
         expected.put("next_page", "next_page")
@@ -81,20 +77,18 @@ class UsageListParamsTest {
                 .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .windowSize(UsageListParams.WindowSize.HOUR)
                 .nextPage("next_page")
-                .billableMetrics(
-                    listOf(
-                        UsageListParams.BillableMetric.builder()
-                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .groupBy(
-                                UsageListParams.BillableMetric.GroupBy.builder()
-                                    .key("key")
-                                    .values(listOf("x"))
-                                    .build()
-                            )
-                            .build()
-                    )
+                .addBillableMetric(
+                    UsageListParams.BillableMetric.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .groupBy(
+                            UsageListParams.BillableMetric.GroupBy.builder()
+                                .key("key")
+                                .addValue("x")
+                                .build()
+                        )
+                        .build()
                 )
-                .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+                .addCustomerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -109,7 +103,7 @@ class UsageListParamsTest {
                         .groupBy(
                             UsageListParams.BillableMetric.GroupBy.builder()
                                 .key("key")
-                                .values(listOf("x"))
+                                .addValue("x")
                                 .build()
                         )
                         .build()

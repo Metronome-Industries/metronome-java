@@ -85,15 +85,14 @@ To create a new usage, first use the `UsageIngestParams` builder to specify attr
 
 ```java
 import com.metronome.api.models.UsageIngestParams;
-import java.util.List;
 
 UsageIngestParams params = UsageIngestParams.builder()
-    .usage(List.of(UsageIngestParams.Usage.builder()
+    .addUsage(UsageIngestParams.Usage.builder()
         .customerId("team@example.com")
         .eventType("heartbeat")
         .timestamp("2021-01-01T00:00:00Z")
         .transactionId("2021-01-01T00:00:00Z_cluster42")
-        .build()))
+        .build())
     .build();
 client.usage().ingest(params)
 ```

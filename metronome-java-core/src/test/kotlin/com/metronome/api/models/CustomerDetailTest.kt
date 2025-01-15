@@ -25,7 +25,7 @@ class CustomerDetailTest {
                         .build()
                 )
                 .externalId("external_id")
-                .ingestAliases(listOf("string"))
+                .addIngestAlias("string")
                 .name("name")
                 .currentBillableStatus(
                     CustomerDetail.CurrentBillableStatus.builder()

@@ -14,7 +14,7 @@ class CustomerTest {
             Customer.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .externalId("external_id")
-                .ingestAliases(listOf("string"))
+                .addIngestAlias("string")
                 .name("name")
                 .customFields(
                     Customer.CustomFields.builder()

@@ -23,15 +23,13 @@ class CreditTest {
                 .type(Credit.Type.CREDIT)
                 .accessSchedule(
                     ScheduleDuration.builder()
-                        .scheduleItems(
-                            listOf(
-                                ScheduleDuration.ScheduleItem.builder()
-                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .amount(0.0)
-                                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .build()
-                            )
+                        .addScheduleItem(
+                            ScheduleDuration.ScheduleItem.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .amount(0.0)
+                                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .build()
                         )
                         .creditType(
                             CreditTypeData.builder()
@@ -41,9 +39,9 @@ class CreditTest {
                         )
                         .build()
                 )
-                .applicableContractIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .applicableProductTags(listOf("string"))
+                .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .addApplicableProductTag("string")
                 .balance(0.0)
                 .contract(
                     Credit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
@@ -54,19 +52,17 @@ class CreditTest {
                         .build()
                 )
                 .description("description")
-                .ledger(
-                    listOf(
-                        Credit.Ledger.ofCreditSegmentStartLedgerEntry(
-                            Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
-                                .amount(0.0)
-                                .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .type(
-                                    Credit.Ledger.CreditSegmentStartLedgerEntry.Type
-                                        .CREDIT_SEGMENT_START
-                                )
-                                .build()
-                        )
+                .addLedger(
+                    Credit.Ledger.ofCreditSegmentStartLedgerEntry(
+                        Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
+                            .amount(0.0)
+                            .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .type(
+                                Credit.Ledger.CreditSegmentStartLedgerEntry.Type
+                                    .CREDIT_SEGMENT_START
+                            )
+                            .build()
                     )
                 )
                 .name("name")
@@ -89,15 +85,13 @@ class CreditTest {
         assertThat(credit.accessSchedule())
             .contains(
                 ScheduleDuration.builder()
-                    .scheduleItems(
-                        listOf(
-                            ScheduleDuration.ScheduleItem.builder()
-                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .amount(0.0)
-                                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .build()
-                        )
+                    .addScheduleItem(
+                        ScheduleDuration.ScheduleItem.builder()
+                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .amount(0.0)
+                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .build()
                     )
                     .creditType(
                         CreditTypeData.builder()

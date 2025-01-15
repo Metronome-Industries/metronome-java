@@ -13,134 +13,109 @@ class ContractListBalancesResponseTest {
     fun createContractListBalancesResponse() {
         val contractListBalancesResponse =
             ContractListBalancesResponse.builder()
-                .data(
-                    listOf(
-                        ContractListBalancesResponse.Data.ofCommit(
-                            Commit.builder()
-                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .product(
-                                    Commit.Product.builder()
-                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .name("name")
-                                        .build()
-                                )
-                                .type(Commit.Type.PREPAID)
-                                .accessSchedule(
-                                    ScheduleDuration.builder()
-                                        .scheduleItems(
-                                            listOf(
-                                                ScheduleDuration.ScheduleItem.builder()
-                                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                    .amount(0.0)
-                                                    .endingBefore(
-                                                        OffsetDateTime.parse(
-                                                            "2019-12-27T18:11:19.117Z"
-                                                        )
-                                                    )
-                                                    .startingAt(
-                                                        OffsetDateTime.parse(
-                                                            "2019-12-27T18:11:19.117Z"
-                                                        )
-                                                    )
-                                                    .build()
+                .addData(
+                    ContractListBalancesResponse.Data.ofCommit(
+                        Commit.builder()
+                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .product(
+                                Commit.Product.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .name("name")
+                                    .build()
+                            )
+                            .type(Commit.Type.PREPAID)
+                            .accessSchedule(
+                                ScheduleDuration.builder()
+                                    .addScheduleItem(
+                                        ScheduleDuration.ScheduleItem.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .amount(0.0)
+                                            .endingBefore(
+                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
-                                        )
-                                        .creditType(
-                                            CreditTypeData.builder()
-                                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                .name("name")
-                                                .build()
-                                        )
-                                        .build()
-                                )
-                                .amount(0.0)
-                                .applicableContractIds(
-                                    listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                )
-                                .applicableProductIds(
-                                    listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                )
-                                .applicableProductTags(listOf("string"))
-                                .balance(0.0)
-                                .contract(
-                                    Commit.Contract.builder()
-                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .build()
-                                )
-                                .customFields(
-                                    Commit.CustomFields.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("string"))
-                                        .build()
-                                )
-                                .description("description")
-                                .invoiceContract(
-                                    Commit.InvoiceContract.builder()
-                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .build()
-                                )
-                                .invoiceSchedule(
-                                    SchedulePointInTime.builder()
-                                        .creditType(
-                                            CreditTypeData.builder()
-                                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                .name("name")
-                                                .build()
-                                        )
-                                        .scheduleItems(
-                                            listOf(
-                                                SchedulePointInTime.ScheduleItem.builder()
-                                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                    .amount(0.0)
-                                                    .invoiceId(
-                                                        "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
-                                                    )
-                                                    .quantity(0.0)
-                                                    .timestamp(
-                                                        OffsetDateTime.parse(
-                                                            "2019-12-27T18:11:19.117Z"
-                                                        )
-                                                    )
-                                                    .unitPrice(0.0)
-                                                    .build()
+                                            .startingAt(
+                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
-                                        )
-                                        .build()
-                                )
-                                .ledger(
-                                    listOf(
-                                        Commit.Ledger.ofPrepaidCommitSegmentStartLedgerEntry(
-                                            Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry
-                                                .builder()
-                                                .amount(0.0)
-                                                .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                .timestamp(
-                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                                )
-                                                .type(
-                                                    Commit.Ledger
-                                                        .PrepaidCommitSegmentStartLedgerEntry
-                                                        .Type
-                                                        .PREPAID_COMMIT_SEGMENT_START
-                                                )
-                                                .build()
-                                        )
+                                            .build()
                                     )
-                                )
-                                .name("name")
-                                .netsuiteSalesOrderId("netsuite_sales_order_id")
-                                .priority(0.0)
-                                .rateType(Commit.RateType.COMMIT_RATE)
-                                .rolledOverFrom(
-                                    Commit.RolledOverFrom.builder()
-                                        .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .creditType(
+                                        CreditTypeData.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .name("name")
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .amount(0.0)
+                            .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .addApplicableProductTag("string")
+                            .balance(0.0)
+                            .contract(
+                                Commit.Contract.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .build()
+                            )
+                            .customFields(
+                                Commit.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
+                            .description("description")
+                            .invoiceContract(
+                                Commit.InvoiceContract.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .build()
+                            )
+                            .invoiceSchedule(
+                                SchedulePointInTime.builder()
+                                    .creditType(
+                                        CreditTypeData.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .name("name")
+                                            .build()
+                                    )
+                                    .addScheduleItem(
+                                        SchedulePointInTime.ScheduleItem.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .amount(0.0)
+                                            .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .quantity(0.0)
+                                            .timestamp(
+                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            )
+                                            .unitPrice(0.0)
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .addLedger(
+                                Commit.Ledger.ofPrepaidCommitSegmentStartLedgerEntry(
+                                    Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry.builder()
+                                        .amount(0.0)
+                                        .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                        .type(
+                                            Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry.Type
+                                                .PREPAID_COMMIT_SEGMENT_START
+                                        )
                                         .build()
                                 )
-                                .rolloverFraction(0.0)
-                                .salesforceOpportunityId("salesforce_opportunity_id")
-                                .uniquenessKey("x")
-                                .build()
-                        )
+                            )
+                            .name("name")
+                            .netsuiteSalesOrderId("netsuite_sales_order_id")
+                            .priority(0.0)
+                            .rateType(Commit.RateType.COMMIT_RATE)
+                            .rolledOverFrom(
+                                Commit.RolledOverFrom.builder()
+                                    .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .build()
+                            )
+                            .rolloverFraction(0.0)
+                            .salesforceOpportunityId("salesforce_opportunity_id")
+                            .uniquenessKey("x")
+                            .build()
                     )
                 )
                 .nextPage("next_page")
@@ -160,19 +135,17 @@ class ContractListBalancesResponseTest {
                         .type(Commit.Type.PREPAID)
                         .accessSchedule(
                             ScheduleDuration.builder()
-                                .scheduleItems(
-                                    listOf(
-                                        ScheduleDuration.ScheduleItem.builder()
-                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .amount(0.0)
-                                            .endingBefore(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .startingAt(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .build()
-                                    )
+                                .addScheduleItem(
+                                    ScheduleDuration.ScheduleItem.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .amount(0.0)
+                                        .endingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .startingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .build()
                                 )
                                 .creditType(
                                     CreditTypeData.builder()
@@ -183,9 +156,9 @@ class ContractListBalancesResponseTest {
                                 .build()
                         )
                         .amount(0.0)
-                        .applicableContractIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                        .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                        .applicableProductTags(listOf("string"))
+                        .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductTag("string")
                         .balance(0.0)
                         .contract(
                             Commit.Contract.builder()
@@ -211,35 +184,29 @@ class ContractListBalancesResponseTest {
                                         .name("name")
                                         .build()
                                 )
-                                .scheduleItems(
-                                    listOf(
-                                        SchedulePointInTime.ScheduleItem.builder()
-                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .amount(0.0)
-                                            .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .quantity(0.0)
-                                            .timestamp(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .unitPrice(0.0)
-                                            .build()
-                                    )
+                                .addScheduleItem(
+                                    SchedulePointInTime.ScheduleItem.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .amount(0.0)
+                                        .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .quantity(0.0)
+                                        .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                        .unitPrice(0.0)
+                                        .build()
                                 )
                                 .build()
                         )
-                        .ledger(
-                            listOf(
-                                Commit.Ledger.ofPrepaidCommitSegmentStartLedgerEntry(
-                                    Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry.builder()
-                                        .amount(0.0)
-                                        .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                        .type(
-                                            Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry.Type
-                                                .PREPAID_COMMIT_SEGMENT_START
-                                        )
-                                        .build()
-                                )
+                        .addLedger(
+                            Commit.Ledger.ofPrepaidCommitSegmentStartLedgerEntry(
+                                Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry.builder()
+                                    .amount(0.0)
+                                    .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .type(
+                                        Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry.Type
+                                            .PREPAID_COMMIT_SEGMENT_START
+                                    )
+                                    .build()
                             )
                         )
                         .name("name")

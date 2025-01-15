@@ -12,97 +12,10 @@ class CreditGrantListEntriesResponseTest {
     fun createCreditGrantListEntriesResponse() {
         val creditGrantListEntriesResponse =
             CreditGrantListEntriesResponse.builder()
-                .data(
-                    listOf(
-                        CreditGrantListEntriesResponse.Data.builder()
-                            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .ledgers(
-                                listOf(
-                                    CreditGrantListEntriesResponse.Data.Ledger.builder()
-                                        .creditType(
-                                            CreditTypeData.builder()
-                                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                                .name("name")
-                                                .build()
-                                        )
-                                        .endingBalance(
-                                            CreditGrantListEntriesResponse.Data.Ledger.EndingBalance
-                                                .builder()
-                                                .effectiveAt(
-                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                                )
-                                                .excludingPending(0.0)
-                                                .includingPending(0.0)
-                                                .build()
-                                        )
-                                        .entries(
-                                            listOf(
-                                                CreditLedgerEntry.builder()
-                                                    .amount(0.0)
-                                                    .createdBy("created_by")
-                                                    .creditGrantId(
-                                                        "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
-                                                    )
-                                                    .effectiveAt(
-                                                        OffsetDateTime.parse(
-                                                            "2019-12-27T18:11:19.117Z"
-                                                        )
-                                                    )
-                                                    .reason("Automated invoice deduction")
-                                                    .runningBalance(0.0)
-                                                    .invoiceId(
-                                                        "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
-                                                    )
-                                                    .build()
-                                            )
-                                        )
-                                        .pendingEntries(
-                                            listOf(
-                                                CreditLedgerEntry.builder()
-                                                    .amount(0.0)
-                                                    .createdBy("created_by")
-                                                    .creditGrantId(
-                                                        "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
-                                                    )
-                                                    .effectiveAt(
-                                                        OffsetDateTime.parse(
-                                                            "2019-12-27T18:11:19.117Z"
-                                                        )
-                                                    )
-                                                    .reason("Automated invoice deduction")
-                                                    .runningBalance(0.0)
-                                                    .invoiceId(
-                                                        "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
-                                                    )
-                                                    .build()
-                                            )
-                                        )
-                                        .startingBalance(
-                                            CreditGrantListEntriesResponse.Data.Ledger
-                                                .StartingBalance
-                                                .builder()
-                                                .effectiveAt(
-                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                                )
-                                                .excludingPending(0.0)
-                                                .includingPending(0.0)
-                                                .build()
-                                        )
-                                        .build()
-                                )
-                            )
-                            .build()
-                    )
-                )
-                .nextPage("next_page")
-                .build()
-        assertThat(creditGrantListEntriesResponse).isNotNull
-        assertThat(creditGrantListEntriesResponse.data())
-            .containsExactly(
-                CreditGrantListEntriesResponse.Data.builder()
-                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .ledgers(
-                        listOf(
+                .addData(
+                    CreditGrantListEntriesResponse.Data.builder()
+                        .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addLedger(
                             CreditGrantListEntriesResponse.Data.Ledger.builder()
                                 .creditType(
                                     CreditTypeData.builder()
@@ -120,35 +33,31 @@ class CreditGrantListEntriesResponseTest {
                                         .includingPending(0.0)
                                         .build()
                                 )
-                                .entries(
-                                    listOf(
-                                        CreditLedgerEntry.builder()
-                                            .amount(0.0)
-                                            .createdBy("created_by")
-                                            .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .effectiveAt(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .reason("Automated invoice deduction")
-                                            .runningBalance(0.0)
-                                            .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .build()
-                                    )
+                                .addEntry(
+                                    CreditLedgerEntry.builder()
+                                        .amount(0.0)
+                                        .createdBy("created_by")
+                                        .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .effectiveAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .reason("Automated invoice deduction")
+                                        .runningBalance(0.0)
+                                        .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
                                 )
-                                .pendingEntries(
-                                    listOf(
-                                        CreditLedgerEntry.builder()
-                                            .amount(0.0)
-                                            .createdBy("created_by")
-                                            .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .effectiveAt(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .reason("Automated invoice deduction")
-                                            .runningBalance(0.0)
-                                            .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .build()
-                                    )
+                                .addPendingEntry(
+                                    CreditLedgerEntry.builder()
+                                        .amount(0.0)
+                                        .createdBy("created_by")
+                                        .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .effectiveAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .reason("Automated invoice deduction")
+                                        .runningBalance(0.0)
+                                        .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
                                 )
                                 .startingBalance(
                                     CreditGrantListEntriesResponse.Data.Ledger.StartingBalance
@@ -162,6 +71,60 @@ class CreditGrantListEntriesResponseTest {
                                 )
                                 .build()
                         )
+                        .build()
+                )
+                .nextPage("next_page")
+                .build()
+        assertThat(creditGrantListEntriesResponse).isNotNull
+        assertThat(creditGrantListEntriesResponse.data())
+            .containsExactly(
+                CreditGrantListEntriesResponse.Data.builder()
+                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addLedger(
+                        CreditGrantListEntriesResponse.Data.Ledger.builder()
+                            .creditType(
+                                CreditTypeData.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .name("name")
+                                    .build()
+                            )
+                            .endingBalance(
+                                CreditGrantListEntriesResponse.Data.Ledger.EndingBalance.builder()
+                                    .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .excludingPending(0.0)
+                                    .includingPending(0.0)
+                                    .build()
+                            )
+                            .addEntry(
+                                CreditLedgerEntry.builder()
+                                    .amount(0.0)
+                                    .createdBy("created_by")
+                                    .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .reason("Automated invoice deduction")
+                                    .runningBalance(0.0)
+                                    .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .build()
+                            )
+                            .addPendingEntry(
+                                CreditLedgerEntry.builder()
+                                    .amount(0.0)
+                                    .createdBy("created_by")
+                                    .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .reason("Automated invoice deduction")
+                                    .runningBalance(0.0)
+                                    .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .build()
+                            )
+                            .startingBalance(
+                                CreditGrantListEntriesResponse.Data.Ledger.StartingBalance.builder()
+                                    .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .excludingPending(0.0)
+                                    .includingPending(0.0)
+                                    .build()
+                            )
+                            .build()
                     )
                     .build()
             )

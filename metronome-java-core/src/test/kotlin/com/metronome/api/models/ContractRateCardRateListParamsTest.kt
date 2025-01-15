@@ -17,8 +17,35 @@ class ContractRateCardRateListParamsTest {
             .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
             .limit(1L)
             .nextPage("next_page")
-            .selectors(
-                listOf(
+            .addSelector(
+                ContractRateCardRateListParams.Selector.builder()
+                    .partialPricingGroupValues(
+                        ContractRateCardRateListParams.Selector.PartialPricingGroupValues.builder()
+                            .putAdditionalProperty("region", JsonValue.from("us-west-2"))
+                            .putAdditionalProperty("cloud", JsonValue.from("aws"))
+                            .build()
+                    )
+                    .pricingGroupValues(
+                        ContractRateCardRateListParams.Selector.PricingGroupValues.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
+                    .addProductTag("string")
+                    .build()
+            )
+            .build()
+    }
+
+    @Test
+    fun getQueryParams() {
+        val params =
+            ContractRateCardRateListParams.builder()
+                .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
+                .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
+                .limit(1L)
+                .nextPage("next_page")
+                .addSelector(
                     ContractRateCardRateListParams.Selector.builder()
                         .partialPricingGroupValues(
                             ContractRateCardRateListParams.Selector.PartialPricingGroupValues
@@ -33,40 +60,8 @@ class ContractRateCardRateListParamsTest {
                                 .build()
                         )
                         .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
-                        .productTags(listOf("string"))
+                        .addProductTag("string")
                         .build()
-                )
-            )
-            .build()
-    }
-
-    @Test
-    fun getQueryParams() {
-        val params =
-            ContractRateCardRateListParams.builder()
-                .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
-                .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
-                .limit(1L)
-                .nextPage("next_page")
-                .selectors(
-                    listOf(
-                        ContractRateCardRateListParams.Selector.builder()
-                            .partialPricingGroupValues(
-                                ContractRateCardRateListParams.Selector.PartialPricingGroupValues
-                                    .builder()
-                                    .putAdditionalProperty("region", JsonValue.from("us-west-2"))
-                                    .putAdditionalProperty("cloud", JsonValue.from("aws"))
-                                    .build()
-                            )
-                            .pricingGroupValues(
-                                ContractRateCardRateListParams.Selector.PricingGroupValues.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                                    .build()
-                            )
-                            .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
-                            .productTags(listOf("string"))
-                            .build()
-                    )
                 )
                 .build()
         val expected = QueryParams.builder()
@@ -94,25 +89,23 @@ class ContractRateCardRateListParamsTest {
                 .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                 .limit(1L)
                 .nextPage("next_page")
-                .selectors(
-                    listOf(
-                        ContractRateCardRateListParams.Selector.builder()
-                            .partialPricingGroupValues(
-                                ContractRateCardRateListParams.Selector.PartialPricingGroupValues
-                                    .builder()
-                                    .putAdditionalProperty("region", JsonValue.from("us-west-2"))
-                                    .putAdditionalProperty("cloud", JsonValue.from("aws"))
-                                    .build()
-                            )
-                            .pricingGroupValues(
-                                ContractRateCardRateListParams.Selector.PricingGroupValues.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                                    .build()
-                            )
-                            .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
-                            .productTags(listOf("string"))
-                            .build()
-                    )
+                .addSelector(
+                    ContractRateCardRateListParams.Selector.builder()
+                        .partialPricingGroupValues(
+                            ContractRateCardRateListParams.Selector.PartialPricingGroupValues
+                                .builder()
+                                .putAdditionalProperty("region", JsonValue.from("us-west-2"))
+                                .putAdditionalProperty("cloud", JsonValue.from("aws"))
+                                .build()
+                        )
+                        .pricingGroupValues(
+                            ContractRateCardRateListParams.Selector.PricingGroupValues.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
+                        .addProductTag("string")
+                        .build()
                 )
                 .build()
         val body = params.getBody()
@@ -136,7 +129,7 @@ class ContractRateCardRateListParamsTest {
                                 .build()
                         )
                         .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
-                        .productTags(listOf("string"))
+                        .addProductTag("string")
                         .build()
                 )
             )

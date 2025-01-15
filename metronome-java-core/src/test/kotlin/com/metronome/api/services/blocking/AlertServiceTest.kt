@@ -27,26 +27,22 @@ class AlertServiceTest {
                     .name("\$100 spend threshold reached")
                     .threshold(10000.0)
                     .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .creditGrantTypeFilters(listOf("enterprise"))
+                    .addCreditGrantTypeFilter("enterprise")
                     .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
-                    .customFieldFilters(
-                        listOf(
-                            AlertCreateParams.CustomFieldFilter.builder()
-                                .entity(AlertCreateParams.CustomFieldFilter.Entity.CONTRACT)
-                                .key("key")
-                                .value("value")
-                                .build()
-                        )
+                    .addCustomFieldFilter(
+                        AlertCreateParams.CustomFieldFilter.builder()
+                            .entity(AlertCreateParams.CustomFieldFilter.Entity.CONTRACT)
+                            .key("key")
+                            .value("value")
+                            .build()
                     )
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .evaluateOnCreate(true)
                     .groupKeyFilter(
                         AlertCreateParams.GroupKeyFilter.builder().key("key").value("value").build()
                     )
-                    .invoiceTypesFilter(
-                        listOf(
-                            "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
-                        )
+                    .addInvoiceTypesFilter(
+                        "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
                     )
                     .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .uniquenessKey("x")

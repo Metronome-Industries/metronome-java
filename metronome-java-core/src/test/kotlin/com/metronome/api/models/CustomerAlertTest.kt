@@ -20,21 +20,19 @@ class CustomerAlertTest {
                         .threshold(0.0)
                         .type(CustomerAlert.Alert.Type.LOW_CREDIT_BALANCE_REACHED)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .creditGrantTypeFilters(listOf("string"))
+                        .addCreditGrantTypeFilter("string")
                         .creditType(
                             CreditTypeData.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .name("name")
                                 .build()
                         )
-                        .customFieldFilters(
-                            listOf(
-                                CustomerAlert.Alert.CustomFieldFilter.builder()
-                                    .entity(CustomerAlert.Alert.CustomFieldFilter.Entity.CONTRACT)
-                                    .key("key")
-                                    .value("value")
-                                    .build()
-                            )
+                        .addCustomFieldFilter(
+                            CustomerAlert.Alert.CustomFieldFilter.builder()
+                                .entity(CustomerAlert.Alert.CustomFieldFilter.Entity.CONTRACT)
+                                .key("key")
+                                .value("value")
+                                .build()
                         )
                         .groupKeyFilter(
                             CustomerAlert.Alert.GroupKeyFilter.builder()
@@ -42,10 +40,8 @@ class CustomerAlertTest {
                                 .value("value")
                                 .build()
                         )
-                        .invoiceTypesFilter(
-                            listOf(
-                                "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
-                            )
+                        .addInvoiceTypesFilter(
+                            "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
                         )
                         .uniquenessKey("x")
                         .build()
@@ -63,21 +59,19 @@ class CustomerAlertTest {
                     .threshold(0.0)
                     .type(CustomerAlert.Alert.Type.LOW_CREDIT_BALANCE_REACHED)
                     .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .creditGrantTypeFilters(listOf("string"))
+                    .addCreditGrantTypeFilter("string")
                     .creditType(
                         CreditTypeData.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .name("name")
                             .build()
                     )
-                    .customFieldFilters(
-                        listOf(
-                            CustomerAlert.Alert.CustomFieldFilter.builder()
-                                .entity(CustomerAlert.Alert.CustomFieldFilter.Entity.CONTRACT)
-                                .key("key")
-                                .value("value")
-                                .build()
-                        )
+                    .addCustomFieldFilter(
+                        CustomerAlert.Alert.CustomFieldFilter.builder()
+                            .entity(CustomerAlert.Alert.CustomFieldFilter.Entity.CONTRACT)
+                            .key("key")
+                            .value("value")
+                            .build()
                     )
                     .groupKeyFilter(
                         CustomerAlert.Alert.GroupKeyFilter.builder()
@@ -85,10 +79,8 @@ class CustomerAlertTest {
                             .value("value")
                             .build()
                     )
-                    .invoiceTypesFilter(
-                        listOf(
-                            "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
-                        )
+                    .addInvoiceTypesFilter(
+                        "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
                     )
                     .uniquenessKey("x")
                     .build()

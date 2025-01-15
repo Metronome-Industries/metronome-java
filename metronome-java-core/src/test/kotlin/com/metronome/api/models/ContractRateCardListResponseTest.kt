@@ -17,27 +17,23 @@ class ContractRateCardListResponseTest {
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .createdBy("created_by")
                 .name("name")
-                .aliases(
-                    listOf(
-                        ContractRateCardListResponse.Alias.builder()
-                            .name("name")
-                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .build()
-                    )
+                .addAlias(
+                    ContractRateCardListResponse.Alias.builder()
+                        .name("name")
+                        .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .build()
                 )
-                .creditTypeConversions(
-                    listOf(
-                        ContractRateCardListResponse.CreditTypeConversion.builder()
-                            .customCreditType(
-                                CreditTypeData.builder()
-                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .name("name")
-                                    .build()
-                            )
-                            .fiatPerCustomCredit("fiat_per_custom_credit")
-                            .build()
-                    )
+                .addCreditTypeConversion(
+                    ContractRateCardListResponse.CreditTypeConversion.builder()
+                        .customCreditType(
+                            CreditTypeData.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .name("name")
+                                .build()
+                        )
+                        .fiatPerCustomCredit("fiat_per_custom_credit")
+                        .build()
                 )
                 .customFields(
                     ContractRateCardListResponse.CustomFields.builder()

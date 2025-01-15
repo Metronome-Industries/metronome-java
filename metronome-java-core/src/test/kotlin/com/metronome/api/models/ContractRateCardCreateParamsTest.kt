@@ -13,22 +13,18 @@ class ContractRateCardCreateParamsTest {
     fun createContractRateCardCreateParams() {
         ContractRateCardCreateParams.builder()
             .name("My Rate Card")
-            .aliases(
-                listOf(
-                    ContractRateCardCreateParams.Alias.builder()
-                        .name("my-rate-card")
-                        .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .build()
-                )
+            .addAlias(
+                ContractRateCardCreateParams.Alias.builder()
+                    .name("my-rate-card")
+                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .build()
             )
-            .creditTypeConversions(
-                listOf(
-                    ContractRateCardCreateParams.CreditTypeConversion.builder()
-                        .customCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
-                        .fiatPerCustomCredit(2.0)
-                        .build()
-                )
+            .addCreditTypeConversion(
+                ContractRateCardCreateParams.CreditTypeConversion.builder()
+                    .customCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                    .fiatPerCustomCredit(2.0)
+                    .build()
             )
             .customFields(
                 ContractRateCardCreateParams.CustomFields.builder()
@@ -45,22 +41,18 @@ class ContractRateCardCreateParamsTest {
         val params =
             ContractRateCardCreateParams.builder()
                 .name("My Rate Card")
-                .aliases(
-                    listOf(
-                        ContractRateCardCreateParams.Alias.builder()
-                            .name("my-rate-card")
-                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .build()
-                    )
+                .addAlias(
+                    ContractRateCardCreateParams.Alias.builder()
+                        .name("my-rate-card")
+                        .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .build()
                 )
-                .creditTypeConversions(
-                    listOf(
-                        ContractRateCardCreateParams.CreditTypeConversion.builder()
-                            .customCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
-                            .fiatPerCustomCredit(2.0)
-                            .build()
-                    )
+                .addCreditTypeConversion(
+                    ContractRateCardCreateParams.CreditTypeConversion.builder()
+                        .customCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                        .fiatPerCustomCredit(2.0)
+                        .build()
                 )
                 .customFields(
                     ContractRateCardCreateParams.CustomFields.builder()

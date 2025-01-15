@@ -21,7 +21,7 @@ class ContractRateCardRateAddResponseTest {
                                     ContractRateCardRateAddResponse.Data.CommitRate.RateType.FLAT
                                 )
                                 .price(0.0)
-                                .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
+                                .addTier(Tier.builder().price(0.0).size(0.0).build())
                                 .build()
                         )
                         .creditType(
@@ -43,7 +43,7 @@ class ContractRateCardRateAddResponseTest {
                                 .build()
                         )
                         .quantity(0.0)
-                        .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
+                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                         .useListPrices(true)
                         .build()
                 )
@@ -57,7 +57,7 @@ class ContractRateCardRateAddResponseTest {
                         ContractRateCardRateAddResponse.Data.CommitRate.builder()
                             .rateType(ContractRateCardRateAddResponse.Data.CommitRate.RateType.FLAT)
                             .price(0.0)
-                            .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
+                            .addTier(Tier.builder().price(0.0).size(0.0).build())
                             .build()
                     )
                     .creditType(
@@ -79,7 +79,7 @@ class ContractRateCardRateAddResponseTest {
                             .build()
                     )
                     .quantity(0.0)
-                    .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
+                    .addTier(Tier.builder().price(0.0).size(0.0).build())
                     .useListPrices(true)
                     .build()
             )

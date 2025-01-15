@@ -30,20 +30,18 @@ class UsageServiceTest {
                     .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                     .windowSize(UsageListParams.WindowSize.HOUR)
                     .nextPage("next_page")
-                    .billableMetrics(
-                        listOf(
-                            UsageListParams.BillableMetric.builder()
-                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .groupBy(
-                                    UsageListParams.BillableMetric.GroupBy.builder()
-                                        .key("key")
-                                        .values(listOf("x"))
-                                        .build()
-                                )
-                                .build()
-                        )
+                    .addBillableMetric(
+                        UsageListParams.BillableMetric.builder()
+                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .groupBy(
+                                UsageListParams.BillableMetric.GroupBy.builder()
+                                    .key("key")
+                                    .addValue("x")
+                                    .build()
+                            )
+                            .build()
                     )
-                    .customerIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+                    .addCustomerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .build()
             )
         println(usageListResponse)
@@ -60,22 +58,20 @@ class UsageServiceTest {
         val usageService = client.usage()
         usageService.ingest(
             UsageIngestParams.builder()
-                .usage(
-                    listOf(
-                        UsageIngestParams.Usage.builder()
-                            .customerId("team@example.com")
-                            .eventType("heartbeat")
-                            .timestamp("2021-01-01T00:00:00Z")
-                            .transactionId("2021-01-01T00:00:00Z_cluster42")
-                            .properties(
-                                UsageIngestParams.Usage.Properties.builder()
-                                    .putAdditionalProperty("cluster_id", JsonValue.from("bar"))
-                                    .putAdditionalProperty("cpu_seconds", JsonValue.from("bar"))
-                                    .putAdditionalProperty("region", JsonValue.from("bar"))
-                                    .build()
-                            )
-                            .build()
-                    )
+                .addUsage(
+                    UsageIngestParams.Usage.builder()
+                        .customerId("team@example.com")
+                        .eventType("heartbeat")
+                        .timestamp("2021-01-01T00:00:00Z")
+                        .transactionId("2021-01-01T00:00:00Z_cluster42")
+                        .properties(
+                            UsageIngestParams.Usage.Properties.builder()
+                                .putAdditionalProperty("cluster_id", JsonValue.from("bar"))
+                                .putAdditionalProperty("cpu_seconds", JsonValue.from("bar"))
+                                .putAdditionalProperty("region", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .build()
                 )
                 .build()
         )

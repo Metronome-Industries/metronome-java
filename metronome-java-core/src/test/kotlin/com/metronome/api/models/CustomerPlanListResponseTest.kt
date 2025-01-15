@@ -28,19 +28,17 @@ class CustomerPlanListResponseTest {
                 .trialInfo(
                     CustomerPlanListResponse.TrialInfo.builder()
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .spendingCaps(
-                            listOf(
-                                CustomerPlanListResponse.TrialInfo.SpendingCap.builder()
-                                    .amount(123.45)
-                                    .amountRemaining(123.0)
-                                    .creditType(
-                                        CreditTypeData.builder()
-                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .name("name")
-                                            .build()
-                                    )
-                                    .build()
-                            )
+                        .addSpendingCap(
+                            CustomerPlanListResponse.TrialInfo.SpendingCap.builder()
+                                .amount(123.45)
+                                .amountRemaining(123.0)
+                                .creditType(
+                                    CreditTypeData.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .name("name")
+                                        .build()
+                                )
+                                .build()
                         )
                         .build()
                 )
@@ -66,19 +64,17 @@ class CustomerPlanListResponseTest {
             .contains(
                 CustomerPlanListResponse.TrialInfo.builder()
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .spendingCaps(
-                        listOf(
-                            CustomerPlanListResponse.TrialInfo.SpendingCap.builder()
-                                .amount(123.45)
-                                .amountRemaining(123.0)
-                                .creditType(
-                                    CreditTypeData.builder()
-                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .name("name")
-                                        .build()
-                                )
-                                .build()
-                        )
+                    .addSpendingCap(
+                        CustomerPlanListResponse.TrialInfo.SpendingCap.builder()
+                            .amount(123.45)
+                            .amountRemaining(123.0)
+                            .creditType(
+                                CreditTypeData.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .name("name")
+                                    .build()
+                            )
+                            .build()
                     )
                     .build()
             )

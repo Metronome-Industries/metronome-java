@@ -15,7 +15,7 @@ class OverrideTest {
             Override.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .applicableProductTags(listOf("string"))
+                .addApplicableProductTag("string")
                 .creditType(
                     CreditTypeData.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -27,28 +27,24 @@ class OverrideTest {
                 .isCommitSpecific(true)
                 .isProrated(true)
                 .multiplier(0.0)
-                .overrideSpecifiers(
-                    listOf(
-                        Override.OverrideSpecifier.builder()
-                            .commitIds(listOf("string"))
-                            .presentationGroupValues(
-                                Override.OverrideSpecifier.PresentationGroupValues.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                                    .build()
-                            )
-                            .pricingGroupValues(
-                                Override.OverrideSpecifier.PricingGroupValues.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                                    .build()
-                            )
-                            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .productTags(listOf("string"))
-                            .build()
-                    )
+                .addOverrideSpecifier(
+                    Override.OverrideSpecifier.builder()
+                        .addCommitId("string")
+                        .presentationGroupValues(
+                            Override.OverrideSpecifier.PresentationGroupValues.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .pricingGroupValues(
+                            Override.OverrideSpecifier.PricingGroupValues.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addProductTag("string")
+                        .build()
                 )
-                .overrideTiers(
-                    listOf(Override.OverrideTier.builder().multiplier(0.0).size(0.0).build())
-                )
+                .addOverrideTier(Override.OverrideTier.builder().multiplier(0.0).size(0.0).build())
                 .overwriteRate(
                     Override.OverwriteRate.builder()
                         .rateType(Override.OverwriteRate.RateType.FLAT)
@@ -66,7 +62,7 @@ class OverrideTest {
                         .isProrated(true)
                         .price(0.0)
                         .quantity(0.0)
-                        .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
+                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                         .build()
                 )
                 .price(0.0)
@@ -80,7 +76,7 @@ class OverrideTest {
                 .quantity(0.0)
                 .rateType(Override.RateType.FLAT)
                 .target(Override.Target.COMMIT_RATE)
-                .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
+                .addTier(Tier.builder().price(0.0).size(0.0).build())
                 .type(Override.Type.OVERWRITE)
                 .value(
                     Override.Value.builder()
@@ -109,7 +105,7 @@ class OverrideTest {
         assertThat(override.overrideSpecifiers().get())
             .containsExactly(
                 Override.OverrideSpecifier.builder()
-                    .commitIds(listOf("string"))
+                    .addCommitId("string")
                     .presentationGroupValues(
                         Override.OverrideSpecifier.PresentationGroupValues.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -121,7 +117,7 @@ class OverrideTest {
                             .build()
                     )
                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .productTags(listOf("string"))
+                    .addProductTag("string")
                     .build()
             )
         assertThat(override.overrideTiers().get())
@@ -144,7 +140,7 @@ class OverrideTest {
                     .isProrated(true)
                     .price(0.0)
                     .quantity(0.0)
-                    .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
+                    .addTier(Tier.builder().price(0.0).size(0.0).build())
                     .build()
             )
         assertThat(override.price()).contains(0.0)

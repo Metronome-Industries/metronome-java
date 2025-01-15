@@ -36,7 +36,7 @@ class CreditGrantCreateParamsTest {
             )
             .effectiveAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
             .invoiceDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-            .productIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+            .addProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .reason("Incentivize new customer")
             .rolloverSettings(
                 CreditGrantCreateParams.RolloverSettings.builder()
@@ -85,7 +85,7 @@ class CreditGrantCreateParamsTest {
                 )
                 .effectiveAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .invoiceDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .productIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+                .addProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .reason("Incentivize new customer")
                 .rolloverSettings(
                     CreditGrantCreateParams.RolloverSettings.builder()

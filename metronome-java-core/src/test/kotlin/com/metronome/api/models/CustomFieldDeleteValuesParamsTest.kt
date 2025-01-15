@@ -12,7 +12,7 @@ class CustomFieldDeleteValuesParamsTest {
         CustomFieldDeleteValuesParams.builder()
             .entity(CustomFieldDeleteValuesParams.Entity.ALERT)
             .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
-            .keys(listOf("x_account_id"))
+            .addKey("x_account_id")
             .build()
     }
 
@@ -22,7 +22,7 @@ class CustomFieldDeleteValuesParamsTest {
             CustomFieldDeleteValuesParams.builder()
                 .entity(CustomFieldDeleteValuesParams.Entity.ALERT)
                 .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
-                .keys(listOf("x_account_id"))
+                .addKey("x_account_id")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -37,7 +37,7 @@ class CustomFieldDeleteValuesParamsTest {
             CustomFieldDeleteValuesParams.builder()
                 .entity(CustomFieldDeleteValuesParams.Entity.ALERT)
                 .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
-                .keys(listOf("x_account_id"))
+                .addKey("x_account_id")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull

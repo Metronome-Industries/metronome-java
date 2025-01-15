@@ -14,14 +14,10 @@ class CreditGrantListParamsTest {
         CreditGrantListParams.builder()
             .limit(1L)
             .nextPage("next_page")
-            .creditGrantIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-            .creditTypeIds(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
-            .customerIds(
-                listOf(
-                    "d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc",
-                    "0e5b8609-d901-4992-b394-c3c2e3f37b1c"
-                )
-            )
+            .addCreditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .addCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+            .addCustomerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+            .addCustomerId("0e5b8609-d901-4992-b394-c3c2e3f37b1c")
             .effectiveBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
             .notExpiringBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
             .build()
@@ -33,14 +29,10 @@ class CreditGrantListParamsTest {
             CreditGrantListParams.builder()
                 .limit(1L)
                 .nextPage("next_page")
-                .creditGrantIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .creditTypeIds(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
-                .customerIds(
-                    listOf(
-                        "d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc",
-                        "0e5b8609-d901-4992-b394-c3c2e3f37b1c"
-                    )
-                )
+                .addCreditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .addCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                .addCustomerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .addCustomerId("0e5b8609-d901-4992-b394-c3c2e3f37b1c")
                 .effectiveBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .notExpiringBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .build()
@@ -63,14 +55,10 @@ class CreditGrantListParamsTest {
             CreditGrantListParams.builder()
                 .limit(1L)
                 .nextPage("next_page")
-                .creditGrantIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                .creditTypeIds(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
-                .customerIds(
-                    listOf(
-                        "d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc",
-                        "0e5b8609-d901-4992-b394-c3c2e3f37b1c"
-                    )
-                )
+                .addCreditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .addCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                .addCustomerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .addCustomerId("0e5b8609-d901-4992-b394-c3c2e3f37b1c")
                 .effectiveBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .notExpiringBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .build()

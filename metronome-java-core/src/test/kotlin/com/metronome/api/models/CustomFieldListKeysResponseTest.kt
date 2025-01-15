@@ -11,14 +11,12 @@ class CustomFieldListKeysResponseTest {
     fun createCustomFieldListKeysResponse() {
         val customFieldListKeysResponse =
             CustomFieldListKeysResponse.builder()
-                .data(
-                    listOf(
-                        CustomFieldListKeysResponse.Data.builder()
-                            .enforceUniqueness(true)
-                            .entity(CustomFieldListKeysResponse.Data.Entity.ALERT)
-                            .key("key")
-                            .build()
-                    )
+                .addData(
+                    CustomFieldListKeysResponse.Data.builder()
+                        .enforceUniqueness(true)
+                        .entity(CustomFieldListKeysResponse.Data.Entity.ALERT)
+                        .key("key")
+                        .build()
                 )
                 .nextPage("next_page")
                 .build()

@@ -13,8 +13,8 @@ class CreditGrantListEntriesParamsTest {
     fun createCreditGrantListEntriesParams() {
         CreditGrantListEntriesParams.builder()
             .nextPage("next_page")
-            .creditTypeIds(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
-            .customerIds(listOf("6a37bb88-8538-48c5-b37b-a41c836328bd"))
+            .addCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+            .addCustomerId("6a37bb88-8538-48c5-b37b-a41c836328bd")
             .endingBefore(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
             .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
             .build()
@@ -25,8 +25,8 @@ class CreditGrantListEntriesParamsTest {
         val params =
             CreditGrantListEntriesParams.builder()
                 .nextPage("next_page")
-                .creditTypeIds(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
-                .customerIds(listOf("6a37bb88-8538-48c5-b37b-a41c836328bd"))
+                .addCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                .addCustomerId("6a37bb88-8538-48c5-b37b-a41c836328bd")
                 .endingBefore(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
                 .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .build()
@@ -47,8 +47,8 @@ class CreditGrantListEntriesParamsTest {
         val params =
             CreditGrantListEntriesParams.builder()
                 .nextPage("next_page")
-                .creditTypeIds(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
-                .customerIds(listOf("6a37bb88-8538-48c5-b37b-a41c836328bd"))
+                .addCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                .addCustomerId("6a37bb88-8538-48c5-b37b-a41c836328bd")
                 .endingBefore(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
                 .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .build()

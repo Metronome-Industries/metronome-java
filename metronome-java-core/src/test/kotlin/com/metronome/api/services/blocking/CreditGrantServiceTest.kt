@@ -54,7 +54,7 @@ class CreditGrantServiceTest {
                     )
                     .effectiveAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                     .invoiceDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .productIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
+                    .addProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .reason("Incentivize new customer")
                     .rolloverSettings(
                         CreditGrantCreateParams.RolloverSettings.builder()
@@ -138,8 +138,8 @@ class CreditGrantServiceTest {
             creditGrantService.listEntries(
                 CreditGrantListEntriesParams.builder()
                     .nextPage("next_page")
-                    .creditTypeIds(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
-                    .customerIds(listOf("6a37bb88-8538-48c5-b37b-a41c836328bd"))
+                    .addCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                    .addCustomerId("6a37bb88-8538-48c5-b37b-a41c836328bd")
                     .endingBefore(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
                     .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                     .build()

@@ -18,8 +18,37 @@ class ContractRetrieveRateScheduleParamsTest {
             .limit(1L)
             .nextPage("next_page")
             .at(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-            .selectors(
-                listOf(
+            .addSelector(
+                ContractRetrieveRateScheduleParams.Selector.builder()
+                    .partialPricingGroupValues(
+                        ContractRetrieveRateScheduleParams.Selector.PartialPricingGroupValues
+                            .builder()
+                            .putAdditionalProperty("region", JsonValue.from("us-west-2"))
+                            .putAdditionalProperty("cloud", JsonValue.from("aws"))
+                            .build()
+                    )
+                    .pricingGroupValues(
+                        ContractRetrieveRateScheduleParams.Selector.PricingGroupValues.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
+                    .addProductTag("string")
+                    .build()
+            )
+            .build()
+    }
+
+    @Test
+    fun getQueryParams() {
+        val params =
+            ContractRetrieveRateScheduleParams.builder()
+                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                .limit(1L)
+                .nextPage("next_page")
+                .at(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                .addSelector(
                     ContractRetrieveRateScheduleParams.Selector.builder()
                         .partialPricingGroupValues(
                             ContractRetrieveRateScheduleParams.Selector.PartialPricingGroupValues
@@ -34,43 +63,8 @@ class ContractRetrieveRateScheduleParamsTest {
                                 .build()
                         )
                         .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
-                        .productTags(listOf("string"))
+                        .addProductTag("string")
                         .build()
-                )
-            )
-            .build()
-    }
-
-    @Test
-    fun getQueryParams() {
-        val params =
-            ContractRetrieveRateScheduleParams.builder()
-                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-                .limit(1L)
-                .nextPage("next_page")
-                .at(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-                .selectors(
-                    listOf(
-                        ContractRetrieveRateScheduleParams.Selector.builder()
-                            .partialPricingGroupValues(
-                                ContractRetrieveRateScheduleParams.Selector
-                                    .PartialPricingGroupValues
-                                    .builder()
-                                    .putAdditionalProperty("region", JsonValue.from("us-west-2"))
-                                    .putAdditionalProperty("cloud", JsonValue.from("aws"))
-                                    .build()
-                            )
-                            .pricingGroupValues(
-                                ContractRetrieveRateScheduleParams.Selector.PricingGroupValues
-                                    .builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                                    .build()
-                            )
-                            .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
-                            .productTags(listOf("string"))
-                            .build()
-                    )
                 )
                 .build()
         val expected = QueryParams.builder()
@@ -99,27 +93,23 @@ class ContractRetrieveRateScheduleParamsTest {
                 .limit(1L)
                 .nextPage("next_page")
                 .at(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-                .selectors(
-                    listOf(
-                        ContractRetrieveRateScheduleParams.Selector.builder()
-                            .partialPricingGroupValues(
-                                ContractRetrieveRateScheduleParams.Selector
-                                    .PartialPricingGroupValues
-                                    .builder()
-                                    .putAdditionalProperty("region", JsonValue.from("us-west-2"))
-                                    .putAdditionalProperty("cloud", JsonValue.from("aws"))
-                                    .build()
-                            )
-                            .pricingGroupValues(
-                                ContractRetrieveRateScheduleParams.Selector.PricingGroupValues
-                                    .builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                                    .build()
-                            )
-                            .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
-                            .productTags(listOf("string"))
-                            .build()
-                    )
+                .addSelector(
+                    ContractRetrieveRateScheduleParams.Selector.builder()
+                        .partialPricingGroupValues(
+                            ContractRetrieveRateScheduleParams.Selector.PartialPricingGroupValues
+                                .builder()
+                                .putAdditionalProperty("region", JsonValue.from("us-west-2"))
+                                .putAdditionalProperty("cloud", JsonValue.from("aws"))
+                                .build()
+                        )
+                        .pricingGroupValues(
+                            ContractRetrieveRateScheduleParams.Selector.PricingGroupValues.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
+                        .addProductTag("string")
+                        .build()
                 )
                 .build()
         val body = params.getBody()
@@ -144,7 +134,7 @@ class ContractRetrieveRateScheduleParamsTest {
                                 .build()
                         )
                         .productId("d6300dbb-882e-4d2d-8dec-5125d16b65d0")
-                        .productTags(listOf("string"))
+                        .addProductTag("string")
                         .build()
                 )
             )

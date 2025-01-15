@@ -12,14 +12,12 @@ class ContractRateCardUpdateParamsTest {
     fun createContractRateCardUpdateParams() {
         ContractRateCardUpdateParams.builder()
             .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-            .aliases(
-                listOf(
-                    ContractRateCardUpdateParams.Alias.builder()
-                        .name("name")
-                        .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .build()
-                )
+            .addAlias(
+                ContractRateCardUpdateParams.Alias.builder()
+                    .name("name")
+                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .build()
             )
             .description("My Updated Rate Card Description")
             .name("My Updated Rate Card")
@@ -31,14 +29,12 @@ class ContractRateCardUpdateParamsTest {
         val params =
             ContractRateCardUpdateParams.builder()
                 .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-                .aliases(
-                    listOf(
-                        ContractRateCardUpdateParams.Alias.builder()
-                            .name("name")
-                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .build()
-                    )
+                .addAlias(
+                    ContractRateCardUpdateParams.Alias.builder()
+                        .name("name")
+                        .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .build()
                 )
                 .description("My Updated Rate Card Description")
                 .name("My Updated Rate Card")

@@ -13,8 +13,47 @@ class DashboardGetEmbeddableUrlParamsTest {
         DashboardGetEmbeddableUrlParams.builder()
             .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
             .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
-            .bmGroupKeyOverrides(
-                listOf(
+            .addBmGroupKeyOverride(
+                DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
+                    .groupKeyName("tenant_id")
+                    .displayName("Org ID")
+                    .valueDisplayNames(
+                        DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.ValueDisplayNames
+                            .builder()
+                            .putAdditionalProperty("48ecb18f358f", JsonValue.from("bar"))
+                            .putAdditionalProperty("e358f3ce242d", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .build()
+            )
+            .addColorOverride(
+                DashboardGetEmbeddableUrlParams.ColorOverride.builder()
+                    .name(DashboardGetEmbeddableUrlParams.ColorOverride.Name.GRAY_DARK)
+                    .value("#ff0000")
+                    .build()
+            )
+            .addDashboardOption(
+                DashboardGetEmbeddableUrlParams.DashboardOption.builder()
+                    .key("show_zero_usage_line_items")
+                    .value("false")
+                    .build()
+            )
+            .addDashboardOption(
+                DashboardGetEmbeddableUrlParams.DashboardOption.builder()
+                    .key("hide_voided_invoices")
+                    .value("true")
+                    .build()
+            )
+            .build()
+    }
+
+    @Test
+    fun getBody() {
+        val params =
+            DashboardGetEmbeddableUrlParams.builder()
+                .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
+                .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
+                .addBmGroupKeyOverride(
                     DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
                         .groupKeyName("tenant_id")
                         .displayName("Org ID")
@@ -27,70 +66,23 @@ class DashboardGetEmbeddableUrlParamsTest {
                         )
                         .build()
                 )
-            )
-            .colorOverrides(
-                listOf(
+                .addColorOverride(
                     DashboardGetEmbeddableUrlParams.ColorOverride.builder()
                         .name(DashboardGetEmbeddableUrlParams.ColorOverride.Name.GRAY_DARK)
                         .value("#ff0000")
                         .build()
                 )
-            )
-            .dashboardOptions(
-                listOf(
+                .addDashboardOption(
                     DashboardGetEmbeddableUrlParams.DashboardOption.builder()
                         .key("show_zero_usage_line_items")
                         .value("false")
-                        .build(),
+                        .build()
+                )
+                .addDashboardOption(
                     DashboardGetEmbeddableUrlParams.DashboardOption.builder()
                         .key("hide_voided_invoices")
                         .value("true")
                         .build()
-                )
-            )
-            .build()
-    }
-
-    @Test
-    fun getBody() {
-        val params =
-            DashboardGetEmbeddableUrlParams.builder()
-                .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
-                .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
-                .bmGroupKeyOverrides(
-                    listOf(
-                        DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
-                            .groupKeyName("tenant_id")
-                            .displayName("Org ID")
-                            .valueDisplayNames(
-                                DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.ValueDisplayNames
-                                    .builder()
-                                    .putAdditionalProperty("48ecb18f358f", JsonValue.from("bar"))
-                                    .putAdditionalProperty("e358f3ce242d", JsonValue.from("bar"))
-                                    .build()
-                            )
-                            .build()
-                    )
-                )
-                .colorOverrides(
-                    listOf(
-                        DashboardGetEmbeddableUrlParams.ColorOverride.builder()
-                            .name(DashboardGetEmbeddableUrlParams.ColorOverride.Name.GRAY_DARK)
-                            .value("#ff0000")
-                            .build()
-                    )
-                )
-                .dashboardOptions(
-                    listOf(
-                        DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-                            .key("show_zero_usage_line_items")
-                            .value("false")
-                            .build(),
-                        DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-                            .key("hide_voided_invoices")
-                            .value("true")
-                            .build()
-                    )
                 )
                 .build()
         val body = params.getBody()

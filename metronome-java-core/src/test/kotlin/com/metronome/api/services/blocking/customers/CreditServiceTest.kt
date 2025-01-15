@@ -28,18 +28,12 @@ class CreditServiceTest {
                 CustomerCreditCreateParams.builder()
                     .accessSchedule(
                         CustomerCreditCreateParams.AccessSchedule.builder()
-                            .scheduleItems(
-                                listOf(
-                                    CustomerCreditCreateParams.AccessSchedule.ScheduleItem.builder()
-                                        .amount(1000.0)
-                                        .endingBefore(
-                                            OffsetDateTime.parse("2020-02-01T00:00:00.000Z")
-                                        )
-                                        .startingAt(
-                                            OffsetDateTime.parse("2020-01-01T00:00:00.000Z")
-                                        )
-                                        .build()
-                                )
+                            .addScheduleItem(
+                                CustomerCreditCreateParams.AccessSchedule.ScheduleItem.builder()
+                                    .amount(1000.0)
+                                    .endingBefore(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
+                                    .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                                    .build()
                             )
                             .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                             .build()
@@ -47,9 +41,9 @@ class CreditServiceTest {
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .priority(100.0)
                     .productId("f14d6729-6a44-4b13-9908-9387f1918790")
-                    .applicableContractIds(listOf("string"))
-                    .applicableProductIds(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
-                    .applicableProductTags(listOf("string"))
+                    .addApplicableContractId("string")
+                    .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addApplicableProductTag("string")
                     .customFields(
                         CustomerCreditCreateParams.CustomFields.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))

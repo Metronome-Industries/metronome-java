@@ -55,7 +55,7 @@ class RateServiceTest {
                         ContractRateCardRateAddParams.CommitRate.builder()
                             .rateType(ContractRateCardRateAddParams.CommitRate.RateType.FLAT)
                             .price(0.0)
-                            .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
+                            .addTier(Tier.builder().price(0.0).size(0.0).build())
                             .build()
                     )
                     .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
@@ -73,7 +73,7 @@ class RateServiceTest {
                             .build()
                     )
                     .quantity(0.0)
-                    .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
+                    .addTier(Tier.builder().price(0.0).size(0.0).build())
                     .useListPrices(true)
                     .build()
             )
@@ -93,87 +93,77 @@ class RateServiceTest {
             rateService.addMany(
                 ContractRateCardRateAddManyParams.builder()
                     .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-                    .rates(
-                        listOf(
-                            ContractRateCardRateAddManyParams.Rate.builder()
-                                .entitled(true)
-                                .productId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-                                .rateType(ContractRateCardRateAddManyParams.Rate.RateType.FLAT)
-                                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-                                .commitRate(
-                                    ContractRateCardRateAddManyParams.Rate.CommitRate.builder()
-                                        .rateType(
-                                            ContractRateCardRateAddManyParams.Rate.CommitRate
-                                                .RateType
-                                                .FLAT
-                                        )
-                                        .price(0.0)
-                                        .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
-                                        .build()
-                                )
-                                .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
-                                .customRate(
-                                    ContractRateCardRateAddManyParams.Rate.CustomRate.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                        .build()
-                                )
-                                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .isProrated(true)
-                                .price(100.0)
-                                .pricingGroupValues(
-                                    ContractRateCardRateAddManyParams.Rate.PricingGroupValues
-                                        .builder()
-                                        .putAdditionalProperty(
-                                            "region",
-                                            JsonValue.from("us-west-2")
-                                        )
-                                        .putAdditionalProperty("cloud", JsonValue.from("aws"))
-                                        .build()
-                                )
-                                .quantity(0.0)
-                                .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
-                                .useListPrices(true)
-                                .build(),
-                            ContractRateCardRateAddManyParams.Rate.builder()
-                                .entitled(true)
-                                .productId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-                                .rateType(ContractRateCardRateAddManyParams.Rate.RateType.FLAT)
-                                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-                                .commitRate(
-                                    ContractRateCardRateAddManyParams.Rate.CommitRate.builder()
-                                        .rateType(
-                                            ContractRateCardRateAddManyParams.Rate.CommitRate
-                                                .RateType
-                                                .FLAT
-                                        )
-                                        .price(0.0)
-                                        .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
-                                        .build()
-                                )
-                                .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
-                                .customRate(
-                                    ContractRateCardRateAddManyParams.Rate.CustomRate.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                        .build()
-                                )
-                                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .isProrated(true)
-                                .price(120.0)
-                                .pricingGroupValues(
-                                    ContractRateCardRateAddManyParams.Rate.PricingGroupValues
-                                        .builder()
-                                        .putAdditionalProperty(
-                                            "region",
-                                            JsonValue.from("us-east-2")
-                                        )
-                                        .putAdditionalProperty("cloud", JsonValue.from("aws"))
-                                        .build()
-                                )
-                                .quantity(0.0)
-                                .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
-                                .useListPrices(true)
-                                .build()
-                        )
+                    .addRate(
+                        ContractRateCardRateAddManyParams.Rate.builder()
+                            .entitled(true)
+                            .productId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                            .rateType(ContractRateCardRateAddManyParams.Rate.RateType.FLAT)
+                            .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                            .commitRate(
+                                ContractRateCardRateAddManyParams.Rate.CommitRate.builder()
+                                    .rateType(
+                                        ContractRateCardRateAddManyParams.Rate.CommitRate.RateType
+                                            .FLAT
+                                    )
+                                    .price(0.0)
+                                    .addTier(Tier.builder().price(0.0).size(0.0).build())
+                                    .build()
+                            )
+                            .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                            .customRate(
+                                ContractRateCardRateAddManyParams.Rate.CustomRate.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .isProrated(true)
+                            .price(100.0)
+                            .pricingGroupValues(
+                                ContractRateCardRateAddManyParams.Rate.PricingGroupValues.builder()
+                                    .putAdditionalProperty("region", JsonValue.from("us-west-2"))
+                                    .putAdditionalProperty("cloud", JsonValue.from("aws"))
+                                    .build()
+                            )
+                            .quantity(0.0)
+                            .addTier(Tier.builder().price(0.0).size(0.0).build())
+                            .useListPrices(true)
+                            .build()
+                    )
+                    .addRate(
+                        ContractRateCardRateAddManyParams.Rate.builder()
+                            .entitled(true)
+                            .productId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                            .rateType(ContractRateCardRateAddManyParams.Rate.RateType.FLAT)
+                            .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                            .commitRate(
+                                ContractRateCardRateAddManyParams.Rate.CommitRate.builder()
+                                    .rateType(
+                                        ContractRateCardRateAddManyParams.Rate.CommitRate.RateType
+                                            .FLAT
+                                    )
+                                    .price(0.0)
+                                    .addTier(Tier.builder().price(0.0).size(0.0).build())
+                                    .build()
+                            )
+                            .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                            .customRate(
+                                ContractRateCardRateAddManyParams.Rate.CustomRate.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .isProrated(true)
+                            .price(120.0)
+                            .pricingGroupValues(
+                                ContractRateCardRateAddManyParams.Rate.PricingGroupValues.builder()
+                                    .putAdditionalProperty("region", JsonValue.from("us-east-2"))
+                                    .putAdditionalProperty("cloud", JsonValue.from("aws"))
+                                    .build()
+                            )
+                            .quantity(0.0)
+                            .addTier(Tier.builder().price(0.0).size(0.0).build())
+                            .useListPrices(true)
+                            .build()
                     )
                     .build()
             )

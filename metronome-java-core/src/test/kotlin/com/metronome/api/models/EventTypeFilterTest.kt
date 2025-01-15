@@ -10,10 +10,7 @@ class EventTypeFilterTest {
     @Test
     fun createEventTypeFilter() {
         val eventTypeFilter =
-            EventTypeFilter.builder()
-                .inValues(listOf("string"))
-                .notInValues(listOf("string"))
-                .build()
+            EventTypeFilter.builder().addInValue("string").addNotInValue("string").build()
         assertThat(eventTypeFilter).isNotNull
         assertThat(eventTypeFilter.inValues().get()).containsExactly("string")
         assertThat(eventTypeFilter.notInValues().get()).containsExactly("string")

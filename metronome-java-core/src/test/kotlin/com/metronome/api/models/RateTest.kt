@@ -32,7 +32,7 @@ class RateTest {
                         .build()
                 )
                 .quantity(0.0)
-                .tiers(listOf(Tier.builder().price(0.0).size(0.0).build()))
+                .addTier(Tier.builder().price(0.0).size(0.0).build())
                 .useListPrices(true)
                 .build()
         assertThat(rate).isNotNull

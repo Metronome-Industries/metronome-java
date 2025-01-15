@@ -13,8 +13,8 @@ class PropertyFilterTest {
             PropertyFilter.builder()
                 .name("name")
                 .exists(true)
-                .inValues(listOf("string"))
-                .notInValues(listOf("string"))
+                .addInValue("string")
+                .addNotInValue("string")
                 .build()
         assertThat(propertyFilter).isNotNull
         assertThat(propertyFilter.name()).isEqualTo("name")

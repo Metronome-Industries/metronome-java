@@ -11,12 +11,12 @@ class CustomerListParamsTest {
     @Test
     fun createCustomerListParams() {
         CustomerListParams.builder()
-            .customerIds(listOf("string"))
+            .addCustomerId("string")
             .ingestAlias("ingest_alias")
             .limit(1L)
             .nextPage("next_page")
             .onlyArchived(true)
-            .salesforceAccountIds(listOf("string"))
+            .addSalesforceAccountId("string")
             .build()
     }
 
@@ -24,12 +24,12 @@ class CustomerListParamsTest {
     fun getQueryParams() {
         val params =
             CustomerListParams.builder()
-                .customerIds(listOf("string"))
+                .addCustomerId("string")
                 .ingestAlias("ingest_alias")
                 .limit(1L)
                 .nextPage("next_page")
                 .onlyArchived(true)
-                .salesforceAccountIds(listOf("string"))
+                .addSalesforceAccountId("string")
                 .build()
         val expected = QueryParams.builder()
         expected.put("customer_ids", "string")

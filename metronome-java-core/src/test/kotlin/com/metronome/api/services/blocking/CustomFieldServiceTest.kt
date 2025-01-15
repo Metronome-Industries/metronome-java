@@ -45,7 +45,7 @@ class CustomFieldServiceTest {
             CustomFieldDeleteValuesParams.builder()
                 .entity(CustomFieldDeleteValuesParams.Entity.ALERT)
                 .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
-                .keys(listOf("x_account_id"))
+                .addKey("x_account_id")
                 .build()
         )
     }
@@ -62,7 +62,7 @@ class CustomFieldServiceTest {
             customFieldService.listKeys(
                 CustomFieldListKeysParams.builder()
                     .nextPage("next_page")
-                    .entities(listOf(CustomFieldListKeysParams.Entity.ALERT))
+                    .addEntity(CustomFieldListKeysParams.Entity.ALERT)
                     .build()
             )
         println(customFieldListKeysResponse)
