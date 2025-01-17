@@ -20,6 +20,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/** List the given customer's plans in reverse-chronological order. */
 class CustomerPlanListPageAsync
 private constructor(
     private val plansService: PlanServiceAsync,

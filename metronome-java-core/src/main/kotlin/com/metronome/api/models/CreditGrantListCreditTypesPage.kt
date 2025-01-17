@@ -19,6 +19,7 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/** List all pricing units (known in the API by the legacy term "credit types"). */
 class CreditGrantListCreditTypesPage
 private constructor(
     private val creditGrantsService: CreditGrantService,

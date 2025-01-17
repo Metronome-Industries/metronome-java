@@ -19,6 +19,7 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/** Get all billable metrics for a given customer. */
 class CustomerListBillableMetricsPage
 private constructor(
     private val customersService: CustomerService,

@@ -19,6 +19,10 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/**
+ * List daily or hourly invoice breakdowns for a given customer, optionally filtered by status, date
+ * range, and/or credit type.
+ */
 class CustomerInvoiceListBreakdownsPage
 private constructor(
     private val invoicesService: InvoiceService,

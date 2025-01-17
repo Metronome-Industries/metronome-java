@@ -1456,6 +1456,12 @@ private constructor(
             "ResellerRoyalty{fraction=$fraction, netsuiteResellerId=$netsuiteResellerId, resellerType=$resellerType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, awsAccountNumber=$awsAccountNumber, awsOfferId=$awsOfferId, awsPayerReferenceId=$awsPayerReferenceId, endingBefore=$endingBefore, gcpAccountId=$gcpAccountId, gcpOfferId=$gcpOfferId, resellerContractValue=$resellerContractValue, additionalProperties=$additionalProperties}"
     }
 
+    /**
+     * Determines which scheduled and commit charges to consolidate onto the Contract's usage
+     * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
+     * consolidation to occur. This field cannot be modified after a Contract has been created. If
+     * this field is omitted, charges will appear on a separate invoice from usage charges.
+     */
     class ScheduledChargesOnUsageInvoices
     @JsonCreator
     private constructor(

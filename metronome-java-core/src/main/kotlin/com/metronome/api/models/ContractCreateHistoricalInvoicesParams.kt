@@ -1172,6 +1172,7 @@ constructor(
                 "UsageLineItem{exclusiveEndDate=$exclusiveEndDate, inclusiveStartDate=$inclusiveStartDate, productId=$productId, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, quantity=$quantity, subtotalsWithQuantity=$subtotalsWithQuantity, additionalProperties=$additionalProperties}"
         }
 
+        /** This field's availability is dependent on your client's configuration. */
         class BillableStatus
         @JsonCreator
         private constructor(

@@ -20,6 +20,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/**
+ * Fetch daily pending costs for the specified customer, broken down by credit type and line items.
+ * Note: this is not supported for customers whose plan includes a UNIQUE-type billable metric.
+ */
 class CustomerListCostsPageAsync
 private constructor(
     private val customersService: CustomerServiceAsync,

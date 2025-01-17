@@ -20,6 +20,9 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/**
+ * List rate cards NOTE: Use `/contract-pricing/rate-cards/getRates` to retrieve rate card rates.
+ */
 class ContractRateCardListPageAsync
 private constructor(
     private val rateCardsService: RateCardServiceAsync,

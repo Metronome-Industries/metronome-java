@@ -20,6 +20,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/**
+ * List all invoices for a given customer, optionally filtered by status, date range, and/or credit
+ * type.
+ */
 class CustomerInvoiceListPageAsync
 private constructor(
     private val invoicesService: InvoiceServiceAsync,

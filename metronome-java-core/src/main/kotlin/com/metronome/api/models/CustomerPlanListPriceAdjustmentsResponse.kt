@@ -374,6 +374,7 @@ private constructor(
                 )
         }
 
+        /** Determines how the value will be applied. */
         class AdjustmentType
         @JsonCreator
         private constructor(

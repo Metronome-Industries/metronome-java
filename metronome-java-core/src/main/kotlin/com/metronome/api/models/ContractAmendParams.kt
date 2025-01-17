@@ -6063,6 +6063,10 @@ constructor(
                 "OverwriteRate{rateType=$rateType, creditTypeId=$creditTypeId, customRate=$customRate, isProrated=$isProrated, price=$price, quantity=$quantity, tiers=$tiers, additionalProperties=$additionalProperties}"
         }
 
+        /**
+         * Indicates whether the override applies to commit rates or list rates. Can only be used
+         * for overrides that have `is_commit_specific` set to `true`. Defaults to `"LIST_RATE"`.
+         */
         class Target
         @JsonCreator
         private constructor(
@@ -6250,6 +6254,7 @@ constructor(
                 "Tier{multiplier=$multiplier, size=$size, additionalProperties=$additionalProperties}"
         }
 
+        /** Overwrites are prioritized over multipliers and tiered overrides. */
         class Type
         @JsonCreator
         private constructor(

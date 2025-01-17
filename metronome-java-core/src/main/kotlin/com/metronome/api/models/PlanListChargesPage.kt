@@ -19,6 +19,7 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/** Fetches a list of charges of a specific plan. */
 class PlanListChargesPage
 private constructor(
     private val plansService: PlanService,

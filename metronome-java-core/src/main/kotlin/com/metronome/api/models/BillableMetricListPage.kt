@@ -19,6 +19,7 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/** List all billable metrics. */
 class BillableMetricListPage
 private constructor(
     private val billableMetricsService: BillableMetricService,

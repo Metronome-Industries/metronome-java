@@ -5486,6 +5486,12 @@ constructor(
             "Discount{productId=$productId, schedule=$schedule, customFields=$customFields, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, additionalProperties=$additionalProperties}"
     }
 
+    /**
+     * Defaults to LOWEST_MULTIPLIER, which applies the greatest discount to list prices
+     * automatically. EXPLICIT prioritization requires specifying priorities for each multiplier;
+     * the one with the lowest priority value will be prioritized first. If tiered overrides are
+     * used, prioritization must be explicit.
+     */
     class MultiplierOverridePrioritization
     @JsonCreator
     private constructor(
@@ -6939,6 +6945,10 @@ constructor(
                 "OverwriteRate{rateType=$rateType, creditTypeId=$creditTypeId, customRate=$customRate, isProrated=$isProrated, price=$price, quantity=$quantity, tiers=$tiers, additionalProperties=$additionalProperties}"
         }
 
+        /**
+         * Indicates whether the override applies to commit rates or list rates. Can only be used
+         * for overrides that have `is_commit_specific` set to `true`. Defaults to `"LIST_RATE"`.
+         */
         class Target
         @JsonCreator
         private constructor(
@@ -7126,6 +7136,7 @@ constructor(
                 "Tier{multiplier=$multiplier, size=$size, additionalProperties=$additionalProperties}"
         }
 
+        /** Overwrites are prioritized over multipliers and tiered overrides. */
         class Type
         @JsonCreator
         private constructor(
@@ -9164,6 +9175,12 @@ constructor(
             "ScheduledCharge{productId=$productId, schedule=$schedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, additionalProperties=$additionalProperties}"
     }
 
+    /**
+     * Determines which scheduled and commit charges to consolidate onto the Contract's usage
+     * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
+     * consolidation to occur. This field cannot be modified after a Contract has been created. If
+     * this field is omitted, charges will appear on a separate invoice from usage charges.
+     */
     class ScheduledChargesOnUsageInvoices
     @JsonCreator
     private constructor(
@@ -9340,6 +9357,7 @@ constructor(
                 )
         }
 
+        /** This field's available values may vary based on your client's configuration. */
         class Type
         @JsonCreator
         private constructor(
@@ -9497,6 +9515,10 @@ constructor(
                     FutureInvoiceBehavior(trueup, additionalProperties.toImmutable())
             }
 
+            /**
+             * Controls whether future trueup invoices are billed or removed. Default behavior is
+             * AS_IS if not specified.
+             */
             class Trueup
             @JsonCreator
             private constructor(
@@ -9846,6 +9868,7 @@ constructor(
             override fun toString() = value.toString()
         }
 
+        /** If not provided, defaults to the first day of the month. */
         class Day
         @JsonCreator
         private constructor(

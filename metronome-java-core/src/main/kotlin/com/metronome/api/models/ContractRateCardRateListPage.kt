@@ -19,6 +19,7 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/** Get all rates for a rate card at a point in time */
 class ContractRateCardRateListPage
 private constructor(
     private val ratesService: RateService,

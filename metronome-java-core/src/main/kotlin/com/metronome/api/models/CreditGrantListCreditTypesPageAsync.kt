@@ -20,6 +20,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/** List all pricing units (known in the API by the legacy term "credit types"). */
 class CreditGrantListCreditTypesPageAsync
 private constructor(
     private val creditGrantsService: CreditGrantServiceAsync,

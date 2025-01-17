@@ -20,6 +20,11 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/**
+ * Lists a customer plans adjustments. See the
+ * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
+ * for details.
+ */
 class CustomerPlanListPriceAdjustmentsPageAsync
 private constructor(
     private val plansService: PlanServiceAsync,

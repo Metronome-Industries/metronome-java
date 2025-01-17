@@ -19,6 +19,11 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/**
+ * Lists a customer plans adjustments. See the
+ * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
+ * for details.
+ */
 class CustomerPlanListPriceAdjustmentsPage
 private constructor(
     private val plansService: PlanService,

@@ -19,6 +19,9 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/**
+ * List rate cards NOTE: Use `/contract-pricing/rate-cards/getRates` to retrieve rate card rates.
+ */
 class ContractRateCardListPage
 private constructor(
     private val rateCardsService: RateCardService,

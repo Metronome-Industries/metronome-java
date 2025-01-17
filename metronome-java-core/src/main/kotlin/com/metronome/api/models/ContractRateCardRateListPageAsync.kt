@@ -20,6 +20,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/** Get all rates for a rate card at a point in time */
 class ContractRateCardRateListPageAsync
 private constructor(
     private val ratesService: RateServiceAsync,

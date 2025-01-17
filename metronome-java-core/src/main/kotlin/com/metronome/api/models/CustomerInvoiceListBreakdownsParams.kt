@@ -352,6 +352,7 @@ constructor(
             )
     }
 
+    /** Invoice sort order by issued_at, e.g. date_asc or date_desc. Defaults to date_asc. */
     class Sort
     @JsonCreator
     private constructor(
@@ -409,6 +410,7 @@ constructor(
         override fun toString() = value.toString()
     }
 
+    /** The granularity of the breakdowns to return. Defaults to day. */
     class WindowSize
     @JsonCreator
     private constructor(

@@ -20,6 +20,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/**
+ * List daily or hourly invoice breakdowns for a given customer, optionally filtered by status, date
+ * range, and/or credit type.
+ */
 class CustomerInvoiceListBreakdownsPageAsync
 private constructor(
     private val invoicesService: InvoiceServiceAsync,

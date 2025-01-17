@@ -1679,6 +1679,12 @@ private constructor(
                 "CustomerBillingProviderConfiguration{billingProvider=$billingProvider, deliveryMethod=$deliveryMethod, additionalProperties=$additionalProperties}"
         }
 
+        /**
+         * Determines which scheduled and commit charges to consolidate onto the Contract's usage
+         * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
+         * consolidation to occur. This field cannot be modified after a Contract has been created.
+         * If this field is omitted, charges will appear on a separate invoice from usage charges.
+         */
         class ScheduledChargesOnUsageInvoices
         @JsonCreator
         private constructor(

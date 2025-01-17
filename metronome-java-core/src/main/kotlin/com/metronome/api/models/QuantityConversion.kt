@@ -149,6 +149,7 @@ private constructor(
             )
     }
 
+    /** The operation to perform on the quantity */
     class Operation
     @JsonCreator
     private constructor(

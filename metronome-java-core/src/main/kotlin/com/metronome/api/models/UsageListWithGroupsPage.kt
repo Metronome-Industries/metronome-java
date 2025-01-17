@@ -19,6 +19,10 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/**
+ * Fetch aggregated usage data for the specified customer, billable-metric, and optional group,
+ * broken into intervals of the specified length.
+ */
 class UsageListWithGroupsPage
 private constructor(
     private val usageService: UsageService,

@@ -587,6 +587,11 @@ constructor(
             )
     }
 
+    /**
+     * A window_size of "day" or "hour" will return the usage for the specified period segmented
+     * into daily or hourly aggregates. A window_size of "none" will return a single usage aggregate
+     * for the entirety of the specified period.
+     */
     class WindowSize
     @JsonCreator
     private constructor(

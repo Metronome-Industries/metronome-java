@@ -20,6 +20,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/** List credit grants. This list does not included voided grants. */
 class CreditGrantListPageAsync
 private constructor(
     private val creditGrantsService: CreditGrantServiceAsync,

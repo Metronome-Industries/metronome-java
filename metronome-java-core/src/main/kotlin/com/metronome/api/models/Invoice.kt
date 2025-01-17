@@ -3350,6 +3350,7 @@ private constructor(
             "LineItem{creditType=$creditType, name=$name, total=$total, appliedCommitOrCredit=$appliedCommitOrCredit, commitCustomFields=$commitCustomFields, commitId=$commitId, commitNetsuiteItemId=$commitNetsuiteItemId, commitNetsuiteSalesOrderId=$commitNetsuiteSalesOrderId, commitSegmentId=$commitSegmentId, commitType=$commitType, customFields=$customFields, endingBefore=$endingBefore, groupKey=$groupKey, groupValue=$groupValue, isProrated=$isProrated, listPrice=$listPrice, metadata=$metadata, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteItemId=$netsuiteItemId, postpaidCommit=$postpaidCommit, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productCustomFields=$productCustomFields, productId=$productId, productType=$productType, professionalServiceCustomFields=$professionalServiceCustomFields, professionalServiceId=$professionalServiceId, quantity=$quantity, resellerType=$resellerType, scheduledChargeCustomFields=$scheduledChargeCustomFields, scheduledChargeId=$scheduledChargeId, startingAt=$startingAt, subLineItems=$subLineItems, tier=$tier, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
     }
 
+    /** This field's availability is dependent on your client's configuration. */
     class BillableStatus
     @JsonCreator
     private constructor(

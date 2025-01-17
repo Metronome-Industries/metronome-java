@@ -20,6 +20,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/** Fetches a list of charges of a specific plan. */
 class PlanListChargesPageAsync
 private constructor(
     private val plansService: PlanServiceAsync,

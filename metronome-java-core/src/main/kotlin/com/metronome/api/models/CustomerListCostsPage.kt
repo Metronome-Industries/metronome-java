@@ -19,6 +19,10 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/**
+ * Fetch daily pending costs for the specified customer, broken down by credit type and line items.
+ * Note: this is not supported for customers whose plan includes a UNIQUE-type billable metric.
+ */
 class CustomerListCostsPage
 private constructor(
     private val customersService: CustomerService,

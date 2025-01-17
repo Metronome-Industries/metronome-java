@@ -518,6 +518,7 @@ constructor(
             )
     }
 
+    /** The type of dashboard to retrieve. */
     class Dashboard
     @JsonCreator
     private constructor(
@@ -931,6 +932,7 @@ constructor(
                 )
         }
 
+        /** The color to override */
         class Name
         @JsonCreator
         private constructor(

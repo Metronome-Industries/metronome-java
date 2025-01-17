@@ -1070,6 +1070,7 @@ constructor(
             )
     }
 
+    /** Type of the alert */
     class AlertType
     @JsonCreator
     private constructor(

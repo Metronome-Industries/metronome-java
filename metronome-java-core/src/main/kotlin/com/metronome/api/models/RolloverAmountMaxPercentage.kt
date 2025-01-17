@@ -114,6 +114,7 @@ private constructor(
             )
     }
 
+    /** Rollover up to a percentage of the original credit grant amount. */
     class Type
     @JsonCreator
     private constructor(

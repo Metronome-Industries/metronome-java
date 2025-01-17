@@ -19,6 +19,10 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/**
+ * Fetches a list of customers on a specific plan (by default, only currently active plans are
+ * included)
+ */
 class PlanListCustomersPage
 private constructor(
     private val plansService: PlanService,

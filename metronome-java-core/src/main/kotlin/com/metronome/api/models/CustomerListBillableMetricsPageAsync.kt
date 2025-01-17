@@ -20,6 +20,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/** Get all billable metrics for a given customer. */
 class CustomerListBillableMetricsPageAsync
 private constructor(
     private val customersService: CustomerServiceAsync,

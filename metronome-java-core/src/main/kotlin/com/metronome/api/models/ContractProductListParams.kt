@@ -342,6 +342,7 @@ constructor(
             )
     }
 
+    /** Filter options for the product list */
     class ArchiveFilter
     @JsonCreator
     private constructor(

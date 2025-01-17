@@ -20,6 +20,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/**
+ * Fetches a list of customers on a specific plan (by default, only currently active plans are
+ * included)
+ */
 class PlanListCustomersPageAsync
 private constructor(
     private val plansService: PlanServiceAsync,

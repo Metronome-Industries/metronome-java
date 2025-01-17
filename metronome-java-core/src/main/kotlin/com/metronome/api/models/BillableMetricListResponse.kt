@@ -384,6 +384,7 @@ private constructor(
             )
     }
 
+    /** Specifies the type of aggregation performed on matching events. */
     class AggregationType
     @JsonCreator
     private constructor(

@@ -19,6 +19,10 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/**
+ * List all invoices for a given customer, optionally filtered by status, date range, and/or credit
+ * type.
+ */
 class CustomerInvoiceListPage
 private constructor(
     private val invoicesService: InvoiceService,

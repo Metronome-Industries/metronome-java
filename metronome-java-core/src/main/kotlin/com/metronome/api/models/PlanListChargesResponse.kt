@@ -776,6 +776,10 @@ private constructor(
                 )
         }
 
+        /**
+         * Whether usage should be rounded down or up to the nearest whole number. If null, quantity
+         * will be rounded to 20 decimal places.
+         */
         class RoundingBehavior
         @JsonCreator
         private constructor(

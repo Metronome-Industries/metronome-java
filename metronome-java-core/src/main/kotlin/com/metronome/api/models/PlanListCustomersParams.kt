@@ -248,6 +248,16 @@ constructor(
             )
     }
 
+    /**
+     * Status of customers on a given plan. Defaults to `active`.
+     * - `all` - Return current, past, and upcoming customers of the plan.
+     * - `active` - Return current customers of the plan.
+     * - `ended` - Return past customers of the plan.
+     * - `upcoming` - Return upcoming customers of the plan.
+     *
+     * Multiple statuses can be OR'd together using commas, e.g. `active,ended`. **Note:**
+     * `ended,upcoming` combination is not yet supported.
+     */
     class Status
     @JsonCreator
     private constructor(

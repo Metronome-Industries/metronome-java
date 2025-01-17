@@ -570,6 +570,7 @@ private constructor(
                 )
         }
 
+        /** Status of the alert */
         class Status
         @JsonCreator
         private constructor(
@@ -633,6 +634,7 @@ private constructor(
             override fun toString() = value.toString()
         }
 
+        /** Type of the alert */
         class Type
         @JsonCreator
         private constructor(
@@ -1127,6 +1129,7 @@ private constructor(
             "Alert{id=$id, name=$name, status=$status, threshold=$threshold, type=$type, updatedAt=$updatedAt, creditGrantTypeFilters=$creditGrantTypeFilters, creditType=$creditType, customFieldFilters=$customFieldFilters, groupKeyFilter=$groupKeyFilter, invoiceTypesFilter=$invoiceTypesFilter, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
     }
 
+    /** The status of the customer alert. If the alert is archived, null will be returned. */
     class CustomerStatus
     @JsonCreator
     private constructor(

@@ -1407,6 +1407,7 @@ constructor(
                 )
         }
 
+        /** The billing provider set for this configuration. */
         class BillingProvider
         @JsonCreator
         private constructor(
@@ -1568,6 +1569,10 @@ constructor(
             override fun toString() = "Configuration{additionalProperties=$additionalProperties}"
         }
 
+        /**
+         * The method to use for delivering invoices to this customer. If not provided, the
+         * `delivery_method_id` must be provided.
+         */
         class DeliveryMethod
         @JsonCreator
         private constructor(

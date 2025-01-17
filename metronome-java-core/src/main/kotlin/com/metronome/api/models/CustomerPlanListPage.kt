@@ -19,6 +19,7 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/** List the given customer's plans in reverse-chronological order. */
 class CustomerPlanListPage
 private constructor(
     private val plansService: PlanService,

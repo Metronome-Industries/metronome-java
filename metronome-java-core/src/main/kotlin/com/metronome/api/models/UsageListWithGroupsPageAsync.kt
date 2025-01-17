@@ -20,6 +20,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/**
+ * Fetch aggregated usage data for the specified customer, billable-metric, and optional group,
+ * broken into intervals of the specified length.
+ */
 class UsageListWithGroupsPageAsync
 private constructor(
     private val usageService: UsageServiceAsync,
