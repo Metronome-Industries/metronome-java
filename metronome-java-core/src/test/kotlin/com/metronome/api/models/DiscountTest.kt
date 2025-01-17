@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -39,6 +40,11 @@ class DiscountTest {
                         )
                         .build()
                 )
+                .customFields(
+                    Discount.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .name("x")
                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                 .build()
@@ -70,6 +76,12 @@ class DiscountTest {
                             .unitPrice(0.0)
                             .build()
                     )
+                    .build()
+            )
+        assertThat(discount.customFields())
+            .contains(
+                Discount.CustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
         assertThat(discount.name()).contains("x")

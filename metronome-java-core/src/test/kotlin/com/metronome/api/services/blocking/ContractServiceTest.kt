@@ -217,6 +217,11 @@ class ContractServiceTest {
                                     )
                                     .build()
                             )
+                            .customFields(
+                                ContractCreateParams.Discount.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .build()
@@ -664,6 +669,11 @@ class ContractServiceTest {
                                             .unitPrice(0.0)
                                             .build()
                                     )
+                                    .build()
+                            )
+                            .customFields(
+                                ContractAmendParams.Discount.CustomFields.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .name("x")

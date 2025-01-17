@@ -401,6 +401,14 @@ class ContractListResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .customFields(
+                                            Discount.CustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
+                                                .build()
+                                        )
                                         .name("x")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                                         .build()
@@ -851,6 +859,14 @@ class ContractListResponseTest {
                                                         )
                                                         .unitPrice(0.0)
                                                         .build()
+                                                )
+                                                .build()
+                                        )
+                                        .customFields(
+                                            Discount.CustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
                                                 )
                                                 .build()
                                         )
@@ -1348,6 +1364,14 @@ class ContractListResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .customFields(
+                                            Discount.CustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string")
+                                                )
+                                                .build()
+                                        )
                                         .name("x")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                                         .build()
@@ -1829,6 +1853,11 @@ class ContractListResponseTest {
                                             )
                                             .build()
                                     )
+                                    .customFields(
+                                        Discount.CustomFields.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .name("x")
                                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                                     .build()
@@ -2246,6 +2275,11 @@ class ContractListResponseTest {
                                                     .unitPrice(0.0)
                                                     .build()
                                             )
+                                            .build()
+                                    )
+                                    .customFields(
+                                        Discount.CustomFields.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
                                     .name("x")
@@ -2705,6 +2739,11 @@ class ContractListResponseTest {
                                                     .unitPrice(0.0)
                                                     .build()
                                             )
+                                            .build()
+                                    )
+                                    .customFields(
+                                        Discount.CustomFields.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
                                     .name("x")

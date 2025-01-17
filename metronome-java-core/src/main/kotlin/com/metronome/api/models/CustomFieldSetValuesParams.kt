@@ -456,6 +456,8 @@ constructor(
 
             @JvmField val CUSTOMER = of("customer")
 
+            @JvmField val DISCOUNT = of("discount")
+
             @JvmField val INVOICE = of("invoice")
 
             @JvmField val PLAN = of("plan")
@@ -482,6 +484,7 @@ constructor(
             CREDIT_GRANT,
             CUSTOMER_PLAN,
             CUSTOMER,
+            DISCOUNT,
             INVOICE,
             PLAN,
             PROFESSIONAL_SERVICE,
@@ -501,6 +504,7 @@ constructor(
             CREDIT_GRANT,
             CUSTOMER_PLAN,
             CUSTOMER,
+            DISCOUNT,
             INVOICE,
             PLAN,
             PROFESSIONAL_SERVICE,
@@ -522,6 +526,7 @@ constructor(
                 CREDIT_GRANT -> Value.CREDIT_GRANT
                 CUSTOMER_PLAN -> Value.CUSTOMER_PLAN
                 CUSTOMER -> Value.CUSTOMER
+                DISCOUNT -> Value.DISCOUNT
                 INVOICE -> Value.INVOICE
                 PLAN -> Value.PLAN
                 PROFESSIONAL_SERVICE -> Value.PROFESSIONAL_SERVICE
@@ -543,6 +548,7 @@ constructor(
                 CREDIT_GRANT -> Known.CREDIT_GRANT
                 CUSTOMER_PLAN -> Known.CUSTOMER_PLAN
                 CUSTOMER -> Known.CUSTOMER
+                DISCOUNT -> Known.DISCOUNT
                 INVOICE -> Known.INVOICE
                 PLAN -> Known.PLAN
                 PROFESSIONAL_SERVICE -> Known.PROFESSIONAL_SERVICE

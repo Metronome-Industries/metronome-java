@@ -232,6 +232,11 @@ class ServiceParamsTest {
                                 )
                                 .build()
                         )
+                        .customFields(
+                            ContractCreateParams.Discount.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .name("x")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .build()
