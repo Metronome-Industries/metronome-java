@@ -37,7 +37,7 @@ constructor(
     /**
      * If true, allows setting the contract end date earlier than the end_timestamp of existing
      * finalized invoices. Finalized invoices will be unchanged; if you want to incorporate the new
-     * end date, you can void and regenerate finalized usage invoices. Defaults to false.
+     * end date, you can void and regenerate finalized usage invoices.
      */
     fun allowEndingBeforeFinalizedInvoice(): Optional<Boolean> =
         body.allowEndingBeforeFinalizedInvoice()
@@ -57,7 +57,7 @@ constructor(
     /**
      * If true, allows setting the contract end date earlier than the end_timestamp of existing
      * finalized invoices. Finalized invoices will be unchanged; if you want to incorporate the new
-     * end date, you can void and regenerate finalized usage invoices. Defaults to false.
+     * end date, you can void and regenerate finalized usage invoices.
      */
     fun _allowEndingBeforeFinalizedInvoice(): JsonField<Boolean> =
         body._allowEndingBeforeFinalizedInvoice()
@@ -109,7 +109,7 @@ constructor(
         /**
          * If true, allows setting the contract end date earlier than the end_timestamp of existing
          * finalized invoices. Finalized invoices will be unchanged; if you want to incorporate the
-         * new end date, you can void and regenerate finalized usage invoices. Defaults to false.
+         * new end date, you can void and regenerate finalized usage invoices.
          */
         fun allowEndingBeforeFinalizedInvoice(): Optional<Boolean> =
             Optional.ofNullable(
@@ -138,7 +138,7 @@ constructor(
         /**
          * If true, allows setting the contract end date earlier than the end_timestamp of existing
          * finalized invoices. Finalized invoices will be unchanged; if you want to incorporate the
-         * new end date, you can void and regenerate finalized usage invoices. Defaults to false.
+         * new end date, you can void and regenerate finalized usage invoices.
          */
         @JsonProperty("allow_ending_before_finalized_invoice")
         @ExcludeMissing
@@ -212,7 +212,6 @@ constructor(
              * If true, allows setting the contract end date earlier than the end_timestamp of
              * existing finalized invoices. Finalized invoices will be unchanged; if you want to
              * incorporate the new end date, you can void and regenerate finalized usage invoices.
-             * Defaults to false.
              */
             fun allowEndingBeforeFinalizedInvoice(allowEndingBeforeFinalizedInvoice: Boolean) =
                 allowEndingBeforeFinalizedInvoice(JsonField.of(allowEndingBeforeFinalizedInvoice))
@@ -221,7 +220,6 @@ constructor(
              * If true, allows setting the contract end date earlier than the end_timestamp of
              * existing finalized invoices. Finalized invoices will be unchanged; if you want to
              * incorporate the new end date, you can void and regenerate finalized usage invoices.
-             * Defaults to false.
              */
             fun allowEndingBeforeFinalizedInvoice(
                 allowEndingBeforeFinalizedInvoice: JsonField<Boolean>
@@ -325,7 +323,7 @@ constructor(
         /**
          * If true, allows setting the contract end date earlier than the end_timestamp of existing
          * finalized invoices. Finalized invoices will be unchanged; if you want to incorporate the
-         * new end date, you can void and regenerate finalized usage invoices. Defaults to false.
+         * new end date, you can void and regenerate finalized usage invoices.
          */
         fun allowEndingBeforeFinalizedInvoice(allowEndingBeforeFinalizedInvoice: Boolean) = apply {
             body.allowEndingBeforeFinalizedInvoice(allowEndingBeforeFinalizedInvoice)
@@ -334,7 +332,7 @@ constructor(
         /**
          * If true, allows setting the contract end date earlier than the end_timestamp of existing
          * finalized invoices. Finalized invoices will be unchanged; if you want to incorporate the
-         * new end date, you can void and regenerate finalized usage invoices. Defaults to false.
+         * new end date, you can void and regenerate finalized usage invoices.
          */
         fun allowEndingBeforeFinalizedInvoice(
             allowEndingBeforeFinalizedInvoice: JsonField<Boolean>
