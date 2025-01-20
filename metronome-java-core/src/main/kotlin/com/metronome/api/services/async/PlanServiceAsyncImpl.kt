@@ -22,7 +22,7 @@ import com.metronome.api.models.PlanListParams
 import java.util.concurrent.CompletableFuture
 
 class PlanServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : PlanServiceAsync {
 

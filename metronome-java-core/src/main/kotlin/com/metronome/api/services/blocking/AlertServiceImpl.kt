@@ -18,7 +18,7 @@ import com.metronome.api.models.AlertCreateParams
 import com.metronome.api.models.AlertCreateResponse
 
 class AlertServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : AlertService {
 

@@ -22,7 +22,7 @@ import com.metronome.api.models.CustomFieldSetValuesParams
 import java.util.concurrent.CompletableFuture
 
 class CustomFieldServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CustomFieldServiceAsync {
 

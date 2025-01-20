@@ -25,7 +25,7 @@ import com.metronome.api.models.ContractProductUpdateResponse
 import java.util.concurrent.CompletableFuture
 
 class ProductServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : ProductServiceAsync {
 

@@ -19,7 +19,7 @@ import com.metronome.api.models.InvoiceVoidResponse
 import java.util.concurrent.CompletableFuture
 
 class InvoiceServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : InvoiceServiceAsync {
 

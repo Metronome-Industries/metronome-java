@@ -21,7 +21,7 @@ import com.metronome.api.models.CustomFieldRemoveKeyParams
 import com.metronome.api.models.CustomFieldSetValuesParams
 
 class CustomFieldServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CustomFieldService {
 

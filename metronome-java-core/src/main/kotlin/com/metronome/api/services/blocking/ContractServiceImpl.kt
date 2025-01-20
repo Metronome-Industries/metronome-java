@@ -43,7 +43,7 @@ import com.metronome.api.services.blocking.contracts.RateCardService
 import com.metronome.api.services.blocking.contracts.RateCardServiceImpl
 
 class ContractServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : ContractService {
 

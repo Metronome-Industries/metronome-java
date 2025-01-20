@@ -21,7 +21,7 @@ import com.metronome.api.models.CustomerCreditUpdateEndDateResponse
 import java.util.concurrent.CompletableFuture
 
 class CreditServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CreditServiceAsync {
 

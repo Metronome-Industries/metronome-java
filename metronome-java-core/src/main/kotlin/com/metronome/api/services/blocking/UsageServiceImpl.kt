@@ -20,7 +20,7 @@ import com.metronome.api.models.UsageListWithGroupsPage
 import com.metronome.api.models.UsageListWithGroupsParams
 
 class UsageServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : UsageService {
 

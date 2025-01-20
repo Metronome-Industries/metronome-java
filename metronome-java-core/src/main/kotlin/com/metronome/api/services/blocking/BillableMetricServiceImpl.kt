@@ -22,7 +22,7 @@ import com.metronome.api.models.BillableMetricRetrieveParams
 import com.metronome.api.models.BillableMetricRetrieveResponse
 
 class BillableMetricServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : BillableMetricService {
 

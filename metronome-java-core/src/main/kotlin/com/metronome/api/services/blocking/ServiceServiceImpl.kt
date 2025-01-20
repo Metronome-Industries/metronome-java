@@ -15,7 +15,7 @@ import com.metronome.api.models.ServiceListParams
 import com.metronome.api.models.ServiceListResponse
 
 class ServiceServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : ServiceService {
 

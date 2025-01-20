@@ -16,7 +16,7 @@ import com.metronome.api.models.DashboardGetEmbeddableUrlParams
 import com.metronome.api.models.DashboardGetEmbeddableUrlResponse
 
 class DashboardServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : DashboardService {
 

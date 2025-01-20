@@ -21,7 +21,7 @@ import com.metronome.api.models.CustomerCommitUpdateEndDateResponse
 import java.util.concurrent.CompletableFuture
 
 class CommitServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CommitServiceAsync {
 

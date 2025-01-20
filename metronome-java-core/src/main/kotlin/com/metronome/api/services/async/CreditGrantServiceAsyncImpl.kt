@@ -27,7 +27,7 @@ import com.metronome.api.models.CreditGrantVoidResponse
 import java.util.concurrent.CompletableFuture
 
 class CreditGrantServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CreditGrantServiceAsync {
 

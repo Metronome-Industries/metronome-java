@@ -20,7 +20,7 @@ import com.metronome.api.models.ContractRateCardRateListPage
 import com.metronome.api.models.ContractRateCardRateListParams
 
 class RateServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : RateService {
 

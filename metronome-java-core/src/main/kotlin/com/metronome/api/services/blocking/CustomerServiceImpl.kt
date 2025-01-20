@@ -45,7 +45,7 @@ import com.metronome.api.services.blocking.customers.PlanService
 import com.metronome.api.services.blocking.customers.PlanServiceImpl
 
 class CustomerServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CustomerService {
 

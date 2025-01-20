@@ -16,7 +16,7 @@ import com.metronome.api.models.AuditLogListParams
 import java.util.concurrent.CompletableFuture
 
 class AuditLogServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : AuditLogServiceAsync {
 

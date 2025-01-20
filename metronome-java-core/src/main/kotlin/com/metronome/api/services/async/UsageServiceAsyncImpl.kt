@@ -21,7 +21,7 @@ import com.metronome.api.models.UsageListWithGroupsParams
 import java.util.concurrent.CompletableFuture
 
 class UsageServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : UsageServiceAsync {
 

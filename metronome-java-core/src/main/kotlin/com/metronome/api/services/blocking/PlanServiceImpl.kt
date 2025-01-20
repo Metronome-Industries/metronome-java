@@ -21,7 +21,7 @@ import com.metronome.api.models.PlanListPage
 import com.metronome.api.models.PlanListParams
 
 class PlanServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : PlanService {
 

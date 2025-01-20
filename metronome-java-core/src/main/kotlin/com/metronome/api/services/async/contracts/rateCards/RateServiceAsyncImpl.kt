@@ -21,7 +21,7 @@ import com.metronome.api.models.ContractRateCardRateListParams
 import java.util.concurrent.CompletableFuture
 
 class RateServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : RateServiceAsync {
 

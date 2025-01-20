@@ -20,7 +20,7 @@ import com.metronome.api.models.CustomerBillingConfigRetrieveResponse
 import java.util.concurrent.CompletableFuture
 
 class BillingConfigServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : BillingConfigServiceAsync {
 

@@ -18,7 +18,7 @@ import com.metronome.api.models.ContractRateCardProductOrderUpdateParams
 import com.metronome.api.models.ContractRateCardProductOrderUpdateResponse
 
 class ProductOrderServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : ProductOrderService {
 

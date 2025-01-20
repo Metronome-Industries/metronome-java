@@ -15,7 +15,7 @@ import com.metronome.api.models.AuditLogListPage
 import com.metronome.api.models.AuditLogListParams
 
 class AuditLogServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : AuditLogService {
 

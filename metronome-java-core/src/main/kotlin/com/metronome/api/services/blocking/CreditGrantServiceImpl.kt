@@ -26,7 +26,7 @@ import com.metronome.api.models.CreditGrantVoidParams
 import com.metronome.api.models.CreditGrantVoidResponse
 
 class CreditGrantServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CreditGrantService {
 

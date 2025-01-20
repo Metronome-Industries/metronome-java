@@ -16,7 +16,7 @@ import com.metronome.api.models.ServiceListResponse
 import java.util.concurrent.CompletableFuture
 
 class ServiceServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : ServiceServiceAsync {
 

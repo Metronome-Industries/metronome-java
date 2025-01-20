@@ -23,7 +23,7 @@ import com.metronome.api.models.BillableMetricRetrieveResponse
 import java.util.concurrent.CompletableFuture
 
 class BillableMetricServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : BillableMetricServiceAsync {
 

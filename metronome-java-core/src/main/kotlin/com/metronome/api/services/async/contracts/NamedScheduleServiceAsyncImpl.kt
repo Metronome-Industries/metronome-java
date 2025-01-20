@@ -19,7 +19,7 @@ import com.metronome.api.models.ContractNamedScheduleUpdateParams
 import java.util.concurrent.CompletableFuture
 
 class NamedScheduleServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : NamedScheduleServiceAsync {
 

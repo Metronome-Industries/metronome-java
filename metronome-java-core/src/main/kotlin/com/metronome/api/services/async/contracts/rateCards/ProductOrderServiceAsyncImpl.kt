@@ -19,7 +19,7 @@ import com.metronome.api.models.ContractRateCardProductOrderUpdateResponse
 import java.util.concurrent.CompletableFuture
 
 class ProductOrderServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : ProductOrderServiceAsync {
 

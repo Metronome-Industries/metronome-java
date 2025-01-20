@@ -20,7 +20,7 @@ import com.metronome.api.models.CustomerCreditUpdateEndDateParams
 import com.metronome.api.models.CustomerCreditUpdateEndDateResponse
 
 class CreditServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CreditService {
 

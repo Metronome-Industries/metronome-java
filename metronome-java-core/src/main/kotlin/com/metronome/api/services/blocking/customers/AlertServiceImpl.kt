@@ -20,7 +20,7 @@ import com.metronome.api.models.CustomerAlertRetrieveParams
 import com.metronome.api.models.CustomerAlertRetrieveResponse
 
 class AlertServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : AlertService {
 

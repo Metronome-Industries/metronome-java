@@ -17,7 +17,7 @@ import com.metronome.api.models.DashboardGetEmbeddableUrlResponse
 import java.util.concurrent.CompletableFuture
 
 class DashboardServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : DashboardServiceAsync {
 

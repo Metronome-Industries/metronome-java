@@ -22,7 +22,7 @@ import com.metronome.api.models.CustomerPlanListPriceAdjustmentsPage
 import com.metronome.api.models.CustomerPlanListPriceAdjustmentsParams
 
 class PlanServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : PlanService {
 

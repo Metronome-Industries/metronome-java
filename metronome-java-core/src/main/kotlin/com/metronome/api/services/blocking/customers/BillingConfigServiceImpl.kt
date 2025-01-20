@@ -19,7 +19,7 @@ import com.metronome.api.models.CustomerBillingConfigRetrieveParams
 import com.metronome.api.models.CustomerBillingConfigRetrieveResponse
 
 class BillingConfigServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : BillingConfigService {
 

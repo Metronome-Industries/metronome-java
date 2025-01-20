@@ -46,7 +46,7 @@ import com.metronome.api.services.async.customers.PlanServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
 class CustomerServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CustomerServiceAsync {
 

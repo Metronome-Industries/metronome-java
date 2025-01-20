@@ -19,7 +19,7 @@ import com.metronome.api.models.AlertCreateResponse
 import java.util.concurrent.CompletableFuture
 
 class AlertServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : AlertServiceAsync {
 

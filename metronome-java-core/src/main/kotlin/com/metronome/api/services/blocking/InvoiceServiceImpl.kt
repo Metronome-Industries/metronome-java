@@ -18,7 +18,7 @@ import com.metronome.api.models.InvoiceVoidParams
 import com.metronome.api.models.InvoiceVoidResponse
 
 class InvoiceServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : InvoiceService {
 

@@ -24,7 +24,7 @@ import com.metronome.api.models.ContractProductUpdateParams
 import com.metronome.api.models.ContractProductUpdateResponse
 
 class ProductServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : ProductService {
 

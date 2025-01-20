@@ -22,7 +22,7 @@ import com.metronome.api.models.CustomerInvoiceRetrieveParams
 import com.metronome.api.models.CustomerInvoiceRetrieveResponse
 
 class InvoiceServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : InvoiceService {
 

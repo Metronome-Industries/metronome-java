@@ -20,7 +20,7 @@ import com.metronome.api.models.CustomerCommitUpdateEndDateParams
 import com.metronome.api.models.CustomerCommitUpdateEndDateResponse
 
 class CommitServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CommitService {
 

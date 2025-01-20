@@ -18,7 +18,7 @@ import com.metronome.api.models.ContractNamedScheduleRetrieveResponse
 import com.metronome.api.models.ContractNamedScheduleUpdateParams
 
 class NamedScheduleServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : NamedScheduleService {
 
