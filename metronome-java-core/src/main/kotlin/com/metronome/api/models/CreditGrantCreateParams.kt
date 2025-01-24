@@ -1317,14 +1317,12 @@ constructor(
             }
 
             /** Specify how much to rollover to the rollover credit grant */
-            fun rolloverAmount(rolloverAmountMaxPercentage: RolloverAmountMaxPercentage) =
-                rolloverAmount(
-                    RolloverAmount.ofRolloverAmountMaxPercentage(rolloverAmountMaxPercentage)
-                )
+            fun rolloverAmount(maxPercentage: RolloverAmountMaxPercentage) =
+                rolloverAmount(RolloverAmount.ofMaxPercentage(maxPercentage))
 
             /** Specify how much to rollover to the rollover credit grant */
-            fun rolloverAmount(rolloverAmountMaxAmount: RolloverAmountMaxAmount) =
-                rolloverAmount(RolloverAmount.ofRolloverAmountMaxAmount(rolloverAmountMaxAmount))
+            fun rolloverAmount(max: RolloverAmountMaxAmount) =
+                rolloverAmount(RolloverAmount.ofMax(max))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1359,35 +1357,31 @@ constructor(
         @JsonSerialize(using = RolloverAmount.Serializer::class)
         class RolloverAmount
         private constructor(
-            private val rolloverAmountMaxPercentage: RolloverAmountMaxPercentage? = null,
-            private val rolloverAmountMaxAmount: RolloverAmountMaxAmount? = null,
+            private val maxPercentage: RolloverAmountMaxPercentage? = null,
+            private val max: RolloverAmountMaxAmount? = null,
             private val _json: JsonValue? = null,
         ) {
 
-            fun rolloverAmountMaxPercentage(): Optional<RolloverAmountMaxPercentage> =
-                Optional.ofNullable(rolloverAmountMaxPercentage)
+            fun maxPercentage(): Optional<RolloverAmountMaxPercentage> =
+                Optional.ofNullable(maxPercentage)
 
-            fun rolloverAmountMaxAmount(): Optional<RolloverAmountMaxAmount> =
-                Optional.ofNullable(rolloverAmountMaxAmount)
+            fun max(): Optional<RolloverAmountMaxAmount> = Optional.ofNullable(max)
 
-            fun isRolloverAmountMaxPercentage(): Boolean = rolloverAmountMaxPercentage != null
+            fun isMaxPercentage(): Boolean = maxPercentage != null
 
-            fun isRolloverAmountMaxAmount(): Boolean = rolloverAmountMaxAmount != null
+            fun isMax(): Boolean = max != null
 
-            fun asRolloverAmountMaxPercentage(): RolloverAmountMaxPercentage =
-                rolloverAmountMaxPercentage.getOrThrow("rolloverAmountMaxPercentage")
+            fun asMaxPercentage(): RolloverAmountMaxPercentage =
+                maxPercentage.getOrThrow("maxPercentage")
 
-            fun asRolloverAmountMaxAmount(): RolloverAmountMaxAmount =
-                rolloverAmountMaxAmount.getOrThrow("rolloverAmountMaxAmount")
+            fun asMax(): RolloverAmountMaxAmount = max.getOrThrow("max")
 
             fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
             fun <T> accept(visitor: Visitor<T>): T {
                 return when {
-                    rolloverAmountMaxPercentage != null ->
-                        visitor.visitRolloverAmountMaxPercentage(rolloverAmountMaxPercentage)
-                    rolloverAmountMaxAmount != null ->
-                        visitor.visitRolloverAmountMaxAmount(rolloverAmountMaxAmount)
+                    maxPercentage != null -> visitor.visitMaxPercentage(maxPercentage)
+                    max != null -> visitor.visitMax(max)
                     else -> visitor.unknown(_json)
                 }
             }
@@ -1401,16 +1395,14 @@ constructor(
 
                 accept(
                     object : Visitor<Unit> {
-                        override fun visitRolloverAmountMaxPercentage(
-                            rolloverAmountMaxPercentage: RolloverAmountMaxPercentage
+                        override fun visitMaxPercentage(
+                            maxPercentage: RolloverAmountMaxPercentage
                         ) {
-                            rolloverAmountMaxPercentage.validate()
+                            maxPercentage.validate()
                         }
 
-                        override fun visitRolloverAmountMaxAmount(
-                            rolloverAmountMaxAmount: RolloverAmountMaxAmount
-                        ) {
-                            rolloverAmountMaxAmount.validate()
+                        override fun visitMax(max: RolloverAmountMaxAmount) {
+                            max.validate()
                         }
                     }
                 )
@@ -1422,17 +1414,15 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is RolloverAmount && rolloverAmountMaxPercentage == other.rolloverAmountMaxPercentage && rolloverAmountMaxAmount == other.rolloverAmountMaxAmount /* spotless:on */
+                return /* spotless:off */ other is RolloverAmount && maxPercentage == other.maxPercentage && max == other.max /* spotless:on */
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(rolloverAmountMaxPercentage, rolloverAmountMaxAmount) /* spotless:on */
+            override fun hashCode(): Int = /* spotless:off */ Objects.hash(maxPercentage, max) /* spotless:on */
 
             override fun toString(): String =
                 when {
-                    rolloverAmountMaxPercentage != null ->
-                        "RolloverAmount{rolloverAmountMaxPercentage=$rolloverAmountMaxPercentage}"
-                    rolloverAmountMaxAmount != null ->
-                        "RolloverAmount{rolloverAmountMaxAmount=$rolloverAmountMaxAmount}"
+                    maxPercentage != null -> "RolloverAmount{maxPercentage=$maxPercentage}"
+                    max != null -> "RolloverAmount{max=$max}"
                     _json != null -> "RolloverAmount{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid RolloverAmount")
                 }
@@ -1440,24 +1430,17 @@ constructor(
             companion object {
 
                 @JvmStatic
-                fun ofRolloverAmountMaxPercentage(
-                    rolloverAmountMaxPercentage: RolloverAmountMaxPercentage
-                ) = RolloverAmount(rolloverAmountMaxPercentage = rolloverAmountMaxPercentage)
+                fun ofMaxPercentage(maxPercentage: RolloverAmountMaxPercentage) =
+                    RolloverAmount(maxPercentage = maxPercentage)
 
-                @JvmStatic
-                fun ofRolloverAmountMaxAmount(rolloverAmountMaxAmount: RolloverAmountMaxAmount) =
-                    RolloverAmount(rolloverAmountMaxAmount = rolloverAmountMaxAmount)
+                @JvmStatic fun ofMax(max: RolloverAmountMaxAmount) = RolloverAmount(max = max)
             }
 
             interface Visitor<out T> {
 
-                fun visitRolloverAmountMaxPercentage(
-                    rolloverAmountMaxPercentage: RolloverAmountMaxPercentage
-                ): T
+                fun visitMaxPercentage(maxPercentage: RolloverAmountMaxPercentage): T
 
-                fun visitRolloverAmountMaxAmount(
-                    rolloverAmountMaxAmount: RolloverAmountMaxAmount
-                ): T
+                fun visitMax(max: RolloverAmountMaxAmount): T
 
                 fun unknown(json: JsonValue?): T {
                     throw MetronomeInvalidDataException("Unknown RolloverAmount: $json")
@@ -1473,13 +1456,13 @@ constructor(
                             it.validate()
                         }
                         ?.let {
-                            return RolloverAmount(rolloverAmountMaxPercentage = it, _json = json)
+                            return RolloverAmount(maxPercentage = it, _json = json)
                         }
                     tryDeserialize(node, jacksonTypeRef<RolloverAmountMaxAmount>()) {
                             it.validate()
                         }
                         ?.let {
-                            return RolloverAmount(rolloverAmountMaxAmount = it, _json = json)
+                            return RolloverAmount(max = it, _json = json)
                         }
 
                     return RolloverAmount(_json = json)
@@ -1494,10 +1477,8 @@ constructor(
                     provider: SerializerProvider
                 ) {
                     when {
-                        value.rolloverAmountMaxPercentage != null ->
-                            generator.writeObject(value.rolloverAmountMaxPercentage)
-                        value.rolloverAmountMaxAmount != null ->
-                            generator.writeObject(value.rolloverAmountMaxAmount)
+                        value.maxPercentage != null -> generator.writeObject(value.maxPercentage)
+                        value.max != null -> generator.writeObject(value.max)
                         value._json != null -> generator.writeObject(value._json)
                         else -> throw IllegalStateException("Invalid RolloverAmount")
                     }
