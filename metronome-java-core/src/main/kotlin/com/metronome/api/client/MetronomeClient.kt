@@ -31,6 +31,12 @@ import com.metronome.api.services.blocking.UsageService
  */
 interface MetronomeClient {
 
+    /**
+     * Returns a version of this client that uses asynchronous execution.
+     *
+     * The returned client shares its resources, like its connection pool and thread pools, with
+     * this client.
+     */
     fun async(): MetronomeClientAsync
 
     fun alerts(): AlertService
