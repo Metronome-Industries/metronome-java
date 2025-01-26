@@ -25,7 +25,7 @@ import java.util.Optional
  * your client's configuration.
  */
 class ContractNamedScheduleUpdateParams
-constructor(
+private constructor(
     private val body: ContractNamedScheduleUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -150,7 +150,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var rateCardId: JsonField<String>? = null
             private var scheduleName: JsonField<String>? = null
@@ -260,7 +260,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractNamedScheduleUpdateBody.Builder =
             ContractNamedScheduleUpdateBody.builder()

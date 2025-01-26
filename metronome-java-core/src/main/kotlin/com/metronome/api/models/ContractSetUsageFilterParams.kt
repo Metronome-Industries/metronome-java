@@ -21,7 +21,7 @@ import java.util.Objects
 
 /** Set usage filter for a contract */
 class ContractSetUsageFilterParams
-constructor(
+private constructor(
     private val body: ContractSetUsageFilterBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -136,7 +136,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
             private var customerId: JsonField<String>? = null
@@ -249,7 +249,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractSetUsageFilterBody.Builder = ContractSetUsageFilterBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

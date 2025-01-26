@@ -24,7 +24,7 @@ import java.util.Optional
 
 /** Create a new credit at the customer level. */
 class CustomerCreditCreateParams
-constructor(
+private constructor(
     private val body: CustomerCreditCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -369,7 +369,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var accessSchedule: JsonField<AccessSchedule>? = null
             private var customerId: JsonField<String>? = null
@@ -657,7 +657,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CustomerCreditCreateBody.Builder = CustomerCreditCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -1008,7 +1008,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var scheduleItems: JsonField<MutableList<ScheduleItem>>? = null
             private var creditTypeId: JsonField<String> = JsonMissing.of()
@@ -1137,7 +1137,7 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var endingBefore: JsonField<OffsetDateTime>? = null
@@ -1269,7 +1269,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 

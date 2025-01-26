@@ -29,8 +29,7 @@ import com.metronome.api.services.async.ServiceServiceAsyncImpl
 import com.metronome.api.services.async.UsageServiceAsync
 import com.metronome.api.services.async.UsageServiceAsyncImpl
 
-class MetronomeClientAsyncImpl
-constructor(
+class MetronomeClientAsyncImpl(
     private val clientOptions: ClientOptions,
 ) : MetronomeClientAsync {
 

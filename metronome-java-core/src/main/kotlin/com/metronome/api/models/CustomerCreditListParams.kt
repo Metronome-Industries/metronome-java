@@ -22,7 +22,7 @@ import java.util.Optional
 
 /** List credits. */
 class CustomerCreditListParams
-constructor(
+private constructor(
     private val body: CustomerCreditListBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -258,7 +258,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
             private var coveringDate: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -436,7 +436,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CustomerCreditListBody.Builder = CustomerCreditListBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

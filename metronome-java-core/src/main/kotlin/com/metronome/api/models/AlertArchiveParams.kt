@@ -21,7 +21,7 @@ import java.util.Optional
 
 /** Archive an existing alert */
 class AlertArchiveParams
-constructor(
+private constructor(
     private val body: AlertArchiveBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -101,7 +101,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var releaseUniquenessKey: JsonField<Boolean> = JsonMissing.of()
@@ -182,7 +182,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: AlertArchiveBody.Builder = AlertArchiveBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

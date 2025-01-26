@@ -18,7 +18,7 @@ import java.util.Optional
  * included)
  */
 class PlanListCustomersParams
-constructor(
+private constructor(
     private val planId: String,
     private val limit: Long?,
     private val nextPage: String?,
@@ -78,7 +78,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var planId: String? = null
         private var limit: Long? = null

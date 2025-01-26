@@ -180,8 +180,7 @@ private constructor(
         }
     }
 
-    class AutoPager
-    constructor(
+    class AutoPager(
         private val firstPage: AuditLogListPage,
     ) : Iterable<AuditLogListResponse> {
 

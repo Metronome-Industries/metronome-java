@@ -126,7 +126,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
@@ -320,7 +320,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -448,7 +448,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var customCreditType: JsonField<CreditTypeData>? = null
             private var fiatPerCustomCredit: JsonField<String>? = null
@@ -549,7 +549,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 

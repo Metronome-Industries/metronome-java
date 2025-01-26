@@ -24,7 +24,7 @@ import java.util.Objects
  * ingest aliases for the given customer.
  */
 class CustomerSetIngestAliasesParams
-constructor(
+private constructor(
     private val customerId: String,
     private val body: CustomerSetIngestAliasesBody,
     private val additionalHeaders: Headers,
@@ -95,7 +95,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var ingestAliases: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -180,7 +180,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var body: CustomerSetIngestAliasesBody.Builder =

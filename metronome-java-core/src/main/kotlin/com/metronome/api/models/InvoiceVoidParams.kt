@@ -20,7 +20,7 @@ import java.util.Objects
 
 /** Void an invoice */
 class InvoiceVoidParams
-constructor(
+private constructor(
     private val body: InvoiceVoidBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -81,7 +81,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -147,7 +147,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: InvoiceVoidBody.Builder = InvoiceVoidBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

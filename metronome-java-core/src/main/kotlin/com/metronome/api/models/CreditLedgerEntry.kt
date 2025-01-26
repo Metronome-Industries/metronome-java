@@ -130,7 +130,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var amount: JsonField<Double>? = null
         private var createdBy: JsonField<String>? = null

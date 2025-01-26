@@ -22,7 +22,7 @@ import java.util.Optional
 
 /** Create a new rate card */
 class ContractRateCardCreateParams
-constructor(
+private constructor(
     private val body: ContractRateCardCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -198,7 +198,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
             private var aliases: JsonField<MutableList<Alias>>? = null
@@ -370,7 +370,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractRateCardCreateBody.Builder = ContractRateCardCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -636,7 +636,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -764,7 +764,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var customCreditTypeId: JsonField<String>? = null
             private var fiatPerCustomCredit: JsonField<Double>? = null
@@ -865,7 +865,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 

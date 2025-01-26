@@ -63,7 +63,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var data: JsonField<MutableList<Data>>? = null
         private var nextPage: JsonField<String>? = null
@@ -181,7 +181,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var enforceUniqueness: JsonField<Boolean>? = null
             private var entity: JsonField<Entity>? = null

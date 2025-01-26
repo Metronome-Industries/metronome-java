@@ -28,7 +28,7 @@ import java.util.Optional
  * for details on the price adjustments.
  */
 class CustomerPlanAddParams
-constructor(
+private constructor(
     private val customerId: String,
     private val body: CustomerPlanAddBody,
     private val additionalHeaders: Headers,
@@ -286,7 +286,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var planId: JsonField<String>? = null
             private var startingOn: JsonField<OffsetDateTime>? = null
@@ -503,7 +503,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var body: CustomerPlanAddBody.Builder = CustomerPlanAddBody.builder()
@@ -821,7 +821,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var customCreditTypeId: JsonField<String>? = null
             private var fiatCurrencyCreditTypeId: JsonField<String>? = null
@@ -1004,7 +1004,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var adjustmentType: JsonField<AdjustmentType>? = null
             private var chargeId: JsonField<String>? = null
@@ -1251,7 +1251,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var lengthInDays: JsonField<Double>? = null
             private var spendingCap: JsonField<SpendingCap> = JsonMissing.of()
@@ -1360,7 +1360,7 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var creditTypeId: JsonField<String>? = null

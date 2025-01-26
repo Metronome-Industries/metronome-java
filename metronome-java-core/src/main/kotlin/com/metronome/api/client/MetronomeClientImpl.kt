@@ -29,8 +29,7 @@ import com.metronome.api.services.blocking.ServiceServiceImpl
 import com.metronome.api.services.blocking.UsageService
 import com.metronome.api.services.blocking.UsageServiceImpl
 
-class MetronomeClientImpl
-constructor(
+class MetronomeClientImpl(
     private val clientOptions: ClientOptions,
 ) : MetronomeClient {
 

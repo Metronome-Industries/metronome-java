@@ -56,7 +56,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var data: JsonField<MutableList<Data>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -285,7 +285,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var amendments: JsonField<MutableList<Amendment>>? = null
@@ -642,7 +642,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var id: JsonField<String>? = null
                 private var commits: JsonField<MutableList<Commit>>? = null
@@ -1055,7 +1055,7 @@ private constructor(
                     @JvmStatic fun builder() = Builder()
                 }
 
-                class Builder {
+                class Builder internal constructor() {
 
                     private var resellerType: JsonField<ResellerType>? = null
                     private var awsAccountNumber: JsonField<String> = JsonMissing.of()
@@ -1336,7 +1336,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -1437,7 +1437,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var billingProvider: JsonField<BillingProvider>? = null
                 private var deliveryMethod: JsonField<DeliveryMethod>? = null

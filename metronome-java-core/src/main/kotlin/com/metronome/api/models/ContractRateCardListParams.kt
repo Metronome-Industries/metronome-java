@@ -14,7 +14,7 @@ import java.util.Optional
  * List rate cards NOTE: Use `/contract-pricing/rate-cards/getRates` to retrieve rate card rates.
  */
 class ContractRateCardListParams
-constructor(
+private constructor(
     private val body: JsonValue,
     private val limit: Long?,
     private val nextPage: String?,
@@ -55,7 +55,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: JsonValue? = null
         private var limit: Long? = null

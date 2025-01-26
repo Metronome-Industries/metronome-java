@@ -23,7 +23,7 @@ import java.util.Optional
 
 /** Create a new alert */
 class AlertCreateParams
-constructor(
+private constructor(
     private val body: AlertCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -427,7 +427,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var alertType: JsonField<AlertType>? = null
             private var name: JsonField<String>? = null
@@ -743,7 +743,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: AlertCreateBody.Builder = AlertCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -1285,7 +1285,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var entity: JsonField<Entity>? = null
             private var key: JsonField<String>? = null
@@ -1468,7 +1468,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var key: JsonField<String>? = null
             private var value: JsonField<String>? = null

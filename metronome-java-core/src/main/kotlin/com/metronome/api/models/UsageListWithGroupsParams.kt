@@ -27,7 +27,7 @@ import java.util.Optional
  * broken into intervals of the specified length.
  */
 class UsageListWithGroupsParams
-constructor(
+private constructor(
     private val limit: Long?,
     private val nextPage: String?,
     private val body: UsageListWithGroupsBody,
@@ -228,7 +228,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var billableMetricId: JsonField<String>? = null
             private var customerId: JsonField<String>? = null
@@ -369,7 +369,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var limit: Long? = null
         private var nextPage: String? = null
@@ -708,7 +708,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var key: JsonField<String>? = null
             private var values: JsonField<MutableList<String>>? = null

@@ -10,7 +10,7 @@ import java.util.Optional
 
 /** List all available plans. */
 class PlanListParams
-constructor(
+private constructor(
     private val limit: Long?,
     private val nextPage: String?,
     private val additionalHeaders: Headers,
@@ -46,7 +46,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var limit: Long? = null
         private var nextPage: String? = null

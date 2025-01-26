@@ -22,7 +22,7 @@ import java.util.Optional
 
 /** Edit an existing credit grant */
 class CreditGrantEditParams
-constructor(
+private constructor(
     private val body: CreditGrantEditBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -137,7 +137,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var creditGrantType: JsonField<String> = JsonMissing.of()
@@ -238,7 +238,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CreditGrantEditBody.Builder = CreditGrantEditBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

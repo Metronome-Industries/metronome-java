@@ -25,7 +25,7 @@ import java.util.Objects
  * keys.
  */
 class CustomFieldAddKeyParams
-constructor(
+private constructor(
     private val body: CustomFieldAddKeyBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -108,7 +108,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var enforceUniqueness: JsonField<Boolean>? = null
             private var entity: JsonField<Entity>? = null
@@ -192,7 +192,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CustomFieldAddKeyBody.Builder = CustomFieldAddKeyBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

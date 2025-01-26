@@ -20,7 +20,7 @@ import java.util.Objects
 
 /** Get a specific product */
 class ContractProductRetrieveParams
-constructor(
+private constructor(
     private val body: ContractProductRetrieveBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -77,7 +77,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -145,7 +145,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractProductRetrieveBody.Builder =
             ContractProductRetrieveBody.builder()

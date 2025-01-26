@@ -11,7 +11,7 @@ import java.util.Optional
 
 /** Fetch a specific invoice for a given customer. */
 class CustomerInvoiceRetrieveParams
-constructor(
+private constructor(
     private val customerId: String,
     private val invoiceId: String,
     private val skipZeroQtyLineItems: Boolean?,
@@ -58,7 +58,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var invoiceId: String? = null

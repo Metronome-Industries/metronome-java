@@ -25,7 +25,7 @@ import java.util.Optional
  * availability is dependent on your client's configuration.
  */
 class ContractScheduleProServicesInvoiceParams
-constructor(
+private constructor(
     private val body: ContractScheduleProServicesInvoiceBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -177,7 +177,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
             private var customerId: JsonField<String>? = null
@@ -317,7 +317,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractScheduleProServicesInvoiceBody.Builder =
             ContractScheduleProServicesInvoiceBody.builder()
@@ -634,7 +634,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var professionalServiceId: JsonField<String>? = null
             private var amendmentId: JsonField<String> = JsonMissing.of()

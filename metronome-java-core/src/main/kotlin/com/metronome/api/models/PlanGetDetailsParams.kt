@@ -10,7 +10,7 @@ import java.util.Objects
 
 /** Fetch high level details of a specific plan. */
 class PlanGetDetailsParams
-constructor(
+private constructor(
     private val planId: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -41,7 +41,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var planId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()

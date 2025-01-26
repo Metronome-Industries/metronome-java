@@ -10,7 +10,7 @@ import java.util.Optional
 
 /** List all billable metrics. */
 class BillableMetricListParams
-constructor(
+private constructor(
     private val includeArchived: Boolean?,
     private val limit: Long?,
     private val nextPage: String?,
@@ -51,7 +51,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var includeArchived: Boolean? = null
         private var limit: Long? = null

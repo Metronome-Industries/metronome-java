@@ -26,7 +26,7 @@ import java.util.Optional
  * iframe in a website. This will show information such as usage data and customer invoices.
  */
 class DashboardGetEmbeddableUrlParams
-constructor(
+private constructor(
     private val body: DashboardGetEmbeddableUrlBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -162,7 +162,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
             private var dashboard: JsonField<Dashboard>? = null
@@ -322,7 +322,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: DashboardGetEmbeddableUrlBody.Builder =
             DashboardGetEmbeddableUrlBody.builder()
@@ -655,7 +655,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var groupKeyName: JsonField<String>? = null
             private var displayName: JsonField<String> = JsonMissing.of()
@@ -762,7 +762,7 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -880,7 +880,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var name: JsonField<Name> = JsonMissing.of()
             private var value: JsonField<String> = JsonMissing.of()
@@ -1157,7 +1157,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var key: JsonField<String>? = null
             private var value: JsonField<String>? = null

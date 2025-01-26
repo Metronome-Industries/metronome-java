@@ -20,7 +20,7 @@ import java.util.Objects
 
 /** Updates ordering of specified products */
 class ContractRateCardProductOrderUpdateParams
-constructor(
+private constructor(
     private val body: ContractRateCardProductOrderUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -99,7 +99,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var productMoves: JsonField<MutableList<ProductMove>>? = null
             private var rateCardId: JsonField<String>? = null
@@ -195,7 +195,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractRateCardProductOrderUpdateBody.Builder =
             ContractRateCardProductOrderUpdateBody.builder()
@@ -403,7 +403,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var position: JsonField<Double>? = null
             private var productId: JsonField<String>? = null

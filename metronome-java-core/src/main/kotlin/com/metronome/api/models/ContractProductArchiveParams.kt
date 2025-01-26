@@ -20,7 +20,7 @@ import java.util.Objects
 
 /** Archive a product */
 class ContractProductArchiveParams
-constructor(
+private constructor(
     private val body: ContractProductArchiveBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -83,7 +83,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var productId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -153,7 +153,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractProductArchiveBody.Builder = ContractProductArchiveBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

@@ -11,7 +11,7 @@ import java.util.Optional
 
 /** List the given customer's plans in reverse-chronological order. */
 class CustomerPlanListParams
-constructor(
+private constructor(
     private val customerId: String,
     private val limit: Long?,
     private val nextPage: String?,
@@ -57,7 +57,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var limit: Long? = null

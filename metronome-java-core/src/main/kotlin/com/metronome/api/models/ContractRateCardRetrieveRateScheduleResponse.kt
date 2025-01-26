@@ -64,7 +64,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var data: JsonField<MutableList<Data>>? = null
         private var nextPage: JsonField<String> = JsonMissing.of()
@@ -266,7 +266,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var entitled: JsonField<Boolean>? = null
             private var productCustomFields: JsonField<ProductCustomFields>? = null
@@ -437,7 +437,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -553,7 +553,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var rateType: JsonField<RateType>? = null
                 private var price: JsonField<Double> = JsonMissing.of()
@@ -783,7 +783,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 

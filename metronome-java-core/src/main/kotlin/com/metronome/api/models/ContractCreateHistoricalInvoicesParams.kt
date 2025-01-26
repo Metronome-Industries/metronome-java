@@ -24,7 +24,7 @@ import java.util.Optional
 
 /** Creates historical usage invoices for a contract */
 class ContractCreateHistoricalInvoicesParams
-constructor(
+private constructor(
     private val body: ContractCreateHistoricalInvoicesBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -97,7 +97,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var invoices: JsonField<MutableList<Invoice>>? = null
             private var preview: JsonField<Boolean>? = null
@@ -189,7 +189,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractCreateHistoricalInvoicesBody.Builder =
             ContractCreateHistoricalInvoicesBody.builder()
@@ -476,7 +476,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
             private var creditTypeId: JsonField<String>? = null
@@ -725,7 +725,7 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var exclusiveEndDate: JsonField<OffsetDateTime>? = null
                 private var inclusiveStartDate: JsonField<OffsetDateTime>? = null
@@ -873,7 +873,7 @@ constructor(
                     @JvmStatic fun builder() = Builder()
                 }
 
-                class Builder {
+                class Builder internal constructor() {
 
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -956,7 +956,7 @@ constructor(
                     @JvmStatic fun builder() = Builder()
                 }
 
-                class Builder {
+                class Builder internal constructor() {
 
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -1071,7 +1071,7 @@ constructor(
                     @JvmStatic fun builder() = Builder()
                 }
 
-                class Builder {
+                class Builder internal constructor() {
 
                     private var exclusiveEndDate: JsonField<OffsetDateTime>? = null
                     private var inclusiveStartDate: JsonField<OffsetDateTime>? = null
@@ -1317,7 +1317,7 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 

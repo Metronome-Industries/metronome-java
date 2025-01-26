@@ -24,7 +24,7 @@ import java.util.Optional
 
 /** Add new rates */
 class ContractRateCardRateAddManyParams
-constructor(
+private constructor(
     private val body: ContractRateCardRateAddManyBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -97,7 +97,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var rateCardId: JsonField<String>? = null
             private var rates: JsonField<MutableList<Rate>>? = null
@@ -188,7 +188,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractRateCardRateAddManyBody.Builder =
             ContractRateCardRateAddManyBody.builder()
@@ -565,7 +565,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var entitled: JsonField<Boolean>? = null
             private var productId: JsonField<String>? = null
@@ -935,7 +935,7 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var rateType: JsonField<RateType>? = null
                 private var price: JsonField<Double> = JsonMissing.of()
@@ -1166,7 +1166,7 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -1250,7 +1250,7 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 

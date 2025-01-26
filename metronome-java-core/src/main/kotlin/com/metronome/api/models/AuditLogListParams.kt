@@ -21,7 +21,7 @@ import java.util.Optional
  * logs.
  */
 class AuditLogListParams
-constructor(
+private constructor(
     private val endingBefore: OffsetDateTime?,
     private val limit: Long?,
     private val nextPage: String?,
@@ -98,7 +98,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var endingBefore: OffsetDateTime? = null
         private var limit: Long? = null

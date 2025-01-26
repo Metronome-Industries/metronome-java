@@ -33,7 +33,7 @@ import java.util.Optional
 
 /** Create a new credit grant */
 class CreditGrantCreateParams
-constructor(
+private constructor(
     private val body: CreditGrantCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -369,7 +369,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
             private var expiresAt: JsonField<OffsetDateTime>? = null
@@ -617,7 +617,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CreditGrantCreateBody.Builder = CreditGrantCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -932,7 +932,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var amount: JsonField<Double>? = null
             private var creditTypeId: JsonField<String>? = null
@@ -1052,7 +1052,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var amount: JsonField<Double>? = null
             private var creditTypeId: JsonField<String>? = null
@@ -1152,7 +1152,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -1272,7 +1272,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var expiresAt: JsonField<OffsetDateTime>? = null
             private var priority: JsonField<Double>? = null
@@ -1447,7 +1447,7 @@ constructor(
                 }
             }
 
-            class Deserializer : BaseDeserializer<RolloverAmount>(RolloverAmount::class) {
+            internal class Deserializer : BaseDeserializer<RolloverAmount>(RolloverAmount::class) {
 
                 override fun ObjectCodec.deserialize(node: JsonNode): RolloverAmount {
                     val json = JsonValue.fromJsonNode(node)
@@ -1469,7 +1469,7 @@ constructor(
                 }
             }
 
-            class Serializer : BaseSerializer<RolloverAmount>(RolloverAmount::class) {
+            internal class Serializer : BaseSerializer<RolloverAmount>(RolloverAmount::class) {
 
                 override fun serialize(
                     value: RolloverAmount,

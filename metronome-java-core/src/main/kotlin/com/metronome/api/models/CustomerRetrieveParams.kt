@@ -10,7 +10,7 @@ import java.util.Objects
 
 /** Get a customer by Metronome ID. */
 class CustomerRetrieveParams
-constructor(
+private constructor(
     private val customerId: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -41,7 +41,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()

@@ -91,7 +91,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var chargeId: JsonField<String>? = null
         private var chargeType: JsonField<ChargeType>? = null
@@ -312,7 +312,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var adjustmentType: JsonField<AdjustmentType>? = null
             private var tier: JsonField<Double> = JsonMissing.of()

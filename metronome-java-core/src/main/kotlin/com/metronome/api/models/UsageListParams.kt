@@ -27,7 +27,7 @@ import java.util.Optional
  * the specified length.
  */
 class UsageListParams
-constructor(
+private constructor(
     private val nextPage: String?,
     private val body: UsageListBody,
     private val additionalHeaders: Headers,
@@ -208,7 +208,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var endingBefore: JsonField<OffsetDateTime>? = null
             private var startingOn: JsonField<OffsetDateTime>? = null
@@ -375,7 +375,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var nextPage: String? = null
         private var body: UsageListBody.Builder = UsageListBody.builder()
@@ -703,7 +703,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var groupBy: JsonField<GroupBy> = JsonMissing.of()
@@ -806,7 +806,7 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var key: JsonField<String>? = null
                 private var values: JsonField<MutableList<String>>? = null

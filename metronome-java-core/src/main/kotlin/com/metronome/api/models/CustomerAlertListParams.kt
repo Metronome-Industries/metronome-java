@@ -23,7 +23,7 @@ import java.util.Optional
 
 /** Fetch all customer alert statuses and alert information for a customer */
 class CustomerAlertListParams
-constructor(
+private constructor(
     private val nextPage: String?,
     private val body: CustomerAlertListBody,
     private val additionalHeaders: Headers,
@@ -117,7 +117,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
             private var alertStatuses: JsonField<MutableList<AlertStatus>>? = null
@@ -218,7 +218,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var nextPage: String? = null
         private var body: CustomerAlertListBody.Builder = CustomerAlertListBody.builder()

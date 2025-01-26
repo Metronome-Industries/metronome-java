@@ -23,7 +23,7 @@ import java.util.Optional
 
 /** Set the billing configuration for a given customer. */
 class CustomerBillingConfigCreateParams
-constructor(
+private constructor(
     private val customerId: String,
     private val billingProviderType: BillingProviderType,
     private val body: CustomerBillingConfigCreateBody,
@@ -153,7 +153,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var billingProviderCustomerId: JsonField<String>? = null
             private var awsProductCode: JsonField<String> = JsonMissing.of()
@@ -262,7 +262,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var billingProviderType: BillingProviderType? = null

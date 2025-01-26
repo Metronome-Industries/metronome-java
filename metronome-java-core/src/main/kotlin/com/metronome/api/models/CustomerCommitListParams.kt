@@ -22,7 +22,7 @@ import java.util.Optional
 
 /** List commits. */
 class CustomerCommitListParams
-constructor(
+private constructor(
     private val body: CustomerCommitListBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -258,7 +258,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
             private var commitId: JsonField<String> = JsonMissing.of()
@@ -436,7 +436,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CustomerCommitListBody.Builder = CustomerCommitListBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

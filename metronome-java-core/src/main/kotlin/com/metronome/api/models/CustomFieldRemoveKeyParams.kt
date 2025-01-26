@@ -22,7 +22,7 @@ import java.util.Objects
 
 /** Remove a key from the allow list for a given entity. */
 class CustomFieldRemoveKeyParams
-constructor(
+private constructor(
     private val body: CustomFieldRemoveKeyBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -91,7 +91,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var entity: JsonField<Entity>? = null
             private var key: JsonField<String>? = null
@@ -165,7 +165,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CustomFieldRemoveKeyBody.Builder = CustomFieldRemoveKeyBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

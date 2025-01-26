@@ -20,7 +20,7 @@ import java.util.Objects
 
 /** Archive a contract */
 class ContractArchiveParams
-constructor(
+private constructor(
     private val body: ContractArchiveBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -121,7 +121,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
             private var customerId: JsonField<String>? = null
@@ -214,7 +214,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractArchiveBody.Builder = ContractArchiveBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

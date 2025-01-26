@@ -20,7 +20,7 @@ import java.util.Objects
 
 /** Updates the specified customer's name. */
 class CustomerSetNameParams
-constructor(
+private constructor(
     private val customerId: String,
     private val body: CustomerSetNameBody,
     private val additionalHeaders: Headers,
@@ -105,7 +105,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -177,7 +177,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var body: CustomerSetNameBody.Builder = CustomerSetNameBody.builder()

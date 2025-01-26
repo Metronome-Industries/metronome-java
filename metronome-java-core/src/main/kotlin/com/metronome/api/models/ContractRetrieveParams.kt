@@ -21,7 +21,7 @@ import java.util.Optional
 
 /** Get a specific contract */
 class ContractRetrieveParams
-constructor(
+private constructor(
     private val body: ContractRetrieveBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -156,7 +156,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
             private var customerId: JsonField<String>? = null
@@ -266,7 +266,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractRetrieveBody.Builder = ContractRetrieveBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

@@ -25,7 +25,7 @@ import java.util.Optional
  * provided)
  */
 class ContractRateCardRetrieveRateScheduleParams
-constructor(
+private constructor(
     private val limit: Long?,
     private val nextPage: String?,
     private val body: ContractRateCardRetrieveRateScheduleBody,
@@ -185,7 +185,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var rateCardId: JsonField<String>? = null
             private var startingAt: JsonField<OffsetDateTime>? = null
@@ -321,7 +321,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var limit: Long? = null
         private var nextPage: String? = null
@@ -613,7 +613,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var partialPricingGroupValues: JsonField<PartialPricingGroupValues> =
                 JsonMissing.of()
@@ -726,7 +726,7 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -813,7 +813,7 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 

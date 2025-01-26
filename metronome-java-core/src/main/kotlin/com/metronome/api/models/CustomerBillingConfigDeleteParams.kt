@@ -20,7 +20,7 @@ import java.util.Optional
  * AWS Marketplace customers.
  */
 class CustomerBillingConfigDeleteParams
-constructor(
+private constructor(
     private val customerId: String,
     private val billingProviderType: BillingProviderType,
     private val additionalHeaders: Headers,
@@ -62,7 +62,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var billingProviderType: BillingProviderType? = null

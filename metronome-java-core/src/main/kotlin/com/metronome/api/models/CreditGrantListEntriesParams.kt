@@ -25,7 +25,7 @@ import java.util.Optional
  * included.
  */
 class CreditGrantListEntriesParams
-constructor(
+private constructor(
     private val nextPage: String?,
     private val body: CreditGrantListEntriesBody,
     private val additionalHeaders: Headers,
@@ -198,7 +198,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var creditTypeIds: JsonField<MutableList<String>>? = null
             private var customerIds: JsonField<MutableList<String>>? = null
@@ -363,7 +363,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var nextPage: String? = null
         private var body: CreditGrantListEntriesBody.Builder = CreditGrantListEntriesBody.builder()

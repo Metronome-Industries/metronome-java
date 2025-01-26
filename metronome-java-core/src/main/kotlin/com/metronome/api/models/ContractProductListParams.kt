@@ -22,7 +22,7 @@ import java.util.Optional
 
 /** List products */
 class ContractProductListParams
-constructor(
+private constructor(
     private val limit: Long?,
     private val nextPage: String?,
     private val body: ContractProductListBody,
@@ -103,7 +103,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var archiveFilter: JsonField<ArchiveFilter> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -172,7 +172,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var limit: Long? = null
         private var nextPage: String? = null

@@ -11,7 +11,7 @@ import java.util.Optional
 
 /** Get all billable metrics for a given customer. */
 class CustomerListBillableMetricsParams
-constructor(
+private constructor(
     private val customerId: String,
     private val includeArchived: Boolean?,
     private val limit: Long?,
@@ -70,7 +70,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var includeArchived: Boolean? = null

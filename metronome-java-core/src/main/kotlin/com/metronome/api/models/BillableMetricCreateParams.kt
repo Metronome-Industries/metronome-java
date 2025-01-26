@@ -23,7 +23,7 @@ import java.util.Optional
 
 /** Creates a new Billable Metric. */
 class BillableMetricCreateParams
-constructor(
+private constructor(
     private val body: BillableMetricCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -266,7 +266,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
             private var aggregationKey: JsonField<String> = JsonMissing.of()
@@ -475,7 +475,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: BillableMetricCreateBody.Builder = BillableMetricCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -825,7 +825,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 

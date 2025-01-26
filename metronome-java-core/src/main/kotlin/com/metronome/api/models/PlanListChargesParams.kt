@@ -11,7 +11,7 @@ import java.util.Optional
 
 /** Fetches a list of charges of a specific plan. */
 class PlanListChargesParams
-constructor(
+private constructor(
     private val planId: String,
     private val limit: Long?,
     private val nextPage: String?,
@@ -57,7 +57,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var planId: String? = null
         private var limit: Long? = null

@@ -24,7 +24,7 @@ import java.util.Optional
 
 /** Add a new rate */
 class ContractRateCardRateAddParams
-constructor(
+private constructor(
     private val body: ContractRateCardRateAddBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -400,7 +400,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var entitled: JsonField<Boolean>? = null
             private var productId: JsonField<String>? = null
@@ -668,7 +668,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractRateCardRateAddBody.Builder =
             ContractRateCardRateAddBody.builder()
@@ -1082,7 +1082,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var rateType: JsonField<RateType>? = null
             private var price: JsonField<Double> = JsonMissing.of()
@@ -1310,7 +1310,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -1390,7 +1390,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 

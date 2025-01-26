@@ -80,7 +80,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var alert: JsonField<Alert>? = null
         private var customerStatus: JsonField<CustomerStatus>? = null
@@ -334,7 +334,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var name: JsonField<String>? = null
@@ -854,7 +854,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var entity: JsonField<Entity>? = null
                 private var key: JsonField<String>? = null
@@ -1042,7 +1042,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var key: JsonField<String>? = null
                 private var value: JsonField<String>? = null

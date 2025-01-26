@@ -22,7 +22,7 @@ import java.util.Optional
 
 /** List balances (commits and credits). */
 class ContractListBalancesParams
-constructor(
+private constructor(
     private val body: ContractListBalancesBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -254,7 +254,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
             private var id: JsonField<String> = JsonMissing.of()
@@ -430,7 +430,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractListBalancesBody.Builder = ContractListBalancesBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

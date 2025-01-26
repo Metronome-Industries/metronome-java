@@ -22,7 +22,7 @@ import java.util.Optional
 
 /** Update the end date of a PREPAID commit */
 class CustomerCommitUpdateEndDateParams
-constructor(
+private constructor(
     private val body: CustomerCommitUpdateEndDateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -165,7 +165,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var commitId: JsonField<String>? = null
             private var customerId: JsonField<String>? = null
@@ -283,7 +283,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CustomerCommitUpdateEndDateBody.Builder =
             CustomerCommitUpdateEndDateBody.builder()

@@ -16,7 +16,7 @@ import java.util.Optional
  * Note: this is not supported for customers whose plan includes a UNIQUE-type billable metric.
  */
 class CustomerListCostsParams
-constructor(
+private constructor(
     private val customerId: String,
     private val endingBefore: OffsetDateTime,
     private val startingOn: OffsetDateTime,
@@ -82,7 +82,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var endingBefore: OffsetDateTime? = null

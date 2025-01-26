@@ -20,7 +20,7 @@ import java.util.Objects
 
 /** Get the customer alert status and alert information for the specified customer and alert */
 class CustomerAlertRetrieveParams
-constructor(
+private constructor(
     private val body: CustomerAlertRetrieveBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -101,7 +101,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var alertId: JsonField<String>? = null
             private var customerId: JsonField<String>? = null
@@ -179,7 +179,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CustomerAlertRetrieveBody.Builder = CustomerAlertRetrieveBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

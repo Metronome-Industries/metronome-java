@@ -22,7 +22,7 @@ import java.util.Optional
 
 /** Get all rates for a rate card at a point in time */
 class ContractRateCardRateListParams
-constructor(
+private constructor(
     private val limit: Long?,
     private val nextPage: String?,
     private val body: ContractRateCardRateListBody,
@@ -149,7 +149,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var at: JsonField<OffsetDateTime>? = null
             private var rateCardId: JsonField<String>? = null
@@ -262,7 +262,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var limit: Long? = null
         private var nextPage: String? = null
@@ -551,7 +551,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var partialPricingGroupValues: JsonField<PartialPricingGroupValues> =
                 JsonMissing.of()
@@ -698,7 +698,7 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -785,7 +785,7 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 

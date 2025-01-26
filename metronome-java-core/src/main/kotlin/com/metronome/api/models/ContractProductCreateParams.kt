@@ -23,7 +23,7 @@ import java.util.Optional
 
 /** Create a new product */
 class ContractProductCreateParams
-constructor(
+private constructor(
     private val body: ContractProductCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -413,7 +413,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
             private var type: JsonField<Type>? = null
@@ -784,7 +784,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractProductCreateBody.Builder = ContractProductCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

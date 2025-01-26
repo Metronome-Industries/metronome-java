@@ -21,7 +21,7 @@ import java.util.Objects
 
 /** Add a one time charge to the specified invoice */
 class CustomerInvoiceAddChargeParams
-constructor(
+private constructor(
     private val customerId: String,
     private val body: CustomerInvoiceAddChargeBody,
     private val additionalHeaders: Headers,
@@ -195,7 +195,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var chargeId: JsonField<String>? = null
             private var customerPlanId: JsonField<String>? = null
@@ -328,7 +328,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var body: CustomerInvoiceAddChargeBody.Builder =

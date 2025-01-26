@@ -20,7 +20,7 @@ import java.util.Objects
 
 /** Reset state for an alert by customer id and force re-evaluation */
 class CustomerAlertResetParams
-constructor(
+private constructor(
     private val body: CustomerAlertResetBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -101,7 +101,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var alertId: JsonField<String>? = null
             private var customerId: JsonField<String>? = null
@@ -179,7 +179,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CustomerAlertResetBody.Builder = CustomerAlertResetBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

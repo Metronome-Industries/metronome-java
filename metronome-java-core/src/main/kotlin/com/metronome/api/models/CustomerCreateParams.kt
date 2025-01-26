@@ -23,7 +23,7 @@ import java.util.Optional
 
 /** Create a new customer */
 class CustomerCreateParams
-constructor(
+private constructor(
     private val body: CustomerCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -194,7 +194,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
             private var billingConfig: JsonField<BillingConfig> = JsonMissing.of()
@@ -363,7 +363,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CustomerCreateBody.Builder = CustomerCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -660,7 +660,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var billingProviderCustomerId: JsonField<String>? = null
             private var billingProviderType: JsonField<BillingProviderType>? = null
@@ -1150,7 +1150,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -1300,7 +1300,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var billingProvider: JsonField<BillingProvider>? = null
             private var configuration: JsonField<Configuration> = JsonMissing.of()
@@ -1518,7 +1518,7 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 

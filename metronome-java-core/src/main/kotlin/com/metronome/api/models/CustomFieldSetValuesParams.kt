@@ -29,7 +29,7 @@ import java.util.Objects
  * field values.
  */
 class CustomFieldSetValuesParams
-constructor(
+private constructor(
     private val body: CustomFieldSetValuesBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -114,7 +114,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var customFields: JsonField<CustomFields>? = null
             private var entity: JsonField<Entity>? = null
@@ -197,7 +197,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CustomFieldSetValuesBody.Builder = CustomFieldSetValuesBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -378,7 +378,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 

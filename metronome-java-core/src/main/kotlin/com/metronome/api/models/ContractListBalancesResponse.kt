@@ -72,7 +72,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var data: JsonField<MutableList<Data>>? = null
         private var nextPage: JsonField<String>? = null
@@ -229,7 +229,7 @@ private constructor(
             }
         }
 
-        class Deserializer : BaseDeserializer<Data>(Data::class) {
+        internal class Deserializer : BaseDeserializer<Data>(Data::class) {
 
             override fun ObjectCodec.deserialize(node: JsonNode): Data {
                 val json = JsonValue.fromJsonNode(node)
@@ -247,7 +247,7 @@ private constructor(
             }
         }
 
-        class Serializer : BaseSerializer<Data>(Data::class) {
+        internal class Serializer : BaseSerializer<Data>(Data::class) {
 
             override fun serialize(
                 value: Data,

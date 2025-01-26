@@ -15,7 +15,7 @@ import java.util.Optional
  * for details.
  */
 class CustomerPlanListPriceAdjustmentsParams
-constructor(
+private constructor(
     private val customerId: String,
     private val customerPlanId: String,
     private val limit: Long?,
@@ -65,7 +65,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var customerPlanId: String? = null

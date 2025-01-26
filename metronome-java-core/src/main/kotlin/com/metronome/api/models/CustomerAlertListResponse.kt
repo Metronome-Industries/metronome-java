@@ -61,7 +61,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var data: JsonField<MutableList<CustomerAlert>>? = null
         private var nextPage: JsonField<String>? = null

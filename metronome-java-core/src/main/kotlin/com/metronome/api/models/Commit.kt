@@ -329,7 +329,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
         private var product: JsonField<Product>? = null
@@ -842,7 +842,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var name: JsonField<String>? = null
@@ -1000,7 +1000,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -1084,7 +1084,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -1168,7 +1168,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -1701,7 +1701,7 @@ private constructor(
             }
         }
 
-        class Deserializer : BaseDeserializer<Ledger>(Ledger::class) {
+        internal class Deserializer : BaseDeserializer<Ledger>(Ledger::class) {
 
             override fun ObjectCodec.deserialize(node: JsonNode): Ledger {
                 val json = JsonValue.fromJsonNode(node)
@@ -1801,7 +1801,7 @@ private constructor(
             }
         }
 
-        class Serializer : BaseSerializer<Ledger>(Ledger::class) {
+        internal class Serializer : BaseSerializer<Ledger>(Ledger::class) {
 
             override fun serialize(
                 value: Ledger,
@@ -1910,7 +1910,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var segmentId: JsonField<String>? = null
@@ -2124,7 +2124,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var invoiceId: JsonField<String>? = null
@@ -2351,7 +2351,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var newContractId: JsonField<String>? = null
@@ -2565,7 +2565,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var segmentId: JsonField<String>? = null
@@ -2779,7 +2779,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var invoiceId: JsonField<String>? = null
@@ -3000,7 +3000,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var invoiceId: JsonField<String>? = null
@@ -3201,7 +3201,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var timestamp: JsonField<OffsetDateTime>? = null
@@ -3409,7 +3409,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var invoiceId: JsonField<String>? = null
@@ -3636,7 +3636,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var newContractId: JsonField<String>? = null
@@ -3850,7 +3850,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var invoiceId: JsonField<String>? = null
@@ -4052,7 +4052,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var reason: JsonField<String>? = null
@@ -4253,7 +4253,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var reason: JsonField<String>? = null
@@ -4447,7 +4447,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var timestamp: JsonField<OffsetDateTime>? = null
@@ -4684,7 +4684,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var commitId: JsonField<String>? = null
             private var contractId: JsonField<String>? = null

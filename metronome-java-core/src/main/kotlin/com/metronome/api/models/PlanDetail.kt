@@ -106,7 +106,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
         private var customFields: JsonField<CustomFields>? = null
@@ -265,7 +265,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -450,7 +450,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var amountGranted: JsonField<Double>? = null
             private var amountGrantedCreditType: JsonField<CreditTypeData>? = null
@@ -670,7 +670,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var creditType: JsonField<CreditTypeData>? = null
             private var name: JsonField<String>? = null
@@ -838,7 +838,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var creditType: JsonField<CreditTypeData>? = null
             private var fiatCreditType: JsonField<CreditTypeData>? = null

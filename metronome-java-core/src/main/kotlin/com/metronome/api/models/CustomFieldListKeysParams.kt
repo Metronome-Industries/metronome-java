@@ -22,7 +22,7 @@ import java.util.Optional
 
 /** List all active custom field keys, optionally filtered by entity type. */
 class CustomFieldListKeysParams
-constructor(
+private constructor(
     private val nextPage: String?,
     private val body: CustomFieldListKeysBody,
     private val additionalHeaders: Headers,
@@ -98,7 +98,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var entities: JsonField<MutableList<Entity>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -183,7 +183,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var nextPage: String? = null
         private var body: CustomFieldListKeysBody.Builder = CustomFieldListKeysBody.builder()

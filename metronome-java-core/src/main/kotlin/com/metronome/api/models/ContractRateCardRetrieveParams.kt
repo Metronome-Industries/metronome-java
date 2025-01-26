@@ -23,7 +23,7 @@ import java.util.Objects
  * rates.
  */
 class ContractRateCardRetrieveParams
-constructor(
+private constructor(
     private val body: ContractRateCardRetrieveBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -80,7 +80,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -148,7 +148,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractRateCardRetrieveBody.Builder =
             ContractRateCardRetrieveBody.builder()

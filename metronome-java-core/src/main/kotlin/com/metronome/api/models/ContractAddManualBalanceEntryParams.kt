@@ -22,7 +22,7 @@ import java.util.Optional
 
 /** Add a manual balance entry */
 class ContractAddManualBalanceEntryParams
-constructor(
+private constructor(
     private val body: ContractAddManualBalanceEntryBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -199,7 +199,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var amount: JsonField<Double>? = null
@@ -333,7 +333,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractAddManualBalanceEntryBody.Builder =
             ContractAddManualBalanceEntryBody.builder()

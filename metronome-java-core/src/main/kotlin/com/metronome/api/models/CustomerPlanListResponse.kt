@@ -132,7 +132,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
         private var customFields: JsonField<CustomFields>? = null
@@ -274,7 +274,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -371,7 +371,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var endingBefore: JsonField<OffsetDateTime>? = null
             private var spendingCaps: JsonField<MutableList<SpendingCap>>? = null
@@ -495,7 +495,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var amount: JsonField<Double>? = null
                 private var amountRemaining: JsonField<Double>? = null

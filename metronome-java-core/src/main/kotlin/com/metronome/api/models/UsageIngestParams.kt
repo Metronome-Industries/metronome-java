@@ -26,7 +26,7 @@ import java.util.Optional
  * to learn more about usage events.
  */
 class UsageIngestParams
-constructor(
+private constructor(
     private val usage: List<Usage>,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -52,7 +52,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var usage: MutableList<Usage>? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -255,7 +255,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
             private var eventType: JsonField<String>? = null
@@ -359,7 +359,7 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 

@@ -22,7 +22,7 @@ import java.util.Optional
 
 /** Change the end date of a customer's plan. */
 class CustomerPlanEndParams
-constructor(
+private constructor(
     private val customerId: String,
     private val customerPlanId: String,
     private val body: CustomerPlanEndBody,
@@ -180,7 +180,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
             private var voidInvoices: JsonField<Boolean> = JsonMissing.of()
@@ -295,7 +295,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var customerPlanId: String? = null

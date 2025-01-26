@@ -20,7 +20,7 @@ import java.util.Objects
 
 /** Sets the ordering of products within a rate card */
 class ContractRateCardProductOrderSetParams
-constructor(
+private constructor(
     private val body: ContractRateCardProductOrderSetBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -99,7 +99,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var productOrder: JsonField<MutableList<String>>? = null
             private var rateCardId: JsonField<String>? = null
@@ -194,7 +194,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractRateCardProductOrderSetBody.Builder =
             ContractRateCardProductOrderSetBody.builder()

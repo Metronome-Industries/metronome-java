@@ -21,7 +21,7 @@ import java.util.Optional
 
 /** Updates the specified customer's config. */
 class CustomerUpdateConfigParams
-constructor(
+private constructor(
     private val customerId: String,
     private val body: CustomerUpdateConfigBody,
     private val additionalHeaders: Headers,
@@ -130,7 +130,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var leaveStripeInvoicesInDraft: JsonField<Boolean> = JsonMissing.of()
             private var salesforceAccountId: JsonField<String> = JsonMissing.of()
@@ -239,7 +239,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var body: CustomerUpdateConfigBody.Builder = CustomerUpdateConfigBody.builder()

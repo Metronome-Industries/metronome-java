@@ -22,7 +22,7 @@ import java.util.Optional
 
 /** Update a product */
 class ContractProductUpdateParams
-constructor(
+private constructor(
     private val body: ContractProductUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -524,7 +524,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var productId: JsonField<String>? = null
             private var startingAt: JsonField<OffsetDateTime>? = null
@@ -955,7 +955,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractProductUpdateBody.Builder = ContractProductUpdateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

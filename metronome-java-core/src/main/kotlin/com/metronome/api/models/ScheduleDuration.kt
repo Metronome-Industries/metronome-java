@@ -67,7 +67,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var scheduleItems: JsonField<MutableList<ScheduleItem>>? = null
         private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
@@ -196,7 +196,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var amount: JsonField<Double>? = null

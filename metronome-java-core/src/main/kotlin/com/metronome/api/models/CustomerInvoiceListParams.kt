@@ -20,7 +20,7 @@ import java.util.Optional
  * type.
  */
 class CustomerInvoiceListParams
-constructor(
+private constructor(
     private val customerId: String,
     private val creditTypeId: String?,
     private val endingBefore: OffsetDateTime?,
@@ -114,7 +114,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var creditTypeId: String? = null

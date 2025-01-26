@@ -22,7 +22,7 @@ import java.util.Objects
 
 /** Deletes one or more custom fields on an instance of a Metronome entity. */
 class CustomFieldDeleteValuesParams
-constructor(
+private constructor(
     private val body: CustomFieldDeleteValuesBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -105,7 +105,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var entity: JsonField<Entity>? = null
             private var entityId: JsonField<String>? = null
@@ -202,7 +202,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CustomFieldDeleteValuesBody.Builder =
             CustomFieldDeleteValuesBody.builder()

@@ -22,7 +22,7 @@ import java.util.Optional
 
 /** Update a rate card */
 class ContractRateCardUpdateParams
-constructor(
+private constructor(
     private val body: ContractRateCardUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -150,7 +150,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var rateCardId: JsonField<String>? = null
             private var aliases: JsonField<MutableList<Alias>>? = null
@@ -275,7 +275,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractRateCardUpdateBody.Builder = ContractRateCardUpdateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -509,7 +509,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()

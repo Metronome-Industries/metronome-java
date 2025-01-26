@@ -286,7 +286,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var commits: JsonField<MutableList<Commit>>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
@@ -702,7 +702,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var fromContractId: JsonField<String>? = null
             private var toContractId: JsonField<String>? = null
@@ -889,7 +889,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var billingAnchorDate: JsonField<OffsetDateTime>? = null
             private var frequency: JsonField<Frequency>? = null
@@ -1189,7 +1189,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var fraction: JsonField<Double>? = null
             private var netsuiteResellerId: JsonField<String>? = null
@@ -1574,7 +1574,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var current: JsonField<BaseUsageFilter>? = null
             private var initial: JsonField<BaseUsageFilter>? = null
@@ -1703,7 +1703,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var groupKey: JsonField<String>? = null
                 private var groupValues: JsonField<MutableList<String>>? = null

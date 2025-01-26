@@ -62,7 +62,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var data: JsonField<MutableList<Data>>? = null
         private var nextPage: JsonField<String>? = null
@@ -175,7 +175,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
             private var ledgers: JsonField<MutableList<Ledger>>? = null
@@ -320,7 +320,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            class Builder internal constructor() {
 
                 private var creditType: JsonField<CreditTypeData>? = null
                 private var endingBalance: JsonField<EndingBalance>? = null
@@ -519,7 +519,7 @@ private constructor(
                     @JvmStatic fun builder() = Builder()
                 }
 
-                class Builder {
+                class Builder internal constructor() {
 
                     private var effectiveAt: JsonField<OffsetDateTime>? = null
                     private var excludingPending: JsonField<Double>? = null
@@ -713,7 +713,7 @@ private constructor(
                     @JvmStatic fun builder() = Builder()
                 }
 
-                class Builder {
+                class Builder internal constructor() {
 
                     private var effectiveAt: JsonField<OffsetDateTime>? = null
                     private var excludingPending: JsonField<Double>? = null

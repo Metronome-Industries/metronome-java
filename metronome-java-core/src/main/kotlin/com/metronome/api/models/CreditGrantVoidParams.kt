@@ -21,7 +21,7 @@ import java.util.Optional
 
 /** Void a credit grant */
 class CreditGrantVoidParams
-constructor(
+private constructor(
     private val body: CreditGrantVoidBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -118,7 +118,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var releaseUniquenessKey: JsonField<Boolean> = JsonMissing.of()
@@ -209,7 +209,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CreditGrantVoidBody.Builder = CreditGrantVoidBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

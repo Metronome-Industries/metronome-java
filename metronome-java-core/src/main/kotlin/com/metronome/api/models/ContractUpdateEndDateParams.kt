@@ -22,7 +22,7 @@ import java.util.Optional
 
 /** Update the end date of a contract */
 class ContractUpdateEndDateParams
-constructor(
+private constructor(
     private val body: ContractUpdateEndDateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -178,7 +178,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
             private var customerId: JsonField<String>? = null
@@ -297,7 +297,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractUpdateEndDateBody.Builder = ContractUpdateEndDateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

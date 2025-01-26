@@ -21,7 +21,7 @@ import java.util.Objects
 
 /** Update the end date of a credit */
 class CustomerCreditUpdateEndDateParams
-constructor(
+private constructor(
     private val body: CustomerCreditUpdateEndDateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -133,7 +133,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var accessEndingBefore: JsonField<OffsetDateTime>? = null
             private var creditId: JsonField<String>? = null
@@ -231,7 +231,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CustomerCreditUpdateEndDateBody.Builder =
             CustomerCreditUpdateEndDateBody.builder()

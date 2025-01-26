@@ -21,7 +21,7 @@ import java.util.Optional
 
 /** List credit grants. This list does not included voided grants. */
 class CreditGrantListParams
-constructor(
+private constructor(
     private val limit: Long?,
     private val nextPage: String?,
     private val body: CreditGrantListBody,
@@ -206,7 +206,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var creditGrantIds: JsonField<MutableList<String>>? = null
             private var creditTypeIds: JsonField<MutableList<String>>? = null
@@ -394,7 +394,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var limit: Long? = null
         private var nextPage: String? = null

@@ -168,7 +168,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
         private var chargeType: JsonField<ChargeType>? = null
@@ -431,7 +431,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -556,7 +556,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var tier: JsonField<Double>? = null
             private var value: JsonField<Double>? = null
@@ -712,7 +712,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var divisionFactor: JsonField<Double>? = null
             private var roundingBehavior: JsonField<RoundingBehavior> = JsonMissing.of()

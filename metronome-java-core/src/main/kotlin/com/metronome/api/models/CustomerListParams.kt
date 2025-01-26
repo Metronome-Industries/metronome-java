@@ -11,7 +11,7 @@ import java.util.Optional
 
 /** List all customers. */
 class CustomerListParams
-constructor(
+private constructor(
     private val customerIds: List<String>?,
     private val ingestAlias: String?,
     private val limit: Long?,
@@ -71,7 +71,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerIds: MutableList<String>? = null
         private var ingestAlias: String? = null

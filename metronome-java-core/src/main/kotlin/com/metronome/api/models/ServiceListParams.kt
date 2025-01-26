@@ -13,7 +13,7 @@ import java.util.Objects
  * least 30 days before they are used for the first time.
  */
 class ServiceListParams
-constructor(
+private constructor(
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) {
@@ -34,7 +34,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()

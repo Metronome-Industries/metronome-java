@@ -22,7 +22,7 @@ import java.util.Optional
 
 /** List all contracts for a customer */
 class ContractListParams
-constructor(
+private constructor(
     private val body: ContractListBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -230,7 +230,7 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
             private var coveringDate: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -384,7 +384,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ContractListBody.Builder = ContractListBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
