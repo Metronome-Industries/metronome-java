@@ -108,4 +108,6 @@ constructor(
     override fun invoices(): InvoiceService = invoices
 
     override fun contracts(): ContractService = contracts
+
+    override fun close() = clientOptions.httpClient.close()
 }
