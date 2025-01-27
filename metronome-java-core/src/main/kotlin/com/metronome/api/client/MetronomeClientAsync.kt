@@ -12,6 +12,7 @@ import com.metronome.api.services.async.CustomerServiceAsync
 import com.metronome.api.services.async.DashboardServiceAsync
 import com.metronome.api.services.async.InvoiceServiceAsync
 import com.metronome.api.services.async.PlanServiceAsync
+import com.metronome.api.services.async.PricingUnitServiceAsync
 import com.metronome.api.services.async.ServiceServiceAsync
 import com.metronome.api.services.async.UsageServiceAsync
 
@@ -44,6 +45,8 @@ interface MetronomeClientAsync {
     fun plans(): PlanServiceAsync
 
     fun creditGrants(): CreditGrantServiceAsync
+
+    fun pricingUnits(): PricingUnitServiceAsync
 
     fun customers(): CustomerServiceAsync
 

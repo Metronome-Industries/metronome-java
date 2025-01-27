@@ -9,7 +9,7 @@ import java.util.Objects
 import java.util.Optional
 
 /** List all pricing units (known in the API by the legacy term "credit types"). */
-class CreditGrantListCreditTypesParams
+class PricingUnitListParams
 private constructor(
     private val limit: Long?,
     private val nextPage: String?,
@@ -45,7 +45,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [CreditGrantListCreditTypesParams]. */
+    /** A builder for [PricingUnitListParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 
@@ -55,14 +55,12 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(creditGrantListCreditTypesParams: CreditGrantListCreditTypesParams) =
-            apply {
-                limit = creditGrantListCreditTypesParams.limit
-                nextPage = creditGrantListCreditTypesParams.nextPage
-                additionalHeaders = creditGrantListCreditTypesParams.additionalHeaders.toBuilder()
-                additionalQueryParams =
-                    creditGrantListCreditTypesParams.additionalQueryParams.toBuilder()
-            }
+        internal fun from(pricingUnitListParams: PricingUnitListParams) = apply {
+            limit = pricingUnitListParams.limit
+            nextPage = pricingUnitListParams.nextPage
+            additionalHeaders = pricingUnitListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = pricingUnitListParams.additionalQueryParams.toBuilder()
+        }
 
         /** Max number of results that should be returned */
         fun limit(limit: Long?) = apply { this.limit = limit }
@@ -178,8 +176,8 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun build(): CreditGrantListCreditTypesParams =
-            CreditGrantListCreditTypesParams(
+        fun build(): PricingUnitListParams =
+            PricingUnitListParams(
                 limit,
                 nextPage,
                 additionalHeaders.build(),
@@ -192,11 +190,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditGrantListCreditTypesParams && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is PricingUnitListParams && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CreditGrantListCreditTypesParams{limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "PricingUnitListParams{limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

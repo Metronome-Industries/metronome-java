@@ -13,17 +13,17 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
-import com.metronome.api.services.blocking.CreditGrantService
+import com.metronome.api.services.blocking.PricingUnitService
 import java.util.Objects
 import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
 /** List all pricing units (known in the API by the legacy term "credit types"). */
-class CreditGrantListCreditTypesPage
+class PricingUnitListPage
 private constructor(
-    private val creditGrantsService: CreditGrantService,
-    private val params: CreditGrantListCreditTypesParams,
+    private val pricingUnitsService: PricingUnitService,
+    private val params: PricingUnitListParams,
     private val response: Response,
 ) {
 
@@ -31,20 +31,20 @@ private constructor(
 
     fun nextPage(): Optional<String> = response().nextPage()
 
-    fun data(): List<CreditGrantListCreditTypesResponse> = response().data()
+    fun data(): List<PricingUnitListResponse> = response().data()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is CreditGrantListCreditTypesPage && creditGrantsService == other.creditGrantsService && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is PricingUnitListPage && pricingUnitsService == other.pricingUnitsService && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(creditGrantsService, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(pricingUnitsService, params, response) /* spotless:on */
 
     override fun toString() =
-        "CreditGrantListCreditTypesPage{creditGrantsService=$creditGrantsService, params=$params, response=$response}"
+        "PricingUnitListPage{pricingUnitsService=$pricingUnitsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean {
         if (data().isEmpty()) {
@@ -54,21 +54,21 @@ private constructor(
         return nextPage().isPresent
     }
 
-    fun getNextPageParams(): Optional<CreditGrantListCreditTypesParams> {
+    fun getNextPageParams(): Optional<PricingUnitListParams> {
         if (!hasNextPage()) {
             return Optional.empty()
         }
 
         return Optional.of(
-            CreditGrantListCreditTypesParams.builder()
+            PricingUnitListParams.builder()
                 .from(params)
                 .apply { nextPage().ifPresent { this.nextPage(it) } }
                 .build()
         )
     }
 
-    fun getNextPage(): Optional<CreditGrantListCreditTypesPage> {
-        return getNextPageParams().map { creditGrantsService.listCreditTypes(it) }
+    fun getNextPage(): Optional<PricingUnitListPage> {
+        return getNextPageParams().map { pricingUnitsService.list(it) }
     }
 
     fun autoPager(): AutoPager = AutoPager(this)
@@ -77,12 +77,12 @@ private constructor(
 
         @JvmStatic
         fun of(
-            creditGrantsService: CreditGrantService,
-            params: CreditGrantListCreditTypesParams,
+            pricingUnitsService: PricingUnitService,
+            params: PricingUnitListParams,
             response: Response
         ) =
-            CreditGrantListCreditTypesPage(
-                creditGrantsService,
+            PricingUnitListPage(
+                pricingUnitsService,
                 params,
                 response,
             )
@@ -94,21 +94,20 @@ private constructor(
     constructor(
         @JsonProperty("next_page") private val nextPage: JsonField<String> = JsonMissing.of(),
         @JsonProperty("data")
-        private val data: JsonField<List<CreditGrantListCreditTypesResponse>> = JsonMissing.of(),
+        private val data: JsonField<List<PricingUnitListResponse>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun nextPage(): Optional<String> = Optional.ofNullable(nextPage.getNullable("next_page"))
 
-        fun data(): List<CreditGrantListCreditTypesResponse> = data.getNullable("data") ?: listOf()
+        fun data(): List<PricingUnitListResponse> = data.getNullable("data") ?: listOf()
 
         @JsonProperty("next_page")
         fun _nextPage(): Optional<JsonField<String>> = Optional.ofNullable(nextPage)
 
         @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<CreditGrantListCreditTypesResponse>>> =
-            Optional.ofNullable(data)
+        fun _data(): Optional<JsonField<List<PricingUnitListResponse>>> = Optional.ofNullable(data)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -149,7 +148,7 @@ private constructor(
         class Builder {
 
             private var nextPage: JsonField<String> = JsonMissing.of()
-            private var data: JsonField<List<CreditGrantListCreditTypesResponse>> = JsonMissing.of()
+            private var data: JsonField<List<PricingUnitListResponse>> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -163,11 +162,9 @@ private constructor(
 
             fun nextPage(nextPage: JsonField<String>) = apply { this.nextPage = nextPage }
 
-            fun data(data: List<CreditGrantListCreditTypesResponse>) = data(JsonField.of(data))
+            fun data(data: List<PricingUnitListResponse>) = data(JsonField.of(data))
 
-            fun data(data: JsonField<List<CreditGrantListCreditTypesResponse>>) = apply {
-                this.data = data
-            }
+            fun data(data: JsonField<List<PricingUnitListResponse>>) = apply { this.data = data }
 
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 this.additionalProperties.put(key, value)
@@ -183,10 +180,10 @@ private constructor(
     }
 
     class AutoPager(
-        private val firstPage: CreditGrantListCreditTypesPage,
-    ) : Iterable<CreditGrantListCreditTypesResponse> {
+        private val firstPage: PricingUnitListPage,
+    ) : Iterable<PricingUnitListResponse> {
 
-        override fun iterator(): Iterator<CreditGrantListCreditTypesResponse> = iterator {
+        override fun iterator(): Iterator<PricingUnitListResponse> = iterator {
             var page = firstPage
             var index = 0
             while (true) {
@@ -198,7 +195,7 @@ private constructor(
             }
         }
 
-        fun stream(): Stream<CreditGrantListCreditTypesResponse> {
+        fun stream(): Stream<PricingUnitListResponse> {
             return StreamSupport.stream(spliterator(), false)
         }
     }

@@ -7,7 +7,6 @@ import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.CreditGrantCreateParams
 import com.metronome.api.models.CreditGrantEditParams
-import com.metronome.api.models.CreditGrantListCreditTypesParams
 import com.metronome.api.models.CreditGrantListEntriesParams
 import com.metronome.api.models.CreditGrantListParams
 import com.metronome.api.models.CreditGrantVoidParams
@@ -107,20 +106,6 @@ class CreditGrantServiceTest {
             )
         println(creditGrantEditResponse)
         creditGrantEditResponse.validate()
-    }
-
-    @Test
-    fun callListCreditTypes() {
-        val client =
-            MetronomeOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val creditGrantService = client.creditGrants()
-        val response =
-            creditGrantService.listCreditTypes(CreditGrantListCreditTypesParams.builder().build())
-        println(response)
-        response.data().forEach { it.validate() }
     }
 
     @Test

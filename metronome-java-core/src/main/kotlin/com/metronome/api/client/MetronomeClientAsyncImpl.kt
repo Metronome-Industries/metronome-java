@@ -24,6 +24,8 @@ import com.metronome.api.services.async.InvoiceServiceAsync
 import com.metronome.api.services.async.InvoiceServiceAsyncImpl
 import com.metronome.api.services.async.PlanServiceAsync
 import com.metronome.api.services.async.PlanServiceAsyncImpl
+import com.metronome.api.services.async.PricingUnitServiceAsync
+import com.metronome.api.services.async.PricingUnitServiceAsyncImpl
 import com.metronome.api.services.async.ServiceServiceAsync
 import com.metronome.api.services.async.ServiceServiceAsyncImpl
 import com.metronome.api.services.async.UsageServiceAsync
@@ -52,6 +54,10 @@ class MetronomeClientAsyncImpl(
 
     private val creditGrants: CreditGrantServiceAsync by lazy {
         CreditGrantServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
+    private val pricingUnits: PricingUnitServiceAsync by lazy {
+        PricingUnitServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
     private val customers: CustomerServiceAsync by lazy {
@@ -97,6 +103,8 @@ class MetronomeClientAsyncImpl(
     override fun plans(): PlanServiceAsync = plans
 
     override fun creditGrants(): CreditGrantServiceAsync = creditGrants
+
+    override fun pricingUnits(): PricingUnitServiceAsync = pricingUnits
 
     override fun customers(): CustomerServiceAsync = customers
 

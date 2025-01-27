@@ -9,8 +9,6 @@ import com.metronome.api.models.CreditGrantCreateParams
 import com.metronome.api.models.CreditGrantCreateResponse
 import com.metronome.api.models.CreditGrantEditParams
 import com.metronome.api.models.CreditGrantEditResponse
-import com.metronome.api.models.CreditGrantListCreditTypesPageAsync
-import com.metronome.api.models.CreditGrantListCreditTypesParams
 import com.metronome.api.models.CreditGrantListEntriesParams
 import com.metronome.api.models.CreditGrantListEntriesResponse
 import com.metronome.api.models.CreditGrantListPageAsync
@@ -41,13 +39,6 @@ interface CreditGrantServiceAsync {
         params: CreditGrantEditParams,
         requestOptions: RequestOptions = RequestOptions.none()
     ): CompletableFuture<CreditGrantEditResponse>
-
-    /** List all pricing units (known in the API by the legacy term "credit types"). */
-    @JvmOverloads
-    fun listCreditTypes(
-        params: CreditGrantListCreditTypesParams,
-        requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<CreditGrantListCreditTypesPageAsync>
 
     /**
      * Fetches a list of credit ledger entries. Returns lists of ledgers per customer. Ledger

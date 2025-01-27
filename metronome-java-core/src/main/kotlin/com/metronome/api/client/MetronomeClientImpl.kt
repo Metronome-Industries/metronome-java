@@ -24,6 +24,8 @@ import com.metronome.api.services.blocking.InvoiceService
 import com.metronome.api.services.blocking.InvoiceServiceImpl
 import com.metronome.api.services.blocking.PlanService
 import com.metronome.api.services.blocking.PlanServiceImpl
+import com.metronome.api.services.blocking.PricingUnitService
+import com.metronome.api.services.blocking.PricingUnitServiceImpl
 import com.metronome.api.services.blocking.ServiceService
 import com.metronome.api.services.blocking.ServiceServiceImpl
 import com.metronome.api.services.blocking.UsageService
@@ -50,6 +52,10 @@ class MetronomeClientImpl(
 
     private val creditGrants: CreditGrantService by lazy {
         CreditGrantServiceImpl(clientOptionsWithUserAgent)
+    }
+
+    private val pricingUnits: PricingUnitService by lazy {
+        PricingUnitServiceImpl(clientOptionsWithUserAgent)
     }
 
     private val customers: CustomerService by lazy {
@@ -89,6 +95,8 @@ class MetronomeClientImpl(
     override fun plans(): PlanService = plans
 
     override fun creditGrants(): CreditGrantService = creditGrants
+
+    override fun pricingUnits(): PricingUnitService = pricingUnits
 
     override fun customers(): CustomerService = customers
 

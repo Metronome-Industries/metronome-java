@@ -16,8 +16,6 @@ import com.metronome.api.models.CreditGrantCreateParams
 import com.metronome.api.models.CreditGrantCreateResponse
 import com.metronome.api.models.CreditGrantEditParams
 import com.metronome.api.models.CreditGrantEditResponse
-import com.metronome.api.models.CreditGrantListCreditTypesPage
-import com.metronome.api.models.CreditGrantListCreditTypesParams
 import com.metronome.api.models.CreditGrantListEntriesParams
 import com.metronome.api.models.CreditGrantListEntriesResponse
 import com.metronome.api.models.CreditGrantListPage
@@ -120,36 +118,6 @@ internal constructor(
                         validate()
                     }
                 }
-        }
-    }
-
-    private val listCreditTypesHandler: Handler<CreditGrantListCreditTypesPage.Response> =
-        jsonHandler<CreditGrantListCreditTypesPage.Response>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
-
-    /** List all pricing units (known in the API by the legacy term "credit types"). */
-    override fun listCreditTypes(
-        params: CreditGrantListCreditTypesParams,
-        requestOptions: RequestOptions
-    ): CreditGrantListCreditTypesPage {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("credit-types", "list")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .build()
-        return clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response
-                .use { listCreditTypesHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
-                }
-                .let { CreditGrantListCreditTypesPage.of(this, params, it) }
         }
     }
 

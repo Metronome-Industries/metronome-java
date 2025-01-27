@@ -16,8 +16,6 @@ import com.metronome.api.models.CreditGrantCreateParams
 import com.metronome.api.models.CreditGrantCreateResponse
 import com.metronome.api.models.CreditGrantEditParams
 import com.metronome.api.models.CreditGrantEditResponse
-import com.metronome.api.models.CreditGrantListCreditTypesPageAsync
-import com.metronome.api.models.CreditGrantListCreditTypesParams
 import com.metronome.api.models.CreditGrantListEntriesParams
 import com.metronome.api.models.CreditGrantListEntriesResponse
 import com.metronome.api.models.CreditGrantListPageAsync
@@ -124,37 +122,6 @@ internal constructor(
                         validate()
                     }
                 }
-        }
-    }
-
-    private val listCreditTypesHandler: Handler<CreditGrantListCreditTypesPageAsync.Response> =
-        jsonHandler<CreditGrantListCreditTypesPageAsync.Response>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
-
-    /** List all pricing units (known in the API by the legacy term "credit types"). */
-    override fun listCreditTypes(
-        params: CreditGrantListCreditTypesParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<CreditGrantListCreditTypesPageAsync> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("credit-types", "list")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { listCreditTypesHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
-                }
-                .let { CreditGrantListCreditTypesPageAsync.of(this, params, it) }
         }
     }
 

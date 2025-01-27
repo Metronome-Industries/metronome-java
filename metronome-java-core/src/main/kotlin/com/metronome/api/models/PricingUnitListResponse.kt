@@ -17,7 +17,7 @@ import java.util.Objects
 import java.util.Optional
 
 @NoAutoDetect
-class CreditGrantListCreditTypesResponse
+class PricingUnitListResponse
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
@@ -46,7 +46,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): CreditGrantListCreditTypesResponse = apply {
+    fun validate(): PricingUnitListResponse = apply {
         if (validated) {
             return@apply
         }
@@ -64,7 +64,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [CreditGrantListCreditTypesResponse]. */
+    /** A builder for [PricingUnitListResponse]. */
     class Builder internal constructor() {
 
         private var id: JsonField<String> = JsonMissing.of()
@@ -73,14 +73,12 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(creditGrantListCreditTypesResponse: CreditGrantListCreditTypesResponse) =
-            apply {
-                id = creditGrantListCreditTypesResponse.id
-                isCurrency = creditGrantListCreditTypesResponse.isCurrency
-                name = creditGrantListCreditTypesResponse.name
-                additionalProperties =
-                    creditGrantListCreditTypesResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(pricingUnitListResponse: PricingUnitListResponse) = apply {
+            id = pricingUnitListResponse.id
+            isCurrency = pricingUnitListResponse.isCurrency
+            name = pricingUnitListResponse.name
+            additionalProperties = pricingUnitListResponse.additionalProperties.toMutableMap()
+        }
 
         fun id(id: String) = id(JsonField.of(id))
 
@@ -113,8 +111,8 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
-        fun build(): CreditGrantListCreditTypesResponse =
-            CreditGrantListCreditTypesResponse(
+        fun build(): PricingUnitListResponse =
+            PricingUnitListResponse(
                 id,
                 isCurrency,
                 name,
@@ -127,7 +125,7 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditGrantListCreditTypesResponse && id == other.id && isCurrency == other.isCurrency && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is PricingUnitListResponse && id == other.id && isCurrency == other.isCurrency && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -137,5 +135,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CreditGrantListCreditTypesResponse{id=$id, isCurrency=$isCurrency, name=$name, additionalProperties=$additionalProperties}"
+        "PricingUnitListResponse{id=$id, isCurrency=$isCurrency, name=$name, additionalProperties=$additionalProperties}"
 }

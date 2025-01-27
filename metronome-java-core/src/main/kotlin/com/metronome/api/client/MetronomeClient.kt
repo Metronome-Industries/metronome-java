@@ -12,6 +12,7 @@ import com.metronome.api.services.blocking.CustomerService
 import com.metronome.api.services.blocking.DashboardService
 import com.metronome.api.services.blocking.InvoiceService
 import com.metronome.api.services.blocking.PlanService
+import com.metronome.api.services.blocking.PricingUnitService
 import com.metronome.api.services.blocking.ServiceService
 import com.metronome.api.services.blocking.UsageService
 
@@ -44,6 +45,8 @@ interface MetronomeClient {
     fun plans(): PlanService
 
     fun creditGrants(): CreditGrantService
+
+    fun pricingUnits(): PricingUnitService
 
     fun customers(): CustomerService
 
