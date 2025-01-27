@@ -81,6 +81,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerListCostsParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

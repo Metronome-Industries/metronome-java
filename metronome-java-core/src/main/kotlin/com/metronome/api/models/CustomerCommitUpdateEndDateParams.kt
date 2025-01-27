@@ -165,6 +165,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomerCommitUpdateEndDateBody]. */
         class Builder internal constructor() {
 
             private var commitId: JsonField<String>? = null
@@ -282,6 +283,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerCommitUpdateEndDateParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

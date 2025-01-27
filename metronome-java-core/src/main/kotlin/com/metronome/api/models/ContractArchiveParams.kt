@@ -121,6 +121,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ContractArchiveBody]. */
         class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
@@ -213,6 +214,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractArchiveParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

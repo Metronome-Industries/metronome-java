@@ -72,6 +72,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractListBalancesResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<MutableList<Data>>? = null
@@ -218,12 +219,22 @@ private constructor(
             @JvmStatic fun ofCredit(credit: Credit) = Data(credit = credit)
         }
 
+        /** An interface that defines how to map each variant of [Data] to a value of type [T]. */
         interface Visitor<out T> {
 
             fun visitCommit(commit: Commit): T
 
             fun visitCredit(credit: Credit): T
 
+            /**
+             * Maps an unknown variant of [Data] to a value of type [T].
+             *
+             * An instance of [Data] can contain an unknown variant if it was deserialized from data
+             * that doesn't match any known variant. For example, if the SDK is on an older version
+             * than the API, then the API may respond with new variants that the SDK is unaware of.
+             *
+             * @throws MetronomeInvalidDataException in the default implementation.
+             */
             fun unknown(json: JsonValue?): T {
                 throw MetronomeInvalidDataException("Unknown Data: $json")
             }

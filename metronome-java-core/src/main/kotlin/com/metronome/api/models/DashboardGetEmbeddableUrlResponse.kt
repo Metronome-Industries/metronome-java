@@ -51,6 +51,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [DashboardGetEmbeddableUrlResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<Data>? = null
@@ -129,6 +130,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [Data]. */
         class Builder internal constructor() {
 
             private var url: JsonField<String> = JsonMissing.of()

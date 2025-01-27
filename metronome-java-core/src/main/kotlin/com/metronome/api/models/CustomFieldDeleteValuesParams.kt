@@ -105,6 +105,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomFieldDeleteValuesBody]. */
         class Builder internal constructor() {
 
             private var entity: JsonField<Entity>? = null
@@ -201,6 +202,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomFieldDeleteValuesParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 
@@ -361,6 +363,14 @@ private constructor(
         private val value: JsonField<String>,
     ) : Enum {
 
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
         @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
@@ -402,6 +412,7 @@ private constructor(
             @JvmStatic fun of(value: String) = Entity(JsonField.of(value))
         }
 
+        /** An enum containing [Entity]'s known values. */
         enum class Known {
             ALERT,
             BILLABLE_METRIC,
@@ -422,6 +433,15 @@ private constructor(
             SCHEDULED_CHARGE,
         }
 
+        /**
+         * An enum containing [Entity]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Entity] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
         enum class Value {
             ALERT,
             BILLABLE_METRIC,
@@ -440,9 +460,17 @@ private constructor(
             PRODUCT,
             RATE_CARD,
             SCHEDULED_CHARGE,
+            /** An enum member indicating that [Entity] was instantiated with an unknown value. */
             _UNKNOWN,
         }
 
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
         fun value(): Value =
             when (this) {
                 ALERT -> Value.ALERT
@@ -465,6 +493,15 @@ private constructor(
                 else -> Value._UNKNOWN
             }
 
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
         fun known(): Known =
             when (this) {
                 ALERT -> Known.ALERT

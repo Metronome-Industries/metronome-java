@@ -139,6 +139,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomerNamedScheduleRetrieveBody]. */
         class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
@@ -239,6 +240,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerNamedScheduleRetrieveParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

@@ -206,6 +206,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CreditGrantListBody]. */
         class Builder internal constructor() {
 
             private var creditGrantIds: JsonField<MutableList<String>>? = null
@@ -393,6 +394,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CreditGrantListParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

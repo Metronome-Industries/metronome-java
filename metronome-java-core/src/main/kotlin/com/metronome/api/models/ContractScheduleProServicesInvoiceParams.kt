@@ -177,6 +177,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ContractScheduleProServicesInvoiceBody]. */
         class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
@@ -316,6 +317,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractScheduleProServicesInvoiceParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 
@@ -634,6 +636,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [LineItem]. */
         class Builder internal constructor() {
 
             private var professionalServiceId: JsonField<String>? = null

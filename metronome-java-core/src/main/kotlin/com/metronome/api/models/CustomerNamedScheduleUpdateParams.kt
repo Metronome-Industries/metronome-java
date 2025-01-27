@@ -150,6 +150,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomerNamedScheduleUpdateBody]. */
         class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
@@ -259,6 +260,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerNamedScheduleUpdateParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

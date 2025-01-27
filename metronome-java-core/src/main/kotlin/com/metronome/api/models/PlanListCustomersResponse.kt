@@ -66,6 +66,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [PlanListCustomersResponse]. */
     class Builder internal constructor() {
 
         private var customerDetails: JsonField<CustomerDetail>? = null
@@ -207,6 +208,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [PlanDetails]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -330,6 +332,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
+            /** A builder for [CustomFields]. */
             class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()

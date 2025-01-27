@@ -52,6 +52,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractRateCardRetrieveResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<Data>? = null
@@ -208,6 +209,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [Data]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -406,6 +408,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
+            /** A builder for [Alias]. */
             class Builder internal constructor() {
 
                 private var name: JsonField<String>? = null
@@ -538,6 +541,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
+            /** A builder for [CreditTypeConversion]. */
             class Builder internal constructor() {
 
                 private var customCreditType: JsonField<CreditTypeData>? = null
@@ -642,6 +646,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
+            /** A builder for [CustomFields]. */
             class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()

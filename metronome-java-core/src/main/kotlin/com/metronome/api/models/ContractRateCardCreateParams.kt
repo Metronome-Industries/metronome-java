@@ -198,6 +198,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ContractRateCardCreateBody]. */
         class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
@@ -369,6 +370,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractRateCardCreateParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 
@@ -636,6 +638,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [Alias]. */
         class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
@@ -764,6 +767,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CreditTypeConversion]. */
         class Builder internal constructor() {
 
             private var customCreditTypeId: JsonField<String>? = null
@@ -865,6 +869,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomFields]. */
         class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()

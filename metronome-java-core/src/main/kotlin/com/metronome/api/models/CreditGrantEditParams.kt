@@ -137,6 +137,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CreditGrantEditBody]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -237,6 +238,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CreditGrantEditParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

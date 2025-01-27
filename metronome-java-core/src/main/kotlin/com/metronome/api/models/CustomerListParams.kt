@@ -70,6 +70,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerListParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

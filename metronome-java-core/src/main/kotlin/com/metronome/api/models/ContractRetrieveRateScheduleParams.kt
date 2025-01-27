@@ -179,6 +179,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ContractRetrieveRateScheduleBody]. */
         class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
@@ -308,6 +309,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractRetrieveRateScheduleParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 
@@ -612,6 +614,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [Selector]. */
         class Builder internal constructor() {
 
             private var partialPricingGroupValues: JsonField<PartialPricingGroupValues> =
@@ -759,6 +762,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
+            /** A builder for [PartialPricingGroupValues]. */
             class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -846,6 +850,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
+            /** A builder for [PricingGroupValues]. */
             class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()

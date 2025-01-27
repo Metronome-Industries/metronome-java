@@ -52,6 +52,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractRateCardRateAddManyResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<Id>? = null

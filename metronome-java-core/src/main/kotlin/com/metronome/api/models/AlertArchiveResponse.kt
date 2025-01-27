@@ -50,6 +50,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [AlertArchiveResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<Id>? = null

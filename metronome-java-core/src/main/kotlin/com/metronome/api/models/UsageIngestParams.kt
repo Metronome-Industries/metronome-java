@@ -51,6 +51,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [UsageIngestParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 
@@ -255,6 +256,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [Usage]. */
         class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
@@ -359,6 +361,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
+            /** A builder for [Properties]. */
             class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()

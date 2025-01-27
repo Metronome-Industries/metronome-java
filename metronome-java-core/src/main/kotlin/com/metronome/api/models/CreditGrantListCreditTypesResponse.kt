@@ -64,6 +64,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CreditGrantListCreditTypesResponse]. */
     class Builder internal constructor() {
 
         private var id: JsonField<String> = JsonMissing.of()

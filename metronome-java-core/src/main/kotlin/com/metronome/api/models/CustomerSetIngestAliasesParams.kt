@@ -95,6 +95,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomerSetIngestAliasesBody]. */
         class Builder internal constructor() {
 
             private var ingestAliases: JsonField<MutableList<String>>? = null
@@ -179,6 +180,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerSetIngestAliasesParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

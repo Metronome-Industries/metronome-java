@@ -241,6 +241,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CreditGrantListResponse]. */
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
@@ -601,6 +602,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [Balance]. */
         class Builder internal constructor() {
 
             private var effectiveAt: JsonField<OffsetDateTime>? = null
@@ -731,6 +733,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomFields]. */
         class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -829,6 +832,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [GrantAmount]. */
         class Builder internal constructor() {
 
             private var amount: JsonField<Double>? = null
@@ -949,6 +953,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [PaidAmount]. */
         class Builder internal constructor() {
 
             private var amount: JsonField<Double>? = null
@@ -1062,6 +1067,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [Product]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null

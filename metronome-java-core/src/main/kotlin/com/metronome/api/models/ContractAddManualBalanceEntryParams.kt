@@ -199,6 +199,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ContractAddManualBalanceEntryBody]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -332,6 +333,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractAddManualBalanceEntryParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

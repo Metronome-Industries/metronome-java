@@ -54,6 +54,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractRateCardNamedScheduleRetrieveResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<MutableList<Data>>? = null
@@ -167,6 +168,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [Data]. */
         class Builder internal constructor() {
 
             private var startingAt: JsonField<OffsetDateTime>? = null

@@ -195,6 +195,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomerInvoiceAddChargeBody]. */
         class Builder internal constructor() {
 
             private var chargeId: JsonField<String>? = null
@@ -327,6 +328,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerInvoiceAddChargeParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

@@ -99,6 +99,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ContractRateCardProductOrderUpdateBody]. */
         class Builder internal constructor() {
 
             private var productMoves: JsonField<MutableList<ProductMove>>? = null
@@ -194,6 +195,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractRateCardProductOrderUpdateParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 
@@ -403,6 +405,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ProductMove]. */
         class Builder internal constructor() {
 
             private var position: JsonField<Double>? = null

@@ -101,6 +101,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [AlertArchiveBody]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -181,6 +182,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [AlertArchiveParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

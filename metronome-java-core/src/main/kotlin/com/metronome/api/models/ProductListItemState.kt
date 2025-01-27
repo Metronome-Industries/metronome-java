@@ -264,6 +264,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ProductListItemState]. */
     class Builder internal constructor() {
 
         private var createdAt: JsonField<OffsetDateTime>? = null

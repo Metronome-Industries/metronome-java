@@ -77,6 +77,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomerArchiveBody]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -140,6 +141,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerArchiveParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

@@ -67,6 +67,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ScheduleDuration]. */
     class Builder internal constructor() {
 
         private var scheduleItems: JsonField<MutableList<ScheduleItem>>? = null
@@ -196,6 +197,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ScheduleItem]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null

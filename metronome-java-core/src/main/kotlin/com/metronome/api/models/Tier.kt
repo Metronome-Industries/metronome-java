@@ -57,6 +57,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [Tier]. */
     class Builder internal constructor() {
 
         private var price: JsonField<Double>? = null

@@ -178,6 +178,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ContractUpdateEndDateBody]. */
         class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
@@ -296,6 +297,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractUpdateEndDateParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

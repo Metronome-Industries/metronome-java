@@ -101,6 +101,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomerAlertResetBody]. */
         class Builder internal constructor() {
 
             private var alertId: JsonField<String>? = null
@@ -178,6 +179,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerAlertResetParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

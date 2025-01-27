@@ -40,6 +40,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [BillableMetricRetrieveParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

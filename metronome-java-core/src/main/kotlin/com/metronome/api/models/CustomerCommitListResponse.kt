@@ -61,6 +61,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerCommitListResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<MutableList<Commit>>? = null

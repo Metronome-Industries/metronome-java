@@ -52,6 +52,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerRetrieveResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<CustomerDetail>? = null

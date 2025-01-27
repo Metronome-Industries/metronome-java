@@ -75,6 +75,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [BaseUsageFilter]. */
     class Builder internal constructor() {
 
         private var groupKey: JsonField<String>? = null

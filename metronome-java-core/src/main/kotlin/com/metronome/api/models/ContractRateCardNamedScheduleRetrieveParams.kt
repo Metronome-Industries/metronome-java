@@ -157,6 +157,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ContractRateCardNamedScheduleRetrieveBody]. */
         class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
@@ -266,6 +267,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractRateCardNamedScheduleRetrieveParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

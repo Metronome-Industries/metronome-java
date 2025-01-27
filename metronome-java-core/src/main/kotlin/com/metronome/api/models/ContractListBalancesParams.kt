@@ -254,6 +254,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ContractListBalancesBody]. */
         class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
@@ -429,6 +430,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractListBalancesParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

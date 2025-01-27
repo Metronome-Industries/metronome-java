@@ -33,6 +33,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ServiceListParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

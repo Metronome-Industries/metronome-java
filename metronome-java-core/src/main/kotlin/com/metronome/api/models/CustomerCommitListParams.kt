@@ -258,6 +258,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomerCommitListBody]. */
         class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
@@ -435,6 +436,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerCommitListParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

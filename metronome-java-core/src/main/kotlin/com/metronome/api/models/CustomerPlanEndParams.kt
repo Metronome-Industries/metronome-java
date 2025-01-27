@@ -180,6 +180,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomerPlanEndBody]. */
         class Builder internal constructor() {
 
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -294,6 +295,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerPlanEndParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

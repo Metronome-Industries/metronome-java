@@ -68,6 +68,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [SchedulePointInTime]. */
     class Builder internal constructor() {
 
         private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
@@ -211,6 +212,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ScheduleItem]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null

@@ -130,6 +130,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CreditLedgerEntry]. */
     class Builder internal constructor() {
 
         private var amount: JsonField<Double>? = null

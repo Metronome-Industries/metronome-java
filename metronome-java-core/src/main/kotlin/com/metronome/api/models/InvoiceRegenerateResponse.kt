@@ -51,6 +51,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [InvoiceRegenerateResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<Data> = JsonMissing.of()
@@ -126,6 +127,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [Data]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null

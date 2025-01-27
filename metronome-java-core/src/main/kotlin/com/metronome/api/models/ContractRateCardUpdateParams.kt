@@ -150,6 +150,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ContractRateCardUpdateBody]. */
         class Builder internal constructor() {
 
             private var rateCardId: JsonField<String>? = null
@@ -274,6 +275,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractRateCardUpdateParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 
@@ -509,6 +511,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [Alias]. */
         class Builder internal constructor() {
 
             private var name: JsonField<String>? = null

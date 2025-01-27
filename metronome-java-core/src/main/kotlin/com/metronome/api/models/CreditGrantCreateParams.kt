@@ -369,6 +369,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CreditGrantCreateBody]. */
         class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
@@ -616,6 +617,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CreditGrantCreateParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 
@@ -932,6 +934,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [GrantAmount]. */
         class Builder internal constructor() {
 
             private var amount: JsonField<Double>? = null
@@ -1052,6 +1055,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [PaidAmount]. */
         class Builder internal constructor() {
 
             private var amount: JsonField<Double>? = null
@@ -1152,6 +1156,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomFields]. */
         class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -1272,6 +1277,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [RolloverSettings]. */
         class Builder internal constructor() {
 
             private var expiresAt: JsonField<OffsetDateTime>? = null
@@ -1436,12 +1442,26 @@ private constructor(
                 @JvmStatic fun ofMax(max: RolloverAmountMaxAmount) = RolloverAmount(max = max)
             }
 
+            /**
+             * An interface that defines how to map each variant of [RolloverAmount] to a value of
+             * type [T].
+             */
             interface Visitor<out T> {
 
                 fun visitMaxPercentage(maxPercentage: RolloverAmountMaxPercentage): T
 
                 fun visitMax(max: RolloverAmountMaxAmount): T
 
+                /**
+                 * Maps an unknown variant of [RolloverAmount] to a value of type [T].
+                 *
+                 * An instance of [RolloverAmount] can contain an unknown variant if it was
+                 * deserialized from data that doesn't match any known variant. For example, if the
+                 * SDK is on an older version than the API, then the API may respond with new
+                 * variants that the SDK is unaware of.
+                 *
+                 * @throws MetronomeInvalidDataException in the default implementation.
+                 */
                 fun unknown(json: JsonValue?): T {
                     throw MetronomeInvalidDataException("Unknown RolloverAmount: $json")
                 }

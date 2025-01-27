@@ -81,6 +81,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [InvoiceRegenerateBody]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -146,6 +147,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [InvoiceRegenerateParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

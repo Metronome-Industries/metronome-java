@@ -99,6 +99,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ContractRateCardProductOrderSetBody]. */
         class Builder internal constructor() {
 
             private var productOrder: JsonField<MutableList<String>>? = null
@@ -193,6 +194,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractRateCardProductOrderSetParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

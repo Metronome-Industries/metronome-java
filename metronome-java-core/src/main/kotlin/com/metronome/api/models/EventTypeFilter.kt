@@ -80,6 +80,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [EventTypeFilter]. */
     class Builder internal constructor() {
 
         private var inValues: JsonField<MutableList<String>>? = null

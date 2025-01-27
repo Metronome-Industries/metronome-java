@@ -133,6 +133,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomerCreditUpdateEndDateBody]. */
         class Builder internal constructor() {
 
             private var accessEndingBefore: JsonField<OffsetDateTime>? = null
@@ -230,6 +231,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerCreditUpdateEndDateParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

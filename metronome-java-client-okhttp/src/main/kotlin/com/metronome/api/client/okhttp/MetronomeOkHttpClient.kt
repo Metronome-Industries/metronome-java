@@ -22,6 +22,7 @@ class MetronomeOkHttpClient private constructor() {
         @JvmStatic fun fromEnv(): MetronomeClient = builder().fromEnv().build()
     }
 
+    /** A builder for [MetronomeOkHttpClient]. */
     class Builder internal constructor() {
 
         private var clientOptions: ClientOptions.Builder = ClientOptions.builder()

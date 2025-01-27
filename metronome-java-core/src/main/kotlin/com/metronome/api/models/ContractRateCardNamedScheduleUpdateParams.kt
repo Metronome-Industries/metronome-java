@@ -168,6 +168,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ContractRateCardNamedScheduleUpdateBody]. */
         class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
@@ -287,6 +288,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractRateCardNamedScheduleUpdateParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

@@ -130,6 +130,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomerUpdateConfigBody]. */
         class Builder internal constructor() {
 
             private var leaveStripeInvoicesInDraft: JsonField<Boolean> = JsonMissing.of()
@@ -238,6 +239,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerUpdateConfigParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

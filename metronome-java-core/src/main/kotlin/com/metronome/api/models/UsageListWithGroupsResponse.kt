@@ -88,6 +88,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [UsageListWithGroupsResponse]. */
     class Builder internal constructor() {
 
         private var endingBefore: JsonField<OffsetDateTime>? = null

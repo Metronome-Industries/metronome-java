@@ -105,6 +105,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CustomerSetNameBody]. */
         class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
@@ -176,6 +177,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerSetNameParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

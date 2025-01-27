@@ -54,6 +54,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerBillingConfigRetrieveResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<Data>? = null
@@ -258,6 +259,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [Data]. */
         class Builder internal constructor() {
 
             private var awsExpirationDate: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -416,6 +418,14 @@ private constructor(
             private val value: JsonField<String>,
         ) : Enum {
 
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
@@ -473,6 +483,7 @@ private constructor(
                 @JvmStatic fun of(value: String) = AwsRegion(JsonField.of(value))
             }
 
+            /** An enum containing [AwsRegion]'s known values. */
             enum class Known {
                 AF_SOUTH_1,
                 AP_EAST_1,
@@ -501,6 +512,15 @@ private constructor(
                 US_WEST_2,
             }
 
+            /**
+             * An enum containing [AwsRegion]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [AwsRegion] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
             enum class Value {
                 AF_SOUTH_1,
                 AP_EAST_1,
@@ -527,9 +547,20 @@ private constructor(
                 US_GOV_WEST_1,
                 US_WEST_1,
                 US_WEST_2,
+                /**
+                 * An enum member indicating that [AwsRegion] was instantiated with an unknown
+                 * value.
+                 */
                 _UNKNOWN,
             }
 
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
             fun value(): Value =
                 when (this) {
                     AF_SOUTH_1 -> Value.AF_SOUTH_1
@@ -560,6 +591,15 @@ private constructor(
                     else -> Value._UNKNOWN
                 }
 
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
             fun known(): Known =
                 when (this) {
                     AF_SOUTH_1 -> Known.AF_SOUTH_1
@@ -611,6 +651,14 @@ private constructor(
             private val value: JsonField<String>,
         ) : Enum {
 
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
@@ -626,6 +674,7 @@ private constructor(
                 @JvmStatic fun of(value: String) = AzureSubscriptionStatus(JsonField.of(value))
             }
 
+            /** An enum containing [AzureSubscriptionStatus]'s known values. */
             enum class Known {
                 SUBSCRIBED,
                 UNSUBSCRIBED,
@@ -633,14 +682,36 @@ private constructor(
                 PENDING_FULFILLMENT_START,
             }
 
+            /**
+             * An enum containing [AzureSubscriptionStatus]'s known values, as well as an [_UNKNOWN]
+             * member.
+             *
+             * An instance of [AzureSubscriptionStatus] can contain an unknown value in a couple of
+             * cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
             enum class Value {
                 SUBSCRIBED,
                 UNSUBSCRIBED,
                 SUSPENDED,
                 PENDING_FULFILLMENT_START,
+                /**
+                 * An enum member indicating that [AzureSubscriptionStatus] was instantiated with an
+                 * unknown value.
+                 */
                 _UNKNOWN,
             }
 
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
             fun value(): Value =
                 when (this) {
                     SUBSCRIBED -> Value.SUBSCRIBED
@@ -650,6 +721,15 @@ private constructor(
                     else -> Value._UNKNOWN
                 }
 
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
             fun known(): Known =
                 when (this) {
                     SUBSCRIBED -> Known.SUBSCRIBED
@@ -683,6 +763,14 @@ private constructor(
             private val value: JsonField<String>,
         ) : Enum {
 
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
@@ -694,17 +782,40 @@ private constructor(
                 @JvmStatic fun of(value: String) = StripeCollectionMethod(JsonField.of(value))
             }
 
+            /** An enum containing [StripeCollectionMethod]'s known values. */
             enum class Known {
                 CHARGE_AUTOMATICALLY,
                 SEND_INVOICE,
             }
 
+            /**
+             * An enum containing [StripeCollectionMethod]'s known values, as well as an [_UNKNOWN]
+             * member.
+             *
+             * An instance of [StripeCollectionMethod] can contain an unknown value in a couple of
+             * cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
             enum class Value {
                 CHARGE_AUTOMATICALLY,
                 SEND_INVOICE,
+                /**
+                 * An enum member indicating that [StripeCollectionMethod] was instantiated with an
+                 * unknown value.
+                 */
                 _UNKNOWN,
             }
 
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
             fun value(): Value =
                 when (this) {
                     CHARGE_AUTOMATICALLY -> Value.CHARGE_AUTOMATICALLY
@@ -712,6 +823,15 @@ private constructor(
                     else -> Value._UNKNOWN
                 }
 
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
             fun known(): Known =
                 when (this) {
                     CHARGE_AUTOMATICALLY -> Known.CHARGE_AUTOMATICALLY

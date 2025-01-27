@@ -62,6 +62,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CreditGrantListEntriesResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<MutableList<Data>>? = null
@@ -175,6 +176,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [Data]. */
         class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
@@ -320,6 +322,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
+            /** A builder for [Ledger]. */
             class Builder internal constructor() {
 
                 private var creditType: JsonField<CreditTypeData>? = null
@@ -519,6 +522,7 @@ private constructor(
                     @JvmStatic fun builder() = Builder()
                 }
 
+                /** A builder for [EndingBalance]. */
                 class Builder internal constructor() {
 
                     private var effectiveAt: JsonField<OffsetDateTime>? = null
@@ -713,6 +717,7 @@ private constructor(
                     @JvmStatic fun builder() = Builder()
                 }
 
+                /** A builder for [StartingBalance]. */
                 class Builder internal constructor() {
 
                     private var effectiveAt: JsonField<OffsetDateTime>? = null

@@ -524,6 +524,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [ContractProductUpdateBody]. */
         class Builder internal constructor() {
 
             private var productId: JsonField<String>? = null
@@ -954,6 +955,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [ContractProductUpdateParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

@@ -75,6 +75,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerListCostsResponse]. */
     class Builder internal constructor() {
 
         private var creditTypes: JsonField<CreditTypes>? = null
@@ -166,6 +167,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
+        /** A builder for [CreditTypes]. */
         class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
