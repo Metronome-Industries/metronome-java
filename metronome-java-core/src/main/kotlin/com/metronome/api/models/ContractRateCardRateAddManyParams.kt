@@ -1074,23 +1074,13 @@ private constructor(
 
                     @JvmField val FLAT = of("FLAT")
 
-                    @JvmField val FLAT = of("flat")
-
                     @JvmField val PERCENTAGE = of("PERCENTAGE")
-
-                    @JvmField val PERCENTAGE = of("percentage")
 
                     @JvmField val SUBSCRIPTION = of("SUBSCRIPTION")
 
-                    @JvmField val SUBSCRIPTION = of("subscription")
-
                     @JvmField val TIERED = of("TIERED")
 
-                    @JvmField val TIERED = of("tiered")
-
                     @JvmField val CUSTOM = of("CUSTOM")
-
-                    @JvmField val CUSTOM = of("custom")
 
                     @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
                 }
@@ -1098,14 +1088,9 @@ private constructor(
                 /** An enum containing [RateType]'s known values. */
                 enum class Known {
                     FLAT,
-                    FLAT,
-                    PERCENTAGE,
                     PERCENTAGE,
                     SUBSCRIPTION,
-                    SUBSCRIPTION,
                     TIERED,
-                    TIERED,
-                    CUSTOM,
                     CUSTOM,
                 }
 
@@ -1120,14 +1105,9 @@ private constructor(
                  */
                 enum class Value {
                     FLAT,
-                    FLAT,
-                    PERCENTAGE,
                     PERCENTAGE,
                     SUBSCRIPTION,
-                    SUBSCRIPTION,
                     TIERED,
-                    TIERED,
-                    CUSTOM,
                     CUSTOM,
                     /**
                      * An enum member indicating that [RateType] was instantiated with an unknown
@@ -1146,14 +1126,9 @@ private constructor(
                 fun value(): Value =
                     when (this) {
                         FLAT -> Value.FLAT
-                        FLAT -> Value.FLAT
-                        PERCENTAGE -> Value.PERCENTAGE
                         PERCENTAGE -> Value.PERCENTAGE
                         SUBSCRIPTION -> Value.SUBSCRIPTION
-                        SUBSCRIPTION -> Value.SUBSCRIPTION
                         TIERED -> Value.TIERED
-                        TIERED -> Value.TIERED
-                        CUSTOM -> Value.CUSTOM
                         CUSTOM -> Value.CUSTOM
                         else -> Value._UNKNOWN
                     }
@@ -1170,14 +1145,9 @@ private constructor(
                 fun known(): Known =
                     when (this) {
                         FLAT -> Known.FLAT
-                        FLAT -> Known.FLAT
-                        PERCENTAGE -> Known.PERCENTAGE
                         PERCENTAGE -> Known.PERCENTAGE
                         SUBSCRIPTION -> Known.SUBSCRIPTION
-                        SUBSCRIPTION -> Known.SUBSCRIPTION
                         TIERED -> Known.TIERED
-                        TIERED -> Known.TIERED
-                        CUSTOM -> Known.CUSTOM
                         CUSTOM -> Known.CUSTOM
                         else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
                     }

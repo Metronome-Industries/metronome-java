@@ -3662,11 +3662,7 @@ private constructor(
 
                 @JvmField val COMMIT_RATE = of("COMMIT_RATE")
 
-                @JvmField val COMMIT_RATE = of("commit_rate")
-
                 @JvmField val LIST_RATE = of("LIST_RATE")
-
-                @JvmField val LIST_RATE = of("list_rate")
 
                 @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
             }
@@ -3674,8 +3670,6 @@ private constructor(
             /** An enum containing [RateType]'s known values. */
             enum class Known {
                 COMMIT_RATE,
-                COMMIT_RATE,
-                LIST_RATE,
                 LIST_RATE,
             }
 
@@ -3690,8 +3684,6 @@ private constructor(
              */
             enum class Value {
                 COMMIT_RATE,
-                COMMIT_RATE,
-                LIST_RATE,
                 LIST_RATE,
                 /**
                  * An enum member indicating that [RateType] was instantiated with an unknown value.
@@ -3709,8 +3701,6 @@ private constructor(
             fun value(): Value =
                 when (this) {
                     COMMIT_RATE -> Value.COMMIT_RATE
-                    COMMIT_RATE -> Value.COMMIT_RATE
-                    LIST_RATE -> Value.LIST_RATE
                     LIST_RATE -> Value.LIST_RATE
                     else -> Value._UNKNOWN
                 }
@@ -3727,8 +3717,6 @@ private constructor(
             fun known(): Known =
                 when (this) {
                     COMMIT_RATE -> Known.COMMIT_RATE
-                    COMMIT_RATE -> Known.COMMIT_RATE
-                    LIST_RATE -> Known.LIST_RATE
                     LIST_RATE -> Known.LIST_RATE
                     else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
                 }
@@ -4495,11 +4483,7 @@ private constructor(
 
                 @JvmField val COMMIT_RATE = of("COMMIT_RATE")
 
-                @JvmField val COMMIT_RATE = of("commit_rate")
-
                 @JvmField val LIST_RATE = of("LIST_RATE")
-
-                @JvmField val LIST_RATE = of("list_rate")
 
                 @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
             }
@@ -4507,8 +4491,6 @@ private constructor(
             /** An enum containing [RateType]'s known values. */
             enum class Known {
                 COMMIT_RATE,
-                COMMIT_RATE,
-                LIST_RATE,
                 LIST_RATE,
             }
 
@@ -4523,8 +4505,6 @@ private constructor(
              */
             enum class Value {
                 COMMIT_RATE,
-                COMMIT_RATE,
-                LIST_RATE,
                 LIST_RATE,
                 /**
                  * An enum member indicating that [RateType] was instantiated with an unknown value.
@@ -4542,8 +4522,6 @@ private constructor(
             fun value(): Value =
                 when (this) {
                     COMMIT_RATE -> Value.COMMIT_RATE
-                    COMMIT_RATE -> Value.COMMIT_RATE
-                    LIST_RATE -> Value.LIST_RATE
                     LIST_RATE -> Value.LIST_RATE
                     else -> Value._UNKNOWN
                 }
@@ -4560,8 +4538,6 @@ private constructor(
             fun known(): Known =
                 when (this) {
                     COMMIT_RATE -> Known.COMMIT_RATE
-                    COMMIT_RATE -> Known.COMMIT_RATE
-                    LIST_RATE -> Known.LIST_RATE
                     LIST_RATE -> Known.LIST_RATE
                     else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
                 }
@@ -7416,11 +7392,7 @@ private constructor(
 
                 @JvmField val COMMIT_RATE = of("COMMIT_RATE")
 
-                @JvmField val COMMIT_RATE = of("commit_rate")
-
                 @JvmField val LIST_RATE = of("LIST_RATE")
-
-                @JvmField val LIST_RATE = of("list_rate")
 
                 @JvmStatic fun of(value: String) = Target(JsonField.of(value))
             }
@@ -7428,8 +7400,6 @@ private constructor(
             /** An enum containing [Target]'s known values. */
             enum class Known {
                 COMMIT_RATE,
-                COMMIT_RATE,
-                LIST_RATE,
                 LIST_RATE,
             }
 
@@ -7444,8 +7414,6 @@ private constructor(
              */
             enum class Value {
                 COMMIT_RATE,
-                COMMIT_RATE,
-                LIST_RATE,
                 LIST_RATE,
                 /**
                  * An enum member indicating that [Target] was instantiated with an unknown value.
@@ -7463,8 +7431,6 @@ private constructor(
             fun value(): Value =
                 when (this) {
                     COMMIT_RATE -> Value.COMMIT_RATE
-                    COMMIT_RATE -> Value.COMMIT_RATE
-                    LIST_RATE -> Value.LIST_RATE
                     LIST_RATE -> Value.LIST_RATE
                     else -> Value._UNKNOWN
                 }
@@ -7481,8 +7447,6 @@ private constructor(
             fun known(): Known =
                 when (this) {
                     COMMIT_RATE -> Known.COMMIT_RATE
-                    COMMIT_RATE -> Known.COMMIT_RATE
-                    LIST_RATE -> Known.LIST_RATE
                     LIST_RATE -> Known.LIST_RATE
                     else -> throw MetronomeInvalidDataException("Unknown Target: $value")
                 }
@@ -10693,8 +10657,6 @@ private constructor(
 
                 @JvmField val CUSTOM_DATE = of("CUSTOM_DATE")
 
-                @JvmField val CUSTOM_DATE = of("custom_date")
-
                 @JvmStatic fun of(value: String) = Day(JsonField.of(value))
             }
 
@@ -10702,7 +10664,6 @@ private constructor(
             enum class Known {
                 FIRST_OF_MONTH,
                 CONTRACT_START,
-                CUSTOM_DATE,
                 CUSTOM_DATE,
             }
 
@@ -10718,7 +10679,6 @@ private constructor(
             enum class Value {
                 FIRST_OF_MONTH,
                 CONTRACT_START,
-                CUSTOM_DATE,
                 CUSTOM_DATE,
                 /** An enum member indicating that [Day] was instantiated with an unknown value. */
                 _UNKNOWN,
@@ -10736,7 +10696,6 @@ private constructor(
                     FIRST_OF_MONTH -> Value.FIRST_OF_MONTH
                     CONTRACT_START -> Value.CONTRACT_START
                     CUSTOM_DATE -> Value.CUSTOM_DATE
-                    CUSTOM_DATE -> Value.CUSTOM_DATE
                     else -> Value._UNKNOWN
                 }
 
@@ -10753,7 +10712,6 @@ private constructor(
                 when (this) {
                     FIRST_OF_MONTH -> Known.FIRST_OF_MONTH
                     CONTRACT_START -> Known.CONTRACT_START
-                    CUSTOM_DATE -> Known.CUSTOM_DATE
                     CUSTOM_DATE -> Known.CUSTOM_DATE
                     else -> throw MetronomeInvalidDataException("Unknown Day: $value")
                 }
