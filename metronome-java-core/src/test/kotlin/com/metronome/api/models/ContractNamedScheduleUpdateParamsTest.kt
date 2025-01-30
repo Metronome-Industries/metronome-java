@@ -21,7 +21,7 @@ class ContractNamedScheduleUpdateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             ContractNamedScheduleUpdateParams.builder()
                 .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
@@ -30,7 +30,7 @@ class ContractNamedScheduleUpdateParamsTest {
                 .value(JsonValue.from(mapOf("my_key" to "my_value")))
                 .endingBefore(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.scheduleName()).isEqualTo("my-schedule")
@@ -40,7 +40,7 @@ class ContractNamedScheduleUpdateParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             ContractNamedScheduleUpdateParams.builder()
                 .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
@@ -48,7 +48,7 @@ class ContractNamedScheduleUpdateParamsTest {
                 .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .value(JsonValue.from(mapOf("my_key" to "my_value")))
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.scheduleName()).isEqualTo("my-schedule")

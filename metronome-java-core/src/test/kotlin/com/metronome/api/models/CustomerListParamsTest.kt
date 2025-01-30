@@ -21,7 +21,7 @@ class CustomerListParamsTest {
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params =
             CustomerListParams.builder()
                 .addCustomerId("string")
@@ -38,13 +38,13 @@ class CustomerListParamsTest {
         expected.put("next_page", "next_page")
         expected.put("only_archived", "true")
         expected.put("salesforce_account_ids", "string")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params = CustomerListParams.builder().build()
         val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 }

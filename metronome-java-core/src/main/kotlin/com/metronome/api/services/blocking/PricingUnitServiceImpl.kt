@@ -10,6 +10,7 @@ import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
 import com.metronome.api.core.http.HttpResponse.Handler
+import com.metronome.api.core.prepare
 import com.metronome.api.errors.MetronomeError
 import com.metronome.api.models.PricingUnitListPage
 import com.metronome.api.models.PricingUnitListParams
@@ -34,11 +35,8 @@ internal constructor(
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("credit-types", "list")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
                 .build()
+                .prepare(clientOptions, params)
         return clientOptions.httpClient.execute(request, requestOptions).let { response ->
             response
                 .use { listHandler.handle(it) }

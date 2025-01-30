@@ -37,7 +37,7 @@ class ContractRateCardCreateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             ContractRateCardCreateParams.builder()
                 .name("My Rate Card")
@@ -62,7 +62,7 @@ class ContractRateCardCreateParamsTest {
                 .description("My Rate Card Description")
                 .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("My Rate Card")
         assertThat(body.aliases())
@@ -95,9 +95,9 @@ class ContractRateCardCreateParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params = ContractRateCardCreateParams.builder().name("My Rate Card").build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("My Rate Card")
     }

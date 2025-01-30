@@ -30,7 +30,7 @@ class UsageIngestParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             UsageIngestParams.builder()
                 .addUsage(
@@ -49,7 +49,7 @@ class UsageIngestParamsTest {
                         .build()
                 )
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body)
             .isEqualTo(
@@ -72,7 +72,7 @@ class UsageIngestParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             UsageIngestParams.builder()
                 .addUsage(
@@ -84,7 +84,7 @@ class UsageIngestParamsTest {
                         .build()
                 )
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body)
             .isEqualTo(

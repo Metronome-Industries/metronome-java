@@ -23,7 +23,7 @@ class AuditLogListParamsTest {
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params =
             AuditLogListParams.builder()
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -42,13 +42,13 @@ class AuditLogListParamsTest {
         expected.put("resource_type", "resource_type")
         expected.put("sort", AuditLogListParams.Sort.DATE_ASC.toString())
         expected.put("starting_on", "2019-12-27T18:11:19.117Z")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params = AuditLogListParams.builder().build()
         val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 }

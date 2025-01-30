@@ -13,19 +13,19 @@ class InvoiceRegenerateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             InvoiceRegenerateParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("6a37bb88-8538-48c5-b37b-a41c836328bd")
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             InvoiceRegenerateParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("6a37bb88-8538-48c5-b37b-a41c836328bd")
     }

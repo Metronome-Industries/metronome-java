@@ -16,26 +16,26 @@ class CustomerAlertResetParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CustomerAlertResetParams.builder()
                 .alertId("5e8691bf-b22a-4672-922d-f80eee940f01")
                 .customerId("4c83caf3-8af4-44e2-9aeb-e290531726d9")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.alertId()).isEqualTo("5e8691bf-b22a-4672-922d-f80eee940f01")
         assertThat(body.customerId()).isEqualTo("4c83caf3-8af4-44e2-9aeb-e290531726d9")
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CustomerAlertResetParams.builder()
                 .alertId("5e8691bf-b22a-4672-922d-f80eee940f01")
                 .customerId("4c83caf3-8af4-44e2-9aeb-e290531726d9")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.alertId()).isEqualTo("5e8691bf-b22a-4672-922d-f80eee940f01")
         assertThat(body.customerId()).isEqualTo("4c83caf3-8af4-44e2-9aeb-e290531726d9")

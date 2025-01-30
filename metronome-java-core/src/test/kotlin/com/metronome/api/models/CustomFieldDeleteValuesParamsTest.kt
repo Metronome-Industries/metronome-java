@@ -17,14 +17,14 @@ class CustomFieldDeleteValuesParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CustomFieldDeleteValuesParams.builder()
                 .entity(CustomFieldDeleteValuesParams.Entity.ALERT)
                 .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
                 .addKey("x_account_id")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.entity()).isEqualTo(CustomFieldDeleteValuesParams.Entity.ALERT)
         assertThat(body.entityId()).isEqualTo("99594816-e8a5-4bca-be21-8d1de0f45120")
@@ -32,14 +32,14 @@ class CustomFieldDeleteValuesParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CustomFieldDeleteValuesParams.builder()
                 .entity(CustomFieldDeleteValuesParams.Entity.ALERT)
                 .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
                 .addKey("x_account_id")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.entity()).isEqualTo(CustomFieldDeleteValuesParams.Entity.ALERT)
         assertThat(body.entityId()).isEqualTo("99594816-e8a5-4bca-be21-8d1de0f45120")

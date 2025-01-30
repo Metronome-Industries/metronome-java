@@ -19,7 +19,7 @@ class CustomerPlanListPriceAdjustmentsParamsTest {
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params =
             CustomerPlanListPriceAdjustmentsParams.builder()
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
@@ -30,18 +30,18 @@ class CustomerPlanListPriceAdjustmentsParamsTest {
         val expected = QueryParams.builder()
         expected.put("limit", "1")
         expected.put("next_page", "next_page")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params =
             CustomerPlanListPriceAdjustmentsParams.builder()
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .customerPlanId("7aa11640-0703-4600-8eb9-293f535a6b74")
                 .build()
         val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test

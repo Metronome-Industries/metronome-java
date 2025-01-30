@@ -22,7 +22,7 @@ class CustomFieldSetValuesParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CustomFieldSetValuesParams.builder()
                 .customFields(
@@ -33,7 +33,7 @@ class CustomFieldSetValuesParamsTest {
                 .entity(CustomFieldSetValuesParams.Entity.ALERT)
                 .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.customFields())
             .isEqualTo(
@@ -46,7 +46,7 @@ class CustomFieldSetValuesParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CustomFieldSetValuesParams.builder()
                 .customFields(
@@ -57,7 +57,7 @@ class CustomFieldSetValuesParamsTest {
                 .entity(CustomFieldSetValuesParams.Entity.ALERT)
                 .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.customFields())
             .isEqualTo(

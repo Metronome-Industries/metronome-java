@@ -22,7 +22,7 @@ class CustomerInvoiceAddChargeParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CustomerInvoiceAddChargeParams.builder()
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
@@ -33,7 +33,7 @@ class CustomerInvoiceAddChargeParamsTest {
                 .price(250.0)
                 .quantity(1.0)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.chargeId()).isEqualTo("5ae4b726-1ebe-439c-9190-9831760ba195")
         assertThat(body.customerPlanId()).isEqualTo("a23b3cf4-47fb-4c3f-bb3d-9e64f7704015")
@@ -45,7 +45,7 @@ class CustomerInvoiceAddChargeParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CustomerInvoiceAddChargeParams.builder()
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
@@ -56,7 +56,7 @@ class CustomerInvoiceAddChargeParamsTest {
                 .price(250.0)
                 .quantity(1.0)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.chargeId()).isEqualTo("5ae4b726-1ebe-439c-9190-9831760ba195")
         assertThat(body.customerPlanId()).isEqualTo("a23b3cf4-47fb-4c3f-bb3d-9e64f7704015")

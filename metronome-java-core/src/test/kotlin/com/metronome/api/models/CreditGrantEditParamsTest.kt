@@ -19,7 +19,7 @@ class CreditGrantEditParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CreditGrantEditParams.builder()
                 .id("9b85c1c1-5238-4f2a-a409-61412905e1e1")
@@ -27,7 +27,7 @@ class CreditGrantEditParamsTest {
                 .expiresAt(OffsetDateTime.parse("2022-04-01T00:00:00Z"))
                 .name("Acme Corp Promotional Credit Grant")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.creditGrantType()).contains("credit_grant_type")
@@ -36,10 +36,10 @@ class CreditGrantEditParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CreditGrantEditParams.builder().id("9b85c1c1-5238-4f2a-a409-61412905e1e1").build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
     }

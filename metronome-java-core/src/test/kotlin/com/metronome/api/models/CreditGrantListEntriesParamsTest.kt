@@ -21,7 +21,7 @@ class CreditGrantListEntriesParamsTest {
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params =
             CreditGrantListEntriesParams.builder()
                 .nextPage("next_page")
@@ -32,18 +32,18 @@ class CreditGrantListEntriesParamsTest {
                 .build()
         val expected = QueryParams.builder()
         expected.put("next_page", "next_page")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params = CreditGrantListEntriesParams.builder().build()
         val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CreditGrantListEntriesParams.builder()
                 .nextPage("next_page")
@@ -52,7 +52,7 @@ class CreditGrantListEntriesParamsTest {
                 .endingBefore(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
                 .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.creditTypeIds()).contains(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
         assertThat(body.customerIds()).contains(listOf("6a37bb88-8538-48c5-b37b-a41c836328bd"))
@@ -61,9 +61,9 @@ class CreditGrantListEntriesParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params = CreditGrantListEntriesParams.builder().build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
     }
 }

@@ -19,7 +19,7 @@ class ContractRateCardListParamsTest {
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params =
             ContractRateCardListParams.builder()
                 .body(JsonValue.from(mapOf<String, Any>()))
@@ -29,35 +29,35 @@ class ContractRateCardListParamsTest {
         val expected = QueryParams.builder()
         expected.put("limit", "1")
         expected.put("next_page", "next_page")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params =
             ContractRateCardListParams.builder().body(JsonValue.from(mapOf<String, Any>())).build()
         val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             ContractRateCardListParams.builder()
                 .body(JsonValue.from(mapOf<String, Any>()))
                 .limit(1L)
                 .nextPage("next_page")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body).isEqualTo(JsonValue.from(mapOf<String, Any>()))
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             ContractRateCardListParams.builder().body(JsonValue.from(mapOf<String, Any>())).build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body).isEqualTo(JsonValue.from(mapOf<String, Any>()))
     }

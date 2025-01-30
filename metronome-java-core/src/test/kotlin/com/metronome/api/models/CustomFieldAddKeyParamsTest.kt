@@ -17,14 +17,14 @@ class CustomFieldAddKeyParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CustomFieldAddKeyParams.builder()
                 .enforceUniqueness(true)
                 .entity(CustomFieldAddKeyParams.Entity.ALERT)
                 .key("x_account_id")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.enforceUniqueness()).isEqualTo(true)
         assertThat(body.entity()).isEqualTo(CustomFieldAddKeyParams.Entity.ALERT)
@@ -32,14 +32,14 @@ class CustomFieldAddKeyParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CustomFieldAddKeyParams.builder()
                 .enforceUniqueness(true)
                 .entity(CustomFieldAddKeyParams.Entity.ALERT)
                 .key("x_account_id")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.enforceUniqueness()).isEqualTo(true)
         assertThat(body.entity()).isEqualTo(CustomFieldAddKeyParams.Entity.ALERT)

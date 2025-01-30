@@ -22,7 +22,7 @@ class ContractAddManualBalanceEntryParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             ContractAddManualBalanceEntryParams.builder()
                 .id("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
@@ -33,7 +33,7 @@ class ContractAddManualBalanceEntryParamsTest {
                 .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
         assertThat(body.amount()).isEqualTo(-1000.0)
@@ -45,7 +45,7 @@ class ContractAddManualBalanceEntryParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             ContractAddManualBalanceEntryParams.builder()
                 .id("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
@@ -54,7 +54,7 @@ class ContractAddManualBalanceEntryParamsTest {
                 .reason("Reason for entry")
                 .segmentId("66368e29-3f97-4d15-a6e9-120897f0070a")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
         assertThat(body.amount()).isEqualTo(-1000.0)

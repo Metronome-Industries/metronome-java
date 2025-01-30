@@ -32,7 +32,7 @@ class UsageListParamsTest {
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params =
             UsageListParams.builder()
                 .endingBefore(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
@@ -54,11 +54,11 @@ class UsageListParamsTest {
                 .build()
         val expected = QueryParams.builder()
         expected.put("next_page", "next_page")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params =
             UsageListParams.builder()
                 .endingBefore(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
@@ -66,11 +66,11 @@ class UsageListParamsTest {
                 .windowSize(UsageListParams.WindowSize.HOUR)
                 .build()
         val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             UsageListParams.builder()
                 .endingBefore(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
@@ -90,7 +90,7 @@ class UsageListParamsTest {
                 )
                 .addCustomerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
         assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
@@ -113,14 +113,14 @@ class UsageListParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             UsageListParams.builder()
                 .endingBefore(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
                 .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .windowSize(UsageListParams.WindowSize.HOUR)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
         assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))

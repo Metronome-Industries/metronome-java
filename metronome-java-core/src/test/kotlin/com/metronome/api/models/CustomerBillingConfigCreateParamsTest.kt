@@ -24,7 +24,7 @@ class CustomerBillingConfigCreateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CustomerBillingConfigCreateParams.builder()
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
@@ -38,7 +38,7 @@ class CustomerBillingConfigCreateParamsTest {
                     CustomerBillingConfigCreateParams.StripeCollectionMethod.CHARGE_AUTOMATICALLY
                 )
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.billingProviderCustomerId()).isEqualTo("cus_AJ6y20bjkOOayM")
         assertThat(body.awsProductCode()).contains("aws_product_code")
@@ -49,7 +49,7 @@ class CustomerBillingConfigCreateParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CustomerBillingConfigCreateParams.builder()
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
@@ -58,7 +58,7 @@ class CustomerBillingConfigCreateParamsTest {
                 )
                 .billingProviderCustomerId("cus_AJ6y20bjkOOayM")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.billingProviderCustomerId()).isEqualTo("cus_AJ6y20bjkOOayM")
     }

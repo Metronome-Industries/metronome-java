@@ -32,7 +32,7 @@ class ContractScheduleProServicesInvoiceParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             ContractScheduleProServicesInvoiceParams.builder()
                 .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -55,7 +55,7 @@ class ContractScheduleProServicesInvoiceParamsTest {
                 .netsuiteInvoiceHeaderEnd(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .netsuiteInvoiceHeaderStart(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.contractId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -84,7 +84,7 @@ class ContractScheduleProServicesInvoiceParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             ContractScheduleProServicesInvoiceParams.builder()
                 .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -96,7 +96,7 @@ class ContractScheduleProServicesInvoiceParamsTest {
                         .build()
                 )
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.contractId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(body.customerId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

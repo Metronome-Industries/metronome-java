@@ -12,6 +12,7 @@ import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
 import com.metronome.api.core.http.HttpResponse.Handler
 import com.metronome.api.core.json
+import com.metronome.api.core.prepare
 import com.metronome.api.errors.MetronomeError
 import com.metronome.api.models.CustomerNamedScheduleRetrieveParams
 import com.metronome.api.models.CustomerNamedScheduleRetrieveResponse
@@ -40,12 +41,9 @@ internal constructor(
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("customers", "getNamedSchedule")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .body(json(clientOptions.jsonMapper, params.getBody()))
+                .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
+                .prepare(clientOptions, params)
         return clientOptions.httpClient.execute(request, requestOptions).let { response ->
             response
                 .use { retrieveHandler.handle(it) }
@@ -68,12 +66,9 @@ internal constructor(
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("customers", "updateNamedSchedule")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .body(json(clientOptions.jsonMapper, params.getBody()))
+                .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
+                .prepare(clientOptions, params)
         clientOptions.httpClient.execute(request, requestOptions).let { response ->
             response.use { updateHandler.handle(it) }
         }

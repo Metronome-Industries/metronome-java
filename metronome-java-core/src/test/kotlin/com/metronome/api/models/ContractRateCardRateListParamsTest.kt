@@ -38,7 +38,7 @@ class ContractRateCardRateListParamsTest {
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params =
             ContractRateCardRateListParams.builder()
                 .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
@@ -67,22 +67,22 @@ class ContractRateCardRateListParamsTest {
         val expected = QueryParams.builder()
         expected.put("limit", "1")
         expected.put("next_page", "next_page")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params =
             ContractRateCardRateListParams.builder()
                 .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
                 .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                 .build()
         val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             ContractRateCardRateListParams.builder()
                 .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
@@ -108,7 +108,7 @@ class ContractRateCardRateListParamsTest {
                         .build()
                 )
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.at()).isEqualTo(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
         assertThat(body.rateCardId()).isEqualTo("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
@@ -136,13 +136,13 @@ class ContractRateCardRateListParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             ContractRateCardRateListParams.builder()
                 .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
                 .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.at()).isEqualTo(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
         assertThat(body.rateCardId()).isEqualTo("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")

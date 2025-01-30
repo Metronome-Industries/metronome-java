@@ -87,7 +87,7 @@ class ContractRateCardRateAddManyParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             ContractRateCardRateAddManyParams.builder()
                 .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
@@ -162,7 +162,7 @@ class ContractRateCardRateAddManyParamsTest {
                         .build()
                 )
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.rates())
@@ -239,7 +239,7 @@ class ContractRateCardRateAddManyParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             ContractRateCardRateAddManyParams.builder()
                 .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
@@ -260,7 +260,7 @@ class ContractRateCardRateAddManyParamsTest {
                         .build()
                 )
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.rates())

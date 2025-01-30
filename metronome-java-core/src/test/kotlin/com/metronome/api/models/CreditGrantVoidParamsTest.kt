@@ -17,14 +17,14 @@ class CreditGrantVoidParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CreditGrantVoidParams.builder()
                 .id("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .releaseUniquenessKey(true)
                 .voidCreditPurchaseInvoice(true)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.releaseUniquenessKey()).contains(true)
@@ -32,10 +32,10 @@ class CreditGrantVoidParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CreditGrantVoidParams.builder().id("9b85c1c1-5238-4f2a-a409-61412905e1e1").build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
     }

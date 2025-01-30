@@ -45,7 +45,7 @@ class ContractRateCardRateAddParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             ContractRateCardRateAddParams.builder()
                 .entitled(true)
@@ -78,7 +78,7 @@ class ContractRateCardRateAddParamsTest {
                 .addTier(Tier.builder().price(0.0).size(0.0).build())
                 .useListPrices(true)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.entitled()).isEqualTo(true)
         assertThat(body.productId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
@@ -115,7 +115,7 @@ class ContractRateCardRateAddParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             ContractRateCardRateAddParams.builder()
                 .entitled(true)
@@ -124,7 +124,7 @@ class ContractRateCardRateAddParamsTest {
                 .rateType(ContractRateCardRateAddParams.RateType.FLAT)
                 .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.entitled()).isEqualTo(true)
         assertThat(body.productId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")

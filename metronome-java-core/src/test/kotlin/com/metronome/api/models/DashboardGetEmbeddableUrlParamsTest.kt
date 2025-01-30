@@ -48,7 +48,7 @@ class DashboardGetEmbeddableUrlParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             DashboardGetEmbeddableUrlParams.builder()
                 .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
@@ -85,7 +85,7 @@ class DashboardGetEmbeddableUrlParamsTest {
                         .build()
                 )
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("4db51251-61de-4bfe-b9ce-495e244f3491")
         assertThat(body.dashboard()).isEqualTo(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
@@ -130,13 +130,13 @@ class DashboardGetEmbeddableUrlParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             DashboardGetEmbeddableUrlParams.builder()
                 .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                 .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("4db51251-61de-4bfe-b9ce-495e244f3491")
         assertThat(body.dashboard()).isEqualTo(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)

@@ -18,7 +18,7 @@ class CustomerAlertListParamsTest {
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params =
             CustomerAlertListParams.builder()
                 .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
@@ -27,28 +27,28 @@ class CustomerAlertListParamsTest {
                 .build()
         val expected = QueryParams.builder()
         expected.put("next_page", "next_page")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params =
             CustomerAlertListParams.builder()
                 .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .build()
         val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CustomerAlertListParams.builder()
                 .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .nextPage("next_page")
                 .addAlertStatus(CustomerAlertListParams.AlertStatus.ENABLED)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.alertStatuses())
@@ -56,12 +56,12 @@ class CustomerAlertListParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CustomerAlertListParams.builder()
                 .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
     }

@@ -39,7 +39,7 @@ class ContractProductCreateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             ContractProductCreateParams.builder()
                 .name("My Product")
@@ -68,7 +68,7 @@ class ContractProductCreateParamsTest {
                 )
                 .addTag("string")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("My Product")
         assertThat(body.type()).isEqualTo(ContractProductCreateParams.Type.FIXED)
@@ -101,13 +101,13 @@ class ContractProductCreateParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             ContractProductCreateParams.builder()
                 .name("My Product")
                 .type(ContractProductCreateParams.Type.FIXED)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("My Product")
         assertThat(body.type()).isEqualTo(ContractProductCreateParams.Type.FIXED)

@@ -20,7 +20,7 @@ class CustomerPlanEndParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CustomerPlanEndParams.builder()
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
@@ -29,7 +29,7 @@ class CustomerPlanEndParamsTest {
                 .voidInvoices(true)
                 .voidStripeInvoices(true)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.endingBefore()).contains(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
         assertThat(body.voidInvoices()).contains(true)
@@ -37,13 +37,13 @@ class CustomerPlanEndParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CustomerPlanEndParams.builder()
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .customerPlanId("7aa11640-0703-4600-8eb9-293f535a6b74")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
     }
 

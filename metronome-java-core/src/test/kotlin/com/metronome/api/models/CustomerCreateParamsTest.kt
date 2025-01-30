@@ -61,7 +61,7 @@ class CustomerCreateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CustomerCreateParams.builder()
                 .name("Example, Inc.")
@@ -112,7 +112,7 @@ class CustomerCreateParamsTest {
                 .externalId("x")
                 .addIngestAlias("team@example.com")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("Example, Inc.")
         assertThat(body.billingConfig())
@@ -169,9 +169,9 @@ class CustomerCreateParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params = CustomerCreateParams.builder().name("Example, Inc.").build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("Example, Inc.")
     }

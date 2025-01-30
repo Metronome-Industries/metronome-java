@@ -3,6 +3,7 @@
 package com.metronome.api.models
 
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.Params
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import java.util.Objects
@@ -16,7 +17,7 @@ private constructor(
     private val nextPage: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     /** If true, the list of returned metrics will include archived metrics */
     fun includeArchived(): Optional<Boolean> = Optional.ofNullable(includeArchived)
@@ -31,10 +32,9 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
+    override fun _queryParams(): QueryParams {
         val queryParams = QueryParams.builder()
         this.includeArchived?.let { queryParams.put("include_archived", listOf(it.toString())) }
         this.limit?.let { queryParams.put("limit", listOf(it.toString())) }

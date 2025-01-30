@@ -73,7 +73,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             ContractCreateHistoricalInvoicesParams.builder()
                 .addInvoice(
@@ -136,7 +136,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                 )
                 .preview(false)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.invoices())
             .isEqualTo(
@@ -203,7 +203,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             ContractCreateHistoricalInvoicesParams.builder()
                 .addInvoice(
@@ -227,7 +227,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
                 )
                 .preview(false)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.invoices())
             .isEqualTo(

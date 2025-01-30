@@ -17,14 +17,14 @@ class ContractRateCardProductOrderSetParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             ContractRateCardProductOrderSetParams.builder()
                 .addProductOrder("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .addProductOrder("b086f2f4-9851-4466-9ca0-30d53e6a42ac")
                 .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.productOrder())
             .isEqualTo(
@@ -37,14 +37,14 @@ class ContractRateCardProductOrderSetParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             ContractRateCardProductOrderSetParams.builder()
                 .addProductOrder("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .addProductOrder("b086f2f4-9851-4466-9ca0-30d53e6a42ac")
                 .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.productOrder())
             .isEqualTo(

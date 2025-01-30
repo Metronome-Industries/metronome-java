@@ -41,7 +41,7 @@ class ContractRateCardRetrieveRateScheduleParamsTest {
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params =
             ContractRateCardRetrieveRateScheduleParams.builder()
                 .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
@@ -72,22 +72,22 @@ class ContractRateCardRetrieveRateScheduleParamsTest {
         val expected = QueryParams.builder()
         expected.put("limit", "1")
         expected.put("next_page", "next_page")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params =
             ContractRateCardRetrieveRateScheduleParams.builder()
                 .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                 .startingAt(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
                 .build()
         val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             ContractRateCardRetrieveRateScheduleParams.builder()
                 .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
@@ -115,7 +115,7 @@ class ContractRateCardRetrieveRateScheduleParamsTest {
                         .build()
                 )
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.rateCardId()).isEqualTo("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
         assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
@@ -145,13 +145,13 @@ class ContractRateCardRetrieveRateScheduleParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             ContractRateCardRetrieveRateScheduleParams.builder()
                 .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                 .startingAt(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.rateCardId()).isEqualTo("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
         assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))

@@ -40,7 +40,7 @@ class ContractRetrieveRateScheduleParamsTest {
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params =
             ContractRetrieveRateScheduleParams.builder()
                 .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
@@ -70,22 +70,22 @@ class ContractRetrieveRateScheduleParamsTest {
         val expected = QueryParams.builder()
         expected.put("limit", "1")
         expected.put("next_page", "next_page")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params =
             ContractRetrieveRateScheduleParams.builder()
                 .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .build()
         val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             ContractRetrieveRateScheduleParams.builder()
                 .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
@@ -112,7 +112,7 @@ class ContractRetrieveRateScheduleParamsTest {
                         .build()
                 )
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
@@ -141,13 +141,13 @@ class ContractRetrieveRateScheduleParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             ContractRetrieveRateScheduleParams.builder()
                 .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")

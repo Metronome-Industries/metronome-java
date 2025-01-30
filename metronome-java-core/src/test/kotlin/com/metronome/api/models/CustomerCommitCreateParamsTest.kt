@@ -79,7 +79,7 @@ class CustomerCommitCreateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CustomerCommitCreateParams.builder()
                 .accessSchedule(
@@ -146,7 +146,7 @@ class CustomerCommitCreateParamsTest {
                 .salesforceOpportunityId("salesforce_opportunity_id")
                 .uniquenessKey("x")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.accessSchedule())
             .isEqualTo(
@@ -218,7 +218,7 @@ class CustomerCommitCreateParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CustomerCommitCreateParams.builder()
                 .accessSchedule(
@@ -237,7 +237,7 @@ class CustomerCommitCreateParamsTest {
                 .productId("f14d6729-6a44-4b13-9908-9387f1918790")
                 .type(CustomerCommitCreateParams.Type.PREPAID)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.accessSchedule())
             .isEqualTo(

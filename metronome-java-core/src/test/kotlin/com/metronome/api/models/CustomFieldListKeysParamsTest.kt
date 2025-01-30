@@ -17,7 +17,7 @@ class CustomFieldListKeysParamsTest {
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params =
             CustomFieldListKeysParams.builder()
                 .nextPage("next_page")
@@ -25,32 +25,32 @@ class CustomFieldListKeysParamsTest {
                 .build()
         val expected = QueryParams.builder()
         expected.put("next_page", "next_page")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params = CustomFieldListKeysParams.builder().build()
         val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CustomFieldListKeysParams.builder()
                 .nextPage("next_page")
                 .addEntity(CustomFieldListKeysParams.Entity.ALERT)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.entities()).contains(listOf(CustomFieldListKeysParams.Entity.ALERT))
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params = CustomFieldListKeysParams.builder().build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
     }
 }

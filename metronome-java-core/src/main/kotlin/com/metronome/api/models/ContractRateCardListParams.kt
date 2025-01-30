@@ -4,6 +4,7 @@ package com.metronome.api.models
 
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.Params
 import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
@@ -20,7 +21,7 @@ private constructor(
     private val nextPage: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun body(): JsonValue = body
 
@@ -34,12 +35,11 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getBody(): JsonValue = body
+    @JvmSynthetic internal fun _body(): JsonValue = body
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
+    override fun _queryParams(): QueryParams {
         val queryParams = QueryParams.builder()
         this.limit?.let { queryParams.put("limit", listOf(it.toString())) }
         this.nextPage?.let { queryParams.put("next_page", listOf(it.toString())) }

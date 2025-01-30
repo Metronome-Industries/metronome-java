@@ -37,7 +37,7 @@ class AlertCreateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             AlertCreateParams.builder()
                 .alertType(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
@@ -64,7 +64,7 @@ class AlertCreateParamsTest {
                 .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .uniquenessKey("x")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.alertType())
             .isEqualTo(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
@@ -98,14 +98,14 @@ class AlertCreateParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             AlertCreateParams.builder()
                 .alertType(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
                 .name("\$100 spend threshold reached")
                 .threshold(10000.0)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.alertType())
             .isEqualTo(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)

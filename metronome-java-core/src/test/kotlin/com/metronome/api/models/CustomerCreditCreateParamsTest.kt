@@ -45,7 +45,7 @@ class CustomerCreditCreateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CustomerCreditCreateParams.builder()
                 .accessSchedule(
@@ -78,7 +78,7 @@ class CustomerCreditCreateParamsTest {
                 .salesforceOpportunityId("salesforce_opportunity_id")
                 .uniquenessKey("x")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.accessSchedule())
             .isEqualTo(
@@ -115,7 +115,7 @@ class CustomerCreditCreateParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CustomerCreditCreateParams.builder()
                 .accessSchedule(
@@ -133,7 +133,7 @@ class CustomerCreditCreateParamsTest {
                 .priority(100.0)
                 .productId("f14d6729-6a44-4b13-9908-9387f1918790")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.accessSchedule())
             .isEqualTo(

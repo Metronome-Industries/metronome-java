@@ -13,19 +13,19 @@ class CustomerArchiveParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CustomerArchiveParams.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("8deed800-1b7a-495d-a207-6c52bac54dc9")
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CustomerArchiveParams.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("8deed800-1b7a-495d-a207-6c52bac54dc9")
     }
