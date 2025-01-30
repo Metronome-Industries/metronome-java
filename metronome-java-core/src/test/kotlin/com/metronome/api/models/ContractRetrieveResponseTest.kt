@@ -186,6 +186,8 @@ class ContractRetrieveResponseTest {
                                                 )
                                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .addProductTag("string")
+                                                .addRecurringCommitId("string")
+                                                .addRecurringCreditId("string")
                                                 .build()
                                         )
                                         .addOverrideTier(
@@ -629,6 +631,8 @@ class ContractRetrieveResponseTest {
                                                 )
                                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .addProductTag("string")
+                                                .addRecurringCommitId("string")
+                                                .addRecurringCreditId("string")
                                                 .build()
                                         )
                                         .addOverrideTier(
@@ -899,6 +903,144 @@ class ContractRetrieveResponseTest {
                                         .build()
                                 )
                                 .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .addRecurringCommit(
+                                    ContractWithoutAmendments.RecurringCommit.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .accessAmount(
+                                            ContractWithoutAmendments.RecurringCommit.AccessAmount
+                                                .builder()
+                                                .creditTypeId(
+                                                    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
+                                                )
+                                                .quantity(0.0)
+                                                .unitPrice(0.0)
+                                                .build()
+                                        )
+                                        .commitDuration(
+                                            ContractWithoutAmendments.RecurringCommit.CommitDuration
+                                                .builder()
+                                                .value(0.0)
+                                                .unit(
+                                                    ContractWithoutAmendments.RecurringCommit
+                                                        .CommitDuration
+                                                        .Unit
+                                                        .PERIODS
+                                                )
+                                                .build()
+                                        )
+                                        .priority(0.0)
+                                        .product(
+                                            ContractWithoutAmendments.RecurringCommit.Product
+                                                .builder()
+                                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                                .name("name")
+                                                .build()
+                                        )
+                                        .rateType(
+                                            ContractWithoutAmendments.RecurringCommit.RateType
+                                                .COMMIT_RATE
+                                        )
+                                        .startingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .addApplicableProductId(
+                                            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
+                                        )
+                                        .addApplicableProductTag("string")
+                                        .contract(
+                                            ContractWithoutAmendments.RecurringCommit.Contract
+                                                .builder()
+                                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                                .build()
+                                        )
+                                        .description("description")
+                                        .endingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoiceAmount(
+                                            ContractWithoutAmendments.RecurringCommit.InvoiceAmount
+                                                .builder()
+                                                .creditTypeId(
+                                                    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
+                                                )
+                                                .quantity(0.0)
+                                                .unitPrice(0.0)
+                                                .build()
+                                        )
+                                        .name("name")
+                                        .netsuiteSalesOrderId("netsuite_sales_order_id")
+                                        .rolloverFraction(0.0)
+                                        .build()
+                                )
+                                .addRecurringCredit(
+                                    ContractWithoutAmendments.RecurringCredit.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .accessAmount(
+                                            ContractWithoutAmendments.RecurringCredit.AccessAmount
+                                                .builder()
+                                                .creditTypeId(
+                                                    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
+                                                )
+                                                .quantity(0.0)
+                                                .unitPrice(0.0)
+                                                .build()
+                                        )
+                                        .commitDuration(
+                                            ContractWithoutAmendments.RecurringCredit.CommitDuration
+                                                .builder()
+                                                .value(0.0)
+                                                .unit(
+                                                    ContractWithoutAmendments.RecurringCredit
+                                                        .CommitDuration
+                                                        .Unit
+                                                        .PERIODS
+                                                )
+                                                .build()
+                                        )
+                                        .priority(0.0)
+                                        .product(
+                                            ContractWithoutAmendments.RecurringCredit.Product
+                                                .builder()
+                                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                                .name("name")
+                                                .build()
+                                        )
+                                        .rateType(
+                                            ContractWithoutAmendments.RecurringCredit.RateType
+                                                .COMMIT_RATE
+                                        )
+                                        .startingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .addApplicableProductId(
+                                            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
+                                        )
+                                        .addApplicableProductTag("string")
+                                        .contract(
+                                            ContractWithoutAmendments.RecurringCredit.Contract
+                                                .builder()
+                                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                                .build()
+                                        )
+                                        .description("description")
+                                        .endingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoiceAmount(
+                                            ContractWithoutAmendments.RecurringCredit.InvoiceAmount
+                                                .builder()
+                                                .creditTypeId(
+                                                    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
+                                                )
+                                                .quantity(0.0)
+                                                .unitPrice(0.0)
+                                                .build()
+                                        )
+                                        .name("name")
+                                        .netsuiteSalesOrderId("netsuite_sales_order_id")
+                                        .rolloverFraction(0.0)
+                                        .build()
+                                )
                                 .addResellerRoyalty(
                                     ContractWithoutAmendments.ResellerRoyalty.builder()
                                         .fraction(0.0)
@@ -1131,6 +1273,8 @@ class ContractRetrieveResponseTest {
                                                 )
                                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .addProductTag("string")
+                                                .addRecurringCommitId("string")
+                                                .addRecurringCreditId("string")
                                                 .build()
                                         )
                                         .addOverrideTier(
@@ -1401,6 +1545,144 @@ class ContractRetrieveResponseTest {
                                         .build()
                                 )
                                 .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .addRecurringCommit(
+                                    ContractWithoutAmendments.RecurringCommit.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .accessAmount(
+                                            ContractWithoutAmendments.RecurringCommit.AccessAmount
+                                                .builder()
+                                                .creditTypeId(
+                                                    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
+                                                )
+                                                .quantity(0.0)
+                                                .unitPrice(0.0)
+                                                .build()
+                                        )
+                                        .commitDuration(
+                                            ContractWithoutAmendments.RecurringCommit.CommitDuration
+                                                .builder()
+                                                .value(0.0)
+                                                .unit(
+                                                    ContractWithoutAmendments.RecurringCommit
+                                                        .CommitDuration
+                                                        .Unit
+                                                        .PERIODS
+                                                )
+                                                .build()
+                                        )
+                                        .priority(0.0)
+                                        .product(
+                                            ContractWithoutAmendments.RecurringCommit.Product
+                                                .builder()
+                                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                                .name("name")
+                                                .build()
+                                        )
+                                        .rateType(
+                                            ContractWithoutAmendments.RecurringCommit.RateType
+                                                .COMMIT_RATE
+                                        )
+                                        .startingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .addApplicableProductId(
+                                            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
+                                        )
+                                        .addApplicableProductTag("string")
+                                        .contract(
+                                            ContractWithoutAmendments.RecurringCommit.Contract
+                                                .builder()
+                                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                                .build()
+                                        )
+                                        .description("description")
+                                        .endingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoiceAmount(
+                                            ContractWithoutAmendments.RecurringCommit.InvoiceAmount
+                                                .builder()
+                                                .creditTypeId(
+                                                    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
+                                                )
+                                                .quantity(0.0)
+                                                .unitPrice(0.0)
+                                                .build()
+                                        )
+                                        .name("name")
+                                        .netsuiteSalesOrderId("netsuite_sales_order_id")
+                                        .rolloverFraction(0.0)
+                                        .build()
+                                )
+                                .addRecurringCredit(
+                                    ContractWithoutAmendments.RecurringCredit.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .accessAmount(
+                                            ContractWithoutAmendments.RecurringCredit.AccessAmount
+                                                .builder()
+                                                .creditTypeId(
+                                                    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
+                                                )
+                                                .quantity(0.0)
+                                                .unitPrice(0.0)
+                                                .build()
+                                        )
+                                        .commitDuration(
+                                            ContractWithoutAmendments.RecurringCredit.CommitDuration
+                                                .builder()
+                                                .value(0.0)
+                                                .unit(
+                                                    ContractWithoutAmendments.RecurringCredit
+                                                        .CommitDuration
+                                                        .Unit
+                                                        .PERIODS
+                                                )
+                                                .build()
+                                        )
+                                        .priority(0.0)
+                                        .product(
+                                            ContractWithoutAmendments.RecurringCredit.Product
+                                                .builder()
+                                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                                .name("name")
+                                                .build()
+                                        )
+                                        .rateType(
+                                            ContractWithoutAmendments.RecurringCredit.RateType
+                                                .COMMIT_RATE
+                                        )
+                                        .startingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .addApplicableProductId(
+                                            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
+                                        )
+                                        .addApplicableProductTag("string")
+                                        .contract(
+                                            ContractWithoutAmendments.RecurringCredit.Contract
+                                                .builder()
+                                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                                .build()
+                                        )
+                                        .description("description")
+                                        .endingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoiceAmount(
+                                            ContractWithoutAmendments.RecurringCredit.InvoiceAmount
+                                                .builder()
+                                                .creditTypeId(
+                                                    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
+                                                )
+                                                .quantity(0.0)
+                                                .unitPrice(0.0)
+                                                .build()
+                                        )
+                                        .name("name")
+                                        .netsuiteSalesOrderId("netsuite_sales_order_id")
+                                        .rolloverFraction(0.0)
+                                        .build()
+                                )
                                 .addResellerRoyalty(
                                     ContractWithoutAmendments.ResellerRoyalty.builder()
                                         .fraction(0.0)
@@ -1654,6 +1936,8 @@ class ContractRetrieveResponseTest {
                                             )
                                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .addProductTag("string")
+                                            .addRecurringCommitId("string")
+                                            .addRecurringCreditId("string")
                                             .build()
                                     )
                                     .addOverrideTier(
@@ -2060,6 +2344,8 @@ class ContractRetrieveResponseTest {
                                             )
                                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .addProductTag("string")
+                                            .addRecurringCommitId("string")
+                                            .addRecurringCreditId("string")
                                             .build()
                                     )
                                     .addOverrideTier(
@@ -2311,6 +2597,120 @@ class ContractRetrieveResponseTest {
                                     .build()
                             )
                             .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .addRecurringCommit(
+                                ContractWithoutAmendments.RecurringCommit.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .accessAmount(
+                                        ContractWithoutAmendments.RecurringCommit.AccessAmount
+                                            .builder()
+                                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .quantity(0.0)
+                                            .unitPrice(0.0)
+                                            .build()
+                                    )
+                                    .commitDuration(
+                                        ContractWithoutAmendments.RecurringCommit.CommitDuration
+                                            .builder()
+                                            .value(0.0)
+                                            .unit(
+                                                ContractWithoutAmendments.RecurringCommit
+                                                    .CommitDuration
+                                                    .Unit
+                                                    .PERIODS
+                                            )
+                                            .build()
+                                    )
+                                    .priority(0.0)
+                                    .product(
+                                        ContractWithoutAmendments.RecurringCommit.Product.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .name("name")
+                                            .build()
+                                    )
+                                    .rateType(
+                                        ContractWithoutAmendments.RecurringCommit.RateType
+                                            .COMMIT_RATE
+                                    )
+                                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .addApplicableProductTag("string")
+                                    .contract(
+                                        ContractWithoutAmendments.RecurringCommit.Contract.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .build()
+                                    )
+                                    .description("description")
+                                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .invoiceAmount(
+                                        ContractWithoutAmendments.RecurringCommit.InvoiceAmount
+                                            .builder()
+                                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .quantity(0.0)
+                                            .unitPrice(0.0)
+                                            .build()
+                                    )
+                                    .name("name")
+                                    .netsuiteSalesOrderId("netsuite_sales_order_id")
+                                    .rolloverFraction(0.0)
+                                    .build()
+                            )
+                            .addRecurringCredit(
+                                ContractWithoutAmendments.RecurringCredit.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .accessAmount(
+                                        ContractWithoutAmendments.RecurringCredit.AccessAmount
+                                            .builder()
+                                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .quantity(0.0)
+                                            .unitPrice(0.0)
+                                            .build()
+                                    )
+                                    .commitDuration(
+                                        ContractWithoutAmendments.RecurringCredit.CommitDuration
+                                            .builder()
+                                            .value(0.0)
+                                            .unit(
+                                                ContractWithoutAmendments.RecurringCredit
+                                                    .CommitDuration
+                                                    .Unit
+                                                    .PERIODS
+                                            )
+                                            .build()
+                                    )
+                                    .priority(0.0)
+                                    .product(
+                                        ContractWithoutAmendments.RecurringCredit.Product.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .name("name")
+                                            .build()
+                                    )
+                                    .rateType(
+                                        ContractWithoutAmendments.RecurringCredit.RateType
+                                            .COMMIT_RATE
+                                    )
+                                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .addApplicableProductTag("string")
+                                    .contract(
+                                        ContractWithoutAmendments.RecurringCredit.Contract.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .build()
+                                    )
+                                    .description("description")
+                                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .invoiceAmount(
+                                        ContractWithoutAmendments.RecurringCredit.InvoiceAmount
+                                            .builder()
+                                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .quantity(0.0)
+                                            .unitPrice(0.0)
+                                            .build()
+                                    )
+                                    .name("name")
+                                    .netsuiteSalesOrderId("netsuite_sales_order_id")
+                                    .rolloverFraction(0.0)
+                                    .build()
+                            )
                             .addResellerRoyalty(
                                 ContractWithoutAmendments.ResellerRoyalty.builder()
                                     .fraction(0.0)
@@ -2524,6 +2924,8 @@ class ContractRetrieveResponseTest {
                                             )
                                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .addProductTag("string")
+                                            .addRecurringCommitId("string")
+                                            .addRecurringCreditId("string")
                                             .build()
                                     )
                                     .addOverrideTier(
@@ -2775,6 +3177,120 @@ class ContractRetrieveResponseTest {
                                     .build()
                             )
                             .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .addRecurringCommit(
+                                ContractWithoutAmendments.RecurringCommit.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .accessAmount(
+                                        ContractWithoutAmendments.RecurringCommit.AccessAmount
+                                            .builder()
+                                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .quantity(0.0)
+                                            .unitPrice(0.0)
+                                            .build()
+                                    )
+                                    .commitDuration(
+                                        ContractWithoutAmendments.RecurringCommit.CommitDuration
+                                            .builder()
+                                            .value(0.0)
+                                            .unit(
+                                                ContractWithoutAmendments.RecurringCommit
+                                                    .CommitDuration
+                                                    .Unit
+                                                    .PERIODS
+                                            )
+                                            .build()
+                                    )
+                                    .priority(0.0)
+                                    .product(
+                                        ContractWithoutAmendments.RecurringCommit.Product.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .name("name")
+                                            .build()
+                                    )
+                                    .rateType(
+                                        ContractWithoutAmendments.RecurringCommit.RateType
+                                            .COMMIT_RATE
+                                    )
+                                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .addApplicableProductTag("string")
+                                    .contract(
+                                        ContractWithoutAmendments.RecurringCommit.Contract.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .build()
+                                    )
+                                    .description("description")
+                                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .invoiceAmount(
+                                        ContractWithoutAmendments.RecurringCommit.InvoiceAmount
+                                            .builder()
+                                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .quantity(0.0)
+                                            .unitPrice(0.0)
+                                            .build()
+                                    )
+                                    .name("name")
+                                    .netsuiteSalesOrderId("netsuite_sales_order_id")
+                                    .rolloverFraction(0.0)
+                                    .build()
+                            )
+                            .addRecurringCredit(
+                                ContractWithoutAmendments.RecurringCredit.builder()
+                                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .accessAmount(
+                                        ContractWithoutAmendments.RecurringCredit.AccessAmount
+                                            .builder()
+                                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .quantity(0.0)
+                                            .unitPrice(0.0)
+                                            .build()
+                                    )
+                                    .commitDuration(
+                                        ContractWithoutAmendments.RecurringCredit.CommitDuration
+                                            .builder()
+                                            .value(0.0)
+                                            .unit(
+                                                ContractWithoutAmendments.RecurringCredit
+                                                    .CommitDuration
+                                                    .Unit
+                                                    .PERIODS
+                                            )
+                                            .build()
+                                    )
+                                    .priority(0.0)
+                                    .product(
+                                        ContractWithoutAmendments.RecurringCredit.Product.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .name("name")
+                                            .build()
+                                    )
+                                    .rateType(
+                                        ContractWithoutAmendments.RecurringCredit.RateType
+                                            .COMMIT_RATE
+                                    )
+                                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .addApplicableProductTag("string")
+                                    .contract(
+                                        ContractWithoutAmendments.RecurringCredit.Contract.builder()
+                                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .build()
+                                    )
+                                    .description("description")
+                                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .invoiceAmount(
+                                        ContractWithoutAmendments.RecurringCredit.InvoiceAmount
+                                            .builder()
+                                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                            .quantity(0.0)
+                                            .unitPrice(0.0)
+                                            .build()
+                                    )
+                                    .name("name")
+                                    .netsuiteSalesOrderId("netsuite_sales_order_id")
+                                    .rolloverFraction(0.0)
+                                    .build()
+                            )
                             .addResellerRoyalty(
                                 ContractWithoutAmendments.ResellerRoyalty.builder()
                                     .fraction(0.0)

@@ -5432,6 +5432,12 @@ private constructor(
             @JsonProperty("product_tags")
             @ExcludeMissing
             private val productTags: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("recurring_commit_ids")
+            @ExcludeMissing
+            private val recurringCommitIds: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("recurring_credit_ids")
+            @ExcludeMissing
+            private val recurringCreditIds: JsonField<List<String>> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
@@ -5474,6 +5480,24 @@ private constructor(
             /**
              * Can only be used for commit specific overrides. Must be used in conjunction with one
              * of product_id, product_tags, pricing_group_values, or presentation_group_values. If
+             * provided, the override will only apply to commits created by the specified recurring
+             * commit ids.
+             */
+            fun recurringCommitIds(): Optional<List<String>> =
+                Optional.ofNullable(recurringCommitIds.getNullable("recurring_commit_ids"))
+
+            /**
+             * Can only be used for commit specific overrides. Must be used in conjunction with one
+             * of product_id, product_tags, pricing_group_values, or presentation_group_values. If
+             * provided, the override will only apply to credits created by the specified recurring
+             * credit ids.
+             */
+            fun recurringCreditIds(): Optional<List<String>> =
+                Optional.ofNullable(recurringCreditIds.getNullable("recurring_credit_ids"))
+
+            /**
+             * Can only be used for commit specific overrides. Must be used in conjunction with one
+             * of product_id, product_tags, pricing_group_values, or presentation_group_values. If
              * provided, the override will only apply to the specified commits. If not provided, the
              * override will apply to all commits.
              */
@@ -5510,6 +5534,26 @@ private constructor(
             @ExcludeMissing
             fun _productTags(): JsonField<List<String>> = productTags
 
+            /**
+             * Can only be used for commit specific overrides. Must be used in conjunction with one
+             * of product_id, product_tags, pricing_group_values, or presentation_group_values. If
+             * provided, the override will only apply to commits created by the specified recurring
+             * commit ids.
+             */
+            @JsonProperty("recurring_commit_ids")
+            @ExcludeMissing
+            fun _recurringCommitIds(): JsonField<List<String>> = recurringCommitIds
+
+            /**
+             * Can only be used for commit specific overrides. Must be used in conjunction with one
+             * of product_id, product_tags, pricing_group_values, or presentation_group_values. If
+             * provided, the override will only apply to credits created by the specified recurring
+             * credit ids.
+             */
+            @JsonProperty("recurring_credit_ids")
+            @ExcludeMissing
+            fun _recurringCreditIds(): JsonField<List<String>> = recurringCreditIds
+
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -5526,6 +5570,8 @@ private constructor(
                 pricingGroupValues().ifPresent { it.validate() }
                 productId()
                 productTags()
+                recurringCommitIds()
+                recurringCreditIds()
                 validated = true
             }
 
@@ -5545,6 +5591,8 @@ private constructor(
                 private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
                 private var productId: JsonField<String> = JsonMissing.of()
                 private var productTags: JsonField<MutableList<String>>? = null
+                private var recurringCommitIds: JsonField<MutableList<String>>? = null
+                private var recurringCreditIds: JsonField<MutableList<String>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -5554,6 +5602,10 @@ private constructor(
                     pricingGroupValues = overrideSpecifier.pricingGroupValues
                     productId = overrideSpecifier.productId
                     productTags = overrideSpecifier.productTags.map { it.toMutableList() }
+                    recurringCommitIds =
+                        overrideSpecifier.recurringCommitIds.map { it.toMutableList() }
+                    recurringCreditIds =
+                        overrideSpecifier.recurringCreditIds.map { it.toMutableList() }
                     additionalProperties = overrideSpecifier.additionalProperties.toMutableMap()
                 }
 
@@ -5667,6 +5719,82 @@ private constructor(
                         }
                 }
 
+                /**
+                 * Can only be used for commit specific overrides. Must be used in conjunction with
+                 * one of product_id, product_tags, pricing_group_values, or
+                 * presentation_group_values. If provided, the override will only apply to commits
+                 * created by the specified recurring commit ids.
+                 */
+                fun recurringCommitIds(recurringCommitIds: List<String>) =
+                    recurringCommitIds(JsonField.of(recurringCommitIds))
+
+                /**
+                 * Can only be used for commit specific overrides. Must be used in conjunction with
+                 * one of product_id, product_tags, pricing_group_values, or
+                 * presentation_group_values. If provided, the override will only apply to commits
+                 * created by the specified recurring commit ids.
+                 */
+                fun recurringCommitIds(recurringCommitIds: JsonField<List<String>>) = apply {
+                    this.recurringCommitIds = recurringCommitIds.map { it.toMutableList() }
+                }
+
+                /**
+                 * Can only be used for commit specific overrides. Must be used in conjunction with
+                 * one of product_id, product_tags, pricing_group_values, or
+                 * presentation_group_values. If provided, the override will only apply to commits
+                 * created by the specified recurring commit ids.
+                 */
+                fun addRecurringCommitId(recurringCommitId: String) = apply {
+                    recurringCommitIds =
+                        (recurringCommitIds ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(recurringCommitId)
+                        }
+                }
+
+                /**
+                 * Can only be used for commit specific overrides. Must be used in conjunction with
+                 * one of product_id, product_tags, pricing_group_values, or
+                 * presentation_group_values. If provided, the override will only apply to credits
+                 * created by the specified recurring credit ids.
+                 */
+                fun recurringCreditIds(recurringCreditIds: List<String>) =
+                    recurringCreditIds(JsonField.of(recurringCreditIds))
+
+                /**
+                 * Can only be used for commit specific overrides. Must be used in conjunction with
+                 * one of product_id, product_tags, pricing_group_values, or
+                 * presentation_group_values. If provided, the override will only apply to credits
+                 * created by the specified recurring credit ids.
+                 */
+                fun recurringCreditIds(recurringCreditIds: JsonField<List<String>>) = apply {
+                    this.recurringCreditIds = recurringCreditIds.map { it.toMutableList() }
+                }
+
+                /**
+                 * Can only be used for commit specific overrides. Must be used in conjunction with
+                 * one of product_id, product_tags, pricing_group_values, or
+                 * presentation_group_values. If provided, the override will only apply to credits
+                 * created by the specified recurring credit ids.
+                 */
+                fun addRecurringCreditId(recurringCreditId: String) = apply {
+                    recurringCreditIds =
+                        (recurringCreditIds ?: JsonField.of(mutableListOf())).apply {
+                            asKnown()
+                                .orElseThrow {
+                                    IllegalStateException(
+                                        "Field was set to non-list type: ${javaClass.simpleName}"
+                                    )
+                                }
+                                .add(recurringCreditId)
+                        }
+                }
+
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
                     putAllAdditionalProperties(additionalProperties)
@@ -5696,6 +5824,8 @@ private constructor(
                         pricingGroupValues,
                         productId,
                         (productTags ?: JsonMissing.of()).map { it.toImmutable() },
+                        (recurringCommitIds ?: JsonMissing.of()).map { it.toImmutable() },
+                        (recurringCreditIds ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -5881,17 +6011,17 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is OverrideSpecifier && commitIds == other.commitIds && presentationGroupValues == other.presentationGroupValues && pricingGroupValues == other.pricingGroupValues && productId == other.productId && productTags == other.productTags && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is OverrideSpecifier && commitIds == other.commitIds && presentationGroupValues == other.presentationGroupValues && pricingGroupValues == other.pricingGroupValues && productId == other.productId && productTags == other.productTags && recurringCommitIds == other.recurringCommitIds && recurringCreditIds == other.recurringCreditIds && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(commitIds, presentationGroupValues, pricingGroupValues, productId, productTags, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(commitIds, presentationGroupValues, pricingGroupValues, productId, productTags, recurringCommitIds, recurringCreditIds, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "OverrideSpecifier{commitIds=$commitIds, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, additionalProperties=$additionalProperties}"
+                "OverrideSpecifier{commitIds=$commitIds, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, recurringCommitIds=$recurringCommitIds, recurringCreditIds=$recurringCreditIds, additionalProperties=$additionalProperties}"
         }
 
         /** Required for OVERWRITE type. */

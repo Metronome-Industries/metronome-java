@@ -70,6 +70,12 @@ private constructor(
     @JsonProperty("rate_card_id")
     @ExcludeMissing
     private val rateCardId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("recurring_commits")
+    @ExcludeMissing
+    private val recurringCommits: JsonField<List<RecurringCommit>> = JsonMissing.of(),
+    @JsonProperty("recurring_credits")
+    @ExcludeMissing
+    private val recurringCredits: JsonField<List<RecurringCredit>> = JsonMissing.of(),
     @JsonProperty("reseller_royalties")
     @ExcludeMissing
     private val resellerRoyalties: JsonField<List<ResellerRoyalty>> = JsonMissing.of(),
@@ -130,6 +136,12 @@ private constructor(
         Optional.ofNullable(professionalServices.getNullable("professional_services"))
 
     fun rateCardId(): Optional<String> = Optional.ofNullable(rateCardId.getNullable("rate_card_id"))
+
+    fun recurringCommits(): Optional<List<RecurringCommit>> =
+        Optional.ofNullable(recurringCommits.getNullable("recurring_commits"))
+
+    fun recurringCredits(): Optional<List<RecurringCredit>> =
+        Optional.ofNullable(recurringCredits.getNullable("recurring_credits"))
 
     /** This field's availability is dependent on your client's configuration. */
     fun resellerRoyalties(): Optional<List<ResellerRoyalty>> =
@@ -214,6 +226,14 @@ private constructor(
 
     @JsonProperty("rate_card_id") @ExcludeMissing fun _rateCardId(): JsonField<String> = rateCardId
 
+    @JsonProperty("recurring_commits")
+    @ExcludeMissing
+    fun _recurringCommits(): JsonField<List<RecurringCommit>> = recurringCommits
+
+    @JsonProperty("recurring_credits")
+    @ExcludeMissing
+    fun _recurringCredits(): JsonField<List<RecurringCredit>> = recurringCredits
+
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("reseller_royalties")
     @ExcludeMissing
@@ -271,6 +291,8 @@ private constructor(
         netsuiteSalesOrderId()
         professionalServices().ifPresent { it.forEach { it.validate() } }
         rateCardId()
+        recurringCommits().ifPresent { it.forEach { it.validate() } }
+        recurringCredits().ifPresent { it.forEach { it.validate() } }
         resellerRoyalties().ifPresent { it.forEach { it.validate() } }
         salesforceOpportunityId()
         scheduledChargesOnUsageInvoices()
@@ -305,6 +327,8 @@ private constructor(
         private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
         private var professionalServices: JsonField<MutableList<ProService>>? = null
         private var rateCardId: JsonField<String> = JsonMissing.of()
+        private var recurringCommits: JsonField<MutableList<RecurringCommit>>? = null
+        private var recurringCredits: JsonField<MutableList<RecurringCredit>>? = null
         private var resellerRoyalties: JsonField<MutableList<ResellerRoyalty>>? = null
         private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
         private var scheduledChargesOnUsageInvoices: JsonField<ScheduledChargesOnUsageInvoices> =
@@ -332,6 +356,8 @@ private constructor(
             professionalServices =
                 contractWithoutAmendments.professionalServices.map { it.toMutableList() }
             rateCardId = contractWithoutAmendments.rateCardId
+            recurringCommits = contractWithoutAmendments.recurringCommits.map { it.toMutableList() }
+            recurringCredits = contractWithoutAmendments.recurringCredits.map { it.toMutableList() }
             resellerRoyalties =
                 contractWithoutAmendments.resellerRoyalties.map { it.toMutableList() }
             salesforceOpportunityId = contractWithoutAmendments.salesforceOpportunityId
@@ -535,6 +561,46 @@ private constructor(
 
         fun rateCardId(rateCardId: JsonField<String>) = apply { this.rateCardId = rateCardId }
 
+        fun recurringCommits(recurringCommits: List<RecurringCommit>) =
+            recurringCommits(JsonField.of(recurringCommits))
+
+        fun recurringCommits(recurringCommits: JsonField<List<RecurringCommit>>) = apply {
+            this.recurringCommits = recurringCommits.map { it.toMutableList() }
+        }
+
+        fun addRecurringCommit(recurringCommit: RecurringCommit) = apply {
+            recurringCommits =
+                (recurringCommits ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(recurringCommit)
+                }
+        }
+
+        fun recurringCredits(recurringCredits: List<RecurringCredit>) =
+            recurringCredits(JsonField.of(recurringCredits))
+
+        fun recurringCredits(recurringCredits: JsonField<List<RecurringCredit>>) = apply {
+            this.recurringCredits = recurringCredits.map { it.toMutableList() }
+        }
+
+        fun addRecurringCredit(recurringCredit: RecurringCredit) = apply {
+            recurringCredits =
+                (recurringCredits ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(recurringCredit)
+                }
+        }
+
         /** This field's availability is dependent on your client's configuration. */
         fun resellerRoyalties(resellerRoyalties: List<ResellerRoyalty>) =
             resellerRoyalties(JsonField.of(resellerRoyalties))
@@ -639,6 +705,8 @@ private constructor(
                 netsuiteSalesOrderId,
                 (professionalServices ?: JsonMissing.of()).map { it.toImmutable() },
                 rateCardId,
+                (recurringCommits ?: JsonMissing.of()).map { it.toImmutable() },
+                (recurringCredits ?: JsonMissing.of()).map { it.toImmutable() },
                 (resellerRoyalties ?: JsonMissing.of()).map { it.toImmutable() },
                 salesforceOpportunityId,
                 scheduledChargesOnUsageInvoices,
@@ -1097,6 +1165,2510 @@ private constructor(
 
         override fun toString() =
             "UsageStatementSchedule{billingAnchorDate=$billingAnchorDate, frequency=$frequency, additionalProperties=$additionalProperties}"
+    }
+
+    @NoAutoDetect
+    class RecurringCommit
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("access_amount")
+        @ExcludeMissing
+        private val accessAmount: JsonField<AccessAmount> = JsonMissing.of(),
+        @JsonProperty("commit_duration")
+        @ExcludeMissing
+        private val commitDuration: JsonField<CommitDuration> = JsonMissing.of(),
+        @JsonProperty("priority")
+        @ExcludeMissing
+        private val priority: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("product")
+        @ExcludeMissing
+        private val product: JsonField<Product> = JsonMissing.of(),
+        @JsonProperty("rate_type")
+        @ExcludeMissing
+        private val rateType: JsonField<RateType> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("applicable_product_ids")
+        @ExcludeMissing
+        private val applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("applicable_product_tags")
+        @ExcludeMissing
+        private val applicableProductTags: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("contract")
+        @ExcludeMissing
+        private val contract: JsonField<Contract> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        private val description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("invoice_amount")
+        @ExcludeMissing
+        private val invoiceAmount: JsonField<InvoiceAmount> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("netsuite_sales_order_id")
+        @ExcludeMissing
+        private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("rollover_fraction")
+        @ExcludeMissing
+        private val rolloverFraction: JsonField<Double> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    ) {
+
+        fun id(): String = id.getRequired("id")
+
+        /** The amount of commit to grant. */
+        fun accessAmount(): AccessAmount = accessAmount.getRequired("access_amount")
+
+        /** The amount of time the created commits will be valid for */
+        fun commitDuration(): CommitDuration = commitDuration.getRequired("commit_duration")
+
+        /** Will be passed down to the individual commits */
+        fun priority(): Double = priority.getRequired("priority")
+
+        fun product(): Product = product.getRequired("product")
+
+        /** Whether the created commits will use the commit rate or list rate */
+        fun rateType(): RateType = rateType.getRequired("rate_type")
+
+        /** Determines the start time for the first commit */
+        fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+        /** Will be passed down to the individual commits */
+        fun applicableProductIds(): Optional<List<String>> =
+            Optional.ofNullable(applicableProductIds.getNullable("applicable_product_ids"))
+
+        /** Will be passed down to the individual commits */
+        fun applicableProductTags(): Optional<List<String>> =
+            Optional.ofNullable(applicableProductTags.getNullable("applicable_product_tags"))
+
+        fun contract(): Optional<Contract> = Optional.ofNullable(contract.getNullable("contract"))
+
+        /** Will be passed down to the individual commits */
+        fun description(): Optional<String> =
+            Optional.ofNullable(description.getNullable("description"))
+
+        /** Determines when the contract will stop creating recurring commits. Optional */
+        fun endingBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+        /** The amount the customer should be billed for the commit. Not required. */
+        fun invoiceAmount(): Optional<InvoiceAmount> =
+            Optional.ofNullable(invoiceAmount.getNullable("invoice_amount"))
+
+        /** Displayed on invoices. Will be passed through to the individual commits */
+        fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
+
+        /** Will be passed down to the individual commits */
+        fun netsuiteSalesOrderId(): Optional<String> =
+            Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
+
+        /**
+         * Will be passed down to the individual commits. This controls how much of an individual
+         * unexpired commit will roll over upon contract transition
+         */
+        fun rolloverFraction(): Optional<Double> =
+            Optional.ofNullable(rolloverFraction.getNullable("rollover_fraction"))
+
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /** The amount of commit to grant. */
+        @JsonProperty("access_amount")
+        @ExcludeMissing
+        fun _accessAmount(): JsonField<AccessAmount> = accessAmount
+
+        /** The amount of time the created commits will be valid for */
+        @JsonProperty("commit_duration")
+        @ExcludeMissing
+        fun _commitDuration(): JsonField<CommitDuration> = commitDuration
+
+        /** Will be passed down to the individual commits */
+        @JsonProperty("priority") @ExcludeMissing fun _priority(): JsonField<Double> = priority
+
+        @JsonProperty("product") @ExcludeMissing fun _product(): JsonField<Product> = product
+
+        /** Whether the created commits will use the commit rate or list rate */
+        @JsonProperty("rate_type") @ExcludeMissing fun _rateType(): JsonField<RateType> = rateType
+
+        /** Determines the start time for the first commit */
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
+
+        /** Will be passed down to the individual commits */
+        @JsonProperty("applicable_product_ids")
+        @ExcludeMissing
+        fun _applicableProductIds(): JsonField<List<String>> = applicableProductIds
+
+        /** Will be passed down to the individual commits */
+        @JsonProperty("applicable_product_tags")
+        @ExcludeMissing
+        fun _applicableProductTags(): JsonField<List<String>> = applicableProductTags
+
+        @JsonProperty("contract") @ExcludeMissing fun _contract(): JsonField<Contract> = contract
+
+        /** Will be passed down to the individual commits */
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
+
+        /** Determines when the contract will stop creating recurring commits. Optional */
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
+
+        /** The amount the customer should be billed for the commit. Not required. */
+        @JsonProperty("invoice_amount")
+        @ExcludeMissing
+        fun _invoiceAmount(): JsonField<InvoiceAmount> = invoiceAmount
+
+        /** Displayed on invoices. Will be passed through to the individual commits */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+        /** Will be passed down to the individual commits */
+        @JsonProperty("netsuite_sales_order_id")
+        @ExcludeMissing
+        fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
+
+        /**
+         * Will be passed down to the individual commits. This controls how much of an individual
+         * unexpired commit will roll over upon contract transition
+         */
+        @JsonProperty("rollover_fraction")
+        @ExcludeMissing
+        fun _rolloverFraction(): JsonField<Double> = rolloverFraction
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): RecurringCommit = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            accessAmount().validate()
+            commitDuration().validate()
+            priority()
+            product().validate()
+            rateType()
+            startingAt()
+            applicableProductIds()
+            applicableProductTags()
+            contract().ifPresent { it.validate() }
+            description()
+            endingBefore()
+            invoiceAmount().ifPresent { it.validate() }
+            name()
+            netsuiteSalesOrderId()
+            rolloverFraction()
+            validated = true
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [RecurringCommit]. */
+        class Builder internal constructor() {
+
+            private var id: JsonField<String>? = null
+            private var accessAmount: JsonField<AccessAmount>? = null
+            private var commitDuration: JsonField<CommitDuration>? = null
+            private var priority: JsonField<Double>? = null
+            private var product: JsonField<Product>? = null
+            private var rateType: JsonField<RateType>? = null
+            private var startingAt: JsonField<OffsetDateTime>? = null
+            private var applicableProductIds: JsonField<MutableList<String>>? = null
+            private var applicableProductTags: JsonField<MutableList<String>>? = null
+            private var contract: JsonField<Contract> = JsonMissing.of()
+            private var description: JsonField<String> = JsonMissing.of()
+            private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var invoiceAmount: JsonField<InvoiceAmount> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
+            private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
+            private var rolloverFraction: JsonField<Double> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(recurringCommit: RecurringCommit) = apply {
+                id = recurringCommit.id
+                accessAmount = recurringCommit.accessAmount
+                commitDuration = recurringCommit.commitDuration
+                priority = recurringCommit.priority
+                product = recurringCommit.product
+                rateType = recurringCommit.rateType
+                startingAt = recurringCommit.startingAt
+                applicableProductIds =
+                    recurringCommit.applicableProductIds.map { it.toMutableList() }
+                applicableProductTags =
+                    recurringCommit.applicableProductTags.map { it.toMutableList() }
+                contract = recurringCommit.contract
+                description = recurringCommit.description
+                endingBefore = recurringCommit.endingBefore
+                invoiceAmount = recurringCommit.invoiceAmount
+                name = recurringCommit.name
+                netsuiteSalesOrderId = recurringCommit.netsuiteSalesOrderId
+                rolloverFraction = recurringCommit.rolloverFraction
+                additionalProperties = recurringCommit.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            /** The amount of commit to grant. */
+            fun accessAmount(accessAmount: AccessAmount) = accessAmount(JsonField.of(accessAmount))
+
+            /** The amount of commit to grant. */
+            fun accessAmount(accessAmount: JsonField<AccessAmount>) = apply {
+                this.accessAmount = accessAmount
+            }
+
+            /** The amount of time the created commits will be valid for */
+            fun commitDuration(commitDuration: CommitDuration) =
+                commitDuration(JsonField.of(commitDuration))
+
+            /** The amount of time the created commits will be valid for */
+            fun commitDuration(commitDuration: JsonField<CommitDuration>) = apply {
+                this.commitDuration = commitDuration
+            }
+
+            /** Will be passed down to the individual commits */
+            fun priority(priority: Double) = priority(JsonField.of(priority))
+
+            /** Will be passed down to the individual commits */
+            fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
+
+            fun product(product: Product) = product(JsonField.of(product))
+
+            fun product(product: JsonField<Product>) = apply { this.product = product }
+
+            /** Whether the created commits will use the commit rate or list rate */
+            fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
+
+            /** Whether the created commits will use the commit rate or list rate */
+            fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
+
+            /** Determines the start time for the first commit */
+            fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
+
+            /** Determines the start time for the first commit */
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                this.startingAt = startingAt
+            }
+
+            /** Will be passed down to the individual commits */
+            fun applicableProductIds(applicableProductIds: List<String>) =
+                applicableProductIds(JsonField.of(applicableProductIds))
+
+            /** Will be passed down to the individual commits */
+            fun applicableProductIds(applicableProductIds: JsonField<List<String>>) = apply {
+                this.applicableProductIds = applicableProductIds.map { it.toMutableList() }
+            }
+
+            /** Will be passed down to the individual commits */
+            fun addApplicableProductId(applicableProductId: String) = apply {
+                applicableProductIds =
+                    (applicableProductIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(applicableProductId)
+                    }
+            }
+
+            /** Will be passed down to the individual commits */
+            fun applicableProductTags(applicableProductTags: List<String>) =
+                applicableProductTags(JsonField.of(applicableProductTags))
+
+            /** Will be passed down to the individual commits */
+            fun applicableProductTags(applicableProductTags: JsonField<List<String>>) = apply {
+                this.applicableProductTags = applicableProductTags.map { it.toMutableList() }
+            }
+
+            /** Will be passed down to the individual commits */
+            fun addApplicableProductTag(applicableProductTag: String) = apply {
+                applicableProductTags =
+                    (applicableProductTags ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(applicableProductTag)
+                    }
+            }
+
+            fun contract(contract: Contract) = contract(JsonField.of(contract))
+
+            fun contract(contract: JsonField<Contract>) = apply { this.contract = contract }
+
+            /** Will be passed down to the individual commits */
+            fun description(description: String) = description(JsonField.of(description))
+
+            /** Will be passed down to the individual commits */
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
+
+            /** Determines when the contract will stop creating recurring commits. Optional */
+            fun endingBefore(endingBefore: OffsetDateTime) =
+                endingBefore(JsonField.of(endingBefore))
+
+            /** Determines when the contract will stop creating recurring commits. Optional */
+            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+                this.endingBefore = endingBefore
+            }
+
+            /** The amount the customer should be billed for the commit. Not required. */
+            fun invoiceAmount(invoiceAmount: InvoiceAmount) =
+                invoiceAmount(JsonField.of(invoiceAmount))
+
+            /** The amount the customer should be billed for the commit. Not required. */
+            fun invoiceAmount(invoiceAmount: JsonField<InvoiceAmount>) = apply {
+                this.invoiceAmount = invoiceAmount
+            }
+
+            /** Displayed on invoices. Will be passed through to the individual commits */
+            fun name(name: String) = name(JsonField.of(name))
+
+            /** Displayed on invoices. Will be passed through to the individual commits */
+            fun name(name: JsonField<String>) = apply { this.name = name }
+
+            /** Will be passed down to the individual commits */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
+                netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
+
+            /** Will be passed down to the individual commits */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
+                this.netsuiteSalesOrderId = netsuiteSalesOrderId
+            }
+
+            /**
+             * Will be passed down to the individual commits. This controls how much of an
+             * individual unexpired commit will roll over upon contract transition
+             */
+            fun rolloverFraction(rolloverFraction: Double) =
+                rolloverFraction(JsonField.of(rolloverFraction))
+
+            /**
+             * Will be passed down to the individual commits. This controls how much of an
+             * individual unexpired commit will roll over upon contract transition
+             */
+            fun rolloverFraction(rolloverFraction: JsonField<Double>) = apply {
+                this.rolloverFraction = rolloverFraction
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            fun build(): RecurringCommit =
+                RecurringCommit(
+                    checkRequired("id", id),
+                    checkRequired("accessAmount", accessAmount),
+                    checkRequired("commitDuration", commitDuration),
+                    checkRequired("priority", priority),
+                    checkRequired("product", product),
+                    checkRequired("rateType", rateType),
+                    checkRequired("startingAt", startingAt),
+                    (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
+                    contract,
+                    description,
+                    endingBefore,
+                    invoiceAmount,
+                    name,
+                    netsuiteSalesOrderId,
+                    rolloverFraction,
+                    additionalProperties.toImmutable(),
+                )
+        }
+
+        /** The amount of commit to grant. */
+        @NoAutoDetect
+        class AccessAmount
+        @JsonCreator
+        private constructor(
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            private val creditTypeId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("quantity")
+            @ExcludeMissing
+            private val quantity: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("unit_price")
+            @ExcludeMissing
+            private val unitPrice: JsonField<Double> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        ) {
+
+            fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
+
+            fun quantity(): Double = quantity.getRequired("quantity")
+
+            fun unitPrice(): Double = unitPrice.getRequired("unit_price")
+
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
+
+            @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
+
+            @JsonProperty("unit_price")
+            @ExcludeMissing
+            fun _unitPrice(): JsonField<Double> = unitPrice
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): AccessAmount = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                creditTypeId()
+                quantity()
+                unitPrice()
+                validated = true
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [AccessAmount]. */
+            class Builder internal constructor() {
+
+                private var creditTypeId: JsonField<String>? = null
+                private var quantity: JsonField<Double>? = null
+                private var unitPrice: JsonField<Double>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(accessAmount: AccessAmount) = apply {
+                    creditTypeId = accessAmount.creditTypeId
+                    quantity = accessAmount.quantity
+                    unitPrice = accessAmount.unitPrice
+                    additionalProperties = accessAmount.additionalProperties.toMutableMap()
+                }
+
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
+
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
+                }
+
+                fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+
+                fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
+
+                fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
+
+                fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                fun build(): AccessAmount =
+                    AccessAmount(
+                        checkRequired("creditTypeId", creditTypeId),
+                        checkRequired("quantity", quantity),
+                        checkRequired("unitPrice", unitPrice),
+                        additionalProperties.toImmutable(),
+                    )
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is AccessAmount && creditTypeId == other.creditTypeId && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(creditTypeId, quantity, unitPrice, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "AccessAmount{creditTypeId=$creditTypeId, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
+        }
+
+        /** The amount of time the created commits will be valid for */
+        @NoAutoDetect
+        class CommitDuration
+        @JsonCreator
+        private constructor(
+            @JsonProperty("value")
+            @ExcludeMissing
+            private val value: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("unit")
+            @ExcludeMissing
+            private val unit: JsonField<Unit> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        ) {
+
+            fun value(): Double = value.getRequired("value")
+
+            fun unit(): Optional<Unit> = Optional.ofNullable(unit.getNullable("unit"))
+
+            @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<Double> = value
+
+            @JsonProperty("unit") @ExcludeMissing fun _unit(): JsonField<Unit> = unit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): CommitDuration = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                value()
+                unit()
+                validated = true
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [CommitDuration]. */
+            class Builder internal constructor() {
+
+                private var value: JsonField<Double>? = null
+                private var unit: JsonField<Unit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(commitDuration: CommitDuration) = apply {
+                    value = commitDuration.value
+                    unit = commitDuration.unit
+                    additionalProperties = commitDuration.additionalProperties.toMutableMap()
+                }
+
+                fun value(value: Double) = value(JsonField.of(value))
+
+                fun value(value: JsonField<Double>) = apply { this.value = value }
+
+                fun unit(unit: Unit) = unit(JsonField.of(unit))
+
+                fun unit(unit: JsonField<Unit>) = apply { this.unit = unit }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                fun build(): CommitDuration =
+                    CommitDuration(
+                        checkRequired("value", value),
+                        unit,
+                        additionalProperties.toImmutable(),
+                    )
+            }
+
+            class Unit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val PERIODS = of("PERIODS")
+
+                    @JvmStatic fun of(value: String) = Unit(JsonField.of(value))
+                }
+
+                /** An enum containing [Unit]'s known values. */
+                enum class Known {
+                    PERIODS,
+                }
+
+                /**
+                 * An enum containing [Unit]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [Unit] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    PERIODS,
+                    /**
+                     * An enum member indicating that [Unit] was instantiated with an unknown value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        PERIODS -> Value.PERIODS
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
+                 *   known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        PERIODS -> Known.PERIODS
+                        else -> throw MetronomeInvalidDataException("Unknown Unit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Unit && value == other.value /* spotless:on */
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is CommitDuration && value == other.value && unit == other.unit && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(value, unit, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "CommitDuration{value=$value, unit=$unit, additionalProperties=$additionalProperties}"
+        }
+
+        @NoAutoDetect
+        class Product
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id")
+            @ExcludeMissing
+            private val id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("name")
+            @ExcludeMissing
+            private val name: JsonField<String> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        ) {
+
+            fun id(): String = id.getRequired("id")
+
+            fun name(): String = name.getRequired("name")
+
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+            @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): Product = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                name()
+                validated = true
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Product]. */
+            class Builder internal constructor() {
+
+                private var id: JsonField<String>? = null
+                private var name: JsonField<String>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(product: Product) = apply {
+                    id = product.id
+                    name = product.name
+                    additionalProperties = product.additionalProperties.toMutableMap()
+                }
+
+                fun id(id: String) = id(JsonField.of(id))
+
+                fun id(id: JsonField<String>) = apply { this.id = id }
+
+                fun name(name: String) = name(JsonField.of(name))
+
+                fun name(name: JsonField<String>) = apply { this.name = name }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                fun build(): Product =
+                    Product(
+                        checkRequired("id", id),
+                        checkRequired("name", name),
+                        additionalProperties.toImmutable(),
+                    )
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Product && id == other.id && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(id, name, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Product{id=$id, name=$name, additionalProperties=$additionalProperties}"
+        }
+
+        /** Whether the created commits will use the commit rate or list rate */
+        class RateType
+        @JsonCreator
+        private constructor(
+            private val value: JsonField<String>,
+        ) : Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val COMMIT_RATE = of("COMMIT_RATE")
+
+                @JvmField val LIST_RATE = of("LIST_RATE")
+
+                @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
+            }
+
+            /** An enum containing [RateType]'s known values. */
+            enum class Known {
+                COMMIT_RATE,
+                LIST_RATE,
+            }
+
+            /**
+             * An enum containing [RateType]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [RateType] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                COMMIT_RATE,
+                LIST_RATE,
+                /**
+                 * An enum member indicating that [RateType] was instantiated with an unknown value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    COMMIT_RATE -> Value.COMMIT_RATE
+                    LIST_RATE -> Value.LIST_RATE
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    COMMIT_RATE -> Known.COMMIT_RATE
+                    LIST_RATE -> Known.LIST_RATE
+                    else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
+                }
+
+            fun asString(): String = _value().asStringOrThrow()
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is RateType && value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        @NoAutoDetect
+        class Contract
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id")
+            @ExcludeMissing
+            private val id: JsonField<String> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        ) {
+
+            fun id(): String = id.getRequired("id")
+
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): Contract = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                validated = true
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Contract]. */
+            class Builder internal constructor() {
+
+                private var id: JsonField<String>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(contract: Contract) = apply {
+                    id = contract.id
+                    additionalProperties = contract.additionalProperties.toMutableMap()
+                }
+
+                fun id(id: String) = id(JsonField.of(id))
+
+                fun id(id: JsonField<String>) = apply { this.id = id }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                fun build(): Contract =
+                    Contract(checkRequired("id", id), additionalProperties.toImmutable())
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Contract && id == other.id && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(id, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() = "Contract{id=$id, additionalProperties=$additionalProperties}"
+        }
+
+        /** The amount the customer should be billed for the commit. Not required. */
+        @NoAutoDetect
+        class InvoiceAmount
+        @JsonCreator
+        private constructor(
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            private val creditTypeId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("quantity")
+            @ExcludeMissing
+            private val quantity: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("unit_price")
+            @ExcludeMissing
+            private val unitPrice: JsonField<Double> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        ) {
+
+            fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
+
+            fun quantity(): Double = quantity.getRequired("quantity")
+
+            fun unitPrice(): Double = unitPrice.getRequired("unit_price")
+
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
+
+            @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
+
+            @JsonProperty("unit_price")
+            @ExcludeMissing
+            fun _unitPrice(): JsonField<Double> = unitPrice
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): InvoiceAmount = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                creditTypeId()
+                quantity()
+                unitPrice()
+                validated = true
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [InvoiceAmount]. */
+            class Builder internal constructor() {
+
+                private var creditTypeId: JsonField<String>? = null
+                private var quantity: JsonField<Double>? = null
+                private var unitPrice: JsonField<Double>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoiceAmount: InvoiceAmount) = apply {
+                    creditTypeId = invoiceAmount.creditTypeId
+                    quantity = invoiceAmount.quantity
+                    unitPrice = invoiceAmount.unitPrice
+                    additionalProperties = invoiceAmount.additionalProperties.toMutableMap()
+                }
+
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
+
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
+                }
+
+                fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+
+                fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
+
+                fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
+
+                fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                fun build(): InvoiceAmount =
+                    InvoiceAmount(
+                        checkRequired("creditTypeId", creditTypeId),
+                        checkRequired("quantity", quantity),
+                        checkRequired("unitPrice", unitPrice),
+                        additionalProperties.toImmutable(),
+                    )
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is InvoiceAmount && creditTypeId == other.creditTypeId && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(creditTypeId, quantity, unitPrice, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "InvoiceAmount{creditTypeId=$creditTypeId, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is RecurringCommit && id == other.id && accessAmount == other.accessAmount && commitDuration == other.commitDuration && priority == other.priority && product == other.product && rateType == other.rateType && startingAt == other.startingAt && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && contract == other.contract && description == other.description && endingBefore == other.endingBefore && invoiceAmount == other.invoiceAmount && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rolloverFraction == other.rolloverFraction && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, accessAmount, commitDuration, priority, product, rateType, startingAt, applicableProductIds, applicableProductTags, contract, description, endingBefore, invoiceAmount, name, netsuiteSalesOrderId, rolloverFraction, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "RecurringCommit{id=$id, accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, product=$product, rateType=$rateType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, contract=$contract, description=$description, endingBefore=$endingBefore, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rolloverFraction=$rolloverFraction, additionalProperties=$additionalProperties}"
+    }
+
+    @NoAutoDetect
+    class RecurringCredit
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("access_amount")
+        @ExcludeMissing
+        private val accessAmount: JsonField<AccessAmount> = JsonMissing.of(),
+        @JsonProperty("commit_duration")
+        @ExcludeMissing
+        private val commitDuration: JsonField<CommitDuration> = JsonMissing.of(),
+        @JsonProperty("priority")
+        @ExcludeMissing
+        private val priority: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("product")
+        @ExcludeMissing
+        private val product: JsonField<Product> = JsonMissing.of(),
+        @JsonProperty("rate_type")
+        @ExcludeMissing
+        private val rateType: JsonField<RateType> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("applicable_product_ids")
+        @ExcludeMissing
+        private val applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("applicable_product_tags")
+        @ExcludeMissing
+        private val applicableProductTags: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("contract")
+        @ExcludeMissing
+        private val contract: JsonField<Contract> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        private val description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("invoice_amount")
+        @ExcludeMissing
+        private val invoiceAmount: JsonField<InvoiceAmount> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("netsuite_sales_order_id")
+        @ExcludeMissing
+        private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("rollover_fraction")
+        @ExcludeMissing
+        private val rolloverFraction: JsonField<Double> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    ) {
+
+        fun id(): String = id.getRequired("id")
+
+        /** The amount of commit to grant. */
+        fun accessAmount(): AccessAmount = accessAmount.getRequired("access_amount")
+
+        /** The amount of time the created commits will be valid for */
+        fun commitDuration(): CommitDuration = commitDuration.getRequired("commit_duration")
+
+        /** Will be passed down to the individual commits */
+        fun priority(): Double = priority.getRequired("priority")
+
+        fun product(): Product = product.getRequired("product")
+
+        /** Whether the created commits will use the commit rate or list rate */
+        fun rateType(): RateType = rateType.getRequired("rate_type")
+
+        /** Determines the start time for the first commit */
+        fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+        /** Will be passed down to the individual commits */
+        fun applicableProductIds(): Optional<List<String>> =
+            Optional.ofNullable(applicableProductIds.getNullable("applicable_product_ids"))
+
+        /** Will be passed down to the individual commits */
+        fun applicableProductTags(): Optional<List<String>> =
+            Optional.ofNullable(applicableProductTags.getNullable("applicable_product_tags"))
+
+        fun contract(): Optional<Contract> = Optional.ofNullable(contract.getNullable("contract"))
+
+        /** Will be passed down to the individual commits */
+        fun description(): Optional<String> =
+            Optional.ofNullable(description.getNullable("description"))
+
+        /** Determines when the contract will stop creating recurring commits. Optional */
+        fun endingBefore(): Optional<OffsetDateTime> =
+            Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+        /** The amount the customer should be billed for the commit. Not required. */
+        fun invoiceAmount(): Optional<InvoiceAmount> =
+            Optional.ofNullable(invoiceAmount.getNullable("invoice_amount"))
+
+        /** Displayed on invoices. Will be passed through to the individual commits */
+        fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
+
+        /** Will be passed down to the individual commits */
+        fun netsuiteSalesOrderId(): Optional<String> =
+            Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
+
+        /**
+         * Will be passed down to the individual commits. This controls how much of an individual
+         * unexpired commit will roll over upon contract transition
+         */
+        fun rolloverFraction(): Optional<Double> =
+            Optional.ofNullable(rolloverFraction.getNullable("rollover_fraction"))
+
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /** The amount of commit to grant. */
+        @JsonProperty("access_amount")
+        @ExcludeMissing
+        fun _accessAmount(): JsonField<AccessAmount> = accessAmount
+
+        /** The amount of time the created commits will be valid for */
+        @JsonProperty("commit_duration")
+        @ExcludeMissing
+        fun _commitDuration(): JsonField<CommitDuration> = commitDuration
+
+        /** Will be passed down to the individual commits */
+        @JsonProperty("priority") @ExcludeMissing fun _priority(): JsonField<Double> = priority
+
+        @JsonProperty("product") @ExcludeMissing fun _product(): JsonField<Product> = product
+
+        /** Whether the created commits will use the commit rate or list rate */
+        @JsonProperty("rate_type") @ExcludeMissing fun _rateType(): JsonField<RateType> = rateType
+
+        /** Determines the start time for the first commit */
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        fun _startingAt(): JsonField<OffsetDateTime> = startingAt
+
+        /** Will be passed down to the individual commits */
+        @JsonProperty("applicable_product_ids")
+        @ExcludeMissing
+        fun _applicableProductIds(): JsonField<List<String>> = applicableProductIds
+
+        /** Will be passed down to the individual commits */
+        @JsonProperty("applicable_product_tags")
+        @ExcludeMissing
+        fun _applicableProductTags(): JsonField<List<String>> = applicableProductTags
+
+        @JsonProperty("contract") @ExcludeMissing fun _contract(): JsonField<Contract> = contract
+
+        /** Will be passed down to the individual commits */
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
+
+        /** Determines when the contract will stop creating recurring commits. Optional */
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
+
+        /** The amount the customer should be billed for the commit. Not required. */
+        @JsonProperty("invoice_amount")
+        @ExcludeMissing
+        fun _invoiceAmount(): JsonField<InvoiceAmount> = invoiceAmount
+
+        /** Displayed on invoices. Will be passed through to the individual commits */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+        /** Will be passed down to the individual commits */
+        @JsonProperty("netsuite_sales_order_id")
+        @ExcludeMissing
+        fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
+
+        /**
+         * Will be passed down to the individual commits. This controls how much of an individual
+         * unexpired commit will roll over upon contract transition
+         */
+        @JsonProperty("rollover_fraction")
+        @ExcludeMissing
+        fun _rolloverFraction(): JsonField<Double> = rolloverFraction
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): RecurringCredit = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            accessAmount().validate()
+            commitDuration().validate()
+            priority()
+            product().validate()
+            rateType()
+            startingAt()
+            applicableProductIds()
+            applicableProductTags()
+            contract().ifPresent { it.validate() }
+            description()
+            endingBefore()
+            invoiceAmount().ifPresent { it.validate() }
+            name()
+            netsuiteSalesOrderId()
+            rolloverFraction()
+            validated = true
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [RecurringCredit]. */
+        class Builder internal constructor() {
+
+            private var id: JsonField<String>? = null
+            private var accessAmount: JsonField<AccessAmount>? = null
+            private var commitDuration: JsonField<CommitDuration>? = null
+            private var priority: JsonField<Double>? = null
+            private var product: JsonField<Product>? = null
+            private var rateType: JsonField<RateType>? = null
+            private var startingAt: JsonField<OffsetDateTime>? = null
+            private var applicableProductIds: JsonField<MutableList<String>>? = null
+            private var applicableProductTags: JsonField<MutableList<String>>? = null
+            private var contract: JsonField<Contract> = JsonMissing.of()
+            private var description: JsonField<String> = JsonMissing.of()
+            private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var invoiceAmount: JsonField<InvoiceAmount> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
+            private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
+            private var rolloverFraction: JsonField<Double> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(recurringCredit: RecurringCredit) = apply {
+                id = recurringCredit.id
+                accessAmount = recurringCredit.accessAmount
+                commitDuration = recurringCredit.commitDuration
+                priority = recurringCredit.priority
+                product = recurringCredit.product
+                rateType = recurringCredit.rateType
+                startingAt = recurringCredit.startingAt
+                applicableProductIds =
+                    recurringCredit.applicableProductIds.map { it.toMutableList() }
+                applicableProductTags =
+                    recurringCredit.applicableProductTags.map { it.toMutableList() }
+                contract = recurringCredit.contract
+                description = recurringCredit.description
+                endingBefore = recurringCredit.endingBefore
+                invoiceAmount = recurringCredit.invoiceAmount
+                name = recurringCredit.name
+                netsuiteSalesOrderId = recurringCredit.netsuiteSalesOrderId
+                rolloverFraction = recurringCredit.rolloverFraction
+                additionalProperties = recurringCredit.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            /** The amount of commit to grant. */
+            fun accessAmount(accessAmount: AccessAmount) = accessAmount(JsonField.of(accessAmount))
+
+            /** The amount of commit to grant. */
+            fun accessAmount(accessAmount: JsonField<AccessAmount>) = apply {
+                this.accessAmount = accessAmount
+            }
+
+            /** The amount of time the created commits will be valid for */
+            fun commitDuration(commitDuration: CommitDuration) =
+                commitDuration(JsonField.of(commitDuration))
+
+            /** The amount of time the created commits will be valid for */
+            fun commitDuration(commitDuration: JsonField<CommitDuration>) = apply {
+                this.commitDuration = commitDuration
+            }
+
+            /** Will be passed down to the individual commits */
+            fun priority(priority: Double) = priority(JsonField.of(priority))
+
+            /** Will be passed down to the individual commits */
+            fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
+
+            fun product(product: Product) = product(JsonField.of(product))
+
+            fun product(product: JsonField<Product>) = apply { this.product = product }
+
+            /** Whether the created commits will use the commit rate or list rate */
+            fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
+
+            /** Whether the created commits will use the commit rate or list rate */
+            fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
+
+            /** Determines the start time for the first commit */
+            fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
+
+            /** Determines the start time for the first commit */
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                this.startingAt = startingAt
+            }
+
+            /** Will be passed down to the individual commits */
+            fun applicableProductIds(applicableProductIds: List<String>) =
+                applicableProductIds(JsonField.of(applicableProductIds))
+
+            /** Will be passed down to the individual commits */
+            fun applicableProductIds(applicableProductIds: JsonField<List<String>>) = apply {
+                this.applicableProductIds = applicableProductIds.map { it.toMutableList() }
+            }
+
+            /** Will be passed down to the individual commits */
+            fun addApplicableProductId(applicableProductId: String) = apply {
+                applicableProductIds =
+                    (applicableProductIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(applicableProductId)
+                    }
+            }
+
+            /** Will be passed down to the individual commits */
+            fun applicableProductTags(applicableProductTags: List<String>) =
+                applicableProductTags(JsonField.of(applicableProductTags))
+
+            /** Will be passed down to the individual commits */
+            fun applicableProductTags(applicableProductTags: JsonField<List<String>>) = apply {
+                this.applicableProductTags = applicableProductTags.map { it.toMutableList() }
+            }
+
+            /** Will be passed down to the individual commits */
+            fun addApplicableProductTag(applicableProductTag: String) = apply {
+                applicableProductTags =
+                    (applicableProductTags ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(applicableProductTag)
+                    }
+            }
+
+            fun contract(contract: Contract) = contract(JsonField.of(contract))
+
+            fun contract(contract: JsonField<Contract>) = apply { this.contract = contract }
+
+            /** Will be passed down to the individual commits */
+            fun description(description: String) = description(JsonField.of(description))
+
+            /** Will be passed down to the individual commits */
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
+
+            /** Determines when the contract will stop creating recurring commits. Optional */
+            fun endingBefore(endingBefore: OffsetDateTime) =
+                endingBefore(JsonField.of(endingBefore))
+
+            /** Determines when the contract will stop creating recurring commits. Optional */
+            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+                this.endingBefore = endingBefore
+            }
+
+            /** The amount the customer should be billed for the commit. Not required. */
+            fun invoiceAmount(invoiceAmount: InvoiceAmount) =
+                invoiceAmount(JsonField.of(invoiceAmount))
+
+            /** The amount the customer should be billed for the commit. Not required. */
+            fun invoiceAmount(invoiceAmount: JsonField<InvoiceAmount>) = apply {
+                this.invoiceAmount = invoiceAmount
+            }
+
+            /** Displayed on invoices. Will be passed through to the individual commits */
+            fun name(name: String) = name(JsonField.of(name))
+
+            /** Displayed on invoices. Will be passed through to the individual commits */
+            fun name(name: JsonField<String>) = apply { this.name = name }
+
+            /** Will be passed down to the individual commits */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
+                netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
+
+            /** Will be passed down to the individual commits */
+            fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
+                this.netsuiteSalesOrderId = netsuiteSalesOrderId
+            }
+
+            /**
+             * Will be passed down to the individual commits. This controls how much of an
+             * individual unexpired commit will roll over upon contract transition
+             */
+            fun rolloverFraction(rolloverFraction: Double) =
+                rolloverFraction(JsonField.of(rolloverFraction))
+
+            /**
+             * Will be passed down to the individual commits. This controls how much of an
+             * individual unexpired commit will roll over upon contract transition
+             */
+            fun rolloverFraction(rolloverFraction: JsonField<Double>) = apply {
+                this.rolloverFraction = rolloverFraction
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            fun build(): RecurringCredit =
+                RecurringCredit(
+                    checkRequired("id", id),
+                    checkRequired("accessAmount", accessAmount),
+                    checkRequired("commitDuration", commitDuration),
+                    checkRequired("priority", priority),
+                    checkRequired("product", product),
+                    checkRequired("rateType", rateType),
+                    checkRequired("startingAt", startingAt),
+                    (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
+                    contract,
+                    description,
+                    endingBefore,
+                    invoiceAmount,
+                    name,
+                    netsuiteSalesOrderId,
+                    rolloverFraction,
+                    additionalProperties.toImmutable(),
+                )
+        }
+
+        /** The amount of commit to grant. */
+        @NoAutoDetect
+        class AccessAmount
+        @JsonCreator
+        private constructor(
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            private val creditTypeId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("quantity")
+            @ExcludeMissing
+            private val quantity: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("unit_price")
+            @ExcludeMissing
+            private val unitPrice: JsonField<Double> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        ) {
+
+            fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
+
+            fun quantity(): Double = quantity.getRequired("quantity")
+
+            fun unitPrice(): Double = unitPrice.getRequired("unit_price")
+
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
+
+            @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
+
+            @JsonProperty("unit_price")
+            @ExcludeMissing
+            fun _unitPrice(): JsonField<Double> = unitPrice
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): AccessAmount = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                creditTypeId()
+                quantity()
+                unitPrice()
+                validated = true
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [AccessAmount]. */
+            class Builder internal constructor() {
+
+                private var creditTypeId: JsonField<String>? = null
+                private var quantity: JsonField<Double>? = null
+                private var unitPrice: JsonField<Double>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(accessAmount: AccessAmount) = apply {
+                    creditTypeId = accessAmount.creditTypeId
+                    quantity = accessAmount.quantity
+                    unitPrice = accessAmount.unitPrice
+                    additionalProperties = accessAmount.additionalProperties.toMutableMap()
+                }
+
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
+
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
+                }
+
+                fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+
+                fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
+
+                fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
+
+                fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                fun build(): AccessAmount =
+                    AccessAmount(
+                        checkRequired("creditTypeId", creditTypeId),
+                        checkRequired("quantity", quantity),
+                        checkRequired("unitPrice", unitPrice),
+                        additionalProperties.toImmutable(),
+                    )
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is AccessAmount && creditTypeId == other.creditTypeId && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(creditTypeId, quantity, unitPrice, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "AccessAmount{creditTypeId=$creditTypeId, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
+        }
+
+        /** The amount of time the created commits will be valid for */
+        @NoAutoDetect
+        class CommitDuration
+        @JsonCreator
+        private constructor(
+            @JsonProperty("value")
+            @ExcludeMissing
+            private val value: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("unit")
+            @ExcludeMissing
+            private val unit: JsonField<Unit> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        ) {
+
+            fun value(): Double = value.getRequired("value")
+
+            fun unit(): Optional<Unit> = Optional.ofNullable(unit.getNullable("unit"))
+
+            @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<Double> = value
+
+            @JsonProperty("unit") @ExcludeMissing fun _unit(): JsonField<Unit> = unit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): CommitDuration = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                value()
+                unit()
+                validated = true
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [CommitDuration]. */
+            class Builder internal constructor() {
+
+                private var value: JsonField<Double>? = null
+                private var unit: JsonField<Unit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(commitDuration: CommitDuration) = apply {
+                    value = commitDuration.value
+                    unit = commitDuration.unit
+                    additionalProperties = commitDuration.additionalProperties.toMutableMap()
+                }
+
+                fun value(value: Double) = value(JsonField.of(value))
+
+                fun value(value: JsonField<Double>) = apply { this.value = value }
+
+                fun unit(unit: Unit) = unit(JsonField.of(unit))
+
+                fun unit(unit: JsonField<Unit>) = apply { this.unit = unit }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                fun build(): CommitDuration =
+                    CommitDuration(
+                        checkRequired("value", value),
+                        unit,
+                        additionalProperties.toImmutable(),
+                    )
+            }
+
+            class Unit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val PERIODS = of("PERIODS")
+
+                    @JvmStatic fun of(value: String) = Unit(JsonField.of(value))
+                }
+
+                /** An enum containing [Unit]'s known values. */
+                enum class Known {
+                    PERIODS,
+                }
+
+                /**
+                 * An enum containing [Unit]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [Unit] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    PERIODS,
+                    /**
+                     * An enum member indicating that [Unit] was instantiated with an unknown value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        PERIODS -> Value.PERIODS
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
+                 *   known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        PERIODS -> Known.PERIODS
+                        else -> throw MetronomeInvalidDataException("Unknown Unit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Unit && value == other.value /* spotless:on */
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is CommitDuration && value == other.value && unit == other.unit && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(value, unit, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "CommitDuration{value=$value, unit=$unit, additionalProperties=$additionalProperties}"
+        }
+
+        @NoAutoDetect
+        class Product
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id")
+            @ExcludeMissing
+            private val id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("name")
+            @ExcludeMissing
+            private val name: JsonField<String> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        ) {
+
+            fun id(): String = id.getRequired("id")
+
+            fun name(): String = name.getRequired("name")
+
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+            @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): Product = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                name()
+                validated = true
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Product]. */
+            class Builder internal constructor() {
+
+                private var id: JsonField<String>? = null
+                private var name: JsonField<String>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(product: Product) = apply {
+                    id = product.id
+                    name = product.name
+                    additionalProperties = product.additionalProperties.toMutableMap()
+                }
+
+                fun id(id: String) = id(JsonField.of(id))
+
+                fun id(id: JsonField<String>) = apply { this.id = id }
+
+                fun name(name: String) = name(JsonField.of(name))
+
+                fun name(name: JsonField<String>) = apply { this.name = name }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                fun build(): Product =
+                    Product(
+                        checkRequired("id", id),
+                        checkRequired("name", name),
+                        additionalProperties.toImmutable(),
+                    )
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Product && id == other.id && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(id, name, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Product{id=$id, name=$name, additionalProperties=$additionalProperties}"
+        }
+
+        /** Whether the created commits will use the commit rate or list rate */
+        class RateType
+        @JsonCreator
+        private constructor(
+            private val value: JsonField<String>,
+        ) : Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val COMMIT_RATE = of("COMMIT_RATE")
+
+                @JvmField val LIST_RATE = of("LIST_RATE")
+
+                @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
+            }
+
+            /** An enum containing [RateType]'s known values. */
+            enum class Known {
+                COMMIT_RATE,
+                LIST_RATE,
+            }
+
+            /**
+             * An enum containing [RateType]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [RateType] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                COMMIT_RATE,
+                LIST_RATE,
+                /**
+                 * An enum member indicating that [RateType] was instantiated with an unknown value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    COMMIT_RATE -> Value.COMMIT_RATE
+                    LIST_RATE -> Value.LIST_RATE
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    COMMIT_RATE -> Known.COMMIT_RATE
+                    LIST_RATE -> Known.LIST_RATE
+                    else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
+                }
+
+            fun asString(): String = _value().asStringOrThrow()
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is RateType && value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        @NoAutoDetect
+        class Contract
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id")
+            @ExcludeMissing
+            private val id: JsonField<String> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        ) {
+
+            fun id(): String = id.getRequired("id")
+
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): Contract = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                validated = true
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Contract]. */
+            class Builder internal constructor() {
+
+                private var id: JsonField<String>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(contract: Contract) = apply {
+                    id = contract.id
+                    additionalProperties = contract.additionalProperties.toMutableMap()
+                }
+
+                fun id(id: String) = id(JsonField.of(id))
+
+                fun id(id: JsonField<String>) = apply { this.id = id }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                fun build(): Contract =
+                    Contract(checkRequired("id", id), additionalProperties.toImmutable())
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Contract && id == other.id && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(id, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() = "Contract{id=$id, additionalProperties=$additionalProperties}"
+        }
+
+        /** The amount the customer should be billed for the commit. Not required. */
+        @NoAutoDetect
+        class InvoiceAmount
+        @JsonCreator
+        private constructor(
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            private val creditTypeId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("quantity")
+            @ExcludeMissing
+            private val quantity: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("unit_price")
+            @ExcludeMissing
+            private val unitPrice: JsonField<Double> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        ) {
+
+            fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
+
+            fun quantity(): Double = quantity.getRequired("quantity")
+
+            fun unitPrice(): Double = unitPrice.getRequired("unit_price")
+
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
+
+            @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
+
+            @JsonProperty("unit_price")
+            @ExcludeMissing
+            fun _unitPrice(): JsonField<Double> = unitPrice
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): InvoiceAmount = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                creditTypeId()
+                quantity()
+                unitPrice()
+                validated = true
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [InvoiceAmount]. */
+            class Builder internal constructor() {
+
+                private var creditTypeId: JsonField<String>? = null
+                private var quantity: JsonField<Double>? = null
+                private var unitPrice: JsonField<Double>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoiceAmount: InvoiceAmount) = apply {
+                    creditTypeId = invoiceAmount.creditTypeId
+                    quantity = invoiceAmount.quantity
+                    unitPrice = invoiceAmount.unitPrice
+                    additionalProperties = invoiceAmount.additionalProperties.toMutableMap()
+                }
+
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
+
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
+                }
+
+                fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+
+                fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
+
+                fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
+
+                fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                fun build(): InvoiceAmount =
+                    InvoiceAmount(
+                        checkRequired("creditTypeId", creditTypeId),
+                        checkRequired("quantity", quantity),
+                        checkRequired("unitPrice", unitPrice),
+                        additionalProperties.toImmutable(),
+                    )
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is InvoiceAmount && creditTypeId == other.creditTypeId && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(creditTypeId, quantity, unitPrice, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "InvoiceAmount{creditTypeId=$creditTypeId, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is RecurringCredit && id == other.id && accessAmount == other.accessAmount && commitDuration == other.commitDuration && priority == other.priority && product == other.product && rateType == other.rateType && startingAt == other.startingAt && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && contract == other.contract && description == other.description && endingBefore == other.endingBefore && invoiceAmount == other.invoiceAmount && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rolloverFraction == other.rolloverFraction && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, accessAmount, commitDuration, priority, product, rateType, startingAt, applicableProductIds, applicableProductTags, contract, description, endingBefore, invoiceAmount, name, netsuiteSalesOrderId, rolloverFraction, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "RecurringCredit{id=$id, accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, product=$product, rateType=$rateType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, contract=$contract, description=$description, endingBefore=$endingBefore, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rolloverFraction=$rolloverFraction, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -1976,15 +4548,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractWithoutAmendments && commits == other.commits && createdAt == other.createdAt && createdBy == other.createdBy && overrides == other.overrides && scheduledCharges == other.scheduledCharges && startingAt == other.startingAt && transitions == other.transitions && usageStatementSchedule == other.usageStatementSchedule && credits == other.credits && discounts == other.discounts && endingBefore == other.endingBefore && name == other.name && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && professionalServices == other.professionalServices && rateCardId == other.rateCardId && resellerRoyalties == other.resellerRoyalties && salesforceOpportunityId == other.salesforceOpportunityId && scheduledChargesOnUsageInvoices == other.scheduledChargesOnUsageInvoices && totalContractValue == other.totalContractValue && usageFilter == other.usageFilter && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ContractWithoutAmendments && commits == other.commits && createdAt == other.createdAt && createdBy == other.createdBy && overrides == other.overrides && scheduledCharges == other.scheduledCharges && startingAt == other.startingAt && transitions == other.transitions && usageStatementSchedule == other.usageStatementSchedule && credits == other.credits && discounts == other.discounts && endingBefore == other.endingBefore && name == other.name && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && professionalServices == other.professionalServices && rateCardId == other.rateCardId && recurringCommits == other.recurringCommits && recurringCredits == other.recurringCredits && resellerRoyalties == other.resellerRoyalties && salesforceOpportunityId == other.salesforceOpportunityId && scheduledChargesOnUsageInvoices == other.scheduledChargesOnUsageInvoices && totalContractValue == other.totalContractValue && usageFilter == other.usageFilter && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(commits, createdAt, createdBy, overrides, scheduledCharges, startingAt, transitions, usageStatementSchedule, credits, discounts, endingBefore, name, netPaymentTermsDays, netsuiteSalesOrderId, professionalServices, rateCardId, resellerRoyalties, salesforceOpportunityId, scheduledChargesOnUsageInvoices, totalContractValue, usageFilter, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(commits, createdAt, createdBy, overrides, scheduledCharges, startingAt, transitions, usageStatementSchedule, credits, discounts, endingBefore, name, netPaymentTermsDays, netsuiteSalesOrderId, professionalServices, rateCardId, recurringCommits, recurringCredits, resellerRoyalties, salesforceOpportunityId, scheduledChargesOnUsageInvoices, totalContractValue, usageFilter, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ContractWithoutAmendments{commits=$commits, createdAt=$createdAt, createdBy=$createdBy, overrides=$overrides, scheduledCharges=$scheduledCharges, startingAt=$startingAt, transitions=$transitions, usageStatementSchedule=$usageStatementSchedule, credits=$credits, discounts=$discounts, endingBefore=$endingBefore, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, professionalServices=$professionalServices, rateCardId=$rateCardId, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledChargesOnUsageInvoices=$scheduledChargesOnUsageInvoices, totalContractValue=$totalContractValue, usageFilter=$usageFilter, additionalProperties=$additionalProperties}"
+        "ContractWithoutAmendments{commits=$commits, createdAt=$createdAt, createdBy=$createdBy, overrides=$overrides, scheduledCharges=$scheduledCharges, startingAt=$startingAt, transitions=$transitions, usageStatementSchedule=$usageStatementSchedule, credits=$credits, discounts=$discounts, endingBefore=$endingBefore, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, professionalServices=$professionalServices, rateCardId=$rateCardId, recurringCommits=$recurringCommits, recurringCredits=$recurringCredits, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledChargesOnUsageInvoices=$scheduledChargesOnUsageInvoices, totalContractValue=$totalContractValue, usageFilter=$usageFilter, additionalProperties=$additionalProperties}"
 }
