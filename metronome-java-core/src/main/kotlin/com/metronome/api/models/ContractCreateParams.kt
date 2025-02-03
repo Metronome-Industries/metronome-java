@@ -6553,7 +6553,7 @@ private constructor(
 
             /**
              * A map of group names to values. The override will only apply to line items with the
-             * specified presentation group values. Can only be used for multiplier overrides.
+             * specified presentation group values.
              */
             fun presentationGroupValues(): Optional<PresentationGroupValues> =
                 Optional.ofNullable(
@@ -6607,7 +6607,7 @@ private constructor(
 
             /**
              * A map of group names to values. The override will only apply to line items with the
-             * specified presentation group values. Can only be used for multiplier overrides.
+             * specified presentation group values.
              */
             @JsonProperty("presentation_group_values")
             @ExcludeMissing
@@ -6748,16 +6748,14 @@ private constructor(
 
                 /**
                  * A map of group names to values. The override will only apply to line items with
-                 * the specified presentation group values. Can only be used for multiplier
-                 * overrides.
+                 * the specified presentation group values.
                  */
                 fun presentationGroupValues(presentationGroupValues: PresentationGroupValues) =
                     presentationGroupValues(JsonField.of(presentationGroupValues))
 
                 /**
                  * A map of group names to values. The override will only apply to line items with
-                 * the specified presentation group values. Can only be used for multiplier
-                 * overrides.
+                 * the specified presentation group values.
                  */
                 fun presentationGroupValues(
                     presentationGroupValues: JsonField<PresentationGroupValues>
@@ -6932,7 +6930,7 @@ private constructor(
 
             /**
              * A map of group names to values. The override will only apply to line items with the
-             * specified presentation group values. Can only be used for multiplier overrides.
+             * specified presentation group values.
              */
             @NoAutoDetect
             class PresentationGroupValues

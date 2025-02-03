@@ -58,9 +58,8 @@ private constructor(
     fun creditTypeId(): Optional<String> = body.creditTypeId()
 
     /**
-     * Only present for beta contract invoices. This field's availability is dependent on your
-     * client's configuration. A list of custom field filters for alert types that support advanced
-     * filtering
+     * A list of custom field filters for alert types that support advanced filtering. Only present
+     * for contract invoices.
      */
     fun customFieldFilters(): Optional<List<CustomFieldFilter>> = body.customFieldFilters()
 
@@ -127,9 +126,8 @@ private constructor(
     fun _creditTypeId(): JsonField<String> = body._creditTypeId()
 
     /**
-     * Only present for beta contract invoices. This field's availability is dependent on your
-     * client's configuration. A list of custom field filters for alert types that support advanced
-     * filtering
+     * A list of custom field filters for alert types that support advanced filtering. Only present
+     * for contract invoices.
      */
     fun _customFieldFilters(): JsonField<List<CustomFieldFilter>> = body._customFieldFilters()
 
@@ -258,9 +256,8 @@ private constructor(
             Optional.ofNullable(creditTypeId.getNullable("credit_type_id"))
 
         /**
-         * Only present for beta contract invoices. This field's availability is dependent on your
-         * client's configuration. A list of custom field filters for alert types that support
-         * advanced filtering
+         * A list of custom field filters for alert types that support advanced filtering. Only
+         * present for contract invoices.
          */
         fun customFieldFilters(): Optional<List<CustomFieldFilter>> =
             Optional.ofNullable(customFieldFilters.getNullable("custom_field_filters"))
@@ -341,9 +338,8 @@ private constructor(
         fun _creditTypeId(): JsonField<String> = creditTypeId
 
         /**
-         * Only present for beta contract invoices. This field's availability is dependent on your
-         * client's configuration. A list of custom field filters for alert types that support
-         * advanced filtering
+         * A list of custom field filters for alert types that support advanced filtering. Only
+         * present for contract invoices.
          */
         @JsonProperty("custom_field_filters")
         @ExcludeMissing
@@ -546,26 +542,23 @@ private constructor(
             }
 
             /**
-             * Only present for beta contract invoices. This field's availability is dependent on
-             * your client's configuration. A list of custom field filters for alert types that
-             * support advanced filtering
+             * A list of custom field filters for alert types that support advanced filtering. Only
+             * present for contract invoices.
              */
             fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>) =
                 customFieldFilters(JsonField.of(customFieldFilters))
 
             /**
-             * Only present for beta contract invoices. This field's availability is dependent on
-             * your client's configuration. A list of custom field filters for alert types that
-             * support advanced filtering
+             * A list of custom field filters for alert types that support advanced filtering. Only
+             * present for contract invoices.
              */
             fun customFieldFilters(customFieldFilters: JsonField<List<CustomFieldFilter>>) = apply {
                 this.customFieldFilters = customFieldFilters.map { it.toMutableList() }
             }
 
             /**
-             * Only present for beta contract invoices. This field's availability is dependent on
-             * your client's configuration. A list of custom field filters for alert types that
-             * support advanced filtering
+             * A list of custom field filters for alert types that support advanced filtering. Only
+             * present for contract invoices.
              */
             fun addCustomFieldFilter(customFieldFilter: CustomFieldFilter) = apply {
                 customFieldFilters =
@@ -833,27 +826,24 @@ private constructor(
         }
 
         /**
-         * Only present for beta contract invoices. This field's availability is dependent on your
-         * client's configuration. A list of custom field filters for alert types that support
-         * advanced filtering
+         * A list of custom field filters for alert types that support advanced filtering. Only
+         * present for contract invoices.
          */
         fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>) = apply {
             body.customFieldFilters(customFieldFilters)
         }
 
         /**
-         * Only present for beta contract invoices. This field's availability is dependent on your
-         * client's configuration. A list of custom field filters for alert types that support
-         * advanced filtering
+         * A list of custom field filters for alert types that support advanced filtering. Only
+         * present for contract invoices.
          */
         fun customFieldFilters(customFieldFilters: JsonField<List<CustomFieldFilter>>) = apply {
             body.customFieldFilters(customFieldFilters)
         }
 
         /**
-         * Only present for beta contract invoices. This field's availability is dependent on your
-         * client's configuration. A list of custom field filters for alert types that support
-         * advanced filtering
+         * A list of custom field filters for alert types that support advanced filtering. Only
+         * present for contract invoices.
          */
         fun addCustomFieldFilter(customFieldFilter: CustomFieldFilter) = apply {
             body.addCustomFieldFilter(customFieldFilter)
