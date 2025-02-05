@@ -22,7 +22,7 @@ interface BillingConfigServiceAsync {
     fun create(
         params: CustomerBillingConfigCreateParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Void>
+    ): CompletableFuture<Void?>
 
     /** Fetch the billing configuration for the given customer. */
     @JvmOverloads
@@ -39,7 +39,7 @@ interface BillingConfigServiceAsync {
     fun delete(
         params: CustomerBillingConfigDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Void>
+    ): CompletableFuture<Void?>
 
     class BillingProviderType
     @JsonCreator

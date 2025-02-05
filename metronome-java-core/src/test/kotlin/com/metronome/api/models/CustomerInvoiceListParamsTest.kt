@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class CustomerInvoiceListParamsTest {
 
     @Test
-    fun createCustomerInvoiceListParams() {
+    fun create() {
         CustomerInvoiceListParams.builder()
             .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .creditTypeId("credit_type_id")

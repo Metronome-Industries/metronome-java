@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class ContractRateCardUpdateParamsTest {
 
     @Test
-    fun createContractRateCardUpdateParams() {
+    fun create() {
         ContractRateCardUpdateParams.builder()
             .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .addAlias(

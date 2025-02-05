@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class AlertCreateParamsTest {
 
     @Test
-    fun createAlertCreateParams() {
+    fun create() {
         AlertCreateParams.builder()
             .alertType(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
             .name("\$100 spend threshold reached")

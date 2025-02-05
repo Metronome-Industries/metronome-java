@@ -30,5 +30,5 @@ interface NamedScheduleServiceAsync {
     fun update(
         params: CustomerNamedScheduleUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Void>
+    ): CompletableFuture<Void?>
 }

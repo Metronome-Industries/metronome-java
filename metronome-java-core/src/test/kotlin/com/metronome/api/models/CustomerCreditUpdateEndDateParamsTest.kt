@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class CustomerCreditUpdateEndDateParamsTest {
 
     @Test
-    fun createCustomerCreditUpdateEndDateParams() {
+    fun create() {
         CustomerCreditUpdateEndDateParams.builder()
             .accessEndingBefore(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
             .creditId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class BillableMetricRetrieveParamsTest {
 
     @Test
-    fun createBillableMetricRetrieveParams() {
+    fun create() {
         BillableMetricRetrieveParams.builder()
             .billableMetricId("13117714-3f05-48e5-a6e9-a66093f13b4d")
             .build()

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class DashboardGetEmbeddableUrlParamsTest {
 
     @Test
-    fun createDashboardGetEmbeddableUrlParams() {
+    fun create() {
         DashboardGetEmbeddableUrlParams.builder()
             .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
             .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)

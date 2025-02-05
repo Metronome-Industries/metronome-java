@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class BillableMetricArchiveParamsTest {
 
     @Test
-    fun createBillableMetricArchiveParams() {
+    fun create() {
         BillableMetricArchiveParams.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build()
     }
 

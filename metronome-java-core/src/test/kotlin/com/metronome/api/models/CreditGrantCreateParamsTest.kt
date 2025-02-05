@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class CreditGrantCreateParamsTest {
 
     @Test
-    fun createCreditGrantCreateParams() {
+    fun create() {
         CreditGrantCreateParams.builder()
             .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
             .expiresAt(OffsetDateTime.parse("2022-04-01T00:00:00Z"))

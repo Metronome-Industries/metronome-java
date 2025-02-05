@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class CustomerArchiveParamsTest {
 
     @Test
-    fun createCustomerArchiveParams() {
+    fun create() {
         CustomerArchiveParams.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build()
     }
 

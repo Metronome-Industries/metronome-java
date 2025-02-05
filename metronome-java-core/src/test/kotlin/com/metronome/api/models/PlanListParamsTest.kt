@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class PlanListParamsTest {
 
     @Test
-    fun createPlanListParams() {
+    fun create() {
         PlanListParams.builder().limit(1L).nextPage("next_page").build()
     }
 

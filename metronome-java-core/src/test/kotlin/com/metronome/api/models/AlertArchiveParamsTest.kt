@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class AlertArchiveParamsTest {
 
     @Test
-    fun createAlertArchiveParams() {
+    fun create() {
         AlertArchiveParams.builder()
             .id("8deed800-1b7a-495d-a207-6c52bac54dc9")
             .releaseUniquenessKey(true)

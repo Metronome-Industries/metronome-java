@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class CreditGrantVoidParamsTest {
 
     @Test
-    fun createCreditGrantVoidParams() {
+    fun create() {
         CreditGrantVoidParams.builder()
             .id("9b85c1c1-5238-4f2a-a409-61412905e1e1")
             .releaseUniquenessKey(true)

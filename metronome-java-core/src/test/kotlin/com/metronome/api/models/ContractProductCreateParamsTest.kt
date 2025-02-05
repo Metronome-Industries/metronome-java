@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class ContractProductCreateParamsTest {
 
     @Test
-    fun createContractProductCreateParams() {
+    fun create() {
         ContractProductCreateParams.builder()
             .name("My Product")
             .type(ContractProductCreateParams.Type.FIXED)

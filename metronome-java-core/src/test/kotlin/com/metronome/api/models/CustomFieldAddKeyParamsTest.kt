@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class CustomFieldAddKeyParamsTest {
 
     @Test
-    fun createCustomFieldAddKeyParams() {
+    fun create() {
         CustomFieldAddKeyParams.builder()
             .enforceUniqueness(true)
             .entity(CustomFieldAddKeyParams.Entity.ALERT)

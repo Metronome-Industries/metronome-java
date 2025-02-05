@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class CustomerListParamsTest {
 
     @Test
-    fun createCustomerListParams() {
+    fun create() {
         CustomerListParams.builder()
             .addCustomerId("string")
             .ingestAlias("ingest_alias")

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class ContractRateCardProductOrderUpdateParamsTest {
 
     @Test
-    fun createContractRateCardProductOrderUpdateParams() {
+    fun create() {
         ContractRateCardProductOrderUpdateParams.builder()
             .addProductMove(
                 ContractRateCardProductOrderUpdateParams.ProductMove.builder()

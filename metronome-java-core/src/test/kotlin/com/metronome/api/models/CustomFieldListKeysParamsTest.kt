@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class CustomFieldListKeysParamsTest {
 
     @Test
-    fun createCustomFieldListKeysParams() {
+    fun create() {
         CustomFieldListKeysParams.builder()
             .nextPage("next_page")
             .addEntity(CustomFieldListKeysParams.Entity.ALERT)

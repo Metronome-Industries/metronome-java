@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 class ContractRateCardRetrieveRateScheduleParamsTest {
 
     @Test
-    fun createContractRateCardRetrieveRateScheduleParams() {
+    fun create() {
         ContractRateCardRetrieveRateScheduleParams.builder()
             .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
             .startingAt(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class InvoiceRegenerateParamsTest {
 
     @Test
-    fun createInvoiceRegenerateParams() {
+    fun create() {
         InvoiceRegenerateParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
     }
 

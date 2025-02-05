@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class ContractProductListParamsTest {
 
     @Test
-    fun createContractProductListParams() {
+    fun create() {
         ContractProductListParams.builder()
             .limit(1L)
             .nextPage("next_page")

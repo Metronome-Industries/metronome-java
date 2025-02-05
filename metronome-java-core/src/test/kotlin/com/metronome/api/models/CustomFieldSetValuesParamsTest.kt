@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class CustomFieldSetValuesParamsTest {
 
     @Test
-    fun createCustomFieldSetValuesParams() {
+    fun create() {
         CustomFieldSetValuesParams.builder()
             .customFields(
                 CustomFieldSetValuesParams.CustomFields.builder()

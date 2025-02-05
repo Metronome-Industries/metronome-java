@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class PlanListCustomersParamsTest {
 
     @Test
-    fun createPlanListCustomersParams() {
+    fun create() {
         PlanListCustomersParams.builder()
             .planId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .limit(1L)

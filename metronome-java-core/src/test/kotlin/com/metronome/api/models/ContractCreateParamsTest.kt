@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class ContractCreateParamsTest {
 
     @Test
-    fun createContractCreateParams() {
+    fun create() {
         ContractCreateParams.builder()
             .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
             .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))

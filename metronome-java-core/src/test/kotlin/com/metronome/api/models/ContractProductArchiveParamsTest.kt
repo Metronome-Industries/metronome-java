@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class ContractProductArchiveParamsTest {
 
     @Test
-    fun createContractProductArchiveParams() {
+    fun create() {
         ContractProductArchiveParams.builder()
             .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .build()

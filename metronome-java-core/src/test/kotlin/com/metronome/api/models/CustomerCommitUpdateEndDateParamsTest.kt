@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class CustomerCommitUpdateEndDateParamsTest {
 
     @Test
-    fun createCustomerCommitUpdateEndDateParams() {
+    fun create() {
         CustomerCommitUpdateEndDateParams.builder()
             .commitId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
             .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")

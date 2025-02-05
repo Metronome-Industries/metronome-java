@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class ContractListParamsTest {
 
     @Test
-    fun createContractListParams() {
+    fun create() {
         ContractListParams.builder()
             .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
             .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

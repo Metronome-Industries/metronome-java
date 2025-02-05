@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class CustomFieldDeleteValuesParamsTest {
 
     @Test
-    fun createCustomFieldDeleteValuesParams() {
+    fun create() {
         CustomFieldDeleteValuesParams.builder()
             .entity(CustomFieldDeleteValuesParams.Entity.ALERT)
             .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")

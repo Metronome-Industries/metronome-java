@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class CustomerPlanListPriceAdjustmentsParamsTest {
 
     @Test
-    fun createCustomerPlanListPriceAdjustmentsParams() {
+    fun create() {
         CustomerPlanListPriceAdjustmentsParams.builder()
             .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .customerPlanId("7aa11640-0703-4600-8eb9-293f535a6b74")

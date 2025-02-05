@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class ContractAddManualBalanceEntryParamsTest {
 
     @Test
-    fun createContractAddManualBalanceEntryParams() {
+    fun create() {
         ContractAddManualBalanceEntryParams.builder()
             .id("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
             .amount(-1000.0)

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class ContractRateCardRateAddParamsTest {
 
     @Test
-    fun createContractRateCardRateAddParams() {
+    fun create() {
         ContractRateCardRateAddParams.builder()
             .entitled(true)
             .productId("13117714-3f05-48e5-a6e9-a66093f13b4d")

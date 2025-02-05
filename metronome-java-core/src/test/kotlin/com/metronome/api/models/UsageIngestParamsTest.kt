@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class UsageIngestParamsTest {
 
     @Test
-    fun createUsageIngestParams() {
+    fun create() {
         UsageIngestParams.builder()
             .addUsage(
                 UsageIngestParams.Usage.builder()

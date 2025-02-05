@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class ContractNamedScheduleRetrieveParamsTest {
 
     @Test
-    fun createContractNamedScheduleRetrieveParams() {
+    fun create() {
         ContractNamedScheduleRetrieveParams.builder()
             .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .scheduleName("my-schedule")

@@ -101,7 +101,7 @@ interface CustomerServiceAsync {
     fun setIngestAliases(
         params: CustomerSetIngestAliasesParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Void>
+    ): CompletableFuture<Void?>
 
     /** Updates the specified customer's name. */
     @JvmOverloads
@@ -115,5 +115,5 @@ interface CustomerServiceAsync {
     fun updateConfig(
         params: CustomerUpdateConfigParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Void>
+    ): CompletableFuture<Void?>
 }

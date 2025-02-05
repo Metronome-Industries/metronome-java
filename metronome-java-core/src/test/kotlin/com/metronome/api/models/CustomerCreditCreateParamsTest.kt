@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class CustomerCreditCreateParamsTest {
 
     @Test
-    fun createCustomerCreditCreateParams() {
+    fun create() {
         CustomerCreditCreateParams.builder()
             .accessSchedule(
                 CustomerCreditCreateParams.AccessSchedule.builder()

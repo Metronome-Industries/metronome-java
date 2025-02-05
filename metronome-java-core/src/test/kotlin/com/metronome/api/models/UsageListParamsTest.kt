@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class UsageListParamsTest {
 
     @Test
-    fun createUsageListParams() {
+    fun create() {
         UsageListParams.builder()
             .endingBefore(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
             .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))

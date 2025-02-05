@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class CustomerInvoiceRetrieveParamsTest {
 
     @Test
-    fun createCustomerInvoiceRetrieveParams() {
+    fun create() {
         CustomerInvoiceRetrieveParams.builder()
             .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .invoiceId("6a37bb88-8538-48c5-b37b-a41c836328bd")

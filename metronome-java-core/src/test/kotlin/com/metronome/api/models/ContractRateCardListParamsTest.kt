@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class ContractRateCardListParamsTest {
 
     @Test
-    fun createContractRateCardListParams() {
+    fun create() {
         ContractRateCardListParams.builder()
             .body(JsonValue.from(mapOf<String, Any>()))
             .limit(1L)

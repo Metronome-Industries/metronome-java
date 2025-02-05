@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class ServiceListParamsTest {
 
     @Test
-    fun createServiceListParams() {
+    fun create() {
         ServiceListParams.builder().build()
     }
 }

@@ -39,16 +39,15 @@ internal constructor(
                 .addPathSegments("plans")
                 .build()
                 .prepare(clientOptions, params)
-        return clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response
-                .use { listHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
+        val response = clientOptions.httpClient.execute(request, requestOptions)
+        return response
+            .use { listHandler.handle(it) }
+            .also {
+                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                    it.validate()
                 }
-                .let { PlanListPage.of(this, params, it) }
-        }
+            }
+            .let { PlanListPage.of(this, params, it) }
     }
 
     private val getDetailsHandler: Handler<PlanGetDetailsResponse> =
@@ -65,15 +64,14 @@ internal constructor(
                 .addPathSegments("planDetails", params.getPathParam(0))
                 .build()
                 .prepare(clientOptions, params)
-        return clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response
-                .use { getDetailsHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
+        val response = clientOptions.httpClient.execute(request, requestOptions)
+        return response
+            .use { getDetailsHandler.handle(it) }
+            .also {
+                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                    it.validate()
                 }
-        }
+            }
     }
 
     private val listChargesHandler: Handler<PlanListChargesPage.Response> =
@@ -91,16 +89,15 @@ internal constructor(
                 .addPathSegments("planDetails", params.getPathParam(0), "charges")
                 .build()
                 .prepare(clientOptions, params)
-        return clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response
-                .use { listChargesHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
+        val response = clientOptions.httpClient.execute(request, requestOptions)
+        return response
+            .use { listChargesHandler.handle(it) }
+            .also {
+                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                    it.validate()
                 }
-                .let { PlanListChargesPage.of(this, params, it) }
-        }
+            }
+            .let { PlanListChargesPage.of(this, params, it) }
     }
 
     private val listCustomersHandler: Handler<PlanListCustomersPage.Response> =
@@ -121,15 +118,14 @@ internal constructor(
                 .addPathSegments("planDetails", params.getPathParam(0), "customers")
                 .build()
                 .prepare(clientOptions, params)
-        return clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response
-                .use { listCustomersHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
+        val response = clientOptions.httpClient.execute(request, requestOptions)
+        return response
+            .use { listCustomersHandler.handle(it) }
+            .also {
+                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                    it.validate()
                 }
-                .let { PlanListCustomersPage.of(this, params, it) }
-        }
+            }
+            .let { PlanListCustomersPage.of(this, params, it) }
     }
 }

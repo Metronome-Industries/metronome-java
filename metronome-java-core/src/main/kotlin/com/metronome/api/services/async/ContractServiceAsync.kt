@@ -66,7 +66,7 @@ interface ContractServiceAsync {
     fun addManualBalanceEntry(
         params: ContractAddManualBalanceEntryParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Void>
+    ): CompletableFuture<Void?>
 
     /** Amend a contract */
     @JvmOverloads
@@ -118,7 +118,7 @@ interface ContractServiceAsync {
     fun setUsageFilter(
         params: ContractSetUsageFilterParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Void>
+    ): CompletableFuture<Void?>
 
     /** Update the end date of a contract */
     @JvmOverloads

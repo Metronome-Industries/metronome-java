@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class UsageListWithGroupsParamsTest {
 
     @Test
-    fun createUsageListWithGroupsParams() {
+    fun create() {
         UsageListWithGroupsParams.builder()
             .billableMetricId("222796fd-d29c-429e-89b2-549fabda4ed6")
             .customerId("04ca7e72-4229-4a6e-ab11-9f7376fccbcb")

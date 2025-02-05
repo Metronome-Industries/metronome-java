@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class CustomerCommitCreateParamsTest {
 
     @Test
-    fun createCustomerCommitCreateParams() {
+    fun create() {
         CustomerCommitCreateParams.builder()
             .accessSchedule(
                 CustomerCommitCreateParams.AccessSchedule.builder()

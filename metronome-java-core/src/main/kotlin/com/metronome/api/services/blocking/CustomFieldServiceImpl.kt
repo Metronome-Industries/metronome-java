@@ -42,9 +42,8 @@ internal constructor(
                 .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
                 .prepare(clientOptions, params)
-        clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response.use { addKeyHandler.handle(it) }
-        }
+        val response = clientOptions.httpClient.execute(request, requestOptions)
+        response.use { addKeyHandler.handle(it) }
     }
 
     private val deleteValuesHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
@@ -61,9 +60,8 @@ internal constructor(
                 .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
                 .prepare(clientOptions, params)
-        clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response.use { deleteValuesHandler.handle(it) }
-        }
+        val response = clientOptions.httpClient.execute(request, requestOptions)
+        response.use { deleteValuesHandler.handle(it) }
     }
 
     private val listKeysHandler: Handler<CustomFieldListKeysResponse> =
@@ -82,15 +80,14 @@ internal constructor(
                 .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
                 .prepare(clientOptions, params)
-        return clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response
-                .use { listKeysHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
+        val response = clientOptions.httpClient.execute(request, requestOptions)
+        return response
+            .use { listKeysHandler.handle(it) }
+            .also {
+                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                    it.validate()
                 }
-        }
+            }
     }
 
     private val removeKeyHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
@@ -104,9 +101,8 @@ internal constructor(
                 .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
                 .prepare(clientOptions, params)
-        clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response.use { removeKeyHandler.handle(it) }
-        }
+        val response = clientOptions.httpClient.execute(request, requestOptions)
+        response.use { removeKeyHandler.handle(it) }
     }
 
     private val setValuesHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
@@ -127,8 +123,7 @@ internal constructor(
                 .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
                 .prepare(clientOptions, params)
-        clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response.use { setValuesHandler.handle(it) }
-        }
+        val response = clientOptions.httpClient.execute(request, requestOptions)
+        response.use { setValuesHandler.handle(it) }
     }
 }

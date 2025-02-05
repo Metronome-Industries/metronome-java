@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class CustomerInvoiceAddChargeParamsTest {
 
     @Test
-    fun createCustomerInvoiceAddChargeParams() {
+    fun create() {
         CustomerInvoiceAddChargeParams.builder()
             .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .chargeId("5ae4b726-1ebe-439c-9190-9831760ba195")

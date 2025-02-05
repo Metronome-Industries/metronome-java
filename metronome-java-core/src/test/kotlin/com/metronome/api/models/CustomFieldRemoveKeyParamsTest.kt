@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class CustomFieldRemoveKeyParamsTest {
 
     @Test
-    fun createCustomFieldRemoveKeyParams() {
+    fun create() {
         CustomFieldRemoveKeyParams.builder()
             .entity(CustomFieldRemoveKeyParams.Entity.ALERT)
             .key("x_account_id")

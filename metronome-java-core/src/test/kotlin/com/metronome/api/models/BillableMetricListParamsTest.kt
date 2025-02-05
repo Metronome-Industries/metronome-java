@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class BillableMetricListParamsTest {
 
     @Test
-    fun createBillableMetricListParams() {
+    fun create() {
         BillableMetricListParams.builder()
             .includeArchived(true)
             .limit(1L)

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class AuditLogListParamsTest {
 
     @Test
-    fun createAuditLogListParams() {
+    fun create() {
         AuditLogListParams.builder()
             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .limit(1L)

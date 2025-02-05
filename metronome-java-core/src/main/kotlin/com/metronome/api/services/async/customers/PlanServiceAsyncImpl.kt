@@ -50,9 +50,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { listHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
                     .let { CustomerPlanListPageAsync.of(this, params, it) }
@@ -84,9 +84,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { addHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -119,9 +119,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { endHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -158,9 +158,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { listPriceAdjustmentsHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
                     .let { CustomerPlanListPriceAdjustmentsPageAsync.of(this, params, it) }

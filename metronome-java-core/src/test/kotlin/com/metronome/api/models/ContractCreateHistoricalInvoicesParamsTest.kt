@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class ContractCreateHistoricalInvoicesParamsTest {
 
     @Test
-    fun createContractCreateHistoricalInvoicesParams() {
+    fun create() {
         ContractCreateHistoricalInvoicesParams.builder()
             .addInvoice(
                 ContractCreateHistoricalInvoicesParams.Invoice.builder()

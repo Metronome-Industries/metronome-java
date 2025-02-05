@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class ContractProductRetrieveParamsTest {
 
     @Test
-    fun createContractProductRetrieveParams() {
+    fun create() {
         ContractProductRetrieveParams.builder().id("d84e7f4e-7a70-4fe4-be02-7a5027beffcc").build()
     }
 

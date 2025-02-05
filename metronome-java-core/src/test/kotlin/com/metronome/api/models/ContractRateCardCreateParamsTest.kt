@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class ContractRateCardCreateParamsTest {
 
     @Test
-    fun createContractRateCardCreateParams() {
+    fun create() {
         ContractRateCardCreateParams.builder()
             .name("My Rate Card")
             .addAlias(

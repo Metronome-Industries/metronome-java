@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class ContractAmendParamsTest {
 
     @Test
-    fun createContractAmendParams() {
+    fun create() {
         ContractAmendParams.builder()
             .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")

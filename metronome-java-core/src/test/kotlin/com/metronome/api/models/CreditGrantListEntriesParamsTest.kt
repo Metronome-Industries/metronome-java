@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class CreditGrantListEntriesParamsTest {
 
     @Test
-    fun createCreditGrantListEntriesParams() {
+    fun create() {
         CreditGrantListEntriesParams.builder()
             .nextPage("next_page")
             .addCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")

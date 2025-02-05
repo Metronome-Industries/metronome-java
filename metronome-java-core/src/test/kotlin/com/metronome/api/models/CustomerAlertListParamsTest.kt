@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class CustomerAlertListParamsTest {
 
     @Test
-    fun createCustomerAlertListParams() {
+    fun create() {
         CustomerAlertListParams.builder()
             .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
             .nextPage("next_page")

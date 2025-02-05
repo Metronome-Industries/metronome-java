@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class PlanGetDetailsParamsTest {
 
     @Test
-    fun createPlanGetDetailsParams() {
+    fun create() {
         PlanGetDetailsParams.builder().planId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc").build()
     }
 

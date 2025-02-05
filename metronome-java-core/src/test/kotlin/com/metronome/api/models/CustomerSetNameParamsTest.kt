@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class CustomerSetNameParamsTest {
 
     @Test
-    fun createCustomerSetNameParams() {
+    fun create() {
         CustomerSetNameParams.builder()
             .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .name("Example, Inc.")

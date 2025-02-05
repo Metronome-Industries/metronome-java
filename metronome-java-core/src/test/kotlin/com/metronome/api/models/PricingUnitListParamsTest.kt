@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class PricingUnitListParamsTest {
 
     @Test
-    fun createPricingUnitListParams() {
+    fun create() {
         PricingUnitListParams.builder().limit(1L).nextPage("next_page").build()
     }
 

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class CreditGrantListParamsTest {
 
     @Test
-    fun createCreditGrantListParams() {
+    fun create() {
         CreditGrantListParams.builder()
             .limit(1L)
             .nextPage("next_page")

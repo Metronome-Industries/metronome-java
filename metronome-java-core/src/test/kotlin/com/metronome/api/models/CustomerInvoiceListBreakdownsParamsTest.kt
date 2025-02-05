@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class CustomerInvoiceListBreakdownsParamsTest {
 
     @Test
-    fun createCustomerInvoiceListBreakdownsParams() {
+    fun create() {
         CustomerInvoiceListBreakdownsParams.builder()
             .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

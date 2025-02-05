@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class CustomerCreditListParamsTest {
 
     @Test
-    fun createCustomerCreditListParams() {
+    fun create() {
         CustomerCreditListParams.builder()
             .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
             .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

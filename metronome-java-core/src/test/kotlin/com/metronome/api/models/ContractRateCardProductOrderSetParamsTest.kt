@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class ContractRateCardProductOrderSetParamsTest {
 
     @Test
-    fun createContractRateCardProductOrderSetParams() {
+    fun create() {
         ContractRateCardProductOrderSetParams.builder()
             .addProductOrder("13117714-3f05-48e5-a6e9-a66093f13b4d")
             .addProductOrder("b086f2f4-9851-4466-9ca0-30d53e6a42ac")

@@ -33,5 +33,5 @@ interface AlertServiceAsync {
     fun reset(
         params: CustomerAlertResetParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Void>
+    ): CompletableFuture<Void?>
 }

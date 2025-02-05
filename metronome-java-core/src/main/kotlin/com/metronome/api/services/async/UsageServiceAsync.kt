@@ -35,7 +35,7 @@ interface UsageServiceAsync {
     fun ingest(
         params: UsageIngestParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Void>
+    ): CompletableFuture<Void?>
 
     /**
      * Fetch aggregated usage data for the specified customer, billable-metric, and optional group,

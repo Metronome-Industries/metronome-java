@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class BillableMetricCreateParamsTest {
 
     @Test
-    fun createBillableMetricCreateParams() {
+    fun create() {
         BillableMetricCreateParams.builder()
             .name("CPU Hours")
             .aggregationKey("cpu_hours")

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class CreditGrantEditParamsTest {
 
     @Test
-    fun createCreditGrantEditParams() {
+    fun create() {
         CreditGrantEditParams.builder()
             .id("9b85c1c1-5238-4f2a-a409-61412905e1e1")
             .creditGrantType("credit_grant_type")

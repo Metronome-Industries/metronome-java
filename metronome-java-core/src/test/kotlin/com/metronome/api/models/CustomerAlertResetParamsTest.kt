@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class CustomerAlertResetParamsTest {
 
     @Test
-    fun createCustomerAlertResetParams() {
+    fun create() {
         CustomerAlertResetParams.builder()
             .alertId("5e8691bf-b22a-4672-922d-f80eee940f01")
             .customerId("4c83caf3-8af4-44e2-9aeb-e290531726d9")
