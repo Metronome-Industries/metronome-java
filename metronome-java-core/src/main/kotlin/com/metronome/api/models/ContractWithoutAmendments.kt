@@ -1271,7 +1271,7 @@ private constructor(
 
         /**
          * Will be passed down to the individual commits. This controls how much of an individual
-         * unexpired commit will roll over upon contract transition. Must be between 0 and 1.
+         * unexpired commit will roll over upon contract transition
          */
         fun rolloverFraction(): Optional<Double> =
             Optional.ofNullable(rolloverFraction.getNullable("rollover_fraction"))
@@ -1338,7 +1338,7 @@ private constructor(
 
         /**
          * Will be passed down to the individual commits. This controls how much of an individual
-         * unexpired commit will roll over upon contract transition. Must be between 0 and 1.
+         * unexpired commit will roll over upon contract transition
          */
         @JsonProperty("rollover_fraction")
         @ExcludeMissing
@@ -1563,16 +1563,14 @@ private constructor(
 
             /**
              * Will be passed down to the individual commits. This controls how much of an
-             * individual unexpired commit will roll over upon contract transition. Must be between
-             * 0 and 1.
+             * individual unexpired commit will roll over upon contract transition
              */
             fun rolloverFraction(rolloverFraction: Double) =
                 rolloverFraction(JsonField.of(rolloverFraction))
 
             /**
              * Will be passed down to the individual commits. This controls how much of an
-             * individual unexpired commit will roll over upon contract transition. Must be between
-             * 0 and 1.
+             * individual unexpired commit will roll over upon contract transition
              */
             fun rolloverFraction(rolloverFraction: JsonField<Double>) = apply {
                 this.rolloverFraction = rolloverFraction
@@ -2525,7 +2523,7 @@ private constructor(
 
         /**
          * Will be passed down to the individual commits. This controls how much of an individual
-         * unexpired commit will roll over upon contract transition. Must be between 0 and 1.
+         * unexpired commit will roll over upon contract transition
          */
         fun rolloverFraction(): Optional<Double> =
             Optional.ofNullable(rolloverFraction.getNullable("rollover_fraction"))
@@ -2592,7 +2590,7 @@ private constructor(
 
         /**
          * Will be passed down to the individual commits. This controls how much of an individual
-         * unexpired commit will roll over upon contract transition. Must be between 0 and 1.
+         * unexpired commit will roll over upon contract transition
          */
         @JsonProperty("rollover_fraction")
         @ExcludeMissing
@@ -2817,16 +2815,14 @@ private constructor(
 
             /**
              * Will be passed down to the individual commits. This controls how much of an
-             * individual unexpired commit will roll over upon contract transition. Must be between
-             * 0 and 1.
+             * individual unexpired commit will roll over upon contract transition
              */
             fun rolloverFraction(rolloverFraction: Double) =
                 rolloverFraction(JsonField.of(rolloverFraction))
 
             /**
              * Will be passed down to the individual commits. This controls how much of an
-             * individual unexpired commit will roll over upon contract transition. Must be between
-             * 0 and 1.
+             * individual unexpired commit will roll over upon contract transition
              */
             fun rolloverFraction(rolloverFraction: JsonField<Double>) = apply {
                 this.rolloverFraction = rolloverFraction
