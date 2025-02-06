@@ -8326,7 +8326,7 @@ private constructor(
         fun description(): Optional<String> =
             Optional.ofNullable(description.getNullable("description"))
 
-        /** determines when the contract will stop creating recurring commits. optional */
+        /** Determines when the contract will stop creating recurring commits. optional */
         fun endingBefore(): Optional<OffsetDateTime> =
             Optional.ofNullable(endingBefore.getNullable("ending_before"))
 
@@ -8346,7 +8346,7 @@ private constructor(
 
         /**
          * Will be passed down to the individual commits. This controls how much of an individual
-         * unexpired commit will roll over upon contract transition
+         * unexpired commit will roll over upon contract transition. Must be between 0 and 1.
          */
         fun rolloverFraction(): Optional<Double> =
             Optional.ofNullable(rolloverFraction.getNullable("rollover_fraction"))
@@ -8393,7 +8393,7 @@ private constructor(
         @ExcludeMissing
         fun _description(): JsonField<String> = description
 
-        /** determines when the contract will stop creating recurring commits. optional */
+        /** Determines when the contract will stop creating recurring commits. optional */
         @JsonProperty("ending_before")
         @ExcludeMissing
         fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
@@ -8416,7 +8416,7 @@ private constructor(
 
         /**
          * Will be passed down to the individual commits. This controls how much of an individual
-         * unexpired commit will roll over upon contract transition
+         * unexpired commit will roll over upon contract transition. Must be between 0 and 1.
          */
         @JsonProperty("rollover_fraction")
         @ExcludeMissing
@@ -8597,11 +8597,11 @@ private constructor(
                 this.description = description
             }
 
-            /** determines when the contract will stop creating recurring commits. optional */
+            /** Determines when the contract will stop creating recurring commits. optional */
             fun endingBefore(endingBefore: OffsetDateTime) =
                 endingBefore(JsonField.of(endingBefore))
 
-            /** determines when the contract will stop creating recurring commits. optional */
+            /** Determines when the contract will stop creating recurring commits. optional */
             fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
             }
@@ -8638,14 +8638,16 @@ private constructor(
 
             /**
              * Will be passed down to the individual commits. This controls how much of an
-             * individual unexpired commit will roll over upon contract transition
+             * individual unexpired commit will roll over upon contract transition. Must be between
+             * 0 and 1.
              */
             fun rolloverFraction(rolloverFraction: Double) =
                 rolloverFraction(JsonField.of(rolloverFraction))
 
             /**
              * Will be passed down to the individual commits. This controls how much of an
-             * individual unexpired commit will roll over upon contract transition
+             * individual unexpired commit will roll over upon contract transition. Must be between
+             * 0 and 1.
              */
             fun rolloverFraction(rolloverFraction: JsonField<Double>) = apply {
                 this.rolloverFraction = rolloverFraction
@@ -9375,7 +9377,7 @@ private constructor(
         fun description(): Optional<String> =
             Optional.ofNullable(description.getNullable("description"))
 
-        /** determines when the contract will stop creating recurring commits. optional */
+        /** Determines when the contract will stop creating recurring commits. optional */
         fun endingBefore(): Optional<OffsetDateTime> =
             Optional.ofNullable(endingBefore.getNullable("ending_before"))
 
@@ -9395,7 +9397,7 @@ private constructor(
 
         /**
          * Will be passed down to the individual commits. This controls how much of an individual
-         * unexpired commit will roll over upon contract transition
+         * unexpired commit will roll over upon contract transition. Must be between 0 and 1.
          */
         fun rolloverFraction(): Optional<Double> =
             Optional.ofNullable(rolloverFraction.getNullable("rollover_fraction"))
@@ -9442,7 +9444,7 @@ private constructor(
         @ExcludeMissing
         fun _description(): JsonField<String> = description
 
-        /** determines when the contract will stop creating recurring commits. optional */
+        /** Determines when the contract will stop creating recurring commits. optional */
         @JsonProperty("ending_before")
         @ExcludeMissing
         fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
@@ -9465,7 +9467,7 @@ private constructor(
 
         /**
          * Will be passed down to the individual commits. This controls how much of an individual
-         * unexpired commit will roll over upon contract transition
+         * unexpired commit will roll over upon contract transition. Must be between 0 and 1.
          */
         @JsonProperty("rollover_fraction")
         @ExcludeMissing
@@ -9646,11 +9648,11 @@ private constructor(
                 this.description = description
             }
 
-            /** determines when the contract will stop creating recurring commits. optional */
+            /** Determines when the contract will stop creating recurring commits. optional */
             fun endingBefore(endingBefore: OffsetDateTime) =
                 endingBefore(JsonField.of(endingBefore))
 
-            /** determines when the contract will stop creating recurring commits. optional */
+            /** Determines when the contract will stop creating recurring commits. optional */
             fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
             }
@@ -9687,14 +9689,16 @@ private constructor(
 
             /**
              * Will be passed down to the individual commits. This controls how much of an
-             * individual unexpired commit will roll over upon contract transition
+             * individual unexpired commit will roll over upon contract transition. Must be between
+             * 0 and 1.
              */
             fun rolloverFraction(rolloverFraction: Double) =
                 rolloverFraction(JsonField.of(rolloverFraction))
 
             /**
              * Will be passed down to the individual commits. This controls how much of an
-             * individual unexpired commit will roll over upon contract transition
+             * individual unexpired commit will roll over upon contract transition. Must be between
+             * 0 and 1.
              */
             fun rolloverFraction(rolloverFraction: JsonField<Double>) = apply {
                 this.rolloverFraction = rolloverFraction
