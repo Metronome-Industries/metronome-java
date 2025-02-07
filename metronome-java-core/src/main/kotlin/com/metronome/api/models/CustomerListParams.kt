@@ -35,7 +35,10 @@ private constructor(
     /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
-    /** Filter the customer list by only archived customers. */
+    /**
+     * Filter the customer list to only return archived customers. By default, only active customers
+     * are returned.
+     */
     fun onlyArchived(): Optional<Boolean> = Optional.ofNullable(onlyArchived)
 
     /** Filter the customer list by salesforce_account_id. Up to 100 ids can be provided. */
@@ -130,13 +133,22 @@ private constructor(
         /** Cursor that indicates where the next page of results should start. */
         fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
 
-        /** Filter the customer list by only archived customers. */
+        /**
+         * Filter the customer list to only return archived customers. By default, only active
+         * customers are returned.
+         */
         fun onlyArchived(onlyArchived: Boolean?) = apply { this.onlyArchived = onlyArchived }
 
-        /** Filter the customer list by only archived customers. */
+        /**
+         * Filter the customer list to only return archived customers. By default, only active
+         * customers are returned.
+         */
         fun onlyArchived(onlyArchived: Boolean) = onlyArchived(onlyArchived as Boolean?)
 
-        /** Filter the customer list by only archived customers. */
+        /**
+         * Filter the customer list to only return archived customers. By default, only active
+         * customers are returned.
+         */
         @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun onlyArchived(onlyArchived: Optional<Boolean>) =
             onlyArchived(onlyArchived.orElse(null) as Boolean?)

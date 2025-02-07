@@ -29,6 +29,7 @@ class CustomerRetrieveResponseTest {
                         .externalId("external_id")
                         .addIngestAlias("string")
                         .name("name")
+                        .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillableStatus(
                             CustomerDetail.CurrentBillableStatus.builder()
                                 .value(CustomerDetail.CurrentBillableStatus.Value.BILLABLE)
@@ -56,6 +57,7 @@ class CustomerRetrieveResponseTest {
                     .externalId("external_id")
                     .addIngestAlias("string")
                     .name("name")
+                    .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .currentBillableStatus(
                         CustomerDetail.CurrentBillableStatus.builder()
                             .value(CustomerDetail.CurrentBillableStatus.Value.BILLABLE)

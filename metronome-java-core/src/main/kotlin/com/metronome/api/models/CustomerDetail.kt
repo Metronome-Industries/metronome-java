@@ -38,6 +38,9 @@ private constructor(
     @ExcludeMissing
     private val ingestAliases: JsonField<List<String>> = JsonMissing.of(),
     @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("archived_at")
+    @ExcludeMissing
+    private val archivedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonProperty("current_billable_status")
     @ExcludeMissing
     private val currentBillableStatus: JsonField<CurrentBillableStatus> = JsonMissing.of(),
@@ -64,6 +67,12 @@ private constructor(
     fun ingestAliases(): List<String> = ingestAliases.getRequired("ingest_aliases")
 
     fun name(): String = name.getRequired("name")
+
+    /**
+     * RFC 3339 timestamp indicating when the customer was archived. Null if the customer is active.
+     */
+    fun archivedAt(): Optional<OffsetDateTime> =
+        Optional.ofNullable(archivedAt.getNullable("archived_at"))
 
     /** This field's availability is dependent on your client's configuration. */
     fun currentBillableStatus(): Optional<CurrentBillableStatus> =
@@ -96,6 +105,13 @@ private constructor(
 
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
+    /**
+     * RFC 3339 timestamp indicating when the customer was archived. Null if the customer is active.
+     */
+    @JsonProperty("archived_at")
+    @ExcludeMissing
+    fun _archivedAt(): JsonField<OffsetDateTime> = archivedAt
+
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("current_billable_status")
     @ExcludeMissing
@@ -118,6 +134,7 @@ private constructor(
         externalId()
         ingestAliases()
         name()
+        archivedAt()
         currentBillableStatus().ifPresent { it.validate() }
         validated = true
     }
@@ -138,6 +155,7 @@ private constructor(
         private var externalId: JsonField<String>? = null
         private var ingestAliases: JsonField<MutableList<String>>? = null
         private var name: JsonField<String>? = null
+        private var archivedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var currentBillableStatus: JsonField<CurrentBillableStatus> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -149,6 +167,7 @@ private constructor(
             externalId = customerDetail.externalId
             ingestAliases = customerDetail.ingestAliases.map { it.toMutableList() }
             name = customerDetail.name
+            archivedAt = customerDetail.archivedAt
             currentBillableStatus = customerDetail.currentBillableStatus
             additionalProperties = customerDetail.additionalProperties.toMutableMap()
         }
@@ -219,6 +238,26 @@ private constructor(
 
         fun name(name: JsonField<String>) = apply { this.name = name }
 
+        /**
+         * RFC 3339 timestamp indicating when the customer was archived. Null if the customer is
+         * active.
+         */
+        fun archivedAt(archivedAt: OffsetDateTime?) = archivedAt(JsonField.ofNullable(archivedAt))
+
+        /**
+         * RFC 3339 timestamp indicating when the customer was archived. Null if the customer is
+         * active.
+         */
+        fun archivedAt(archivedAt: Optional<OffsetDateTime>) = archivedAt(archivedAt.orElse(null))
+
+        /**
+         * RFC 3339 timestamp indicating when the customer was archived. Null if the customer is
+         * active.
+         */
+        fun archivedAt(archivedAt: JsonField<OffsetDateTime>) = apply {
+            this.archivedAt = archivedAt
+        }
+
         /** This field's availability is dependent on your client's configuration. */
         fun currentBillableStatus(currentBillableStatus: CurrentBillableStatus) =
             currentBillableStatus(JsonField.of(currentBillableStatus))
@@ -255,6 +294,7 @@ private constructor(
                 checkRequired("externalId", externalId),
                 checkRequired("ingestAliases", ingestAliases).map { it.toImmutable() },
                 checkRequired("name", name),
+                archivedAt,
                 currentBillableStatus,
                 additionalProperties.toImmutable(),
             )
@@ -670,15 +710,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerDetail && id == other.id && customFields == other.customFields && customerConfig == other.customerConfig && externalId == other.externalId && ingestAliases == other.ingestAliases && name == other.name && currentBillableStatus == other.currentBillableStatus && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerDetail && id == other.id && customFields == other.customFields && customerConfig == other.customerConfig && externalId == other.externalId && ingestAliases == other.ingestAliases && name == other.name && archivedAt == other.archivedAt && currentBillableStatus == other.currentBillableStatus && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, customFields, customerConfig, externalId, ingestAliases, name, currentBillableStatus, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, customFields, customerConfig, externalId, ingestAliases, name, archivedAt, currentBillableStatus, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CustomerDetail{id=$id, customFields=$customFields, customerConfig=$customerConfig, externalId=$externalId, ingestAliases=$ingestAliases, name=$name, currentBillableStatus=$currentBillableStatus, additionalProperties=$additionalProperties}"
+        "CustomerDetail{id=$id, customFields=$customFields, customerConfig=$customerConfig, externalId=$externalId, ingestAliases=$ingestAliases, name=$name, archivedAt=$archivedAt, currentBillableStatus=$currentBillableStatus, additionalProperties=$additionalProperties}"
 }

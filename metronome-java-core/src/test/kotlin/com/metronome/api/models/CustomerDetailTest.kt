@@ -27,6 +27,7 @@ class CustomerDetailTest {
                 .externalId("external_id")
                 .addIngestAlias("string")
                 .name("name")
+                .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .currentBillableStatus(
                     CustomerDetail.CurrentBillableStatus.builder()
                         .value(CustomerDetail.CurrentBillableStatus.Value.BILLABLE)
@@ -51,6 +52,8 @@ class CustomerDetailTest {
         assertThat(customerDetail.externalId()).isEqualTo("external_id")
         assertThat(customerDetail.ingestAliases()).containsExactly("string")
         assertThat(customerDetail.name()).isEqualTo("name")
+        assertThat(customerDetail.archivedAt())
+            .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(customerDetail.currentBillableStatus())
             .contains(
                 CustomerDetail.CurrentBillableStatus.builder()
