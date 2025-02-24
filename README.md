@@ -153,7 +153,7 @@ The asynchronous client supports the same options as the synchronous one, except
 
 The SDK throws custom unchecked exception types:
 
-- `MetronomeServiceException`: Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
+- [`MetronomeServiceException`](metronome-java-core/src/main/kotlin/com/metronome/api/errors/MetronomeServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
 
   | Status | Exception                       |
   | ------ | ------------------------------- |
@@ -166,11 +166,11 @@ The SDK throws custom unchecked exception types:
   | 5xx    | `InternalServerException`       |
   | others | `UnexpectedStatusCodeException` |
 
-- `MetronomeIoException`: I/O networking errors.
+- [`MetronomeIoException`](metronome-java-core/src/main/kotlin/com/metronome/api/errors/MetronomeIoException.kt): I/O networking errors.
 
-- `MetronomeInvalidDataException`: Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
+- [`MetronomeInvalidDataException`](metronome-java-core/src/main/kotlin/com/metronome/api/errors/MetronomeInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
 
-- `MetronomeException`: Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
+- [`MetronomeException`](metronome-java-core/src/main/kotlin/com/metronome/api/errors/MetronomeException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
 
 ## Pagination
 
@@ -336,7 +336,7 @@ UsageIngestParams params = UsageIngestParams.builder()
 
 These can be accessed on the built object later using the `_additionalHeaders()`, `_additionalQueryParams()`, and `_additionalBodyProperties()` methods. You can also set undocumented parameters on nested headers, query params, or body classes using the `putAdditionalProperty` method. These properties can be accessed on the built object later using the `_additionalProperties()` method.
 
-To set a documented parameter or property to an undocumented or not yet supported _value_, pass a `JsonValue` object to its setter:
+To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](metronome-java-core/src/main/kotlin/com/metronome/api/core/JsonValue.kt) object to its setter:
 
 ```java
 import com.metronome.api.models.UsageIngestParams;
@@ -402,7 +402,7 @@ if (customerId.isMissing()) {
 
 In rare cases, the API may return a response that doesn't match the expected type. For example, the SDK may expect a property to contain a `String`, but the API could return something else.
 
-By default, the SDK will not throw an exception in this case. It will throw `MetronomeInvalidDataException` only if you directly access the property.
+By default, the SDK will not throw an exception in this case. It will throw [`MetronomeInvalidDataException`](metronome-java-core/src/main/kotlin/com/metronome/api/errors/MetronomeInvalidDataException.kt) only if you directly access the property.
 
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
