@@ -74,7 +74,7 @@ class UsageServiceAsyncImpl internal constructor(private val clientOptions: Clie
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("ingest")
-                .body(json(clientOptions.jsonMapper, params._body()))
+                .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
                 .prepareAsync(clientOptions, params)
         return request

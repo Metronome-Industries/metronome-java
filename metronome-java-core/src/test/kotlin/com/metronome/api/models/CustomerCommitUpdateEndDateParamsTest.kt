@@ -3,6 +3,7 @@
 package com.metronome.api.models
 
 import java.time.OffsetDateTime
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -30,7 +31,7 @@ class CustomerCommitUpdateEndDateParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.commitId()).isEqualTo("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
         assertThat(body.accessEndingBefore())
@@ -49,7 +50,7 @@ class CustomerCommitUpdateEndDateParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.commitId()).isEqualTo("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
     }

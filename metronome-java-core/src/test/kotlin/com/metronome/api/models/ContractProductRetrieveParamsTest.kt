@@ -23,7 +23,6 @@ class ContractProductRetrieveParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
         assertThat(body).isEqualTo(Id.builder().id("d84e7f4e-7a70-4fe4-be02-7a5027beffcc").build())
     }
 
@@ -36,7 +35,6 @@ class ContractProductRetrieveParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
         assertThat(body).isEqualTo(Id.builder().id("d84e7f4e-7a70-4fe4-be02-7a5027beffcc").build())
     }
 }

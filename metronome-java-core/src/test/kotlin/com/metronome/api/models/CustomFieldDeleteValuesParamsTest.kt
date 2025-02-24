@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -27,7 +28,7 @@ class CustomFieldDeleteValuesParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.entity()).isEqualTo(CustomFieldDeleteValuesParams.Entity.ALERT)
         assertThat(body.entityId()).isEqualTo("99594816-e8a5-4bca-be21-8d1de0f45120")
         assertThat(body.keys()).isEqualTo(listOf("x_account_id"))
@@ -44,7 +45,7 @@ class CustomFieldDeleteValuesParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.entity()).isEqualTo(CustomFieldDeleteValuesParams.Entity.ALERT)
         assertThat(body.entityId()).isEqualTo("99594816-e8a5-4bca-be21-8d1de0f45120")
         assertThat(body.keys()).isEqualTo(listOf("x_account_id"))

@@ -5,6 +5,7 @@ package com.metronome.api.models
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.http.QueryParams
 import java.time.OffsetDateTime
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -118,7 +119,7 @@ class ContractRateCardRetrieveRateScheduleParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.rateCardId()).isEqualTo("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
         assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
         assertThat(body.endingBefore()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -156,7 +157,7 @@ class ContractRateCardRetrieveRateScheduleParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.rateCardId()).isEqualTo("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
         assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
     }

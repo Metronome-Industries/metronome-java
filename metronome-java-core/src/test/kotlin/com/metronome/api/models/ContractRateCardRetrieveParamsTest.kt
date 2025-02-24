@@ -23,7 +23,6 @@ class ContractRateCardRetrieveParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
         assertThat(body).isEqualTo(Id.builder().id("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe").build())
     }
 
@@ -36,7 +35,6 @@ class ContractRateCardRetrieveParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
         assertThat(body).isEqualTo(Id.builder().id("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe").build())
     }
 }

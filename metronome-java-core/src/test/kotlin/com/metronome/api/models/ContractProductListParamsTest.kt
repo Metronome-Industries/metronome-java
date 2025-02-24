@@ -3,6 +3,7 @@
 package com.metronome.api.models
 
 import com.metronome.api.core.http.QueryParams
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -49,7 +50,7 @@ class ContractProductListParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.archiveFilter()).contains(ContractProductListParams.ArchiveFilter.ARCHIVED)
     }
 
@@ -59,6 +60,6 @@ class ContractProductListParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
     }
 }

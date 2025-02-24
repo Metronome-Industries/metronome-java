@@ -3,6 +3,7 @@
 package com.metronome.api.models
 
 import com.metronome.api.core.JsonValue
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -50,9 +51,8 @@ class UsageIngestParamsTest {
                 )
                 .build()
 
-        val body = params._body()
+        val body = params._body().getOrNull()
 
-        assertThat(body).isNotNull
         assertThat(body)
             .isEqualTo(
                 listOf(
@@ -75,31 +75,8 @@ class UsageIngestParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params =
-            UsageIngestParams.builder()
-                .addUsage(
-                    UsageIngestParams.Usage.builder()
-                        .customerId("team@example.com")
-                        .eventType("heartbeat")
-                        .timestamp("2021-01-01T00:00:00Z")
-                        .transactionId("2021-01-01T00:00:00Z_cluster42")
-                        .build()
-                )
-                .build()
+        val params = UsageIngestParams.builder().build()
 
-        val body = params._body()
-
-        assertThat(body).isNotNull
-        assertThat(body)
-            .isEqualTo(
-                listOf(
-                    UsageIngestParams.Usage.builder()
-                        .customerId("team@example.com")
-                        .eventType("heartbeat")
-                        .timestamp("2021-01-01T00:00:00Z")
-                        .transactionId("2021-01-01T00:00:00Z_cluster42")
-                        .build()
-                )
-            )
+        val body = params._body().getOrNull()
     }
 }

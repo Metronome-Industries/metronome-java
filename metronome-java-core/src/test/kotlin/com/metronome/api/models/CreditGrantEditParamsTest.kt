@@ -3,6 +3,7 @@
 package com.metronome.api.models
 
 import java.time.OffsetDateTime
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -30,7 +31,7 @@ class CreditGrantEditParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.id()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.creditGrantType()).contains("credit_grant_type")
         assertThat(body.expiresAt()).contains(OffsetDateTime.parse("2022-04-01T00:00:00Z"))
@@ -44,7 +45,7 @@ class CreditGrantEditParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.id()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
     }
 }

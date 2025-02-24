@@ -3,6 +3,7 @@
 package com.metronome.api.models
 
 import com.metronome.api.core.JsonValue
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -101,7 +102,7 @@ class BillableMetricCreateParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.name()).isEqualTo("CPU Hours")
         assertThat(body.aggregationKey()).contains("cpu_hours")
         assertThat(body.aggregationType())
@@ -151,7 +152,7 @@ class BillableMetricCreateParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.name()).isEqualTo("CPU Hours")
     }
 }

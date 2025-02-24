@@ -109,12 +109,7 @@ class RateCardServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val rateCardService = client.contracts().rateCards()
-        val response =
-            rateCardService.list(
-                ContractRateCardListParams.builder()
-                    .body(JsonValue.from(mapOf<String, Any>()))
-                    .build()
-            )
+        val response = rateCardService.list(ContractRateCardListParams.builder().build())
         println(response)
         response.data().forEach { it.validate() }
     }

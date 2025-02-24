@@ -4,6 +4,7 @@ package com.metronome.api.models
 
 import com.metronome.api.core.http.QueryParams
 import java.time.OffsetDateTime
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -93,7 +94,7 @@ class UsageListParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
         assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
         assertThat(body.windowSize()).isEqualTo(UsageListParams.WindowSize.HOUR)
@@ -125,7 +126,7 @@ class UsageListParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.endingBefore()).isEqualTo(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
         assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
         assertThat(body.windowSize()).isEqualTo(UsageListParams.WindowSize.HOUR)

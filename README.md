@@ -50,14 +50,7 @@ import com.metronome.api.models.UsageIngestParams;
 // Configures using the `METRONOME_BEARER_TOKEN` and `METRONOME_WEBHOOK_SECRET` environment variables
 MetronomeClient client = MetronomeOkHttpClient.fromEnv();
 
-UsageIngestParams params = UsageIngestParams.builder()
-    .addUsage(UsageIngestParams.Usage.builder()
-        .customerId("team@example.com")
-        .eventType("heartbeat")
-        .timestamp("2021-01-01T00:00:00Z")
-        .transactionId("2021-01-01T00:00:00Z_cluster42")
-        .build())
-    .build();
+UsageIngestParams params = UsageIngestParams.builder().build();
 client.usage().ingest(params)
 ```
 
@@ -127,14 +120,7 @@ import java.util.concurrent.CompletableFuture;
 // Configures using the `METRONOME_BEARER_TOKEN` and `METRONOME_WEBHOOK_SECRET` environment variables
 MetronomeClient client = MetronomeOkHttpClient.fromEnv();
 
-UsageIngestParams params = UsageIngestParams.builder()
-    .addUsage(UsageIngestParams.Usage.builder()
-        .customerId("team@example.com")
-        .eventType("heartbeat")
-        .timestamp("2021-01-01T00:00:00Z")
-        .transactionId("2021-01-01T00:00:00Z_cluster42")
-        .build())
-    .build();
+UsageIngestParams params = UsageIngestParams.builder().build();
 CompletableFuture<Void?> response = client.async().usage().ingest(params);
 ```
 
@@ -149,14 +135,7 @@ import java.util.concurrent.CompletableFuture;
 // Configures using the `METRONOME_BEARER_TOKEN` and `METRONOME_WEBHOOK_SECRET` environment variables
 MetronomeClientAsync client = MetronomeOkHttpClientAsync.fromEnv();
 
-UsageIngestParams params = UsageIngestParams.builder()
-    .addUsage(UsageIngestParams.Usage.builder()
-        .customerId("team@example.com")
-        .eventType("heartbeat")
-        .timestamp("2021-01-01T00:00:00Z")
-        .transactionId("2021-01-01T00:00:00Z_cluster42")
-        .build())
-    .build();
+UsageIngestParams params = UsageIngestParams.builder().build();
 CompletableFuture<Void?> response = client.usage().ingest(params);
 ```
 
@@ -354,14 +333,7 @@ To set a documented parameter or property to an undocumented or not yet supporte
 ```java
 import com.metronome.api.models.UsageIngestParams;
 
-UsageIngestParams params = UsageIngestParams.builder()
-    .addUsage(UsageIngestParams.Usage.builder()
-        .customerId("team@example.com")
-        .eventType("heartbeat")
-        .timestamp("2021-01-01T00:00:00Z")
-        .transactionId("2021-01-01T00:00:00Z_cluster42")
-        .build())
-    .build();
+UsageIngestParams params = UsageIngestParams.builder().build();
 ```
 
 ### Response properties

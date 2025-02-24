@@ -3,6 +3,7 @@
 package com.metronome.api.models
 
 import com.metronome.api.core.JsonValue
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -36,7 +37,7 @@ class CustomFieldSetValuesParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.customFields())
             .isEqualTo(
                 CustomFieldSetValuesParams.CustomFields.builder()
@@ -62,7 +63,7 @@ class CustomFieldSetValuesParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.customFields())
             .isEqualTo(
                 CustomFieldSetValuesParams.CustomFields.builder()

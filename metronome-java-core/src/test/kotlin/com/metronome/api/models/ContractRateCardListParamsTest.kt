@@ -34,8 +34,7 @@ class ContractRateCardListParamsTest {
 
     @Test
     fun queryParamsWithoutOptionalFields() {
-        val params =
-            ContractRateCardListParams.builder().body(JsonValue.from(mapOf<String, Any>())).build()
+        val params = ContractRateCardListParams.builder().build()
         val expected = QueryParams.builder()
         assertThat(params._queryParams()).isEqualTo(expected.build())
     }
@@ -51,18 +50,13 @@ class ContractRateCardListParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
         assertThat(body).isEqualTo(JsonValue.from(mapOf<String, Any>()))
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params =
-            ContractRateCardListParams.builder().body(JsonValue.from(mapOf<String, Any>())).build()
+        val params = ContractRateCardListParams.builder().build()
 
         val body = params._body()
-
-        assertThat(body).isNotNull
-        assertThat(body).isEqualTo(JsonValue.from(mapOf<String, Any>()))
     }
 }

@@ -4,6 +4,7 @@ package com.metronome.api.models
 
 import com.metronome.api.core.http.QueryParams
 import java.time.OffsetDateTime
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -88,7 +89,7 @@ class UsageListWithGroupsParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.billableMetricId()).isEqualTo("222796fd-d29c-429e-89b2-549fabda4ed6")
         assertThat(body.customerId()).isEqualTo("04ca7e72-4229-4a6e-ab11-9f7376fccbcb")
         assertThat(body.windowSize()).isEqualTo(UsageListWithGroupsParams.WindowSize.HOUR)
@@ -115,7 +116,7 @@ class UsageListWithGroupsParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.billableMetricId()).isEqualTo("222796fd-d29c-429e-89b2-549fabda4ed6")
         assertThat(body.customerId()).isEqualTo("04ca7e72-4229-4a6e-ab11-9f7376fccbcb")
         assertThat(body.windowSize()).isEqualTo(UsageListWithGroupsParams.WindowSize.HOUR)

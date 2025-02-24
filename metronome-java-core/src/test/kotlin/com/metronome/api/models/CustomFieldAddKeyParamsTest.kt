@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -27,7 +28,7 @@ class CustomFieldAddKeyParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.enforceUniqueness()).isEqualTo(true)
         assertThat(body.entity()).isEqualTo(CustomFieldAddKeyParams.Entity.ALERT)
         assertThat(body.key()).isEqualTo("x_account_id")
@@ -44,7 +45,7 @@ class CustomFieldAddKeyParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.enforceUniqueness()).isEqualTo(true)
         assertThat(body.entity()).isEqualTo(CustomFieldAddKeyParams.Entity.ALERT)
         assertThat(body.key()).isEqualTo("x_account_id")

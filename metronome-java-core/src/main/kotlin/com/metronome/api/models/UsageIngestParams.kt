@@ -28,18 +28,18 @@ import java.util.Optional
  */
 class UsageIngestParams
 private constructor(
-    private val usage: List<Usage>,
+    private val usage: List<Usage>?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun usage(): List<Usage> = usage
+    fun usage(): Optional<List<Usage>> = Optional.ofNullable(usage)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): List<Usage> = usage
+    @JvmSynthetic internal fun _body(): Optional<List<Usage>> = Optional.ofNullable(usage)
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -287,12 +287,14 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(usageIngestParams: UsageIngestParams) = apply {
-            usage = usageIngestParams.usage.toMutableList()
+            usage = usageIngestParams.usage?.toMutableList()
             additionalHeaders = usageIngestParams.additionalHeaders.toBuilder()
             additionalQueryParams = usageIngestParams.additionalQueryParams.toBuilder()
         }
 
-        fun usage(usage: List<Usage>) = apply { this.usage = usage.toMutableList() }
+        fun usage(usage: List<Usage>?) = apply { this.usage = usage?.toMutableList() }
+
+        fun usage(usage: Optional<List<Usage>>) = usage(usage.orElse(null))
 
         fun addUsage(usage: Usage) = apply {
             this.usage = (this.usage ?: mutableListOf()).apply { add(usage) }
@@ -398,7 +400,7 @@ private constructor(
 
         fun build(): UsageIngestParams =
             UsageIngestParams(
-                checkRequired("usage", usage).toImmutable(),
+                usage?.toImmutable(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )

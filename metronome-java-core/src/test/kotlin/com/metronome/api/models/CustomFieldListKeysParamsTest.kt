@@ -3,6 +3,7 @@
 package com.metronome.api.models
 
 import com.metronome.api.core.http.QueryParams
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -45,7 +46,7 @@ class CustomFieldListKeysParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.entities()).contains(listOf(CustomFieldListKeysParams.Entity.ALERT))
     }
 
@@ -55,6 +56,6 @@ class CustomFieldListKeysParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
     }
 }

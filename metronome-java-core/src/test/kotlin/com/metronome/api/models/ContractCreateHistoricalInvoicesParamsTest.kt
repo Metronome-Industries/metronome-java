@@ -4,6 +4,7 @@ package com.metronome.api.models
 
 import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -139,7 +140,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.invoices())
             .isEqualTo(
                 listOf(
@@ -232,7 +233,7 @@ class ContractCreateHistoricalInvoicesParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.invoices())
             .isEqualTo(
                 listOf(

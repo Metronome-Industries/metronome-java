@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -25,7 +26,7 @@ class AlertArchiveParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.id()).isEqualTo("8deed800-1b7a-495d-a207-6c52bac54dc9")
         assertThat(body.releaseUniquenessKey()).contains(true)
     }
@@ -36,7 +37,7 @@ class AlertArchiveParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.id()).isEqualTo("8deed800-1b7a-495d-a207-6c52bac54dc9")
     }
 }

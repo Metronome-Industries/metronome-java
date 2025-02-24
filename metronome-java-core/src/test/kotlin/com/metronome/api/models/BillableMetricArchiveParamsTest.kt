@@ -23,7 +23,6 @@ class BillableMetricArchiveParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
         assertThat(body).isEqualTo(Id.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build())
     }
 
@@ -36,7 +35,6 @@ class BillableMetricArchiveParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
         assertThat(body).isEqualTo(Id.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build())
     }
 }

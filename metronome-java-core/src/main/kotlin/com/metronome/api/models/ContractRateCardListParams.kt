@@ -2,10 +2,10 @@
 
 package com.metronome.api.models
 
+import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.Params
-import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import java.util.Objects
@@ -60,7 +60,7 @@ private constructor(
 
         private var limit: Long? = null
         private var nextPage: String? = null
-        private var body: JsonValue? = null
+        private var body: JsonValue = JsonMissing.of()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -193,7 +193,7 @@ private constructor(
             ContractRateCardListParams(
                 limit,
                 nextPage,
-                checkRequired("body", body),
+                body,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )

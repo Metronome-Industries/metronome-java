@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -71,7 +72,7 @@ class ContractProductCreateParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.name()).isEqualTo("My Product")
         assertThat(body.type()).isEqualTo(ContractProductCreateParams.Type.FIXED)
         assertThat(body.billableMetricId()).contains("13117714-3f05-48e5-a6e9-a66093f13b4d")
@@ -112,7 +113,7 @@ class ContractProductCreateParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.name()).isEqualTo("My Product")
         assertThat(body.type()).isEqualTo(ContractProductCreateParams.Type.FIXED)
     }

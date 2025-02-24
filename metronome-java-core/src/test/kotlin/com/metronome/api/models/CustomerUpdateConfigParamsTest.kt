@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -27,7 +28,7 @@ class CustomerUpdateConfigParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.leaveStripeInvoicesInDraft()).contains(true)
         assertThat(body.salesforceAccountId()).contains("0015500001WO1ZiABL")
     }
@@ -41,7 +42,7 @@ class CustomerUpdateConfigParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
     }
 
     @Test

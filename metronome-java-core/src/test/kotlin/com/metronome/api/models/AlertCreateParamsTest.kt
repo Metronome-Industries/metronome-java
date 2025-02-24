@@ -2,6 +2,7 @@
 
 package com.metronome.api.models
 
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -67,7 +68,7 @@ class AlertCreateParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.alertType())
             .isEqualTo(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
         assertThat(body.name()).isEqualTo("\$100 spend threshold reached")
@@ -110,7 +111,7 @@ class AlertCreateParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.alertType())
             .isEqualTo(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
         assertThat(body.name()).isEqualTo("\$100 spend threshold reached")
