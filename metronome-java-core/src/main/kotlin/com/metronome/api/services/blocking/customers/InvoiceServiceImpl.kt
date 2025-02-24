@@ -118,7 +118,9 @@ class InvoiceServiceImpl internal constructor(private val clientOptions: ClientO
 
     /**
      * List daily or hourly invoice breakdowns for a given customer, optionally filtered by status,
-     * date range, and/or credit type.
+     * date range, and/or credit type. Important considerations:
+     * - If we receive backdated usage after an invoice has been finalized, the backdated usage will
+     *   be included in the response and usage numbers may differ.
      */
     override fun listBreakdowns(
         params: CustomerInvoiceListBreakdownsParams,
