@@ -9329,9 +9329,6 @@ private constructor(
         @JsonProperty("ending_before")
         @ExcludeMissing
         private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("invoice_amount")
-        @ExcludeMissing
-        private val invoiceAmount: JsonField<InvoiceAmount> = JsonMissing.of(),
         @JsonProperty("name")
         @ExcludeMissing
         private val name: JsonField<String> = JsonMissing.of(),
@@ -9380,10 +9377,6 @@ private constructor(
         /** Determines when the contract will stop creating recurring commits. optional */
         fun endingBefore(): Optional<OffsetDateTime> =
             Optional.ofNullable(endingBefore.getNullable("ending_before"))
-
-        /** The amount the customer should be billed for the commit. Not required. */
-        fun invoiceAmount(): Optional<InvoiceAmount> =
-            Optional.ofNullable(invoiceAmount.getNullable("invoice_amount"))
 
         /** displayed on invoices. will be passed through to the individual commits */
         fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
@@ -9449,11 +9442,6 @@ private constructor(
         @ExcludeMissing
         fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
-        /** The amount the customer should be billed for the commit. Not required. */
-        @JsonProperty("invoice_amount")
-        @ExcludeMissing
-        fun _invoiceAmount(): JsonField<InvoiceAmount> = invoiceAmount
-
         /** displayed on invoices. will be passed through to the individual commits */
         @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
@@ -9501,7 +9489,6 @@ private constructor(
             applicableProductTags()
             description()
             endingBefore()
-            invoiceAmount().ifPresent { it.validate() }
             name()
             netsuiteSalesOrderId()
             rateType()
@@ -9529,7 +9516,6 @@ private constructor(
             private var applicableProductTags: JsonField<MutableList<String>>? = null
             private var description: JsonField<String> = JsonMissing.of()
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var invoiceAmount: JsonField<InvoiceAmount> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
             private var rateType: JsonField<RateType> = JsonMissing.of()
@@ -9550,7 +9536,6 @@ private constructor(
                     recurringCredit.applicableProductTags.map { it.toMutableList() }
                 description = recurringCredit.description
                 endingBefore = recurringCredit.endingBefore
-                invoiceAmount = recurringCredit.invoiceAmount
                 name = recurringCredit.name
                 netsuiteSalesOrderId = recurringCredit.netsuiteSalesOrderId
                 rateType = recurringCredit.rateType
@@ -9657,15 +9642,6 @@ private constructor(
                 this.endingBefore = endingBefore
             }
 
-            /** The amount the customer should be billed for the commit. Not required. */
-            fun invoiceAmount(invoiceAmount: InvoiceAmount) =
-                invoiceAmount(JsonField.of(invoiceAmount))
-
-            /** The amount the customer should be billed for the commit. Not required. */
-            fun invoiceAmount(invoiceAmount: JsonField<InvoiceAmount>) = apply {
-                this.invoiceAmount = invoiceAmount
-            }
-
             /** displayed on invoices. will be passed through to the individual commits */
             fun name(name: String) = name(JsonField.of(name))
 
@@ -9748,7 +9724,6 @@ private constructor(
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     description,
                     endingBefore,
-                    invoiceAmount,
                     name,
                     netsuiteSalesOrderId,
                     rateType,
@@ -10099,143 +10074,6 @@ private constructor(
                 "CommitDuration{unit=$unit, value=$value, additionalProperties=$additionalProperties}"
         }
 
-        /** The amount the customer should be billed for the commit. Not required. */
-        @NoAutoDetect
-        class InvoiceAmount
-        @JsonCreator
-        private constructor(
-            @JsonProperty("credit_type_id")
-            @ExcludeMissing
-            private val creditTypeId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("quantity")
-            @ExcludeMissing
-            private val quantity: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("unit_price")
-            @ExcludeMissing
-            private val unitPrice: JsonField<Double> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-        ) {
-
-            fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
-
-            fun quantity(): Double = quantity.getRequired("quantity")
-
-            fun unitPrice(): Double = unitPrice.getRequired("unit_price")
-
-            @JsonProperty("credit_type_id")
-            @ExcludeMissing
-            fun _creditTypeId(): JsonField<String> = creditTypeId
-
-            @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
-
-            @JsonProperty("unit_price")
-            @ExcludeMissing
-            fun _unitPrice(): JsonField<Double> = unitPrice
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): InvoiceAmount = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                creditTypeId()
-                quantity()
-                unitPrice()
-                validated = true
-            }
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [InvoiceAmount]. */
-            class Builder internal constructor() {
-
-                private var creditTypeId: JsonField<String>? = null
-                private var quantity: JsonField<Double>? = null
-                private var unitPrice: JsonField<Double>? = null
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(invoiceAmount: InvoiceAmount) = apply {
-                    creditTypeId = invoiceAmount.creditTypeId
-                    quantity = invoiceAmount.quantity
-                    unitPrice = invoiceAmount.unitPrice
-                    additionalProperties = invoiceAmount.additionalProperties.toMutableMap()
-                }
-
-                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
-
-                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
-                    this.creditTypeId = creditTypeId
-                }
-
-                fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
-
-                fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
-
-                fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
-
-                fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                fun build(): InvoiceAmount =
-                    InvoiceAmount(
-                        checkRequired("creditTypeId", creditTypeId),
-                        checkRequired("quantity", quantity),
-                        checkRequired("unitPrice", unitPrice),
-                        additionalProperties.toImmutable(),
-                    )
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is InvoiceAmount && creditTypeId == other.creditTypeId && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
-            }
-
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(creditTypeId, quantity, unitPrice, additionalProperties) }
-            /* spotless:on */
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "InvoiceAmount{creditTypeId=$creditTypeId, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
-        }
-
         /** Whether the created commits will use the commit rate or list rate */
         class RateType
         @JsonCreator
@@ -10336,17 +10174,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is RecurringCredit && accessAmount == other.accessAmount && commitDuration == other.commitDuration && priority == other.priority && productId == other.productId && startingAt == other.startingAt && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && description == other.description && endingBefore == other.endingBefore && invoiceAmount == other.invoiceAmount && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rateType == other.rateType && rolloverFraction == other.rolloverFraction && temporaryId == other.temporaryId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is RecurringCredit && accessAmount == other.accessAmount && commitDuration == other.commitDuration && priority == other.priority && productId == other.productId && startingAt == other.startingAt && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && description == other.description && endingBefore == other.endingBefore && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rateType == other.rateType && rolloverFraction == other.rolloverFraction && temporaryId == other.temporaryId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(accessAmount, commitDuration, priority, productId, startingAt, applicableProductIds, applicableProductTags, description, endingBefore, invoiceAmount, name, netsuiteSalesOrderId, rateType, rolloverFraction, temporaryId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(accessAmount, commitDuration, priority, productId, startingAt, applicableProductIds, applicableProductTags, description, endingBefore, name, netsuiteSalesOrderId, rateType, rolloverFraction, temporaryId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "RecurringCredit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, rolloverFraction=$rolloverFraction, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+            "RecurringCredit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, rolloverFraction=$rolloverFraction, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect

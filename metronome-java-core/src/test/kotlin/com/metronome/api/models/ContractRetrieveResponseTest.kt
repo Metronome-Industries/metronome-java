@@ -1026,16 +1026,6 @@ class ContractRetrieveResponseTest {
                                         .endingBefore(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
-                                        .invoiceAmount(
-                                            ContractWithoutAmendments.RecurringCredit.InvoiceAmount
-                                                .builder()
-                                                .creditTypeId(
-                                                    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
-                                                )
-                                                .quantity(0.0)
-                                                .unitPrice(0.0)
-                                                .build()
-                                        )
                                         .name("name")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                                         .rolloverFraction(0.0)
@@ -1667,16 +1657,6 @@ class ContractRetrieveResponseTest {
                                         .description("description")
                                         .endingBefore(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                        )
-                                        .invoiceAmount(
-                                            ContractWithoutAmendments.RecurringCredit.InvoiceAmount
-                                                .builder()
-                                                .creditTypeId(
-                                                    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
-                                                )
-                                                .quantity(0.0)
-                                                .unitPrice(0.0)
-                                                .build()
                                         )
                                         .name("name")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
@@ -2698,14 +2678,6 @@ class ContractRetrieveResponseTest {
                                     )
                                     .description("description")
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .invoiceAmount(
-                                        ContractWithoutAmendments.RecurringCredit.InvoiceAmount
-                                            .builder()
-                                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .quantity(0.0)
-                                            .unitPrice(0.0)
-                                            .build()
-                                    )
                                     .name("name")
                                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                                     .rolloverFraction(0.0)
@@ -3278,14 +3250,6 @@ class ContractRetrieveResponseTest {
                                     )
                                     .description("description")
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .invoiceAmount(
-                                        ContractWithoutAmendments.RecurringCredit.InvoiceAmount
-                                            .builder()
-                                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                            .quantity(0.0)
-                                            .unitPrice(0.0)
-                                            .build()
-                                    )
                                     .name("name")
                                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                                     .rolloverFraction(0.0)
