@@ -44,7 +44,9 @@ class ContractRateCardProductOrderUpdateParamsTest {
                 )
                 .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.productMoves())
             .isEqualTo(
@@ -56,7 +58,7 @@ class ContractRateCardProductOrderUpdateParamsTest {
                     ContractRateCardProductOrderUpdateParams.ProductMove.builder()
                         .position(1.0)
                         .productId("b086f2f4-9851-4466-9ca0-30d53e6a42ac")
-                        .build()
+                        .build(),
                 )
             )
         assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
@@ -80,7 +82,9 @@ class ContractRateCardProductOrderUpdateParamsTest {
                 )
                 .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.productMoves())
             .isEqualTo(
@@ -92,7 +96,7 @@ class ContractRateCardProductOrderUpdateParamsTest {
                     ContractRateCardProductOrderUpdateParams.ProductMove.builder()
                         .position(1.0)
                         .productId("b086f2f4-9851-4466-9ca0-30d53e6a42ac")
-                        .build()
+                        .build(),
                 )
             )
         assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")

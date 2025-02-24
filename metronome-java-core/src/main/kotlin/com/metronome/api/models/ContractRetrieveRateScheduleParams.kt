@@ -26,7 +26,7 @@ class ContractRetrieveRateScheduleParams
 private constructor(
     private val limit: Long?,
     private val nextPage: String?,
-    private val body: ContractRetrieveRateScheduleBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -79,7 +79,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractRetrieveRateScheduleBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -92,9 +92,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class ContractRetrieveRateScheduleBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("contract_id")
         @ExcludeMissing
         private val contractId: JsonField<String> = JsonMissing.of(),
@@ -160,7 +160,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractRetrieveRateScheduleBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -179,7 +179,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractRetrieveRateScheduleBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
@@ -189,16 +189,13 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(contractRetrieveRateScheduleBody: ContractRetrieveRateScheduleBody) =
-                apply {
-                    contractId = contractRetrieveRateScheduleBody.contractId
-                    customerId = contractRetrieveRateScheduleBody.customerId
-                    at = contractRetrieveRateScheduleBody.at
-                    selectors =
-                        contractRetrieveRateScheduleBody.selectors.map { it.toMutableList() }
-                    additionalProperties =
-                        contractRetrieveRateScheduleBody.additionalProperties.toMutableMap()
-                }
+            internal fun from(body: Body) = apply {
+                contractId = body.contractId
+                customerId = body.customerId
+                at = body.at
+                selectors = body.selectors.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
 
             /** ID of the contract to get the rate schedule for. */
             fun contractId(contractId: String) = contractId(JsonField.of(contractId))
@@ -274,8 +271,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractRetrieveRateScheduleBody =
-                ContractRetrieveRateScheduleBody(
+            fun build(): Body =
+                Body(
                     checkRequired("contractId", contractId),
                     checkRequired("customerId", customerId),
                     at,
@@ -289,7 +286,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractRetrieveRateScheduleBody && contractId == other.contractId && customerId == other.customerId && at == other.at && selectors == other.selectors && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && contractId == other.contractId && customerId == other.customerId && at == other.at && selectors == other.selectors && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -299,7 +296,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractRetrieveRateScheduleBody{contractId=$contractId, customerId=$customerId, at=$at, selectors=$selectors, additionalProperties=$additionalProperties}"
+            "Body{contractId=$contractId, customerId=$customerId, at=$at, selectors=$selectors, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -315,8 +312,7 @@ private constructor(
 
         private var limit: Long? = null
         private var nextPage: String? = null
-        private var body: ContractRetrieveRateScheduleBody.Builder =
-            ContractRetrieveRateScheduleBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -738,7 +734,7 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
         ) {
 
             @JsonAnyGetter
@@ -826,7 +822,7 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
         ) {
 
             @JsonAnyGetter

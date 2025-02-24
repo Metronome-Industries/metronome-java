@@ -20,10 +20,8 @@ import com.metronome.api.models.CustomerCreditListResponse
 import com.metronome.api.models.CustomerCreditUpdateEndDateParams
 import com.metronome.api.models.CustomerCreditUpdateEndDateResponse
 
-class CreditServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : CreditService {
+class CreditServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    CreditService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -34,7 +32,7 @@ internal constructor(
     /** Create a new credit at the customer level. */
     override fun create(
         params: CustomerCreditCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerCreditCreateResponse {
         val request =
             HttpRequest.builder()
@@ -60,7 +58,7 @@ internal constructor(
     /** List credits. */
     override fun list(
         params: CustomerCreditListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerCreditListResponse {
         val request =
             HttpRequest.builder()
@@ -86,7 +84,7 @@ internal constructor(
     /** Update the end date of a credit */
     override fun updateEndDate(
         params: CustomerCreditUpdateEndDateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerCreditUpdateEndDateResponse {
         val request =
             HttpRequest.builder()

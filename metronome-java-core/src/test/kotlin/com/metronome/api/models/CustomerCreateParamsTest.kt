@@ -44,7 +44,7 @@ class CustomerCreateParamsTest {
                             .putAdditionalProperty("stripe_customer_id", JsonValue.from("bar"))
                             .putAdditionalProperty(
                                 "stripe_collection_method",
-                                JsonValue.from("bar")
+                                JsonValue.from("bar"),
                             )
                             .build()
                     )
@@ -98,7 +98,7 @@ class CustomerCreateParamsTest {
                                 .putAdditionalProperty("stripe_customer_id", JsonValue.from("bar"))
                                 .putAdditionalProperty(
                                     "stripe_collection_method",
-                                    JsonValue.from("bar")
+                                    JsonValue.from("bar"),
                                 )
                                 .build()
                         )
@@ -112,7 +112,9 @@ class CustomerCreateParamsTest {
                 .externalId("x")
                 .addIngestAlias("team@example.com")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("Example, Inc.")
         assertThat(body.billingConfig())
@@ -152,7 +154,7 @@ class CustomerCreateParamsTest {
                                 .putAdditionalProperty("stripe_customer_id", JsonValue.from("bar"))
                                 .putAdditionalProperty(
                                     "stripe_collection_method",
-                                    JsonValue.from("bar")
+                                    JsonValue.from("bar"),
                                 )
                                 .build()
                         )
@@ -171,7 +173,9 @@ class CustomerCreateParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params = CustomerCreateParams.builder().name("Example, Inc.").build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("Example, Inc.")
     }

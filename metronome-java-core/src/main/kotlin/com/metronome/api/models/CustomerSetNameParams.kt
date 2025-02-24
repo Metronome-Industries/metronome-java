@@ -23,7 +23,7 @@ import java.util.Objects
 class CustomerSetNameParams
 private constructor(
     private val customerId: String,
-    private val body: CustomerSetNameBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -48,7 +48,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomerSetNameBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -62,9 +62,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class CustomerSetNameBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("name")
         @ExcludeMissing
         private val name: JsonField<String> = JsonMissing.of(),
@@ -90,7 +90,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomerSetNameBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -106,16 +106,16 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomerSetNameBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customerSetNameBody: CustomerSetNameBody) = apply {
-                name = customerSetNameBody.name
-                additionalProperties = customerSetNameBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                name = body.name
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /**
@@ -149,8 +149,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomerSetNameBody =
-                CustomerSetNameBody(checkRequired("name", name), additionalProperties.toImmutable())
+            fun build(): Body =
+                Body(checkRequired("name", name), additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -158,7 +158,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerSetNameBody && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -167,8 +167,7 @@ private constructor(
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "CustomerSetNameBody{name=$name, additionalProperties=$additionalProperties}"
+        override fun toString() = "Body{name=$name, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -183,7 +182,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var customerId: String? = null
-        private var body: CustomerSetNameBody.Builder = CustomerSetNameBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

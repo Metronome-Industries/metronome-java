@@ -18,20 +18,20 @@ interface CommitService {
     @JvmOverloads
     fun create(
         params: CustomerCommitCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCommitCreateResponse
 
     /** List commits. */
     @JvmOverloads
     fun list(
         params: CustomerCommitListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCommitListResponse
 
     /** Update the end date of a PREPAID commit */
     @JvmOverloads
     fun updateEndDate(
         params: CustomerCommitUpdateEndDateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCommitUpdateEndDateResponse
 }

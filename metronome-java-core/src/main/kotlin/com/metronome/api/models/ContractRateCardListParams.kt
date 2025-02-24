@@ -16,20 +16,20 @@ import java.util.Optional
  */
 class ContractRateCardListParams
 private constructor(
-    private val body: JsonValue,
     private val limit: Long?,
     private val nextPage: String?,
+    private val body: JsonValue,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
-
-    fun body(): JsonValue = body
 
     /** Max number of results that should be returned */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
     /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
+
+    fun body(): JsonValue = body
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -58,22 +58,20 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: JsonValue? = null
         private var limit: Long? = null
         private var nextPage: String? = null
+        private var body: JsonValue? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(contractRateCardListParams: ContractRateCardListParams) = apply {
-            body = contractRateCardListParams.body
             limit = contractRateCardListParams.limit
             nextPage = contractRateCardListParams.nextPage
+            body = contractRateCardListParams.body
             additionalHeaders = contractRateCardListParams.additionalHeaders.toBuilder()
             additionalQueryParams = contractRateCardListParams.additionalQueryParams.toBuilder()
         }
-
-        fun body(body: JsonValue) = apply { this.body = body }
 
         /** Max number of results that should be returned */
         fun limit(limit: Long?) = apply { this.limit = limit }
@@ -90,6 +88,8 @@ private constructor(
 
         /** Cursor that indicates where the next page of results should start. */
         fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.orElse(null))
+
+        fun body(body: JsonValue) = apply { this.body = body }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -191,9 +191,9 @@ private constructor(
 
         fun build(): ContractRateCardListParams =
             ContractRateCardListParams(
-                checkRequired("body", body),
                 limit,
                 nextPage,
+                checkRequired("body", body),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -204,11 +204,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardListParams && body == other.body && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardListParams && limit == other.limit && nextPage == other.nextPage && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, limit, nextPage, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(limit, nextPage, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractRateCardListParams{body=$body, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ContractRateCardListParams{limit=$limit, nextPage=$nextPage, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

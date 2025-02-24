@@ -21,7 +21,7 @@ interface PlanServiceAsync {
     @JvmOverloads
     fun list(
         params: CustomerPlanListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerPlanListPageAsync>
 
     /**
@@ -32,14 +32,14 @@ interface PlanServiceAsync {
     @JvmOverloads
     fun add(
         params: CustomerPlanAddParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerPlanAddResponse>
 
     /** Change the end date of a customer's plan. */
     @JvmOverloads
     fun end(
         params: CustomerPlanEndParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerPlanEndResponse>
 
     /**
@@ -50,6 +50,6 @@ interface PlanServiceAsync {
     @JvmOverloads
     fun listPriceAdjustments(
         params: CustomerPlanListPriceAdjustmentsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerPlanListPriceAdjustmentsPageAsync>
 }

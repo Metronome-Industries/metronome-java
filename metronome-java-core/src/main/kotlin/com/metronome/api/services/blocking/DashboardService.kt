@@ -17,6 +17,6 @@ interface DashboardService {
     @JvmOverloads
     fun getEmbeddableUrl(
         params: DashboardGetEmbeddableUrlParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): DashboardGetEmbeddableUrlResponse
 }

@@ -19,10 +19,8 @@ import com.metronome.api.models.ContractRateCardProductOrderUpdateParams
 import com.metronome.api.models.ContractRateCardProductOrderUpdateResponse
 import java.util.concurrent.CompletableFuture
 
-class ProductOrderServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : ProductOrderServiceAsync {
+class ProductOrderServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    ProductOrderServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -33,7 +31,7 @@ internal constructor(
     /** Updates ordering of specified products */
     override fun update(
         params: ContractRateCardProductOrderUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractRateCardProductOrderUpdateResponse> {
         val request =
             HttpRequest.builder()
@@ -62,7 +60,7 @@ internal constructor(
     /** Sets the ordering of products within a rate card */
     override fun set(
         params: ContractRateCardProductOrderSetParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractRateCardProductOrderSetResponse> {
         val request =
             HttpRequest.builder()

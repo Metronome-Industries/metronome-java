@@ -27,7 +27,7 @@ import java.util.Objects
 class CustomerSetIngestAliasesParams
 private constructor(
     private val customerId: String,
-    private val body: CustomerSetIngestAliasesBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -44,7 +44,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomerSetIngestAliasesBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -58,9 +58,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class CustomerSetIngestAliasesBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("ingest_aliases")
         @ExcludeMissing
         private val ingestAliases: JsonField<List<String>> = JsonMissing.of(),
@@ -80,7 +80,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomerSetIngestAliasesBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -96,18 +96,16 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomerSetIngestAliasesBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var ingestAliases: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customerSetIngestAliasesBody: CustomerSetIngestAliasesBody) = apply {
-                ingestAliases =
-                    customerSetIngestAliasesBody.ingestAliases.map { it.toMutableList() }
-                additionalProperties =
-                    customerSetIngestAliasesBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                ingestAliases = body.ingestAliases.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun ingestAliases(ingestAliases: List<String>) =
@@ -149,10 +147,10 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomerSetIngestAliasesBody =
-                CustomerSetIngestAliasesBody(
+            fun build(): Body =
+                Body(
                     checkRequired("ingestAliases", ingestAliases).map { it.toImmutable() },
-                    additionalProperties.toImmutable()
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -161,7 +159,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerSetIngestAliasesBody && ingestAliases == other.ingestAliases && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && ingestAliases == other.ingestAliases && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -171,7 +169,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerSetIngestAliasesBody{ingestAliases=$ingestAliases, additionalProperties=$additionalProperties}"
+            "Body{ingestAliases=$ingestAliases, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -186,8 +184,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var customerId: String? = null
-        private var body: CustomerSetIngestAliasesBody.Builder =
-            CustomerSetIngestAliasesBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

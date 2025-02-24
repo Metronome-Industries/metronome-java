@@ -35,7 +35,7 @@ import java.util.Optional
 /** Create a new credit grant */
 class CreditGrantCreateParams
 private constructor(
-    private val body: CreditGrantCreateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -148,16 +148,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CreditGrantCreateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class CreditGrantCreateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("customer_id")
         @ExcludeMissing
         private val customerId: JsonField<String> = JsonMissing.of(),
@@ -341,7 +341,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CreditGrantCreateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -370,7 +370,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CreditGrantCreateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
@@ -390,22 +390,22 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(creditGrantCreateBody: CreditGrantCreateBody) = apply {
-                customerId = creditGrantCreateBody.customerId
-                expiresAt = creditGrantCreateBody.expiresAt
-                grantAmount = creditGrantCreateBody.grantAmount
-                name = creditGrantCreateBody.name
-                paidAmount = creditGrantCreateBody.paidAmount
-                priority = creditGrantCreateBody.priority
-                creditGrantType = creditGrantCreateBody.creditGrantType
-                customFields = creditGrantCreateBody.customFields
-                effectiveAt = creditGrantCreateBody.effectiveAt
-                invoiceDate = creditGrantCreateBody.invoiceDate
-                productIds = creditGrantCreateBody.productIds.map { it.toMutableList() }
-                reason = creditGrantCreateBody.reason
-                rolloverSettings = creditGrantCreateBody.rolloverSettings
-                uniquenessKey = creditGrantCreateBody.uniquenessKey
-                additionalProperties = creditGrantCreateBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                customerId = body.customerId
+                expiresAt = body.expiresAt
+                grantAmount = body.grantAmount
+                name = body.name
+                paidAmount = body.paidAmount
+                priority = body.priority
+                creditGrantType = body.creditGrantType
+                customFields = body.customFields
+                effectiveAt = body.effectiveAt
+                invoiceDate = body.invoiceDate
+                productIds = body.productIds.map { it.toMutableList() }
+                reason = body.reason
+                rolloverSettings = body.rolloverSettings
+                uniquenessKey = body.uniquenessKey
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** the Metronome ID of the customer */
@@ -573,8 +573,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CreditGrantCreateBody =
-                CreditGrantCreateBody(
+            fun build(): Body =
+                Body(
                     checkRequired("customerId", customerId),
                     checkRequired("expiresAt", expiresAt),
                     checkRequired("grantAmount", grantAmount),
@@ -598,7 +598,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CreditGrantCreateBody && customerId == other.customerId && expiresAt == other.expiresAt && grantAmount == other.grantAmount && name == other.name && paidAmount == other.paidAmount && priority == other.priority && creditGrantType == other.creditGrantType && customFields == other.customFields && effectiveAt == other.effectiveAt && invoiceDate == other.invoiceDate && productIds == other.productIds && reason == other.reason && rolloverSettings == other.rolloverSettings && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && customerId == other.customerId && expiresAt == other.expiresAt && grantAmount == other.grantAmount && name == other.name && paidAmount == other.paidAmount && priority == other.priority && creditGrantType == other.creditGrantType && customFields == other.customFields && effectiveAt == other.effectiveAt && invoiceDate == other.invoiceDate && productIds == other.productIds && reason == other.reason && rolloverSettings == other.rolloverSettings && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -608,7 +608,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CreditGrantCreateBody{customerId=$customerId, expiresAt=$expiresAt, grantAmount=$grantAmount, name=$name, paidAmount=$paidAmount, priority=$priority, creditGrantType=$creditGrantType, customFields=$customFields, effectiveAt=$effectiveAt, invoiceDate=$invoiceDate, productIds=$productIds, reason=$reason, rolloverSettings=$rolloverSettings, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
+            "Body{customerId=$customerId, expiresAt=$expiresAt, grantAmount=$grantAmount, name=$name, paidAmount=$paidAmount, priority=$priority, creditGrantType=$creditGrantType, customFields=$customFields, effectiveAt=$effectiveAt, invoiceDate=$invoiceDate, productIds=$productIds, reason=$reason, rolloverSettings=$rolloverSettings, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -622,7 +622,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: CreditGrantCreateBody.Builder = CreditGrantCreateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -1133,7 +1133,7 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
     ) {
 
         @JsonAnyGetter
@@ -1495,7 +1495,7 @@ private constructor(
                 override fun serialize(
                     value: RolloverAmount,
                     generator: JsonGenerator,
-                    provider: SerializerProvider
+                    provider: SerializerProvider,
                 ) {
                     when {
                         value.maxPercentage != null -> generator.writeObject(value.maxPercentage)

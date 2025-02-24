@@ -9,6 +9,7 @@ import com.metronome.api.models.ContractProductCreateParams
 import com.metronome.api.models.ContractProductListParams
 import com.metronome.api.models.ContractProductRetrieveParams
 import com.metronome.api.models.ContractProductUpdateParams
+import com.metronome.api.models.Id
 import com.metronome.api.models.QuantityConversion
 import com.metronome.api.models.QuantityRounding
 import java.time.OffsetDateTime
@@ -71,7 +72,7 @@ class ProductServiceTest {
         val contractProductRetrieveResponse =
             productService.retrieve(
                 ContractProductRetrieveParams.builder()
-                    .id("d84e7f4e-7a70-4fe4-be02-7a5027beffcc")
+                    .id(Id.builder().id("d84e7f4e-7a70-4fe4-be02-7a5027beffcc").build())
                     .build()
             )
         println(contractProductRetrieveResponse)

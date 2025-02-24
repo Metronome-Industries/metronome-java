@@ -23,21 +23,21 @@ interface CreditGrantServiceAsync {
     @JvmOverloads
     fun create(
         params: CreditGrantCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CreditGrantCreateResponse>
 
     /** List credit grants. This list does not included voided grants. */
     @JvmOverloads
     fun list(
         params: CreditGrantListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CreditGrantListPageAsync>
 
     /** Edit an existing credit grant */
     @JvmOverloads
     fun edit(
         params: CreditGrantEditParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CreditGrantEditResponse>
 
     /**
@@ -48,13 +48,13 @@ interface CreditGrantServiceAsync {
     @JvmOverloads
     fun listEntries(
         params: CreditGrantListEntriesParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CreditGrantListEntriesResponse>
 
     /** Void a credit grant */
     @JvmOverloads
     fun void_(
         params: CreditGrantVoidParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CreditGrantVoidResponse>
 }

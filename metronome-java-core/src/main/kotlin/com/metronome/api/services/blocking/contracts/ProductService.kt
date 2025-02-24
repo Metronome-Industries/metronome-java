@@ -22,34 +22,34 @@ interface ProductService {
     @JvmOverloads
     fun create(
         params: ContractProductCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ContractProductCreateResponse
 
     /** Get a specific product */
     @JvmOverloads
     fun retrieve(
         params: ContractProductRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ContractProductRetrieveResponse
 
     /** Update a product */
     @JvmOverloads
     fun update(
         params: ContractProductUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ContractProductUpdateResponse
 
     /** List products */
     @JvmOverloads
     fun list(
         params: ContractProductListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ContractProductListPage
 
     /** Archive a product */
     @JvmOverloads
     fun archive(
         params: ContractProductArchiveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ContractProductArchiveResponse
 }

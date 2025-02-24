@@ -26,7 +26,7 @@ class ContractRateCardRateListParams
 private constructor(
     private val limit: Long?,
     private val nextPage: String?,
-    private val body: ContractRateCardRateListBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -67,7 +67,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractRateCardRateListBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -80,9 +80,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class ContractRateCardRateListBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("at")
         @ExcludeMissing
         private val at: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -131,7 +131,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractRateCardRateListBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -149,7 +149,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractRateCardRateListBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var at: JsonField<OffsetDateTime>? = null
@@ -158,12 +158,11 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(contractRateCardRateListBody: ContractRateCardRateListBody) = apply {
-                at = contractRateCardRateListBody.at
-                rateCardId = contractRateCardRateListBody.rateCardId
-                selectors = contractRateCardRateListBody.selectors.map { it.toMutableList() }
-                additionalProperties =
-                    contractRateCardRateListBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                at = body.at
+                rateCardId = body.rateCardId
+                selectors = body.selectors.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** inclusive starting point for the rates schedule */
@@ -228,8 +227,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractRateCardRateListBody =
-                ContractRateCardRateListBody(
+            fun build(): Body =
+                Body(
                     checkRequired("at", at),
                     checkRequired("rateCardId", rateCardId),
                     (selectors ?: JsonMissing.of()).map { it.toImmutable() },
@@ -242,7 +241,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractRateCardRateListBody && at == other.at && rateCardId == other.rateCardId && selectors == other.selectors && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && at == other.at && rateCardId == other.rateCardId && selectors == other.selectors && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -252,7 +251,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractRateCardRateListBody{at=$at, rateCardId=$rateCardId, selectors=$selectors, additionalProperties=$additionalProperties}"
+            "Body{at=$at, rateCardId=$rateCardId, selectors=$selectors, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -268,8 +267,7 @@ private constructor(
 
         private var limit: Long? = null
         private var nextPage: String? = null
-        private var body: ContractRateCardRateListBody.Builder =
-            ContractRateCardRateListBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -677,7 +675,7 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
         ) {
 
             @JsonAnyGetter
@@ -765,7 +763,7 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
         ) {
 
             @JsonAnyGetter

@@ -18,20 +18,20 @@ interface CreditService {
     @JvmOverloads
     fun create(
         params: CustomerCreditCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditCreateResponse
 
     /** List credits. */
     @JvmOverloads
     fun list(
         params: CustomerCreditListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditListResponse
 
     /** Update the end date of a credit */
     @JvmOverloads
     fun updateEndDate(
         params: CustomerCreditUpdateEndDateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditUpdateEndDateResponse
 }

@@ -10,6 +10,7 @@ import com.metronome.api.models.BillableMetricCreateParams
 import com.metronome.api.models.BillableMetricListParams
 import com.metronome.api.models.BillableMetricRetrieveParams
 import com.metronome.api.models.EventTypeFilter
+import com.metronome.api.models.Id
 import com.metronome.api.models.PropertyFilter
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -117,7 +118,7 @@ class BillableMetricServiceTest {
         val billableMetricArchiveResponse =
             billableMetricService.archive(
                 BillableMetricArchiveParams.builder()
-                    .id("8deed800-1b7a-495d-a207-6c52bac54dc9")
+                    .id(Id.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build())
                     .build()
             )
         println(billableMetricArchiveResponse)

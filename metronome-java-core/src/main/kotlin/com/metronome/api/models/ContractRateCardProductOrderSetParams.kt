@@ -22,7 +22,7 @@ import java.util.Objects
 /** Sets the ordering of products within a rate card */
 class ContractRateCardProductOrderSetParams
 private constructor(
-    private val body: ContractRateCardProductOrderSetBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -43,16 +43,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractRateCardProductOrderSetBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class ContractRateCardProductOrderSetBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("product_order")
         @ExcludeMissing
         private val productOrder: JsonField<List<String>> = JsonMissing.of(),
@@ -83,7 +83,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractRateCardProductOrderSetBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -100,7 +100,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractRateCardProductOrderSetBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var productOrder: JsonField<MutableList<String>>? = null
@@ -108,14 +108,10 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(
-                contractRateCardProductOrderSetBody: ContractRateCardProductOrderSetBody
-            ) = apply {
-                productOrder =
-                    contractRateCardProductOrderSetBody.productOrder.map { it.toMutableList() }
-                rateCardId = contractRateCardProductOrderSetBody.rateCardId
-                additionalProperties =
-                    contractRateCardProductOrderSetBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                productOrder = body.productOrder.map { it.toMutableList() }
+                rateCardId = body.rateCardId
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun productOrder(productOrder: List<String>) = productOrder(JsonField.of(productOrder))
@@ -162,8 +158,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractRateCardProductOrderSetBody =
-                ContractRateCardProductOrderSetBody(
+            fun build(): Body =
+                Body(
                     checkRequired("productOrder", productOrder).map { it.toImmutable() },
                     checkRequired("rateCardId", rateCardId),
                     additionalProperties.toImmutable(),
@@ -175,7 +171,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractRateCardProductOrderSetBody && productOrder == other.productOrder && rateCardId == other.rateCardId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && productOrder == other.productOrder && rateCardId == other.rateCardId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -185,7 +181,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractRateCardProductOrderSetBody{productOrder=$productOrder, rateCardId=$rateCardId, additionalProperties=$additionalProperties}"
+            "Body{productOrder=$productOrder, rateCardId=$rateCardId, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -199,8 +195,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: ContractRateCardProductOrderSetBody.Builder =
-            ContractRateCardProductOrderSetBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

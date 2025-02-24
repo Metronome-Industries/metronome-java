@@ -26,7 +26,7 @@ class ContractProductListParams
 private constructor(
     private val limit: Long?,
     private val nextPage: String?,
-    private val body: ContractProductListBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -49,7 +49,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractProductListBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -62,9 +62,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class ContractProductListBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("archive_filter")
         @ExcludeMissing
         private val archiveFilter: JsonField<ArchiveFilter> = JsonMissing.of(),
@@ -87,7 +87,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractProductListBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -103,16 +103,16 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractProductListBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var archiveFilter: JsonField<ArchiveFilter> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(contractProductListBody: ContractProductListBody) = apply {
-                archiveFilter = contractProductListBody.archiveFilter
-                additionalProperties = contractProductListBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                archiveFilter = body.archiveFilter
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** Filter options for the product list */
@@ -143,8 +143,7 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractProductListBody =
-                ContractProductListBody(archiveFilter, additionalProperties.toImmutable())
+            fun build(): Body = Body(archiveFilter, additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -152,7 +151,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractProductListBody && archiveFilter == other.archiveFilter && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && archiveFilter == other.archiveFilter && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -162,7 +161,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractProductListBody{archiveFilter=$archiveFilter, additionalProperties=$additionalProperties}"
+            "Body{archiveFilter=$archiveFilter, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -178,7 +177,7 @@ private constructor(
 
         private var limit: Long? = null
         private var nextPage: String? = null
-        private var body: ContractProductListBody.Builder = ContractProductListBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -345,11 +344,8 @@ private constructor(
     }
 
     /** Filter options for the product list */
-    class ArchiveFilter
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class ArchiveFilter @JsonCreator private constructor(private val value: JsonField<String>) :
+        Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -431,7 +427,19 @@ private constructor(
                 else -> throw MetronomeInvalidDataException("Unknown ArchiveFilter: $value")
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

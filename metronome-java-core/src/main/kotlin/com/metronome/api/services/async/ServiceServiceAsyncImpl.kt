@@ -16,10 +16,8 @@ import com.metronome.api.models.ServiceListParams
 import com.metronome.api.models.ServiceListResponse
 import java.util.concurrent.CompletableFuture
 
-class ServiceServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : ServiceServiceAsync {
+class ServiceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    ServiceServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -33,7 +31,7 @@ internal constructor(
      */
     override fun list(
         params: ServiceListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ServiceListResponse> {
         val request =
             HttpRequest.builder()

@@ -23,10 +23,8 @@ import com.metronome.api.models.CustomerInvoiceRetrieveParams
 import com.metronome.api.models.CustomerInvoiceRetrieveResponse
 import java.util.concurrent.CompletableFuture
 
-class InvoiceServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : InvoiceServiceAsync {
+class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    InvoiceServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -37,7 +35,7 @@ internal constructor(
     /** Fetch a specific invoice for a given customer. */
     override fun retrieve(
         params: CustomerInvoiceRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerInvoiceRetrieveResponse> {
         val request =
             HttpRequest.builder()
@@ -46,7 +44,7 @@ internal constructor(
                     "customers",
                     params.getPathParam(0),
                     "invoices",
-                    params.getPathParam(1)
+                    params.getPathParam(1),
                 )
                 .build()
                 .prepareAsync(clientOptions, params)
@@ -73,7 +71,7 @@ internal constructor(
      */
     override fun list(
         params: CustomerInvoiceListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerInvoiceListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -102,7 +100,7 @@ internal constructor(
     /** Add a one time charge to the specified invoice */
     override fun addCharge(
         params: CustomerInvoiceAddChargeParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerInvoiceAddChargeResponse> {
         val request =
             HttpRequest.builder()
@@ -134,7 +132,7 @@ internal constructor(
      */
     override fun listBreakdowns(
         params: CustomerInvoiceListBreakdownsParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerInvoiceListBreakdownsPageAsync> {
         val request =
             HttpRequest.builder()

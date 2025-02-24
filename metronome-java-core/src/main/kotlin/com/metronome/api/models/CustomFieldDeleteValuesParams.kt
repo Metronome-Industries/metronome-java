@@ -24,7 +24,7 @@ import java.util.Objects
 /** Deletes one or more custom fields on an instance of a Metronome entity. */
 class CustomFieldDeleteValuesParams
 private constructor(
-    private val body: CustomFieldDeleteValuesBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -47,16 +47,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomFieldDeleteValuesBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class CustomFieldDeleteValuesBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("entity")
         @ExcludeMissing
         private val entity: JsonField<Entity> = JsonMissing.of(),
@@ -88,7 +88,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomFieldDeleteValuesBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -106,7 +106,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomFieldDeleteValuesBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var entity: JsonField<Entity>? = null
@@ -115,12 +115,11 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customFieldDeleteValuesBody: CustomFieldDeleteValuesBody) = apply {
-                entity = customFieldDeleteValuesBody.entity
-                entityId = customFieldDeleteValuesBody.entityId
-                keys = customFieldDeleteValuesBody.keys.map { it.toMutableList() }
-                additionalProperties =
-                    customFieldDeleteValuesBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                entity = body.entity
+                entityId = body.entityId
+                keys = body.keys.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun entity(entity: Entity) = entity(JsonField.of(entity))
@@ -169,8 +168,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomFieldDeleteValuesBody =
-                CustomFieldDeleteValuesBody(
+            fun build(): Body =
+                Body(
                     checkRequired("entity", entity),
                     checkRequired("entityId", entityId),
                     checkRequired("keys", keys).map { it.toImmutable() },
@@ -183,7 +182,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomFieldDeleteValuesBody && entity == other.entity && entityId == other.entityId && keys == other.keys && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && entity == other.entity && entityId == other.entityId && keys == other.keys && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -193,7 +192,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomFieldDeleteValuesBody{entity=$entity, entityId=$entityId, keys=$keys, additionalProperties=$additionalProperties}"
+            "Body{entity=$entity, entityId=$entityId, keys=$keys, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -207,8 +206,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: CustomFieldDeleteValuesBody.Builder =
-            CustomFieldDeleteValuesBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -358,11 +356,7 @@ private constructor(
             )
     }
 
-    class Entity
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Entity @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -525,7 +519,19 @@ private constructor(
                 else -> throw MetronomeInvalidDataException("Unknown Entity: $value")
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

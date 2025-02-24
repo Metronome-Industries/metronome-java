@@ -90,7 +90,7 @@ private constructor(
         fun build(): CustomerAlertRetrieveResponse =
             CustomerAlertRetrieveResponse(
                 checkRequired("data", data),
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

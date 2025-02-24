@@ -31,7 +31,7 @@ import java.util.Optional
 class CustomerPlanAddParams
 private constructor(
     private val customerId: String,
-    private val body: CustomerPlanAddBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -120,7 +120,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomerPlanAddBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -134,9 +134,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class CustomerPlanAddBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("plan_id")
         @ExcludeMissing
         private val planId: JsonField<String> = JsonMissing.of(),
@@ -265,7 +265,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomerPlanAddBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -287,7 +287,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomerPlanAddBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var planId: JsonField<String>? = null
@@ -301,16 +301,15 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customerPlanAddBody: CustomerPlanAddBody) = apply {
-                planId = customerPlanAddBody.planId
-                startingOn = customerPlanAddBody.startingOn
-                endingBefore = customerPlanAddBody.endingBefore
-                netPaymentTermsDays = customerPlanAddBody.netPaymentTermsDays
-                overageRateAdjustments =
-                    customerPlanAddBody.overageRateAdjustments.map { it.toMutableList() }
-                priceAdjustments = customerPlanAddBody.priceAdjustments.map { it.toMutableList() }
-                trialSpec = customerPlanAddBody.trialSpec
-                additionalProperties = customerPlanAddBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                planId = body.planId
+                startingOn = body.startingOn
+                endingBefore = body.endingBefore
+                netPaymentTermsDays = body.netPaymentTermsDays
+                overageRateAdjustments = body.overageRateAdjustments.map { it.toMutableList() }
+                priceAdjustments = body.priceAdjustments.map { it.toMutableList() }
+                trialSpec = body.trialSpec
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun planId(planId: String) = planId(JsonField.of(planId))
@@ -466,8 +465,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomerPlanAddBody =
-                CustomerPlanAddBody(
+            fun build(): Body =
+                Body(
                     checkRequired("planId", planId),
                     checkRequired("startingOn", startingOn),
                     endingBefore,
@@ -484,7 +483,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerPlanAddBody && planId == other.planId && startingOn == other.startingOn && endingBefore == other.endingBefore && netPaymentTermsDays == other.netPaymentTermsDays && overageRateAdjustments == other.overageRateAdjustments && priceAdjustments == other.priceAdjustments && trialSpec == other.trialSpec && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && planId == other.planId && startingOn == other.startingOn && endingBefore == other.endingBefore && netPaymentTermsDays == other.netPaymentTermsDays && overageRateAdjustments == other.overageRateAdjustments && priceAdjustments == other.priceAdjustments && trialSpec == other.trialSpec && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -494,7 +493,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerPlanAddBody{planId=$planId, startingOn=$startingOn, endingBefore=$endingBefore, netPaymentTermsDays=$netPaymentTermsDays, overageRateAdjustments=$overageRateAdjustments, priceAdjustments=$priceAdjustments, trialSpec=$trialSpec, additionalProperties=$additionalProperties}"
+            "Body{planId=$planId, startingOn=$startingOn, endingBefore=$endingBefore, netPaymentTermsDays=$netPaymentTermsDays, overageRateAdjustments=$overageRateAdjustments, priceAdjustments=$priceAdjustments, trialSpec=$trialSpec, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -509,7 +508,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var customerId: String? = null
-        private var body: CustomerPlanAddBody.Builder = CustomerPlanAddBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -1114,9 +1113,7 @@ private constructor(
 
         class AdjustmentType
         @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -1204,7 +1201,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown AdjustmentType: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {

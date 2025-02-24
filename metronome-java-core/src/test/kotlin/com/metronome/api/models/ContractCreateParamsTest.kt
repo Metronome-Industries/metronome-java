@@ -869,7 +869,9 @@ class ContractCreateParamsTest {
                         .build()
                 )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
         assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
@@ -1348,7 +1350,9 @@ class ContractCreateParamsTest {
                 .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
         assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))

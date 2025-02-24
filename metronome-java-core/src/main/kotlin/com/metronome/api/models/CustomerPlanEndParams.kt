@@ -26,7 +26,7 @@ class CustomerPlanEndParams
 private constructor(
     private val customerId: String,
     private val customerPlanId: String,
-    private val body: CustomerPlanEndBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -79,7 +79,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomerPlanEndBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -94,9 +94,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class CustomerPlanEndBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("ending_before")
         @ExcludeMissing
         private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -163,7 +163,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomerPlanEndBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -181,7 +181,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomerPlanEndBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -190,11 +190,11 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customerPlanEndBody: CustomerPlanEndBody) = apply {
-                endingBefore = customerPlanEndBody.endingBefore
-                voidInvoices = customerPlanEndBody.voidInvoices
-                voidStripeInvoices = customerPlanEndBody.voidStripeInvoices
-                additionalProperties = customerPlanEndBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                endingBefore = body.endingBefore
+                voidInvoices = body.voidInvoices
+                voidStripeInvoices = body.voidStripeInvoices
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /**
@@ -262,8 +262,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomerPlanEndBody =
-                CustomerPlanEndBody(
+            fun build(): Body =
+                Body(
                     endingBefore,
                     voidInvoices,
                     voidStripeInvoices,
@@ -276,7 +276,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerPlanEndBody && endingBefore == other.endingBefore && voidInvoices == other.voidInvoices && voidStripeInvoices == other.voidStripeInvoices && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && endingBefore == other.endingBefore && voidInvoices == other.voidInvoices && voidStripeInvoices == other.voidStripeInvoices && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -286,7 +286,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerPlanEndBody{endingBefore=$endingBefore, voidInvoices=$voidInvoices, voidStripeInvoices=$voidStripeInvoices, additionalProperties=$additionalProperties}"
+            "Body{endingBefore=$endingBefore, voidInvoices=$voidInvoices, voidStripeInvoices=$voidStripeInvoices, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -302,7 +302,7 @@ private constructor(
 
         private var customerId: String? = null
         private var customerPlanId: String? = null
-        private var body: CustomerPlanEndBody.Builder = CustomerPlanEndBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

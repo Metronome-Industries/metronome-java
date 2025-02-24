@@ -21,27 +21,27 @@ interface BillableMetricServiceAsync {
     @JvmOverloads
     fun create(
         params: BillableMetricCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BillableMetricCreateResponse>
 
     /** Get a billable metric. */
     @JvmOverloads
     fun retrieve(
         params: BillableMetricRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BillableMetricRetrieveResponse>
 
     /** List all billable metrics. */
     @JvmOverloads
     fun list(
         params: BillableMetricListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BillableMetricListPageAsync>
 
     /** Archive an existing billable metric. */
     @JvmOverloads
     fun archive(
         params: BillableMetricArchiveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BillableMetricArchiveResponse>
 }

@@ -45,10 +45,8 @@ import com.metronome.api.services.blocking.customers.NamedScheduleServiceImpl
 import com.metronome.api.services.blocking.customers.PlanService
 import com.metronome.api.services.blocking.customers.PlanServiceImpl
 
-class CustomerServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : CustomerService {
+class CustomerServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    CustomerService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -90,7 +88,7 @@ internal constructor(
     /** Create a new customer */
     override fun create(
         params: CustomerCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerCreateResponse {
         val request =
             HttpRequest.builder()
@@ -116,7 +114,7 @@ internal constructor(
     /** Get a customer by Metronome ID. */
     override fun retrieve(
         params: CustomerRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerRetrieveResponse {
         val request =
             HttpRequest.builder()
@@ -141,7 +139,7 @@ internal constructor(
     /** List all customers. */
     override fun list(
         params: CustomerListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerListPage {
         val request =
             HttpRequest.builder()
@@ -167,7 +165,7 @@ internal constructor(
     /** Archive a customer */
     override fun archive(
         params: CustomerArchiveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerArchiveResponse {
         val request =
             HttpRequest.builder()
@@ -193,7 +191,7 @@ internal constructor(
     /** Get all billable metrics for a given customer. */
     override fun listBillableMetrics(
         params: CustomerListBillableMetricsParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerListBillableMetricsPage {
         val request =
             HttpRequest.builder()
@@ -223,7 +221,7 @@ internal constructor(
      */
     override fun listCosts(
         params: CustomerListCostsParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerListCostsPage {
         val request =
             HttpRequest.builder()
@@ -252,7 +250,7 @@ internal constructor(
      */
     override fun setIngestAliases(
         params: CustomerSetIngestAliasesParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ) {
         val request =
             HttpRequest.builder()
@@ -272,7 +270,7 @@ internal constructor(
     /** Updates the specified customer's name. */
     override fun setName(
         params: CustomerSetNameParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerSetNameResponse {
         val request =
             HttpRequest.builder()

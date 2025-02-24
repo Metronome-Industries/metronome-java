@@ -49,35 +49,35 @@ interface CustomerService {
     @JvmOverloads
     fun create(
         params: CustomerCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreateResponse
 
     /** Get a customer by Metronome ID. */
     @JvmOverloads
     fun retrieve(
         params: CustomerRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerRetrieveResponse
 
     /** List all customers. */
     @JvmOverloads
     fun list(
         params: CustomerListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerListPage
 
     /** Archive a customer */
     @JvmOverloads
     fun archive(
         params: CustomerArchiveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerArchiveResponse
 
     /** Get all billable metrics for a given customer. */
     @JvmOverloads
     fun listBillableMetrics(
         params: CustomerListBillableMetricsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerListBillableMetricsPage
 
     /**
@@ -88,7 +88,7 @@ interface CustomerService {
     @JvmOverloads
     fun listCosts(
         params: CustomerListCostsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerListCostsPage
 
     /**
@@ -99,20 +99,20 @@ interface CustomerService {
     @JvmOverloads
     fun setIngestAliases(
         params: CustomerSetIngestAliasesParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     )
 
     /** Updates the specified customer's name. */
     @JvmOverloads
     fun setName(
         params: CustomerSetNameParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerSetNameResponse
 
     /** Updates the specified customer's config. */
     @JvmOverloads
     fun updateConfig(
         params: CustomerUpdateConfigParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     )
 }

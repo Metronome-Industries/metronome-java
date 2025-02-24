@@ -68,7 +68,9 @@ class ContractProductCreateParamsTest {
                 )
                 .addTag("string")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("My Product")
         assertThat(body.type()).isEqualTo(ContractProductCreateParams.Type.FIXED)
@@ -107,7 +109,9 @@ class ContractProductCreateParamsTest {
                 .name("My Product")
                 .type(ContractProductCreateParams.Type.FIXED)
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("My Product")
         assertThat(body.type()).isEqualTo(ContractProductCreateParams.Type.FIXED)

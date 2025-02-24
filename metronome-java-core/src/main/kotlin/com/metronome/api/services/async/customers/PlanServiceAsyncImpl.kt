@@ -23,10 +23,8 @@ import com.metronome.api.models.CustomerPlanListPriceAdjustmentsPageAsync
 import com.metronome.api.models.CustomerPlanListPriceAdjustmentsParams
 import java.util.concurrent.CompletableFuture
 
-class PlanServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : PlanServiceAsync {
+class PlanServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    PlanServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -37,7 +35,7 @@ internal constructor(
     /** List the given customer's plans in reverse-chronological order. */
     override fun list(
         params: CustomerPlanListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerPlanListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -70,7 +68,7 @@ internal constructor(
      */
     override fun add(
         params: CustomerPlanAddParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerPlanAddResponse> {
         val request =
             HttpRequest.builder()
@@ -99,7 +97,7 @@ internal constructor(
     /** Change the end date of a customer's plan. */
     override fun end(
         params: CustomerPlanEndParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerPlanEndResponse> {
         val request =
             HttpRequest.builder()
@@ -109,7 +107,7 @@ internal constructor(
                     params.getPathParam(0),
                     "plans",
                     params.getPathParam(1),
-                    "end"
+                    "end",
                 )
                 .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
@@ -139,7 +137,7 @@ internal constructor(
      */
     override fun listPriceAdjustments(
         params: CustomerPlanListPriceAdjustmentsParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerPlanListPriceAdjustmentsPageAsync> {
         val request =
             HttpRequest.builder()
@@ -149,7 +147,7 @@ internal constructor(
                     params.getPathParam(0),
                     "plans",
                     params.getPathParam(1),
-                    "priceAdjustments"
+                    "priceAdjustments",
                 )
                 .build()
                 .prepareAsync(clientOptions, params)

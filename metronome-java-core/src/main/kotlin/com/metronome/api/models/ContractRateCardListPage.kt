@@ -81,13 +81,8 @@ private constructor(
         fun of(
             rateCardsService: RateCardService,
             params: ContractRateCardListParams,
-            response: Response
-        ) =
-            ContractRateCardListPage(
-                rateCardsService,
-                params,
-                response,
-            )
+            response: Response,
+        ) = ContractRateCardListPage(rateCardsService, params, response)
     }
 
     @NoAutoDetect
@@ -175,18 +170,12 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    nextPage,
-                    data,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(nextPage, data, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: ContractRateCardListPage,
-    ) : Iterable<ContractRateCardListResponse> {
+    class AutoPager(private val firstPage: ContractRateCardListPage) :
+        Iterable<ContractRateCardListResponse> {
 
         override fun iterator(): Iterator<ContractRateCardListResponse> = iterator {
             var page = firstPage

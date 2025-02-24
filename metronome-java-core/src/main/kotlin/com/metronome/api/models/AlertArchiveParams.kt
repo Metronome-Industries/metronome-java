@@ -23,7 +23,7 @@ import java.util.Optional
 /** Archive an existing alert */
 class AlertArchiveParams
 private constructor(
-    private val body: AlertArchiveBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -46,16 +46,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): AlertArchiveBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class AlertArchiveBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("release_uniqueness_key")
         @ExcludeMissing
@@ -85,7 +85,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): AlertArchiveBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -102,7 +102,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [AlertArchiveBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -110,10 +110,10 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(alertArchiveBody: AlertArchiveBody) = apply {
-                id = alertArchiveBody.id
-                releaseUniquenessKey = alertArchiveBody.releaseUniquenessKey
-                additionalProperties = alertArchiveBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                id = body.id
+                releaseUniquenessKey = body.releaseUniquenessKey
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** The Metronome ID of the alert */
@@ -150,8 +150,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): AlertArchiveBody =
-                AlertArchiveBody(
+            fun build(): Body =
+                Body(
                     checkRequired("id", id),
                     releaseUniquenessKey,
                     additionalProperties.toImmutable(),
@@ -163,7 +163,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is AlertArchiveBody && id == other.id && releaseUniquenessKey == other.releaseUniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && id == other.id && releaseUniquenessKey == other.releaseUniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -173,7 +173,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "AlertArchiveBody{id=$id, releaseUniquenessKey=$releaseUniquenessKey, additionalProperties=$additionalProperties}"
+            "Body{id=$id, releaseUniquenessKey=$releaseUniquenessKey, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -187,7 +187,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: AlertArchiveBody.Builder = AlertArchiveBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

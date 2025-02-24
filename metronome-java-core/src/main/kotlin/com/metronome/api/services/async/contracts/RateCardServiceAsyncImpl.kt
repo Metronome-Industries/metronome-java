@@ -31,10 +31,8 @@ import com.metronome.api.services.async.contracts.rateCards.RateServiceAsync
 import com.metronome.api.services.async.contracts.rateCards.RateServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
-class RateCardServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : RateCardServiceAsync {
+class RateCardServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    RateCardServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -61,7 +59,7 @@ internal constructor(
     /** Create a new rate card */
     override fun create(
         params: ContractRateCardCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractRateCardCreateResponse> {
         val request =
             HttpRequest.builder()
@@ -93,7 +91,7 @@ internal constructor(
      */
     override fun retrieve(
         params: ContractRateCardRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractRateCardRetrieveResponse> {
         val request =
             HttpRequest.builder()
@@ -122,7 +120,7 @@ internal constructor(
     /** Update a rate card */
     override fun update(
         params: ContractRateCardUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractRateCardUpdateResponse> {
         val request =
             HttpRequest.builder()
@@ -154,7 +152,7 @@ internal constructor(
      */
     override fun list(
         params: ContractRateCardListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractRateCardListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -187,7 +185,7 @@ internal constructor(
      */
     override fun retrieveRateSchedule(
         params: ContractRateCardRetrieveRateScheduleParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractRateCardRetrieveRateScheduleResponse> {
         val request =
             HttpRequest.builder()

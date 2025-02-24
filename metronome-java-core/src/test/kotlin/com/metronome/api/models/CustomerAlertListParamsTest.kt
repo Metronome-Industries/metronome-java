@@ -11,8 +11,8 @@ class CustomerAlertListParamsTest {
     @Test
     fun create() {
         CustomerAlertListParams.builder()
-            .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
             .nextPage("next_page")
+            .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
             .addAlertStatus(CustomerAlertListParams.AlertStatus.ENABLED)
             .build()
     }
@@ -21,8 +21,8 @@ class CustomerAlertListParamsTest {
     fun queryParams() {
         val params =
             CustomerAlertListParams.builder()
-                .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .nextPage("next_page")
+                .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .addAlertStatus(CustomerAlertListParams.AlertStatus.ENABLED)
                 .build()
         val expected = QueryParams.builder()
@@ -44,11 +44,13 @@ class CustomerAlertListParamsTest {
     fun body() {
         val params =
             CustomerAlertListParams.builder()
-                .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .nextPage("next_page")
+                .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .addAlertStatus(CustomerAlertListParams.AlertStatus.ENABLED)
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.alertStatuses())
@@ -61,7 +63,9 @@ class CustomerAlertListParamsTest {
             CustomerAlertListParams.builder()
                 .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
     }

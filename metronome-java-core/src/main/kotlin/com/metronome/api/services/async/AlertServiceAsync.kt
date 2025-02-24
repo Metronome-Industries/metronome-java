@@ -17,13 +17,13 @@ interface AlertServiceAsync {
     @JvmOverloads
     fun create(
         params: AlertCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<AlertCreateResponse>
 
     /** Archive an existing alert */
     @JvmOverloads
     fun archive(
         params: AlertArchiveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<AlertArchiveResponse>
 }

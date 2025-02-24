@@ -22,7 +22,7 @@ import java.util.Objects
 /** Regenerate a voided contract invoice */
 class InvoiceRegenerateParams
 private constructor(
-    private val body: InvoiceRegenerateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -39,16 +39,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): InvoiceRegenerateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class InvoiceRegenerateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
@@ -66,7 +66,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): InvoiceRegenerateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -82,16 +82,16 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [InvoiceRegenerateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(invoiceRegenerateBody: InvoiceRegenerateBody) = apply {
-                id = invoiceRegenerateBody.id
-                additionalProperties = invoiceRegenerateBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                id = body.id
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** The invoice id to regenerate */
@@ -119,8 +119,7 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): InvoiceRegenerateBody =
-                InvoiceRegenerateBody(checkRequired("id", id), additionalProperties.toImmutable())
+            fun build(): Body = Body(checkRequired("id", id), additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -128,7 +127,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is InvoiceRegenerateBody && id == other.id && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && id == other.id && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -137,8 +136,7 @@ private constructor(
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "InvoiceRegenerateBody{id=$id, additionalProperties=$additionalProperties}"
+        override fun toString() = "Body{id=$id, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -152,7 +150,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: InvoiceRegenerateBody.Builder = InvoiceRegenerateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

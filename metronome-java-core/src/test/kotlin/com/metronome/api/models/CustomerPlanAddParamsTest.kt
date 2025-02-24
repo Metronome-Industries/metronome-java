@@ -87,7 +87,9 @@ class CustomerPlanAddParamsTest {
                         .build()
                 )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.planId()).isEqualTo("d2c06dae-9549-4d7d-bc04-b78dd3d241b8")
         assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
@@ -140,7 +142,9 @@ class CustomerPlanAddParamsTest {
                 .planId("d2c06dae-9549-4d7d-bc04-b78dd3d241b8")
                 .startingOn(OffsetDateTime.parse("2021-02-01T00:00:00Z"))
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.planId()).isEqualTo("d2c06dae-9549-4d7d-bc04-b78dd3d241b8")
         assertThat(body.startingOn()).isEqualTo(OffsetDateTime.parse("2021-02-01T00:00:00Z"))

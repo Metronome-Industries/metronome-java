@@ -27,7 +27,7 @@ import java.util.Optional
  */
 class CustomerNamedScheduleUpdateParams
 private constructor(
-    private val body: CustomerNamedScheduleUpdateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -64,16 +64,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomerNamedScheduleUpdateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class CustomerNamedScheduleUpdateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("customer_id")
         @ExcludeMissing
         private val customerId: JsonField<String> = JsonMissing.of(),
@@ -132,7 +132,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomerNamedScheduleUpdateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -151,7 +151,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomerNamedScheduleUpdateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
@@ -162,16 +162,14 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customerNamedScheduleUpdateBody: CustomerNamedScheduleUpdateBody) =
-                apply {
-                    customerId = customerNamedScheduleUpdateBody.customerId
-                    scheduleName = customerNamedScheduleUpdateBody.scheduleName
-                    startingAt = customerNamedScheduleUpdateBody.startingAt
-                    value = customerNamedScheduleUpdateBody.value
-                    endingBefore = customerNamedScheduleUpdateBody.endingBefore
-                    additionalProperties =
-                        customerNamedScheduleUpdateBody.additionalProperties.toMutableMap()
-                }
+            internal fun from(body: Body) = apply {
+                customerId = body.customerId
+                scheduleName = body.scheduleName
+                startingAt = body.startingAt
+                value = body.value
+                endingBefore = body.endingBefore
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
 
             /** ID of the customer whose named schedule is to be updated */
             fun customerId(customerId: String) = customerId(JsonField.of(customerId))
@@ -225,8 +223,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomerNamedScheduleUpdateBody =
-                CustomerNamedScheduleUpdateBody(
+            fun build(): Body =
+                Body(
                     checkRequired("customerId", customerId),
                     checkRequired("scheduleName", scheduleName),
                     checkRequired("startingAt", startingAt),
@@ -241,7 +239,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerNamedScheduleUpdateBody && customerId == other.customerId && scheduleName == other.scheduleName && startingAt == other.startingAt && value == other.value && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && customerId == other.customerId && scheduleName == other.scheduleName && startingAt == other.startingAt && value == other.value && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -251,7 +249,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerNamedScheduleUpdateBody{customerId=$customerId, scheduleName=$scheduleName, startingAt=$startingAt, value=$value, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
+            "Body{customerId=$customerId, scheduleName=$scheduleName, startingAt=$startingAt, value=$value, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -265,8 +263,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: CustomerNamedScheduleUpdateBody.Builder =
-            CustomerNamedScheduleUpdateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

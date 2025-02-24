@@ -16,13 +16,13 @@ interface InvoiceService {
     @JvmOverloads
     fun regenerate(
         params: InvoiceRegenerateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): InvoiceRegenerateResponse
 
     /** Void an invoice */
     @JvmOverloads
     fun void_(
         params: InvoiceVoidParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): InvoiceVoidResponse
 }

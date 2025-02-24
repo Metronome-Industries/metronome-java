@@ -18,10 +18,8 @@ import com.metronome.api.models.InvoiceRegenerateResponse
 import com.metronome.api.models.InvoiceVoidParams
 import com.metronome.api.models.InvoiceVoidResponse
 
-class InvoiceServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : InvoiceService {
+class InvoiceServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    InvoiceService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -32,7 +30,7 @@ internal constructor(
     /** Regenerate a voided contract invoice */
     override fun regenerate(
         params: InvoiceRegenerateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): InvoiceRegenerateResponse {
         val request =
             HttpRequest.builder()
@@ -57,7 +55,7 @@ internal constructor(
     /** Void an invoice */
     override fun void_(
         params: InvoiceVoidParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): InvoiceVoidResponse {
         val request =
             HttpRequest.builder()

@@ -46,7 +46,9 @@ class ContractProductListParamsTest {
                 .nextPage("next_page")
                 .archiveFilter(ContractProductListParams.ArchiveFilter.ARCHIVED)
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.archiveFilter()).contains(ContractProductListParams.ArchiveFilter.ARCHIVED)
     }
@@ -54,7 +56,9 @@ class ContractProductListParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params = ContractProductListParams.builder().build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
     }
 }

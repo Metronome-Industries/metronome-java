@@ -26,7 +26,7 @@ import java.util.Optional
 /** Creates historical usage invoices for a contract */
 class ContractCreateHistoricalInvoicesParams
 private constructor(
-    private val body: ContractCreateHistoricalInvoicesBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -45,16 +45,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractCreateHistoricalInvoicesBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class ContractCreateHistoricalInvoicesBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("invoices")
         @ExcludeMissing
         private val invoices: JsonField<List<Invoice>> = JsonMissing.of(),
@@ -81,7 +81,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractCreateHistoricalInvoicesBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -98,7 +98,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractCreateHistoricalInvoicesBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var invoices: JsonField<MutableList<Invoice>>? = null
@@ -106,13 +106,10 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(
-                contractCreateHistoricalInvoicesBody: ContractCreateHistoricalInvoicesBody
-            ) = apply {
-                invoices = contractCreateHistoricalInvoicesBody.invoices.map { it.toMutableList() }
-                preview = contractCreateHistoricalInvoicesBody.preview
-                additionalProperties =
-                    contractCreateHistoricalInvoicesBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                invoices = body.invoices.map { it.toMutableList() }
+                preview = body.preview
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun invoices(invoices: List<Invoice>) = invoices(JsonField.of(invoices))
@@ -157,8 +154,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractCreateHistoricalInvoicesBody =
-                ContractCreateHistoricalInvoicesBody(
+            fun build(): Body =
+                Body(
                     checkRequired("invoices", invoices).map { it.toImmutable() },
                     checkRequired("preview", preview),
                     additionalProperties.toImmutable(),
@@ -170,7 +167,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractCreateHistoricalInvoicesBody && invoices == other.invoices && preview == other.preview && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && invoices == other.invoices && preview == other.preview && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -180,7 +177,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractCreateHistoricalInvoicesBody{invoices=$invoices, preview=$preview, additionalProperties=$additionalProperties}"
+            "Body{invoices=$invoices, preview=$preview, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -194,8 +191,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: ContractCreateHistoricalInvoicesBody.Builder =
-            ContractCreateHistoricalInvoicesBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -854,7 +850,7 @@ private constructor(
             @JsonCreator
             private constructor(
                 @JsonAnySetter
-                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
             ) {
 
                 @JsonAnyGetter
@@ -938,7 +934,7 @@ private constructor(
             @JsonCreator
             private constructor(
                 @JsonAnySetter
-                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
             ) {
 
                 @JsonAnyGetter
@@ -1183,9 +1179,7 @@ private constructor(
         /** This field's availability is dependent on your client's configuration. */
         class BillableStatus
         @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -1261,7 +1255,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown BillableStatus: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1278,9 +1284,7 @@ private constructor(
 
         class BreakdownGranularity
         @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -1359,7 +1363,19 @@ private constructor(
                         throw MetronomeInvalidDataException("Unknown BreakdownGranularity: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1379,7 +1395,7 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
         ) {
 
             @JsonAnyGetter

@@ -20,10 +20,8 @@ import com.metronome.api.models.CustomerAlertResetParams
 import com.metronome.api.models.CustomerAlertRetrieveParams
 import com.metronome.api.models.CustomerAlertRetrieveResponse
 
-class AlertServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : AlertService {
+class AlertServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    AlertService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -34,7 +32,7 @@ internal constructor(
     /** Get the customer alert status and alert information for the specified customer and alert */
     override fun retrieve(
         params: CustomerAlertRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerAlertRetrieveResponse {
         val request =
             HttpRequest.builder()
@@ -60,7 +58,7 @@ internal constructor(
     /** Fetch all customer alert statuses and alert information for a customer */
     override fun list(
         params: CustomerAlertListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerAlertListResponse {
         val request =
             HttpRequest.builder()

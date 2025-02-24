@@ -24,7 +24,7 @@ import java.util.Optional
 /** List all contracts for a customer */
 class ContractListParams
 private constructor(
-    private val body: ContractListBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -93,16 +93,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractListBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class ContractListBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("customer_id")
         @ExcludeMissing
         private val customerId: JsonField<String> = JsonMissing.of(),
@@ -210,7 +210,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractListBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -231,7 +231,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractListBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
@@ -243,14 +243,14 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(contractListBody: ContractListBody) = apply {
-                customerId = contractListBody.customerId
-                coveringDate = contractListBody.coveringDate
-                includeArchived = contractListBody.includeArchived
-                includeBalance = contractListBody.includeBalance
-                includeLedgers = contractListBody.includeLedgers
-                startingAt = contractListBody.startingAt
-                additionalProperties = contractListBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                customerId = body.customerId
+                coveringDate = body.coveringDate
+                includeArchived = body.includeArchived
+                includeBalance = body.includeBalance
+                includeLedgers = body.includeLedgers
+                startingAt = body.startingAt
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun customerId(customerId: String) = customerId(JsonField.of(customerId))
@@ -348,8 +348,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractListBody =
-                ContractListBody(
+            fun build(): Body =
+                Body(
                     checkRequired("customerId", customerId),
                     coveringDate,
                     includeArchived,
@@ -365,7 +365,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractListBody && customerId == other.customerId && coveringDate == other.coveringDate && includeArchived == other.includeArchived && includeBalance == other.includeBalance && includeLedgers == other.includeLedgers && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && customerId == other.customerId && coveringDate == other.coveringDate && includeArchived == other.includeArchived && includeBalance == other.includeBalance && includeLedgers == other.includeLedgers && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -375,7 +375,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractListBody{customerId=$customerId, coveringDate=$coveringDate, includeArchived=$includeArchived, includeBalance=$includeBalance, includeLedgers=$includeLedgers, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+            "Body{customerId=$customerId, coveringDate=$coveringDate, includeArchived=$includeArchived, includeBalance=$includeBalance, includeLedgers=$includeLedgers, startingAt=$startingAt, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -389,7 +389,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: ContractListBody.Builder = ContractListBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

@@ -21,7 +21,7 @@ interface UsageServiceAsync {
     @JvmOverloads
     fun list(
         params: UsageListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<UsageListResponse>
 
     /**
@@ -34,7 +34,7 @@ interface UsageServiceAsync {
     @JvmOverloads
     fun ingest(
         params: UsageIngestParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
     /**
@@ -44,6 +44,6 @@ interface UsageServiceAsync {
     @JvmOverloads
     fun listWithGroups(
         params: UsageListWithGroupsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<UsageListWithGroupsPageAsync>
 }

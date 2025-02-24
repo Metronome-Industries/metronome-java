@@ -27,7 +27,7 @@ import java.util.Optional
  */
 class ContractScheduleProServicesInvoiceParams
 private constructor(
-    private val body: ContractScheduleProServicesInvoiceBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -71,16 +71,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractScheduleProServicesInvoiceBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class ContractScheduleProServicesInvoiceBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("contract_id")
         @ExcludeMissing
         private val contractId: JsonField<String> = JsonMissing.of(),
@@ -157,7 +157,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractScheduleProServicesInvoiceBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -178,7 +178,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractScheduleProServicesInvoiceBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
@@ -190,20 +190,14 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(
-                contractScheduleProServicesInvoiceBody: ContractScheduleProServicesInvoiceBody
-            ) = apply {
-                contractId = contractScheduleProServicesInvoiceBody.contractId
-                customerId = contractScheduleProServicesInvoiceBody.customerId
-                issuedAt = contractScheduleProServicesInvoiceBody.issuedAt
-                lineItems =
-                    contractScheduleProServicesInvoiceBody.lineItems.map { it.toMutableList() }
-                netsuiteInvoiceHeaderEnd =
-                    contractScheduleProServicesInvoiceBody.netsuiteInvoiceHeaderEnd
-                netsuiteInvoiceHeaderStart =
-                    contractScheduleProServicesInvoiceBody.netsuiteInvoiceHeaderStart
-                additionalProperties =
-                    contractScheduleProServicesInvoiceBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                contractId = body.contractId
+                customerId = body.customerId
+                issuedAt = body.issuedAt
+                lineItems = body.lineItems.map { it.toMutableList() }
+                netsuiteInvoiceHeaderEnd = body.netsuiteInvoiceHeaderEnd
+                netsuiteInvoiceHeaderStart = body.netsuiteInvoiceHeaderStart
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun contractId(contractId: String) = contractId(JsonField.of(contractId))
@@ -281,8 +275,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractScheduleProServicesInvoiceBody =
-                ContractScheduleProServicesInvoiceBody(
+            fun build(): Body =
+                Body(
                     checkRequired("contractId", contractId),
                     checkRequired("customerId", customerId),
                     checkRequired("issuedAt", issuedAt),
@@ -298,7 +292,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractScheduleProServicesInvoiceBody && contractId == other.contractId && customerId == other.customerId && issuedAt == other.issuedAt && lineItems == other.lineItems && netsuiteInvoiceHeaderEnd == other.netsuiteInvoiceHeaderEnd && netsuiteInvoiceHeaderStart == other.netsuiteInvoiceHeaderStart && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && contractId == other.contractId && customerId == other.customerId && issuedAt == other.issuedAt && lineItems == other.lineItems && netsuiteInvoiceHeaderEnd == other.netsuiteInvoiceHeaderEnd && netsuiteInvoiceHeaderStart == other.netsuiteInvoiceHeaderStart && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -308,7 +302,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractScheduleProServicesInvoiceBody{contractId=$contractId, customerId=$customerId, issuedAt=$issuedAt, lineItems=$lineItems, netsuiteInvoiceHeaderEnd=$netsuiteInvoiceHeaderEnd, netsuiteInvoiceHeaderStart=$netsuiteInvoiceHeaderStart, additionalProperties=$additionalProperties}"
+            "Body{contractId=$contractId, customerId=$customerId, issuedAt=$issuedAt, lineItems=$lineItems, netsuiteInvoiceHeaderEnd=$netsuiteInvoiceHeaderEnd, netsuiteInvoiceHeaderStart=$netsuiteInvoiceHeaderStart, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -322,8 +316,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: ContractScheduleProServicesInvoiceBody.Builder =
-            ContractScheduleProServicesInvoiceBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

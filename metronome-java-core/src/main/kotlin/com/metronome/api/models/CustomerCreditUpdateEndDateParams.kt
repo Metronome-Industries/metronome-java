@@ -23,7 +23,7 @@ import java.util.Objects
 /** Update the end date of a credit */
 class CustomerCreditUpdateEndDateParams
 private constructor(
-    private val body: CustomerCreditUpdateEndDateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -58,16 +58,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomerCreditUpdateEndDateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class CustomerCreditUpdateEndDateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("access_ending_before")
         @ExcludeMissing
         private val accessEndingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -116,7 +116,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomerCreditUpdateEndDateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -134,7 +134,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomerCreditUpdateEndDateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var accessEndingBefore: JsonField<OffsetDateTime>? = null
@@ -143,14 +143,12 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customerCreditUpdateEndDateBody: CustomerCreditUpdateEndDateBody) =
-                apply {
-                    accessEndingBefore = customerCreditUpdateEndDateBody.accessEndingBefore
-                    creditId = customerCreditUpdateEndDateBody.creditId
-                    customerId = customerCreditUpdateEndDateBody.customerId
-                    additionalProperties =
-                        customerCreditUpdateEndDateBody.additionalProperties.toMutableMap()
-                }
+            internal fun from(body: Body) = apply {
+                accessEndingBefore = body.accessEndingBefore
+                creditId = body.creditId
+                customerId = body.customerId
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
 
             /**
              * RFC 3339 timestamp indicating when access to the credit will end and it will no
@@ -198,8 +196,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomerCreditUpdateEndDateBody =
-                CustomerCreditUpdateEndDateBody(
+            fun build(): Body =
+                Body(
                     checkRequired("accessEndingBefore", accessEndingBefore),
                     checkRequired("creditId", creditId),
                     checkRequired("customerId", customerId),
@@ -212,7 +210,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerCreditUpdateEndDateBody && accessEndingBefore == other.accessEndingBefore && creditId == other.creditId && customerId == other.customerId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && accessEndingBefore == other.accessEndingBefore && creditId == other.creditId && customerId == other.customerId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -222,7 +220,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerCreditUpdateEndDateBody{accessEndingBefore=$accessEndingBefore, creditId=$creditId, customerId=$customerId, additionalProperties=$additionalProperties}"
+            "Body{accessEndingBefore=$accessEndingBefore, creditId=$creditId, customerId=$customerId, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -236,8 +234,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: CustomerCreditUpdateEndDateBody.Builder =
-            CustomerCreditUpdateEndDateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

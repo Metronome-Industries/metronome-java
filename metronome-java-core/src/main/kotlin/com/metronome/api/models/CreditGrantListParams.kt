@@ -25,7 +25,7 @@ class CreditGrantListParams
 private constructor(
     private val limit: Long?,
     private val nextPage: String?,
-    private val body: CreditGrantListBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -84,7 +84,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CreditGrantListBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -97,9 +97,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class CreditGrantListBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("credit_grant_ids")
         @ExcludeMissing
         private val creditGrantIds: JsonField<List<String>> = JsonMissing.of(),
@@ -186,7 +186,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CreditGrantListBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -206,7 +206,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CreditGrantListBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var creditGrantIds: JsonField<MutableList<String>>? = null
@@ -217,13 +217,13 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(creditGrantListBody: CreditGrantListBody) = apply {
-                creditGrantIds = creditGrantListBody.creditGrantIds.map { it.toMutableList() }
-                creditTypeIds = creditGrantListBody.creditTypeIds.map { it.toMutableList() }
-                customerIds = creditGrantListBody.customerIds.map { it.toMutableList() }
-                effectiveBefore = creditGrantListBody.effectiveBefore
-                notExpiringBefore = creditGrantListBody.notExpiringBefore
-                additionalProperties = creditGrantListBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                creditGrantIds = body.creditGrantIds.map { it.toMutableList() }
+                creditTypeIds = body.creditTypeIds.map { it.toMutableList() }
+                customerIds = body.customerIds.map { it.toMutableList() }
+                effectiveBefore = body.effectiveBefore
+                notExpiringBefore = body.notExpiringBefore
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /**
@@ -358,8 +358,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CreditGrantListBody =
-                CreditGrantListBody(
+            fun build(): Body =
+                Body(
                     (creditGrantIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (creditTypeIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (customerIds ?: JsonMissing.of()).map { it.toImmutable() },
@@ -374,7 +374,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CreditGrantListBody && creditGrantIds == other.creditGrantIds && creditTypeIds == other.creditTypeIds && customerIds == other.customerIds && effectiveBefore == other.effectiveBefore && notExpiringBefore == other.notExpiringBefore && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && creditGrantIds == other.creditGrantIds && creditTypeIds == other.creditTypeIds && customerIds == other.customerIds && effectiveBefore == other.effectiveBefore && notExpiringBefore == other.notExpiringBefore && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -384,7 +384,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CreditGrantListBody{creditGrantIds=$creditGrantIds, creditTypeIds=$creditTypeIds, customerIds=$customerIds, effectiveBefore=$effectiveBefore, notExpiringBefore=$notExpiringBefore, additionalProperties=$additionalProperties}"
+            "Body{creditGrantIds=$creditGrantIds, creditTypeIds=$creditTypeIds, customerIds=$customerIds, effectiveBefore=$effectiveBefore, notExpiringBefore=$notExpiringBefore, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -400,7 +400,7 @@ private constructor(
 
         private var limit: Long? = null
         private var nextPage: String? = null
-        private var body: CreditGrantListBody.Builder = CreditGrantListBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

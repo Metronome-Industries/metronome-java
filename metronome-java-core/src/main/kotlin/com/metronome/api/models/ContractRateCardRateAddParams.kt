@@ -26,7 +26,7 @@ import java.util.Optional
 /** Add a new rate */
 class ContractRateCardRateAddParams
 private constructor(
-    private val body: ContractRateCardRateAddBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -157,16 +157,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractRateCardRateAddBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class ContractRateCardRateAddBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("entitled")
         @ExcludeMissing
         private val entitled: JsonField<Boolean> = JsonMissing.of(),
@@ -371,7 +371,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractRateCardRateAddBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -401,7 +401,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractRateCardRateAddBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var entitled: JsonField<Boolean>? = null
@@ -422,24 +422,23 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(contractRateCardRateAddBody: ContractRateCardRateAddBody) = apply {
-                entitled = contractRateCardRateAddBody.entitled
-                productId = contractRateCardRateAddBody.productId
-                rateCardId = contractRateCardRateAddBody.rateCardId
-                rateType = contractRateCardRateAddBody.rateType
-                startingAt = contractRateCardRateAddBody.startingAt
-                commitRate = contractRateCardRateAddBody.commitRate
-                creditTypeId = contractRateCardRateAddBody.creditTypeId
-                customRate = contractRateCardRateAddBody.customRate
-                endingBefore = contractRateCardRateAddBody.endingBefore
-                isProrated = contractRateCardRateAddBody.isProrated
-                price = contractRateCardRateAddBody.price
-                pricingGroupValues = contractRateCardRateAddBody.pricingGroupValues
-                quantity = contractRateCardRateAddBody.quantity
-                tiers = contractRateCardRateAddBody.tiers.map { it.toMutableList() }
-                useListPrices = contractRateCardRateAddBody.useListPrices
-                additionalProperties =
-                    contractRateCardRateAddBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                entitled = body.entitled
+                productId = body.productId
+                rateCardId = body.rateCardId
+                rateType = body.rateType
+                startingAt = body.startingAt
+                commitRate = body.commitRate
+                creditTypeId = body.creditTypeId
+                customRate = body.customRate
+                endingBefore = body.endingBefore
+                isProrated = body.isProrated
+                price = body.price
+                pricingGroupValues = body.pricingGroupValues
+                quantity = body.quantity
+                tiers = body.tiers.map { it.toMutableList() }
+                useListPrices = body.useListPrices
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun entitled(entitled: Boolean) = entitled(JsonField.of(entitled))
@@ -623,8 +622,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractRateCardRateAddBody =
-                ContractRateCardRateAddBody(
+            fun build(): Body =
+                Body(
                     checkRequired("entitled", entitled),
                     checkRequired("productId", productId),
                     checkRequired("rateCardId", rateCardId),
@@ -649,7 +648,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractRateCardRateAddBody && entitled == other.entitled && productId == other.productId && rateCardId == other.rateCardId && rateType == other.rateType && startingAt == other.startingAt && commitRate == other.commitRate && creditTypeId == other.creditTypeId && customRate == other.customRate && endingBefore == other.endingBefore && isProrated == other.isProrated && price == other.price && pricingGroupValues == other.pricingGroupValues && quantity == other.quantity && tiers == other.tiers && useListPrices == other.useListPrices && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && entitled == other.entitled && productId == other.productId && rateCardId == other.rateCardId && rateType == other.rateType && startingAt == other.startingAt && commitRate == other.commitRate && creditTypeId == other.creditTypeId && customRate == other.customRate && endingBefore == other.endingBefore && isProrated == other.isProrated && price == other.price && pricingGroupValues == other.pricingGroupValues && quantity == other.quantity && tiers == other.tiers && useListPrices == other.useListPrices && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -659,7 +658,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractRateCardRateAddBody{entitled=$entitled, productId=$productId, rateCardId=$rateCardId, rateType=$rateType, startingAt=$startingAt, commitRate=$commitRate, creditTypeId=$creditTypeId, customRate=$customRate, endingBefore=$endingBefore, isProrated=$isProrated, price=$price, pricingGroupValues=$pricingGroupValues, quantity=$quantity, tiers=$tiers, useListPrices=$useListPrices, additionalProperties=$additionalProperties}"
+            "Body{entitled=$entitled, productId=$productId, rateCardId=$rateCardId, rateType=$rateType, startingAt=$startingAt, commitRate=$commitRate, creditTypeId=$creditTypeId, customRate=$customRate, endingBefore=$endingBefore, isProrated=$isProrated, price=$price, pricingGroupValues=$pricingGroupValues, quantity=$quantity, tiers=$tiers, useListPrices=$useListPrices, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -673,8 +672,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: ContractRateCardRateAddBody.Builder =
-            ContractRateCardRateAddBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -949,11 +947,7 @@ private constructor(
             )
     }
 
-    class RateType
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class RateType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -1044,7 +1038,19 @@ private constructor(
                 else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1196,11 +1202,8 @@ private constructor(
                 )
         }
 
-        class RateType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class RateType @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -1293,7 +1296,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1332,7 +1347,7 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
     ) {
 
         @JsonAnyGetter
@@ -1413,7 +1428,7 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
     ) {
 
         @JsonAnyGetter

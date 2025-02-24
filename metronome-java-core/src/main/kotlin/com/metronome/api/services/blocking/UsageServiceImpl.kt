@@ -20,10 +20,8 @@ import com.metronome.api.models.UsageListResponse
 import com.metronome.api.models.UsageListWithGroupsPage
 import com.metronome.api.models.UsageListWithGroupsParams
 
-class UsageServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : UsageService {
+class UsageServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    UsageService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -83,7 +81,7 @@ internal constructor(
      */
     override fun listWithGroups(
         params: UsageListWithGroupsParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): UsageListWithGroupsPage {
         val request =
             HttpRequest.builder()

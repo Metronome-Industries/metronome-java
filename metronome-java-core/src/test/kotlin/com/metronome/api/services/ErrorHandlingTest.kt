@@ -1887,7 +1887,7 @@ class ErrorHandlingTest {
                 assertPermissionDenied(
                     e,
                     Headers.builder().put("Foo", "Bar").build(),
-                    METRONOME_ERROR
+                    METRONOME_ERROR,
                 )
             })
     }
@@ -2807,7 +2807,7 @@ class ErrorHandlingTest {
                 assertUnprocessableEntity(
                     e,
                     Headers.builder().put("Foo", "Bar").build(),
-                    METRONOME_ERROR
+                    METRONOME_ERROR,
                 )
             })
     }
@@ -3727,7 +3727,7 @@ class ErrorHandlingTest {
                 assertInternalServer(
                     e,
                     Headers.builder().put("Foo", "Bar").build(),
-                    METRONOME_ERROR
+                    METRONOME_ERROR,
                 )
             })
     }
@@ -4190,7 +4190,7 @@ class ErrorHandlingTest {
                     e,
                     999,
                     Headers.builder().put("Foo", "Bar").build(),
-                    toJson(METRONOME_ERROR)
+                    toJson(METRONOME_ERROR),
                 )
             })
     }
@@ -5115,7 +5115,7 @@ class ErrorHandlingTest {
         throwable: Throwable,
         statusCode: Int,
         headers: Headers,
-        responseBody: ByteArray
+        responseBody: ByteArray,
     ) {
         assertThat(throwable)
             .asInstanceOf(
@@ -5151,7 +5151,7 @@ class ErrorHandlingTest {
     private fun assertPermissionDenied(
         throwable: Throwable,
         headers: Headers,
-        error: MetronomeError
+        error: MetronomeError,
     ) {
         assertThat(throwable)
             .asInstanceOf(
@@ -5177,7 +5177,7 @@ class ErrorHandlingTest {
     private fun assertUnprocessableEntity(
         throwable: Throwable,
         headers: Headers,
-        error: MetronomeError
+        error: MetronomeError,
     ) {
         assertThat(throwable)
             .asInstanceOf(
@@ -5203,7 +5203,7 @@ class ErrorHandlingTest {
     private fun assertInternalServer(
         throwable: Throwable,
         headers: Headers,
-        error: MetronomeError
+        error: MetronomeError,
     ) {
         assertThat(throwable)
             .asInstanceOf(InstanceOfAssertFactories.throwable(InternalServerException::class.java))

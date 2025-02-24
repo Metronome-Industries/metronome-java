@@ -19,6 +19,6 @@ interface ServiceServiceAsync {
     @JvmOverloads
     fun list(
         params: ServiceListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ServiceListResponse>
 }

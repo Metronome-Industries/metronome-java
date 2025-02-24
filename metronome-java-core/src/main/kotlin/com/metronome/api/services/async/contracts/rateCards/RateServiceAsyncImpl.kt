@@ -21,10 +21,8 @@ import com.metronome.api.models.ContractRateCardRateListPageAsync
 import com.metronome.api.models.ContractRateCardRateListParams
 import java.util.concurrent.CompletableFuture
 
-class RateServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : RateServiceAsync {
+class RateServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    RateServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -35,7 +33,7 @@ internal constructor(
     /** Get all rates for a rate card at a point in time */
     override fun list(
         params: ContractRateCardRateListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractRateCardRateListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -65,7 +63,7 @@ internal constructor(
     /** Add a new rate */
     override fun add(
         params: ContractRateCardRateAddParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractRateCardRateAddResponse> {
         val request =
             HttpRequest.builder()
@@ -94,7 +92,7 @@ internal constructor(
     /** Add new rates */
     override fun addMany(
         params: ContractRateCardRateAddManyParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractRateCardRateAddManyResponse> {
         val request =
             HttpRequest.builder()

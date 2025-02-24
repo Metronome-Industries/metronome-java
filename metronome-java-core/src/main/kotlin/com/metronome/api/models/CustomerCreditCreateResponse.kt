@@ -88,7 +88,7 @@ private constructor(
         fun build(): CustomerCreditCreateResponse =
             CustomerCreditCreateResponse(
                 checkRequired("data", data),
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

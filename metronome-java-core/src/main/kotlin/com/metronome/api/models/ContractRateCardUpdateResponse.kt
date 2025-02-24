@@ -89,7 +89,7 @@ private constructor(
         fun build(): ContractRateCardUpdateResponse =
             ContractRateCardUpdateResponse(
                 checkRequired("data", data),
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

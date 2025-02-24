@@ -14,6 +14,7 @@ import com.metronome.api.models.CustomerRetrieveParams
 import com.metronome.api.models.CustomerSetIngestAliasesParams
 import com.metronome.api.models.CustomerSetNameParams
 import com.metronome.api.models.CustomerUpdateConfigParams
+import com.metronome.api.models.Id
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -67,11 +68,11 @@ class CustomerServiceTest {
                                     .builder()
                                     .putAdditionalProperty(
                                         "stripe_customer_id",
-                                        JsonValue.from("bar")
+                                        JsonValue.from("bar"),
                                     )
                                     .putAdditionalProperty(
                                         "stripe_collection_method",
-                                        JsonValue.from("bar")
+                                        JsonValue.from("bar"),
                                     )
                                     .build()
                             )
@@ -132,7 +133,9 @@ class CustomerServiceTest {
         val customerService = client.customers()
         val customerArchiveResponse =
             customerService.archive(
-                CustomerArchiveParams.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build()
+                CustomerArchiveParams.builder()
+                    .id(Id.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build())
+                    .build()
             )
         println(customerArchiveResponse)
         customerArchiveResponse.validate()

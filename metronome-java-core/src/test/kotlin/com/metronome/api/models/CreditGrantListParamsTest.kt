@@ -62,7 +62,9 @@ class CreditGrantListParamsTest {
                 .effectiveBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .notExpiringBefore(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.creditGrantIds()).contains(listOf("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"))
         assertThat(body.creditTypeIds()).contains(listOf("2714e483-4ff1-48e4-9e25-ac732e8f24f2"))
@@ -70,7 +72,7 @@ class CreditGrantListParamsTest {
             .contains(
                 listOf(
                     "d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc",
-                    "0e5b8609-d901-4992-b394-c3c2e3f37b1c"
+                    "0e5b8609-d901-4992-b394-c3c2e3f37b1c",
                 )
             )
         assertThat(body.effectiveBefore()).contains(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
@@ -80,7 +82,9 @@ class CreditGrantListParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params = CreditGrantListParams.builder().build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
     }
 }

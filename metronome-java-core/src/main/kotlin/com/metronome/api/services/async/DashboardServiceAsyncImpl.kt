@@ -17,10 +17,8 @@ import com.metronome.api.models.DashboardGetEmbeddableUrlParams
 import com.metronome.api.models.DashboardGetEmbeddableUrlResponse
 import java.util.concurrent.CompletableFuture
 
-class DashboardServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : DashboardServiceAsync {
+class DashboardServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    DashboardServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -34,7 +32,7 @@ internal constructor(
      */
     override fun getEmbeddableUrl(
         params: DashboardGetEmbeddableUrlParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<DashboardGetEmbeddableUrlResponse> {
         val request =
             HttpRequest.builder()

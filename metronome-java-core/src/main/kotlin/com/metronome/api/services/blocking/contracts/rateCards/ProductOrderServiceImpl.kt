@@ -18,10 +18,8 @@ import com.metronome.api.models.ContractRateCardProductOrderSetResponse
 import com.metronome.api.models.ContractRateCardProductOrderUpdateParams
 import com.metronome.api.models.ContractRateCardProductOrderUpdateResponse
 
-class ProductOrderServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : ProductOrderService {
+class ProductOrderServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    ProductOrderService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -32,7 +30,7 @@ internal constructor(
     /** Updates ordering of specified products */
     override fun update(
         params: ContractRateCardProductOrderUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): ContractRateCardProductOrderUpdateResponse {
         val request =
             HttpRequest.builder()
@@ -58,7 +56,7 @@ internal constructor(
     /** Sets the ordering of products within a rate card */
     override fun set(
         params: ContractRateCardProductOrderSetParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): ContractRateCardProductOrderSetResponse {
         val request =
             HttpRequest.builder()

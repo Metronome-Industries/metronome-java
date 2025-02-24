@@ -18,20 +18,20 @@ interface RateService {
     @JvmOverloads
     fun list(
         params: ContractRateCardRateListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ContractRateCardRateListPage
 
     /** Add a new rate */
     @JvmOverloads
     fun add(
         params: ContractRateCardRateAddParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ContractRateCardRateAddResponse
 
     /** Add new rates */
     @JvmOverloads
     fun addMany(
         params: ContractRateCardRateAddManyParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ContractRateCardRateAddManyResponse
 }

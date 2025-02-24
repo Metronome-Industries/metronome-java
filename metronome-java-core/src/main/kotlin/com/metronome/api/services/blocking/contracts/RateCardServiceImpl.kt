@@ -30,10 +30,8 @@ import com.metronome.api.services.blocking.contracts.rateCards.ProductOrderServi
 import com.metronome.api.services.blocking.contracts.rateCards.RateService
 import com.metronome.api.services.blocking.contracts.rateCards.RateServiceImpl
 
-class RateCardServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : RateCardService {
+class RateCardServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    RateCardService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -60,7 +58,7 @@ internal constructor(
     /** Create a new rate card */
     override fun create(
         params: ContractRateCardCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): ContractRateCardCreateResponse {
         val request =
             HttpRequest.builder()
@@ -89,7 +87,7 @@ internal constructor(
      */
     override fun retrieve(
         params: ContractRateCardRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): ContractRateCardRetrieveResponse {
         val request =
             HttpRequest.builder()
@@ -115,7 +113,7 @@ internal constructor(
     /** Update a rate card */
     override fun update(
         params: ContractRateCardUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): ContractRateCardUpdateResponse {
         val request =
             HttpRequest.builder()
@@ -144,7 +142,7 @@ internal constructor(
      */
     override fun list(
         params: ContractRateCardListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): ContractRateCardListPage {
         val request =
             HttpRequest.builder()
@@ -174,7 +172,7 @@ internal constructor(
      */
     override fun retrieveRateSchedule(
         params: ContractRateCardRetrieveRateScheduleParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): ContractRateCardRetrieveRateScheduleResponse {
         val request =
             HttpRequest.builder()

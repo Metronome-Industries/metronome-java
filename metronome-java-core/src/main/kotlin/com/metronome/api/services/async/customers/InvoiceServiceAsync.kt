@@ -21,7 +21,7 @@ interface InvoiceServiceAsync {
     @JvmOverloads
     fun retrieve(
         params: CustomerInvoiceRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerInvoiceRetrieveResponse>
 
     /**
@@ -31,14 +31,14 @@ interface InvoiceServiceAsync {
     @JvmOverloads
     fun list(
         params: CustomerInvoiceListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerInvoiceListPageAsync>
 
     /** Add a one time charge to the specified invoice */
     @JvmOverloads
     fun addCharge(
         params: CustomerInvoiceAddChargeParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerInvoiceAddChargeResponse>
 
     /**
@@ -48,6 +48,6 @@ interface InvoiceServiceAsync {
     @JvmOverloads
     fun listBreakdowns(
         params: CustomerInvoiceListBreakdownsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerInvoiceListBreakdownsPageAsync>
 }

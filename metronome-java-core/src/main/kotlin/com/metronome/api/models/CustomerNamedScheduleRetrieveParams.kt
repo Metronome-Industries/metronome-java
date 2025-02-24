@@ -27,7 +27,7 @@ import java.util.Optional
  */
 class CustomerNamedScheduleRetrieveParams
 private constructor(
-    private val body: CustomerNamedScheduleRetrieveBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -62,16 +62,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomerNamedScheduleRetrieveBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class CustomerNamedScheduleRetrieveBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("customer_id")
         @ExcludeMissing
         private val customerId: JsonField<String> = JsonMissing.of(),
@@ -122,7 +122,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomerNamedScheduleRetrieveBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -140,7 +140,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomerNamedScheduleRetrieveBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
@@ -149,14 +149,11 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(
-                customerNamedScheduleRetrieveBody: CustomerNamedScheduleRetrieveBody
-            ) = apply {
-                customerId = customerNamedScheduleRetrieveBody.customerId
-                scheduleName = customerNamedScheduleRetrieveBody.scheduleName
-                coveringDate = customerNamedScheduleRetrieveBody.coveringDate
-                additionalProperties =
-                    customerNamedScheduleRetrieveBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                customerId = body.customerId
+                scheduleName = body.scheduleName
+                coveringDate = body.coveringDate
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** ID of the customer whose named schedule is to be retrieved */
@@ -207,8 +204,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomerNamedScheduleRetrieveBody =
-                CustomerNamedScheduleRetrieveBody(
+            fun build(): Body =
+                Body(
                     checkRequired("customerId", customerId),
                     checkRequired("scheduleName", scheduleName),
                     coveringDate,
@@ -221,7 +218,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerNamedScheduleRetrieveBody && customerId == other.customerId && scheduleName == other.scheduleName && coveringDate == other.coveringDate && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && customerId == other.customerId && scheduleName == other.scheduleName && coveringDate == other.coveringDate && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -231,7 +228,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerNamedScheduleRetrieveBody{customerId=$customerId, scheduleName=$scheduleName, coveringDate=$coveringDate, additionalProperties=$additionalProperties}"
+            "Body{customerId=$customerId, scheduleName=$scheduleName, coveringDate=$coveringDate, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -245,8 +242,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: CustomerNamedScheduleRetrieveBody.Builder =
-            CustomerNamedScheduleRetrieveBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

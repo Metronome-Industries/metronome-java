@@ -15,10 +15,8 @@ import com.metronome.api.errors.MetronomeError
 import com.metronome.api.models.PricingUnitListPage
 import com.metronome.api.models.PricingUnitListParams
 
-class PricingUnitServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : PricingUnitService {
+class PricingUnitServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    PricingUnitService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -29,7 +27,7 @@ internal constructor(
     /** List all pricing units (known in the API by the legacy term "credit types"). */
     override fun list(
         params: PricingUnitListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): PricingUnitListPage {
         val request =
             HttpRequest.builder()

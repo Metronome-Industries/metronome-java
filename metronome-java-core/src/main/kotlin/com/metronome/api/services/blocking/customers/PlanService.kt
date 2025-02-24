@@ -20,7 +20,7 @@ interface PlanService {
     @JvmOverloads
     fun list(
         params: CustomerPlanListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerPlanListPage
 
     /**
@@ -31,14 +31,14 @@ interface PlanService {
     @JvmOverloads
     fun add(
         params: CustomerPlanAddParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerPlanAddResponse
 
     /** Change the end date of a customer's plan. */
     @JvmOverloads
     fun end(
         params: CustomerPlanEndParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerPlanEndResponse
 
     /**
@@ -49,6 +49,6 @@ interface PlanService {
     @JvmOverloads
     fun listPriceAdjustments(
         params: CustomerPlanListPriceAdjustmentsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerPlanListPriceAdjustmentsPage
 }

@@ -30,7 +30,9 @@ class CustomerNamedScheduleUpdateParamsTest {
                 .value(JsonValue.from(mapOf("my_key" to "my_value")))
                 .endingBefore(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.scheduleName()).isEqualTo("my-schedule")
@@ -48,7 +50,9 @@ class CustomerNamedScheduleUpdateParamsTest {
                 .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .value(JsonValue.from(mapOf("my_key" to "my_value")))
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.scheduleName()).isEqualTo("my-schedule")

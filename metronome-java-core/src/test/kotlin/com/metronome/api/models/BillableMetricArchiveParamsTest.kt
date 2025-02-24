@@ -9,24 +9,34 @@ class BillableMetricArchiveParamsTest {
 
     @Test
     fun create() {
-        BillableMetricArchiveParams.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build()
+        BillableMetricArchiveParams.builder()
+            .id(Id.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build())
+            .build()
     }
 
     @Test
     fun body() {
         val params =
-            BillableMetricArchiveParams.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build()
+            BillableMetricArchiveParams.builder()
+                .id(Id.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build())
+                .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("8deed800-1b7a-495d-a207-6c52bac54dc9")
+        assertThat(body).isEqualTo(Id.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build())
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
         val params =
-            BillableMetricArchiveParams.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build()
+            BillableMetricArchiveParams.builder()
+                .id(Id.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build())
+                .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("8deed800-1b7a-495d-a207-6c52bac54dc9")
+        assertThat(body).isEqualTo(Id.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build())
     }
 }

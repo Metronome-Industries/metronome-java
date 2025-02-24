@@ -82,13 +82,8 @@ private constructor(
         fun of(
             ratesService: RateServiceAsync,
             params: ContractRateCardRateListParams,
-            response: Response
-        ) =
-            ContractRateCardRateListPageAsync(
-                ratesService,
-                params,
-                response,
-            )
+            response: Response,
+        ) = ContractRateCardRateListPageAsync(ratesService, params, response)
     }
 
     @NoAutoDetect
@@ -176,26 +171,19 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    nextPage,
-                    data,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(nextPage, data, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: ContractRateCardRateListPageAsync,
-    ) {
+    class AutoPager(private val firstPage: ContractRateCardRateListPageAsync) {
 
         fun forEach(
             action: Predicate<ContractRateCardRateListResponse>,
-            executor: Executor
+            executor: Executor,
         ): CompletableFuture<Void> {
             fun CompletableFuture<Optional<ContractRateCardRateListPageAsync>>.forEach(
                 action: (ContractRateCardRateListResponse) -> Boolean,
-                executor: Executor
+                executor: Executor,
             ): CompletableFuture<Void> =
                 thenComposeAsync(
                     { page ->
@@ -204,7 +192,7 @@ private constructor(
                             .map { it.getNextPage().forEach(action, executor) }
                             .orElseGet { CompletableFuture.completedFuture(null) }
                     },
-                    executor
+                    executor,
                 )
             return CompletableFuture.completedFuture(Optional.of(firstPage))
                 .forEach(action::test, executor)

@@ -26,10 +26,10 @@ class UsageServiceTest {
         val usageListResponse =
             usageService.list(
                 UsageListParams.builder()
+                    .nextPage("next_page")
                     .endingBefore(OffsetDateTime.parse("2021-01-03T00:00:00Z"))
                     .startingOn(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                     .windowSize(UsageListParams.WindowSize.HOUR)
-                    .nextPage("next_page")
                     .addBillableMetric(
                         UsageListParams.BillableMetric.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

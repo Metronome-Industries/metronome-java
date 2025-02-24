@@ -15,7 +15,9 @@ class InvoiceVoidParamsTest {
     @Test
     fun body() {
         val params = InvoiceVoidParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("6a37bb88-8538-48c5-b37b-a41c836328bd")
     }
@@ -23,7 +25,9 @@ class InvoiceVoidParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params = InvoiceVoidParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("6a37bb88-8538-48c5-b37b-a41c836328bd")
     }

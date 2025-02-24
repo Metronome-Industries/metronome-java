@@ -80,11 +80,7 @@ private constructor(
 
         @JvmStatic
         fun of(usageService: UsageService, params: UsageListWithGroupsParams, response: Response) =
-            UsageListWithGroupsPage(
-                usageService,
-                params,
-                response,
-            )
+            UsageListWithGroupsPage(usageService, params, response)
     }
 
     @NoAutoDetect
@@ -172,18 +168,12 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    nextPage,
-                    data,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(nextPage, data, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: UsageListWithGroupsPage,
-    ) : Iterable<UsageListWithGroupsResponse> {
+    class AutoPager(private val firstPage: UsageListWithGroupsPage) :
+        Iterable<UsageListWithGroupsResponse> {
 
         override fun iterator(): Iterator<UsageListWithGroupsResponse> = iterator {
             var page = firstPage

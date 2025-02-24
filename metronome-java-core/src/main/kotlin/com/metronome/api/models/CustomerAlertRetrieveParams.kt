@@ -22,7 +22,7 @@ import java.util.Objects
 /** Get the customer alert status and alert information for the specified customer and alert */
 class CustomerAlertRetrieveParams
 private constructor(
-    private val body: CustomerAlertRetrieveBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -45,16 +45,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomerAlertRetrieveBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class CustomerAlertRetrieveBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("alert_id")
         @ExcludeMissing
         private val alertId: JsonField<String> = JsonMissing.of(),
@@ -85,7 +85,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomerAlertRetrieveBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -102,7 +102,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomerAlertRetrieveBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var alertId: JsonField<String>? = null
@@ -110,10 +110,10 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customerAlertRetrieveBody: CustomerAlertRetrieveBody) = apply {
-                alertId = customerAlertRetrieveBody.alertId
-                customerId = customerAlertRetrieveBody.customerId
-                additionalProperties = customerAlertRetrieveBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                alertId = body.alertId
+                customerId = body.customerId
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** The Metronome ID of the alert */
@@ -147,8 +147,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomerAlertRetrieveBody =
-                CustomerAlertRetrieveBody(
+            fun build(): Body =
+                Body(
                     checkRequired("alertId", alertId),
                     checkRequired("customerId", customerId),
                     additionalProperties.toImmutable(),
@@ -160,7 +160,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerAlertRetrieveBody && alertId == other.alertId && customerId == other.customerId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && alertId == other.alertId && customerId == other.customerId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -170,7 +170,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerAlertRetrieveBody{alertId=$alertId, customerId=$customerId, additionalProperties=$additionalProperties}"
+            "Body{alertId=$alertId, customerId=$customerId, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -184,7 +184,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: CustomerAlertRetrieveBody.Builder = CustomerAlertRetrieveBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

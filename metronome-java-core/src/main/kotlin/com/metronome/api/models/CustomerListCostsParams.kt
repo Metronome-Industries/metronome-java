@@ -52,13 +52,13 @@ private constructor(
         this.endingBefore.let {
             queryParams.put(
                 "ending_before",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it)),
             )
         }
         this.startingOn.let {
             queryParams.put(
                 "starting_on",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it)),
             )
         }
         this.limit?.let { queryParams.put("limit", listOf(it.toString())) }

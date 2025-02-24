@@ -22,10 +22,7 @@ import com.metronome.api.models.CustomerPlanListParams
 import com.metronome.api.models.CustomerPlanListPriceAdjustmentsPage
 import com.metronome.api.models.CustomerPlanListPriceAdjustmentsParams
 
-class PlanServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : PlanService {
+class PlanServiceImpl internal constructor(private val clientOptions: ClientOptions) : PlanService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -36,7 +33,7 @@ internal constructor(
     /** List the given customer's plans in reverse-chronological order. */
     override fun list(
         params: CustomerPlanListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerPlanListPage {
         val request =
             HttpRequest.builder()
@@ -66,7 +63,7 @@ internal constructor(
      */
     override fun add(
         params: CustomerPlanAddParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerPlanAddResponse {
         val request =
             HttpRequest.builder()
@@ -92,7 +89,7 @@ internal constructor(
     /** Change the end date of a customer's plan. */
     override fun end(
         params: CustomerPlanEndParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerPlanEndResponse {
         val request =
             HttpRequest.builder()
@@ -102,7 +99,7 @@ internal constructor(
                     params.getPathParam(0),
                     "plans",
                     params.getPathParam(1),
-                    "end"
+                    "end",
                 )
                 .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
@@ -129,7 +126,7 @@ internal constructor(
      */
     override fun listPriceAdjustments(
         params: CustomerPlanListPriceAdjustmentsParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerPlanListPriceAdjustmentsPage {
         val request =
             HttpRequest.builder()
@@ -139,7 +136,7 @@ internal constructor(
                     params.getPathParam(0),
                     "plans",
                     params.getPathParam(1),
-                    "priceAdjustments"
+                    "priceAdjustments",
                 )
                 .build()
                 .prepare(clientOptions, params)

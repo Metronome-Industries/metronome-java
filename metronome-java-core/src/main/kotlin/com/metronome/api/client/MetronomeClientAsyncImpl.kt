@@ -31,9 +31,7 @@ import com.metronome.api.services.async.ServiceServiceAsyncImpl
 import com.metronome.api.services.async.UsageServiceAsync
 import com.metronome.api.services.async.UsageServiceAsyncImpl
 
-class MetronomeClientAsyncImpl(
-    private val clientOptions: ClientOptions,
-) : MetronomeClientAsync {
+class MetronomeClientAsyncImpl(private val clientOptions: ClientOptions) : MetronomeClientAsync {
 
     private val clientOptionsWithUserAgent =
         if (clientOptions.headers.names().contains("User-Agent")) clientOptions

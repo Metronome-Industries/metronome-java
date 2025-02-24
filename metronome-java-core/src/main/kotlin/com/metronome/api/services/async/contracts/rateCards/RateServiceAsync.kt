@@ -19,20 +19,20 @@ interface RateServiceAsync {
     @JvmOverloads
     fun list(
         params: ContractRateCardRateListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractRateCardRateListPageAsync>
 
     /** Add a new rate */
     @JvmOverloads
     fun add(
         params: ContractRateCardRateAddParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractRateCardRateAddResponse>
 
     /** Add new rates */
     @JvmOverloads
     fun addMany(
         params: ContractRateCardRateAddManyParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractRateCardRateAddManyResponse>
 }

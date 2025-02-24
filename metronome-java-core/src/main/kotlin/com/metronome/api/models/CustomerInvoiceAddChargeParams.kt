@@ -24,7 +24,7 @@ import java.util.Objects
 class CustomerInvoiceAddChargeParams
 private constructor(
     private val customerId: String,
-    private val body: CustomerInvoiceAddChargeBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -79,7 +79,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomerInvoiceAddChargeBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -93,9 +93,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class CustomerInvoiceAddChargeBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("charge_id")
         @ExcludeMissing
         private val chargeId: JsonField<String> = JsonMissing.of(),
@@ -175,7 +175,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomerInvoiceAddChargeBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -196,7 +196,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomerInvoiceAddChargeBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var chargeId: JsonField<String>? = null
@@ -208,15 +208,14 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customerInvoiceAddChargeBody: CustomerInvoiceAddChargeBody) = apply {
-                chargeId = customerInvoiceAddChargeBody.chargeId
-                customerPlanId = customerInvoiceAddChargeBody.customerPlanId
-                description = customerInvoiceAddChargeBody.description
-                invoiceStartTimestamp = customerInvoiceAddChargeBody.invoiceStartTimestamp
-                price = customerInvoiceAddChargeBody.price
-                quantity = customerInvoiceAddChargeBody.quantity
-                additionalProperties =
-                    customerInvoiceAddChargeBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                chargeId = body.chargeId
+                customerPlanId = body.customerPlanId
+                description = body.description
+                invoiceStartTimestamp = body.invoiceStartTimestamp
+                price = body.price
+                quantity = body.quantity
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /**
@@ -292,8 +291,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomerInvoiceAddChargeBody =
-                CustomerInvoiceAddChargeBody(
+            fun build(): Body =
+                Body(
                     checkRequired("chargeId", chargeId),
                     checkRequired("customerPlanId", customerPlanId),
                     checkRequired("description", description),
@@ -309,7 +308,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerInvoiceAddChargeBody && chargeId == other.chargeId && customerPlanId == other.customerPlanId && description == other.description && invoiceStartTimestamp == other.invoiceStartTimestamp && price == other.price && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && chargeId == other.chargeId && customerPlanId == other.customerPlanId && description == other.description && invoiceStartTimestamp == other.invoiceStartTimestamp && price == other.price && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -319,7 +318,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerInvoiceAddChargeBody{chargeId=$chargeId, customerPlanId=$customerPlanId, description=$description, invoiceStartTimestamp=$invoiceStartTimestamp, price=$price, quantity=$quantity, additionalProperties=$additionalProperties}"
+            "Body{chargeId=$chargeId, customerPlanId=$customerPlanId, description=$description, invoiceStartTimestamp=$invoiceStartTimestamp, price=$price, quantity=$quantity, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -334,8 +333,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var customerId: String? = null
-        private var body: CustomerInvoiceAddChargeBody.Builder =
-            CustomerInvoiceAddChargeBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

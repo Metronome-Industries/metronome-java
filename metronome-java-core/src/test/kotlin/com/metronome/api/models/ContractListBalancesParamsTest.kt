@@ -39,7 +39,9 @@ class ContractListBalancesParamsTest {
                 .nextPage("next_page")
                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
         assertThat(body.id()).contains("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
@@ -60,7 +62,9 @@ class ContractListBalancesParamsTest {
             ContractListBalancesParams.builder()
                 .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
     }

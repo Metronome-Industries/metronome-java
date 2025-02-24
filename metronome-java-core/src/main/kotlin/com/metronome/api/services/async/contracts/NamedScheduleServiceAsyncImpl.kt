@@ -19,10 +19,8 @@ import com.metronome.api.models.ContractNamedScheduleRetrieveResponse
 import com.metronome.api.models.ContractNamedScheduleUpdateParams
 import java.util.concurrent.CompletableFuture
 
-class NamedScheduleServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : NamedScheduleServiceAsync {
+class NamedScheduleServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    NamedScheduleServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -36,7 +34,7 @@ internal constructor(
      */
     override fun retrieve(
         params: ContractNamedScheduleRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractNamedScheduleRetrieveResponse> {
         val request =
             HttpRequest.builder()
@@ -66,7 +64,7 @@ internal constructor(
      */
     override fun update(
         params: ContractNamedScheduleUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()

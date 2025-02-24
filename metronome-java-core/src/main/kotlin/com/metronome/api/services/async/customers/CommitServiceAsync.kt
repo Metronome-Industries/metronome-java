@@ -19,20 +19,20 @@ interface CommitServiceAsync {
     @JvmOverloads
     fun create(
         params: CustomerCommitCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCommitCreateResponse>
 
     /** List commits. */
     @JvmOverloads
     fun list(
         params: CustomerCommitListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCommitListResponse>
 
     /** Update the end date of a PREPAID commit */
     @JvmOverloads
     fun updateEndDate(
         params: CustomerCommitUpdateEndDateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCommitUpdateEndDateResponse>
 }

@@ -28,7 +28,7 @@ import java.util.Optional
 class CreditGrantListEntriesParams
 private constructor(
     private val nextPage: String?,
-    private val body: CreditGrantListEntriesBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -86,7 +86,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CreditGrantListEntriesBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -98,9 +98,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class CreditGrantListEntriesBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("credit_type_ids")
         @ExcludeMissing
         private val creditTypeIds: JsonField<List<String>> = JsonMissing.of(),
@@ -179,7 +179,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CreditGrantListEntriesBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -198,7 +198,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CreditGrantListEntriesBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var creditTypeIds: JsonField<MutableList<String>>? = null
@@ -208,13 +208,12 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(creditGrantListEntriesBody: CreditGrantListEntriesBody) = apply {
-                creditTypeIds = creditGrantListEntriesBody.creditTypeIds.map { it.toMutableList() }
-                customerIds = creditGrantListEntriesBody.customerIds.map { it.toMutableList() }
-                endingBefore = creditGrantListEntriesBody.endingBefore
-                startingOn = creditGrantListEntriesBody.startingOn
-                additionalProperties =
-                    creditGrantListEntriesBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                creditTypeIds = body.creditTypeIds.map { it.toMutableList() }
+                customerIds = body.customerIds.map { it.toMutableList() }
+                endingBefore = body.endingBefore
+                startingOn = body.startingOn
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /**
@@ -328,8 +327,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CreditGrantListEntriesBody =
-                CreditGrantListEntriesBody(
+            fun build(): Body =
+                Body(
                     (creditTypeIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (customerIds ?: JsonMissing.of()).map { it.toImmutable() },
                     endingBefore,
@@ -343,7 +342,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CreditGrantListEntriesBody && creditTypeIds == other.creditTypeIds && customerIds == other.customerIds && endingBefore == other.endingBefore && startingOn == other.startingOn && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && creditTypeIds == other.creditTypeIds && customerIds == other.customerIds && endingBefore == other.endingBefore && startingOn == other.startingOn && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -353,7 +352,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CreditGrantListEntriesBody{creditTypeIds=$creditTypeIds, customerIds=$customerIds, endingBefore=$endingBefore, startingOn=$startingOn, additionalProperties=$additionalProperties}"
+            "Body{creditTypeIds=$creditTypeIds, customerIds=$customerIds, endingBefore=$endingBefore, startingOn=$startingOn, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -368,7 +367,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var nextPage: String? = null
-        private var body: CreditGrantListEntriesBody.Builder = CreditGrantListEntriesBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

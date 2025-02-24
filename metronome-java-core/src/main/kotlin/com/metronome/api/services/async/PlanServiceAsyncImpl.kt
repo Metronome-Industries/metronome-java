@@ -22,10 +22,8 @@ import com.metronome.api.models.PlanListPageAsync
 import com.metronome.api.models.PlanListParams
 import java.util.concurrent.CompletableFuture
 
-class PlanServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : PlanServiceAsync {
+class PlanServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    PlanServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -36,7 +34,7 @@ internal constructor(
     /** List all available plans. */
     override fun list(
         params: PlanListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<PlanListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -64,7 +62,7 @@ internal constructor(
     /** Fetch high level details of a specific plan. */
     override fun getDetails(
         params: PlanGetDetailsParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<PlanGetDetailsResponse> {
         val request =
             HttpRequest.builder()
@@ -92,7 +90,7 @@ internal constructor(
     /** Fetches a list of charges of a specific plan. */
     override fun listCharges(
         params: PlanListChargesParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<PlanListChargesPageAsync> {
         val request =
             HttpRequest.builder()
@@ -124,7 +122,7 @@ internal constructor(
      */
     override fun listCustomers(
         params: PlanListCustomersParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<PlanListCustomersPageAsync> {
         val request =
             HttpRequest.builder()

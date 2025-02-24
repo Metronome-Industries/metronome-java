@@ -24,7 +24,7 @@ import java.util.Optional
 class CustomerUpdateConfigParams
 private constructor(
     private val customerId: String,
-    private val body: CustomerUpdateConfigBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -55,7 +55,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomerUpdateConfigBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -69,9 +69,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class CustomerUpdateConfigBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("leave_stripe_invoices_in_draft")
         @ExcludeMissing
         private val leaveStripeInvoicesInDraft: JsonField<Boolean> = JsonMissing.of(),
@@ -114,7 +114,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomerUpdateConfigBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -131,7 +131,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomerUpdateConfigBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var leaveStripeInvoicesInDraft: JsonField<Boolean> = JsonMissing.of()
@@ -139,10 +139,10 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customerUpdateConfigBody: CustomerUpdateConfigBody) = apply {
-                leaveStripeInvoicesInDraft = customerUpdateConfigBody.leaveStripeInvoicesInDraft
-                salesforceAccountId = customerUpdateConfigBody.salesforceAccountId
-                additionalProperties = customerUpdateConfigBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                leaveStripeInvoicesInDraft = body.leaveStripeInvoicesInDraft
+                salesforceAccountId = body.salesforceAccountId
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /**
@@ -207,8 +207,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomerUpdateConfigBody =
-                CustomerUpdateConfigBody(
+            fun build(): Body =
+                Body(
                     leaveStripeInvoicesInDraft,
                     salesforceAccountId,
                     additionalProperties.toImmutable(),
@@ -220,7 +220,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerUpdateConfigBody && leaveStripeInvoicesInDraft == other.leaveStripeInvoicesInDraft && salesforceAccountId == other.salesforceAccountId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && leaveStripeInvoicesInDraft == other.leaveStripeInvoicesInDraft && salesforceAccountId == other.salesforceAccountId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -230,7 +230,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerUpdateConfigBody{leaveStripeInvoicesInDraft=$leaveStripeInvoicesInDraft, salesforceAccountId=$salesforceAccountId, additionalProperties=$additionalProperties}"
+            "Body{leaveStripeInvoicesInDraft=$leaveStripeInvoicesInDraft, salesforceAccountId=$salesforceAccountId, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -245,7 +245,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var customerId: String? = null
-        private var body: CustomerUpdateConfigBody.Builder = CustomerUpdateConfigBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

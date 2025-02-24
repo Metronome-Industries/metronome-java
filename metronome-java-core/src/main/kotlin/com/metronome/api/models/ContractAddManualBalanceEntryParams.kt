@@ -24,7 +24,7 @@ import java.util.Optional
 /** Add a manual balance entry */
 class ContractAddManualBalanceEntryParams
 private constructor(
-    private val body: ContractAddManualBalanceEntryBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -83,16 +83,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractAddManualBalanceEntryBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class ContractAddManualBalanceEntryBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("amount")
         @ExcludeMissing
@@ -178,7 +178,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractAddManualBalanceEntryBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -200,7 +200,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractAddManualBalanceEntryBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -213,18 +213,15 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(
-                contractAddManualBalanceEntryBody: ContractAddManualBalanceEntryBody
-            ) = apply {
-                id = contractAddManualBalanceEntryBody.id
-                amount = contractAddManualBalanceEntryBody.amount
-                customerId = contractAddManualBalanceEntryBody.customerId
-                reason = contractAddManualBalanceEntryBody.reason
-                segmentId = contractAddManualBalanceEntryBody.segmentId
-                contractId = contractAddManualBalanceEntryBody.contractId
-                timestamp = contractAddManualBalanceEntryBody.timestamp
-                additionalProperties =
-                    contractAddManualBalanceEntryBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                id = body.id
+                amount = body.amount
+                customerId = body.customerId
+                reason = body.reason
+                segmentId = body.segmentId
+                contractId = body.contractId
+                timestamp = body.timestamp
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** ID of the balance (commit or credit) to update. */
@@ -296,8 +293,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractAddManualBalanceEntryBody =
-                ContractAddManualBalanceEntryBody(
+            fun build(): Body =
+                Body(
                     checkRequired("id", id),
                     checkRequired("amount", amount),
                     checkRequired("customerId", customerId),
@@ -314,7 +311,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractAddManualBalanceEntryBody && id == other.id && amount == other.amount && customerId == other.customerId && reason == other.reason && segmentId == other.segmentId && contractId == other.contractId && timestamp == other.timestamp && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && id == other.id && amount == other.amount && customerId == other.customerId && reason == other.reason && segmentId == other.segmentId && contractId == other.contractId && timestamp == other.timestamp && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -324,7 +321,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractAddManualBalanceEntryBody{id=$id, amount=$amount, customerId=$customerId, reason=$reason, segmentId=$segmentId, contractId=$contractId, timestamp=$timestamp, additionalProperties=$additionalProperties}"
+            "Body{id=$id, amount=$amount, customerId=$customerId, reason=$reason, segmentId=$segmentId, contractId=$contractId, timestamp=$timestamp, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -338,8 +335,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: ContractAddManualBalanceEntryBody.Builder =
-            ContractAddManualBalanceEntryBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

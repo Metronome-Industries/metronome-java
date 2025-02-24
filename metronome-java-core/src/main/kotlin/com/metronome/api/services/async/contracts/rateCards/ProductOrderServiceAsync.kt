@@ -17,13 +17,13 @@ interface ProductOrderServiceAsync {
     @JvmOverloads
     fun update(
         params: ContractRateCardProductOrderUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractRateCardProductOrderUpdateResponse>
 
     /** Sets the ordering of products within a rate card */
     @JvmOverloads
     fun set(
         params: ContractRateCardProductOrderSetParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractRateCardProductOrderSetResponse>
 }

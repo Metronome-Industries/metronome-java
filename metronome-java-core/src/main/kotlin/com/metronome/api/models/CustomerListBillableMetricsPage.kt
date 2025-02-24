@@ -79,13 +79,8 @@ private constructor(
         fun of(
             customersService: CustomerService,
             params: CustomerListBillableMetricsParams,
-            response: Response
-        ) =
-            CustomerListBillableMetricsPage(
-                customersService,
-                params,
-                response,
-            )
+            response: Response,
+        ) = CustomerListBillableMetricsPage(customersService, params, response)
     }
 
     @NoAutoDetect
@@ -174,18 +169,12 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    nextPage,
-                    data,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(nextPage, data, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: CustomerListBillableMetricsPage,
-    ) : Iterable<CustomerListBillableMetricsResponse> {
+    class AutoPager(private val firstPage: CustomerListBillableMetricsPage) :
+        Iterable<CustomerListBillableMetricsResponse> {
 
         override fun iterator(): Iterator<CustomerListBillableMetricsResponse> = iterator {
             var page = firstPage

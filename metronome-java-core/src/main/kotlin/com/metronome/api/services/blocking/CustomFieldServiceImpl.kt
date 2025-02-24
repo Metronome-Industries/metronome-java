@@ -21,10 +21,8 @@ import com.metronome.api.models.CustomFieldListKeysResponse
 import com.metronome.api.models.CustomFieldRemoveKeyParams
 import com.metronome.api.models.CustomFieldSetValuesParams
 
-class CustomFieldServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : CustomFieldService {
+class CustomFieldServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    CustomFieldService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -51,7 +49,7 @@ internal constructor(
     /** Deletes one or more custom fields on an instance of a Metronome entity. */
     override fun deleteValues(
         params: CustomFieldDeleteValuesParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ) {
         val request =
             HttpRequest.builder()
@@ -71,7 +69,7 @@ internal constructor(
     /** List all active custom field keys, optionally filtered by entity type. */
     override fun listKeys(
         params: CustomFieldListKeysParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomFieldListKeysResponse {
         val request =
             HttpRequest.builder()

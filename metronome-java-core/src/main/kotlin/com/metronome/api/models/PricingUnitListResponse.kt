@@ -112,12 +112,7 @@ private constructor(
         }
 
         fun build(): PricingUnitListResponse =
-            PricingUnitListResponse(
-                id,
-                isCurrency,
-                name,
-                additionalProperties.toImmutable(),
-            )
+            PricingUnitListResponse(id, isCurrency, name, additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {

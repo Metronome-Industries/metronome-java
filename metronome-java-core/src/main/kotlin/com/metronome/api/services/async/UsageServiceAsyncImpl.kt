@@ -21,10 +21,8 @@ import com.metronome.api.models.UsageListWithGroupsPageAsync
 import com.metronome.api.models.UsageListWithGroupsParams
 import java.util.concurrent.CompletableFuture
 
-class UsageServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : UsageServiceAsync {
+class UsageServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    UsageServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -37,7 +35,7 @@ internal constructor(
      */
     override fun list(
         params: UsageListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<UsageListResponse> {
         val request =
             HttpRequest.builder()
@@ -70,7 +68,7 @@ internal constructor(
      */
     override fun ingest(
         params: UsageIngestParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()
@@ -94,7 +92,7 @@ internal constructor(
      */
     override fun listWithGroups(
         params: UsageListWithGroupsParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<UsageListWithGroupsPageAsync> {
         val request =
             HttpRequest.builder()

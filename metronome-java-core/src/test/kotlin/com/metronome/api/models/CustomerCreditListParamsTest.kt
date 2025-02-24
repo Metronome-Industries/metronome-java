@@ -39,7 +39,9 @@ class CustomerCreditListParamsTest {
                 .nextPage("next_page")
                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
         assertThat(body.coveringDate()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -60,7 +62,9 @@ class CustomerCreditListParamsTest {
             CustomerCreditListParams.builder()
                 .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
     }

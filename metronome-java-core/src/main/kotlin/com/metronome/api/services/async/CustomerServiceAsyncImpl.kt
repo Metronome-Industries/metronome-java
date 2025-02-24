@@ -46,10 +46,8 @@ import com.metronome.api.services.async.customers.PlanServiceAsync
 import com.metronome.api.services.async.customers.PlanServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
-class CustomerServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : CustomerServiceAsync {
+class CustomerServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    CustomerServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -91,7 +89,7 @@ internal constructor(
     /** Create a new customer */
     override fun create(
         params: CustomerCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerCreateResponse> {
         val request =
             HttpRequest.builder()
@@ -120,7 +118,7 @@ internal constructor(
     /** Get a customer by Metronome ID. */
     override fun retrieve(
         params: CustomerRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerRetrieveResponse> {
         val request =
             HttpRequest.builder()
@@ -148,7 +146,7 @@ internal constructor(
     /** List all customers. */
     override fun list(
         params: CustomerListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -177,7 +175,7 @@ internal constructor(
     /** Archive a customer */
     override fun archive(
         params: CustomerArchiveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerArchiveResponse> {
         val request =
             HttpRequest.builder()
@@ -206,7 +204,7 @@ internal constructor(
     /** Get all billable metrics for a given customer. */
     override fun listBillableMetrics(
         params: CustomerListBillableMetricsParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerListBillableMetricsPageAsync> {
         val request =
             HttpRequest.builder()
@@ -239,7 +237,7 @@ internal constructor(
      */
     override fun listCosts(
         params: CustomerListCostsParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerListCostsPageAsync> {
         val request =
             HttpRequest.builder()
@@ -271,7 +269,7 @@ internal constructor(
      */
     override fun setIngestAliases(
         params: CustomerSetIngestAliasesParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()
@@ -292,7 +290,7 @@ internal constructor(
     /** Updates the specified customer's name. */
     override fun setName(
         params: CustomerSetNameParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerSetNameResponse> {
         val request =
             HttpRequest.builder()
@@ -319,7 +317,7 @@ internal constructor(
     /** Updates the specified customer's config. */
     override fun updateConfig(
         params: CustomerUpdateConfigParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()

@@ -31,7 +31,7 @@ class UsageListWithGroupsParams
 private constructor(
     private val limit: Long?,
     private val nextPage: String?,
-    private val body: UsageListWithGroupsBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -96,7 +96,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): UsageListWithGroupsBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -109,9 +109,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class UsageListWithGroupsBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("billable_metric_id")
         @ExcludeMissing
         private val billableMetricId: JsonField<String> = JsonMissing.of(),
@@ -206,7 +206,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): UsageListWithGroupsBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -228,7 +228,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [UsageListWithGroupsBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var billableMetricId: JsonField<String>? = null
@@ -241,15 +241,15 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(usageListWithGroupsBody: UsageListWithGroupsBody) = apply {
-                billableMetricId = usageListWithGroupsBody.billableMetricId
-                customerId = usageListWithGroupsBody.customerId
-                windowSize = usageListWithGroupsBody.windowSize
-                currentPeriod = usageListWithGroupsBody.currentPeriod
-                endingBefore = usageListWithGroupsBody.endingBefore
-                groupBy = usageListWithGroupsBody.groupBy
-                startingOn = usageListWithGroupsBody.startingOn
-                additionalProperties = usageListWithGroupsBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                billableMetricId = body.billableMetricId
+                customerId = body.customerId
+                windowSize = body.windowSize
+                currentPeriod = body.currentPeriod
+                endingBefore = body.endingBefore
+                groupBy = body.groupBy
+                startingOn = body.startingOn
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun billableMetricId(billableMetricId: String) =
@@ -331,8 +331,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): UsageListWithGroupsBody =
-                UsageListWithGroupsBody(
+            fun build(): Body =
+                Body(
                     checkRequired("billableMetricId", billableMetricId),
                     checkRequired("customerId", customerId),
                     checkRequired("windowSize", windowSize),
@@ -349,7 +349,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is UsageListWithGroupsBody && billableMetricId == other.billableMetricId && customerId == other.customerId && windowSize == other.windowSize && currentPeriod == other.currentPeriod && endingBefore == other.endingBefore && groupBy == other.groupBy && startingOn == other.startingOn && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && billableMetricId == other.billableMetricId && customerId == other.customerId && windowSize == other.windowSize && currentPeriod == other.currentPeriod && endingBefore == other.endingBefore && groupBy == other.groupBy && startingOn == other.startingOn && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -359,7 +359,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UsageListWithGroupsBody{billableMetricId=$billableMetricId, customerId=$customerId, windowSize=$windowSize, currentPeriod=$currentPeriod, endingBefore=$endingBefore, groupBy=$groupBy, startingOn=$startingOn, additionalProperties=$additionalProperties}"
+            "Body{billableMetricId=$billableMetricId, customerId=$customerId, windowSize=$windowSize, currentPeriod=$currentPeriod, endingBefore=$endingBefore, groupBy=$groupBy, startingOn=$startingOn, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -375,7 +375,7 @@ private constructor(
 
         private var limit: Long? = null
         private var nextPage: String? = null
-        private var body: UsageListWithGroupsBody.Builder = UsageListWithGroupsBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -594,11 +594,7 @@ private constructor(
      * into daily or hourly aggregates. A window_size of "none" will return a single usage aggregate
      * for the entirety of the specified period.
      */
-    class WindowSize
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class WindowSize @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -679,7 +675,19 @@ private constructor(
                 else -> throw MetronomeInvalidDataException("Unknown WindowSize: $value")
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

@@ -42,7 +42,9 @@ class CustomFieldListKeysParamsTest {
                 .nextPage("next_page")
                 .addEntity(CustomFieldListKeysParams.Entity.ALERT)
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.entities()).contains(listOf(CustomFieldListKeysParams.Entity.ALERT))
     }
@@ -50,7 +52,9 @@ class CustomFieldListKeysParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params = CustomFieldListKeysParams.builder().build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
     }
 }

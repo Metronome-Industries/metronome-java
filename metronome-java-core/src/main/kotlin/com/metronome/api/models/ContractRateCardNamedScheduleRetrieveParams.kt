@@ -27,7 +27,7 @@ import java.util.Optional
  */
 class ContractRateCardNamedScheduleRetrieveParams
 private constructor(
-    private val body: ContractRateCardNamedScheduleRetrieveBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -68,16 +68,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractRateCardNamedScheduleRetrieveBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class ContractRateCardNamedScheduleRetrieveBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("contract_id")
         @ExcludeMissing
         private val contractId: JsonField<String> = JsonMissing.of(),
@@ -139,7 +139,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractRateCardNamedScheduleRetrieveBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -158,7 +158,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractRateCardNamedScheduleRetrieveBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
@@ -168,15 +168,12 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(
-                contractRateCardNamedScheduleRetrieveBody: ContractRateCardNamedScheduleRetrieveBody
-            ) = apply {
-                contractId = contractRateCardNamedScheduleRetrieveBody.contractId
-                customerId = contractRateCardNamedScheduleRetrieveBody.customerId
-                scheduleName = contractRateCardNamedScheduleRetrieveBody.scheduleName
-                coveringDate = contractRateCardNamedScheduleRetrieveBody.coveringDate
-                additionalProperties =
-                    contractRateCardNamedScheduleRetrieveBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                contractId = body.contractId
+                customerId = body.customerId
+                scheduleName = body.scheduleName
+                coveringDate = body.coveringDate
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** ID of the contract whose named schedule is to be retrieved */
@@ -233,8 +230,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractRateCardNamedScheduleRetrieveBody =
-                ContractRateCardNamedScheduleRetrieveBody(
+            fun build(): Body =
+                Body(
                     checkRequired("contractId", contractId),
                     checkRequired("customerId", customerId),
                     checkRequired("scheduleName", scheduleName),
@@ -248,7 +245,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractRateCardNamedScheduleRetrieveBody && contractId == other.contractId && customerId == other.customerId && scheduleName == other.scheduleName && coveringDate == other.coveringDate && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && contractId == other.contractId && customerId == other.customerId && scheduleName == other.scheduleName && coveringDate == other.coveringDate && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -258,7 +255,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractRateCardNamedScheduleRetrieveBody{contractId=$contractId, customerId=$customerId, scheduleName=$scheduleName, coveringDate=$coveringDate, additionalProperties=$additionalProperties}"
+            "Body{contractId=$contractId, customerId=$customerId, scheduleName=$scheduleName, coveringDate=$coveringDate, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -272,8 +269,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: ContractRateCardNamedScheduleRetrieveBody.Builder =
-            ContractRateCardNamedScheduleRetrieveBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

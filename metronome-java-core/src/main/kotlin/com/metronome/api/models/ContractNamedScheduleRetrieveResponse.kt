@@ -110,7 +110,7 @@ private constructor(
         fun build(): ContractNamedScheduleRetrieveResponse =
             ContractNamedScheduleRetrieveResponse(
                 checkRequired("data", data).map { it.toImmutable() },
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

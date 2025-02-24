@@ -136,7 +136,9 @@ class ContractCreateHistoricalInvoicesParamsTest {
                 )
                 .preview(false)
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.invoices())
             .isEqualTo(
@@ -227,7 +229,9 @@ class ContractCreateHistoricalInvoicesParamsTest {
                 )
                 .preview(false)
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.invoices())
             .isEqualTo(

@@ -91,7 +91,7 @@ private constructor(
         fun build(): ContractRateCardProductOrderUpdateResponse =
             ContractRateCardProductOrderUpdateResponse(
                 checkRequired("data", data),
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

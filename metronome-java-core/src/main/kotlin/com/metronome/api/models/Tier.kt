@@ -99,11 +99,7 @@ private constructor(
         }
 
         fun build(): Tier =
-            Tier(
-                checkRequired("price", price),
-                size,
-                additionalProperties.toImmutable(),
-            )
+            Tier(checkRequired("price", price), size, additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {

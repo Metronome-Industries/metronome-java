@@ -19,7 +19,7 @@ interface NamedScheduleServiceAsync {
     @JvmOverloads
     fun retrieve(
         params: CustomerNamedScheduleRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerNamedScheduleRetrieveResponse>
 
     /**
@@ -29,6 +29,6 @@ interface NamedScheduleServiceAsync {
     @JvmOverloads
     fun update(
         params: CustomerNamedScheduleUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 }

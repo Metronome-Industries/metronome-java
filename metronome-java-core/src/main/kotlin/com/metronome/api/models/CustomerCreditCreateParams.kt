@@ -26,7 +26,7 @@ import java.util.Optional
 /** Create a new credit at the customer level. */
 class CustomerCreditCreateParams
 private constructor(
-    private val body: CustomerCreditCreateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -143,16 +143,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomerCreditCreateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class CustomerCreditCreateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("access_schedule")
         @ExcludeMissing
         private val accessSchedule: JsonField<AccessSchedule> = JsonMissing.of(),
@@ -341,7 +341,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomerCreditCreateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -370,7 +370,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomerCreditCreateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var accessSchedule: JsonField<AccessSchedule>? = null
@@ -390,25 +390,22 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customerCreditCreateBody: CustomerCreditCreateBody) = apply {
-                accessSchedule = customerCreditCreateBody.accessSchedule
-                customerId = customerCreditCreateBody.customerId
-                priority = customerCreditCreateBody.priority
-                productId = customerCreditCreateBody.productId
-                applicableContractIds =
-                    customerCreditCreateBody.applicableContractIds.map { it.toMutableList() }
-                applicableProductIds =
-                    customerCreditCreateBody.applicableProductIds.map { it.toMutableList() }
-                applicableProductTags =
-                    customerCreditCreateBody.applicableProductTags.map { it.toMutableList() }
-                customFields = customerCreditCreateBody.customFields
-                description = customerCreditCreateBody.description
-                name = customerCreditCreateBody.name
-                netsuiteSalesOrderId = customerCreditCreateBody.netsuiteSalesOrderId
-                rateType = customerCreditCreateBody.rateType
-                salesforceOpportunityId = customerCreditCreateBody.salesforceOpportunityId
-                uniquenessKey = customerCreditCreateBody.uniquenessKey
-                additionalProperties = customerCreditCreateBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                accessSchedule = body.accessSchedule
+                customerId = body.customerId
+                priority = body.priority
+                productId = body.productId
+                applicableContractIds = body.applicableContractIds.map { it.toMutableList() }
+                applicableProductIds = body.applicableProductIds.map { it.toMutableList() }
+                applicableProductTags = body.applicableProductTags.map { it.toMutableList() }
+                customFields = body.customFields
+                description = body.description
+                name = body.name
+                netsuiteSalesOrderId = body.netsuiteSalesOrderId
+                rateType = body.rateType
+                salesforceOpportunityId = body.salesforceOpportunityId
+                uniquenessKey = body.uniquenessKey
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** Schedule for distributing the credit to the customer. */
@@ -613,8 +610,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomerCreditCreateBody =
-                CustomerCreditCreateBody(
+            fun build(): Body =
+                Body(
                     checkRequired("accessSchedule", accessSchedule),
                     checkRequired("customerId", customerId),
                     checkRequired("priority", priority),
@@ -638,7 +635,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerCreditCreateBody && accessSchedule == other.accessSchedule && customerId == other.customerId && priority == other.priority && productId == other.productId && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && customFields == other.customFields && description == other.description && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rateType == other.rateType && salesforceOpportunityId == other.salesforceOpportunityId && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && accessSchedule == other.accessSchedule && customerId == other.customerId && priority == other.priority && productId == other.productId && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && customFields == other.customFields && description == other.description && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rateType == other.rateType && salesforceOpportunityId == other.salesforceOpportunityId && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -648,7 +645,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerCreditCreateBody{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
+            "Body{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -662,7 +659,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: CustomerCreditCreateBody.Builder = CustomerCreditCreateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -1250,7 +1247,7 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
     ) {
 
         @JsonAnyGetter
@@ -1323,11 +1320,7 @@ private constructor(
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
-    class RateType
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class RateType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -1400,7 +1393,19 @@ private constructor(
                 else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

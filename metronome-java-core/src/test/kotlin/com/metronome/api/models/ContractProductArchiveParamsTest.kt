@@ -20,7 +20,9 @@ class ContractProductArchiveParamsTest {
             ContractProductArchiveParams.builder()
                 .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.productId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
     }
@@ -31,7 +33,9 @@ class ContractProductArchiveParamsTest {
             ContractProductArchiveParams.builder()
                 .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.productId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
     }

@@ -19,10 +19,8 @@ import com.metronome.api.models.InvoiceVoidParams
 import com.metronome.api.models.InvoiceVoidResponse
 import java.util.concurrent.CompletableFuture
 
-class InvoiceServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : InvoiceServiceAsync {
+class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    InvoiceServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -33,7 +31,7 @@ internal constructor(
     /** Regenerate a voided contract invoice */
     override fun regenerate(
         params: InvoiceRegenerateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<InvoiceRegenerateResponse> {
         val request =
             HttpRequest.builder()
@@ -61,7 +59,7 @@ internal constructor(
     /** Void an invoice */
     override fun void_(
         params: InvoiceVoidParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<InvoiceVoidResponse> {
         val request =
             HttpRequest.builder()

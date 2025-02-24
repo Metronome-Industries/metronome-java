@@ -2,21 +2,12 @@
 
 package com.metronome.api.models
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.metronome.api.core.ExcludeMissing
-import com.metronome.api.core.JsonField
-import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.Params
 import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
-import com.metronome.api.core.immutableEmptyMap
-import com.metronome.api.core.toImmutable
 import java.util.Objects
 
 /**
@@ -25,122 +16,24 @@ import java.util.Objects
  */
 class ContractRateCardRetrieveParams
 private constructor(
-    private val body: ContractRateCardRetrieveBody,
+    private val id: Id,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun id(): String = body.id()
+    fun id(): Id = id
 
-    fun _id(): JsonField<String> = body._id()
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+    fun _additionalBodyProperties(): Map<String, JsonValue> = id._additionalProperties()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractRateCardRetrieveBody = body
+    @JvmSynthetic internal fun _body(): Id = id
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
-
-    @NoAutoDetect
-    class ContractRateCardRetrieveBody
-    @JsonCreator
-    internal constructor(
-        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        fun id(): String = id.getRequired("id")
-
-        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): ContractRateCardRetrieveBody = apply {
-            if (validated) {
-                return@apply
-            }
-
-            id()
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [ContractRateCardRetrieveBody]. */
-        class Builder internal constructor() {
-
-            private var id: JsonField<String>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(contractRateCardRetrieveBody: ContractRateCardRetrieveBody) = apply {
-                id = contractRateCardRetrieveBody.id
-                additionalProperties =
-                    contractRateCardRetrieveBody.additionalProperties.toMutableMap()
-            }
-
-            fun id(id: String) = id(JsonField.of(id))
-
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            fun build(): ContractRateCardRetrieveBody =
-                ContractRateCardRetrieveBody(
-                    checkRequired("id", id),
-                    additionalProperties.toImmutable()
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is ContractRateCardRetrieveBody && id == other.id && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "ContractRateCardRetrieveBody{id=$id, additionalProperties=$additionalProperties}"
-    }
 
     fun toBuilder() = Builder().from(this)
 
@@ -153,40 +46,18 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: ContractRateCardRetrieveBody.Builder =
-            ContractRateCardRetrieveBody.builder()
+        private var id: Id? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(contractRateCardRetrieveParams: ContractRateCardRetrieveParams) = apply {
-            body = contractRateCardRetrieveParams.body.toBuilder()
+            id = contractRateCardRetrieveParams.id
             additionalHeaders = contractRateCardRetrieveParams.additionalHeaders.toBuilder()
             additionalQueryParams = contractRateCardRetrieveParams.additionalQueryParams.toBuilder()
         }
 
-        fun id(id: String) = apply { body.id(id) }
-
-        fun id(id: JsonField<String>) = apply { body.id(id) }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
+        fun id(id: Id) = apply { this.id = id }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -288,7 +159,7 @@ private constructor(
 
         fun build(): ContractRateCardRetrieveParams =
             ContractRateCardRetrieveParams(
-                body.build(),
+                checkRequired("id", id),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -299,11 +170,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractRateCardRetrieveParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is ContractRateCardRetrieveParams && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ContractRateCardRetrieveParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ContractRateCardRetrieveParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

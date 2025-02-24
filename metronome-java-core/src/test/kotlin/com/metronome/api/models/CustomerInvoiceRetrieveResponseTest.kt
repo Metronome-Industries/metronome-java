@@ -78,7 +78,7 @@ class CustomerInvoiceRetrieveResponseTest {
                                             Rate.PricingGroupValues.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -138,7 +138,7 @@ class CustomerInvoiceRetrieveResponseTest {
                                             Invoice.LineItem.SubLineItem.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )

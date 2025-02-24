@@ -17,13 +17,13 @@ interface InvoiceServiceAsync {
     @JvmOverloads
     fun regenerate(
         params: InvoiceRegenerateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<InvoiceRegenerateResponse>
 
     /** Void an invoice */
     @JvmOverloads
     fun void_(
         params: InvoiceVoidParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<InvoiceVoidResponse>
 }

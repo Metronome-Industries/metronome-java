@@ -95,7 +95,7 @@ private constructor(
         fun build(): ContractRateCardRateAddManyResponse =
             ContractRateCardRateAddManyResponse(
                 checkRequired("data", data),
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

@@ -14,6 +14,6 @@ interface PricingUnitService {
     @JvmOverloads
     fun list(
         params: PricingUnitListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): PricingUnitListPage
 }

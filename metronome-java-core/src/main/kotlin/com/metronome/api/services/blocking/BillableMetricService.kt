@@ -20,27 +20,27 @@ interface BillableMetricService {
     @JvmOverloads
     fun create(
         params: BillableMetricCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): BillableMetricCreateResponse
 
     /** Get a billable metric. */
     @JvmOverloads
     fun retrieve(
         params: BillableMetricRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): BillableMetricRetrieveResponse
 
     /** List all billable metrics. */
     @JvmOverloads
     fun list(
         params: BillableMetricListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): BillableMetricListPage
 
     /** Archive an existing billable metric. */
     @JvmOverloads
     fun archive(
         params: BillableMetricArchiveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): BillableMetricArchiveResponse
 }

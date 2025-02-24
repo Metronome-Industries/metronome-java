@@ -98,7 +98,9 @@ class CreditGrantCreateParamsTest {
                 )
                 .uniquenessKey("x")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.expiresAt()).isEqualTo(OffsetDateTime.parse("2022-04-01T00:00:00Z"))
@@ -166,7 +168,9 @@ class CreditGrantCreateParamsTest {
                 )
                 .priority(0.5)
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.expiresAt()).isEqualTo(OffsetDateTime.parse("2022-04-01T00:00:00Z"))

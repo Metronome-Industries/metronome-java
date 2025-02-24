@@ -32,7 +32,7 @@ interface RateCardServiceAsync {
     @JvmOverloads
     fun create(
         params: ContractRateCardCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractRateCardCreateResponse>
 
     /**
@@ -42,14 +42,14 @@ interface RateCardServiceAsync {
     @JvmOverloads
     fun retrieve(
         params: ContractRateCardRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractRateCardRetrieveResponse>
 
     /** Update a rate card */
     @JvmOverloads
     fun update(
         params: ContractRateCardUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractRateCardUpdateResponse>
 
     /**
@@ -59,7 +59,7 @@ interface RateCardServiceAsync {
     @JvmOverloads
     fun list(
         params: ContractRateCardListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractRateCardListPageAsync>
 
     /**
@@ -69,6 +69,6 @@ interface RateCardServiceAsync {
     @JvmOverloads
     fun retrieveRateSchedule(
         params: ContractRateCardRetrieveRateScheduleParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractRateCardRetrieveRateScheduleResponse>
 }

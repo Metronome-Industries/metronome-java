@@ -44,10 +44,8 @@ import com.metronome.api.services.async.contracts.RateCardServiceAsync
 import com.metronome.api.services.async.contracts.RateCardServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
-class ContractServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : ContractServiceAsync {
+class ContractServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    ContractServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -71,7 +69,7 @@ internal constructor(
     /** Create a new contract */
     override fun create(
         params: ContractCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractCreateResponse> {
         val request =
             HttpRequest.builder()
@@ -100,7 +98,7 @@ internal constructor(
     /** Get a specific contract */
     override fun retrieve(
         params: ContractRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractRetrieveResponse> {
         val request =
             HttpRequest.builder()
@@ -128,7 +126,7 @@ internal constructor(
     /** List all contracts for a customer */
     override fun list(
         params: ContractListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractListResponse> {
         val request =
             HttpRequest.builder()
@@ -156,7 +154,7 @@ internal constructor(
     /** Add a manual balance entry */
     override fun addManualBalanceEntry(
         params: ContractAddManualBalanceEntryParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()
@@ -176,7 +174,7 @@ internal constructor(
     /** Amend a contract */
     override fun amend(
         params: ContractAmendParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractAmendResponse> {
         val request =
             HttpRequest.builder()
@@ -205,7 +203,7 @@ internal constructor(
     /** Archive a contract */
     override fun archive(
         params: ContractArchiveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractArchiveResponse> {
         val request =
             HttpRequest.builder()
@@ -234,7 +232,7 @@ internal constructor(
     /** Creates historical usage invoices for a contract */
     override fun createHistoricalInvoices(
         params: ContractCreateHistoricalInvoicesParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractCreateHistoricalInvoicesResponse> {
         val request =
             HttpRequest.builder()
@@ -263,7 +261,7 @@ internal constructor(
     /** List balances (commits and credits). */
     override fun listBalances(
         params: ContractListBalancesParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractListBalancesResponse> {
         val request =
             HttpRequest.builder()
@@ -292,7 +290,7 @@ internal constructor(
     /** Get the rate schedule for the rate card on a given contract. */
     override fun retrieveRateSchedule(
         params: ContractRetrieveRateScheduleParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractRetrieveRateScheduleResponse> {
         val request =
             HttpRequest.builder()
@@ -325,7 +323,7 @@ internal constructor(
      */
     override fun scheduleProServicesInvoice(
         params: ContractScheduleProServicesInvoiceParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractScheduleProServicesInvoiceResponse> {
         val request =
             HttpRequest.builder()
@@ -353,7 +351,7 @@ internal constructor(
     /** Set usage filter for a contract */
     override fun setUsageFilter(
         params: ContractSetUsageFilterParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()
@@ -374,7 +372,7 @@ internal constructor(
     /** Update the end date of a contract */
     override fun updateEndDate(
         params: ContractUpdateEndDateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractUpdateEndDateResponse> {
         val request =
             HttpRequest.builder()

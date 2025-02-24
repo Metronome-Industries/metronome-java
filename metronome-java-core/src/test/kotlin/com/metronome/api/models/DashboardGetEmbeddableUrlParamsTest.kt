@@ -85,7 +85,9 @@ class DashboardGetEmbeddableUrlParamsTest {
                         .build()
                 )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("4db51251-61de-4bfe-b9ce-495e244f3491")
         assertThat(body.dashboard()).isEqualTo(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
@@ -124,7 +126,7 @@ class DashboardGetEmbeddableUrlParamsTest {
                     DashboardGetEmbeddableUrlParams.DashboardOption.builder()
                         .key("hide_voided_invoices")
                         .value("true")
-                        .build()
+                        .build(),
                 )
             )
     }
@@ -136,7 +138,9 @@ class DashboardGetEmbeddableUrlParamsTest {
                 .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                 .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("4db51251-61de-4bfe-b9ce-495e244f3491")
         assertThat(body.dashboard()).isEqualTo(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)

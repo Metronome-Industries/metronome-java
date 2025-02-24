@@ -88,7 +88,7 @@ private constructor(
         fun build(): ContractProductCreateResponse =
             ContractProductCreateResponse(
                 checkRequired("data", data),
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

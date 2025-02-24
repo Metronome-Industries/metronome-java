@@ -1053,10 +1053,10 @@ class ContractServiceTest {
         val contractRetrieveRateScheduleResponse =
             contractService.retrieveRateSchedule(
                 ContractRetrieveRateScheduleParams.builder()
-                    .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .limit(1L)
                     .nextPage("next_page")
+                    .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .at(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                     .addSelector(
                         ContractRetrieveRateScheduleParams.Selector.builder()

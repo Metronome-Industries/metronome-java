@@ -624,7 +624,9 @@ class ContractAmendParamsTest {
                 )
                 .totalContractValue(0.0)
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
@@ -973,7 +975,9 @@ class ContractAmendParamsTest {
                 .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")

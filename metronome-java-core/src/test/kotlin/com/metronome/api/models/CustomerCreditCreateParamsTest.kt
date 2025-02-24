@@ -78,7 +78,9 @@ class CustomerCreditCreateParamsTest {
                 .salesforceOpportunityId("salesforce_opportunity_id")
                 .uniquenessKey("x")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.accessSchedule())
             .isEqualTo(
@@ -133,7 +135,9 @@ class CustomerCreditCreateParamsTest {
                 .priority(100.0)
                 .productId("f14d6729-6a44-4b13-9908-9387f1918790")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.accessSchedule())
             .isEqualTo(

@@ -162,7 +162,9 @@ class ContractRateCardRateAddManyParamsTest {
                         .build()
                 )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.rates())
@@ -233,7 +235,7 @@ class ContractRateCardRateAddManyParamsTest {
                         .quantity(0.0)
                         .addTier(Tier.builder().price(0.0).size(0.0).build())
                         .useListPrices(true)
-                        .build()
+                        .build(),
                 )
             )
     }
@@ -260,7 +262,9 @@ class ContractRateCardRateAddManyParamsTest {
                         .build()
                 )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.rates())
@@ -277,7 +281,7 @@ class ContractRateCardRateAddManyParamsTest {
                         .productId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                         .rateType(ContractRateCardRateAddManyParams.Rate.RateType.FLAT)
                         .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-                        .build()
+                        .build(),
                 )
             )
     }

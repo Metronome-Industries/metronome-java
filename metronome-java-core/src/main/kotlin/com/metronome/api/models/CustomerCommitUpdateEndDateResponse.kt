@@ -91,7 +91,7 @@ private constructor(
         fun build(): CustomerCommitUpdateEndDateResponse =
             CustomerCommitUpdateEndDateResponse(
                 checkRequired("data", data),
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

@@ -90,7 +90,7 @@ private constructor(
         fun build(): CustomerInvoiceRetrieveResponse =
             CustomerInvoiceRetrieveResponse(
                 checkRequired("data", data),
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

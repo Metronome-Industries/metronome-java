@@ -20,7 +20,7 @@ interface UsageService {
     @JvmOverloads
     fun list(
         params: UsageListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): UsageListResponse
 
     /**
@@ -40,6 +40,6 @@ interface UsageService {
     @JvmOverloads
     fun listWithGroups(
         params: UsageListWithGroupsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): UsageListWithGroupsPage
 }

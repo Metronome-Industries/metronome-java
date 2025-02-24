@@ -22,10 +22,8 @@ import com.metronome.api.models.CustomFieldRemoveKeyParams
 import com.metronome.api.models.CustomFieldSetValuesParams
 import java.util.concurrent.CompletableFuture
 
-class CustomFieldServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : CustomFieldServiceAsync {
+class CustomFieldServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    CustomFieldServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -37,7 +35,7 @@ internal constructor(
      */
     override fun addKey(
         params: CustomFieldAddKeyParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()
@@ -56,7 +54,7 @@ internal constructor(
     /** Deletes one or more custom fields on an instance of a Metronome entity. */
     override fun deleteValues(
         params: CustomFieldDeleteValuesParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()
@@ -77,7 +75,7 @@ internal constructor(
     /** List all active custom field keys, optionally filtered by entity type. */
     override fun listKeys(
         params: CustomFieldListKeysParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomFieldListKeysResponse> {
         val request =
             HttpRequest.builder()
@@ -104,7 +102,7 @@ internal constructor(
     /** Remove a key from the allow list for a given entity. */
     override fun removeKey(
         params: CustomFieldRemoveKeyParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()
@@ -130,7 +128,7 @@ internal constructor(
      */
     override fun setValues(
         params: CustomFieldSetValuesParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()

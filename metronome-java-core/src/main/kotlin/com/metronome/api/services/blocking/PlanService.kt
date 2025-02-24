@@ -20,21 +20,21 @@ interface PlanService {
     @JvmOverloads
     fun list(
         params: PlanListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): PlanListPage
 
     /** Fetch high level details of a specific plan. */
     @JvmOverloads
     fun getDetails(
         params: PlanGetDetailsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): PlanGetDetailsResponse
 
     /** Fetches a list of charges of a specific plan. */
     @JvmOverloads
     fun listCharges(
         params: PlanListChargesParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): PlanListChargesPage
 
     /**
@@ -44,6 +44,6 @@ interface PlanService {
     @JvmOverloads
     fun listCustomers(
         params: PlanListCustomersParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): PlanListCustomersPage
 }

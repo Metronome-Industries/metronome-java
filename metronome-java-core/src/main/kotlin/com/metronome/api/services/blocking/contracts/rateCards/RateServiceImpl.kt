@@ -20,10 +20,7 @@ import com.metronome.api.models.ContractRateCardRateAddResponse
 import com.metronome.api.models.ContractRateCardRateListPage
 import com.metronome.api.models.ContractRateCardRateListParams
 
-class RateServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : RateService {
+class RateServiceImpl internal constructor(private val clientOptions: ClientOptions) : RateService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -34,7 +31,7 @@ internal constructor(
     /** Get all rates for a rate card at a point in time */
     override fun list(
         params: ContractRateCardRateListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): ContractRateCardRateListPage {
         val request =
             HttpRequest.builder()
@@ -61,7 +58,7 @@ internal constructor(
     /** Add a new rate */
     override fun add(
         params: ContractRateCardRateAddParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): ContractRateCardRateAddResponse {
         val request =
             HttpRequest.builder()
@@ -87,7 +84,7 @@ internal constructor(
     /** Add new rates */
     override fun addMany(
         params: ContractRateCardRateAddManyParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): ContractRateCardRateAddManyResponse {
         val request =
             HttpRequest.builder()

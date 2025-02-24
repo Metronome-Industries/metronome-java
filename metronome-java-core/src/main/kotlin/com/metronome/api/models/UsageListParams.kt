@@ -30,7 +30,7 @@ import java.util.Optional
 class UsageListParams
 private constructor(
     private val nextPage: String?,
-    private val body: UsageListBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -90,7 +90,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): UsageListBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -102,9 +102,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class UsageListBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("ending_before")
         @ExcludeMissing
         private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -188,7 +188,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): UsageListBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -208,7 +208,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [UsageListBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var endingBefore: JsonField<OffsetDateTime>? = null
@@ -219,13 +219,13 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(usageListBody: UsageListBody) = apply {
-                endingBefore = usageListBody.endingBefore
-                startingOn = usageListBody.startingOn
-                windowSize = usageListBody.windowSize
-                billableMetrics = usageListBody.billableMetrics.map { it.toMutableList() }
-                customerIds = usageListBody.customerIds.map { it.toMutableList() }
-                additionalProperties = usageListBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                endingBefore = body.endingBefore
+                startingOn = body.startingOn
+                windowSize = body.windowSize
+                billableMetrics = body.billableMetrics.map { it.toMutableList() }
+                customerIds = body.customerIds.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun endingBefore(endingBefore: OffsetDateTime) =
@@ -339,8 +339,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): UsageListBody =
-                UsageListBody(
+            fun build(): Body =
+                Body(
                     checkRequired("endingBefore", endingBefore),
                     checkRequired("startingOn", startingOn),
                     checkRequired("windowSize", windowSize),
@@ -355,7 +355,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is UsageListBody && endingBefore == other.endingBefore && startingOn == other.startingOn && windowSize == other.windowSize && billableMetrics == other.billableMetrics && customerIds == other.customerIds && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && endingBefore == other.endingBefore && startingOn == other.startingOn && windowSize == other.windowSize && billableMetrics == other.billableMetrics && customerIds == other.customerIds && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -365,7 +365,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UsageListBody{endingBefore=$endingBefore, startingOn=$startingOn, windowSize=$windowSize, billableMetrics=$billableMetrics, customerIds=$customerIds, additionalProperties=$additionalProperties}"
+            "Body{endingBefore=$endingBefore, startingOn=$startingOn, windowSize=$windowSize, billableMetrics=$billableMetrics, customerIds=$customerIds, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -380,7 +380,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var nextPage: String? = null
-        private var body: UsageListBody.Builder = UsageListBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -599,11 +599,7 @@ private constructor(
      * into daily or hourly aggregates. A window_size of "none" will return a single usage aggregate
      * for the entirety of the specified period.
      */
-    class WindowSize
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class WindowSize @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -684,7 +680,19 @@ private constructor(
                 else -> throw MetronomeInvalidDataException("Unknown WindowSize: $value")
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -784,11 +792,7 @@ private constructor(
             }
 
             fun build(): BillableMetric =
-                BillableMetric(
-                    checkRequired("id", id),
-                    groupBy,
-                    additionalProperties.toImmutable(),
-                )
+                BillableMetric(checkRequired("id", id), groupBy, additionalProperties.toImmutable())
         }
 
         @NoAutoDetect

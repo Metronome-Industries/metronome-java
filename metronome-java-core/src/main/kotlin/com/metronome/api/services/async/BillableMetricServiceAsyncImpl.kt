@@ -24,9 +24,7 @@ import com.metronome.api.models.BillableMetricRetrieveResponse
 import java.util.concurrent.CompletableFuture
 
 class BillableMetricServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : BillableMetricServiceAsync {
+internal constructor(private val clientOptions: ClientOptions) : BillableMetricServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -37,7 +35,7 @@ internal constructor(
     /** Creates a new Billable Metric. */
     override fun create(
         params: BillableMetricCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<BillableMetricCreateResponse> {
         val request =
             HttpRequest.builder()
@@ -66,7 +64,7 @@ internal constructor(
     /** Get a billable metric. */
     override fun retrieve(
         params: BillableMetricRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<BillableMetricRetrieveResponse> {
         val request =
             HttpRequest.builder()
@@ -94,7 +92,7 @@ internal constructor(
     /** List all billable metrics. */
     override fun list(
         params: BillableMetricListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<BillableMetricListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -123,7 +121,7 @@ internal constructor(
     /** Archive an existing billable metric. */
     override fun archive(
         params: BillableMetricArchiveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<BillableMetricArchiveResponse> {
         val request =
             HttpRequest.builder()

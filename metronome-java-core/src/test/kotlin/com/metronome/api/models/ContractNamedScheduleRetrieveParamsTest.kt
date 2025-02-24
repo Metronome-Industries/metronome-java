@@ -25,7 +25,9 @@ class ContractNamedScheduleRetrieveParamsTest {
                 .scheduleName("my-schedule")
                 .coveringDate(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.scheduleName()).isEqualTo("my-schedule")
@@ -39,7 +41,9 @@ class ContractNamedScheduleRetrieveParamsTest {
                 .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .scheduleName("my-schedule")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.scheduleName()).isEqualTo("my-schedule")

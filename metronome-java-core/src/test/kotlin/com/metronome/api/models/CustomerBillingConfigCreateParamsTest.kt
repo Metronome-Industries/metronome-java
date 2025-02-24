@@ -38,7 +38,9 @@ class CustomerBillingConfigCreateParamsTest {
                     CustomerBillingConfigCreateParams.StripeCollectionMethod.CHARGE_AUTOMATICALLY
                 )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.billingProviderCustomerId()).isEqualTo("cus_AJ6y20bjkOOayM")
         assertThat(body.awsProductCode()).contains("aws_product_code")
@@ -58,7 +60,9 @@ class CustomerBillingConfigCreateParamsTest {
                 )
                 .billingProviderCustomerId("cus_AJ6y20bjkOOayM")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.billingProviderCustomerId()).isEqualTo("cus_AJ6y20bjkOOayM")
     }

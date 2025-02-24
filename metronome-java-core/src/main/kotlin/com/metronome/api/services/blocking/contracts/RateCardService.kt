@@ -31,7 +31,7 @@ interface RateCardService {
     @JvmOverloads
     fun create(
         params: ContractRateCardCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ContractRateCardCreateResponse
 
     /**
@@ -41,14 +41,14 @@ interface RateCardService {
     @JvmOverloads
     fun retrieve(
         params: ContractRateCardRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ContractRateCardRetrieveResponse
 
     /** Update a rate card */
     @JvmOverloads
     fun update(
         params: ContractRateCardUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ContractRateCardUpdateResponse
 
     /**
@@ -58,7 +58,7 @@ interface RateCardService {
     @JvmOverloads
     fun list(
         params: ContractRateCardListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ContractRateCardListPage
 
     /**
@@ -68,6 +68,6 @@ interface RateCardService {
     @JvmOverloads
     fun retrieveRateSchedule(
         params: ContractRateCardRetrieveRateScheduleParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ContractRateCardRetrieveRateScheduleResponse
 }

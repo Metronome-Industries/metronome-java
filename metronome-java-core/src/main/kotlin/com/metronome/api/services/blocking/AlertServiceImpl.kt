@@ -18,10 +18,8 @@ import com.metronome.api.models.AlertArchiveResponse
 import com.metronome.api.models.AlertCreateParams
 import com.metronome.api.models.AlertCreateResponse
 
-class AlertServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : AlertService {
+class AlertServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    AlertService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -31,7 +29,7 @@ internal constructor(
     /** Create a new alert */
     override fun create(
         params: AlertCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): AlertCreateResponse {
         val request =
             HttpRequest.builder()
@@ -56,7 +54,7 @@ internal constructor(
     /** Archive an existing alert */
     override fun archive(
         params: AlertArchiveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): AlertArchiveResponse {
         val request =
             HttpRequest.builder()

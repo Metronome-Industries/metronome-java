@@ -10,6 +10,7 @@ import com.metronome.api.models.ContractRateCardListParams
 import com.metronome.api.models.ContractRateCardRetrieveParams
 import com.metronome.api.models.ContractRateCardRetrieveRateScheduleParams
 import com.metronome.api.models.ContractRateCardUpdateParams
+import com.metronome.api.models.Id
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -66,7 +67,7 @@ class RateCardServiceTest {
         val contractRateCardRetrieveResponse =
             rateCardService.retrieve(
                 ContractRateCardRetrieveParams.builder()
-                    .id("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
+                    .id(Id.builder().id("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe").build())
                     .build()
             )
         println(contractRateCardRetrieveResponse)
@@ -129,10 +130,10 @@ class RateCardServiceTest {
         val contractRateCardRetrieveRateScheduleResponse =
             rateCardService.retrieveRateSchedule(
                 ContractRateCardRetrieveRateScheduleParams.builder()
-                    .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
-                    .startingAt(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
                     .limit(1L)
                     .nextPage("next_page")
+                    .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
+                    .startingAt(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .addSelector(
                         ContractRateCardRetrieveRateScheduleParams.Selector.builder()

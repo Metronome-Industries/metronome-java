@@ -31,7 +31,7 @@ class CustomerListCostsResponseTest {
                                         ),
                                     "name" to "name",
                                 )
-                            )
+                            ),
                         )
                         .build()
                 )
@@ -58,7 +58,7 @@ class CustomerListCostsResponseTest {
                                     ),
                                 "name" to "name",
                             )
-                        )
+                        ),
                     )
                     .build()
             )

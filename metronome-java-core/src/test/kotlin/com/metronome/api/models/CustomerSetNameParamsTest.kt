@@ -22,7 +22,9 @@ class CustomerSetNameParamsTest {
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .name("Example, Inc.")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("Example, Inc.")
     }
@@ -34,7 +36,9 @@ class CustomerSetNameParamsTest {
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .name("Example, Inc.")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("Example, Inc.")
     }

@@ -23,7 +23,7 @@ import java.util.Optional
 /** Get a specific contract */
 class ContractRetrieveParams
 private constructor(
-    private val body: ContractRetrieveBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -64,16 +64,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractRetrieveBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class ContractRetrieveBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("contract_id")
         @ExcludeMissing
         private val contractId: JsonField<String> = JsonMissing.of(),
@@ -138,7 +138,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractRetrieveBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -157,7 +157,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractRetrieveBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
@@ -167,12 +167,12 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(contractRetrieveBody: ContractRetrieveBody) = apply {
-                contractId = contractRetrieveBody.contractId
-                customerId = contractRetrieveBody.customerId
-                includeBalance = contractRetrieveBody.includeBalance
-                includeLedgers = contractRetrieveBody.includeLedgers
-                additionalProperties = contractRetrieveBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                contractId = body.contractId
+                customerId = body.customerId
+                includeBalance = body.includeBalance
+                includeLedgers = body.includeLedgers
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun contractId(contractId: String) = contractId(JsonField.of(contractId))
@@ -232,8 +232,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractRetrieveBody =
-                ContractRetrieveBody(
+            fun build(): Body =
+                Body(
                     checkRequired("contractId", contractId),
                     checkRequired("customerId", customerId),
                     includeBalance,
@@ -247,7 +247,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractRetrieveBody && contractId == other.contractId && customerId == other.customerId && includeBalance == other.includeBalance && includeLedgers == other.includeLedgers && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && contractId == other.contractId && customerId == other.customerId && includeBalance == other.includeBalance && includeLedgers == other.includeLedgers && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -257,7 +257,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractRetrieveBody{contractId=$contractId, customerId=$customerId, includeBalance=$includeBalance, includeLedgers=$includeLedgers, additionalProperties=$additionalProperties}"
+            "Body{contractId=$contractId, customerId=$customerId, includeBalance=$includeBalance, includeLedgers=$includeLedgers, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -271,7 +271,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: ContractRetrieveBody.Builder = ContractRetrieveBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

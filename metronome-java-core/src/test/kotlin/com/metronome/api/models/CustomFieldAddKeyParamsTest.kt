@@ -24,7 +24,9 @@ class CustomFieldAddKeyParamsTest {
                 .entity(CustomFieldAddKeyParams.Entity.ALERT)
                 .key("x_account_id")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.enforceUniqueness()).isEqualTo(true)
         assertThat(body.entity()).isEqualTo(CustomFieldAddKeyParams.Entity.ALERT)
@@ -39,7 +41,9 @@ class CustomFieldAddKeyParamsTest {
                 .entity(CustomFieldAddKeyParams.Entity.ALERT)
                 .key("x_account_id")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.enforceUniqueness()).isEqualTo(true)
         assertThat(body.entity()).isEqualTo(CustomFieldAddKeyParams.Entity.ALERT)

@@ -20,10 +20,8 @@ import com.metronome.api.models.CustomerBillingConfigRetrieveParams
 import com.metronome.api.models.CustomerBillingConfigRetrieveResponse
 import java.util.concurrent.CompletableFuture
 
-class BillingConfigServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : BillingConfigServiceAsync {
+class BillingConfigServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    BillingConfigServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -32,7 +30,7 @@ internal constructor(
     /** Set the billing configuration for a given customer. */
     override fun create(
         params: CustomerBillingConfigCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()
@@ -41,7 +39,7 @@ internal constructor(
                     "customers",
                     params.getPathParam(0),
                     "billing-config",
-                    params.getPathParam(1)
+                    params.getPathParam(1),
                 )
                 .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
@@ -58,7 +56,7 @@ internal constructor(
     /** Fetch the billing configuration for the given customer. */
     override fun retrieve(
         params: CustomerBillingConfigRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerBillingConfigRetrieveResponse> {
         val request =
             HttpRequest.builder()
@@ -67,7 +65,7 @@ internal constructor(
                     "customers",
                     params.getPathParam(0),
                     "billing-config",
-                    params.getPathParam(1)
+                    params.getPathParam(1),
                 )
                 .build()
                 .prepareAsync(clientOptions, params)
@@ -92,7 +90,7 @@ internal constructor(
      */
     override fun delete(
         params: CustomerBillingConfigDeleteParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()
@@ -101,7 +99,7 @@ internal constructor(
                     "customers",
                     params.getPathParam(0),
                     "billing-config",
-                    params.getPathParam(1)
+                    params.getPathParam(1),
                 )
                 .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                 .build()

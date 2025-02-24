@@ -25,10 +25,8 @@ import com.metronome.api.models.ContractProductUpdateParams
 import com.metronome.api.models.ContractProductUpdateResponse
 import java.util.concurrent.CompletableFuture
 
-class ProductServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : ProductServiceAsync {
+class ProductServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    ProductServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -39,7 +37,7 @@ internal constructor(
     /** Create a new product */
     override fun create(
         params: ContractProductCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractProductCreateResponse> {
         val request =
             HttpRequest.builder()
@@ -68,7 +66,7 @@ internal constructor(
     /** Get a specific product */
     override fun retrieve(
         params: ContractProductRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractProductRetrieveResponse> {
         val request =
             HttpRequest.builder()
@@ -97,7 +95,7 @@ internal constructor(
     /** Update a product */
     override fun update(
         params: ContractProductUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractProductUpdateResponse> {
         val request =
             HttpRequest.builder()
@@ -126,7 +124,7 @@ internal constructor(
     /** List products */
     override fun list(
         params: ContractProductListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractProductListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -156,7 +154,7 @@ internal constructor(
     /** Archive a product */
     override fun archive(
         params: ContractProductArchiveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ContractProductArchiveResponse> {
         val request =
             HttpRequest.builder()

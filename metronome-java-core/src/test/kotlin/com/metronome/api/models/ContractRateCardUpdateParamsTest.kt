@@ -39,7 +39,9 @@ class ContractRateCardUpdateParamsTest {
                 .description("My Updated Rate Card Description")
                 .name("My Updated Rate Card")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.aliases())
@@ -62,7 +64,9 @@ class ContractRateCardUpdateParamsTest {
             ContractRateCardUpdateParams.builder()
                 .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
     }

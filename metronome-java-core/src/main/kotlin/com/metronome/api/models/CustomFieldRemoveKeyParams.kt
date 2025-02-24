@@ -24,7 +24,7 @@ import java.util.Objects
 /** Remove a key from the allow list for a given entity. */
 class CustomFieldRemoveKeyParams
 private constructor(
-    private val body: CustomFieldRemoveKeyBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -43,16 +43,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomFieldRemoveKeyBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class CustomFieldRemoveKeyBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("entity")
         @ExcludeMissing
         private val entity: JsonField<Entity> = JsonMissing.of(),
@@ -75,7 +75,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomFieldRemoveKeyBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -92,7 +92,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomFieldRemoveKeyBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var entity: JsonField<Entity>? = null
@@ -100,10 +100,10 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customFieldRemoveKeyBody: CustomFieldRemoveKeyBody) = apply {
-                entity = customFieldRemoveKeyBody.entity
-                key = customFieldRemoveKeyBody.key
-                additionalProperties = customFieldRemoveKeyBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                entity = body.entity
+                key = body.key
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun entity(entity: Entity) = entity(JsonField.of(entity))
@@ -133,8 +133,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomFieldRemoveKeyBody =
-                CustomFieldRemoveKeyBody(
+            fun build(): Body =
+                Body(
                     checkRequired("entity", entity),
                     checkRequired("key", key),
                     additionalProperties.toImmutable(),
@@ -146,7 +146,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomFieldRemoveKeyBody && entity == other.entity && key == other.key && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && entity == other.entity && key == other.key && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -156,7 +156,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomFieldRemoveKeyBody{entity=$entity, key=$key, additionalProperties=$additionalProperties}"
+            "Body{entity=$entity, key=$key, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -170,7 +170,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: CustomFieldRemoveKeyBody.Builder = CustomFieldRemoveKeyBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -314,11 +314,7 @@ private constructor(
             )
     }
 
-    class Entity
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Entity @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -481,7 +477,19 @@ private constructor(
                 else -> throw MetronomeInvalidDataException("Unknown Entity: $value")
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

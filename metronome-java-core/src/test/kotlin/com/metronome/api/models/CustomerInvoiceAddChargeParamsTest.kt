@@ -33,7 +33,9 @@ class CustomerInvoiceAddChargeParamsTest {
                 .price(250.0)
                 .quantity(1.0)
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.chargeId()).isEqualTo("5ae4b726-1ebe-439c-9190-9831760ba195")
         assertThat(body.customerPlanId()).isEqualTo("a23b3cf4-47fb-4c3f-bb3d-9e64f7704015")
@@ -56,7 +58,9 @@ class CustomerInvoiceAddChargeParamsTest {
                 .price(250.0)
                 .quantity(1.0)
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.chargeId()).isEqualTo("5ae4b726-1ebe-439c-9190-9831760ba195")
         assertThat(body.customerPlanId()).isEqualTo("a23b3cf4-47fb-4c3f-bb3d-9e64f7704015")

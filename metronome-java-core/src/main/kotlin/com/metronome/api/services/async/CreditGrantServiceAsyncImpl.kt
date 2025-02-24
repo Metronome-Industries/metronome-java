@@ -25,10 +25,8 @@ import com.metronome.api.models.CreditGrantVoidParams
 import com.metronome.api.models.CreditGrantVoidResponse
 import java.util.concurrent.CompletableFuture
 
-class CreditGrantServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : CreditGrantServiceAsync {
+class CreditGrantServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    CreditGrantServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -39,7 +37,7 @@ internal constructor(
     /** Create a new credit grant */
     override fun create(
         params: CreditGrantCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CreditGrantCreateResponse> {
         val request =
             HttpRequest.builder()
@@ -68,7 +66,7 @@ internal constructor(
     /** List credit grants. This list does not included voided grants. */
     override fun list(
         params: CreditGrantListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CreditGrantListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -98,7 +96,7 @@ internal constructor(
     /** Edit an existing credit grant */
     override fun edit(
         params: CreditGrantEditParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CreditGrantEditResponse> {
         val request =
             HttpRequest.builder()
@@ -131,7 +129,7 @@ internal constructor(
      */
     override fun listEntries(
         params: CreditGrantListEntriesParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CreditGrantListEntriesResponse> {
         val request =
             HttpRequest.builder()
@@ -160,7 +158,7 @@ internal constructor(
     /** Void a credit grant */
     override fun void_(
         params: CreditGrantVoidParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CreditGrantVoidResponse> {
         val request =
             HttpRequest.builder()

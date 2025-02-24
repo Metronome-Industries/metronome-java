@@ -19,6 +19,6 @@ interface AuditLogService {
     @JvmOverloads
     fun list(
         params: AuditLogListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): AuditLogListPage
 }

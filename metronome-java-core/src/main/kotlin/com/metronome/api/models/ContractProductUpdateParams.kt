@@ -24,7 +24,7 @@ import java.util.Optional
 /** Update a product */
 class ContractProductUpdateParams
 private constructor(
-    private val body: ContractProductUpdateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -215,16 +215,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractProductUpdateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class ContractProductUpdateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("product_id")
         @ExcludeMissing
         private val productId: JsonField<String> = JsonMissing.of(),
@@ -495,7 +495,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractProductUpdateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -525,7 +525,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractProductUpdateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var productId: JsonField<String>? = null
@@ -546,26 +546,23 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(contractProductUpdateBody: ContractProductUpdateBody) = apply {
-                productId = contractProductUpdateBody.productId
-                startingAt = contractProductUpdateBody.startingAt
-                billableMetricId = contractProductUpdateBody.billableMetricId
-                compositeProductIds =
-                    contractProductUpdateBody.compositeProductIds.map { it.toMutableList() }
-                compositeTags = contractProductUpdateBody.compositeTags.map { it.toMutableList() }
-                excludeFreeUsage = contractProductUpdateBody.excludeFreeUsage
-                isRefundable = contractProductUpdateBody.isRefundable
-                name = contractProductUpdateBody.name
-                netsuiteInternalItemId = contractProductUpdateBody.netsuiteInternalItemId
-                netsuiteOverageItemId = contractProductUpdateBody.netsuiteOverageItemId
-                presentationGroupKey =
-                    contractProductUpdateBody.presentationGroupKey.map { it.toMutableList() }
-                pricingGroupKey =
-                    contractProductUpdateBody.pricingGroupKey.map { it.toMutableList() }
-                quantityConversion = contractProductUpdateBody.quantityConversion
-                quantityRounding = contractProductUpdateBody.quantityRounding
-                tags = contractProductUpdateBody.tags.map { it.toMutableList() }
-                additionalProperties = contractProductUpdateBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                productId = body.productId
+                startingAt = body.startingAt
+                billableMetricId = body.billableMetricId
+                compositeProductIds = body.compositeProductIds.map { it.toMutableList() }
+                compositeTags = body.compositeTags.map { it.toMutableList() }
+                excludeFreeUsage = body.excludeFreeUsage
+                isRefundable = body.isRefundable
+                name = body.name
+                netsuiteInternalItemId = body.netsuiteInternalItemId
+                netsuiteOverageItemId = body.netsuiteOverageItemId
+                presentationGroupKey = body.presentationGroupKey.map { it.toMutableList() }
+                pricingGroupKey = body.pricingGroupKey.map { it.toMutableList() }
+                quantityConversion = body.quantityConversion
+                quantityRounding = body.quantityRounding
+                tags = body.tags.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** ID of the product to update */
@@ -910,8 +907,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractProductUpdateBody =
-                ContractProductUpdateBody(
+            fun build(): Body =
+                Body(
                     checkRequired("productId", productId),
                     checkRequired("startingAt", startingAt),
                     billableMetricId,
@@ -936,7 +933,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractProductUpdateBody && productId == other.productId && startingAt == other.startingAt && billableMetricId == other.billableMetricId && compositeProductIds == other.compositeProductIds && compositeTags == other.compositeTags && excludeFreeUsage == other.excludeFreeUsage && isRefundable == other.isRefundable && name == other.name && netsuiteInternalItemId == other.netsuiteInternalItemId && netsuiteOverageItemId == other.netsuiteOverageItemId && presentationGroupKey == other.presentationGroupKey && pricingGroupKey == other.pricingGroupKey && quantityConversion == other.quantityConversion && quantityRounding == other.quantityRounding && tags == other.tags && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && productId == other.productId && startingAt == other.startingAt && billableMetricId == other.billableMetricId && compositeProductIds == other.compositeProductIds && compositeTags == other.compositeTags && excludeFreeUsage == other.excludeFreeUsage && isRefundable == other.isRefundable && name == other.name && netsuiteInternalItemId == other.netsuiteInternalItemId && netsuiteOverageItemId == other.netsuiteOverageItemId && presentationGroupKey == other.presentationGroupKey && pricingGroupKey == other.pricingGroupKey && quantityConversion == other.quantityConversion && quantityRounding == other.quantityRounding && tags == other.tags && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -946,7 +943,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractProductUpdateBody{productId=$productId, startingAt=$startingAt, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, name=$name, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, tags=$tags, additionalProperties=$additionalProperties}"
+            "Body{productId=$productId, startingAt=$startingAt, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, name=$name, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, tags=$tags, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -960,7 +957,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: ContractProductUpdateBody.Builder = ContractProductUpdateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

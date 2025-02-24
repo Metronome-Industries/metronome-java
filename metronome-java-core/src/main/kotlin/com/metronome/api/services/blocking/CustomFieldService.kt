@@ -21,28 +21,28 @@ interface CustomFieldService {
     @JvmOverloads
     fun addKey(
         params: CustomFieldAddKeyParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     )
 
     /** Deletes one or more custom fields on an instance of a Metronome entity. */
     @JvmOverloads
     fun deleteValues(
         params: CustomFieldDeleteValuesParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     )
 
     /** List all active custom field keys, optionally filtered by entity type. */
     @JvmOverloads
     fun listKeys(
         params: CustomFieldListKeysParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomFieldListKeysResponse
 
     /** Remove a key from the allow list for a given entity. */
     @JvmOverloads
     fun removeKey(
         params: CustomFieldRemoveKeyParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     )
 
     /**
@@ -56,6 +56,6 @@ interface CustomFieldService {
     @JvmOverloads
     fun setValues(
         params: CustomFieldSetValuesParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     )
 }

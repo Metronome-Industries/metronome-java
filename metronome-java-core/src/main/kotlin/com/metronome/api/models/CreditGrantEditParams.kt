@@ -24,7 +24,7 @@ import java.util.Optional
 /** Edit an existing credit grant */
 class CreditGrantEditParams
 private constructor(
-    private val body: CreditGrantEditBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -59,16 +59,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CreditGrantEditBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class CreditGrantEditBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("credit_grant_type")
         @ExcludeMissing
@@ -119,7 +119,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CreditGrantEditBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -138,7 +138,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CreditGrantEditBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -148,12 +148,12 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(creditGrantEditBody: CreditGrantEditBody) = apply {
-                id = creditGrantEditBody.id
-                creditGrantType = creditGrantEditBody.creditGrantType
-                expiresAt = creditGrantEditBody.expiresAt
-                name = creditGrantEditBody.name
-                additionalProperties = creditGrantEditBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                id = body.id
+                creditGrantType = body.creditGrantType
+                expiresAt = body.expiresAt
+                name = body.name
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** the ID of the credit grant */
@@ -204,8 +204,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CreditGrantEditBody =
-                CreditGrantEditBody(
+            fun build(): Body =
+                Body(
                     checkRequired("id", id),
                     creditGrantType,
                     expiresAt,
@@ -219,7 +219,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CreditGrantEditBody && id == other.id && creditGrantType == other.creditGrantType && expiresAt == other.expiresAt && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && id == other.id && creditGrantType == other.creditGrantType && expiresAt == other.expiresAt && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -229,7 +229,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CreditGrantEditBody{id=$id, creditGrantType=$creditGrantType, expiresAt=$expiresAt, name=$name, additionalProperties=$additionalProperties}"
+            "Body{id=$id, creditGrantType=$creditGrantType, expiresAt=$expiresAt, name=$name, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -243,7 +243,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: CreditGrantEditBody.Builder = CreditGrantEditBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

@@ -98,7 +98,9 @@ class BillableMetricCreateParamsTest {
                 )
                 .sql("sql")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("CPU Hours")
         assertThat(body.aggregationKey()).contains("cpu_hours")
@@ -146,7 +148,9 @@ class BillableMetricCreateParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params = BillableMetricCreateParams.builder().name("CPU Hours").build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.name()).isEqualTo("CPU Hours")
     }

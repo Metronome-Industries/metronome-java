@@ -26,7 +26,7 @@ import java.util.Optional
 /** Create a new contract */
 class ContractCreateParams
 private constructor(
-    private val body: ContractCreateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -206,16 +206,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractCreateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class ContractCreateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("customer_id")
         @ExcludeMissing
         private val customerId: JsonField<String> = JsonMissing.of(),
@@ -551,7 +551,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractCreateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -593,7 +593,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractCreateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
@@ -631,37 +631,35 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(contractCreateBody: ContractCreateBody) = apply {
-                customerId = contractCreateBody.customerId
-                startingAt = contractCreateBody.startingAt
-                billingProviderConfiguration = contractCreateBody.billingProviderConfiguration
-                commits = contractCreateBody.commits.map { it.toMutableList() }
-                credits = contractCreateBody.credits.map { it.toMutableList() }
-                customFields = contractCreateBody.customFields
-                discounts = contractCreateBody.discounts.map { it.toMutableList() }
-                endingBefore = contractCreateBody.endingBefore
-                multiplierOverridePrioritization =
-                    contractCreateBody.multiplierOverridePrioritization
-                name = contractCreateBody.name
-                netPaymentTermsDays = contractCreateBody.netPaymentTermsDays
-                netsuiteSalesOrderId = contractCreateBody.netsuiteSalesOrderId
-                overrides = contractCreateBody.overrides.map { it.toMutableList() }
-                professionalServices =
-                    contractCreateBody.professionalServices.map { it.toMutableList() }
-                rateCardAlias = contractCreateBody.rateCardAlias
-                rateCardId = contractCreateBody.rateCardId
-                recurringCommits = contractCreateBody.recurringCommits.map { it.toMutableList() }
-                recurringCredits = contractCreateBody.recurringCredits.map { it.toMutableList() }
-                resellerRoyalties = contractCreateBody.resellerRoyalties.map { it.toMutableList() }
-                salesforceOpportunityId = contractCreateBody.salesforceOpportunityId
-                scheduledCharges = contractCreateBody.scheduledCharges.map { it.toMutableList() }
-                scheduledChargesOnUsageInvoices = contractCreateBody.scheduledChargesOnUsageInvoices
-                totalContractValue = contractCreateBody.totalContractValue
-                transition = contractCreateBody.transition
-                uniquenessKey = contractCreateBody.uniquenessKey
-                usageFilter = contractCreateBody.usageFilter
-                usageStatementSchedule = contractCreateBody.usageStatementSchedule
-                additionalProperties = contractCreateBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                customerId = body.customerId
+                startingAt = body.startingAt
+                billingProviderConfiguration = body.billingProviderConfiguration
+                commits = body.commits.map { it.toMutableList() }
+                credits = body.credits.map { it.toMutableList() }
+                customFields = body.customFields
+                discounts = body.discounts.map { it.toMutableList() }
+                endingBefore = body.endingBefore
+                multiplierOverridePrioritization = body.multiplierOverridePrioritization
+                name = body.name
+                netPaymentTermsDays = body.netPaymentTermsDays
+                netsuiteSalesOrderId = body.netsuiteSalesOrderId
+                overrides = body.overrides.map { it.toMutableList() }
+                professionalServices = body.professionalServices.map { it.toMutableList() }
+                rateCardAlias = body.rateCardAlias
+                rateCardId = body.rateCardId
+                recurringCommits = body.recurringCommits.map { it.toMutableList() }
+                recurringCredits = body.recurringCredits.map { it.toMutableList() }
+                resellerRoyalties = body.resellerRoyalties.map { it.toMutableList() }
+                salesforceOpportunityId = body.salesforceOpportunityId
+                scheduledCharges = body.scheduledCharges.map { it.toMutableList() }
+                scheduledChargesOnUsageInvoices = body.scheduledChargesOnUsageInvoices
+                totalContractValue = body.totalContractValue
+                transition = body.transition
+                uniquenessKey = body.uniquenessKey
+                usageFilter = body.usageFilter
+                usageStatementSchedule = body.usageStatementSchedule
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun customerId(customerId: String) = customerId(JsonField.of(customerId))
@@ -1038,8 +1036,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractCreateBody =
-                ContractCreateBody(
+            fun build(): Body =
+                Body(
                     checkRequired("customerId", customerId),
                     checkRequired("startingAt", startingAt),
                     billingProviderConfiguration,
@@ -1076,7 +1074,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractCreateBody && customerId == other.customerId && startingAt == other.startingAt && billingProviderConfiguration == other.billingProviderConfiguration && commits == other.commits && credits == other.credits && customFields == other.customFields && discounts == other.discounts && endingBefore == other.endingBefore && multiplierOverridePrioritization == other.multiplierOverridePrioritization && name == other.name && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && overrides == other.overrides && professionalServices == other.professionalServices && rateCardAlias == other.rateCardAlias && rateCardId == other.rateCardId && recurringCommits == other.recurringCommits && recurringCredits == other.recurringCredits && resellerRoyalties == other.resellerRoyalties && salesforceOpportunityId == other.salesforceOpportunityId && scheduledCharges == other.scheduledCharges && scheduledChargesOnUsageInvoices == other.scheduledChargesOnUsageInvoices && totalContractValue == other.totalContractValue && transition == other.transition && uniquenessKey == other.uniquenessKey && usageFilter == other.usageFilter && usageStatementSchedule == other.usageStatementSchedule && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && customerId == other.customerId && startingAt == other.startingAt && billingProviderConfiguration == other.billingProviderConfiguration && commits == other.commits && credits == other.credits && customFields == other.customFields && discounts == other.discounts && endingBefore == other.endingBefore && multiplierOverridePrioritization == other.multiplierOverridePrioritization && name == other.name && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && overrides == other.overrides && professionalServices == other.professionalServices && rateCardAlias == other.rateCardAlias && rateCardId == other.rateCardId && recurringCommits == other.recurringCommits && recurringCredits == other.recurringCredits && resellerRoyalties == other.resellerRoyalties && salesforceOpportunityId == other.salesforceOpportunityId && scheduledCharges == other.scheduledCharges && scheduledChargesOnUsageInvoices == other.scheduledChargesOnUsageInvoices && totalContractValue == other.totalContractValue && transition == other.transition && uniquenessKey == other.uniquenessKey && usageFilter == other.usageFilter && usageStatementSchedule == other.usageStatementSchedule && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -1086,7 +1084,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractCreateBody{customerId=$customerId, startingAt=$startingAt, billingProviderConfiguration=$billingProviderConfiguration, commits=$commits, credits=$credits, customFields=$customFields, discounts=$discounts, endingBefore=$endingBefore, multiplierOverridePrioritization=$multiplierOverridePrioritization, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, overrides=$overrides, professionalServices=$professionalServices, rateCardAlias=$rateCardAlias, rateCardId=$rateCardId, recurringCommits=$recurringCommits, recurringCredits=$recurringCredits, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledCharges=$scheduledCharges, scheduledChargesOnUsageInvoices=$scheduledChargesOnUsageInvoices, totalContractValue=$totalContractValue, transition=$transition, uniquenessKey=$uniquenessKey, usageFilter=$usageFilter, usageStatementSchedule=$usageStatementSchedule, additionalProperties=$additionalProperties}"
+            "Body{customerId=$customerId, startingAt=$startingAt, billingProviderConfiguration=$billingProviderConfiguration, commits=$commits, credits=$credits, customFields=$customFields, discounts=$discounts, endingBefore=$endingBefore, multiplierOverridePrioritization=$multiplierOverridePrioritization, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, overrides=$overrides, professionalServices=$professionalServices, rateCardAlias=$rateCardAlias, rateCardId=$rateCardId, recurringCommits=$recurringCommits, recurringCredits=$recurringCredits, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledCharges=$scheduledCharges, scheduledChargesOnUsageInvoices=$scheduledChargesOnUsageInvoices, totalContractValue=$totalContractValue, transition=$transition, uniquenessKey=$uniquenessKey, usageFilter=$usageFilter, usageStatementSchedule=$usageStatementSchedule, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -1100,7 +1098,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: ContractCreateBody.Builder = ContractCreateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -1634,9 +1632,7 @@ private constructor(
 
         class BillingProvider
         @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -1730,7 +1726,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown BillingProvider: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1747,9 +1755,7 @@ private constructor(
 
         class DeliveryMethod
         @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -1837,7 +1843,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown DeliveryMethod: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -2360,11 +2378,7 @@ private constructor(
                 )
         }
 
-        class Type
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -2437,7 +2451,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown Type: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -2751,7 +2777,7 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
         ) {
 
             @JsonAnyGetter
@@ -3276,9 +3302,7 @@ private constructor(
 
                 class AmountDistribution
                 @JsonCreator
-                private constructor(
-                    private val value: JsonField<String>,
-                ) : Enum {
+                private constructor(private val value: JsonField<String>) : Enum {
 
                     /**
                      * Returns this class instance's raw value.
@@ -3366,7 +3390,19 @@ private constructor(
                                 )
                         }
 
-                    fun asString(): String = _value().asStringOrThrow()
+                    /**
+                     * Returns this class instance's primitive wire representation.
+                     *
+                     * This differs from the [toString] method because that method is primarily for
+                     * debugging and generally doesn't throw.
+                     *
+                     * @throws MetronomeInvalidDataException if this class instance's value does not
+                     *   have the expected primitive type.
+                     */
+                    fun asString(): String =
+                        _value().asString().orElseThrow {
+                            MetronomeInvalidDataException("Value is not a String")
+                        }
 
                     override fun equals(other: Any?): Boolean {
                         if (this === other) {
@@ -3383,9 +3419,7 @@ private constructor(
 
                 class Frequency
                 @JsonCreator
-                private constructor(
-                    private val value: JsonField<String>,
-                ) : Enum {
+                private constructor(private val value: JsonField<String>) : Enum {
 
                     /**
                      * Returns this class instance's raw value.
@@ -3475,7 +3509,19 @@ private constructor(
                             else -> throw MetronomeInvalidDataException("Unknown Frequency: $value")
                         }
 
-                    fun asString(): String = _value().asStringOrThrow()
+                    /**
+                     * Returns this class instance's primitive wire representation.
+                     *
+                     * This differs from the [toString] method because that method is primarily for
+                     * debugging and generally doesn't throw.
+                     *
+                     * @throws MetronomeInvalidDataException if this class instance's value does not
+                     *   have the expected primitive type.
+                     */
+                    fun asString(): String =
+                        _value().asString().orElseThrow {
+                            MetronomeInvalidDataException("Value is not a String")
+                        }
 
                     override fun equals(other: Any?): Boolean {
                         if (this === other) {
@@ -3743,11 +3789,8 @@ private constructor(
                 "InvoiceSchedule{creditTypeId=$creditTypeId, recurringSchedule=$recurringSchedule, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
         }
 
-        class RateType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class RateType @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -3822,7 +3865,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -4488,7 +4543,7 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
         ) {
 
             @JsonAnyGetter
@@ -4564,11 +4619,8 @@ private constructor(
             override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
         }
 
-        class RateType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class RateType @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -4643,7 +4695,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -4681,7 +4745,7 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
     ) {
 
         @JsonAnyGetter
@@ -5360,9 +5424,7 @@ private constructor(
 
                 class AmountDistribution
                 @JsonCreator
-                private constructor(
-                    private val value: JsonField<String>,
-                ) : Enum {
+                private constructor(private val value: JsonField<String>) : Enum {
 
                     /**
                      * Returns this class instance's raw value.
@@ -5450,7 +5512,19 @@ private constructor(
                                 )
                         }
 
-                    fun asString(): String = _value().asStringOrThrow()
+                    /**
+                     * Returns this class instance's primitive wire representation.
+                     *
+                     * This differs from the [toString] method because that method is primarily for
+                     * debugging and generally doesn't throw.
+                     *
+                     * @throws MetronomeInvalidDataException if this class instance's value does not
+                     *   have the expected primitive type.
+                     */
+                    fun asString(): String =
+                        _value().asString().orElseThrow {
+                            MetronomeInvalidDataException("Value is not a String")
+                        }
 
                     override fun equals(other: Any?): Boolean {
                         if (this === other) {
@@ -5467,9 +5541,7 @@ private constructor(
 
                 class Frequency
                 @JsonCreator
-                private constructor(
-                    private val value: JsonField<String>,
-                ) : Enum {
+                private constructor(private val value: JsonField<String>) : Enum {
 
                     /**
                      * Returns this class instance's raw value.
@@ -5559,7 +5631,19 @@ private constructor(
                             else -> throw MetronomeInvalidDataException("Unknown Frequency: $value")
                         }
 
-                    fun asString(): String = _value().asStringOrThrow()
+                    /**
+                     * Returns this class instance's primitive wire representation.
+                     *
+                     * This differs from the [toString] method because that method is primarily for
+                     * debugging and generally doesn't throw.
+                     *
+                     * @throws MetronomeInvalidDataException if this class instance's value does not
+                     *   have the expected primitive type.
+                     */
+                    fun asString(): String =
+                        _value().asString().orElseThrow {
+                            MetronomeInvalidDataException("Value is not a String")
+                        }
 
                     override fun equals(other: Any?): Boolean {
                         if (this === other) {
@@ -5832,7 +5916,7 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
         ) {
 
             @JsonAnyGetter
@@ -5934,9 +6018,7 @@ private constructor(
      */
     class MultiplierOverridePrioritization
     @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -6017,7 +6099,19 @@ private constructor(
                     )
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -6937,7 +7031,7 @@ private constructor(
             @JsonCreator
             private constructor(
                 @JsonAnySetter
-                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
             ) {
 
                 @JsonAnyGetter
@@ -7025,7 +7119,7 @@ private constructor(
             @JsonCreator
             private constructor(
                 @JsonAnySetter
-                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
             ) {
 
                 @JsonAnyGetter
@@ -7382,11 +7476,8 @@ private constructor(
                     )
             }
 
-            class RateType
-            @JsonCreator
-            private constructor(
-                private val value: JsonField<String>,
-            ) : Enum {
+            class RateType @JsonCreator private constructor(private val value: JsonField<String>) :
+                Enum {
 
                 /**
                  * Returns this class instance's raw value.
@@ -7480,7 +7571,19 @@ private constructor(
                         else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
                     }
 
-                fun asString(): String = _value().asStringOrThrow()
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -7503,7 +7606,7 @@ private constructor(
             @JsonCreator
             private constructor(
                 @JsonAnySetter
-                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
             ) {
 
                 @JsonAnyGetter
@@ -7601,11 +7704,7 @@ private constructor(
          * Indicates whether the override applies to commit rates or list rates. Can only be used
          * for overrides that have `is_commit_specific` set to `true`. Defaults to `"LIST_RATE"`.
          */
-        class Target
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class Target @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -7680,7 +7779,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown Target: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -7815,11 +7926,7 @@ private constructor(
         }
 
         /** Overwrites are prioritized over multipliers and tiered overrides. */
-        class Type
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -7898,7 +8005,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown Type: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -8153,7 +8272,7 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
         ) {
 
             @JsonAnyGetter
@@ -8942,11 +9061,8 @@ private constructor(
                     )
             }
 
-            class Unit
-            @JsonCreator
-            private constructor(
-                private val value: JsonField<String>,
-            ) : Enum {
+            class Unit @JsonCreator private constructor(private val value: JsonField<String>) :
+                Enum {
 
                 /**
                  * Returns this class instance's raw value.
@@ -8967,7 +9083,7 @@ private constructor(
 
                 /** An enum containing [Unit]'s known values. */
                 enum class Known {
-                    PERIODS,
+                    PERIODS
                 }
 
                 /**
@@ -9015,7 +9131,19 @@ private constructor(
                         else -> throw MetronomeInvalidDataException("Unknown Unit: $value")
                     }
 
-                fun asString(): String = _value().asStringOrThrow()
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -9186,11 +9314,8 @@ private constructor(
         }
 
         /** Whether the created commits will use the commit rate or list rate */
-        class RateType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class RateType @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -9265,7 +9390,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -9968,11 +10105,8 @@ private constructor(
                     )
             }
 
-            class Unit
-            @JsonCreator
-            private constructor(
-                private val value: JsonField<String>,
-            ) : Enum {
+            class Unit @JsonCreator private constructor(private val value: JsonField<String>) :
+                Enum {
 
                 /**
                  * Returns this class instance's raw value.
@@ -9993,7 +10127,7 @@ private constructor(
 
                 /** An enum containing [Unit]'s known values. */
                 enum class Known {
-                    PERIODS,
+                    PERIODS
                 }
 
                 /**
@@ -10041,7 +10175,19 @@ private constructor(
                         else -> throw MetronomeInvalidDataException("Unknown Unit: $value")
                     }
 
-                fun asString(): String = _value().asStringOrThrow()
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -10075,11 +10221,8 @@ private constructor(
         }
 
         /** Whether the created commits will use the commit rate or list rate */
-        class RateType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class RateType @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -10154,7 +10297,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -10486,11 +10641,8 @@ private constructor(
                 )
         }
 
-        class ResellerType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class ResellerType @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -10578,7 +10730,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown ResellerType: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -10840,11 +11004,7 @@ private constructor(
                 }
 
                 fun build(): GcpOptions =
-                    GcpOptions(
-                        gcpAccountId,
-                        gcpOfferId,
-                        additionalProperties.toImmutable(),
-                    )
+                    GcpOptions(gcpAccountId, gcpOfferId, additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -11469,9 +11629,7 @@ private constructor(
 
                 class AmountDistribution
                 @JsonCreator
-                private constructor(
-                    private val value: JsonField<String>,
-                ) : Enum {
+                private constructor(private val value: JsonField<String>) : Enum {
 
                     /**
                      * Returns this class instance's raw value.
@@ -11559,7 +11717,19 @@ private constructor(
                                 )
                         }
 
-                    fun asString(): String = _value().asStringOrThrow()
+                    /**
+                     * Returns this class instance's primitive wire representation.
+                     *
+                     * This differs from the [toString] method because that method is primarily for
+                     * debugging and generally doesn't throw.
+                     *
+                     * @throws MetronomeInvalidDataException if this class instance's value does not
+                     *   have the expected primitive type.
+                     */
+                    fun asString(): String =
+                        _value().asString().orElseThrow {
+                            MetronomeInvalidDataException("Value is not a String")
+                        }
 
                     override fun equals(other: Any?): Boolean {
                         if (this === other) {
@@ -11576,9 +11746,7 @@ private constructor(
 
                 class Frequency
                 @JsonCreator
-                private constructor(
-                    private val value: JsonField<String>,
-                ) : Enum {
+                private constructor(private val value: JsonField<String>) : Enum {
 
                     /**
                      * Returns this class instance's raw value.
@@ -11668,7 +11836,19 @@ private constructor(
                             else -> throw MetronomeInvalidDataException("Unknown Frequency: $value")
                         }
 
-                    fun asString(): String = _value().asStringOrThrow()
+                    /**
+                     * Returns this class instance's primitive wire representation.
+                     *
+                     * This differs from the [toString] method because that method is primarily for
+                     * debugging and generally doesn't throw.
+                     *
+                     * @throws MetronomeInvalidDataException if this class instance's value does not
+                     *   have the expected primitive type.
+                     */
+                    fun asString(): String =
+                        _value().asString().orElseThrow {
+                            MetronomeInvalidDataException("Value is not a String")
+                        }
 
                     override fun equals(other: Any?): Boolean {
                         if (this === other) {
@@ -11962,9 +12142,7 @@ private constructor(
      */
     class ScheduledChargesOnUsageInvoices
     @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -11985,7 +12163,7 @@ private constructor(
 
         /** An enum containing [ScheduledChargesOnUsageInvoices]'s known values. */
         enum class Known {
-            ALL,
+            ALL
         }
 
         /**
@@ -12039,7 +12217,19 @@ private constructor(
                     )
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -12178,11 +12368,7 @@ private constructor(
         }
 
         /** This field's available values may vary based on your client's configuration. */
-        class Type
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -12255,7 +12441,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown Type: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -12375,11 +12573,8 @@ private constructor(
              * Controls whether future trueup invoices are billed or removed. Default behavior is
              * AS_IS if not specified.
              */
-            class Trueup
-            @JsonCreator
-            private constructor(
-                private val value: JsonField<String>,
-            ) : Enum {
+            class Trueup @JsonCreator private constructor(private val value: JsonField<String>) :
+                Enum {
 
                 /**
                  * Returns this class instance's raw value.
@@ -12455,7 +12650,19 @@ private constructor(
                         else -> throw MetronomeInvalidDataException("Unknown Trueup: $value")
                     }
 
-                fun asString(): String = _value().asStringOrThrow()
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -12700,11 +12907,8 @@ private constructor(
                 )
         }
 
-        class Frequency
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class Frequency @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -12786,7 +12990,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown Frequency: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -12802,11 +13018,7 @@ private constructor(
         }
 
         /** If not provided, defaults to the first day of the month. */
-        class Day
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class Day @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -12885,7 +13097,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown Day: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {

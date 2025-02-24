@@ -21,10 +21,8 @@ import com.metronome.api.models.CustomerCommitUpdateEndDateParams
 import com.metronome.api.models.CustomerCommitUpdateEndDateResponse
 import java.util.concurrent.CompletableFuture
 
-class CommitServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : CommitServiceAsync {
+class CommitServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    CommitServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -35,7 +33,7 @@ internal constructor(
     /** Create a new commit at the customer level. */
     override fun create(
         params: CustomerCommitCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerCommitCreateResponse> {
         val request =
             HttpRequest.builder()
@@ -64,7 +62,7 @@ internal constructor(
     /** List commits. */
     override fun list(
         params: CustomerCommitListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerCommitListResponse> {
         val request =
             HttpRequest.builder()
@@ -93,7 +91,7 @@ internal constructor(
     /** Update the end date of a PREPAID commit */
     override fun updateEndDate(
         params: CustomerCommitUpdateEndDateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerCommitUpdateEndDateResponse> {
         val request =
             HttpRequest.builder()

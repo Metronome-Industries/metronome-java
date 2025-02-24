@@ -25,7 +25,7 @@ import java.util.Optional
 /** Creates a new Billable Metric. */
 class BillableMetricCreateParams
 private constructor(
-    private val body: BillableMetricCreateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -110,16 +110,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): BillableMetricCreateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class BillableMetricCreateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("name")
         @ExcludeMissing
         private val name: JsonField<String> = JsonMissing.of(),
@@ -244,7 +244,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): BillableMetricCreateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -267,7 +267,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [BillableMetricCreateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
@@ -281,17 +281,16 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(billableMetricCreateBody: BillableMetricCreateBody) = apply {
-                name = billableMetricCreateBody.name
-                aggregationKey = billableMetricCreateBody.aggregationKey
-                aggregationType = billableMetricCreateBody.aggregationType
-                customFields = billableMetricCreateBody.customFields
-                eventTypeFilter = billableMetricCreateBody.eventTypeFilter
-                groupKeys = billableMetricCreateBody.groupKeys.map { it.toMutableList() }
-                propertyFilters =
-                    billableMetricCreateBody.propertyFilters.map { it.toMutableList() }
-                sql = billableMetricCreateBody.sql
-                additionalProperties = billableMetricCreateBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                name = body.name
+                aggregationKey = body.aggregationKey
+                aggregationType = body.aggregationType
+                customFields = body.customFields
+                eventTypeFilter = body.eventTypeFilter
+                groupKeys = body.groupKeys.map { it.toMutableList() }
+                propertyFilters = body.propertyFilters.map { it.toMutableList() }
+                sql = body.sql
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** The display name of the billable metric. */
@@ -437,8 +436,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): BillableMetricCreateBody =
-                BillableMetricCreateBody(
+            fun build(): Body =
+                Body(
                     checkRequired("name", name),
                     aggregationKey,
                     aggregationType,
@@ -456,7 +455,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is BillableMetricCreateBody && name == other.name && aggregationKey == other.aggregationKey && aggregationType == other.aggregationType && customFields == other.customFields && eventTypeFilter == other.eventTypeFilter && groupKeys == other.groupKeys && propertyFilters == other.propertyFilters && sql == other.sql && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && name == other.name && aggregationKey == other.aggregationKey && aggregationType == other.aggregationType && customFields == other.customFields && eventTypeFilter == other.eventTypeFilter && groupKeys == other.groupKeys && propertyFilters == other.propertyFilters && sql == other.sql && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -466,7 +465,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "BillableMetricCreateBody{name=$name, aggregationKey=$aggregationKey, aggregationType=$aggregationType, customFields=$customFields, eventTypeFilter=$eventTypeFilter, groupKeys=$groupKeys, propertyFilters=$propertyFilters, sql=$sql, additionalProperties=$additionalProperties}"
+            "Body{name=$name, aggregationKey=$aggregationKey, aggregationType=$aggregationType, customFields=$customFields, eventTypeFilter=$eventTypeFilter, groupKeys=$groupKeys, propertyFilters=$propertyFilters, sql=$sql, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -480,7 +479,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: BillableMetricCreateBody.Builder = BillableMetricCreateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -723,11 +722,8 @@ private constructor(
     }
 
     /** Specifies the type of aggregation performed on matching events. */
-    class AggregationType
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class AggregationType @JsonCreator private constructor(private val value: JsonField<String>) :
+        Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -821,7 +817,19 @@ private constructor(
                 else -> throw MetronomeInvalidDataException("Unknown AggregationType: $value")
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -842,7 +850,7 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
     ) {
 
         @JsonAnyGetter

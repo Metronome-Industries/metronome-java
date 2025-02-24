@@ -88,7 +88,7 @@ private constructor(
         fun build(): CreditGrantCreateResponse =
             CreditGrantCreateResponse(
                 checkRequired("data", data),
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

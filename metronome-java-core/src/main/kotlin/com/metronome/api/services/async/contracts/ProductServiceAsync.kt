@@ -23,34 +23,34 @@ interface ProductServiceAsync {
     @JvmOverloads
     fun create(
         params: ContractProductCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractProductCreateResponse>
 
     /** Get a specific product */
     @JvmOverloads
     fun retrieve(
         params: ContractProductRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractProductRetrieveResponse>
 
     /** Update a product */
     @JvmOverloads
     fun update(
         params: ContractProductUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractProductUpdateResponse>
 
     /** List products */
     @JvmOverloads
     fun list(
         params: ContractProductListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractProductListPageAsync>
 
     /** Archive a product */
     @JvmOverloads
     fun archive(
         params: ContractProductArchiveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractProductArchiveResponse>
 }

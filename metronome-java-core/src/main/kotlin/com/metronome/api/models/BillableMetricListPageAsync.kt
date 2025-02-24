@@ -82,13 +82,8 @@ private constructor(
         fun of(
             billableMetricsService: BillableMetricServiceAsync,
             params: BillableMetricListParams,
-            response: Response
-        ) =
-            BillableMetricListPageAsync(
-                billableMetricsService,
-                params,
-                response,
-            )
+            response: Response,
+        ) = BillableMetricListPageAsync(billableMetricsService, params, response)
     }
 
     @NoAutoDetect
@@ -174,26 +169,19 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    nextPage,
-                    data,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(nextPage, data, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: BillableMetricListPageAsync,
-    ) {
+    class AutoPager(private val firstPage: BillableMetricListPageAsync) {
 
         fun forEach(
             action: Predicate<BillableMetricListResponse>,
-            executor: Executor
+            executor: Executor,
         ): CompletableFuture<Void> {
             fun CompletableFuture<Optional<BillableMetricListPageAsync>>.forEach(
                 action: (BillableMetricListResponse) -> Boolean,
-                executor: Executor
+                executor: Executor,
             ): CompletableFuture<Void> =
                 thenComposeAsync(
                     { page ->
@@ -202,7 +190,7 @@ private constructor(
                             .map { it.getNextPage().forEach(action, executor) }
                             .orElseGet { CompletableFuture.completedFuture(null) }
                     },
-                    executor
+                    executor,
                 )
             return CompletableFuture.completedFuture(Optional.of(firstPage))
                 .forEach(action::test, executor)

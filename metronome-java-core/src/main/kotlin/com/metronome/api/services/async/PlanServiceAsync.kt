@@ -21,21 +21,21 @@ interface PlanServiceAsync {
     @JvmOverloads
     fun list(
         params: PlanListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PlanListPageAsync>
 
     /** Fetch high level details of a specific plan. */
     @JvmOverloads
     fun getDetails(
         params: PlanGetDetailsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PlanGetDetailsResponse>
 
     /** Fetches a list of charges of a specific plan. */
     @JvmOverloads
     fun listCharges(
         params: PlanListChargesParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PlanListChargesPageAsync>
 
     /**
@@ -45,6 +45,6 @@ interface PlanServiceAsync {
     @JvmOverloads
     fun listCustomers(
         params: PlanListCustomersParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PlanListCustomersPageAsync>
 }

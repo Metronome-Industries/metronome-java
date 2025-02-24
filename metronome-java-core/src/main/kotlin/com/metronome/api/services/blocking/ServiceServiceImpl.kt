@@ -15,10 +15,8 @@ import com.metronome.api.errors.MetronomeError
 import com.metronome.api.models.ServiceListParams
 import com.metronome.api.models.ServiceListResponse
 
-class ServiceServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : ServiceService {
+class ServiceServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    ServiceService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -32,7 +30,7 @@ internal constructor(
      */
     override fun list(
         params: ServiceListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): ServiceListResponse {
         val request =
             HttpRequest.builder()

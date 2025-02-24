@@ -18,10 +18,8 @@ import com.metronome.api.models.ContractRateCardNamedScheduleRetrieveParams
 import com.metronome.api.models.ContractRateCardNamedScheduleRetrieveResponse
 import com.metronome.api.models.ContractRateCardNamedScheduleUpdateParams
 
-class NamedScheduleServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : NamedScheduleService {
+class NamedScheduleServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    NamedScheduleService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -35,7 +33,7 @@ internal constructor(
      */
     override fun retrieve(
         params: ContractRateCardNamedScheduleRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): ContractRateCardNamedScheduleRetrieveResponse {
         val request =
             HttpRequest.builder()
@@ -62,7 +60,7 @@ internal constructor(
      */
     override fun update(
         params: ContractRateCardNamedScheduleUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ) {
         val request =
             HttpRequest.builder()

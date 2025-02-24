@@ -89,7 +89,7 @@ private constructor(
         fun build(): ContractProductArchiveResponse =
             ContractProductArchiveResponse(
                 checkRequired("data", data),
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

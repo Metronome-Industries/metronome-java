@@ -111,7 +111,7 @@ private constructor(
         fun build(): ContractRateCardNamedScheduleRetrieveResponse =
             ContractRateCardNamedScheduleRetrieveResponse(
                 checkRequired("data", data).map { it.toImmutable() },
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

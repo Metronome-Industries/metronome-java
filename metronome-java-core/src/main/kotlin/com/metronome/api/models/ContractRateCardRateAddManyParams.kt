@@ -26,7 +26,7 @@ import java.util.Optional
 /** Add new rates */
 class ContractRateCardRateAddManyParams
 private constructor(
-    private val body: ContractRateCardRateAddManyBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -45,16 +45,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractRateCardRateAddManyBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class ContractRateCardRateAddManyBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("rate_card_id")
         @ExcludeMissing
         private val rateCardId: JsonField<String> = JsonMissing.of(),
@@ -81,7 +81,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractRateCardRateAddManyBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -98,7 +98,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractRateCardRateAddManyBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var rateCardId: JsonField<String>? = null
@@ -106,13 +106,11 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(contractRateCardRateAddManyBody: ContractRateCardRateAddManyBody) =
-                apply {
-                    rateCardId = contractRateCardRateAddManyBody.rateCardId
-                    rates = contractRateCardRateAddManyBody.rates.map { it.toMutableList() }
-                    additionalProperties =
-                        contractRateCardRateAddManyBody.additionalProperties.toMutableMap()
-                }
+            internal fun from(body: Body) = apply {
+                rateCardId = body.rateCardId
+                rates = body.rates.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
 
             fun rateCardId(rateCardId: String) = rateCardId(JsonField.of(rateCardId))
 
@@ -156,8 +154,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractRateCardRateAddManyBody =
-                ContractRateCardRateAddManyBody(
+            fun build(): Body =
+                Body(
                     checkRequired("rateCardId", rateCardId),
                     checkRequired("rates", rates).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
@@ -169,7 +167,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractRateCardRateAddManyBody && rateCardId == other.rateCardId && rates == other.rates && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && rateCardId == other.rateCardId && rates == other.rates && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -179,7 +177,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractRateCardRateAddManyBody{rateCardId=$rateCardId, rates=$rates, additionalProperties=$additionalProperties}"
+            "Body{rateCardId=$rateCardId, rates=$rates, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -193,8 +191,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: ContractRateCardRateAddManyBody.Builder =
-            ContractRateCardRateAddManyBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -801,11 +798,8 @@ private constructor(
                 )
         }
 
-        class RateType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class RateType @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -898,7 +892,19 @@ private constructor(
                     else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
                 }
 
-            fun asString(): String = _value().asStringOrThrow()
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1055,11 +1061,8 @@ private constructor(
                     )
             }
 
-            class RateType
-            @JsonCreator
-            private constructor(
-                private val value: JsonField<String>,
-            ) : Enum {
+            class RateType @JsonCreator private constructor(private val value: JsonField<String>) :
+                Enum {
 
                 /**
                  * Returns this class instance's raw value.
@@ -1153,7 +1156,19 @@ private constructor(
                         else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
                     }
 
-                fun asString(): String = _value().asStringOrThrow()
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -1192,7 +1207,7 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
         ) {
 
             @JsonAnyGetter
@@ -1277,7 +1292,7 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
         ) {
 
             @JsonAnyGetter

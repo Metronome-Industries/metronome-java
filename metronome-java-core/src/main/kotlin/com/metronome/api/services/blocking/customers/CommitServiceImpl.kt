@@ -20,10 +20,8 @@ import com.metronome.api.models.CustomerCommitListResponse
 import com.metronome.api.models.CustomerCommitUpdateEndDateParams
 import com.metronome.api.models.CustomerCommitUpdateEndDateResponse
 
-class CommitServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : CommitService {
+class CommitServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    CommitService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -34,7 +32,7 @@ internal constructor(
     /** Create a new commit at the customer level. */
     override fun create(
         params: CustomerCommitCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerCommitCreateResponse {
         val request =
             HttpRequest.builder()
@@ -60,7 +58,7 @@ internal constructor(
     /** List commits. */
     override fun list(
         params: CustomerCommitListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerCommitListResponse {
         val request =
             HttpRequest.builder()
@@ -86,7 +84,7 @@ internal constructor(
     /** Update the end date of a PREPAID commit */
     override fun updateEndDate(
         params: CustomerCommitUpdateEndDateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerCommitUpdateEndDateResponse {
         val request =
             HttpRequest.builder()

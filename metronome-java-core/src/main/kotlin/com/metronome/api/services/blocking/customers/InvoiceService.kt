@@ -20,7 +20,7 @@ interface InvoiceService {
     @JvmOverloads
     fun retrieve(
         params: CustomerInvoiceRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerInvoiceRetrieveResponse
 
     /**
@@ -30,14 +30,14 @@ interface InvoiceService {
     @JvmOverloads
     fun list(
         params: CustomerInvoiceListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerInvoiceListPage
 
     /** Add a one time charge to the specified invoice */
     @JvmOverloads
     fun addCharge(
         params: CustomerInvoiceAddChargeParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerInvoiceAddChargeResponse
 
     /**
@@ -47,6 +47,6 @@ interface InvoiceService {
     @JvmOverloads
     fun listBreakdowns(
         params: CustomerInvoiceListBreakdownsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerInvoiceListBreakdownsPage
 }

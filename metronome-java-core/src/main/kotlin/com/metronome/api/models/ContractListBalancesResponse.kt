@@ -263,7 +263,7 @@ private constructor(
             override fun serialize(
                 value: Data,
                 generator: JsonGenerator,
-                provider: SerializerProvider
+                provider: SerializerProvider,
             ) {
                 when {
                     value.commit != null -> generator.writeObject(value.commit)

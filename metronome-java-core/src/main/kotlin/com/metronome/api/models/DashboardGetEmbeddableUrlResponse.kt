@@ -91,7 +91,7 @@ private constructor(
         fun build(): DashboardGetEmbeddableUrlResponse =
             DashboardGetEmbeddableUrlResponse(
                 checkRequired("data", data),
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

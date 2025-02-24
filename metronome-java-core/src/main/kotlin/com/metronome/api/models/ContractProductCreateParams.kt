@@ -25,7 +25,7 @@ import java.util.Optional
 /** Create a new product */
 class ContractProductCreateParams
 private constructor(
-    private val body: ContractProductCreateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -162,16 +162,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractProductCreateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class ContractProductCreateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("name")
         @ExcludeMissing
         private val name: JsonField<String> = JsonMissing.of(),
@@ -385,7 +385,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractProductCreateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -414,7 +414,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractProductCreateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
@@ -434,25 +434,22 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(contractProductCreateBody: ContractProductCreateBody) = apply {
-                name = contractProductCreateBody.name
-                type = contractProductCreateBody.type
-                billableMetricId = contractProductCreateBody.billableMetricId
-                compositeProductIds =
-                    contractProductCreateBody.compositeProductIds.map { it.toMutableList() }
-                compositeTags = contractProductCreateBody.compositeTags.map { it.toMutableList() }
-                excludeFreeUsage = contractProductCreateBody.excludeFreeUsage
-                isRefundable = contractProductCreateBody.isRefundable
-                netsuiteInternalItemId = contractProductCreateBody.netsuiteInternalItemId
-                netsuiteOverageItemId = contractProductCreateBody.netsuiteOverageItemId
-                presentationGroupKey =
-                    contractProductCreateBody.presentationGroupKey.map { it.toMutableList() }
-                pricingGroupKey =
-                    contractProductCreateBody.pricingGroupKey.map { it.toMutableList() }
-                quantityConversion = contractProductCreateBody.quantityConversion
-                quantityRounding = contractProductCreateBody.quantityRounding
-                tags = contractProductCreateBody.tags.map { it.toMutableList() }
-                additionalProperties = contractProductCreateBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                name = body.name
+                type = body.type
+                billableMetricId = body.billableMetricId
+                compositeProductIds = body.compositeProductIds.map { it.toMutableList() }
+                compositeTags = body.compositeTags.map { it.toMutableList() }
+                excludeFreeUsage = body.excludeFreeUsage
+                isRefundable = body.isRefundable
+                netsuiteInternalItemId = body.netsuiteInternalItemId
+                netsuiteOverageItemId = body.netsuiteOverageItemId
+                presentationGroupKey = body.presentationGroupKey.map { it.toMutableList() }
+                pricingGroupKey = body.pricingGroupKey.map { it.toMutableList() }
+                quantityConversion = body.quantityConversion
+                quantityRounding = body.quantityRounding
+                tags = body.tags.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** displayed on invoices */
@@ -740,8 +737,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractProductCreateBody =
-                ContractProductCreateBody(
+            fun build(): Body =
+                Body(
                     checkRequired("name", name),
                     checkRequired("type", type),
                     billableMetricId,
@@ -765,7 +762,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractProductCreateBody && name == other.name && type == other.type && billableMetricId == other.billableMetricId && compositeProductIds == other.compositeProductIds && compositeTags == other.compositeTags && excludeFreeUsage == other.excludeFreeUsage && isRefundable == other.isRefundable && netsuiteInternalItemId == other.netsuiteInternalItemId && netsuiteOverageItemId == other.netsuiteOverageItemId && presentationGroupKey == other.presentationGroupKey && pricingGroupKey == other.pricingGroupKey && quantityConversion == other.quantityConversion && quantityRounding == other.quantityRounding && tags == other.tags && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && name == other.name && type == other.type && billableMetricId == other.billableMetricId && compositeProductIds == other.compositeProductIds && compositeTags == other.compositeTags && excludeFreeUsage == other.excludeFreeUsage && isRefundable == other.isRefundable && netsuiteInternalItemId == other.netsuiteInternalItemId && netsuiteOverageItemId == other.netsuiteOverageItemId && presentationGroupKey == other.presentationGroupKey && pricingGroupKey == other.pricingGroupKey && quantityConversion == other.quantityConversion && quantityRounding == other.quantityRounding && tags == other.tags && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -775,7 +772,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractProductCreateBody{name=$name, type=$type, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, tags=$tags, additionalProperties=$additionalProperties}"
+            "Body{name=$name, type=$type, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, tags=$tags, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -789,7 +786,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: ContractProductCreateBody.Builder = ContractProductCreateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -1143,11 +1140,7 @@ private constructor(
             )
     }
 
-    class Type
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -1244,7 +1237,19 @@ private constructor(
                 else -> throw MetronomeInvalidDataException("Unknown Type: $value")
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

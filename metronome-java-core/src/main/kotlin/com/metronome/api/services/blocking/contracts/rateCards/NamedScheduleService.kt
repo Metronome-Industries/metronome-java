@@ -18,7 +18,7 @@ interface NamedScheduleService {
     @JvmOverloads
     fun retrieve(
         params: ContractRateCardNamedScheduleRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ContractRateCardNamedScheduleRetrieveResponse
 
     /**
@@ -28,6 +28,6 @@ interface NamedScheduleService {
     @JvmOverloads
     fun update(
         params: ContractRateCardNamedScheduleUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     )
 }

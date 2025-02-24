@@ -50,35 +50,35 @@ interface CustomerServiceAsync {
     @JvmOverloads
     fun create(
         params: CustomerCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreateResponse>
 
     /** Get a customer by Metronome ID. */
     @JvmOverloads
     fun retrieve(
         params: CustomerRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerRetrieveResponse>
 
     /** List all customers. */
     @JvmOverloads
     fun list(
         params: CustomerListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerListPageAsync>
 
     /** Archive a customer */
     @JvmOverloads
     fun archive(
         params: CustomerArchiveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerArchiveResponse>
 
     /** Get all billable metrics for a given customer. */
     @JvmOverloads
     fun listBillableMetrics(
         params: CustomerListBillableMetricsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerListBillableMetricsPageAsync>
 
     /**
@@ -89,7 +89,7 @@ interface CustomerServiceAsync {
     @JvmOverloads
     fun listCosts(
         params: CustomerListCostsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerListCostsPageAsync>
 
     /**
@@ -100,20 +100,20 @@ interface CustomerServiceAsync {
     @JvmOverloads
     fun setIngestAliases(
         params: CustomerSetIngestAliasesParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
     /** Updates the specified customer's name. */
     @JvmOverloads
     fun setName(
         params: CustomerSetNameParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerSetNameResponse>
 
     /** Updates the specified customer's config. */
     @JvmOverloads
     fun updateConfig(
         params: CustomerUpdateConfigParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 }

@@ -31,7 +31,9 @@ class ContractListParamsTest {
                 .includeLedgers(true)
                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.coveringDate()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -45,7 +47,9 @@ class ContractListParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             ContractListParams.builder().customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1").build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
     }

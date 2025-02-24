@@ -24,7 +24,7 @@ import java.util.Optional
 /** List commits. */
 class CustomerCommitListParams
 private constructor(
-    private val body: CustomerCommitListBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -95,16 +95,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomerCommitListBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class CustomerCommitListBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("customer_id")
         @ExcludeMissing
         private val customerId: JsonField<String> = JsonMissing.of(),
@@ -234,7 +234,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomerCommitListBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -259,7 +259,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomerCommitListBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
@@ -275,18 +275,18 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customerCommitListBody: CustomerCommitListBody) = apply {
-                customerId = customerCommitListBody.customerId
-                commitId = customerCommitListBody.commitId
-                coveringDate = customerCommitListBody.coveringDate
-                effectiveBefore = customerCommitListBody.effectiveBefore
-                includeArchived = customerCommitListBody.includeArchived
-                includeBalance = customerCommitListBody.includeBalance
-                includeContractCommits = customerCommitListBody.includeContractCommits
-                includeLedgers = customerCommitListBody.includeLedgers
-                nextPage = customerCommitListBody.nextPage
-                startingAt = customerCommitListBody.startingAt
-                additionalProperties = customerCommitListBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                customerId = body.customerId
+                commitId = body.commitId
+                coveringDate = body.coveringDate
+                effectiveBefore = body.effectiveBefore
+                includeArchived = body.includeArchived
+                includeBalance = body.includeBalance
+                includeContractCommits = body.includeContractCommits
+                includeLedgers = body.includeLedgers
+                nextPage = body.nextPage
+                startingAt = body.startingAt
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun customerId(customerId: String) = customerId(JsonField.of(customerId))
@@ -396,8 +396,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomerCommitListBody =
-                CustomerCommitListBody(
+            fun build(): Body =
+                Body(
                     checkRequired("customerId", customerId),
                     commitId,
                     coveringDate,
@@ -417,7 +417,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerCommitListBody && customerId == other.customerId && commitId == other.commitId && coveringDate == other.coveringDate && effectiveBefore == other.effectiveBefore && includeArchived == other.includeArchived && includeBalance == other.includeBalance && includeContractCommits == other.includeContractCommits && includeLedgers == other.includeLedgers && nextPage == other.nextPage && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && customerId == other.customerId && commitId == other.commitId && coveringDate == other.coveringDate && effectiveBefore == other.effectiveBefore && includeArchived == other.includeArchived && includeBalance == other.includeBalance && includeContractCommits == other.includeContractCommits && includeLedgers == other.includeLedgers && nextPage == other.nextPage && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -427,7 +427,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerCommitListBody{customerId=$customerId, commitId=$commitId, coveringDate=$coveringDate, effectiveBefore=$effectiveBefore, includeArchived=$includeArchived, includeBalance=$includeBalance, includeContractCommits=$includeContractCommits, includeLedgers=$includeLedgers, nextPage=$nextPage, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+            "Body{customerId=$customerId, commitId=$commitId, coveringDate=$coveringDate, effectiveBefore=$effectiveBefore, includeArchived=$includeArchived, includeBalance=$includeBalance, includeContractCommits=$includeContractCommits, includeLedgers=$includeLedgers, nextPage=$nextPage, startingAt=$startingAt, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -441,7 +441,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: CustomerCommitListBody.Builder = CustomerCommitListBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

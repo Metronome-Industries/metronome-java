@@ -13,10 +13,10 @@ class ContractRateCardRateListParamsTest {
     @Test
     fun create() {
         ContractRateCardRateListParams.builder()
-            .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
-            .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
             .limit(1L)
             .nextPage("next_page")
+            .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
+            .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
             .addSelector(
                 ContractRateCardRateListParams.Selector.builder()
                     .partialPricingGroupValues(
@@ -41,10 +41,10 @@ class ContractRateCardRateListParamsTest {
     fun queryParams() {
         val params =
             ContractRateCardRateListParams.builder()
-                .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
-                .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                 .limit(1L)
                 .nextPage("next_page")
+                .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
+                .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                 .addSelector(
                     ContractRateCardRateListParams.Selector.builder()
                         .partialPricingGroupValues(
@@ -85,10 +85,10 @@ class ContractRateCardRateListParamsTest {
     fun body() {
         val params =
             ContractRateCardRateListParams.builder()
-                .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
-                .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                 .limit(1L)
                 .nextPage("next_page")
+                .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
+                .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                 .addSelector(
                     ContractRateCardRateListParams.Selector.builder()
                         .partialPricingGroupValues(
@@ -108,7 +108,9 @@ class ContractRateCardRateListParamsTest {
                         .build()
                 )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.at()).isEqualTo(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
         assertThat(body.rateCardId()).isEqualTo("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
@@ -142,7 +144,9 @@ class ContractRateCardRateListParamsTest {
                 .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
                 .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.at()).isEqualTo(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
         assertThat(body.rateCardId()).isEqualTo("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")

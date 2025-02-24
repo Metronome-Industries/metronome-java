@@ -19,10 +19,8 @@ import com.metronome.api.models.AlertCreateParams
 import com.metronome.api.models.AlertCreateResponse
 import java.util.concurrent.CompletableFuture
 
-class AlertServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : AlertServiceAsync {
+class AlertServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    AlertServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -32,7 +30,7 @@ internal constructor(
     /** Create a new alert */
     override fun create(
         params: AlertCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<AlertCreateResponse> {
         val request =
             HttpRequest.builder()
@@ -60,7 +58,7 @@ internal constructor(
     /** Archive an existing alert */
     override fun archive(
         params: AlertArchiveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<AlertArchiveResponse> {
         val request =
             HttpRequest.builder()

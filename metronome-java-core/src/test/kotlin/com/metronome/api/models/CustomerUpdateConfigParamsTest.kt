@@ -24,7 +24,9 @@ class CustomerUpdateConfigParamsTest {
                 .leaveStripeInvoicesInDraft(true)
                 .salesforceAccountId("0015500001WO1ZiABL")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.leaveStripeInvoicesInDraft()).contains(true)
         assertThat(body.salesforceAccountId()).contains("0015500001WO1ZiABL")
@@ -36,7 +38,9 @@ class CustomerUpdateConfigParamsTest {
             CustomerUpdateConfigParams.builder()
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
     }
 

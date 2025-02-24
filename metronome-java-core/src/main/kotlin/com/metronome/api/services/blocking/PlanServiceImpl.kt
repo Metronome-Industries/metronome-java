@@ -21,10 +21,7 @@ import com.metronome.api.models.PlanListCustomersParams
 import com.metronome.api.models.PlanListPage
 import com.metronome.api.models.PlanListParams
 
-class PlanServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : PlanService {
+class PlanServiceImpl internal constructor(private val clientOptions: ClientOptions) : PlanService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -56,7 +53,7 @@ internal constructor(
     /** Fetch high level details of a specific plan. */
     override fun getDetails(
         params: PlanGetDetailsParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): PlanGetDetailsResponse {
         val request =
             HttpRequest.builder()
@@ -81,7 +78,7 @@ internal constructor(
     /** Fetches a list of charges of a specific plan. */
     override fun listCharges(
         params: PlanListChargesParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): PlanListChargesPage {
         val request =
             HttpRequest.builder()
@@ -110,7 +107,7 @@ internal constructor(
      */
     override fun listCustomers(
         params: PlanListCustomersParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): PlanListCustomersPage {
         val request =
             HttpRequest.builder()

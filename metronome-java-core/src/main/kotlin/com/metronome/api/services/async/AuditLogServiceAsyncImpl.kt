@@ -16,10 +16,8 @@ import com.metronome.api.models.AuditLogListPageAsync
 import com.metronome.api.models.AuditLogListParams
 import java.util.concurrent.CompletableFuture
 
-class AuditLogServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : AuditLogServiceAsync {
+class AuditLogServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    AuditLogServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -35,7 +33,7 @@ internal constructor(
      */
     override fun list(
         params: AuditLogListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<AuditLogListPageAsync> {
         val request =
             HttpRequest.builder()

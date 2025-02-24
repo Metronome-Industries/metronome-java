@@ -17,20 +17,20 @@ interface AlertService {
     @JvmOverloads
     fun retrieve(
         params: CustomerAlertRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerAlertRetrieveResponse
 
     /** Fetch all customer alert statuses and alert information for a customer */
     @JvmOverloads
     fun list(
         params: CustomerAlertListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerAlertListResponse
 
     /** Reset state for an alert by customer id and force re-evaluation */
     @JvmOverloads
     fun reset(
         params: CustomerAlertResetParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     )
 }

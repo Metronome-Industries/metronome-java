@@ -22,10 +22,8 @@ import com.metronome.api.models.CustomerInvoiceListParams
 import com.metronome.api.models.CustomerInvoiceRetrieveParams
 import com.metronome.api.models.CustomerInvoiceRetrieveResponse
 
-class InvoiceServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : InvoiceService {
+class InvoiceServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    InvoiceService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -36,7 +34,7 @@ internal constructor(
     /** Fetch a specific invoice for a given customer. */
     override fun retrieve(
         params: CustomerInvoiceRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerInvoiceRetrieveResponse {
         val request =
             HttpRequest.builder()
@@ -45,7 +43,7 @@ internal constructor(
                     "customers",
                     params.getPathParam(0),
                     "invoices",
-                    params.getPathParam(1)
+                    params.getPathParam(1),
                 )
                 .build()
                 .prepare(clientOptions, params)
@@ -69,7 +67,7 @@ internal constructor(
      */
     override fun list(
         params: CustomerInvoiceListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerInvoiceListPage {
         val request =
             HttpRequest.builder()
@@ -95,7 +93,7 @@ internal constructor(
     /** Add a one time charge to the specified invoice */
     override fun addCharge(
         params: CustomerInvoiceAddChargeParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerInvoiceAddChargeResponse {
         val request =
             HttpRequest.builder()
@@ -124,7 +122,7 @@ internal constructor(
      */
     override fun listBreakdowns(
         params: CustomerInvoiceListBreakdownsParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CustomerInvoiceListBreakdownsPage {
         val request =
             HttpRequest.builder()

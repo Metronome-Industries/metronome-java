@@ -15,10 +15,8 @@ import com.metronome.api.errors.MetronomeError
 import com.metronome.api.models.AuditLogListPage
 import com.metronome.api.models.AuditLogListParams
 
-class AuditLogServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : AuditLogService {
+class AuditLogServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    AuditLogService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -34,7 +32,7 @@ internal constructor(
      */
     override fun list(
         params: AuditLogListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): AuditLogListPage {
         val request =
             HttpRequest.builder()

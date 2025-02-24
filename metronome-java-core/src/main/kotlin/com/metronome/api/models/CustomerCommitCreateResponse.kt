@@ -88,7 +88,7 @@ private constructor(
         fun build(): CustomerCommitCreateResponse =
             CustomerCommitCreateResponse(
                 checkRequired("data", data),
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

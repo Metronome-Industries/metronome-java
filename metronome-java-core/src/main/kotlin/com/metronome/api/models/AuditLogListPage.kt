@@ -82,11 +82,7 @@ private constructor(
 
         @JvmStatic
         fun of(auditLogsService: AuditLogService, params: AuditLogListParams, response: Response) =
-            AuditLogListPage(
-                auditLogsService,
-                params,
-                response,
-            )
+            AuditLogListPage(auditLogsService, params, response)
     }
 
     @NoAutoDetect
@@ -171,18 +167,11 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    nextPage,
-                    data,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(nextPage, data, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: AuditLogListPage,
-    ) : Iterable<AuditLogListResponse> {
+    class AutoPager(private val firstPage: AuditLogListPage) : Iterable<AuditLogListResponse> {
 
         override fun iterator(): Iterator<AuditLogListResponse> = iterator {
             var page = firstPage

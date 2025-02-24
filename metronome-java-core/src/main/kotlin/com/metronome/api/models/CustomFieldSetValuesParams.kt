@@ -31,7 +31,7 @@ import java.util.Objects
  */
 class CustomFieldSetValuesParams
 private constructor(
-    private val body: CustomFieldSetValuesBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -54,16 +54,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomFieldSetValuesBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class CustomFieldSetValuesBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("custom_fields")
         @ExcludeMissing
         private val customFields: JsonField<CustomFields> = JsonMissing.of(),
@@ -97,7 +97,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomFieldSetValuesBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -115,7 +115,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomFieldSetValuesBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var customFields: JsonField<CustomFields>? = null
@@ -124,11 +124,11 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customFieldSetValuesBody: CustomFieldSetValuesBody) = apply {
-                customFields = customFieldSetValuesBody.customFields
-                entity = customFieldSetValuesBody.entity
-                entityId = customFieldSetValuesBody.entityId
-                additionalProperties = customFieldSetValuesBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                customFields = body.customFields
+                entity = body.entity
+                entityId = body.entityId
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
@@ -164,8 +164,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomFieldSetValuesBody =
-                CustomFieldSetValuesBody(
+            fun build(): Body =
+                Body(
                     checkRequired("customFields", customFields),
                     checkRequired("entity", entity),
                     checkRequired("entityId", entityId),
@@ -178,7 +178,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomFieldSetValuesBody && customFields == other.customFields && entity == other.entity && entityId == other.entityId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && customFields == other.customFields && entity == other.entity && entityId == other.entityId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -188,7 +188,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomFieldSetValuesBody{customFields=$customFields, entity=$entity, entityId=$entityId, additionalProperties=$additionalProperties}"
+            "Body{customFields=$customFields, entity=$entity, entityId=$entityId, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -202,7 +202,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: CustomFieldSetValuesBody.Builder = CustomFieldSetValuesBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -357,7 +357,7 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
     ) {
 
         @JsonAnyGetter
@@ -430,11 +430,7 @@ private constructor(
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
-    class Entity
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Entity @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -597,7 +593,19 @@ private constructor(
                 else -> throw MetronomeInvalidDataException("Unknown Entity: $value")
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

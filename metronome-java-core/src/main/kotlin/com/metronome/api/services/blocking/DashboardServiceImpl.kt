@@ -16,10 +16,8 @@ import com.metronome.api.errors.MetronomeError
 import com.metronome.api.models.DashboardGetEmbeddableUrlParams
 import com.metronome.api.models.DashboardGetEmbeddableUrlResponse
 
-class DashboardServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : DashboardService {
+class DashboardServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    DashboardService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -33,7 +31,7 @@ internal constructor(
      */
     override fun getEmbeddableUrl(
         params: DashboardGetEmbeddableUrlParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): DashboardGetEmbeddableUrlResponse {
         val request =
             HttpRequest.builder()

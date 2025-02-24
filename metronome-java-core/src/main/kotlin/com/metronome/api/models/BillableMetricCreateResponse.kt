@@ -88,7 +88,7 @@ private constructor(
         fun build(): BillableMetricCreateResponse =
             BillableMetricCreateResponse(
                 checkRequired("data", data),
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

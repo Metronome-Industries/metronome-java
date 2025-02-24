@@ -24,7 +24,7 @@ import java.util.Optional
 /** Create a new rate card */
 class ContractRateCardCreateParams
 private constructor(
-    private val body: ContractRateCardCreateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -82,16 +82,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractRateCardCreateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class ContractRateCardCreateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("name")
         @ExcludeMissing
         private val name: JsonField<String> = JsonMissing.of(),
@@ -178,7 +178,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractRateCardCreateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -199,7 +199,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractRateCardCreateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
@@ -211,16 +211,14 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(contractRateCardCreateBody: ContractRateCardCreateBody) = apply {
-                name = contractRateCardCreateBody.name
-                aliases = contractRateCardCreateBody.aliases.map { it.toMutableList() }
-                creditTypeConversions =
-                    contractRateCardCreateBody.creditTypeConversions.map { it.toMutableList() }
-                customFields = contractRateCardCreateBody.customFields
-                description = contractRateCardCreateBody.description
-                fiatCreditTypeId = contractRateCardCreateBody.fiatCreditTypeId
-                additionalProperties =
-                    contractRateCardCreateBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                name = body.name
+                aliases = body.aliases.map { it.toMutableList() }
+                creditTypeConversions = body.creditTypeConversions.map { it.toMutableList() }
+                customFields = body.customFields
+                description = body.description
+                fiatCreditTypeId = body.fiatCreditTypeId
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** Used only in UI/API. It is not exposed to end customers. */
@@ -334,8 +332,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractRateCardCreateBody =
-                ContractRateCardCreateBody(
+            fun build(): Body =
+                Body(
                     checkRequired("name", name),
                     (aliases ?: JsonMissing.of()).map { it.toImmutable() },
                     (creditTypeConversions ?: JsonMissing.of()).map { it.toImmutable() },
@@ -351,7 +349,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractRateCardCreateBody && name == other.name && aliases == other.aliases && creditTypeConversions == other.creditTypeConversions && customFields == other.customFields && description == other.description && fiatCreditTypeId == other.fiatCreditTypeId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && name == other.name && aliases == other.aliases && creditTypeConversions == other.creditTypeConversions && customFields == other.customFields && description == other.description && fiatCreditTypeId == other.fiatCreditTypeId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -361,7 +359,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractRateCardCreateBody{name=$name, aliases=$aliases, creditTypeConversions=$creditTypeConversions, customFields=$customFields, description=$description, fiatCreditTypeId=$fiatCreditTypeId, additionalProperties=$additionalProperties}"
+            "Body{name=$name, aliases=$aliases, creditTypeConversions=$creditTypeConversions, customFields=$customFields, description=$description, fiatCreditTypeId=$fiatCreditTypeId, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -375,7 +373,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: ContractRateCardCreateBody.Builder = ContractRateCardCreateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -846,7 +844,7 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
     ) {
 
         @JsonAnyGetter

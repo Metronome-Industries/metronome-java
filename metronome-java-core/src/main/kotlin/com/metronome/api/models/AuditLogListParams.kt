@@ -72,7 +72,7 @@ private constructor(
         this.endingBefore?.let {
             queryParams.put(
                 "ending_before",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it)),
             )
         }
         this.limit?.let { queryParams.put("limit", listOf(it.toString())) }
@@ -83,7 +83,7 @@ private constructor(
         this.startingOn?.let {
             queryParams.put(
                 "starting_on",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it)),
             )
         }
         queryParams.putAll(additionalQueryParams)
@@ -300,11 +300,7 @@ private constructor(
     }
 
     /** Sort order by timestamp, e.g. date_asc or date_desc. Defaults to date_asc. */
-    class Sort
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Sort @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -377,7 +373,19 @@ private constructor(
                 else -> throw MetronomeInvalidDataException("Unknown Sort: $value")
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

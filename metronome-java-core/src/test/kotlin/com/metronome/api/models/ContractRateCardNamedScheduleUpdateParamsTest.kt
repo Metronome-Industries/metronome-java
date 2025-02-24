@@ -32,7 +32,9 @@ class ContractRateCardNamedScheduleUpdateParamsTest {
                 .value(JsonValue.from(mapOf("my_key" to "my_value")))
                 .endingBefore(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
@@ -52,7 +54,9 @@ class ContractRateCardNamedScheduleUpdateParamsTest {
                 .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .value(JsonValue.from(mapOf("my_key" to "my_value")))
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")

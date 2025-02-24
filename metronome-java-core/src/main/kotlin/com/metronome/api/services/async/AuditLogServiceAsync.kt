@@ -20,6 +20,6 @@ interface AuditLogServiceAsync {
     @JvmOverloads
     fun list(
         params: AuditLogListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<AuditLogListPageAsync>
 }

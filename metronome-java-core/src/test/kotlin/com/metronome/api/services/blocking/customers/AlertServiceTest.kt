@@ -43,8 +43,8 @@ class AlertServiceTest {
         val customerAlertListResponse =
             alertService.list(
                 CustomerAlertListParams.builder()
-                    .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                     .nextPage("next_page")
+                    .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                     .addAlertStatus(CustomerAlertListParams.AlertStatus.ENABLED)
                     .build()
             )

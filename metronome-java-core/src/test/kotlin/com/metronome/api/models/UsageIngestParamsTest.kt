@@ -49,7 +49,9 @@ class UsageIngestParamsTest {
                         .build()
                 )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body)
             .isEqualTo(
@@ -84,7 +86,9 @@ class UsageIngestParamsTest {
                         .build()
                 )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body)
             .isEqualTo(

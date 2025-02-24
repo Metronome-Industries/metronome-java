@@ -22,10 +22,8 @@ import com.metronome.api.models.BillableMetricListParams
 import com.metronome.api.models.BillableMetricRetrieveParams
 import com.metronome.api.models.BillableMetricRetrieveResponse
 
-class BillableMetricServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : BillableMetricService {
+class BillableMetricServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    BillableMetricService {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -36,7 +34,7 @@ internal constructor(
     /** Creates a new Billable Metric. */
     override fun create(
         params: BillableMetricCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): BillableMetricCreateResponse {
         val request =
             HttpRequest.builder()
@@ -62,7 +60,7 @@ internal constructor(
     /** Get a billable metric. */
     override fun retrieve(
         params: BillableMetricRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): BillableMetricRetrieveResponse {
         val request =
             HttpRequest.builder()
@@ -87,7 +85,7 @@ internal constructor(
     /** List all billable metrics. */
     override fun list(
         params: BillableMetricListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): BillableMetricListPage {
         val request =
             HttpRequest.builder()
@@ -113,7 +111,7 @@ internal constructor(
     /** Archive an existing billable metric. */
     override fun archive(
         params: BillableMetricArchiveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): BillableMetricArchiveResponse {
         val request =
             HttpRequest.builder()

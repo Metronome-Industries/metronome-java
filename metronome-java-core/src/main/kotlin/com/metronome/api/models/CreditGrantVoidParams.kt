@@ -23,7 +23,7 @@ import java.util.Optional
 /** Void a credit grant */
 class CreditGrantVoidParams
 private constructor(
-    private val body: CreditGrantVoidBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -50,16 +50,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CreditGrantVoidBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class CreditGrantVoidBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("release_uniqueness_key")
         @ExcludeMissing
@@ -101,7 +101,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CreditGrantVoidBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -119,7 +119,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CreditGrantVoidBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -128,11 +128,11 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(creditGrantVoidBody: CreditGrantVoidBody) = apply {
-                id = creditGrantVoidBody.id
-                releaseUniquenessKey = creditGrantVoidBody.releaseUniquenessKey
-                voidCreditPurchaseInvoice = creditGrantVoidBody.voidCreditPurchaseInvoice
-                additionalProperties = creditGrantVoidBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                id = body.id
+                releaseUniquenessKey = body.releaseUniquenessKey
+                voidCreditPurchaseInvoice = body.voidCreditPurchaseInvoice
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
@@ -176,8 +176,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CreditGrantVoidBody =
-                CreditGrantVoidBody(
+            fun build(): Body =
+                Body(
                     checkRequired("id", id),
                     releaseUniquenessKey,
                     voidCreditPurchaseInvoice,
@@ -190,7 +190,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CreditGrantVoidBody && id == other.id && releaseUniquenessKey == other.releaseUniquenessKey && voidCreditPurchaseInvoice == other.voidCreditPurchaseInvoice && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && id == other.id && releaseUniquenessKey == other.releaseUniquenessKey && voidCreditPurchaseInvoice == other.voidCreditPurchaseInvoice && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -200,7 +200,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CreditGrantVoidBody{id=$id, releaseUniquenessKey=$releaseUniquenessKey, voidCreditPurchaseInvoice=$voidCreditPurchaseInvoice, additionalProperties=$additionalProperties}"
+            "Body{id=$id, releaseUniquenessKey=$releaseUniquenessKey, voidCreditPurchaseInvoice=$voidCreditPurchaseInvoice, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -214,7 +214,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: CreditGrantVoidBody.Builder = CreditGrantVoidBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

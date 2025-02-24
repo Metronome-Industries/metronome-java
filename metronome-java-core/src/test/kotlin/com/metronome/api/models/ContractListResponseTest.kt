@@ -73,7 +73,7 @@ class ContractListResponseTest {
                                             Commit.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -171,7 +171,7 @@ class ContractListResponseTest {
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
-                                                            JsonValue.from("string")
+                                                            JsonValue.from("string"),
                                                         )
                                                         .build()
                                                 )
@@ -180,7 +180,7 @@ class ContractListResponseTest {
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
-                                                            JsonValue.from("string")
+                                                            JsonValue.from("string"),
                                                         )
                                                         .build()
                                                 )
@@ -209,7 +209,7 @@ class ContractListResponseTest {
                                                     Override.OverwriteRate.CustomRate.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
-                                                            JsonValue.from("bar")
+                                                            JsonValue.from("bar"),
                                                         )
                                                         .build()
                                                 )
@@ -280,7 +280,7 @@ class ContractListResponseTest {
                                             ScheduledCharge.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -342,7 +342,7 @@ class ContractListResponseTest {
                                             Credit.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -407,7 +407,7 @@ class ContractListResponseTest {
                                             Discount.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -427,7 +427,7 @@ class ContractListResponseTest {
                                             ProService.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -517,7 +517,7 @@ class ContractListResponseTest {
                                             Commit.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -615,7 +615,7 @@ class ContractListResponseTest {
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
-                                                            JsonValue.from("string")
+                                                            JsonValue.from("string"),
                                                         )
                                                         .build()
                                                 )
@@ -624,7 +624,7 @@ class ContractListResponseTest {
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
-                                                            JsonValue.from("string")
+                                                            JsonValue.from("string"),
                                                         )
                                                         .build()
                                                 )
@@ -653,7 +653,7 @@ class ContractListResponseTest {
                                                     Override.OverwriteRate.CustomRate.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
-                                                            JsonValue.from("bar")
+                                                            JsonValue.from("bar"),
                                                         )
                                                         .build()
                                                 )
@@ -724,7 +724,7 @@ class ContractListResponseTest {
                                             ScheduledCharge.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -805,7 +805,7 @@ class ContractListResponseTest {
                                             Credit.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -870,7 +870,7 @@ class ContractListResponseTest {
                                             Discount.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -893,7 +893,7 @@ class ContractListResponseTest {
                                             ProService.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -1149,7 +1149,7 @@ class ContractListResponseTest {
                                             Commit.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -1247,7 +1247,7 @@ class ContractListResponseTest {
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
-                                                            JsonValue.from("string")
+                                                            JsonValue.from("string"),
                                                         )
                                                         .build()
                                                 )
@@ -1256,7 +1256,7 @@ class ContractListResponseTest {
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
-                                                            JsonValue.from("string")
+                                                            JsonValue.from("string"),
                                                         )
                                                         .build()
                                                 )
@@ -1285,7 +1285,7 @@ class ContractListResponseTest {
                                                     Override.OverwriteRate.CustomRate.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
-                                                            JsonValue.from("bar")
+                                                            JsonValue.from("bar"),
                                                         )
                                                         .build()
                                                 )
@@ -1356,7 +1356,7 @@ class ContractListResponseTest {
                                             ScheduledCharge.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -1437,7 +1437,7 @@ class ContractListResponseTest {
                                             Credit.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -1502,7 +1502,7 @@ class ContractListResponseTest {
                                             Discount.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -1525,7 +1525,7 @@ class ContractListResponseTest {
                                             ProService.CustomFields.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
-                                                    JsonValue.from("string")
+                                                    JsonValue.from("string"),
                                                 )
                                                 .build()
                                         )
@@ -1897,7 +1897,7 @@ class ContractListResponseTest {
                                                     .builder()
                                                     .putAdditionalProperty(
                                                         "foo",
-                                                        JsonValue.from("string")
+                                                        JsonValue.from("string"),
                                                     )
                                                     .build()
                                             )
@@ -1906,7 +1906,7 @@ class ContractListResponseTest {
                                                     .builder()
                                                     .putAdditionalProperty(
                                                         "foo",
-                                                        JsonValue.from("string")
+                                                        JsonValue.from("string"),
                                                     )
                                                     .build()
                                             )
@@ -1935,7 +1935,7 @@ class ContractListResponseTest {
                                                 Override.OverwriteRate.CustomRate.builder()
                                                     .putAdditionalProperty(
                                                         "foo",
-                                                        JsonValue.from("bar")
+                                                        JsonValue.from("bar"),
                                                     )
                                                     .build()
                                             )
@@ -2305,7 +2305,7 @@ class ContractListResponseTest {
                                                     .builder()
                                                     .putAdditionalProperty(
                                                         "foo",
-                                                        JsonValue.from("string")
+                                                        JsonValue.from("string"),
                                                     )
                                                     .build()
                                             )
@@ -2314,7 +2314,7 @@ class ContractListResponseTest {
                                                     .builder()
                                                     .putAdditionalProperty(
                                                         "foo",
-                                                        JsonValue.from("string")
+                                                        JsonValue.from("string"),
                                                     )
                                                     .build()
                                             )
@@ -2343,7 +2343,7 @@ class ContractListResponseTest {
                                                 Override.OverwriteRate.CustomRate.builder()
                                                     .putAdditionalProperty(
                                                         "foo",
-                                                        JsonValue.from("bar")
+                                                        JsonValue.from("bar"),
                                                     )
                                                     .build()
                                             )
@@ -2877,7 +2877,7 @@ class ContractListResponseTest {
                                                     .builder()
                                                     .putAdditionalProperty(
                                                         "foo",
-                                                        JsonValue.from("string")
+                                                        JsonValue.from("string"),
                                                     )
                                                     .build()
                                             )
@@ -2886,7 +2886,7 @@ class ContractListResponseTest {
                                                     .builder()
                                                     .putAdditionalProperty(
                                                         "foo",
-                                                        JsonValue.from("string")
+                                                        JsonValue.from("string"),
                                                     )
                                                     .build()
                                             )
@@ -2915,7 +2915,7 @@ class ContractListResponseTest {
                                                 Override.OverwriteRate.CustomRate.builder()
                                                     .putAdditionalProperty(
                                                         "foo",
-                                                        JsonValue.from("bar")
+                                                        JsonValue.from("bar"),
                                                     )
                                                     .build()
                                             )

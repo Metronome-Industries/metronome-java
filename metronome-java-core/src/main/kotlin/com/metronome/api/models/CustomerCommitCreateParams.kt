@@ -26,7 +26,7 @@ import java.util.Optional
 /** Create a new commit at the customer level. */
 class CustomerCommitCreateParams
 private constructor(
-    private val body: CustomerCommitCreateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -187,16 +187,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomerCommitCreateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class CustomerCommitCreateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("access_schedule")
         @ExcludeMissing
         private val accessSchedule: JsonField<AccessSchedule> = JsonMissing.of(),
@@ -446,7 +446,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomerCommitCreateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -478,7 +478,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomerCommitCreateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var accessSchedule: JsonField<AccessSchedule>? = null
@@ -501,28 +501,25 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customerCommitCreateBody: CustomerCommitCreateBody) = apply {
-                accessSchedule = customerCommitCreateBody.accessSchedule
-                customerId = customerCommitCreateBody.customerId
-                priority = customerCommitCreateBody.priority
-                productId = customerCommitCreateBody.productId
-                type = customerCommitCreateBody.type
-                applicableContractIds =
-                    customerCommitCreateBody.applicableContractIds.map { it.toMutableList() }
-                applicableProductIds =
-                    customerCommitCreateBody.applicableProductIds.map { it.toMutableList() }
-                applicableProductTags =
-                    customerCommitCreateBody.applicableProductTags.map { it.toMutableList() }
-                customFields = customerCommitCreateBody.customFields
-                description = customerCommitCreateBody.description
-                invoiceContractId = customerCommitCreateBody.invoiceContractId
-                invoiceSchedule = customerCommitCreateBody.invoiceSchedule
-                name = customerCommitCreateBody.name
-                netsuiteSalesOrderId = customerCommitCreateBody.netsuiteSalesOrderId
-                rateType = customerCommitCreateBody.rateType
-                salesforceOpportunityId = customerCommitCreateBody.salesforceOpportunityId
-                uniquenessKey = customerCommitCreateBody.uniquenessKey
-                additionalProperties = customerCommitCreateBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                accessSchedule = body.accessSchedule
+                customerId = body.customerId
+                priority = body.priority
+                productId = body.productId
+                type = body.type
+                applicableContractIds = body.applicableContractIds.map { it.toMutableList() }
+                applicableProductIds = body.applicableProductIds.map { it.toMutableList() }
+                applicableProductTags = body.applicableProductTags.map { it.toMutableList() }
+                customFields = body.customFields
+                description = body.description
+                invoiceContractId = body.invoiceContractId
+                invoiceSchedule = body.invoiceSchedule
+                name = body.name
+                netsuiteSalesOrderId = body.netsuiteSalesOrderId
+                rateType = body.rateType
+                salesforceOpportunityId = body.salesforceOpportunityId
+                uniquenessKey = body.uniquenessKey
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /**
@@ -781,8 +778,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomerCommitCreateBody =
-                CustomerCommitCreateBody(
+            fun build(): Body =
+                Body(
                     checkRequired("accessSchedule", accessSchedule),
                     checkRequired("customerId", customerId),
                     checkRequired("priority", priority),
@@ -809,7 +806,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerCommitCreateBody && accessSchedule == other.accessSchedule && customerId == other.customerId && priority == other.priority && productId == other.productId && type == other.type && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && customFields == other.customFields && description == other.description && invoiceContractId == other.invoiceContractId && invoiceSchedule == other.invoiceSchedule && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rateType == other.rateType && salesforceOpportunityId == other.salesforceOpportunityId && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && accessSchedule == other.accessSchedule && customerId == other.customerId && priority == other.priority && productId == other.productId && type == other.type && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && customFields == other.customFields && description == other.description && invoiceContractId == other.invoiceContractId && invoiceSchedule == other.invoiceSchedule && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rateType == other.rateType && salesforceOpportunityId == other.salesforceOpportunityId && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -819,7 +816,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerCommitCreateBody{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, type=$type, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
+            "Body{accessSchedule=$accessSchedule, customerId=$customerId, priority=$priority, productId=$productId, type=$type, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rateType=$rateType, salesforceOpportunityId=$salesforceOpportunityId, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -833,7 +830,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: CustomerCommitCreateBody.Builder = CustomerCommitCreateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -1475,11 +1472,7 @@ private constructor(
             "AccessSchedule{scheduleItems=$scheduleItems, creditTypeId=$creditTypeId, additionalProperties=$additionalProperties}"
     }
 
-    class Type
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -1552,7 +1545,19 @@ private constructor(
                 else -> throw MetronomeInvalidDataException("Unknown Type: $value")
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1572,7 +1577,7 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
     ) {
 
         @JsonAnyGetter
@@ -2077,9 +2082,7 @@ private constructor(
 
             class AmountDistribution
             @JsonCreator
-            private constructor(
-                private val value: JsonField<String>,
-            ) : Enum {
+            private constructor(private val value: JsonField<String>) : Enum {
 
                 /**
                  * Returns this class instance's raw value.
@@ -2166,7 +2169,19 @@ private constructor(
                             )
                     }
 
-                fun asString(): String = _value().asStringOrThrow()
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -2181,11 +2196,8 @@ private constructor(
                 override fun toString() = value.toString()
             }
 
-            class Frequency
-            @JsonCreator
-            private constructor(
-                private val value: JsonField<String>,
-            ) : Enum {
+            class Frequency @JsonCreator private constructor(private val value: JsonField<String>) :
+                Enum {
 
                 /**
                  * Returns this class instance's raw value.
@@ -2273,7 +2285,19 @@ private constructor(
                         else -> throw MetronomeInvalidDataException("Unknown Frequency: $value")
                     }
 
-                fun asString(): String = _value().asStringOrThrow()
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -2530,11 +2554,7 @@ private constructor(
             "InvoiceSchedule{creditTypeId=$creditTypeId, recurringSchedule=$recurringSchedule, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
     }
 
-    class RateType
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class RateType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -2607,7 +2627,19 @@ private constructor(
                 else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

@@ -23,7 +23,7 @@ import java.util.Objects
 /** Set usage filter for a contract */
 class ContractSetUsageFilterParams
 private constructor(
-    private val body: ContractSetUsageFilterBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -54,16 +54,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): ContractSetUsageFilterBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class ContractSetUsageFilterBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("contract_id")
         @ExcludeMissing
         private val contractId: JsonField<String> = JsonMissing.of(),
@@ -117,7 +117,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ContractSetUsageFilterBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -137,7 +137,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ContractSetUsageFilterBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var contractId: JsonField<String>? = null
@@ -148,14 +148,13 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(contractSetUsageFilterBody: ContractSetUsageFilterBody) = apply {
-                contractId = contractSetUsageFilterBody.contractId
-                customerId = contractSetUsageFilterBody.customerId
-                groupKey = contractSetUsageFilterBody.groupKey
-                groupValues = contractSetUsageFilterBody.groupValues.map { it.toMutableList() }
-                startingAt = contractSetUsageFilterBody.startingAt
-                additionalProperties =
-                    contractSetUsageFilterBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                contractId = body.contractId
+                customerId = body.customerId
+                groupKey = body.groupKey
+                groupValues = body.groupValues.map { it.toMutableList() }
+                startingAt = body.startingAt
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun contractId(contractId: String) = contractId(JsonField.of(contractId))
@@ -214,8 +213,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): ContractSetUsageFilterBody =
-                ContractSetUsageFilterBody(
+            fun build(): Body =
+                Body(
                     checkRequired("contractId", contractId),
                     checkRequired("customerId", customerId),
                     checkRequired("groupKey", groupKey),
@@ -230,7 +229,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ContractSetUsageFilterBody && contractId == other.contractId && customerId == other.customerId && groupKey == other.groupKey && groupValues == other.groupValues && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && contractId == other.contractId && customerId == other.customerId && groupKey == other.groupKey && groupValues == other.groupValues && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -240,7 +239,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ContractSetUsageFilterBody{contractId=$contractId, customerId=$customerId, groupKey=$groupKey, groupValues=$groupValues, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+            "Body{contractId=$contractId, customerId=$customerId, groupKey=$groupKey, groupValues=$groupValues, startingAt=$startingAt, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -254,7 +253,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: ContractSetUsageFilterBody.Builder = ContractSetUsageFilterBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

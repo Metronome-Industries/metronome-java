@@ -12,9 +12,9 @@ class ContractRateCardListParamsTest {
     @Test
     fun create() {
         ContractRateCardListParams.builder()
-            .body(JsonValue.from(mapOf<String, Any>()))
             .limit(1L)
             .nextPage("next_page")
+            .body(JsonValue.from(mapOf<String, Any>()))
             .build()
     }
 
@@ -22,9 +22,9 @@ class ContractRateCardListParamsTest {
     fun queryParams() {
         val params =
             ContractRateCardListParams.builder()
-                .body(JsonValue.from(mapOf<String, Any>()))
                 .limit(1L)
                 .nextPage("next_page")
+                .body(JsonValue.from(mapOf<String, Any>()))
                 .build()
         val expected = QueryParams.builder()
         expected.put("limit", "1")
@@ -44,11 +44,13 @@ class ContractRateCardListParamsTest {
     fun body() {
         val params =
             ContractRateCardListParams.builder()
-                .body(JsonValue.from(mapOf<String, Any>()))
                 .limit(1L)
                 .nextPage("next_page")
+                .body(JsonValue.from(mapOf<String, Any>()))
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body).isEqualTo(JsonValue.from(mapOf<String, Any>()))
     }
@@ -57,7 +59,9 @@ class ContractRateCardListParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             ContractRateCardListParams.builder().body(JsonValue.from(mapOf<String, Any>())).build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body).isEqualTo(JsonValue.from(mapOf<String, Any>()))
     }

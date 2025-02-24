@@ -108,7 +108,7 @@ private constructor(
         fun build(): ContractScheduleProServicesInvoiceResponse =
             ContractScheduleProServicesInvoiceResponse(
                 checkRequired("data", data).map { it.toImmutable() },
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

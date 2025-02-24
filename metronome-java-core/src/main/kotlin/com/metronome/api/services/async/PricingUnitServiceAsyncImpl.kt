@@ -16,10 +16,8 @@ import com.metronome.api.models.PricingUnitListPageAsync
 import com.metronome.api.models.PricingUnitListParams
 import java.util.concurrent.CompletableFuture
 
-class PricingUnitServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : PricingUnitServiceAsync {
+class PricingUnitServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    PricingUnitServiceAsync {
 
     private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
 
@@ -30,7 +28,7 @@ internal constructor(
     /** List all pricing units (known in the API by the legacy term "credit types"). */
     override fun list(
         params: PricingUnitListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<PricingUnitListPageAsync> {
         val request =
             HttpRequest.builder()
