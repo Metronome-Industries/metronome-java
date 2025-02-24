@@ -112,7 +112,7 @@ See this table for the available options:
 
 To send a request to the Metronome API, build an instance of some `Params` class and pass it to the corresponding client method. When the response is received, it will be deserialized into an instance of a Java class.
 
-For example, `client.alerts().create(...)` should be called with an instance of `AlertCreateParams`, and it will return an instance of `AlertCreateResponse`.
+For example, `client.contracts().create(...)` should be called with an instance of `ContractCreateParams`, and it will return an instance of `ContractCreateResponse`.
 
 ## Asynchronous execution
 
@@ -372,7 +372,7 @@ To access undocumented response properties, call the `_additionalProperties()` m
 import com.metronome.api.core.JsonValue;
 import java.util.Map;
 
-Map<String, JsonValue> additionalProperties = client.alerts().create(params)._additionalProperties();
+Map<String, JsonValue> additionalProperties = client.contracts().create(params)._additionalProperties();
 JsonValue secretPropertyValue = additionalProperties.get("secretProperty");
 
 String result = secretPropertyValue.accept(new JsonValue.Visitor<>() {
@@ -400,22 +400,21 @@ To access a property's raw JSON value, which may be undocumented, call its `_` p
 
 ```java
 import com.metronome.api.core.JsonField;
-import com.metronome.api.models.AlertCreateParams;
 import java.util.Optional;
 
-JsonField<AlertCreateParams.AlertType> alertType = client.alerts().create(params)._alertType();
+JsonField<String> customerId = client.contracts().create(params)._customerId();
 
-if (alertType.isMissing()) {
+if (customerId.isMissing()) {
   // The property is absent from the JSON response
-} else if (alertType.isNull()) {
+} else if (customerId.isNull()) {
   // The property was set to literal null
 } else {
   // Check if value was provided as a string
   // Other methods include `asNumber()`, `asBoolean()`, etc.
-  Optional<String> jsonString = alertType.asString();
+  Optional<String> jsonString = customerId.asString();
 
   // Try to deserialize into a custom type
-  MyClass myObject = alertType.asUnknown().orElseThrow().convert(MyClass.class);
+  MyClass myObject = customerId.asUnknown().orElseThrow().convert(MyClass.class);
 }
 ```
 
@@ -428,9 +427,9 @@ By default, the SDK will not throw an exception in this case. It will throw `Met
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```java
-import com.metronome.api.models.AlertCreateResponse;
+import com.metronome.api.models.ContractCreateResponse;
 
-AlertCreateResponse alert = client.alerts().create(params).validate();
+ContractCreateResponse contract = client.contracts().create(params).validate();
 ```
 
 Or configure the method call to validate the response using the `responseValidation` method:
