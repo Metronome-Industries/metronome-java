@@ -4,7 +4,6 @@ package com.metronome.api.services.blocking
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
-import com.metronome.api.models.PricingUnitListParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -19,7 +18,7 @@ class PricingUnitServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val pricingUnitService = client.pricingUnits()
-        val response = pricingUnitService.list(PricingUnitListParams.builder().build())
+        val response = pricingUnitService.list()
         println(response)
         response.data().forEach { it.validate() }
     }

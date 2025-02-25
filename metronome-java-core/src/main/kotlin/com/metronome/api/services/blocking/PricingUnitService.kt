@@ -13,7 +13,11 @@ interface PricingUnitService {
     /** List all pricing units (known in the API by the legacy term "credit types"). */
     @JvmOverloads
     fun list(
-        params: PricingUnitListParams,
+        params: PricingUnitListParams = PricingUnitListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PricingUnitListPage
+
+    /** List all pricing units (known in the API by the legacy term "credit types"). */
+    fun list(requestOptions: RequestOptions): PricingUnitListPage =
+        list(PricingUnitListParams.none(), requestOptions)
 }

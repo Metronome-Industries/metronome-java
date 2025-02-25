@@ -50,8 +50,7 @@ import com.metronome.api.models.UsageIngestParams;
 // Configures using the `METRONOME_BEARER_TOKEN` and `METRONOME_WEBHOOK_SECRET` environment variables
 MetronomeClient client = MetronomeOkHttpClient.fromEnv();
 
-UsageIngestParams params = UsageIngestParams.builder().build();
-client.usage().ingest(params)
+client.usage().ingest()
 ```
 
 ## Client configuration
@@ -128,8 +127,7 @@ import java.util.concurrent.CompletableFuture;
 // Configures using the `METRONOME_BEARER_TOKEN` and `METRONOME_WEBHOOK_SECRET` environment variables
 MetronomeClient client = MetronomeOkHttpClient.fromEnv();
 
-UsageIngestParams params = UsageIngestParams.builder().build();
-CompletableFuture<Void?> response = client.async().usage().ingest(params);
+CompletableFuture<Void?> response = client.async().usage().ingest();
 ```
 
 Or create an asynchronous client from the beginning:
@@ -143,8 +141,7 @@ import java.util.concurrent.CompletableFuture;
 // Configures using the `METRONOME_BEARER_TOKEN` and `METRONOME_WEBHOOK_SECRET` environment variables
 MetronomeClientAsync client = MetronomeOkHttpClientAsync.fromEnv();
 
-UsageIngestParams params = UsageIngestParams.builder().build();
-CompletableFuture<Void?> response = client.usage().ingest(params);
+CompletableFuture<Void?> response = client.usage().ingest();
 ```
 
 The asynchronous client supports the same options as the synchronous one, except most methods return `CompletableFuture`s.
@@ -277,9 +274,7 @@ To set a custom timeout, configure the method call using the `timeout` method:
 ```java
 import com.metronome.api.models.UsageIngestParams;
 
-client.usage().ingest(
-  params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
-)
+client.usage().ingest(RequestOptions.builder().timeout(Duration.ofSeconds(30)).build())
 ```
 
 Or configure the default for all method calls at the client level:
@@ -417,9 +412,7 @@ Or configure the method call to validate the response using the `responseValidat
 ```java
 import com.metronome.api.models.UsageIngestParams;
 
-client.usage().ingest(
-  params, RequestOptions.builder().responseValidation(true).build()
-)
+client.usage().ingest(RequestOptions.builder().responseValidation(true).build())
 ```
 
 Or configure the default for all method calls at the client level:

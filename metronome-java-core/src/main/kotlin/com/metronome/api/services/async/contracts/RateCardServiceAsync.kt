@@ -58,9 +58,16 @@ interface RateCardServiceAsync {
      */
     @JvmOverloads
     fun list(
-        params: ContractRateCardListParams,
+        params: ContractRateCardListParams = ContractRateCardListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractRateCardListPageAsync>
+
+    /**
+     * List rate cards NOTE: Use `/contract-pricing/rate-cards/getRates` to retrieve rate card
+     * rates.
+     */
+    fun list(requestOptions: RequestOptions): CompletableFuture<ContractRateCardListPageAsync> =
+        list(ContractRateCardListParams.none(), requestOptions)
 
     /**
      * Get all rates for a rate card from starting_at (either in perpetuity or until ending_before,

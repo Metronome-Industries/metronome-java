@@ -29,9 +29,13 @@ interface CreditGrantServiceAsync {
     /** List credit grants. This list does not included voided grants. */
     @JvmOverloads
     fun list(
-        params: CreditGrantListParams,
+        params: CreditGrantListParams = CreditGrantListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CreditGrantListPageAsync>
+
+    /** List credit grants. This list does not included voided grants. */
+    fun list(requestOptions: RequestOptions): CompletableFuture<CreditGrantListPageAsync> =
+        list(CreditGrantListParams.none(), requestOptions)
 
     /** Edit an existing credit grant */
     @JvmOverloads
@@ -47,9 +51,19 @@ interface CreditGrantServiceAsync {
      */
     @JvmOverloads
     fun listEntries(
-        params: CreditGrantListEntriesParams,
+        params: CreditGrantListEntriesParams = CreditGrantListEntriesParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CreditGrantListEntriesResponse>
+
+    /**
+     * Fetches a list of credit ledger entries. Returns lists of ledgers per customer. Ledger
+     * entries are returned in chronological order. Ledger entries associated with voided credit
+     * grants are not included.
+     */
+    fun listEntries(
+        requestOptions: RequestOptions
+    ): CompletableFuture<CreditGrantListEntriesResponse> =
+        listEntries(CreditGrantListEntriesParams.none(), requestOptions)
 
     /** Void a credit grant */
     @JvmOverloads

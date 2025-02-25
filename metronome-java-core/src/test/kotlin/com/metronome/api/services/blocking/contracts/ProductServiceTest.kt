@@ -6,7 +6,6 @@ import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.models.ContractProductArchiveParams
 import com.metronome.api.models.ContractProductCreateParams
-import com.metronome.api.models.ContractProductListParams
 import com.metronome.api.models.ContractProductRetrieveParams
 import com.metronome.api.models.ContractProductUpdateParams
 import com.metronome.api.models.Id
@@ -130,7 +129,7 @@ class ProductServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val productService = client.contracts().products()
-        val response = productService.list(ContractProductListParams.builder().build())
+        val response = productService.list()
         println(response)
         response.data().forEach { it.validate() }
     }

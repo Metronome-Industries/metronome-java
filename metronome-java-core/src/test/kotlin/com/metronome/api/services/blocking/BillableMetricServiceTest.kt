@@ -7,7 +7,6 @@ import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.BillableMetricArchiveParams
 import com.metronome.api.models.BillableMetricCreateParams
-import com.metronome.api.models.BillableMetricListParams
 import com.metronome.api.models.BillableMetricRetrieveParams
 import com.metronome.api.models.EventTypeFilter
 import com.metronome.api.models.Id
@@ -102,7 +101,7 @@ class BillableMetricServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val billableMetricService = client.billableMetrics()
-        val response = billableMetricService.list(BillableMetricListParams.builder().build())
+        val response = billableMetricService.list()
         println(response)
         response.data().forEach { it.validate() }
     }

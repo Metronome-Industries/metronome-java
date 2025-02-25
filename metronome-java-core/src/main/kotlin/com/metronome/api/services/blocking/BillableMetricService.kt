@@ -33,9 +33,13 @@ interface BillableMetricService {
     /** List all billable metrics. */
     @JvmOverloads
     fun list(
-        params: BillableMetricListParams,
+        params: BillableMetricListParams = BillableMetricListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BillableMetricListPage
+
+    /** List all billable metrics. */
+    fun list(requestOptions: RequestOptions): BillableMetricListPage =
+        list(BillableMetricListParams.none(), requestOptions)
 
     /** Archive an existing billable metric. */
     @JvmOverloads

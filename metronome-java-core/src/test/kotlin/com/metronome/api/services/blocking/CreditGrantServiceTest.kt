@@ -8,7 +8,6 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.models.CreditGrantCreateParams
 import com.metronome.api.models.CreditGrantEditParams
 import com.metronome.api.models.CreditGrantListEntriesParams
-import com.metronome.api.models.CreditGrantListParams
 import com.metronome.api.models.CreditGrantVoidParams
 import com.metronome.api.models.RolloverAmountMaxPercentage
 import java.time.OffsetDateTime
@@ -82,7 +81,7 @@ class CreditGrantServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val creditGrantService = client.creditGrants()
-        val response = creditGrantService.list(CreditGrantListParams.builder().build())
+        val response = creditGrantService.list()
         println(response)
         response.data().forEach { it.validate() }
     }

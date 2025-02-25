@@ -34,9 +34,13 @@ interface BillableMetricServiceAsync {
     /** List all billable metrics. */
     @JvmOverloads
     fun list(
-        params: BillableMetricListParams,
+        params: BillableMetricListParams = BillableMetricListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BillableMetricListPageAsync>
+
+    /** List all billable metrics. */
+    fun list(requestOptions: RequestOptions): CompletableFuture<BillableMetricListPageAsync> =
+        list(BillableMetricListParams.none(), requestOptions)
 
     /** Archive an existing billable metric. */
     @JvmOverloads

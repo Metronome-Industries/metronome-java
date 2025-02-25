@@ -19,9 +19,13 @@ interface PlanService {
     /** List all available plans. */
     @JvmOverloads
     fun list(
-        params: PlanListParams,
+        params: PlanListParams = PlanListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PlanListPage
+
+    /** List all available plans. */
+    fun list(requestOptions: RequestOptions): PlanListPage =
+        list(PlanListParams.none(), requestOptions)
 
     /** Fetch high level details of a specific plan. */
     @JvmOverloads

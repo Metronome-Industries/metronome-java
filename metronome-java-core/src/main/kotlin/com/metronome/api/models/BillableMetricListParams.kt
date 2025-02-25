@@ -47,6 +47,8 @@ private constructor(
 
     companion object {
 
+        fun none(): BillableMetricListParams = builder().build()
+
         @JvmStatic fun builder() = Builder()
     }
 

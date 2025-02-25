@@ -35,9 +35,13 @@ interface CustomFieldServiceAsync {
     /** List all active custom field keys, optionally filtered by entity type. */
     @JvmOverloads
     fun listKeys(
-        params: CustomFieldListKeysParams,
+        params: CustomFieldListKeysParams = CustomFieldListKeysParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomFieldListKeysResponse>
+
+    /** List all active custom field keys, optionally filtered by entity type. */
+    fun listKeys(requestOptions: RequestOptions): CompletableFuture<CustomFieldListKeysResponse> =
+        listKeys(CustomFieldListKeysParams.none(), requestOptions)
 
     /** Remove a key from the allow list for a given entity. */
     @JvmOverloads

@@ -14,7 +14,11 @@ interface PricingUnitServiceAsync {
     /** List all pricing units (known in the API by the legacy term "credit types"). */
     @JvmOverloads
     fun list(
-        params: PricingUnitListParams,
+        params: PricingUnitListParams = PricingUnitListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PricingUnitListPageAsync>
+
+    /** List all pricing units (known in the API by the legacy term "credit types"). */
+    fun list(requestOptions: RequestOptions): CompletableFuture<PricingUnitListPageAsync> =
+        list(PricingUnitListParams.none(), requestOptions)
 }

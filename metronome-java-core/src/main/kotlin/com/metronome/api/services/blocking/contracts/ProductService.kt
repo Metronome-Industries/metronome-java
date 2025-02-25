@@ -42,9 +42,13 @@ interface ProductService {
     /** List products */
     @JvmOverloads
     fun list(
-        params: ContractProductListParams,
+        params: ContractProductListParams = ContractProductListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ContractProductListPage
+
+    /** List products */
+    fun list(requestOptions: RequestOptions): ContractProductListPage =
+        list(ContractProductListParams.none(), requestOptions)
 
     /** Archive a product */
     @JvmOverloads

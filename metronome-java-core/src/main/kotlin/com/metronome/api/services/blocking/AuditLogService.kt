@@ -18,7 +18,16 @@ interface AuditLogService {
      */
     @JvmOverloads
     fun list(
-        params: AuditLogListParams,
+        params: AuditLogListParams = AuditLogListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AuditLogListPage
+
+    /**
+     * Retrieves a range of audit logs. If no further audit logs are currently available, the data
+     * array will be empty. As new audit logs are created, subsequent requests using the same
+     * next_page value will be in the returned data array, ensuring a continuous and uninterrupted
+     * reading of audit logs.
+     */
+    fun list(requestOptions: RequestOptions): AuditLogListPage =
+        list(AuditLogListParams.none(), requestOptions)
 }

@@ -63,9 +63,13 @@ interface CustomerServiceAsync {
     /** List all customers. */
     @JvmOverloads
     fun list(
-        params: CustomerListParams,
+        params: CustomerListParams = CustomerListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerListPageAsync>
+
+    /** List all customers. */
+    fun list(requestOptions: RequestOptions): CompletableFuture<CustomerListPageAsync> =
+        list(CustomerListParams.none(), requestOptions)
 
     /** Archive a customer */
     @JvmOverloads

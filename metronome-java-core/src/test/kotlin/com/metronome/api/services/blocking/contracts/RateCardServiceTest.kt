@@ -6,7 +6,6 @@ import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.ContractRateCardCreateParams
-import com.metronome.api.models.ContractRateCardListParams
 import com.metronome.api.models.ContractRateCardRetrieveParams
 import com.metronome.api.models.ContractRateCardRetrieveRateScheduleParams
 import com.metronome.api.models.ContractRateCardUpdateParams
@@ -109,7 +108,7 @@ class RateCardServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val rateCardService = client.contracts().rateCards()
-        val response = rateCardService.list(ContractRateCardListParams.builder().build())
+        val response = rateCardService.list()
         println(response)
         response.data().forEach { it.validate() }
     }

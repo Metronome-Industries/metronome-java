@@ -43,9 +43,13 @@ interface ProductServiceAsync {
     /** List products */
     @JvmOverloads
     fun list(
-        params: ContractProductListParams,
+        params: ContractProductListParams = ContractProductListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContractProductListPageAsync>
+
+    /** List products */
+    fun list(requestOptions: RequestOptions): CompletableFuture<ContractProductListPageAsync> =
+        list(ContractProductListParams.none(), requestOptions)
 
     /** Archive a product */
     @JvmOverloads

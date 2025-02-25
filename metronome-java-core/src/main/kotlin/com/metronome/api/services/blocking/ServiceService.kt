@@ -17,7 +17,15 @@ interface ServiceService {
      */
     @JvmOverloads
     fun list(
-        params: ServiceListParams,
+        params: ServiceListParams = ServiceListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ServiceListResponse
+
+    /**
+     * Fetches a list of services used by Metronome and the associated IP addresses. IP addresses
+     * are not necessarily unique between services. In most cases, IP addresses will appear in the
+     * list at least 30 days before they are used for the first time.
+     */
+    fun list(requestOptions: RequestOptions): ServiceListResponse =
+        list(ServiceListParams.none(), requestOptions)
 }

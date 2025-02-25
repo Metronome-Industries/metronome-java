@@ -9,7 +9,6 @@ import com.metronome.api.models.CustomerArchiveParams
 import com.metronome.api.models.CustomerCreateParams
 import com.metronome.api.models.CustomerListBillableMetricsParams
 import com.metronome.api.models.CustomerListCostsParams
-import com.metronome.api.models.CustomerListParams
 import com.metronome.api.models.CustomerRetrieveParams
 import com.metronome.api.models.CustomerSetIngestAliasesParams
 import com.metronome.api.models.CustomerSetNameParams
@@ -118,7 +117,7 @@ class CustomerServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val customerService = client.customers()
-        val response = customerService.list(CustomerListParams.builder().build())
+        val response = customerService.list()
         println(response)
         response.data().forEach { it.validate() }
     }

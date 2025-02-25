@@ -42,6 +42,8 @@ private constructor(
 
     companion object {
 
+        fun none(): PlanListParams = builder().build()
+
         @JvmStatic fun builder() = Builder()
     }
 

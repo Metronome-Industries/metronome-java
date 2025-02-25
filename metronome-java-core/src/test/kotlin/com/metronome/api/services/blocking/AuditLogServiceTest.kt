@@ -4,7 +4,6 @@ package com.metronome.api.services.blocking
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
-import com.metronome.api.models.AuditLogListParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -19,7 +18,7 @@ class AuditLogServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val auditLogService = client.auditLogs()
-        val response = auditLogService.list(AuditLogListParams.builder().build())
+        val response = auditLogService.list()
         println(response)
         response.data().forEach { it.validate() }
     }

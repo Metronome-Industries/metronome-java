@@ -7,7 +7,6 @@ import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.models.PlanGetDetailsParams
 import com.metronome.api.models.PlanListChargesParams
 import com.metronome.api.models.PlanListCustomersParams
-import com.metronome.api.models.PlanListParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -22,7 +21,7 @@ class PlanServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val planService = client.plans()
-        val response = planService.list(PlanListParams.builder().build())
+        val response = planService.list()
         println(response)
         response.data().forEach { it.validate() }
     }

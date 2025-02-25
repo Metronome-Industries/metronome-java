@@ -28,9 +28,13 @@ interface CreditGrantService {
     /** List credit grants. This list does not included voided grants. */
     @JvmOverloads
     fun list(
-        params: CreditGrantListParams,
+        params: CreditGrantListParams = CreditGrantListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CreditGrantListPage
+
+    /** List credit grants. This list does not included voided grants. */
+    fun list(requestOptions: RequestOptions): CreditGrantListPage =
+        list(CreditGrantListParams.none(), requestOptions)
 
     /** Edit an existing credit grant */
     @JvmOverloads
@@ -46,9 +50,17 @@ interface CreditGrantService {
      */
     @JvmOverloads
     fun listEntries(
-        params: CreditGrantListEntriesParams,
+        params: CreditGrantListEntriesParams = CreditGrantListEntriesParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CreditGrantListEntriesResponse
+
+    /**
+     * Fetches a list of credit ledger entries. Returns lists of ledgers per customer. Ledger
+     * entries are returned in chronological order. Ledger entries associated with voided credit
+     * grants are not included.
+     */
+    fun listEntries(requestOptions: RequestOptions): CreditGrantListEntriesResponse =
+        listEntries(CreditGrantListEntriesParams.none(), requestOptions)
 
     /** Void a credit grant */
     @JvmOverloads

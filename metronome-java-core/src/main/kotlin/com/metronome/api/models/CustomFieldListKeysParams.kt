@@ -180,6 +180,8 @@ private constructor(
 
     companion object {
 
+        fun none(): CustomFieldListKeysParams = builder().build()
+
         @JvmStatic fun builder() = Builder()
     }
 

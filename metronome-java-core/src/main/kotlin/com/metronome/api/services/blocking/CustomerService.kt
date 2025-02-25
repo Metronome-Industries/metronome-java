@@ -62,9 +62,13 @@ interface CustomerService {
     /** List all customers. */
     @JvmOverloads
     fun list(
-        params: CustomerListParams,
+        params: CustomerListParams = CustomerListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerListPage
+
+    /** List all customers. */
+    fun list(requestOptions: RequestOptions): CustomerListPage =
+        list(CustomerListParams.none(), requestOptions)
 
     /** Archive a customer */
     @JvmOverloads

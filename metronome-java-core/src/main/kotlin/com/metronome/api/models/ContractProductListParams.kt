@@ -168,6 +168,8 @@ private constructor(
 
     companion object {
 
+        fun none(): ContractProductListParams = builder().build()
+
         @JvmStatic fun builder() = Builder()
     }
 

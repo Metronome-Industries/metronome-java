@@ -359,6 +359,8 @@ private constructor(
 
     companion object {
 
+        fun none(): CreditGrantListEntriesParams = builder().build()
+
         @JvmStatic fun builder() = Builder()
     }
 

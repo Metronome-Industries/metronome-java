@@ -20,9 +20,13 @@ interface PlanServiceAsync {
     /** List all available plans. */
     @JvmOverloads
     fun list(
-        params: PlanListParams,
+        params: PlanListParams = PlanListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PlanListPageAsync>
+
+    /** List all available plans. */
+    fun list(requestOptions: RequestOptions): CompletableFuture<PlanListPageAsync> =
+        list(PlanListParams.none(), requestOptions)
 
     /** Fetch high level details of a specific plan. */
     @JvmOverloads
