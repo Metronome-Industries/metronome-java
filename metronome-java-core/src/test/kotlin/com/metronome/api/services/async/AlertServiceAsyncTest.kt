@@ -1,28 +1,28 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.services.blocking
+package com.metronome.api.services.async
 
 import com.metronome.api.TestServerExtension
-import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.models.AlertArchiveParams
 import com.metronome.api.models.AlertCreateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class AlertServiceTest {
+class AlertServiceAsyncTest {
 
     @Test
     fun create() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val alertService = client.alerts()
+        val alertServiceAsync = client.alerts()
 
-        val alert =
-            alertService.create(
+        val alertFuture =
+            alertServiceAsync.create(
                 AlertCreateParams.builder()
                     .alertType(AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
                     .name("\$100 spend threshold reached")
@@ -50,26 +50,28 @@ class AlertServiceTest {
                     .build()
             )
 
+        val alert = alertFuture.get()
         alert.validate()
     }
 
     @Test
     fun archive() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val alertService = client.alerts()
+        val alertServiceAsync = client.alerts()
 
-        val response =
-            alertService.archive(
+        val responseFuture =
+            alertServiceAsync.archive(
                 AlertArchiveParams.builder()
                     .id("8deed800-1b7a-495d-a207-6c52bac54dc9")
                     .releaseUniquenessKey(true)
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 }

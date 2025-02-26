@@ -11,15 +11,16 @@ import org.junit.jupiter.api.extension.ExtendWith
 class ServiceServiceTest {
 
     @Test
-    fun callList() {
+    fun list() {
         val client =
             MetronomeOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
         val serviceService = client.services()
-        val serviceListResponse = serviceService.list()
-        println(serviceListResponse)
-        serviceListResponse.validate()
+
+        val service = serviceService.list()
+
+        service.validate()
     }
 }

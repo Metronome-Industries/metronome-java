@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.services.blocking
+package com.metronome.api.services.async
 
 import com.metronome.api.TestServerExtension
-import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.CreditGrantCreateParams
 import com.metronome.api.models.CreditGrantEditParams
@@ -15,19 +15,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class CreditGrantServiceTest {
+class CreditGrantServiceAsyncTest {
 
     @Test
     fun create() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val creditGrantService = client.creditGrants()
+        val creditGrantServiceAsync = client.creditGrants()
 
-        val creditGrant =
-            creditGrantService.create(
+        val creditGrantFuture =
+            creditGrantServiceAsync.create(
                 CreditGrantCreateParams.builder()
                     .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                     .expiresAt(OffsetDateTime.parse("2022-04-01T00:00:00Z"))
@@ -71,34 +71,36 @@ class CreditGrantServiceTest {
                     .build()
             )
 
+        val creditGrant = creditGrantFuture.get()
         creditGrant.validate()
     }
 
     @Test
     fun list() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val creditGrantService = client.creditGrants()
+        val creditGrantServiceAsync = client.creditGrants()
 
-        val page = creditGrantService.list()
+        val pageFuture = creditGrantServiceAsync.list()
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 
     @Test
     fun edit() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val creditGrantService = client.creditGrants()
+        val creditGrantServiceAsync = client.creditGrants()
 
-        val response =
-            creditGrantService.edit(
+        val responseFuture =
+            creditGrantServiceAsync.edit(
                 CreditGrantEditParams.builder()
                     .id("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                     .creditGrantType("credit_grant_type")
@@ -107,20 +109,21 @@ class CreditGrantServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun listEntries() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val creditGrantService = client.creditGrants()
+        val creditGrantServiceAsync = client.creditGrants()
 
-        val response =
-            creditGrantService.listEntries(
+        val responseFuture =
+            creditGrantServiceAsync.listEntries(
                 CreditGrantListEntriesParams.builder()
                     .nextPage("next_page")
                     .addCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
@@ -130,20 +133,21 @@ class CreditGrantServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun void_() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val creditGrantService = client.creditGrants()
+        val creditGrantServiceAsync = client.creditGrants()
 
-        val response =
-            creditGrantService.void_(
+        val responseFuture =
+            creditGrantServiceAsync.void_(
                 CreditGrantVoidParams.builder()
                     .id("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                     .releaseUniquenessKey(true)
@@ -151,6 +155,7 @@ class CreditGrantServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 }

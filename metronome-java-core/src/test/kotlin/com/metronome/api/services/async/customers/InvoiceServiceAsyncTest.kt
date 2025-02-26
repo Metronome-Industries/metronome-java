@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.services.blocking.customers
+package com.metronome.api.services.async.customers
 
 import com.metronome.api.TestServerExtension
-import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.models.CustomerInvoiceAddChargeParams
 import com.metronome.api.models.CustomerInvoiceListBreakdownsParams
 import com.metronome.api.models.CustomerInvoiceListParams
@@ -13,19 +13,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class InvoiceServiceTest {
+class InvoiceServiceAsyncTest {
 
     @Test
     fun retrieve() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val invoiceService = client.customers().invoices()
+        val invoiceServiceAsync = client.customers().invoices()
 
-        val invoice =
-            invoiceService.retrieve(
+        val invoiceFuture =
+            invoiceServiceAsync.retrieve(
                 CustomerInvoiceRetrieveParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .invoiceId("6a37bb88-8538-48c5-b37b-a41c836328bd")
@@ -33,39 +33,41 @@ class InvoiceServiceTest {
                     .build()
             )
 
+        val invoice = invoiceFuture.get()
         invoice.validate()
     }
 
     @Test
     fun list() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val invoiceService = client.customers().invoices()
+        val invoiceServiceAsync = client.customers().invoices()
 
-        val page =
-            invoiceService.list(
+        val pageFuture =
+            invoiceServiceAsync.list(
                 CustomerInvoiceListParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 
     @Test
     fun addCharge() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val invoiceService = client.customers().invoices()
+        val invoiceServiceAsync = client.customers().invoices()
 
-        val response =
-            invoiceService.addCharge(
+        val responseFuture =
+            invoiceServiceAsync.addCharge(
                 CustomerInvoiceAddChargeParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .chargeId("5ae4b726-1ebe-439c-9190-9831760ba195")
@@ -77,20 +79,21 @@ class InvoiceServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun listBreakdowns() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val invoiceService = client.customers().invoices()
+        val invoiceServiceAsync = client.customers().invoices()
 
-        val page =
-            invoiceService.listBreakdowns(
+        val pageFuture =
+            invoiceServiceAsync.listBreakdowns(
                 CustomerInvoiceListBreakdownsParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -98,6 +101,7 @@ class InvoiceServiceTest {
                     .build()
             )
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 }

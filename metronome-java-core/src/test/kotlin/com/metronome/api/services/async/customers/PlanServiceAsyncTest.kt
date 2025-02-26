@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.services.blocking.customers
+package com.metronome.api.services.async.customers
 
 import com.metronome.api.TestServerExtension
-import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.models.CustomerPlanAddParams
 import com.metronome.api.models.CustomerPlanEndParams
 import com.metronome.api.models.CustomerPlanListParams
@@ -13,38 +13,39 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class PlanServiceTest {
+class PlanServiceAsyncTest {
 
     @Test
     fun list() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val planService = client.customers().plans()
+        val planServiceAsync = client.customers().plans()
 
-        val page =
-            planService.list(
+        val pageFuture =
+            planServiceAsync.list(
                 CustomerPlanListParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 
     @Test
     fun add() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val planService = client.customers().plans()
+        val planServiceAsync = client.customers().plans()
 
-        val response =
-            planService.add(
+        val responseFuture =
+            planServiceAsync.add(
                 CustomerPlanAddParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .planId("d2c06dae-9549-4d7d-bc04-b78dd3d241b8")
@@ -84,20 +85,21 @@ class PlanServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun end() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val planService = client.customers().plans()
+        val planServiceAsync = client.customers().plans()
 
-        val response =
-            planService.end(
+        val responseFuture =
+            planServiceAsync.end(
                 CustomerPlanEndParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .customerPlanId("7aa11640-0703-4600-8eb9-293f535a6b74")
@@ -107,26 +109,28 @@ class PlanServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun listPriceAdjustments() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val planService = client.customers().plans()
+        val planServiceAsync = client.customers().plans()
 
-        val page =
-            planService.listPriceAdjustments(
+        val pageFuture =
+            planServiceAsync.listPriceAdjustments(
                 CustomerPlanListPriceAdjustmentsParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .customerPlanId("7aa11640-0703-4600-8eb9-293f535a6b74")
                     .build()
             )
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 }

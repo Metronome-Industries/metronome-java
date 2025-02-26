@@ -17,13 +17,14 @@ import org.junit.jupiter.api.extension.ExtendWith
 class CustomFieldServiceTest {
 
     @Test
-    fun callAddKey() {
+    fun addKey() {
         val client =
             MetronomeOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
         val customFieldService = client.customFields()
+
         customFieldService.addKey(
             CustomFieldAddKeyParams.builder()
                 .enforceUniqueness(true)
@@ -34,13 +35,14 @@ class CustomFieldServiceTest {
     }
 
     @Test
-    fun callDeleteValues() {
+    fun deleteValues() {
         val client =
             MetronomeOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
         val customFieldService = client.customFields()
+
         customFieldService.deleteValues(
             CustomFieldDeleteValuesParams.builder()
                 .entity(CustomFieldDeleteValuesParams.Entity.ALERT)
@@ -51,32 +53,34 @@ class CustomFieldServiceTest {
     }
 
     @Test
-    fun callListKeys() {
+    fun listKeys() {
         val client =
             MetronomeOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
         val customFieldService = client.customFields()
-        val customFieldListKeysResponse =
+
+        val response =
             customFieldService.listKeys(
                 CustomFieldListKeysParams.builder()
                     .nextPage("next_page")
                     .addEntity(CustomFieldListKeysParams.Entity.ALERT)
                     .build()
             )
-        println(customFieldListKeysResponse)
-        customFieldListKeysResponse.validate()
+
+        response.validate()
     }
 
     @Test
-    fun callRemoveKey() {
+    fun removeKey() {
         val client =
             MetronomeOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
         val customFieldService = client.customFields()
+
         customFieldService.removeKey(
             CustomFieldRemoveKeyParams.builder()
                 .entity(CustomFieldRemoveKeyParams.Entity.ALERT)
@@ -86,13 +90,14 @@ class CustomFieldServiceTest {
     }
 
     @Test
-    fun callSetValues() {
+    fun setValues() {
         val client =
             MetronomeOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
         val customFieldService = client.customFields()
+
         customFieldService.setValues(
             CustomFieldSetValuesParams.builder()
                 .customFields(

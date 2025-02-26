@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.services.blocking.contracts
+package com.metronome.api.services.async.contracts
 
 import com.metronome.api.TestServerExtension
-import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.models.ContractProductArchiveParams
 import com.metronome.api.models.ContractProductCreateParams
 import com.metronome.api.models.ContractProductRetrieveParams
@@ -16,19 +16,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class ProductServiceTest {
+class ProductServiceAsyncTest {
 
     @Test
     fun create() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val productService = client.contracts().products()
+        val productServiceAsync = client.contracts().products()
 
-        val product =
-            productService.create(
+        val productFuture =
+            productServiceAsync.create(
                 ContractProductCreateParams.builder()
                     .name("My Product")
                     .type(ContractProductCreateParams.Type.FIXED)
@@ -58,39 +58,41 @@ class ProductServiceTest {
                     .build()
             )
 
+        val product = productFuture.get()
         product.validate()
     }
 
     @Test
     fun retrieve() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val productService = client.contracts().products()
+        val productServiceAsync = client.contracts().products()
 
-        val product =
-            productService.retrieve(
+        val productFuture =
+            productServiceAsync.retrieve(
                 ContractProductRetrieveParams.builder()
                     .id(Id.builder().id("d84e7f4e-7a70-4fe4-be02-7a5027beffcc").build())
                     .build()
             )
 
+        val product = productFuture.get()
         product.validate()
     }
 
     @Test
     fun update() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val productService = client.contracts().products()
+        val productServiceAsync = client.contracts().products()
 
-        val product =
-            productService.update(
+        val productFuture =
+            productServiceAsync.update(
                 ContractProductUpdateParams.builder()
                     .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
@@ -121,39 +123,42 @@ class ProductServiceTest {
                     .build()
             )
 
+        val product = productFuture.get()
         product.validate()
     }
 
     @Test
     fun list() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val productService = client.contracts().products()
+        val productServiceAsync = client.contracts().products()
 
-        val page = productService.list()
+        val pageFuture = productServiceAsync.list()
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 
     @Test
     fun archive() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val productService = client.contracts().products()
+        val productServiceAsync = client.contracts().products()
 
-        val response =
-            productService.archive(
+        val responseFuture =
+            productServiceAsync.archive(
                 ContractProductArchiveParams.builder()
                     .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 }

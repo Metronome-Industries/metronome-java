@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.services.blocking.contracts
+package com.metronome.api.services.async.contracts
 
 import com.metronome.api.TestServerExtension
-import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.ContractNamedScheduleRetrieveParams
 import com.metronome.api.models.ContractNamedScheduleUpdateParams
@@ -12,19 +12,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class NamedScheduleServiceTest {
+class NamedScheduleServiceAsyncTest {
 
     @Test
     fun retrieve() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val namedScheduleService = client.contracts().namedSchedules()
+        val namedScheduleServiceAsync = client.contracts().namedSchedules()
 
-        val namedSchedule =
-            namedScheduleService.retrieve(
+        val namedScheduleFuture =
+            namedScheduleServiceAsync.retrieve(
                 ContractNamedScheduleRetrieveParams.builder()
                     .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .scheduleName("my-schedule")
@@ -32,26 +32,30 @@ class NamedScheduleServiceTest {
                     .build()
             )
 
+        val namedSchedule = namedScheduleFuture.get()
         namedSchedule.validate()
     }
 
     @Test
     fun update() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val namedScheduleService = client.contracts().namedSchedules()
+        val namedScheduleServiceAsync = client.contracts().namedSchedules()
 
-        namedScheduleService.update(
-            ContractNamedScheduleUpdateParams.builder()
-                .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-                .scheduleName("my-schedule")
-                .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
-                .value(JsonValue.from(mapOf("my_key" to "my_value")))
-                .endingBefore(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
-                .build()
-        )
+        val future =
+            namedScheduleServiceAsync.update(
+                ContractNamedScheduleUpdateParams.builder()
+                    .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .scheduleName("my-schedule")
+                    .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
+                    .value(JsonValue.from(mapOf("my_key" to "my_value")))
+                    .endingBefore(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+                    .build()
+            )
+
+        val response = future.get()
     }
 }

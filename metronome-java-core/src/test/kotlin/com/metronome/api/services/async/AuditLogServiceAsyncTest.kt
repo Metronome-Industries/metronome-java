@@ -1,26 +1,27 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.services.blocking
+package com.metronome.api.services.async
 
 import com.metronome.api.TestServerExtension
-import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class PricingUnitServiceTest {
+class AuditLogServiceAsyncTest {
 
     @Test
     fun list() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val pricingUnitService = client.pricingUnits()
+        val auditLogServiceAsync = client.auditLogs()
 
-        val page = pricingUnitService.list()
+        val pageFuture = auditLogServiceAsync.list()
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 }

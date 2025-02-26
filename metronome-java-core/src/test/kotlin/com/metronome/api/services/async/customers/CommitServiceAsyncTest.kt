@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.services.blocking.customers
+package com.metronome.api.services.async.customers
 
 import com.metronome.api.TestServerExtension
-import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.CustomerCommitCreateParams
 import com.metronome.api.models.CustomerCommitListParams
@@ -13,19 +13,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class CommitServiceTest {
+class CommitServiceAsyncTest {
 
     @Test
     fun create() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val commitService = client.customers().commits()
+        val commitServiceAsync = client.customers().commits()
 
-        val commit =
-            commitService.create(
+        val commitFuture =
+            commitServiceAsync.create(
                 CustomerCommitCreateParams.builder()
                     .accessSchedule(
                         CustomerCommitCreateParams.AccessSchedule.builder()
@@ -94,20 +94,21 @@ class CommitServiceTest {
                     .build()
             )
 
+        val commit = commitFuture.get()
         commit.validate()
     }
 
     @Test
     fun list() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val commitService = client.customers().commits()
+        val commitServiceAsync = client.customers().commits()
 
-        val commit =
-            commitService.list(
+        val commitFuture =
+            commitServiceAsync.list(
                 CustomerCommitListParams.builder()
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .commitId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
@@ -122,20 +123,21 @@ class CommitServiceTest {
                     .build()
             )
 
+        val commit = commitFuture.get()
         commit.validate()
     }
 
     @Test
     fun updateEndDate() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val commitService = client.customers().commits()
+        val commitServiceAsync = client.customers().commits()
 
-        val response =
-            commitService.updateEndDate(
+        val responseFuture =
+            commitServiceAsync.updateEndDate(
                 CustomerCommitUpdateEndDateParams.builder()
                     .commitId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
@@ -144,6 +146,7 @@ class CommitServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 }

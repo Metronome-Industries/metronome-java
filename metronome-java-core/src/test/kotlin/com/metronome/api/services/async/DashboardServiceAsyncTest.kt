@@ -1,28 +1,28 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.services.blocking
+package com.metronome.api.services.async
 
 import com.metronome.api.TestServerExtension
-import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.DashboardGetEmbeddableUrlParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class DashboardServiceTest {
+class DashboardServiceAsyncTest {
 
     @Test
     fun getEmbeddableUrl() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val dashboardService = client.dashboards()
+        val dashboardServiceAsync = client.dashboards()
 
-        val response =
-            dashboardService.getEmbeddableUrl(
+        val responseFuture =
+            dashboardServiceAsync.getEmbeddableUrl(
                 DashboardGetEmbeddableUrlParams.builder()
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
@@ -60,6 +60,7 @@ class DashboardServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 }

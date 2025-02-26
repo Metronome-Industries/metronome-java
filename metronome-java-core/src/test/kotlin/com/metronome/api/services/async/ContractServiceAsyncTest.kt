@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.services.blocking
+package com.metronome.api.services.async
 
 import com.metronome.api.TestServerExtension
-import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.BaseUsageFilter
 import com.metronome.api.models.ContractAddManualBalanceEntryParams
@@ -24,19 +24,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class ContractServiceTest {
+class ContractServiceAsyncTest {
 
     @Test
     fun create() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val contractService = client.contracts()
+        val contractServiceAsync = client.contracts()
 
-        val contract =
-            contractService.create(
+        val contractFuture =
+            contractServiceAsync.create(
                 ContractCreateParams.builder()
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
@@ -500,20 +500,21 @@ class ContractServiceTest {
                     .build()
             )
 
+        val contract = contractFuture.get()
         contract.validate()
     }
 
     @Test
     fun retrieve() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val contractService = client.contracts()
+        val contractServiceAsync = client.contracts()
 
-        val contract =
-            contractService.retrieve(
+        val contractFuture =
+            contractServiceAsync.retrieve(
                 ContractRetrieveParams.builder()
                     .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
@@ -522,20 +523,21 @@ class ContractServiceTest {
                     .build()
             )
 
+        val contract = contractFuture.get()
         contract.validate()
     }
 
     @Test
     fun list() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val contractService = client.contracts()
+        val contractServiceAsync = client.contracts()
 
-        val contract =
-            contractService.list(
+        val contractFuture =
+            contractServiceAsync.list(
                 ContractListParams.builder()
                     .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                     .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -546,42 +548,46 @@ class ContractServiceTest {
                     .build()
             )
 
+        val contract = contractFuture.get()
         contract.validate()
     }
 
     @Test
     fun addManualBalanceEntry() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val contractService = client.contracts()
+        val contractServiceAsync = client.contracts()
 
-        contractService.addManualBalanceEntry(
-            ContractAddManualBalanceEntryParams.builder()
-                .id("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
-                .amount(-1000.0)
-                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-                .reason("Reason for entry")
-                .segmentId("66368e29-3f97-4d15-a6e9-120897f0070a")
-                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .build()
-        )
+        val future =
+            contractServiceAsync.addManualBalanceEntry(
+                ContractAddManualBalanceEntryParams.builder()
+                    .id("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
+                    .amount(-1000.0)
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .reason("Reason for entry")
+                    .segmentId("66368e29-3f97-4d15-a6e9-120897f0070a")
+                    .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .build()
+            )
+
+        val response = future.get()
     }
 
     @Test
     fun amend() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val contractService = client.contracts()
+        val contractServiceAsync = client.contracts()
 
-        val response =
-            contractService.amend(
+        val responseFuture =
+            contractServiceAsync.amend(
                 ContractAmendParams.builder()
                     .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
@@ -915,20 +921,21 @@ class ContractServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun archive() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val contractService = client.contracts()
+        val contractServiceAsync = client.contracts()
 
-        val response =
-            contractService.archive(
+        val responseFuture =
+            contractServiceAsync.archive(
                 ContractArchiveParams.builder()
                     .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
@@ -936,20 +943,21 @@ class ContractServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun createHistoricalInvoices() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val contractService = client.contracts()
+        val contractServiceAsync = client.contracts()
 
-        val response =
-            contractService.createHistoricalInvoices(
+        val responseFuture =
+            contractServiceAsync.createHistoricalInvoices(
                 ContractCreateHistoricalInvoicesParams.builder()
                     .addInvoice(
                         ContractCreateHistoricalInvoicesParams.Invoice.builder()
@@ -1019,20 +1027,21 @@ class ContractServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun listBalances() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val contractService = client.contracts()
+        val contractServiceAsync = client.contracts()
 
-        val response =
-            contractService.listBalances(
+        val responseFuture =
+            contractServiceAsync.listBalances(
                 ContractListBalancesParams.builder()
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .id("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
@@ -1047,20 +1056,21 @@ class ContractServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun retrieveRateSchedule() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val contractService = client.contracts()
+        val contractServiceAsync = client.contracts()
 
-        val response =
-            contractService.retrieveRateSchedule(
+        val responseFuture =
+            contractServiceAsync.retrieveRateSchedule(
                 ContractRetrieveRateScheduleParams.builder()
                     .limit(1L)
                     .nextPage("next_page")
@@ -1090,20 +1100,21 @@ class ContractServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun scheduleProServicesInvoice() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val contractService = client.contracts()
+        val contractServiceAsync = client.contracts()
 
-        val response =
-            contractService.scheduleProServicesInvoice(
+        val responseFuture =
+            contractServiceAsync.scheduleProServicesInvoice(
                 ContractScheduleProServicesInvoiceParams.builder()
                     .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1129,41 +1140,45 @@ class ContractServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun setUsageFilter() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val contractService = client.contracts()
+        val contractServiceAsync = client.contracts()
 
-        contractService.setUsageFilter(
-            ContractSetUsageFilterParams.builder()
-                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-                .groupKey("business_subscription_id")
-                .addGroupValue("ID-1")
-                .addGroupValue("ID-2")
-                .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-                .build()
-        )
+        val future =
+            contractServiceAsync.setUsageFilter(
+                ContractSetUsageFilterParams.builder()
+                    .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .groupKey("business_subscription_id")
+                    .addGroupValue("ID-1")
+                    .addGroupValue("ID-2")
+                    .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                    .build()
+            )
+
+        val response = future.get()
     }
 
     @Test
     fun updateEndDate() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val contractService = client.contracts()
+        val contractServiceAsync = client.contracts()
 
-        val response =
-            contractService.updateEndDate(
+        val responseFuture =
+            contractServiceAsync.updateEndDate(
                 ContractUpdateEndDateParams.builder()
                     .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
@@ -1172,6 +1187,7 @@ class ContractServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 }

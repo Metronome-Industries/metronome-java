@@ -14,13 +14,14 @@ import org.junit.jupiter.api.extension.ExtendWith
 class BillingConfigServiceTest {
 
     @Test
-    fun callCreate() {
+    fun create() {
         val client =
             MetronomeOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
         val billingConfigService = client.customers().billingConfig()
+
         billingConfigService.create(
             CustomerBillingConfigCreateParams.builder()
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
@@ -38,14 +39,15 @@ class BillingConfigServiceTest {
     }
 
     @Test
-    fun callRetrieve() {
+    fun retrieve() {
         val client =
             MetronomeOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
         val billingConfigService = client.customers().billingConfig()
-        val customerBillingConfigRetrieveResponse =
+
+        val billingConfig =
             billingConfigService.retrieve(
                 CustomerBillingConfigRetrieveParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
@@ -54,18 +56,19 @@ class BillingConfigServiceTest {
                     )
                     .build()
             )
-        println(customerBillingConfigRetrieveResponse)
-        customerBillingConfigRetrieveResponse.validate()
+
+        billingConfig.validate()
     }
 
     @Test
-    fun callDelete() {
+    fun delete() {
         val client =
             MetronomeOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
         val billingConfigService = client.customers().billingConfig()
+
         billingConfigService.delete(
             CustomerBillingConfigDeleteParams.builder()
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")

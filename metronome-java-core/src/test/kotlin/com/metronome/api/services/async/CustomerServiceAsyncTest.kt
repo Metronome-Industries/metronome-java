@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.services.blocking
+package com.metronome.api.services.async
 
 import com.metronome.api.TestServerExtension
-import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.CustomerArchiveParams
 import com.metronome.api.models.CustomerCreateParams
@@ -19,19 +19,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class CustomerServiceTest {
+class CustomerServiceAsyncTest {
 
     @Test
     fun create() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        val customer =
-            customerService.create(
+        val customerFuture =
+            customerServiceAsync.create(
                 CustomerCreateParams.builder()
                     .name("Example, Inc.")
                     .billingConfig(
@@ -89,91 +89,96 @@ class CustomerServiceTest {
                     .build()
             )
 
+        val customer = customerFuture.get()
         customer.validate()
     }
 
     @Test
     fun retrieve() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        val customer =
-            customerService.retrieve(
+        val customerFuture =
+            customerServiceAsync.retrieve(
                 CustomerRetrieveParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )
 
+        val customer = customerFuture.get()
         customer.validate()
     }
 
     @Test
     fun list() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        val page = customerService.list()
+        val pageFuture = customerServiceAsync.list()
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 
     @Test
     fun archive() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        val response =
-            customerService.archive(
+        val responseFuture =
+            customerServiceAsync.archive(
                 CustomerArchiveParams.builder()
                     .id(Id.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build())
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun listBillableMetrics() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        val page =
-            customerService.listBillableMetrics(
+        val pageFuture =
+            customerServiceAsync.listBillableMetrics(
                 CustomerListBillableMetricsParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 
     @Test
     fun listCosts() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        val page =
-            customerService.listCosts(
+        val pageFuture =
+            customerServiceAsync.listCosts(
                 CustomerListCostsParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -181,61 +186,69 @@ class CustomerServiceTest {
                     .build()
             )
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 
     @Test
     fun setIngestAliases() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        customerService.setIngestAliases(
-            CustomerSetIngestAliasesParams.builder()
-                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-                .addIngestAlias("team@example.com")
-                .build()
-        )
+        val future =
+            customerServiceAsync.setIngestAliases(
+                CustomerSetIngestAliasesParams.builder()
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .addIngestAlias("team@example.com")
+                    .build()
+            )
+
+        val response = future.get()
     }
 
     @Test
     fun setName() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        val response =
-            customerService.setName(
+        val responseFuture =
+            customerServiceAsync.setName(
                 CustomerSetNameParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .name("Example, Inc.")
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun updateConfig() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        customerService.updateConfig(
-            CustomerUpdateConfigParams.builder()
-                .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-                .leaveStripeInvoicesInDraft(true)
-                .salesforceAccountId("0015500001WO1ZiABL")
-                .build()
-        )
+        val future =
+            customerServiceAsync.updateConfig(
+                CustomerUpdateConfigParams.builder()
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .leaveStripeInvoicesInDraft(true)
+                    .salesforceAccountId("0015500001WO1ZiABL")
+                    .build()
+            )
+
+        val response = future.get()
     }
 }

@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.services.blocking.contracts
+package com.metronome.api.services.async.contracts
 
 import com.metronome.api.TestServerExtension
-import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.ContractRateCardCreateParams
 import com.metronome.api.models.ContractRateCardRetrieveParams
@@ -15,19 +15,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class RateCardServiceTest {
+class RateCardServiceAsyncTest {
 
     @Test
     fun create() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val rateCardService = client.contracts().rateCards()
+        val rateCardServiceAsync = client.contracts().rateCards()
 
-        val rateCard =
-            rateCardService.create(
+        val rateCardFuture =
+            rateCardServiceAsync.create(
                 ContractRateCardCreateParams.builder()
                     .name("My Rate Card")
                     .addAlias(
@@ -53,39 +53,41 @@ class RateCardServiceTest {
                     .build()
             )
 
+        val rateCard = rateCardFuture.get()
         rateCard.validate()
     }
 
     @Test
     fun retrieve() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val rateCardService = client.contracts().rateCards()
+        val rateCardServiceAsync = client.contracts().rateCards()
 
-        val rateCard =
-            rateCardService.retrieve(
+        val rateCardFuture =
+            rateCardServiceAsync.retrieve(
                 ContractRateCardRetrieveParams.builder()
                     .id(Id.builder().id("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe").build())
                     .build()
             )
 
+        val rateCard = rateCardFuture.get()
         rateCard.validate()
     }
 
     @Test
     fun update() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val rateCardService = client.contracts().rateCards()
+        val rateCardServiceAsync = client.contracts().rateCards()
 
-        val rateCard =
-            rateCardService.update(
+        val rateCardFuture =
+            rateCardServiceAsync.update(
                 ContractRateCardUpdateParams.builder()
                     .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .addAlias(
@@ -100,34 +102,36 @@ class RateCardServiceTest {
                     .build()
             )
 
+        val rateCard = rateCardFuture.get()
         rateCard.validate()
     }
 
     @Test
     fun list() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val rateCardService = client.contracts().rateCards()
+        val rateCardServiceAsync = client.contracts().rateCards()
 
-        val page = rateCardService.list()
+        val pageFuture = rateCardServiceAsync.list()
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 
     @Test
     fun retrieveRateSchedule() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val rateCardService = client.contracts().rateCards()
+        val rateCardServiceAsync = client.contracts().rateCards()
 
-        val response =
-            rateCardService.retrieveRateSchedule(
+        val responseFuture =
+            rateCardServiceAsync.retrieveRateSchedule(
                 ContractRateCardRetrieveRateScheduleParams.builder()
                     .limit(1L)
                     .nextPage("next_page")
@@ -157,6 +161,7 @@ class RateCardServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 }

@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.services.blocking.customers
+package com.metronome.api.services.async.customers
 
 import com.metronome.api.TestServerExtension
-import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.CustomerCreditCreateParams
 import com.metronome.api.models.CustomerCreditListParams
@@ -13,19 +13,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class CreditServiceTest {
+class CreditServiceAsyncTest {
 
     @Test
     fun create() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val creditService = client.customers().credits()
+        val creditServiceAsync = client.customers().credits()
 
-        val credit =
-            creditService.create(
+        val creditFuture =
+            creditServiceAsync.create(
                 CustomerCreditCreateParams.builder()
                     .accessSchedule(
                         CustomerCreditCreateParams.AccessSchedule.builder()
@@ -59,20 +59,21 @@ class CreditServiceTest {
                     .build()
             )
 
+        val credit = creditFuture.get()
         credit.validate()
     }
 
     @Test
     fun list() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val creditService = client.customers().credits()
+        val creditServiceAsync = client.customers().credits()
 
-        val credit =
-            creditService.list(
+        val creditFuture =
+            creditServiceAsync.list(
                 CustomerCreditListParams.builder()
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -87,20 +88,21 @@ class CreditServiceTest {
                     .build()
             )
 
+        val credit = creditFuture.get()
         credit.validate()
     }
 
     @Test
     fun updateEndDate() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val creditService = client.customers().credits()
+        val creditServiceAsync = client.customers().credits()
 
-        val response =
-            creditService.updateEndDate(
+        val responseFuture =
+            creditServiceAsync.updateEndDate(
                 CustomerCreditUpdateEndDateParams.builder()
                     .accessEndingBefore(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                     .creditId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
@@ -108,6 +110,7 @@ class CreditServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 }

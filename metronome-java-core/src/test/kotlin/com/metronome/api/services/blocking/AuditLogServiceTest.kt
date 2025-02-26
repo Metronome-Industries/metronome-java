@@ -11,15 +11,16 @@ import org.junit.jupiter.api.extension.ExtendWith
 class AuditLogServiceTest {
 
     @Test
-    fun callList() {
+    fun list() {
         val client =
             MetronomeOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
         val auditLogService = client.auditLogs()
-        val response = auditLogService.list()
-        println(response)
-        response.data().forEach { it.validate() }
+
+        val page = auditLogService.list()
+
+        page.response().validate()
     }
 }

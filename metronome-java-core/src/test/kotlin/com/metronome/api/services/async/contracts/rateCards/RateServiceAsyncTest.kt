@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.services.blocking.contracts.rateCards
+package com.metronome.api.services.async.contracts.rateCards
 
 import com.metronome.api.TestServerExtension
-import com.metronome.api.client.okhttp.MetronomeOkHttpClient
+import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.ContractRateCardRateAddManyParams
 import com.metronome.api.models.ContractRateCardRateAddParams
@@ -14,39 +14,40 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class RateServiceTest {
+class RateServiceAsyncTest {
 
     @Test
     fun list() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val rateService = client.contracts().rateCards().rates()
+        val rateServiceAsync = client.contracts().rateCards().rates()
 
-        val page =
-            rateService.list(
+        val pageFuture =
+            rateServiceAsync.list(
                 ContractRateCardRateListParams.builder()
                     .at(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
                     .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                     .build()
             )
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 
     @Test
     fun add() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val rateService = client.contracts().rateCards().rates()
+        val rateServiceAsync = client.contracts().rateCards().rates()
 
-        val response =
-            rateService.add(
+        val responseFuture =
+            rateServiceAsync.add(
                 ContractRateCardRateAddParams.builder()
                     .entitled(true)
                     .productId("13117714-3f05-48e5-a6e9-a66093f13b4d")
@@ -80,20 +81,21 @@ class RateServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun addMany() {
         val client =
-            MetronomeOkHttpClient.builder()
+            MetronomeOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val rateService = client.contracts().rateCards().rates()
+        val rateServiceAsync = client.contracts().rateCards().rates()
 
-        val response =
-            rateService.addMany(
+        val responseFuture =
+            rateServiceAsync.addMany(
                 ContractRateCardRateAddManyParams.builder()
                     .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .addRate(
@@ -171,6 +173,7 @@ class RateServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 }
