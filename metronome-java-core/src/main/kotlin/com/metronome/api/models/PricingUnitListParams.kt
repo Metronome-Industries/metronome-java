@@ -42,7 +42,7 @@ private constructor(
 
     companion object {
 
-        fun none(): PricingUnitListParams = builder().build()
+        @JvmStatic fun none(): PricingUnitListParams = builder().build()
 
         @JvmStatic fun builder() = Builder()
     }

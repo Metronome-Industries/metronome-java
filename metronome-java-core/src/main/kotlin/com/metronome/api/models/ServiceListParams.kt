@@ -31,7 +31,7 @@ private constructor(
 
     companion object {
 
-        fun none(): ServiceListParams = builder().build()
+        @JvmStatic fun none(): ServiceListParams = builder().build()
 
         @JvmStatic fun builder() = Builder()
     }

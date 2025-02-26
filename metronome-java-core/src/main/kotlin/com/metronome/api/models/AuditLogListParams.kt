@@ -94,7 +94,7 @@ private constructor(
 
     companion object {
 
-        fun none(): AuditLogListParams = builder().build()
+        @JvmStatic fun none(): AuditLogListParams = builder().build()
 
         @JvmStatic fun builder() = Builder()
     }
