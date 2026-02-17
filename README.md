@@ -1,22 +1,14 @@
 # Metronome Java API Library
 
-<!-- x-release-please-start-version -->
-
 [![Maven Central](https://img.shields.io/maven-central/v/com.metronome.api/metronome-java)](https://central.sonatype.com/artifact/com.metronome.api/metronome-java/0.0.1-alpha.0)
 
-<!-- x-release-please-end -->
-
 The Metronome Java SDK provides convenient access to the Metronome REST API from applications written in Java.
-
-The Metronome Java SDK is similar to the Metronome Kotlin SDK but with minor differences that make it more ergonomic for use in Java, such as `Optional` instead of nullable values, `Stream` instead of `Sequence`, and `CompletableFuture` instead of suspend functions.
 
 It is generated with [Stainless](https://www.stainlessapi.com/).
 
 The REST API documentation can be found on [docs.metronome.com](https://docs.metronome.com).
 
 ## Installation
-
-<!-- x-release-please-start-version -->
 
 ### Gradle
 
@@ -34,8 +26,6 @@ implementation("com.metronome.api:metronome-java:0.0.1-alpha.0")
 </dependency>
 ```
 
-<!-- x-release-please-end -->
-
 ## Requirements
 
 This library requires Java 8 or later.
@@ -45,12 +35,26 @@ This library requires Java 8 or later.
 ```java
 import com.metronome.api.client.MetronomeClient;
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient;
-import com.metronome.api.models.UsageIngestParams;
+import com.metronome.api.core.JsonValue;
+import com.metronome.api.models.V1UsageIngestParams;
 
 // Configures using the `METRONOME_BEARER_TOKEN` and `METRONOME_WEBHOOK_SECRET` environment variables
 MetronomeClient client = MetronomeOkHttpClient.fromEnv();
 
-client.usage().ingest()
+V1UsageIngestParams params = V1UsageIngestParams.builder()
+    .addUsage(V1UsageIngestParams.Usage.builder()
+        .transactionId("90e9401f-0f8c-4cd3-9a9f-d6beb56d8d72")
+        .customerId("team@example.com")
+        .eventType("heartbeat")
+        .timestamp("2024-01-01T00:00:00Z")
+        .properties(V1UsageIngestParams.Usage.Properties.builder()
+            .putAdditionalProperty("cluster_id", JsonValue.from("42"))
+            .putAdditionalProperty("cpu_seconds", JsonValue.from(60))
+            .putAdditionalProperty("region", JsonValue.from("Europe"))
+            .build())
+        .build())
+    .build();
+client.v1().usage().ingest(params)
 ```
 
 ## Client configuration
@@ -104,7 +108,7 @@ See this table for the available options:
 
 To send a request to the Metronome API, build an instance of some `Params` class and pass it to the corresponding client method. When the response is received, it will be deserialized into an instance of a Java class.
 
-For example, `client.contracts().create(...)` should be called with an instance of `ContractCreateParams`, and it will return an instance of `ContractCreateResponse`.
+For example, `client.v1().contracts().create(...)` should be called with an instance of `V1ContractCreateParams`, and it will return an instance of `V1ContractCreateResponse`.
 
 ## Immutability
 
@@ -121,13 +125,27 @@ The default client is synchronous. To switch to asynchronous execution, call the
 ```java
 import com.metronome.api.client.MetronomeClient;
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient;
-import com.metronome.api.models.UsageIngestParams;
+import com.metronome.api.core.JsonValue;
+import com.metronome.api.models.V1UsageIngestParams;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `METRONOME_BEARER_TOKEN` and `METRONOME_WEBHOOK_SECRET` environment variables
 MetronomeClient client = MetronomeOkHttpClient.fromEnv();
 
-CompletableFuture<Void?> response = client.async().usage().ingest();
+V1UsageIngestParams params = V1UsageIngestParams.builder()
+    .addUsage(V1UsageIngestParams.Usage.builder()
+        .transactionId("90e9401f-0f8c-4cd3-9a9f-d6beb56d8d72")
+        .customerId("team@example.com")
+        .eventType("heartbeat")
+        .timestamp("2024-01-01T00:00:00Z")
+        .properties(V1UsageIngestParams.Usage.Properties.builder()
+            .putAdditionalProperty("cluster_id", JsonValue.from("42"))
+            .putAdditionalProperty("cpu_seconds", JsonValue.from(60))
+            .putAdditionalProperty("region", JsonValue.from("Europe"))
+            .build())
+        .build())
+    .build();
+CompletableFuture<Void?> response = client.async().v1().usage().ingest(params);
 ```
 
 Or create an asynchronous client from the beginning:
@@ -135,16 +153,82 @@ Or create an asynchronous client from the beginning:
 ```java
 import com.metronome.api.client.MetronomeClientAsync;
 import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync;
-import com.metronome.api.models.UsageIngestParams;
+import com.metronome.api.core.JsonValue;
+import com.metronome.api.models.V1UsageIngestParams;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `METRONOME_BEARER_TOKEN` and `METRONOME_WEBHOOK_SECRET` environment variables
 MetronomeClientAsync client = MetronomeOkHttpClientAsync.fromEnv();
 
-CompletableFuture<Void?> response = client.usage().ingest();
+V1UsageIngestParams params = V1UsageIngestParams.builder()
+    .addUsage(V1UsageIngestParams.Usage.builder()
+        .transactionId("90e9401f-0f8c-4cd3-9a9f-d6beb56d8d72")
+        .customerId("team@example.com")
+        .eventType("heartbeat")
+        .timestamp("2024-01-01T00:00:00Z")
+        .properties(V1UsageIngestParams.Usage.Properties.builder()
+            .putAdditionalProperty("cluster_id", JsonValue.from("42"))
+            .putAdditionalProperty("cpu_seconds", JsonValue.from(60))
+            .putAdditionalProperty("region", JsonValue.from("Europe"))
+            .build())
+        .build())
+    .build();
+CompletableFuture<Void?> response = client.v1().usage().ingest(params);
 ```
 
 The asynchronous client supports the same options as the synchronous one, except most methods return `CompletableFuture`s.
+
+## Binary responses
+
+The SDK defines methods that return binary responses, which are used for API responses that shouldn't necessarily be parsed, like non-JSON data.
+
+These methods return [`HttpResponse`](metronome-java-core/src/main/kotlin/com/metronome/api/core/http/HttpResponse.kt):
+
+```java
+import com.metronome.api.core.http.HttpResponse;
+import com.metronome.api.models.V1CustomerInvoiceRetrievePdfParams;
+
+V1CustomerInvoiceRetrievePdfParams params = V1CustomerInvoiceRetrievePdfParams.builder()
+    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+    .invoiceId("6a37bb88-8538-48c5-b37b-a41c836328bd")
+    .build();
+HttpResponse response = client.v1().customers().invoices().retrievePdf(params);
+```
+
+To save the response content to a file, use the [`Files.copy(...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#copy-java.io.InputStream-java.nio.file.Path-java.nio.file.CopyOption...-) method:
+
+```java
+import com.metronome.api.core.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
+try (HttpResponse response = client.v1().customers().invoices().retrievePdf(params)) {
+    Files.copy(
+        response.body(),
+        Paths.get(path),
+        StandardCopyOption.REPLACE_EXISTING
+    );
+} catch (Exception e) {
+    System.out.println("Something went wrong!");
+    throw new RuntimeException(e);
+}
+```
+
+Or transfer the response content to any [`OutputStream`](https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html):
+
+```java
+import com.metronome.api.core.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+try (HttpResponse response = client.v1().customers().invoices().retrievePdf(params)) {
+    response.body().transferTo(Files.newOutputStream(Paths.get(path)));
+} catch (Exception e) {
+    System.out.println("Something went wrong!");
+    throw new RuntimeException(e);
+}
+```
 
 ## Error handling
 
@@ -180,17 +264,17 @@ To iterate through all results across all pages, you can use `autoPager`, which 
 ### Synchronous
 
 ```java
-import com.metronome.api.models.ContractProductListPage;
-import com.metronome.api.models.ContractProductListResponse;
+import com.metronome.api.models.V1ContractProductListPage;
+import com.metronome.api.models.V1ContractProductListResponse;
 
 // As an Iterable:
-ContractProductListPage page = client.contracts().products().list(params);
-for (ContractProductListResponse product : page.autoPager()) {
+V1ContractProductListPage page = client.v1().contracts().products().list(params);
+for (V1ContractProductListResponse product : page.autoPager()) {
     System.out.println(product);
 };
 
 // As a Stream:
-client.contracts().products().list(params).autoPager().stream()
+client.v1().contracts().products().list(params).autoPager().stream()
     .limit(50)
     .forEach(product -> System.out.println(product));
 ```
@@ -199,7 +283,7 @@ client.contracts().products().list(params).autoPager().stream()
 
 ```java
 // Using forEach, which returns CompletableFuture<Void>:
-asyncClient.contracts().products().list(params).autoPager()
+asyncClient.v1().contracts().products().list(params).autoPager()
     .forEach(product -> System.out.println(product), executor);
 ```
 
@@ -208,12 +292,12 @@ asyncClient.contracts().products().list(params).autoPager()
 If none of the above helpers meet your needs, you can also manually request pages one-by-one. A page of results has a `data()` method to fetch the list of objects, as well as top-level `response` and other methods to fetch top-level data about the page. It also has methods `hasNextPage`, `getNextPage`, and `getNextPageParams` methods to help with pagination.
 
 ```java
-import com.metronome.api.models.ContractProductListPage;
-import com.metronome.api.models.ContractProductListResponse;
+import com.metronome.api.models.V1ContractProductListPage;
+import com.metronome.api.models.V1ContractProductListResponse;
 
-ContractProductListPage page = client.contracts().products().list(params);
+V1ContractProductListPage page = client.v1().contracts().products().list(params);
 while (page != null) {
-    for (ContractProductListResponse product : page.data()) {
+    for (V1ContractProductListResponse product : page.data()) {
         System.out.println(product);
     }
 
@@ -272,9 +356,12 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```java
-import com.metronome.api.models.UsageIngestParams;
+import com.metronome.api.core.JsonValue;
+import com.metronome.api.models.V1UsageIngestParams;
 
-client.usage().ingest(RequestOptions.builder().timeout(Duration.ofSeconds(30)).build())
+client.v1().usage().ingest(
+  params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
+)
 ```
 
 Or configure the default for all method calls at the client level:
@@ -320,9 +407,9 @@ To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQu
 
 ```java
 import com.metronome.api.core.JsonValue;
-import com.metronome.api.models.UsageIngestParams;
+import com.metronome.api.models.V1UsageIngestParams;
 
-UsageIngestParams params = UsageIngestParams.builder()
+V1UsageIngestParams params = V1UsageIngestParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
     .putAdditionalQueryParam("secret_query_param", "42")
     .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))
@@ -334,9 +421,12 @@ These can be accessed on the built object later using the `_additionalHeaders()`
 To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](metronome-java-core/src/main/kotlin/com/metronome/api/core/JsonValue.kt) object to its setter:
 
 ```java
-import com.metronome.api.models.UsageIngestParams;
+import com.metronome.api.core.JsonValue;
+import com.metronome.api.models.V1UsageIngestParams;
 
-UsageIngestParams params = UsageIngestParams.builder().build();
+V1UsageIngestParams params = V1UsageIngestParams.builder()
+    .usage(JsonValue.from(42))
+    .build();
 ```
 
 ### Response properties
@@ -347,7 +437,7 @@ To access undocumented response properties, call the `_additionalProperties()` m
 import com.metronome.api.core.JsonValue;
 import java.util.Map;
 
-Map<String, JsonValue> additionalProperties = client.contracts().create(params)._additionalProperties();
+Map<String, JsonValue> additionalProperties = client.v1().contracts().create(params)._additionalProperties();
 JsonValue secretPropertyValue = additionalProperties.get("secretProperty");
 
 String result = secretPropertyValue.accept(new JsonValue.Visitor<>() {
@@ -377,7 +467,7 @@ To access a property's raw JSON value, which may be undocumented, call its `_` p
 import com.metronome.api.core.JsonField;
 import java.util.Optional;
 
-JsonField<String> customerId = client.contracts().create(params)._customerId();
+JsonField<String> customerId = client.v1().contracts().create(params)._customerId();
 
 if (customerId.isMissing()) {
   // The property is absent from the JSON response
@@ -402,17 +492,20 @@ By default, the SDK will not throw an exception in this case. It will throw [`Me
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```java
-import com.metronome.api.models.ContractCreateResponse;
+import com.metronome.api.models.V1ContractCreateResponse;
 
-ContractCreateResponse contract = client.contracts().create(params).validate();
+V1ContractCreateResponse contract = client.v1().contracts().create(params).validate();
 ```
 
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```java
-import com.metronome.api.models.UsageIngestParams;
+import com.metronome.api.core.JsonValue;
+import com.metronome.api.models.V1UsageIngestParams;
 
-client.usage().ingest(RequestOptions.builder().responseValidation(true).build())
+client.v1().usage().ingest(
+  params, RequestOptions.builder().responseValidation(true).build()
+)
 ```
 
 Or configure the default for all method calls at the client level:
@@ -465,4 +558,4 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/Metronome-Industries/metronome-java/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/metronome-java/issues) with questions, bugs, or suggestions.

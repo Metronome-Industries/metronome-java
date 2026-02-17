@@ -2,19 +2,8 @@
 
 package com.metronome.api.client
 
-import com.metronome.api.services.blocking.AlertService
-import com.metronome.api.services.blocking.AuditLogService
-import com.metronome.api.services.blocking.BillableMetricService
-import com.metronome.api.services.blocking.ContractService
-import com.metronome.api.services.blocking.CreditGrantService
-import com.metronome.api.services.blocking.CustomFieldService
-import com.metronome.api.services.blocking.CustomerService
-import com.metronome.api.services.blocking.DashboardService
-import com.metronome.api.services.blocking.InvoiceService
-import com.metronome.api.services.blocking.PlanService
-import com.metronome.api.services.blocking.PricingUnitService
-import com.metronome.api.services.blocking.ServiceService
-import com.metronome.api.services.blocking.UsageService
+import com.metronome.api.services.blocking.V1Service
+import com.metronome.api.services.blocking.V2Service
 
 /**
  * A client for interacting with the Metronome REST API synchronously. You can also switch to
@@ -40,31 +29,9 @@ interface MetronomeClient {
      */
     fun async(): MetronomeClientAsync
 
-    fun alerts(): AlertService
+    fun v2(): V2Service
 
-    fun plans(): PlanService
-
-    fun creditGrants(): CreditGrantService
-
-    fun pricingUnits(): PricingUnitService
-
-    fun customers(): CustomerService
-
-    fun dashboards(): DashboardService
-
-    fun usage(): UsageService
-
-    fun auditLogs(): AuditLogService
-
-    fun customFields(): CustomFieldService
-
-    fun billableMetrics(): BillableMetricService
-
-    fun services(): ServiceService
-
-    fun invoices(): InvoiceService
-
-    fun contracts(): ContractService
+    fun v1(): V1Service
 
     /**
      * Closes this client, relinquishing any underlying resources.

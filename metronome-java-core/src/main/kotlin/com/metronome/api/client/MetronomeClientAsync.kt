@@ -2,19 +2,8 @@
 
 package com.metronome.api.client
 
-import com.metronome.api.services.async.AlertServiceAsync
-import com.metronome.api.services.async.AuditLogServiceAsync
-import com.metronome.api.services.async.BillableMetricServiceAsync
-import com.metronome.api.services.async.ContractServiceAsync
-import com.metronome.api.services.async.CreditGrantServiceAsync
-import com.metronome.api.services.async.CustomFieldServiceAsync
-import com.metronome.api.services.async.CustomerServiceAsync
-import com.metronome.api.services.async.DashboardServiceAsync
-import com.metronome.api.services.async.InvoiceServiceAsync
-import com.metronome.api.services.async.PlanServiceAsync
-import com.metronome.api.services.async.PricingUnitServiceAsync
-import com.metronome.api.services.async.ServiceServiceAsync
-import com.metronome.api.services.async.UsageServiceAsync
+import com.metronome.api.services.async.V1ServiceAsync
+import com.metronome.api.services.async.V2ServiceAsync
 
 /**
  * A client for interacting with the Metronome REST API asynchronously. You can also switch to
@@ -40,31 +29,9 @@ interface MetronomeClientAsync {
      */
     fun sync(): MetronomeClient
 
-    fun alerts(): AlertServiceAsync
+    fun v2(): V2ServiceAsync
 
-    fun plans(): PlanServiceAsync
-
-    fun creditGrants(): CreditGrantServiceAsync
-
-    fun pricingUnits(): PricingUnitServiceAsync
-
-    fun customers(): CustomerServiceAsync
-
-    fun dashboards(): DashboardServiceAsync
-
-    fun usage(): UsageServiceAsync
-
-    fun auditLogs(): AuditLogServiceAsync
-
-    fun customFields(): CustomFieldServiceAsync
-
-    fun billableMetrics(): BillableMetricServiceAsync
-
-    fun services(): ServiceServiceAsync
-
-    fun invoices(): InvoiceServiceAsync
-
-    fun contracts(): ContractServiceAsync
+    fun v1(): V1ServiceAsync
 
     /**
      * Closes this client, relinquishing any underlying resources.

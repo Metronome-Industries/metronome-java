@@ -25,6 +25,9 @@ class CustomerDetail
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonProperty("custom_fields")
     @ExcludeMissing
     private val customFields: JsonField<CustomFields> = JsonMissing.of(),
@@ -38,6 +41,9 @@ private constructor(
     @ExcludeMissing
     private val ingestAliases: JsonField<List<String>> = JsonMissing.of(),
     @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("updated_at")
+    @ExcludeMissing
+    private val updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonProperty("archived_at")
     @ExcludeMissing
     private val archivedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -50,6 +56,10 @@ private constructor(
     /** the Metronome ID of the customer */
     fun id(): String = id.getRequired("id")
 
+    /** RFC 3339 timestamp indicating when the customer was created. */
+    fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
+
+    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
     fun customFields(): CustomFields = customFields.getRequired("custom_fields")
 
     fun customerConfig(): CustomerConfig = customerConfig.getRequired("customer_config")
@@ -68,6 +78,9 @@ private constructor(
 
     fun name(): String = name.getRequired("name")
 
+    /** RFC 3339 timestamp indicating when the customer was last updated. */
+    fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
+
     /**
      * RFC 3339 timestamp indicating when the customer was archived. Null if the customer is active.
      */
@@ -81,6 +94,12 @@ private constructor(
     /** the Metronome ID of the customer */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+    /** RFC 3339 timestamp indicating when the customer was created. */
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
     @JsonProperty("custom_fields")
     @ExcludeMissing
     fun _customFields(): JsonField<CustomFields> = customFields
@@ -104,6 +123,11 @@ private constructor(
     fun _ingestAliases(): JsonField<List<String>> = ingestAliases
 
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+    /** RFC 3339 timestamp indicating when the customer was last updated. */
+    @JsonProperty("updated_at")
+    @ExcludeMissing
+    fun _updatedAt(): JsonField<OffsetDateTime> = updatedAt
 
     /**
      * RFC 3339 timestamp indicating when the customer was archived. Null if the customer is active.
@@ -129,11 +153,13 @@ private constructor(
         }
 
         id()
+        createdAt()
         customFields().validate()
         customerConfig().validate()
         externalId()
         ingestAliases()
         name()
+        updatedAt()
         archivedAt()
         currentBillableStatus().ifPresent { it.validate() }
         validated = true
@@ -150,11 +176,13 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
+        private var createdAt: JsonField<OffsetDateTime>? = null
         private var customFields: JsonField<CustomFields>? = null
         private var customerConfig: JsonField<CustomerConfig>? = null
         private var externalId: JsonField<String>? = null
         private var ingestAliases: JsonField<MutableList<String>>? = null
         private var name: JsonField<String>? = null
+        private var updatedAt: JsonField<OffsetDateTime>? = null
         private var archivedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var currentBillableStatus: JsonField<CurrentBillableStatus> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -162,11 +190,13 @@ private constructor(
         @JvmSynthetic
         internal fun from(customerDetail: CustomerDetail) = apply {
             id = customerDetail.id
+            createdAt = customerDetail.createdAt
             customFields = customerDetail.customFields
             customerConfig = customerDetail.customerConfig
             externalId = customerDetail.externalId
             ingestAliases = customerDetail.ingestAliases.map { it.toMutableList() }
             name = customerDetail.name
+            updatedAt = customerDetail.updatedAt
             archivedAt = customerDetail.archivedAt
             currentBillableStatus = customerDetail.currentBillableStatus
             additionalProperties = customerDetail.additionalProperties.toMutableMap()
@@ -178,8 +208,16 @@ private constructor(
         /** the Metronome ID of the customer */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
+        /** RFC 3339 timestamp indicating when the customer was created. */
+        fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+        /** RFC 3339 timestamp indicating when the customer was created. */
+        fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
+
+        /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
+        /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
         fun customFields(customFields: JsonField<CustomFields>) = apply {
             this.customFields = customFields
         }
@@ -238,6 +276,12 @@ private constructor(
 
         fun name(name: JsonField<String>) = apply { this.name = name }
 
+        /** RFC 3339 timestamp indicating when the customer was last updated. */
+        fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
+
+        /** RFC 3339 timestamp indicating when the customer was last updated. */
+        fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
+
         /**
          * RFC 3339 timestamp indicating when the customer was archived. Null if the customer is
          * active.
@@ -289,17 +333,20 @@ private constructor(
         fun build(): CustomerDetail =
             CustomerDetail(
                 checkRequired("id", id),
+                checkRequired("createdAt", createdAt),
                 checkRequired("customFields", customFields),
                 checkRequired("customerConfig", customerConfig),
                 checkRequired("externalId", externalId),
                 checkRequired("ingestAliases", ingestAliases).map { it.toImmutable() },
                 checkRequired("name", name),
+                checkRequired("updatedAt", updatedAt),
                 archivedAt,
                 currentBillableStatus,
                 additionalProperties.toImmutable(),
             )
     }
 
+    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
     @NoAutoDetect
     class CustomFields
     @JsonCreator
@@ -718,15 +765,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerDetail && id == other.id && customFields == other.customFields && customerConfig == other.customerConfig && externalId == other.externalId && ingestAliases == other.ingestAliases && name == other.name && archivedAt == other.archivedAt && currentBillableStatus == other.currentBillableStatus && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerDetail && id == other.id && createdAt == other.createdAt && customFields == other.customFields && customerConfig == other.customerConfig && externalId == other.externalId && ingestAliases == other.ingestAliases && name == other.name && updatedAt == other.updatedAt && archivedAt == other.archivedAt && currentBillableStatus == other.currentBillableStatus && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, customFields, customerConfig, externalId, ingestAliases, name, archivedAt, currentBillableStatus, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, createdAt, customFields, customerConfig, externalId, ingestAliases, name, updatedAt, archivedAt, currentBillableStatus, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CustomerDetail{id=$id, customFields=$customFields, customerConfig=$customerConfig, externalId=$externalId, ingestAliases=$ingestAliases, name=$name, archivedAt=$archivedAt, currentBillableStatus=$currentBillableStatus, additionalProperties=$additionalProperties}"
+        "CustomerDetail{id=$id, createdAt=$createdAt, customFields=$customFields, customerConfig=$customerConfig, externalId=$externalId, ingestAliases=$ingestAliases, name=$name, updatedAt=$updatedAt, archivedAt=$archivedAt, currentBillableStatus=$currentBillableStatus, additionalProperties=$additionalProperties}"
 }

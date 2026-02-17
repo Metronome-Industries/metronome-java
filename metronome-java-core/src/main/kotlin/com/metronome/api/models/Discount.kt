@@ -44,6 +44,7 @@ private constructor(
 
     fun schedule(): SchedulePointInTime = schedule.getRequired("schedule")
 
+    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
     fun customFields(): Optional<CustomFields> =
         Optional.ofNullable(customFields.getNullable("custom_fields"))
 
@@ -61,6 +62,7 @@ private constructor(
     @ExcludeMissing
     fun _schedule(): JsonField<SchedulePointInTime> = schedule
 
+    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
     @JsonProperty("custom_fields")
     @ExcludeMissing
     fun _customFields(): JsonField<CustomFields> = customFields
@@ -133,8 +135,10 @@ private constructor(
 
         fun schedule(schedule: JsonField<SchedulePointInTime>) = apply { this.schedule = schedule }
 
+        /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
+        /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
         fun customFields(customFields: JsonField<CustomFields>) = apply {
             this.customFields = customFields
         }
@@ -293,6 +297,7 @@ private constructor(
             "Product{id=$id, name=$name, additionalProperties=$additionalProperties}"
     }
 
+    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
     @NoAutoDetect
     class CustomFields
     @JsonCreator

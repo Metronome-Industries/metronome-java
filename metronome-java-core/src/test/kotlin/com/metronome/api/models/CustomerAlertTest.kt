@@ -40,8 +40,18 @@ class CustomerAlertTest {
                                 .value("value")
                                 .build()
                         )
-                        .addInvoiceTypesFilter(
-                            "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
+                        .addGroupValue(
+                            CustomerAlert.Alert.GroupValue.builder()
+                                .key("key")
+                                .value("value")
+                                .build()
+                        )
+                        .addInvoiceTypesFilter("SCHEDULED or USAGE")
+                        .seatFilter(
+                            CustomerAlert.Alert.SeatFilter.builder()
+                                .seatGroupKey("seat_group_key")
+                                .seatGroupValue("seat_group_value")
+                                .build()
                         )
                         .uniquenessKey("x")
                         .build()
@@ -79,8 +89,15 @@ class CustomerAlertTest {
                             .value("value")
                             .build()
                     )
-                    .addInvoiceTypesFilter(
-                        "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
+                    .addGroupValue(
+                        CustomerAlert.Alert.GroupValue.builder().key("key").value("value").build()
+                    )
+                    .addInvoiceTypesFilter("SCHEDULED or USAGE")
+                    .seatFilter(
+                        CustomerAlert.Alert.SeatFilter.builder()
+                            .seatGroupKey("seat_group_key")
+                            .seatGroupValue("seat_group_value")
+                            .build()
                     )
                     .uniquenessKey("x")
                     .build()

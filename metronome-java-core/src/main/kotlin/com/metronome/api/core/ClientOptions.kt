@@ -30,7 +30,7 @@ private constructor(
 
     companion object {
 
-        const val PRODUCTION_URL = "https://api.metronome.com/v1"
+        const val PRODUCTION_URL = "https://api.metronome.com"
 
         @JvmStatic fun builder() = Builder()
 

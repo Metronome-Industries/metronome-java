@@ -36,22 +36,28 @@ private constructor(
 
     fun alert(): Alert = alert.getRequired("alert")
 
-    /** The status of the customer alert. If the alert is archived, null will be returned. */
+    /**
+     * The status of the threshold notification. If the notification is archived, null will be
+     * returned.
+     */
     fun customerStatus(): Optional<CustomerStatus> =
         Optional.ofNullable(customerStatus.getNullable("customer_status"))
 
-    /** If present, indicates the reason the alert was triggered. */
+    /** If present, indicates the reason the threshold notification was triggered. */
     fun triggeredBy(): Optional<String> =
         Optional.ofNullable(triggeredBy.getNullable("triggered_by"))
 
     @JsonProperty("alert") @ExcludeMissing fun _alert(): JsonField<Alert> = alert
 
-    /** The status of the customer alert. If the alert is archived, null will be returned. */
+    /**
+     * The status of the threshold notification. If the notification is archived, null will be
+     * returned.
+     */
     @JsonProperty("customer_status")
     @ExcludeMissing
     fun _customerStatus(): JsonField<CustomerStatus> = customerStatus
 
-    /** If present, indicates the reason the alert was triggered. */
+    /** If present, indicates the reason the threshold notification was triggered. */
     @JsonProperty("triggered_by")
     @ExcludeMissing
     fun _triggeredBy(): JsonField<String> = triggeredBy
@@ -100,26 +106,35 @@ private constructor(
 
         fun alert(alert: JsonField<Alert>) = apply { this.alert = alert }
 
-        /** The status of the customer alert. If the alert is archived, null will be returned. */
+        /**
+         * The status of the threshold notification. If the notification is archived, null will be
+         * returned.
+         */
         fun customerStatus(customerStatus: CustomerStatus?) =
             customerStatus(JsonField.ofNullable(customerStatus))
 
-        /** The status of the customer alert. If the alert is archived, null will be returned. */
+        /**
+         * The status of the threshold notification. If the notification is archived, null will be
+         * returned.
+         */
         fun customerStatus(customerStatus: Optional<CustomerStatus>) =
             customerStatus(customerStatus.orElse(null))
 
-        /** The status of the customer alert. If the alert is archived, null will be returned. */
+        /**
+         * The status of the threshold notification. If the notification is archived, null will be
+         * returned.
+         */
         fun customerStatus(customerStatus: JsonField<CustomerStatus>) = apply {
             this.customerStatus = customerStatus
         }
 
-        /** If present, indicates the reason the alert was triggered. */
+        /** If present, indicates the reason the threshold notification was triggered. */
         fun triggeredBy(triggeredBy: String?) = triggeredBy(JsonField.ofNullable(triggeredBy))
 
-        /** If present, indicates the reason the alert was triggered. */
+        /** If present, indicates the reason the threshold notification was triggered. */
         fun triggeredBy(triggeredBy: Optional<String>) = triggeredBy(triggeredBy.orElse(null))
 
-        /** If present, indicates the reason the alert was triggered. */
+        /** If present, indicates the reason the threshold notification was triggered. */
         fun triggeredBy(triggeredBy: JsonField<String>) = apply { this.triggeredBy = triggeredBy }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -180,9 +195,15 @@ private constructor(
         @JsonProperty("group_key_filter")
         @ExcludeMissing
         private val groupKeyFilter: JsonField<GroupKeyFilter> = JsonMissing.of(),
+        @JsonProperty("group_values")
+        @ExcludeMissing
+        private val groupValues: JsonField<List<GroupValue>> = JsonMissing.of(),
         @JsonProperty("invoice_types_filter")
         @ExcludeMissing
         private val invoiceTypesFilter: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("seat_filter")
+        @ExcludeMissing
+        private val seatFilter: JsonField<SeatFilter> = JsonMissing.of(),
         @JsonProperty("uniqueness_key")
         @ExcludeMissing
         private val uniquenessKey: JsonField<String> = JsonMissing.of(),
@@ -190,28 +211,28 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** the Metronome ID of the alert */
+        /** the Metronome ID of the threshold notification */
         fun id(): String = id.getRequired("id")
 
-        /** Name of the alert */
+        /** Name of the threshold notification */
         fun name(): String = name.getRequired("name")
 
-        /** Status of the alert */
+        /** Status of the threshold notification */
         fun status(): Status = status.getRequired("status")
 
-        /** Threshold value of the alert policy */
+        /** Threshold value of the notification policy */
         fun threshold(): Double = threshold.getRequired("threshold")
 
-        /** Type of the alert */
+        /** Type of the threshold notification */
         fun type(): Type = type.getRequired("type")
 
-        /** Timestamp for when the alert was last updated */
+        /** Timestamp for when the threshold notification was last updated */
         fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
 
         /**
-         * An array of strings, representing a way to filter the credit grant this alert applies to,
-         * by looking at the credit_grant_type field on the credit grant. This field is only defined
-         * for CreditPercentage and CreditBalance alerts
+         * An array of strings, representing a way to filter the credit grant this threshold
+         * notification applies to, by looking at the credit_grant_type field on the credit grant.
+         * This field is only defined for CreditPercentage and CreditBalance notifications
          */
         fun creditGrantTypeFilters(): Optional<List<String>> =
             Optional.ofNullable(creditGrantTypeFilters.getNullable("credit_grant_type_filters"))
@@ -219,20 +240,37 @@ private constructor(
         fun creditType(): Optional<CreditTypeData> =
             Optional.ofNullable(creditType.getNullable("credit_type"))
 
-        /** A list of custom field filters for alert types that support advanced filtering */
+        /** A list of custom field filters for notification types that support advanced filtering */
         fun customFieldFilters(): Optional<List<CustomFieldFilter>> =
             Optional.ofNullable(customFieldFilters.getNullable("custom_field_filters"))
 
         /**
-         * Scopes alert evaluation to a specific presentation group key on individual line items.
-         * Only present for spend alerts.
+         * Scopes threshold notification evaluation to a specific presentation group key on
+         * individual line items. Only present for spend notifications.
          */
         fun groupKeyFilter(): Optional<GroupKeyFilter> =
             Optional.ofNullable(groupKeyFilter.getNullable("group_key_filter"))
 
-        /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
+        /**
+         * Only present for `spend_threshold_reached` notifications. Scope notification to a
+         * specific group key on individual line items.
+         */
+        fun groupValues(): Optional<List<GroupValue>> =
+            Optional.ofNullable(groupValues.getNullable("group_values"))
+
+        /**
+         * Only supported for invoice_total_reached threshold notifications. A list of invoice types
+         * to evaluate.
+         */
         fun invoiceTypesFilter(): Optional<List<String>> =
             Optional.ofNullable(invoiceTypesFilter.getNullable("invoice_types_filter"))
+
+        /**
+         * Only present for low_remaining_seat_balance_reached notifications. The seat group key or
+         * seat group key-value pair the alert is scoped to.
+         */
+        fun seatFilter(): Optional<SeatFilter> =
+            Optional.ofNullable(seatFilter.getNullable("seat_filter"))
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
@@ -242,30 +280,30 @@ private constructor(
         fun uniquenessKey(): Optional<String> =
             Optional.ofNullable(uniquenessKey.getNullable("uniqueness_key"))
 
-        /** the Metronome ID of the alert */
+        /** the Metronome ID of the threshold notification */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-        /** Name of the alert */
+        /** Name of the threshold notification */
         @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-        /** Status of the alert */
+        /** Status of the threshold notification */
         @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<Status> = status
 
-        /** Threshold value of the alert policy */
+        /** Threshold value of the notification policy */
         @JsonProperty("threshold") @ExcludeMissing fun _threshold(): JsonField<Double> = threshold
 
-        /** Type of the alert */
+        /** Type of the threshold notification */
         @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
-        /** Timestamp for when the alert was last updated */
+        /** Timestamp for when the threshold notification was last updated */
         @JsonProperty("updated_at")
         @ExcludeMissing
         fun _updatedAt(): JsonField<OffsetDateTime> = updatedAt
 
         /**
-         * An array of strings, representing a way to filter the credit grant this alert applies to,
-         * by looking at the credit_grant_type field on the credit grant. This field is only defined
-         * for CreditPercentage and CreditBalance alerts
+         * An array of strings, representing a way to filter the credit grant this threshold
+         * notification applies to, by looking at the credit_grant_type field on the credit grant.
+         * This field is only defined for CreditPercentage and CreditBalance notifications
          */
         @JsonProperty("credit_grant_type_filters")
         @ExcludeMissing
@@ -275,23 +313,42 @@ private constructor(
         @ExcludeMissing
         fun _creditType(): JsonField<CreditTypeData> = creditType
 
-        /** A list of custom field filters for alert types that support advanced filtering */
+        /** A list of custom field filters for notification types that support advanced filtering */
         @JsonProperty("custom_field_filters")
         @ExcludeMissing
         fun _customFieldFilters(): JsonField<List<CustomFieldFilter>> = customFieldFilters
 
         /**
-         * Scopes alert evaluation to a specific presentation group key on individual line items.
-         * Only present for spend alerts.
+         * Scopes threshold notification evaluation to a specific presentation group key on
+         * individual line items. Only present for spend notifications.
          */
         @JsonProperty("group_key_filter")
         @ExcludeMissing
         fun _groupKeyFilter(): JsonField<GroupKeyFilter> = groupKeyFilter
 
-        /** Only supported for invoice_total_reached alerts. A list of invoice types to evaluate. */
+        /**
+         * Only present for `spend_threshold_reached` notifications. Scope notification to a
+         * specific group key on individual line items.
+         */
+        @JsonProperty("group_values")
+        @ExcludeMissing
+        fun _groupValues(): JsonField<List<GroupValue>> = groupValues
+
+        /**
+         * Only supported for invoice_total_reached threshold notifications. A list of invoice types
+         * to evaluate.
+         */
         @JsonProperty("invoice_types_filter")
         @ExcludeMissing
         fun _invoiceTypesFilter(): JsonField<List<String>> = invoiceTypesFilter
+
+        /**
+         * Only present for low_remaining_seat_balance_reached notifications. The seat group key or
+         * seat group key-value pair the alert is scoped to.
+         */
+        @JsonProperty("seat_filter")
+        @ExcludeMissing
+        fun _seatFilter(): JsonField<SeatFilter> = seatFilter
 
         /**
          * Prevents the creation of duplicates. If a request to create a record is made with a
@@ -323,7 +380,9 @@ private constructor(
             creditType().ifPresent { it.validate() }
             customFieldFilters().ifPresent { it.forEach { it.validate() } }
             groupKeyFilter().ifPresent { it.validate() }
+            groupValues().ifPresent { it.forEach { it.validate() } }
             invoiceTypesFilter()
+            seatFilter().ifPresent { it.validate() }
             uniquenessKey()
             validated = true
         }
@@ -348,7 +407,9 @@ private constructor(
             private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var customFieldFilters: JsonField<MutableList<CustomFieldFilter>>? = null
             private var groupKeyFilter: JsonField<GroupKeyFilter> = JsonMissing.of()
+            private var groupValues: JsonField<MutableList<GroupValue>>? = null
             private var invoiceTypesFilter: JsonField<MutableList<String>>? = null
+            private var seatFilter: JsonField<SeatFilter> = JsonMissing.of()
             private var uniquenessKey: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -364,70 +425,75 @@ private constructor(
                 creditType = alert.creditType
                 customFieldFilters = alert.customFieldFilters.map { it.toMutableList() }
                 groupKeyFilter = alert.groupKeyFilter
+                groupValues = alert.groupValues.map { it.toMutableList() }
                 invoiceTypesFilter = alert.invoiceTypesFilter.map { it.toMutableList() }
+                seatFilter = alert.seatFilter
                 uniquenessKey = alert.uniquenessKey
                 additionalProperties = alert.additionalProperties.toMutableMap()
             }
 
-            /** the Metronome ID of the alert */
+            /** the Metronome ID of the threshold notification */
             fun id(id: String) = id(JsonField.of(id))
 
-            /** the Metronome ID of the alert */
+            /** the Metronome ID of the threshold notification */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
-            /** Name of the alert */
+            /** Name of the threshold notification */
             fun name(name: String) = name(JsonField.of(name))
 
-            /** Name of the alert */
+            /** Name of the threshold notification */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
-            /** Status of the alert */
+            /** Status of the threshold notification */
             fun status(status: Status) = status(JsonField.of(status))
 
-            /** Status of the alert */
+            /** Status of the threshold notification */
             fun status(status: JsonField<Status>) = apply { this.status = status }
 
-            /** Threshold value of the alert policy */
+            /** Threshold value of the notification policy */
             fun threshold(threshold: Double) = threshold(JsonField.of(threshold))
 
-            /** Threshold value of the alert policy */
+            /** Threshold value of the notification policy */
             fun threshold(threshold: JsonField<Double>) = apply { this.threshold = threshold }
 
-            /** Type of the alert */
+            /** Type of the threshold notification */
             fun type(type: Type) = type(JsonField.of(type))
 
-            /** Type of the alert */
+            /** Type of the threshold notification */
             fun type(type: JsonField<Type>) = apply { this.type = type }
 
-            /** Timestamp for when the alert was last updated */
+            /** Timestamp for when the threshold notification was last updated */
             fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
-            /** Timestamp for when the alert was last updated */
+            /** Timestamp for when the threshold notification was last updated */
             fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply {
                 this.updatedAt = updatedAt
             }
 
             /**
-             * An array of strings, representing a way to filter the credit grant this alert applies
-             * to, by looking at the credit_grant_type field on the credit grant. This field is only
-             * defined for CreditPercentage and CreditBalance alerts
+             * An array of strings, representing a way to filter the credit grant this threshold
+             * notification applies to, by looking at the credit_grant_type field on the credit
+             * grant. This field is only defined for CreditPercentage and CreditBalance
+             * notifications
              */
             fun creditGrantTypeFilters(creditGrantTypeFilters: List<String>) =
                 creditGrantTypeFilters(JsonField.of(creditGrantTypeFilters))
 
             /**
-             * An array of strings, representing a way to filter the credit grant this alert applies
-             * to, by looking at the credit_grant_type field on the credit grant. This field is only
-             * defined for CreditPercentage and CreditBalance alerts
+             * An array of strings, representing a way to filter the credit grant this threshold
+             * notification applies to, by looking at the credit_grant_type field on the credit
+             * grant. This field is only defined for CreditPercentage and CreditBalance
+             * notifications
              */
             fun creditGrantTypeFilters(creditGrantTypeFilters: JsonField<List<String>>) = apply {
                 this.creditGrantTypeFilters = creditGrantTypeFilters.map { it.toMutableList() }
             }
 
             /**
-             * An array of strings, representing a way to filter the credit grant this alert applies
-             * to, by looking at the credit_grant_type field on the credit grant. This field is only
-             * defined for CreditPercentage and CreditBalance alerts
+             * An array of strings, representing a way to filter the credit grant this threshold
+             * notification applies to, by looking at the credit_grant_type field on the credit
+             * grant. This field is only defined for CreditPercentage and CreditBalance
+             * notifications
              */
             fun addCreditGrantTypeFilter(creditGrantTypeFilter: String) = apply {
                 creditGrantTypeFilters =
@@ -452,16 +518,22 @@ private constructor(
                 this.creditType = creditType
             }
 
-            /** A list of custom field filters for alert types that support advanced filtering */
+            /**
+             * A list of custom field filters for notification types that support advanced filtering
+             */
             fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>) =
                 customFieldFilters(JsonField.of(customFieldFilters))
 
-            /** A list of custom field filters for alert types that support advanced filtering */
+            /**
+             * A list of custom field filters for notification types that support advanced filtering
+             */
             fun customFieldFilters(customFieldFilters: JsonField<List<CustomFieldFilter>>) = apply {
                 this.customFieldFilters = customFieldFilters.map { it.toMutableList() }
             }
 
-            /** A list of custom field filters for alert types that support advanced filtering */
+            /**
+             * A list of custom field filters for notification types that support advanced filtering
+             */
             fun addCustomFieldFilter(customFieldFilter: CustomFieldFilter) = apply {
                 customFieldFilters =
                     (customFieldFilters ?: JsonField.of(mutableListOf())).apply {
@@ -476,35 +548,69 @@ private constructor(
             }
 
             /**
-             * Scopes alert evaluation to a specific presentation group key on individual line
-             * items. Only present for spend alerts.
+             * Scopes threshold notification evaluation to a specific presentation group key on
+             * individual line items. Only present for spend notifications.
              */
             fun groupKeyFilter(groupKeyFilter: GroupKeyFilter) =
                 groupKeyFilter(JsonField.of(groupKeyFilter))
 
             /**
-             * Scopes alert evaluation to a specific presentation group key on individual line
-             * items. Only present for spend alerts.
+             * Scopes threshold notification evaluation to a specific presentation group key on
+             * individual line items. Only present for spend notifications.
              */
             fun groupKeyFilter(groupKeyFilter: JsonField<GroupKeyFilter>) = apply {
                 this.groupKeyFilter = groupKeyFilter
             }
 
             /**
-             * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
+             * Only present for `spend_threshold_reached` notifications. Scope notification to a
+             * specific group key on individual line items.
+             */
+            fun groupValues(groupValues: List<GroupValue>) = groupValues(JsonField.of(groupValues))
+
+            /**
+             * Only present for `spend_threshold_reached` notifications. Scope notification to a
+             * specific group key on individual line items.
+             */
+            fun groupValues(groupValues: JsonField<List<GroupValue>>) = apply {
+                this.groupValues = groupValues.map { it.toMutableList() }
+            }
+
+            /**
+             * Only present for `spend_threshold_reached` notifications. Scope notification to a
+             * specific group key on individual line items.
+             */
+            fun addGroupValue(groupValue: GroupValue) = apply {
+                groupValues =
+                    (groupValues ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(groupValue)
+                    }
+            }
+
+            /**
+             * Only supported for invoice_total_reached threshold notifications. A list of invoice
+             * types to evaluate.
              */
             fun invoiceTypesFilter(invoiceTypesFilter: List<String>) =
                 invoiceTypesFilter(JsonField.of(invoiceTypesFilter))
 
             /**
-             * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
+             * Only supported for invoice_total_reached threshold notifications. A list of invoice
+             * types to evaluate.
              */
             fun invoiceTypesFilter(invoiceTypesFilter: JsonField<List<String>>) = apply {
                 this.invoiceTypesFilter = invoiceTypesFilter.map { it.toMutableList() }
             }
 
             /**
-             * Only supported for invoice_total_reached alerts. A list of invoice types to evaluate.
+             * Only supported for invoice_total_reached threshold notifications. A list of invoice
+             * types to evaluate.
              */
             fun addInvoiceTypesFilter(invoiceTypesFilter: String) = apply {
                 this.invoiceTypesFilter =
@@ -517,6 +623,20 @@ private constructor(
                             }
                             .add(invoiceTypesFilter)
                     }
+            }
+
+            /**
+             * Only present for low_remaining_seat_balance_reached notifications. The seat group key
+             * or seat group key-value pair the alert is scoped to.
+             */
+            fun seatFilter(seatFilter: SeatFilter) = seatFilter(JsonField.of(seatFilter))
+
+            /**
+             * Only present for low_remaining_seat_balance_reached notifications. The seat group key
+             * or seat group key-value pair the alert is scoped to.
+             */
+            fun seatFilter(seatFilter: JsonField<SeatFilter>) = apply {
+                this.seatFilter = seatFilter
             }
 
             /**
@@ -566,13 +686,15 @@ private constructor(
                     creditType,
                     (customFieldFilters ?: JsonMissing.of()).map { it.toImmutable() },
                     groupKeyFilter,
+                    (groupValues ?: JsonMissing.of()).map { it.toImmutable() },
                     (invoiceTypesFilter ?: JsonMissing.of()).map { it.toImmutable() },
+                    seatFilter,
                     uniquenessKey,
                     additionalProperties.toImmutable(),
                 )
         }
 
-        /** Status of the alert */
+        /** Status of the threshold notification */
         class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
             /**
@@ -681,7 +803,7 @@ private constructor(
             override fun toString() = value.toString()
         }
 
-        /** Type of the alert */
+        /** Type of the threshold notification */
         class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
             /**
@@ -741,6 +863,9 @@ private constructor(
                 val LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED =
                     of("low_remaining_contract_credit_and_commit_balance_reached")
 
+                @JvmField
+                val LOW_REMAINING_SEAT_BALANCE_REACHED = of("low_remaining_seat_balance_reached")
+
                 @JvmField val INVOICE_TOTAL_REACHED = of("invoice_total_reached")
 
                 @JvmStatic fun of(value: String) = Type(JsonField.of(value))
@@ -761,6 +886,7 @@ private constructor(
                 LOW_REMAINING_CONTRACT_CREDIT_BALANCE_REACHED,
                 LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED,
                 LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED,
+                LOW_REMAINING_SEAT_BALANCE_REACHED,
                 INVOICE_TOTAL_REACHED,
             }
 
@@ -787,6 +913,7 @@ private constructor(
                 LOW_REMAINING_CONTRACT_CREDIT_BALANCE_REACHED,
                 LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED,
                 LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED,
+                LOW_REMAINING_SEAT_BALANCE_REACHED,
                 INVOICE_TOTAL_REACHED,
                 /** An enum member indicating that [Type] was instantiated with an unknown value. */
                 _UNKNOWN,
@@ -823,6 +950,7 @@ private constructor(
                         Value.LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED
                     LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED ->
                         Value.LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED
+                    LOW_REMAINING_SEAT_BALANCE_REACHED -> Value.LOW_REMAINING_SEAT_BALANCE_REACHED
                     INVOICE_TOTAL_REACHED -> Value.INVOICE_TOTAL_REACHED
                     else -> Value._UNKNOWN
                 }
@@ -860,6 +988,7 @@ private constructor(
                         Known.LOW_REMAINING_CONTRACT_CREDIT_PERCENTAGE_REACHED
                     LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED ->
                         Known.LOW_REMAINING_CONTRACT_CREDIT_AND_COMMIT_BALANCE_REACHED
+                    LOW_REMAINING_SEAT_BALANCE_REACHED -> Known.LOW_REMAINING_SEAT_BALANCE_REACHED
                     INVOICE_TOTAL_REACHED -> Known.INVOICE_TOTAL_REACHED
                     else -> throw MetronomeInvalidDataException("Unknown Type: $value")
                 }
@@ -1132,8 +1261,8 @@ private constructor(
         }
 
         /**
-         * Scopes alert evaluation to a specific presentation group key on individual line items.
-         * Only present for spend alerts.
+         * Scopes threshold notification evaluation to a specific presentation group key on
+         * individual line items. Only present for spend notifications.
          */
         @NoAutoDetect
         class GroupKeyFilter
@@ -1250,25 +1379,276 @@ private constructor(
                 "GroupKeyFilter{key=$key, value=$value, additionalProperties=$additionalProperties}"
         }
 
+        @NoAutoDetect
+        class GroupValue
+        @JsonCreator
+        private constructor(
+            @JsonProperty("key")
+            @ExcludeMissing
+            private val key: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("value")
+            @ExcludeMissing
+            private val value: JsonField<String> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        ) {
+
+            fun key(): String = key.getRequired("key")
+
+            fun value(): Optional<String> = Optional.ofNullable(value.getNullable("value"))
+
+            @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
+
+            @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): GroupValue = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                key()
+                value()
+                validated = true
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [GroupValue]. */
+            class Builder internal constructor() {
+
+                private var key: JsonField<String>? = null
+                private var value: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(groupValue: GroupValue) = apply {
+                    key = groupValue.key
+                    value = groupValue.value
+                    additionalProperties = groupValue.additionalProperties.toMutableMap()
+                }
+
+                fun key(key: String) = key(JsonField.of(key))
+
+                fun key(key: JsonField<String>) = apply { this.key = key }
+
+                fun value(value: String) = value(JsonField.of(value))
+
+                fun value(value: JsonField<String>) = apply { this.value = value }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                fun build(): GroupValue =
+                    GroupValue(checkRequired("key", key), value, additionalProperties.toImmutable())
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is GroupValue && key == other.key && value == other.value && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(key, value, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "GroupValue{key=$key, value=$value, additionalProperties=$additionalProperties}"
+        }
+
+        /**
+         * Only present for low_remaining_seat_balance_reached notifications. The seat group key or
+         * seat group key-value pair the alert is scoped to.
+         */
+        @NoAutoDetect
+        class SeatFilter
+        @JsonCreator
+        private constructor(
+            @JsonProperty("seat_group_key")
+            @ExcludeMissing
+            private val seatGroupKey: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("seat_group_value")
+            @ExcludeMissing
+            private val seatGroupValue: JsonField<String> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        ) {
+
+            /** The seat group key (e.g., "seat_id", "user_id") that the alert is scoped to. */
+            fun seatGroupKey(): String = seatGroupKey.getRequired("seat_group_key")
+
+            /** The seat group value that the alert is scoped to. */
+            fun seatGroupValue(): Optional<String> =
+                Optional.ofNullable(seatGroupValue.getNullable("seat_group_value"))
+
+            /** The seat group key (e.g., "seat_id", "user_id") that the alert is scoped to. */
+            @JsonProperty("seat_group_key")
+            @ExcludeMissing
+            fun _seatGroupKey(): JsonField<String> = seatGroupKey
+
+            /** The seat group value that the alert is scoped to. */
+            @JsonProperty("seat_group_value")
+            @ExcludeMissing
+            fun _seatGroupValue(): JsonField<String> = seatGroupValue
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): SeatFilter = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                seatGroupKey()
+                seatGroupValue()
+                validated = true
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [SeatFilter]. */
+            class Builder internal constructor() {
+
+                private var seatGroupKey: JsonField<String>? = null
+                private var seatGroupValue: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(seatFilter: SeatFilter) = apply {
+                    seatGroupKey = seatFilter.seatGroupKey
+                    seatGroupValue = seatFilter.seatGroupValue
+                    additionalProperties = seatFilter.additionalProperties.toMutableMap()
+                }
+
+                /** The seat group key (e.g., "seat_id", "user_id") that the alert is scoped to. */
+                fun seatGroupKey(seatGroupKey: String) = seatGroupKey(JsonField.of(seatGroupKey))
+
+                /** The seat group key (e.g., "seat_id", "user_id") that the alert is scoped to. */
+                fun seatGroupKey(seatGroupKey: JsonField<String>) = apply {
+                    this.seatGroupKey = seatGroupKey
+                }
+
+                /** The seat group value that the alert is scoped to. */
+                fun seatGroupValue(seatGroupValue: String) =
+                    seatGroupValue(JsonField.of(seatGroupValue))
+
+                /** The seat group value that the alert is scoped to. */
+                fun seatGroupValue(seatGroupValue: JsonField<String>) = apply {
+                    this.seatGroupValue = seatGroupValue
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                fun build(): SeatFilter =
+                    SeatFilter(
+                        checkRequired("seatGroupKey", seatGroupKey),
+                        seatGroupValue,
+                        additionalProperties.toImmutable(),
+                    )
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is SeatFilter && seatGroupKey == other.seatGroupKey && seatGroupValue == other.seatGroupValue && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(seatGroupKey, seatGroupValue, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "SeatFilter{seatGroupKey=$seatGroupKey, seatGroupValue=$seatGroupValue, additionalProperties=$additionalProperties}"
+        }
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Alert && id == other.id && name == other.name && status == other.status && threshold == other.threshold && type == other.type && updatedAt == other.updatedAt && creditGrantTypeFilters == other.creditGrantTypeFilters && creditType == other.creditType && customFieldFilters == other.customFieldFilters && groupKeyFilter == other.groupKeyFilter && invoiceTypesFilter == other.invoiceTypesFilter && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Alert && id == other.id && name == other.name && status == other.status && threshold == other.threshold && type == other.type && updatedAt == other.updatedAt && creditGrantTypeFilters == other.creditGrantTypeFilters && creditType == other.creditType && customFieldFilters == other.customFieldFilters && groupKeyFilter == other.groupKeyFilter && groupValues == other.groupValues && invoiceTypesFilter == other.invoiceTypesFilter && seatFilter == other.seatFilter && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, name, status, threshold, type, updatedAt, creditGrantTypeFilters, creditType, customFieldFilters, groupKeyFilter, invoiceTypesFilter, uniquenessKey, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, name, status, threshold, type, updatedAt, creditGrantTypeFilters, creditType, customFieldFilters, groupKeyFilter, groupValues, invoiceTypesFilter, seatFilter, uniquenessKey, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Alert{id=$id, name=$name, status=$status, threshold=$threshold, type=$type, updatedAt=$updatedAt, creditGrantTypeFilters=$creditGrantTypeFilters, creditType=$creditType, customFieldFilters=$customFieldFilters, groupKeyFilter=$groupKeyFilter, invoiceTypesFilter=$invoiceTypesFilter, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
+            "Alert{id=$id, name=$name, status=$status, threshold=$threshold, type=$type, updatedAt=$updatedAt, creditGrantTypeFilters=$creditGrantTypeFilters, creditType=$creditType, customFieldFilters=$customFieldFilters, groupKeyFilter=$groupKeyFilter, groupValues=$groupValues, invoiceTypesFilter=$invoiceTypesFilter, seatFilter=$seatFilter, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
     }
 
-    /** The status of the customer alert. If the alert is archived, null will be returned. */
+    /**
+     * The status of the threshold notification. If the notification is archived, null will be
+     * returned.
+     */
     class CustomerStatus @JsonCreator private constructor(private val value: JsonField<String>) :
         Enum {
 

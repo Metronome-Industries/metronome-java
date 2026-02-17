@@ -27,9 +27,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/Metronome-Industries/metronome-java.git")
-                    developerConnection.set("scm:git:git://github.com/Metronome-Industries/metronome-java.git")
-                    url.set("https://github.com/Metronome-Industries/metronome-java")
+                    connection.set("scm:git:git://github.com/stainless-sdks/metronome-java.git")
+                    developerConnection.set("scm:git:git://github.com/stainless-sdks/metronome-java.git")
+                    url.set("https://github.com/stainless-sdks/metronome-java")
                 }
 
                 versionMapping {

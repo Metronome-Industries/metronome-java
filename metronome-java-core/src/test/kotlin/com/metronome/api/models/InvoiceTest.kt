@@ -31,6 +31,7 @@ class InvoiceTest {
                         )
                         .name("name")
                         .total(0.0)
+                        .type("type")
                         .appliedCommitOrCredit(
                             Invoice.LineItem.AppliedCommitOrCredit.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -52,6 +53,12 @@ class InvoiceTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .discountCustomFields(
+                            Invoice.LineItem.DiscountCustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .discountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .groupKey("group_key")
                         .groupValue("group_value")
@@ -79,7 +86,6 @@ class InvoiceTest {
                                 )
                                 .quantity(0.0)
                                 .addTier(Tier.builder().price(0.0).size(0.0).build())
-                                .useListPrices(true)
                                 .build()
                         )
                         .metadata("metadata")
@@ -88,6 +94,14 @@ class InvoiceTest {
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                         )
                         .netsuiteItemId("netsuite_item_id")
+                        .origin(
+                            Invoice.LineItem.Origin.builder()
+                                .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .lineItemId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
                         .postpaidCommit(
                             Invoice.LineItem.PostpaidCommit.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -109,6 +123,7 @@ class InvoiceTest {
                                 .build()
                         )
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addProductTag("string")
                         .productType("product_type")
                         .professionalServiceCustomFields(
                             Invoice.LineItem.ProfessionalServiceCustomFields.builder()
@@ -160,6 +175,12 @@ class InvoiceTest {
                                 )
                                 .build()
                         )
+                        .subscriptionCustomFields(
+                            Invoice.LineItem.SubscriptionCustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .subscriptionId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .tier(
                             Invoice.LineItem.Tier.builder()
                                 .level(0.0)
@@ -172,11 +193,16 @@ class InvoiceTest {
                 )
                 .status("DRAFT, VOID, or FINALIZED")
                 .total(0.0)
-                .type(
-                    "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
-                )
+                .type("SCHEDULED or USAGE")
                 .amendmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .billableStatus(Invoice.BillableStatus.BILLABLE)
+                .billableStatus(JsonValue.from(mapOf<String, Any>()))
+                .addConstituentInvoice(
+                    Invoice.ConstituentInvoice.builder()
+                        .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .build()
+                )
                 .contractCustomFields(
                     Invoice.ContractCustomFields.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -195,12 +221,24 @@ class InvoiceTest {
                                         .BillingProviderType
                                         .AWS_MARKETPLACE
                                 )
+                                .billingProviderError("billing_provider_error")
+                                .externalPaymentId("external_payment_id")
                                 .externalStatus(
                                     Invoice.CorrectionRecord.CorrectedExternalInvoice.ExternalStatus
                                         .DRAFT
                                 )
                                 .invoiceId("invoice_id")
+                                .invoicedSubTotal(0.0)
+                                .invoicedTotal(0.0)
                                 .issuedAtTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .pdfUrl("https://example.com")
+                                .tax(
+                                    Invoice.CorrectionRecord.CorrectedExternalInvoice.Tax.builder()
+                                        .totalTaxAmount(0.0)
+                                        .totalTaxableAmount(0.0)
+                                        .transactionId("transaction_id")
+                                        .build()
+                                )
                                 .build()
                         )
                         .build()
@@ -222,9 +260,21 @@ class InvoiceTest {
                         .billingProviderType(
                             Invoice.ExternalInvoice.BillingProviderType.AWS_MARKETPLACE
                         )
+                        .billingProviderError("billing_provider_error")
+                        .externalPaymentId("external_payment_id")
                         .externalStatus(Invoice.ExternalInvoice.ExternalStatus.DRAFT)
                         .invoiceId("invoice_id")
+                        .invoicedSubTotal(0.0)
+                        .invoicedTotal(0.0)
                         .issuedAtTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .pdfUrl("https://example.com")
+                        .tax(
+                            Invoice.ExternalInvoice.Tax.builder()
+                                .totalTaxAmount(0.0)
+                                .totalTaxableAmount(0.0)
+                                .transactionId("transaction_id")
+                                .build()
+                        )
                         .build()
                 )
                 .addInvoiceAdjustment(
@@ -248,6 +298,12 @@ class InvoiceTest {
                 .issuedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .netPaymentTermsDays(0.0)
                 .netsuiteSalesOrderId("netsuite_sales_order_id")
+                .payer(
+                    Invoice.Payer.builder()
+                        .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .build()
+                )
                 .planCustomFields(
                     Invoice.PlanCustomFields.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -275,6 +331,15 @@ class InvoiceTest {
                         )
                         .build()
                 )
+                .addRevenueSystemInvoice(
+                    Invoice.RevenueSystemInvoice.builder()
+                        .revenueSystemExternalEntityType("revenue_system_external_entity_type")
+                        .revenueSystemProvider("revenue_system_provider")
+                        .syncStatus("sync_status")
+                        .errorMessage("error_message")
+                        .revenueSystemExternalEntityId("revenue_system_external_entity_id")
+                        .build()
+                )
                 .salesforceOpportunityId("salesforce_opportunity_id")
                 .startTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .subtotal(0.0)
@@ -300,6 +365,7 @@ class InvoiceTest {
                     )
                     .name("name")
                     .total(0.0)
+                    .type("type")
                     .appliedCommitOrCredit(
                         Invoice.LineItem.AppliedCommitOrCredit.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -321,6 +387,12 @@ class InvoiceTest {
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
+                    .discountCustomFields(
+                        Invoice.LineItem.DiscountCustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .discountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .groupKey("group_key")
                     .groupValue("group_value")
@@ -348,13 +420,20 @@ class InvoiceTest {
                             )
                             .quantity(0.0)
                             .addTier(Tier.builder().price(0.0).size(0.0).build())
-                            .useListPrices(true)
                             .build()
                     )
                     .metadata("metadata")
                     .netsuiteInvoiceBillingEnd(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .netsuiteInvoiceBillingStart(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .netsuiteItemId("netsuite_item_id")
+                    .origin(
+                        Invoice.LineItem.Origin.builder()
+                            .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .lineItemId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .build()
+                    )
                     .postpaidCommit(
                         Invoice.LineItem.PostpaidCommit.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -376,6 +455,7 @@ class InvoiceTest {
                             .build()
                     )
                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addProductTag("string")
                     .productType("product_type")
                     .professionalServiceCustomFields(
                         Invoice.LineItem.ProfessionalServiceCustomFields.builder()
@@ -423,6 +503,12 @@ class InvoiceTest {
                             )
                             .build()
                     )
+                    .subscriptionCustomFields(
+                        Invoice.LineItem.SubscriptionCustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .subscriptionId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .tier(
                         Invoice.LineItem.Tier.builder()
                             .level(0.0)
@@ -435,12 +521,17 @@ class InvoiceTest {
             )
         assertThat(invoice.status()).isEqualTo("DRAFT, VOID, or FINALIZED")
         assertThat(invoice.total()).isEqualTo(0.0)
-        assertThat(invoice.type())
-            .isEqualTo(
-                "PLAN_ARREARS, SCHEDULED, USAGE, CORRECTION, CREDIT_PURCHASE, or SEAT_PURCHASE"
-            )
+        assertThat(invoice.type()).isEqualTo("SCHEDULED or USAGE")
         assertThat(invoice.amendmentId()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(invoice.billableStatus()).contains(Invoice.BillableStatus.BILLABLE)
+        assertThat(invoice._billableStatus()).isEqualTo(JsonValue.from(mapOf<String, Any>()))
+        assertThat(invoice.constituentInvoices().get())
+            .containsExactly(
+                Invoice.ConstituentInvoice.builder()
+                    .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .build()
+            )
         assertThat(invoice.contractCustomFields())
             .contains(
                 Invoice.ContractCustomFields.builder()
@@ -461,12 +552,24 @@ class InvoiceTest {
                                     .BillingProviderType
                                     .AWS_MARKETPLACE
                             )
+                            .billingProviderError("billing_provider_error")
+                            .externalPaymentId("external_payment_id")
                             .externalStatus(
                                 Invoice.CorrectionRecord.CorrectedExternalInvoice.ExternalStatus
                                     .DRAFT
                             )
                             .invoiceId("invoice_id")
+                            .invoicedSubTotal(0.0)
+                            .invoicedTotal(0.0)
                             .issuedAtTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .pdfUrl("https://example.com")
+                            .tax(
+                                Invoice.CorrectionRecord.CorrectedExternalInvoice.Tax.builder()
+                                    .totalTaxAmount(0.0)
+                                    .totalTaxableAmount(0.0)
+                                    .transactionId("transaction_id")
+                                    .build()
+                            )
                             .build()
                     )
                     .build()
@@ -492,9 +595,21 @@ class InvoiceTest {
                     .billingProviderType(
                         Invoice.ExternalInvoice.BillingProviderType.AWS_MARKETPLACE
                     )
+                    .billingProviderError("billing_provider_error")
+                    .externalPaymentId("external_payment_id")
                     .externalStatus(Invoice.ExternalInvoice.ExternalStatus.DRAFT)
                     .invoiceId("invoice_id")
+                    .invoicedSubTotal(0.0)
+                    .invoicedTotal(0.0)
                     .issuedAtTimestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .pdfUrl("https://example.com")
+                    .tax(
+                        Invoice.ExternalInvoice.Tax.builder()
+                            .totalTaxAmount(0.0)
+                            .totalTaxableAmount(0.0)
+                            .transactionId("transaction_id")
+                            .build()
+                    )
                     .build()
             )
         assertThat(invoice.invoiceAdjustments().get())
@@ -519,6 +634,13 @@ class InvoiceTest {
         assertThat(invoice.issuedAt()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(invoice.netPaymentTermsDays()).contains(0.0)
         assertThat(invoice.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
+        assertThat(invoice.payer())
+            .contains(
+                Invoice.Payer.builder()
+                    .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .build()
+            )
         assertThat(invoice.planCustomFields())
             .contains(
                 Invoice.PlanCustomFields.builder()
@@ -546,6 +668,16 @@ class InvoiceTest {
                             .gcpOfferId("gcp_offer_id")
                             .build()
                     )
+                    .build()
+            )
+        assertThat(invoice.revenueSystemInvoices().get())
+            .containsExactly(
+                Invoice.RevenueSystemInvoice.builder()
+                    .revenueSystemExternalEntityType("revenue_system_external_entity_type")
+                    .revenueSystemProvider("revenue_system_provider")
+                    .syncStatus("sync_status")
+                    .errorMessage("error_message")
+                    .revenueSystemExternalEntityId("revenue_system_external_entity_id")
                     .build()
             )
         assertThat(invoice.salesforceOpportunityId()).contains("salesforce_opportunity_id")

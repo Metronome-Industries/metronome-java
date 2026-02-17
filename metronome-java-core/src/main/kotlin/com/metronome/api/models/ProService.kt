@@ -62,6 +62,7 @@ private constructor(
      */
     fun unitPrice(): Double = unitPrice.getRequired("unit_price")
 
+    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
     fun customFields(): Optional<CustomFields> =
         Optional.ofNullable(customFields.getNullable("custom_fields"))
 
@@ -88,6 +89,7 @@ private constructor(
      */
     @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice(): JsonField<Double> = unitPrice
 
+    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
     @JsonProperty("custom_fields")
     @ExcludeMissing
     fun _customFields(): JsonField<CustomFields> = customFields
@@ -186,8 +188,10 @@ private constructor(
          */
         fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
 
+        /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
+        /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
         fun customFields(customFields: JsonField<CustomFields>) = apply {
             this.customFields = customFields
         }
@@ -238,6 +242,7 @@ private constructor(
             )
     }
 
+    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
     @NoAutoDetect
     class CustomFields
     @JsonCreator

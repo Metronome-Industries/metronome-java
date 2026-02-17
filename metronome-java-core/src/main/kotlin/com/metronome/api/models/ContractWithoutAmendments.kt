@@ -57,6 +57,9 @@ private constructor(
     @JsonProperty("ending_before")
     @ExcludeMissing
     private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("hierarchy_configuration")
+    @ExcludeMissing
+    private val hierarchyConfiguration: JsonField<HierarchyConfiguration> = JsonMissing.of(),
     @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
     @JsonProperty("net_payment_terms_days")
     @ExcludeMissing
@@ -64,6 +67,11 @@ private constructor(
     @JsonProperty("netsuite_sales_order_id")
     @ExcludeMissing
     private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("prepaid_balance_threshold_configuration")
+    @ExcludeMissing
+    private val prepaidBalanceThresholdConfiguration:
+        JsonField<PrepaidBalanceThresholdConfiguration> =
+        JsonMissing.of(),
     @JsonProperty("professional_services")
     @ExcludeMissing
     private val professionalServices: JsonField<List<ProService>> = JsonMissing.of(),
@@ -85,6 +93,10 @@ private constructor(
     @JsonProperty("scheduled_charges_on_usage_invoices")
     @ExcludeMissing
     private val scheduledChargesOnUsageInvoices: JsonField<ScheduledChargesOnUsageInvoices> =
+        JsonMissing.of(),
+    @JsonProperty("spend_threshold_configuration")
+    @ExcludeMissing
+    private val spendThresholdConfiguration: JsonField<SpendThresholdConfiguration> =
         JsonMissing.of(),
     @JsonProperty("total_contract_value")
     @ExcludeMissing
@@ -115,12 +127,19 @@ private constructor(
 
     fun credits(): Optional<List<Credit>> = Optional.ofNullable(credits.getNullable("credits"))
 
-    /** This field's availability is dependent on your client's configuration. */
+    /** This field's availability is dependent on your client's */
     fun discounts(): Optional<List<Discount>> =
         Optional.ofNullable(discounts.getNullable("discounts"))
 
     fun endingBefore(): Optional<OffsetDateTime> =
         Optional.ofNullable(endingBefore.getNullable("ending_before"))
+
+    /**
+     * Either a **parent** configuration with a list of children or a **child** configuration with a
+     * single parent.
+     */
+    fun hierarchyConfiguration(): Optional<HierarchyConfiguration> =
+        Optional.ofNullable(hierarchyConfiguration.getNullable("hierarchy_configuration"))
 
     fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
 
@@ -130,6 +149,13 @@ private constructor(
     /** This field's availability is dependent on your client's configuration. */
     fun netsuiteSalesOrderId(): Optional<String> =
         Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
+
+    fun prepaidBalanceThresholdConfiguration(): Optional<PrepaidBalanceThresholdConfiguration> =
+        Optional.ofNullable(
+            prepaidBalanceThresholdConfiguration.getNullable(
+                "prepaid_balance_threshold_configuration"
+            )
+        )
 
     /** This field's availability is dependent on your client's configuration. */
     fun professionalServices(): Optional<List<ProService>> =
@@ -160,6 +186,11 @@ private constructor(
     fun scheduledChargesOnUsageInvoices(): Optional<ScheduledChargesOnUsageInvoices> =
         Optional.ofNullable(
             scheduledChargesOnUsageInvoices.getNullable("scheduled_charges_on_usage_invoices")
+        )
+
+    fun spendThresholdConfiguration(): Optional<SpendThresholdConfiguration> =
+        Optional.ofNullable(
+            spendThresholdConfiguration.getNullable("spend_threshold_configuration")
         )
 
     /** This field's availability is dependent on your client's configuration. */
@@ -199,7 +230,7 @@ private constructor(
 
     @JsonProperty("credits") @ExcludeMissing fun _credits(): JsonField<List<Credit>> = credits
 
-    /** This field's availability is dependent on your client's configuration. */
+    /** This field's availability is dependent on your client's */
     @JsonProperty("discounts")
     @ExcludeMissing
     fun _discounts(): JsonField<List<Discount>> = discounts
@@ -207,6 +238,14 @@ private constructor(
     @JsonProperty("ending_before")
     @ExcludeMissing
     fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
+
+    /**
+     * Either a **parent** configuration with a list of children or a **child** configuration with a
+     * single parent.
+     */
+    @JsonProperty("hierarchy_configuration")
+    @ExcludeMissing
+    fun _hierarchyConfiguration(): JsonField<HierarchyConfiguration> = hierarchyConfiguration
 
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
@@ -218,6 +257,11 @@ private constructor(
     @JsonProperty("netsuite_sales_order_id")
     @ExcludeMissing
     fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
+
+    @JsonProperty("prepaid_balance_threshold_configuration")
+    @ExcludeMissing
+    fun _prepaidBalanceThresholdConfiguration(): JsonField<PrepaidBalanceThresholdConfiguration> =
+        prepaidBalanceThresholdConfiguration
 
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("professional_services")
@@ -255,6 +299,11 @@ private constructor(
     fun _scheduledChargesOnUsageInvoices(): JsonField<ScheduledChargesOnUsageInvoices> =
         scheduledChargesOnUsageInvoices
 
+    @JsonProperty("spend_threshold_configuration")
+    @ExcludeMissing
+    fun _spendThresholdConfiguration(): JsonField<SpendThresholdConfiguration> =
+        spendThresholdConfiguration
+
     /** This field's availability is dependent on your client's configuration. */
     @JsonProperty("total_contract_value")
     @ExcludeMissing
@@ -286,9 +335,11 @@ private constructor(
         credits().ifPresent { it.forEach { it.validate() } }
         discounts().ifPresent { it.forEach { it.validate() } }
         endingBefore()
+        hierarchyConfiguration().ifPresent { it.validate() }
         name()
         netPaymentTermsDays()
         netsuiteSalesOrderId()
+        prepaidBalanceThresholdConfiguration().ifPresent { it.validate() }
         professionalServices().ifPresent { it.forEach { it.validate() } }
         rateCardId()
         recurringCommits().ifPresent { it.forEach { it.validate() } }
@@ -296,6 +347,7 @@ private constructor(
         resellerRoyalties().ifPresent { it.forEach { it.validate() } }
         salesforceOpportunityId()
         scheduledChargesOnUsageInvoices()
+        spendThresholdConfiguration().ifPresent { it.validate() }
         totalContractValue()
         usageFilter().ifPresent { it.validate() }
         validated = true
@@ -322,9 +374,13 @@ private constructor(
         private var credits: JsonField<MutableList<Credit>>? = null
         private var discounts: JsonField<MutableList<Discount>>? = null
         private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var hierarchyConfiguration: JsonField<HierarchyConfiguration> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
         private var netPaymentTermsDays: JsonField<Double> = JsonMissing.of()
         private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
+        private var prepaidBalanceThresholdConfiguration:
+            JsonField<PrepaidBalanceThresholdConfiguration> =
+            JsonMissing.of()
         private var professionalServices: JsonField<MutableList<ProService>>? = null
         private var rateCardId: JsonField<String> = JsonMissing.of()
         private var recurringCommits: JsonField<MutableList<RecurringCommit>>? = null
@@ -332,6 +388,8 @@ private constructor(
         private var resellerRoyalties: JsonField<MutableList<ResellerRoyalty>>? = null
         private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
         private var scheduledChargesOnUsageInvoices: JsonField<ScheduledChargesOnUsageInvoices> =
+            JsonMissing.of()
+        private var spendThresholdConfiguration: JsonField<SpendThresholdConfiguration> =
             JsonMissing.of()
         private var totalContractValue: JsonField<Double> = JsonMissing.of()
         private var usageFilter: JsonField<UsageFilter> = JsonMissing.of()
@@ -350,9 +408,12 @@ private constructor(
             credits = contractWithoutAmendments.credits.map { it.toMutableList() }
             discounts = contractWithoutAmendments.discounts.map { it.toMutableList() }
             endingBefore = contractWithoutAmendments.endingBefore
+            hierarchyConfiguration = contractWithoutAmendments.hierarchyConfiguration
             name = contractWithoutAmendments.name
             netPaymentTermsDays = contractWithoutAmendments.netPaymentTermsDays
             netsuiteSalesOrderId = contractWithoutAmendments.netsuiteSalesOrderId
+            prepaidBalanceThresholdConfiguration =
+                contractWithoutAmendments.prepaidBalanceThresholdConfiguration
             professionalServices =
                 contractWithoutAmendments.professionalServices.map { it.toMutableList() }
             rateCardId = contractWithoutAmendments.rateCardId
@@ -363,6 +424,7 @@ private constructor(
             salesforceOpportunityId = contractWithoutAmendments.salesforceOpportunityId
             scheduledChargesOnUsageInvoices =
                 contractWithoutAmendments.scheduledChargesOnUsageInvoices
+            spendThresholdConfiguration = contractWithoutAmendments.spendThresholdConfiguration
             totalContractValue = contractWithoutAmendments.totalContractValue
             usageFilter = contractWithoutAmendments.usageFilter
             additionalProperties = contractWithoutAmendments.additionalProperties.toMutableMap()
@@ -486,15 +548,15 @@ private constructor(
                 }
         }
 
-        /** This field's availability is dependent on your client's configuration. */
+        /** This field's availability is dependent on your client's */
         fun discounts(discounts: List<Discount>) = discounts(JsonField.of(discounts))
 
-        /** This field's availability is dependent on your client's configuration. */
+        /** This field's availability is dependent on your client's */
         fun discounts(discounts: JsonField<List<Discount>>) = apply {
             this.discounts = discounts.map { it.toMutableList() }
         }
 
-        /** This field's availability is dependent on your client's configuration. */
+        /** This field's availability is dependent on your client's */
         fun addDiscount(discount: Discount) = apply {
             discounts =
                 (discounts ?: JsonField.of(mutableListOf())).apply {
@@ -514,6 +576,36 @@ private constructor(
             this.endingBefore = endingBefore
         }
 
+        /**
+         * Either a **parent** configuration with a list of children or a **child** configuration
+         * with a single parent.
+         */
+        fun hierarchyConfiguration(hierarchyConfiguration: HierarchyConfiguration) =
+            hierarchyConfiguration(JsonField.of(hierarchyConfiguration))
+
+        /**
+         * Either a **parent** configuration with a list of children or a **child** configuration
+         * with a single parent.
+         */
+        fun hierarchyConfiguration(hierarchyConfiguration: JsonField<HierarchyConfiguration>) =
+            apply {
+                this.hierarchyConfiguration = hierarchyConfiguration
+            }
+
+        /**
+         * Either a **parent** configuration with a list of children or a **child** configuration
+         * with a single parent.
+         */
+        fun hierarchyConfiguration(parent: HierarchyConfiguration.ParentHierarchyConfiguration) =
+            hierarchyConfiguration(HierarchyConfiguration.ofParent(parent))
+
+        /**
+         * Either a **parent** configuration with a list of children or a **child** configuration
+         * with a single parent.
+         */
+        fun hierarchyConfiguration(child: HierarchyConfiguration.ChildHierarchyConfiguration) =
+            hierarchyConfiguration(HierarchyConfiguration.ofChild(child))
+
         fun name(name: String) = name(JsonField.of(name))
 
         fun name(name: JsonField<String>) = apply { this.name = name }
@@ -532,6 +624,16 @@ private constructor(
         /** This field's availability is dependent on your client's configuration. */
         fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
             this.netsuiteSalesOrderId = netsuiteSalesOrderId
+        }
+
+        fun prepaidBalanceThresholdConfiguration(
+            prepaidBalanceThresholdConfiguration: PrepaidBalanceThresholdConfiguration
+        ) = prepaidBalanceThresholdConfiguration(JsonField.of(prepaidBalanceThresholdConfiguration))
+
+        fun prepaidBalanceThresholdConfiguration(
+            prepaidBalanceThresholdConfiguration: JsonField<PrepaidBalanceThresholdConfiguration>
+        ) = apply {
+            this.prepaidBalanceThresholdConfiguration = prepaidBalanceThresholdConfiguration
         }
 
         /** This field's availability is dependent on your client's configuration. */
@@ -653,6 +755,13 @@ private constructor(
             scheduledChargesOnUsageInvoices: JsonField<ScheduledChargesOnUsageInvoices>
         ) = apply { this.scheduledChargesOnUsageInvoices = scheduledChargesOnUsageInvoices }
 
+        fun spendThresholdConfiguration(spendThresholdConfiguration: SpendThresholdConfiguration) =
+            spendThresholdConfiguration(JsonField.of(spendThresholdConfiguration))
+
+        fun spendThresholdConfiguration(
+            spendThresholdConfiguration: JsonField<SpendThresholdConfiguration>
+        ) = apply { this.spendThresholdConfiguration = spendThresholdConfiguration }
+
         /** This field's availability is dependent on your client's configuration. */
         fun totalContractValue(totalContractValue: Double) =
             totalContractValue(JsonField.of(totalContractValue))
@@ -700,9 +809,11 @@ private constructor(
                 (credits ?: JsonMissing.of()).map { it.toImmutable() },
                 (discounts ?: JsonMissing.of()).map { it.toImmutable() },
                 endingBefore,
+                hierarchyConfiguration,
                 name,
                 netPaymentTermsDays,
                 netsuiteSalesOrderId,
+                prepaidBalanceThresholdConfiguration,
                 (professionalServices ?: JsonMissing.of()).map { it.toImmutable() },
                 rateCardId,
                 (recurringCommits ?: JsonMissing.of()).map { it.toImmutable() },
@@ -710,6 +821,7 @@ private constructor(
                 (resellerRoyalties ?: JsonMissing.of()).map { it.toImmutable() },
                 salesforceOpportunityId,
                 scheduledChargesOnUsageInvoices,
+                spendThresholdConfiguration,
                 totalContractValue,
                 usageFilter,
                 additionalProperties.toImmutable(),
@@ -1077,6 +1189,8 @@ private constructor(
 
                 @JvmField val ANNUAL = of("ANNUAL")
 
+                @JvmField val WEEKLY = of("WEEKLY")
+
                 @JvmStatic fun of(value: String) = Frequency(JsonField.of(value))
             }
 
@@ -1085,6 +1199,7 @@ private constructor(
                 MONTHLY,
                 QUARTERLY,
                 ANNUAL,
+                WEEKLY,
             }
 
             /**
@@ -1100,6 +1215,7 @@ private constructor(
                 MONTHLY,
                 QUARTERLY,
                 ANNUAL,
+                WEEKLY,
                 /**
                  * An enum member indicating that [Frequency] was instantiated with an unknown
                  * value.
@@ -1119,6 +1235,7 @@ private constructor(
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
                     ANNUAL -> Value.ANNUAL
+                    WEEKLY -> Value.WEEKLY
                     else -> Value._UNKNOWN
                 }
 
@@ -1136,6 +1253,7 @@ private constructor(
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
                     ANNUAL -> Known.ANNUAL
+                    WEEKLY -> Known.WEEKLY
                     else -> throw MetronomeInvalidDataException("Unknown Frequency: $value")
                 }
 
@@ -1222,6 +1340,10 @@ private constructor(
         @JsonProperty("ending_before")
         @ExcludeMissing
         private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("hierarchy_configuration")
+        @ExcludeMissing
+        private val hierarchyConfiguration: JsonField<CommitHierarchyConfiguration> =
+            JsonMissing.of(),
         @JsonProperty("invoice_amount")
         @ExcludeMissing
         private val invoiceAmount: JsonField<InvoiceAmount> = JsonMissing.of(),
@@ -1231,9 +1353,22 @@ private constructor(
         @JsonProperty("netsuite_sales_order_id")
         @ExcludeMissing
         private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("proration")
+        @ExcludeMissing
+        private val proration: JsonField<Proration> = JsonMissing.of(),
+        @JsonProperty("recurrence_frequency")
+        @ExcludeMissing
+        private val recurrenceFrequency: JsonField<RecurrenceFrequency> = JsonMissing.of(),
         @JsonProperty("rollover_fraction")
         @ExcludeMissing
         private val rolloverFraction: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("specifiers")
+        @ExcludeMissing
+        private val specifiers: JsonField<List<CommitSpecifier>> = JsonMissing.of(),
+        @JsonProperty("subscription_config")
+        @ExcludeMissing
+        private val subscriptionConfig: JsonField<RecurringCommitSubscriptionConfig> =
+            JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -1275,6 +1410,10 @@ private constructor(
         fun endingBefore(): Optional<OffsetDateTime> =
             Optional.ofNullable(endingBefore.getNullable("ending_before"))
 
+        /** Optional configuration for recurring commit/credit hierarchy access control */
+        fun hierarchyConfiguration(): Optional<CommitHierarchyConfiguration> =
+            Optional.ofNullable(hierarchyConfiguration.getNullable("hierarchy_configuration"))
+
         /** The amount the customer should be billed for the commit. Not required. */
         fun invoiceAmount(): Optional<InvoiceAmount> =
             Optional.ofNullable(invoiceAmount.getNullable("invoice_amount"))
@@ -1287,11 +1426,39 @@ private constructor(
             Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
 
         /**
+         * Determines whether the first and last commit will be prorated. If not provided, the
+         * default is FIRST_AND_LAST (i.e. prorate both the first and last commits).
+         */
+        fun proration(): Optional<Proration> =
+            Optional.ofNullable(proration.getNullable("proration"))
+
+        /**
+         * The frequency at which the recurring commits will be created. If not provided: - The
+         * commits will be created on the usage invoice frequency. If provided: - The period defined
+         * in the duration will correspond to this frequency. - Commits will be created aligned with
+         * the recurring commit's starting_at rather than the usage invoice dates.
+         */
+        fun recurrenceFrequency(): Optional<RecurrenceFrequency> =
+            Optional.ofNullable(recurrenceFrequency.getNullable("recurrence_frequency"))
+
+        /**
          * Will be passed down to the individual commits. This controls how much of an individual
          * unexpired commit will roll over upon contract transition. Must be between 0 and 1.
          */
         fun rolloverFraction(): Optional<Double> =
             Optional.ofNullable(rolloverFraction.getNullable("rollover_fraction"))
+
+        /**
+         * List of filters that determine what kind of customer usage draws down a commit or credit.
+         * A customer's usage needs to meet the condition of at least one of the specifiers to
+         * contribute to a commit's or credit's drawdown.
+         */
+        fun specifiers(): Optional<List<CommitSpecifier>> =
+            Optional.ofNullable(specifiers.getNullable("specifiers"))
+
+        /** Attach a subscription to the recurring commit/credit. */
+        fun subscriptionConfig(): Optional<RecurringCommitSubscriptionConfig> =
+            Optional.ofNullable(subscriptionConfig.getNullable("subscription_config"))
 
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
@@ -1340,6 +1507,12 @@ private constructor(
         @ExcludeMissing
         fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
+        /** Optional configuration for recurring commit/credit hierarchy access control */
+        @JsonProperty("hierarchy_configuration")
+        @ExcludeMissing
+        fun _hierarchyConfiguration(): JsonField<CommitHierarchyConfiguration> =
+            hierarchyConfiguration
+
         /** The amount the customer should be billed for the commit. Not required. */
         @JsonProperty("invoice_amount")
         @ExcludeMissing
@@ -1354,12 +1527,44 @@ private constructor(
         fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
 
         /**
+         * Determines whether the first and last commit will be prorated. If not provided, the
+         * default is FIRST_AND_LAST (i.e. prorate both the first and last commits).
+         */
+        @JsonProperty("proration")
+        @ExcludeMissing
+        fun _proration(): JsonField<Proration> = proration
+
+        /**
+         * The frequency at which the recurring commits will be created. If not provided: - The
+         * commits will be created on the usage invoice frequency. If provided: - The period defined
+         * in the duration will correspond to this frequency. - Commits will be created aligned with
+         * the recurring commit's starting_at rather than the usage invoice dates.
+         */
+        @JsonProperty("recurrence_frequency")
+        @ExcludeMissing
+        fun _recurrenceFrequency(): JsonField<RecurrenceFrequency> = recurrenceFrequency
+
+        /**
          * Will be passed down to the individual commits. This controls how much of an individual
          * unexpired commit will roll over upon contract transition. Must be between 0 and 1.
          */
         @JsonProperty("rollover_fraction")
         @ExcludeMissing
         fun _rolloverFraction(): JsonField<Double> = rolloverFraction
+
+        /**
+         * List of filters that determine what kind of customer usage draws down a commit or credit.
+         * A customer's usage needs to meet the condition of at least one of the specifiers to
+         * contribute to a commit's or credit's drawdown.
+         */
+        @JsonProperty("specifiers")
+        @ExcludeMissing
+        fun _specifiers(): JsonField<List<CommitSpecifier>> = specifiers
+
+        /** Attach a subscription to the recurring commit/credit. */
+        @JsonProperty("subscription_config")
+        @ExcludeMissing
+        fun _subscriptionConfig(): JsonField<RecurringCommitSubscriptionConfig> = subscriptionConfig
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1384,10 +1589,15 @@ private constructor(
             contract().ifPresent { it.validate() }
             description()
             endingBefore()
+            hierarchyConfiguration().ifPresent { it.validate() }
             invoiceAmount().ifPresent { it.validate() }
             name()
             netsuiteSalesOrderId()
+            proration()
+            recurrenceFrequency()
             rolloverFraction()
+            specifiers().ifPresent { it.forEach { it.validate() } }
+            subscriptionConfig().ifPresent { it.validate() }
             validated = true
         }
 
@@ -1413,10 +1623,17 @@ private constructor(
             private var contract: JsonField<Contract> = JsonMissing.of()
             private var description: JsonField<String> = JsonMissing.of()
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var hierarchyConfiguration: JsonField<CommitHierarchyConfiguration> =
+                JsonMissing.of()
             private var invoiceAmount: JsonField<InvoiceAmount> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
+            private var proration: JsonField<Proration> = JsonMissing.of()
+            private var recurrenceFrequency: JsonField<RecurrenceFrequency> = JsonMissing.of()
             private var rolloverFraction: JsonField<Double> = JsonMissing.of()
+            private var specifiers: JsonField<MutableList<CommitSpecifier>>? = null
+            private var subscriptionConfig: JsonField<RecurringCommitSubscriptionConfig> =
+                JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -1435,10 +1652,15 @@ private constructor(
                 contract = recurringCommit.contract
                 description = recurringCommit.description
                 endingBefore = recurringCommit.endingBefore
+                hierarchyConfiguration = recurringCommit.hierarchyConfiguration
                 invoiceAmount = recurringCommit.invoiceAmount
                 name = recurringCommit.name
                 netsuiteSalesOrderId = recurringCommit.netsuiteSalesOrderId
+                proration = recurringCommit.proration
+                recurrenceFrequency = recurringCommit.recurrenceFrequency
                 rolloverFraction = recurringCommit.rolloverFraction
+                specifiers = recurringCommit.specifiers.map { it.toMutableList() }
+                subscriptionConfig = recurringCommit.subscriptionConfig
                 additionalProperties = recurringCommit.additionalProperties.toMutableMap()
             }
 
@@ -1554,6 +1776,15 @@ private constructor(
                 this.endingBefore = endingBefore
             }
 
+            /** Optional configuration for recurring commit/credit hierarchy access control */
+            fun hierarchyConfiguration(hierarchyConfiguration: CommitHierarchyConfiguration) =
+                hierarchyConfiguration(JsonField.of(hierarchyConfiguration))
+
+            /** Optional configuration for recurring commit/credit hierarchy access control */
+            fun hierarchyConfiguration(
+                hierarchyConfiguration: JsonField<CommitHierarchyConfiguration>
+            ) = apply { this.hierarchyConfiguration = hierarchyConfiguration }
+
             /** The amount the customer should be billed for the commit. Not required. */
             fun invoiceAmount(invoiceAmount: InvoiceAmount) =
                 invoiceAmount(JsonField.of(invoiceAmount))
@@ -1579,6 +1810,37 @@ private constructor(
             }
 
             /**
+             * Determines whether the first and last commit will be prorated. If not provided, the
+             * default is FIRST_AND_LAST (i.e. prorate both the first and last commits).
+             */
+            fun proration(proration: Proration) = proration(JsonField.of(proration))
+
+            /**
+             * Determines whether the first and last commit will be prorated. If not provided, the
+             * default is FIRST_AND_LAST (i.e. prorate both the first and last commits).
+             */
+            fun proration(proration: JsonField<Proration>) = apply { this.proration = proration }
+
+            /**
+             * The frequency at which the recurring commits will be created. If not provided: - The
+             * commits will be created on the usage invoice frequency. If provided: - The period
+             * defined in the duration will correspond to this frequency. - Commits will be created
+             * aligned with the recurring commit's starting_at rather than the usage invoice dates.
+             */
+            fun recurrenceFrequency(recurrenceFrequency: RecurrenceFrequency) =
+                recurrenceFrequency(JsonField.of(recurrenceFrequency))
+
+            /**
+             * The frequency at which the recurring commits will be created. If not provided: - The
+             * commits will be created on the usage invoice frequency. If provided: - The period
+             * defined in the duration will correspond to this frequency. - Commits will be created
+             * aligned with the recurring commit's starting_at rather than the usage invoice dates.
+             */
+            fun recurrenceFrequency(recurrenceFrequency: JsonField<RecurrenceFrequency>) = apply {
+                this.recurrenceFrequency = recurrenceFrequency
+            }
+
+            /**
              * Will be passed down to the individual commits. This controls how much of an
              * individual unexpired commit will roll over upon contract transition. Must be between
              * 0 and 1.
@@ -1594,6 +1856,49 @@ private constructor(
             fun rolloverFraction(rolloverFraction: JsonField<Double>) = apply {
                 this.rolloverFraction = rolloverFraction
             }
+
+            /**
+             * List of filters that determine what kind of customer usage draws down a commit or
+             * credit. A customer's usage needs to meet the condition of at least one of the
+             * specifiers to contribute to a commit's or credit's drawdown.
+             */
+            fun specifiers(specifiers: List<CommitSpecifier>) = specifiers(JsonField.of(specifiers))
+
+            /**
+             * List of filters that determine what kind of customer usage draws down a commit or
+             * credit. A customer's usage needs to meet the condition of at least one of the
+             * specifiers to contribute to a commit's or credit's drawdown.
+             */
+            fun specifiers(specifiers: JsonField<List<CommitSpecifier>>) = apply {
+                this.specifiers = specifiers.map { it.toMutableList() }
+            }
+
+            /**
+             * List of filters that determine what kind of customer usage draws down a commit or
+             * credit. A customer's usage needs to meet the condition of at least one of the
+             * specifiers to contribute to a commit's or credit's drawdown.
+             */
+            fun addSpecifier(specifier: CommitSpecifier) = apply {
+                specifiers =
+                    (specifiers ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(specifier)
+                    }
+            }
+
+            /** Attach a subscription to the recurring commit/credit. */
+            fun subscriptionConfig(subscriptionConfig: RecurringCommitSubscriptionConfig) =
+                subscriptionConfig(JsonField.of(subscriptionConfig))
+
+            /** Attach a subscription to the recurring commit/credit. */
+            fun subscriptionConfig(
+                subscriptionConfig: JsonField<RecurringCommitSubscriptionConfig>
+            ) = apply { this.subscriptionConfig = subscriptionConfig }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1628,10 +1933,15 @@ private constructor(
                     contract,
                     description,
                     endingBefore,
+                    hierarchyConfiguration,
                     invoiceAmount,
                     name,
                     netsuiteSalesOrderId,
+                    proration,
+                    recurrenceFrequency,
                     rolloverFraction,
+                    (specifiers ?: JsonMissing.of()).map { it.toImmutable() },
+                    subscriptionConfig,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -1644,31 +1954,31 @@ private constructor(
             @JsonProperty("credit_type_id")
             @ExcludeMissing
             private val creditTypeId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("quantity")
-            @ExcludeMissing
-            private val quantity: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("unit_price")
             @ExcludeMissing
             private val unitPrice: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("quantity")
+            @ExcludeMissing
+            private val quantity: JsonField<Double> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
 
-            fun quantity(): Double = quantity.getRequired("quantity")
-
             fun unitPrice(): Double = unitPrice.getRequired("unit_price")
+
+            fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
 
             @JsonProperty("credit_type_id")
             @ExcludeMissing
             fun _creditTypeId(): JsonField<String> = creditTypeId
 
-            @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
-
             @JsonProperty("unit_price")
             @ExcludeMissing
             fun _unitPrice(): JsonField<Double> = unitPrice
+
+            @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1682,8 +1992,8 @@ private constructor(
                 }
 
                 creditTypeId()
-                quantity()
                 unitPrice()
+                quantity()
                 validated = true
             }
 
@@ -1698,15 +2008,15 @@ private constructor(
             class Builder internal constructor() {
 
                 private var creditTypeId: JsonField<String>? = null
-                private var quantity: JsonField<Double>? = null
                 private var unitPrice: JsonField<Double>? = null
+                private var quantity: JsonField<Double> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(accessAmount: AccessAmount) = apply {
                     creditTypeId = accessAmount.creditTypeId
-                    quantity = accessAmount.quantity
                     unitPrice = accessAmount.unitPrice
+                    quantity = accessAmount.quantity
                     additionalProperties = accessAmount.additionalProperties.toMutableMap()
                 }
 
@@ -1716,13 +2026,13 @@ private constructor(
                     this.creditTypeId = creditTypeId
                 }
 
-                fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
-
-                fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
-
                 fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
 
                 fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
+
+                fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+
+                fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -1749,8 +2059,8 @@ private constructor(
                 fun build(): AccessAmount =
                     AccessAmount(
                         checkRequired("creditTypeId", creditTypeId),
-                        checkRequired("quantity", quantity),
                         checkRequired("unitPrice", unitPrice),
+                        quantity,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -1760,17 +2070,17 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is AccessAmount && creditTypeId == other.creditTypeId && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is AccessAmount && creditTypeId == other.creditTypeId && unitPrice == other.unitPrice && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(creditTypeId, quantity, unitPrice, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(creditTypeId, unitPrice, quantity, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AccessAmount{creditTypeId=$creditTypeId, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
+                "AccessAmount{creditTypeId=$creditTypeId, unitPrice=$unitPrice, quantity=$quantity, additionalProperties=$additionalProperties}"
         }
 
         /** The amount of time the created commits will be valid for */
@@ -2438,22 +2748,268 @@ private constructor(
                 "InvoiceAmount{creditTypeId=$creditTypeId, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
         }
 
+        /**
+         * Determines whether the first and last commit will be prorated. If not provided, the
+         * default is FIRST_AND_LAST (i.e. prorate both the first and last commits).
+         */
+        class Proration @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val NONE = of("NONE")
+
+                @JvmField val FIRST = of("FIRST")
+
+                @JvmField val LAST = of("LAST")
+
+                @JvmField val FIRST_AND_LAST = of("FIRST_AND_LAST")
+
+                @JvmStatic fun of(value: String) = Proration(JsonField.of(value))
+            }
+
+            /** An enum containing [Proration]'s known values. */
+            enum class Known {
+                NONE,
+                FIRST,
+                LAST,
+                FIRST_AND_LAST,
+            }
+
+            /**
+             * An enum containing [Proration]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [Proration] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                NONE,
+                FIRST,
+                LAST,
+                FIRST_AND_LAST,
+                /**
+                 * An enum member indicating that [Proration] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    NONE -> Value.NONE
+                    FIRST -> Value.FIRST
+                    LAST -> Value.LAST
+                    FIRST_AND_LAST -> Value.FIRST_AND_LAST
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    NONE -> Known.NONE
+                    FIRST -> Known.FIRST
+                    LAST -> Known.LAST
+                    FIRST_AND_LAST -> Known.FIRST_AND_LAST
+                    else -> throw MetronomeInvalidDataException("Unknown Proration: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Proration && value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        /**
+         * The frequency at which the recurring commits will be created. If not provided: - The
+         * commits will be created on the usage invoice frequency. If provided: - The period defined
+         * in the duration will correspond to this frequency. - Commits will be created aligned with
+         * the recurring commit's starting_at rather than the usage invoice dates.
+         */
+        class RecurrenceFrequency
+        @JsonCreator
+        private constructor(private val value: JsonField<String>) : Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val MONTHLY = of("MONTHLY")
+
+                @JvmField val QUARTERLY = of("QUARTERLY")
+
+                @JvmField val ANNUAL = of("ANNUAL")
+
+                @JvmField val WEEKLY = of("WEEKLY")
+
+                @JvmStatic fun of(value: String) = RecurrenceFrequency(JsonField.of(value))
+            }
+
+            /** An enum containing [RecurrenceFrequency]'s known values. */
+            enum class Known {
+                MONTHLY,
+                QUARTERLY,
+                ANNUAL,
+                WEEKLY,
+            }
+
+            /**
+             * An enum containing [RecurrenceFrequency]'s known values, as well as an [_UNKNOWN]
+             * member.
+             *
+             * An instance of [RecurrenceFrequency] can contain an unknown value in a couple of
+             * cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                MONTHLY,
+                QUARTERLY,
+                ANNUAL,
+                WEEKLY,
+                /**
+                 * An enum member indicating that [RecurrenceFrequency] was instantiated with an
+                 * unknown value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    MONTHLY -> Value.MONTHLY
+                    QUARTERLY -> Value.QUARTERLY
+                    ANNUAL -> Value.ANNUAL
+                    WEEKLY -> Value.WEEKLY
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    MONTHLY -> Known.MONTHLY
+                    QUARTERLY -> Known.QUARTERLY
+                    ANNUAL -> Known.ANNUAL
+                    WEEKLY -> Known.WEEKLY
+                    else ->
+                        throw MetronomeInvalidDataException("Unknown RecurrenceFrequency: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is RecurrenceFrequency && value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is RecurringCommit && id == other.id && accessAmount == other.accessAmount && commitDuration == other.commitDuration && priority == other.priority && product == other.product && rateType == other.rateType && startingAt == other.startingAt && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && contract == other.contract && description == other.description && endingBefore == other.endingBefore && invoiceAmount == other.invoiceAmount && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rolloverFraction == other.rolloverFraction && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is RecurringCommit && id == other.id && accessAmount == other.accessAmount && commitDuration == other.commitDuration && priority == other.priority && product == other.product && rateType == other.rateType && startingAt == other.startingAt && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && contract == other.contract && description == other.description && endingBefore == other.endingBefore && hierarchyConfiguration == other.hierarchyConfiguration && invoiceAmount == other.invoiceAmount && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && proration == other.proration && recurrenceFrequency == other.recurrenceFrequency && rolloverFraction == other.rolloverFraction && specifiers == other.specifiers && subscriptionConfig == other.subscriptionConfig && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, accessAmount, commitDuration, priority, product, rateType, startingAt, applicableProductIds, applicableProductTags, contract, description, endingBefore, invoiceAmount, name, netsuiteSalesOrderId, rolloverFraction, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, accessAmount, commitDuration, priority, product, rateType, startingAt, applicableProductIds, applicableProductTags, contract, description, endingBefore, hierarchyConfiguration, invoiceAmount, name, netsuiteSalesOrderId, proration, recurrenceFrequency, rolloverFraction, specifiers, subscriptionConfig, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "RecurringCommit{id=$id, accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, product=$product, rateType=$rateType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, contract=$contract, description=$description, endingBefore=$endingBefore, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rolloverFraction=$rolloverFraction, additionalProperties=$additionalProperties}"
+            "RecurringCommit{id=$id, accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, product=$product, rateType=$rateType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, contract=$contract, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -2494,15 +3050,32 @@ private constructor(
         @JsonProperty("ending_before")
         @ExcludeMissing
         private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("hierarchy_configuration")
+        @ExcludeMissing
+        private val hierarchyConfiguration: JsonField<CommitHierarchyConfiguration> =
+            JsonMissing.of(),
         @JsonProperty("name")
         @ExcludeMissing
         private val name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("netsuite_sales_order_id")
         @ExcludeMissing
         private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("proration")
+        @ExcludeMissing
+        private val proration: JsonField<Proration> = JsonMissing.of(),
+        @JsonProperty("recurrence_frequency")
+        @ExcludeMissing
+        private val recurrenceFrequency: JsonField<RecurrenceFrequency> = JsonMissing.of(),
         @JsonProperty("rollover_fraction")
         @ExcludeMissing
         private val rolloverFraction: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("specifiers")
+        @ExcludeMissing
+        private val specifiers: JsonField<List<CommitSpecifier>> = JsonMissing.of(),
+        @JsonProperty("subscription_config")
+        @ExcludeMissing
+        private val subscriptionConfig: JsonField<RecurringCommitSubscriptionConfig> =
+            JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -2544,6 +3117,10 @@ private constructor(
         fun endingBefore(): Optional<OffsetDateTime> =
             Optional.ofNullable(endingBefore.getNullable("ending_before"))
 
+        /** Optional configuration for recurring commit/credit hierarchy access control */
+        fun hierarchyConfiguration(): Optional<CommitHierarchyConfiguration> =
+            Optional.ofNullable(hierarchyConfiguration.getNullable("hierarchy_configuration"))
+
         /** Displayed on invoices. Will be passed through to the individual commits */
         fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
 
@@ -2552,11 +3129,39 @@ private constructor(
             Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
 
         /**
+         * Determines whether the first and last commit will be prorated. If not provided, the
+         * default is FIRST_AND_LAST (i.e. prorate both the first and last commits).
+         */
+        fun proration(): Optional<Proration> =
+            Optional.ofNullable(proration.getNullable("proration"))
+
+        /**
+         * The frequency at which the recurring commits will be created. If not provided: - The
+         * commits will be created on the usage invoice frequency. If provided: - The period defined
+         * in the duration will correspond to this frequency. - Commits will be created aligned with
+         * the recurring commit's starting_at rather than the usage invoice dates.
+         */
+        fun recurrenceFrequency(): Optional<RecurrenceFrequency> =
+            Optional.ofNullable(recurrenceFrequency.getNullable("recurrence_frequency"))
+
+        /**
          * Will be passed down to the individual commits. This controls how much of an individual
          * unexpired commit will roll over upon contract transition. Must be between 0 and 1.
          */
         fun rolloverFraction(): Optional<Double> =
             Optional.ofNullable(rolloverFraction.getNullable("rollover_fraction"))
+
+        /**
+         * List of filters that determine what kind of customer usage draws down a commit or credit.
+         * A customer's usage needs to meet the condition of at least one of the specifiers to
+         * contribute to a commit's or credit's drawdown.
+         */
+        fun specifiers(): Optional<List<CommitSpecifier>> =
+            Optional.ofNullable(specifiers.getNullable("specifiers"))
+
+        /** Attach a subscription to the recurring commit/credit. */
+        fun subscriptionConfig(): Optional<RecurringCommitSubscriptionConfig> =
+            Optional.ofNullable(subscriptionConfig.getNullable("subscription_config"))
 
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
@@ -2605,6 +3210,12 @@ private constructor(
         @ExcludeMissing
         fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
+        /** Optional configuration for recurring commit/credit hierarchy access control */
+        @JsonProperty("hierarchy_configuration")
+        @ExcludeMissing
+        fun _hierarchyConfiguration(): JsonField<CommitHierarchyConfiguration> =
+            hierarchyConfiguration
+
         /** Displayed on invoices. Will be passed through to the individual commits */
         @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
@@ -2614,12 +3225,44 @@ private constructor(
         fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
 
         /**
+         * Determines whether the first and last commit will be prorated. If not provided, the
+         * default is FIRST_AND_LAST (i.e. prorate both the first and last commits).
+         */
+        @JsonProperty("proration")
+        @ExcludeMissing
+        fun _proration(): JsonField<Proration> = proration
+
+        /**
+         * The frequency at which the recurring commits will be created. If not provided: - The
+         * commits will be created on the usage invoice frequency. If provided: - The period defined
+         * in the duration will correspond to this frequency. - Commits will be created aligned with
+         * the recurring commit's starting_at rather than the usage invoice dates.
+         */
+        @JsonProperty("recurrence_frequency")
+        @ExcludeMissing
+        fun _recurrenceFrequency(): JsonField<RecurrenceFrequency> = recurrenceFrequency
+
+        /**
          * Will be passed down to the individual commits. This controls how much of an individual
          * unexpired commit will roll over upon contract transition. Must be between 0 and 1.
          */
         @JsonProperty("rollover_fraction")
         @ExcludeMissing
         fun _rolloverFraction(): JsonField<Double> = rolloverFraction
+
+        /**
+         * List of filters that determine what kind of customer usage draws down a commit or credit.
+         * A customer's usage needs to meet the condition of at least one of the specifiers to
+         * contribute to a commit's or credit's drawdown.
+         */
+        @JsonProperty("specifiers")
+        @ExcludeMissing
+        fun _specifiers(): JsonField<List<CommitSpecifier>> = specifiers
+
+        /** Attach a subscription to the recurring commit/credit. */
+        @JsonProperty("subscription_config")
+        @ExcludeMissing
+        fun _subscriptionConfig(): JsonField<RecurringCommitSubscriptionConfig> = subscriptionConfig
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -2644,9 +3287,14 @@ private constructor(
             contract().ifPresent { it.validate() }
             description()
             endingBefore()
+            hierarchyConfiguration().ifPresent { it.validate() }
             name()
             netsuiteSalesOrderId()
+            proration()
+            recurrenceFrequency()
             rolloverFraction()
+            specifiers().ifPresent { it.forEach { it.validate() } }
+            subscriptionConfig().ifPresent { it.validate() }
             validated = true
         }
 
@@ -2672,9 +3320,16 @@ private constructor(
             private var contract: JsonField<Contract> = JsonMissing.of()
             private var description: JsonField<String> = JsonMissing.of()
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var hierarchyConfiguration: JsonField<CommitHierarchyConfiguration> =
+                JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
+            private var proration: JsonField<Proration> = JsonMissing.of()
+            private var recurrenceFrequency: JsonField<RecurrenceFrequency> = JsonMissing.of()
             private var rolloverFraction: JsonField<Double> = JsonMissing.of()
+            private var specifiers: JsonField<MutableList<CommitSpecifier>>? = null
+            private var subscriptionConfig: JsonField<RecurringCommitSubscriptionConfig> =
+                JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -2693,9 +3348,14 @@ private constructor(
                 contract = recurringCredit.contract
                 description = recurringCredit.description
                 endingBefore = recurringCredit.endingBefore
+                hierarchyConfiguration = recurringCredit.hierarchyConfiguration
                 name = recurringCredit.name
                 netsuiteSalesOrderId = recurringCredit.netsuiteSalesOrderId
+                proration = recurringCredit.proration
+                recurrenceFrequency = recurringCredit.recurrenceFrequency
                 rolloverFraction = recurringCredit.rolloverFraction
+                specifiers = recurringCredit.specifiers.map { it.toMutableList() }
+                subscriptionConfig = recurringCredit.subscriptionConfig
                 additionalProperties = recurringCredit.additionalProperties.toMutableMap()
             }
 
@@ -2811,6 +3471,15 @@ private constructor(
                 this.endingBefore = endingBefore
             }
 
+            /** Optional configuration for recurring commit/credit hierarchy access control */
+            fun hierarchyConfiguration(hierarchyConfiguration: CommitHierarchyConfiguration) =
+                hierarchyConfiguration(JsonField.of(hierarchyConfiguration))
+
+            /** Optional configuration for recurring commit/credit hierarchy access control */
+            fun hierarchyConfiguration(
+                hierarchyConfiguration: JsonField<CommitHierarchyConfiguration>
+            ) = apply { this.hierarchyConfiguration = hierarchyConfiguration }
+
             /** Displayed on invoices. Will be passed through to the individual commits */
             fun name(name: String) = name(JsonField.of(name))
 
@@ -2824,6 +3493,37 @@ private constructor(
             /** Will be passed down to the individual commits */
             fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
                 this.netsuiteSalesOrderId = netsuiteSalesOrderId
+            }
+
+            /**
+             * Determines whether the first and last commit will be prorated. If not provided, the
+             * default is FIRST_AND_LAST (i.e. prorate both the first and last commits).
+             */
+            fun proration(proration: Proration) = proration(JsonField.of(proration))
+
+            /**
+             * Determines whether the first and last commit will be prorated. If not provided, the
+             * default is FIRST_AND_LAST (i.e. prorate both the first and last commits).
+             */
+            fun proration(proration: JsonField<Proration>) = apply { this.proration = proration }
+
+            /**
+             * The frequency at which the recurring commits will be created. If not provided: - The
+             * commits will be created on the usage invoice frequency. If provided: - The period
+             * defined in the duration will correspond to this frequency. - Commits will be created
+             * aligned with the recurring commit's starting_at rather than the usage invoice dates.
+             */
+            fun recurrenceFrequency(recurrenceFrequency: RecurrenceFrequency) =
+                recurrenceFrequency(JsonField.of(recurrenceFrequency))
+
+            /**
+             * The frequency at which the recurring commits will be created. If not provided: - The
+             * commits will be created on the usage invoice frequency. If provided: - The period
+             * defined in the duration will correspond to this frequency. - Commits will be created
+             * aligned with the recurring commit's starting_at rather than the usage invoice dates.
+             */
+            fun recurrenceFrequency(recurrenceFrequency: JsonField<RecurrenceFrequency>) = apply {
+                this.recurrenceFrequency = recurrenceFrequency
             }
 
             /**
@@ -2842,6 +3542,49 @@ private constructor(
             fun rolloverFraction(rolloverFraction: JsonField<Double>) = apply {
                 this.rolloverFraction = rolloverFraction
             }
+
+            /**
+             * List of filters that determine what kind of customer usage draws down a commit or
+             * credit. A customer's usage needs to meet the condition of at least one of the
+             * specifiers to contribute to a commit's or credit's drawdown.
+             */
+            fun specifiers(specifiers: List<CommitSpecifier>) = specifiers(JsonField.of(specifiers))
+
+            /**
+             * List of filters that determine what kind of customer usage draws down a commit or
+             * credit. A customer's usage needs to meet the condition of at least one of the
+             * specifiers to contribute to a commit's or credit's drawdown.
+             */
+            fun specifiers(specifiers: JsonField<List<CommitSpecifier>>) = apply {
+                this.specifiers = specifiers.map { it.toMutableList() }
+            }
+
+            /**
+             * List of filters that determine what kind of customer usage draws down a commit or
+             * credit. A customer's usage needs to meet the condition of at least one of the
+             * specifiers to contribute to a commit's or credit's drawdown.
+             */
+            fun addSpecifier(specifier: CommitSpecifier) = apply {
+                specifiers =
+                    (specifiers ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(specifier)
+                    }
+            }
+
+            /** Attach a subscription to the recurring commit/credit. */
+            fun subscriptionConfig(subscriptionConfig: RecurringCommitSubscriptionConfig) =
+                subscriptionConfig(JsonField.of(subscriptionConfig))
+
+            /** Attach a subscription to the recurring commit/credit. */
+            fun subscriptionConfig(
+                subscriptionConfig: JsonField<RecurringCommitSubscriptionConfig>
+            ) = apply { this.subscriptionConfig = subscriptionConfig }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -2876,9 +3619,14 @@ private constructor(
                     contract,
                     description,
                     endingBefore,
+                    hierarchyConfiguration,
                     name,
                     netsuiteSalesOrderId,
+                    proration,
+                    recurrenceFrequency,
                     rolloverFraction,
+                    (specifiers ?: JsonMissing.of()).map { it.toImmutable() },
+                    subscriptionConfig,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -2891,31 +3639,31 @@ private constructor(
             @JsonProperty("credit_type_id")
             @ExcludeMissing
             private val creditTypeId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("quantity")
-            @ExcludeMissing
-            private val quantity: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("unit_price")
             @ExcludeMissing
             private val unitPrice: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("quantity")
+            @ExcludeMissing
+            private val quantity: JsonField<Double> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
 
-            fun quantity(): Double = quantity.getRequired("quantity")
-
             fun unitPrice(): Double = unitPrice.getRequired("unit_price")
+
+            fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
 
             @JsonProperty("credit_type_id")
             @ExcludeMissing
             fun _creditTypeId(): JsonField<String> = creditTypeId
 
-            @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
-
             @JsonProperty("unit_price")
             @ExcludeMissing
             fun _unitPrice(): JsonField<Double> = unitPrice
+
+            @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -2929,8 +3677,8 @@ private constructor(
                 }
 
                 creditTypeId()
-                quantity()
                 unitPrice()
+                quantity()
                 validated = true
             }
 
@@ -2945,15 +3693,15 @@ private constructor(
             class Builder internal constructor() {
 
                 private var creditTypeId: JsonField<String>? = null
-                private var quantity: JsonField<Double>? = null
                 private var unitPrice: JsonField<Double>? = null
+                private var quantity: JsonField<Double> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(accessAmount: AccessAmount) = apply {
                     creditTypeId = accessAmount.creditTypeId
-                    quantity = accessAmount.quantity
                     unitPrice = accessAmount.unitPrice
+                    quantity = accessAmount.quantity
                     additionalProperties = accessAmount.additionalProperties.toMutableMap()
                 }
 
@@ -2963,13 +3711,13 @@ private constructor(
                     this.creditTypeId = creditTypeId
                 }
 
-                fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
-
-                fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
-
                 fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
 
                 fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
+
+                fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+
+                fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -2996,8 +3744,8 @@ private constructor(
                 fun build(): AccessAmount =
                     AccessAmount(
                         checkRequired("creditTypeId", creditTypeId),
-                        checkRequired("quantity", quantity),
                         checkRequired("unitPrice", unitPrice),
+                        quantity,
                         additionalProperties.toImmutable(),
                     )
             }
@@ -3007,17 +3755,17 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is AccessAmount && creditTypeId == other.creditTypeId && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is AccessAmount && creditTypeId == other.creditTypeId && unitPrice == other.unitPrice && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(creditTypeId, quantity, unitPrice, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(creditTypeId, unitPrice, quantity, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AccessAmount{creditTypeId=$creditTypeId, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
+                "AccessAmount{creditTypeId=$creditTypeId, unitPrice=$unitPrice, quantity=$quantity, additionalProperties=$additionalProperties}"
         }
 
         /** The amount of time the created commits will be valid for */
@@ -3548,22 +4296,268 @@ private constructor(
             override fun toString() = "Contract{id=$id, additionalProperties=$additionalProperties}"
         }
 
+        /**
+         * Determines whether the first and last commit will be prorated. If not provided, the
+         * default is FIRST_AND_LAST (i.e. prorate both the first and last commits).
+         */
+        class Proration @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val NONE = of("NONE")
+
+                @JvmField val FIRST = of("FIRST")
+
+                @JvmField val LAST = of("LAST")
+
+                @JvmField val FIRST_AND_LAST = of("FIRST_AND_LAST")
+
+                @JvmStatic fun of(value: String) = Proration(JsonField.of(value))
+            }
+
+            /** An enum containing [Proration]'s known values. */
+            enum class Known {
+                NONE,
+                FIRST,
+                LAST,
+                FIRST_AND_LAST,
+            }
+
+            /**
+             * An enum containing [Proration]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [Proration] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                NONE,
+                FIRST,
+                LAST,
+                FIRST_AND_LAST,
+                /**
+                 * An enum member indicating that [Proration] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    NONE -> Value.NONE
+                    FIRST -> Value.FIRST
+                    LAST -> Value.LAST
+                    FIRST_AND_LAST -> Value.FIRST_AND_LAST
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    NONE -> Known.NONE
+                    FIRST -> Known.FIRST
+                    LAST -> Known.LAST
+                    FIRST_AND_LAST -> Known.FIRST_AND_LAST
+                    else -> throw MetronomeInvalidDataException("Unknown Proration: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Proration && value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        /**
+         * The frequency at which the recurring commits will be created. If not provided: - The
+         * commits will be created on the usage invoice frequency. If provided: - The period defined
+         * in the duration will correspond to this frequency. - Commits will be created aligned with
+         * the recurring commit's starting_at rather than the usage invoice dates.
+         */
+        class RecurrenceFrequency
+        @JsonCreator
+        private constructor(private val value: JsonField<String>) : Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val MONTHLY = of("MONTHLY")
+
+                @JvmField val QUARTERLY = of("QUARTERLY")
+
+                @JvmField val ANNUAL = of("ANNUAL")
+
+                @JvmField val WEEKLY = of("WEEKLY")
+
+                @JvmStatic fun of(value: String) = RecurrenceFrequency(JsonField.of(value))
+            }
+
+            /** An enum containing [RecurrenceFrequency]'s known values. */
+            enum class Known {
+                MONTHLY,
+                QUARTERLY,
+                ANNUAL,
+                WEEKLY,
+            }
+
+            /**
+             * An enum containing [RecurrenceFrequency]'s known values, as well as an [_UNKNOWN]
+             * member.
+             *
+             * An instance of [RecurrenceFrequency] can contain an unknown value in a couple of
+             * cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                MONTHLY,
+                QUARTERLY,
+                ANNUAL,
+                WEEKLY,
+                /**
+                 * An enum member indicating that [RecurrenceFrequency] was instantiated with an
+                 * unknown value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    MONTHLY -> Value.MONTHLY
+                    QUARTERLY -> Value.QUARTERLY
+                    ANNUAL -> Value.ANNUAL
+                    WEEKLY -> Value.WEEKLY
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    MONTHLY -> Known.MONTHLY
+                    QUARTERLY -> Known.QUARTERLY
+                    ANNUAL -> Known.ANNUAL
+                    WEEKLY -> Known.WEEKLY
+                    else ->
+                        throw MetronomeInvalidDataException("Unknown RecurrenceFrequency: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is RecurrenceFrequency && value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is RecurringCredit && id == other.id && accessAmount == other.accessAmount && commitDuration == other.commitDuration && priority == other.priority && product == other.product && rateType == other.rateType && startingAt == other.startingAt && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && contract == other.contract && description == other.description && endingBefore == other.endingBefore && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && rolloverFraction == other.rolloverFraction && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is RecurringCredit && id == other.id && accessAmount == other.accessAmount && commitDuration == other.commitDuration && priority == other.priority && product == other.product && rateType == other.rateType && startingAt == other.startingAt && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && contract == other.contract && description == other.description && endingBefore == other.endingBefore && hierarchyConfiguration == other.hierarchyConfiguration && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && proration == other.proration && recurrenceFrequency == other.recurrenceFrequency && rolloverFraction == other.rolloverFraction && specifiers == other.specifiers && subscriptionConfig == other.subscriptionConfig && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, accessAmount, commitDuration, priority, product, rateType, startingAt, applicableProductIds, applicableProductTags, contract, description, endingBefore, name, netsuiteSalesOrderId, rolloverFraction, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, accessAmount, commitDuration, priority, product, rateType, startingAt, applicableProductIds, applicableProductTags, contract, description, endingBefore, hierarchyConfiguration, name, netsuiteSalesOrderId, proration, recurrenceFrequency, rolloverFraction, specifiers, subscriptionConfig, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "RecurringCredit{id=$id, accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, product=$product, rateType=$rateType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, contract=$contract, description=$description, endingBefore=$endingBefore, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, rolloverFraction=$rolloverFraction, additionalProperties=$additionalProperties}"
+            "RecurringCredit{id=$id, accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, product=$product, rateType=$rateType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, contract=$contract, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -4462,15 +5456,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ContractWithoutAmendments && commits == other.commits && createdAt == other.createdAt && createdBy == other.createdBy && overrides == other.overrides && scheduledCharges == other.scheduledCharges && startingAt == other.startingAt && transitions == other.transitions && usageStatementSchedule == other.usageStatementSchedule && credits == other.credits && discounts == other.discounts && endingBefore == other.endingBefore && name == other.name && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && professionalServices == other.professionalServices && rateCardId == other.rateCardId && recurringCommits == other.recurringCommits && recurringCredits == other.recurringCredits && resellerRoyalties == other.resellerRoyalties && salesforceOpportunityId == other.salesforceOpportunityId && scheduledChargesOnUsageInvoices == other.scheduledChargesOnUsageInvoices && totalContractValue == other.totalContractValue && usageFilter == other.usageFilter && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ContractWithoutAmendments && commits == other.commits && createdAt == other.createdAt && createdBy == other.createdBy && overrides == other.overrides && scheduledCharges == other.scheduledCharges && startingAt == other.startingAt && transitions == other.transitions && usageStatementSchedule == other.usageStatementSchedule && credits == other.credits && discounts == other.discounts && endingBefore == other.endingBefore && hierarchyConfiguration == other.hierarchyConfiguration && name == other.name && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && prepaidBalanceThresholdConfiguration == other.prepaidBalanceThresholdConfiguration && professionalServices == other.professionalServices && rateCardId == other.rateCardId && recurringCommits == other.recurringCommits && recurringCredits == other.recurringCredits && resellerRoyalties == other.resellerRoyalties && salesforceOpportunityId == other.salesforceOpportunityId && scheduledChargesOnUsageInvoices == other.scheduledChargesOnUsageInvoices && spendThresholdConfiguration == other.spendThresholdConfiguration && totalContractValue == other.totalContractValue && usageFilter == other.usageFilter && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(commits, createdAt, createdBy, overrides, scheduledCharges, startingAt, transitions, usageStatementSchedule, credits, discounts, endingBefore, name, netPaymentTermsDays, netsuiteSalesOrderId, professionalServices, rateCardId, recurringCommits, recurringCredits, resellerRoyalties, salesforceOpportunityId, scheduledChargesOnUsageInvoices, totalContractValue, usageFilter, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(commits, createdAt, createdBy, overrides, scheduledCharges, startingAt, transitions, usageStatementSchedule, credits, discounts, endingBefore, hierarchyConfiguration, name, netPaymentTermsDays, netsuiteSalesOrderId, prepaidBalanceThresholdConfiguration, professionalServices, rateCardId, recurringCommits, recurringCredits, resellerRoyalties, salesforceOpportunityId, scheduledChargesOnUsageInvoices, spendThresholdConfiguration, totalContractValue, usageFilter, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ContractWithoutAmendments{commits=$commits, createdAt=$createdAt, createdBy=$createdBy, overrides=$overrides, scheduledCharges=$scheduledCharges, startingAt=$startingAt, transitions=$transitions, usageStatementSchedule=$usageStatementSchedule, credits=$credits, discounts=$discounts, endingBefore=$endingBefore, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, professionalServices=$professionalServices, rateCardId=$rateCardId, recurringCommits=$recurringCommits, recurringCredits=$recurringCredits, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledChargesOnUsageInvoices=$scheduledChargesOnUsageInvoices, totalContractValue=$totalContractValue, usageFilter=$usageFilter, additionalProperties=$additionalProperties}"
+        "ContractWithoutAmendments{commits=$commits, createdAt=$createdAt, createdBy=$createdBy, overrides=$overrides, scheduledCharges=$scheduledCharges, startingAt=$startingAt, transitions=$transitions, usageStatementSchedule=$usageStatementSchedule, credits=$credits, discounts=$discounts, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, prepaidBalanceThresholdConfiguration=$prepaidBalanceThresholdConfiguration, professionalServices=$professionalServices, rateCardId=$rateCardId, recurringCommits=$recurringCommits, recurringCredits=$recurringCredits, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledChargesOnUsageInvoices=$scheduledChargesOnUsageInvoices, spendThresholdConfiguration=$spendThresholdConfiguration, totalContractValue=$totalContractValue, usageFilter=$usageFilter, additionalProperties=$additionalProperties}"
 }

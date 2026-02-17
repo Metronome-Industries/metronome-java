@@ -33,7 +33,6 @@ class RateTest {
                 )
                 .quantity(0.0)
                 .addTier(Tier.builder().price(0.0).size(0.0).build())
-                .useListPrices(true)
                 .build()
         assertThat(rate).isNotNull
         assertThat(rate.rateType()).isEqualTo(Rate.RateType.FLAT)
@@ -60,6 +59,5 @@ class RateTest {
             )
         assertThat(rate.quantity()).contains(0.0)
         assertThat(rate.tiers().get()).containsExactly(Tier.builder().price(0.0).size(0.0).build())
-        assertThat(rate.useListPrices()).contains(true)
     }
 }

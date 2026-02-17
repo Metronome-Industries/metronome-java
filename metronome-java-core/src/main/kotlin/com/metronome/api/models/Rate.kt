@@ -45,9 +45,6 @@ private constructor(
     @JsonProperty("tiers")
     @ExcludeMissing
     private val tiers: JsonField<List<Tier>> = JsonMissing.of(),
-    @JsonProperty("use_list_prices")
-    @ExcludeMissing
-    private val useListPrices: JsonField<Boolean> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
@@ -80,13 +77,6 @@ private constructor(
 
     /** Only set for TIERED rate_type. */
     fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers.getNullable("tiers"))
-
-    /**
-     * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using list
-     * prices rather than the standard rates for this product on the contract.
-     */
-    fun useListPrices(): Optional<Boolean> =
-        Optional.ofNullable(useListPrices.getNullable("use_list_prices"))
 
     @JsonProperty("rate_type") @ExcludeMissing fun _rateType(): JsonField<RateType> = rateType
 
@@ -121,14 +111,6 @@ private constructor(
     /** Only set for TIERED rate_type. */
     @JsonProperty("tiers") @ExcludeMissing fun _tiers(): JsonField<List<Tier>> = tiers
 
-    /**
-     * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using list
-     * prices rather than the standard rates for this product on the contract.
-     */
-    @JsonProperty("use_list_prices")
-    @ExcludeMissing
-    fun _useListPrices(): JsonField<Boolean> = useListPrices
-
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -148,7 +130,6 @@ private constructor(
         pricingGroupValues().ifPresent { it.validate() }
         quantity()
         tiers().ifPresent { it.forEach { it.validate() } }
-        useListPrices()
         validated = true
     }
 
@@ -170,7 +151,6 @@ private constructor(
         private var pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of()
         private var quantity: JsonField<Double> = JsonMissing.of()
         private var tiers: JsonField<MutableList<Tier>>? = null
-        private var useListPrices: JsonField<Boolean> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -183,7 +163,6 @@ private constructor(
             pricingGroupValues = rate.pricingGroupValues
             quantity = rate.quantity
             tiers = rate.tiers.map { it.toMutableList() }
-            useListPrices = rate.useListPrices
             additionalProperties = rate.additionalProperties.toMutableMap()
         }
 
@@ -264,20 +243,6 @@ private constructor(
                 }
         }
 
-        /**
-         * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
-         * list prices rather than the standard rates for this product on the contract.
-         */
-        fun useListPrices(useListPrices: Boolean) = useListPrices(JsonField.of(useListPrices))
-
-        /**
-         * Only set for PERCENTAGE rate_type. Defaults to false. If true, rate is computed using
-         * list prices rather than the standard rates for this product on the contract.
-         */
-        fun useListPrices(useListPrices: JsonField<Boolean>) = apply {
-            this.useListPrices = useListPrices
-        }
-
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -307,7 +272,6 @@ private constructor(
                 pricingGroupValues,
                 quantity,
                 (tiers ?: JsonMissing.of()).map { it.toImmutable() },
-                useListPrices,
                 additionalProperties.toImmutable(),
             )
     }
@@ -336,6 +300,8 @@ private constructor(
 
             @JvmField val TIERED = of("TIERED")
 
+            @JvmField val TIERED_PERCENTAGE = of("TIERED_PERCENTAGE")
+
             @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
         }
 
@@ -346,6 +312,7 @@ private constructor(
             SUBSCRIPTION,
             CUSTOM,
             TIERED,
+            TIERED_PERCENTAGE,
         }
 
         /**
@@ -363,6 +330,7 @@ private constructor(
             SUBSCRIPTION,
             CUSTOM,
             TIERED,
+            TIERED_PERCENTAGE,
             /** An enum member indicating that [RateType] was instantiated with an unknown value. */
             _UNKNOWN,
         }
@@ -381,6 +349,7 @@ private constructor(
                 SUBSCRIPTION -> Value.SUBSCRIPTION
                 CUSTOM -> Value.CUSTOM
                 TIERED -> Value.TIERED
+                TIERED_PERCENTAGE -> Value.TIERED_PERCENTAGE
                 else -> Value._UNKNOWN
             }
 
@@ -400,6 +369,7 @@ private constructor(
                 SUBSCRIPTION -> Known.SUBSCRIPTION
                 CUSTOM -> Known.CUSTOM
                 TIERED -> Known.TIERED
+                TIERED_PERCENTAGE -> Known.TIERED_PERCENTAGE
                 else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
             }
 
@@ -593,15 +563,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Rate && rateType == other.rateType && creditType == other.creditType && customRate == other.customRate && isProrated == other.isProrated && price == other.price && pricingGroupValues == other.pricingGroupValues && quantity == other.quantity && tiers == other.tiers && useListPrices == other.useListPrices && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Rate && rateType == other.rateType && creditType == other.creditType && customRate == other.customRate && isProrated == other.isProrated && price == other.price && pricingGroupValues == other.pricingGroupValues && quantity == other.quantity && tiers == other.tiers && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(rateType, creditType, customRate, isProrated, price, pricingGroupValues, quantity, tiers, useListPrices, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(rateType, creditType, customRate, isProrated, price, pricingGroupValues, quantity, tiers, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Rate{rateType=$rateType, creditType=$creditType, customRate=$customRate, isProrated=$isProrated, price=$price, pricingGroupValues=$pricingGroupValues, quantity=$quantity, tiers=$tiers, useListPrices=$useListPrices, additionalProperties=$additionalProperties}"
+        "Rate{rateType=$rateType, creditType=$creditType, customRate=$customRate, isProrated=$isProrated, price=$price, pricingGroupValues=$pricingGroupValues, quantity=$quantity, tiers=$tiers, additionalProperties=$additionalProperties}"
 }

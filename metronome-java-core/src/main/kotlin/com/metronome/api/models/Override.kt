@@ -534,6 +534,9 @@ private constructor(
     class OverrideSpecifier
     @JsonCreator
     private constructor(
+        @JsonProperty("billing_frequency")
+        @ExcludeMissing
+        private val billingFrequency: JsonField<BillingFrequency> = JsonMissing.of(),
         @JsonProperty("commit_ids")
         @ExcludeMissing
         private val commitIds: JsonField<List<String>> = JsonMissing.of(),
@@ -559,6 +562,9 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        fun billingFrequency(): Optional<BillingFrequency> =
+            Optional.ofNullable(billingFrequency.getNullable("billing_frequency"))
+
         fun commitIds(): Optional<List<String>> =
             Optional.ofNullable(commitIds.getNullable("commit_ids"))
 
@@ -578,6 +584,10 @@ private constructor(
 
         fun recurringCreditIds(): Optional<List<String>> =
             Optional.ofNullable(recurringCreditIds.getNullable("recurring_credit_ids"))
+
+        @JsonProperty("billing_frequency")
+        @ExcludeMissing
+        fun _billingFrequency(): JsonField<BillingFrequency> = billingFrequency
 
         @JsonProperty("commit_ids")
         @ExcludeMissing
@@ -616,6 +626,7 @@ private constructor(
                 return@apply
             }
 
+            billingFrequency()
             commitIds()
             presentationGroupValues().ifPresent { it.validate() }
             pricingGroupValues().ifPresent { it.validate() }
@@ -636,6 +647,7 @@ private constructor(
         /** A builder for [OverrideSpecifier]. */
         class Builder internal constructor() {
 
+            private var billingFrequency: JsonField<BillingFrequency> = JsonMissing.of()
             private var commitIds: JsonField<MutableList<String>>? = null
             private var presentationGroupValues: JsonField<PresentationGroupValues> =
                 JsonMissing.of()
@@ -648,6 +660,7 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(overrideSpecifier: OverrideSpecifier) = apply {
+                billingFrequency = overrideSpecifier.billingFrequency
                 commitIds = overrideSpecifier.commitIds.map { it.toMutableList() }
                 presentationGroupValues = overrideSpecifier.presentationGroupValues
                 pricingGroupValues = overrideSpecifier.pricingGroupValues
@@ -656,6 +669,13 @@ private constructor(
                 recurringCommitIds = overrideSpecifier.recurringCommitIds.map { it.toMutableList() }
                 recurringCreditIds = overrideSpecifier.recurringCreditIds.map { it.toMutableList() }
                 additionalProperties = overrideSpecifier.additionalProperties.toMutableMap()
+            }
+
+            fun billingFrequency(billingFrequency: BillingFrequency) =
+                billingFrequency(JsonField.of(billingFrequency))
+
+            fun billingFrequency(billingFrequency: JsonField<BillingFrequency>) = apply {
+                this.billingFrequency = billingFrequency
             }
 
             fun commitIds(commitIds: List<String>) = commitIds(JsonField.of(commitIds))
@@ -775,6 +795,7 @@ private constructor(
 
             fun build(): OverrideSpecifier =
                 OverrideSpecifier(
+                    billingFrequency,
                     (commitIds ?: JsonMissing.of()).map { it.toImmutable() },
                     presentationGroupValues,
                     pricingGroupValues,
@@ -784,6 +805,124 @@ private constructor(
                     (recurringCreditIds ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
+        }
+
+        class BillingFrequency
+        @JsonCreator
+        private constructor(private val value: JsonField<String>) : Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val MONTHLY = of("MONTHLY")
+
+                @JvmField val QUARTERLY = of("QUARTERLY")
+
+                @JvmField val ANNUAL = of("ANNUAL")
+
+                @JvmField val WEEKLY = of("WEEKLY")
+
+                @JvmStatic fun of(value: String) = BillingFrequency(JsonField.of(value))
+            }
+
+            /** An enum containing [BillingFrequency]'s known values. */
+            enum class Known {
+                MONTHLY,
+                QUARTERLY,
+                ANNUAL,
+                WEEKLY,
+            }
+
+            /**
+             * An enum containing [BillingFrequency]'s known values, as well as an [_UNKNOWN]
+             * member.
+             *
+             * An instance of [BillingFrequency] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                MONTHLY,
+                QUARTERLY,
+                ANNUAL,
+                WEEKLY,
+                /**
+                 * An enum member indicating that [BillingFrequency] was instantiated with an
+                 * unknown value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    MONTHLY -> Value.MONTHLY
+                    QUARTERLY -> Value.QUARTERLY
+                    ANNUAL -> Value.ANNUAL
+                    WEEKLY -> Value.WEEKLY
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    MONTHLY -> Known.MONTHLY
+                    QUARTERLY -> Known.QUARTERLY
+                    ANNUAL -> Known.ANNUAL
+                    WEEKLY -> Known.WEEKLY
+                    else -> throw MetronomeInvalidDataException("Unknown BillingFrequency: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is BillingFrequency && value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
         }
 
         @NoAutoDetect
@@ -958,598 +1097,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is OverrideSpecifier && commitIds == other.commitIds && presentationGroupValues == other.presentationGroupValues && pricingGroupValues == other.pricingGroupValues && productId == other.productId && productTags == other.productTags && recurringCommitIds == other.recurringCommitIds && recurringCreditIds == other.recurringCreditIds && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is OverrideSpecifier && billingFrequency == other.billingFrequency && commitIds == other.commitIds && presentationGroupValues == other.presentationGroupValues && pricingGroupValues == other.pricingGroupValues && productId == other.productId && productTags == other.productTags && recurringCommitIds == other.recurringCommitIds && recurringCreditIds == other.recurringCreditIds && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(commitIds, presentationGroupValues, pricingGroupValues, productId, productTags, recurringCommitIds, recurringCreditIds, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(billingFrequency, commitIds, presentationGroupValues, pricingGroupValues, productId, productTags, recurringCommitIds, recurringCreditIds, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "OverrideSpecifier{commitIds=$commitIds, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, recurringCommitIds=$recurringCommitIds, recurringCreditIds=$recurringCreditIds, additionalProperties=$additionalProperties}"
-    }
-
-    @NoAutoDetect
-    class OverrideTier
-    @JsonCreator
-    private constructor(
-        @JsonProperty("multiplier")
-        @ExcludeMissing
-        private val multiplier: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("size")
-        @ExcludeMissing
-        private val size: JsonField<Double> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        fun multiplier(): Double = multiplier.getRequired("multiplier")
-
-        fun size(): Optional<Double> = Optional.ofNullable(size.getNullable("size"))
-
-        @JsonProperty("multiplier")
-        @ExcludeMissing
-        fun _multiplier(): JsonField<Double> = multiplier
-
-        @JsonProperty("size") @ExcludeMissing fun _size(): JsonField<Double> = size
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): OverrideTier = apply {
-            if (validated) {
-                return@apply
-            }
-
-            multiplier()
-            size()
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [OverrideTier]. */
-        class Builder internal constructor() {
-
-            private var multiplier: JsonField<Double>? = null
-            private var size: JsonField<Double> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(overrideTier: OverrideTier) = apply {
-                multiplier = overrideTier.multiplier
-                size = overrideTier.size
-                additionalProperties = overrideTier.additionalProperties.toMutableMap()
-            }
-
-            fun multiplier(multiplier: Double) = multiplier(JsonField.of(multiplier))
-
-            fun multiplier(multiplier: JsonField<Double>) = apply { this.multiplier = multiplier }
-
-            fun size(size: Double) = size(JsonField.of(size))
-
-            fun size(size: JsonField<Double>) = apply { this.size = size }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            fun build(): OverrideTier =
-                OverrideTier(
-                    checkRequired("multiplier", multiplier),
-                    size,
-                    additionalProperties.toImmutable(),
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is OverrideTier && multiplier == other.multiplier && size == other.size && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(multiplier, size, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "OverrideTier{multiplier=$multiplier, size=$size, additionalProperties=$additionalProperties}"
-    }
-
-    @NoAutoDetect
-    class OverwriteRate
-    @JsonCreator
-    private constructor(
-        @JsonProperty("rate_type")
-        @ExcludeMissing
-        private val rateType: JsonField<RateType> = JsonMissing.of(),
-        @JsonProperty("credit_type")
-        @ExcludeMissing
-        private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
-        @JsonProperty("custom_rate")
-        @ExcludeMissing
-        private val customRate: JsonField<CustomRate> = JsonMissing.of(),
-        @JsonProperty("is_prorated")
-        @ExcludeMissing
-        private val isProrated: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("price")
-        @ExcludeMissing
-        private val price: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("quantity")
-        @ExcludeMissing
-        private val quantity: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("tiers")
-        @ExcludeMissing
-        private val tiers: JsonField<List<Tier>> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        fun rateType(): RateType = rateType.getRequired("rate_type")
-
-        fun creditType(): Optional<CreditTypeData> =
-            Optional.ofNullable(creditType.getNullable("credit_type"))
-
-        /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
-        fun customRate(): Optional<CustomRate> =
-            Optional.ofNullable(customRate.getNullable("custom_rate"))
-
-        /**
-         * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
-         * true.
-         */
-        fun isProrated(): Optional<Boolean> =
-            Optional.ofNullable(isProrated.getNullable("is_prorated"))
-
-        /**
-         * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this is a
-         * decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
-         */
-        fun price(): Optional<Double> = Optional.ofNullable(price.getNullable("price"))
-
-        /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-        fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
-
-        /** Only set for TIERED rate_type. */
-        fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers.getNullable("tiers"))
-
-        @JsonProperty("rate_type") @ExcludeMissing fun _rateType(): JsonField<RateType> = rateType
-
-        @JsonProperty("credit_type")
-        @ExcludeMissing
-        fun _creditType(): JsonField<CreditTypeData> = creditType
-
-        /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
-        @JsonProperty("custom_rate")
-        @ExcludeMissing
-        fun _customRate(): JsonField<CustomRate> = customRate
-
-        /**
-         * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
-         * true.
-         */
-        @JsonProperty("is_prorated")
-        @ExcludeMissing
-        fun _isProrated(): JsonField<Boolean> = isProrated
-
-        /**
-         * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this is a
-         * decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
-         */
-        @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Double> = price
-
-        /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
-
-        /** Only set for TIERED rate_type. */
-        @JsonProperty("tiers") @ExcludeMissing fun _tiers(): JsonField<List<Tier>> = tiers
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): OverwriteRate = apply {
-            if (validated) {
-                return@apply
-            }
-
-            rateType()
-            creditType().ifPresent { it.validate() }
-            customRate().ifPresent { it.validate() }
-            isProrated()
-            price()
-            quantity()
-            tiers().ifPresent { it.forEach { it.validate() } }
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [OverwriteRate]. */
-        class Builder internal constructor() {
-
-            private var rateType: JsonField<RateType>? = null
-            private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
-            private var customRate: JsonField<CustomRate> = JsonMissing.of()
-            private var isProrated: JsonField<Boolean> = JsonMissing.of()
-            private var price: JsonField<Double> = JsonMissing.of()
-            private var quantity: JsonField<Double> = JsonMissing.of()
-            private var tiers: JsonField<MutableList<Tier>>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(overwriteRate: OverwriteRate) = apply {
-                rateType = overwriteRate.rateType
-                creditType = overwriteRate.creditType
-                customRate = overwriteRate.customRate
-                isProrated = overwriteRate.isProrated
-                price = overwriteRate.price
-                quantity = overwriteRate.quantity
-                tiers = overwriteRate.tiers.map { it.toMutableList() }
-                additionalProperties = overwriteRate.additionalProperties.toMutableMap()
-            }
-
-            fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
-
-            fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
-
-            fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
-
-            fun creditType(creditType: JsonField<CreditTypeData>) = apply {
-                this.creditType = creditType
-            }
-
-            /**
-             * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
-             */
-            fun customRate(customRate: CustomRate) = customRate(JsonField.of(customRate))
-
-            /**
-             * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
-             */
-            fun customRate(customRate: JsonField<CustomRate>) = apply {
-                this.customRate = customRate
-            }
-
-            /**
-             * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
-             * to true.
-             */
-            fun isProrated(isProrated: Boolean) = isProrated(JsonField.of(isProrated))
-
-            /**
-             * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set
-             * to true.
-             */
-            fun isProrated(isProrated: JsonField<Boolean>) = apply { this.isProrated = isProrated }
-
-            /**
-             * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this
-             * is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
-             */
-            fun price(price: Double) = price(JsonField.of(price))
-
-            /**
-             * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this
-             * is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
-             */
-            fun price(price: JsonField<Double>) = apply { this.price = price }
-
-            /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-            fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
-
-            /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-            fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
-
-            /** Only set for TIERED rate_type. */
-            fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
-
-            /** Only set for TIERED rate_type. */
-            fun tiers(tiers: JsonField<List<Tier>>) = apply {
-                this.tiers = tiers.map { it.toMutableList() }
-            }
-
-            /** Only set for TIERED rate_type. */
-            fun addTier(tier: Tier) = apply {
-                tiers =
-                    (tiers ?: JsonField.of(mutableListOf())).apply {
-                        asKnown()
-                            .orElseThrow {
-                                IllegalStateException(
-                                    "Field was set to non-list type: ${javaClass.simpleName}"
-                                )
-                            }
-                            .add(tier)
-                    }
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            fun build(): OverwriteRate =
-                OverwriteRate(
-                    checkRequired("rateType", rateType),
-                    creditType,
-                    customRate,
-                    isProrated,
-                    price,
-                    quantity,
-                    (tiers ?: JsonMissing.of()).map { it.toImmutable() },
-                    additionalProperties.toImmutable(),
-                )
-        }
-
-        class RateType @JsonCreator private constructor(private val value: JsonField<String>) :
-            Enum {
-
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                @JvmField val FLAT = of("FLAT")
-
-                @JvmField val PERCENTAGE = of("PERCENTAGE")
-
-                @JvmField val SUBSCRIPTION = of("SUBSCRIPTION")
-
-                @JvmField val TIERED = of("TIERED")
-
-                @JvmField val CUSTOM = of("CUSTOM")
-
-                @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
-            }
-
-            /** An enum containing [RateType]'s known values. */
-            enum class Known {
-                FLAT,
-                PERCENTAGE,
-                SUBSCRIPTION,
-                TIERED,
-                CUSTOM,
-            }
-
-            /**
-             * An enum containing [RateType]'s known values, as well as an [_UNKNOWN] member.
-             *
-             * An instance of [RateType] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                FLAT,
-                PERCENTAGE,
-                SUBSCRIPTION,
-                TIERED,
-                CUSTOM,
-                /**
-                 * An enum member indicating that [RateType] was instantiated with an unknown value.
-                 */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
-             */
-            fun value(): Value =
-                when (this) {
-                    FLAT -> Value.FLAT
-                    PERCENTAGE -> Value.PERCENTAGE
-                    SUBSCRIPTION -> Value.SUBSCRIPTION
-                    TIERED -> Value.TIERED
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
-             *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
-             *   member.
-             */
-            fun known(): Known =
-                when (this) {
-                    FLAT -> Known.FLAT
-                    PERCENTAGE -> Known.PERCENTAGE
-                    SUBSCRIPTION -> Known.SUBSCRIPTION
-                    TIERED -> Known.TIERED
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
-             *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have
-             *   the expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString().orElseThrow {
-                    MetronomeInvalidDataException("Value is not a String")
-                }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is RateType && value == other.value /* spotless:on */
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
-
-        /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
-        @NoAutoDetect
-        class CustomRate
-        @JsonCreator
-        private constructor(
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
-        ) {
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): CustomRate = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                validated = true
-            }
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [CustomRate]. */
-            class Builder internal constructor() {
-
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(customRate: CustomRate) = apply {
-                    additionalProperties = customRate.additionalProperties.toMutableMap()
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                fun build(): CustomRate = CustomRate(additionalProperties.toImmutable())
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is CustomRate && additionalProperties == other.additionalProperties /* spotless:on */
-            }
-
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() = "CustomRate{additionalProperties=$additionalProperties}"
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is OverwriteRate && rateType == other.rateType && creditType == other.creditType && customRate == other.customRate && isProrated == other.isProrated && price == other.price && quantity == other.quantity && tiers == other.tiers && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(rateType, creditType, customRate, isProrated, price, quantity, tiers, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "OverwriteRate{rateType=$rateType, creditType=$creditType, customRate=$customRate, isProrated=$isProrated, price=$price, quantity=$quantity, tiers=$tiers, additionalProperties=$additionalProperties}"
+            "OverrideSpecifier{billingFrequency=$billingFrequency, commitIds=$commitIds, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, recurringCommitIds=$recurringCommitIds, recurringCreditIds=$recurringCreditIds, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -1684,6 +1242,8 @@ private constructor(
 
             @JvmField val TIERED = of("TIERED")
 
+            @JvmField val TIERED_PERCENTAGE = of("TIERED_PERCENTAGE")
+
             @JvmField val CUSTOM = of("CUSTOM")
 
             @JvmStatic fun of(value: String) = RateType(JsonField.of(value))
@@ -1695,6 +1255,7 @@ private constructor(
             PERCENTAGE,
             SUBSCRIPTION,
             TIERED,
+            TIERED_PERCENTAGE,
             CUSTOM,
         }
 
@@ -1712,6 +1273,7 @@ private constructor(
             PERCENTAGE,
             SUBSCRIPTION,
             TIERED,
+            TIERED_PERCENTAGE,
             CUSTOM,
             /** An enum member indicating that [RateType] was instantiated with an unknown value. */
             _UNKNOWN,
@@ -1730,6 +1292,7 @@ private constructor(
                 PERCENTAGE -> Value.PERCENTAGE
                 SUBSCRIPTION -> Value.SUBSCRIPTION
                 TIERED -> Value.TIERED
+                TIERED_PERCENTAGE -> Value.TIERED_PERCENTAGE
                 CUSTOM -> Value.CUSTOM
                 else -> Value._UNKNOWN
             }
@@ -1749,6 +1312,7 @@ private constructor(
                 PERCENTAGE -> Known.PERCENTAGE
                 SUBSCRIPTION -> Known.SUBSCRIPTION
                 TIERED -> Known.TIERED
+                TIERED_PERCENTAGE -> Known.TIERED_PERCENTAGE
                 CUSTOM -> Known.CUSTOM
                 else -> throw MetronomeInvalidDataException("Unknown RateType: $value")
             }

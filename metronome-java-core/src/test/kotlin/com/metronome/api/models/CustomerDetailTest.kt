@@ -14,6 +14,7 @@ class CustomerDetailTest {
         val customerDetail =
             CustomerDetail.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .customFields(
                     CustomerDetail.CustomFields.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -27,6 +28,7 @@ class CustomerDetailTest {
                 .externalId("external_id")
                 .addIngestAlias("string")
                 .name("name")
+                .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .currentBillableStatus(
                     CustomerDetail.CurrentBillableStatus.builder()
@@ -37,6 +39,8 @@ class CustomerDetailTest {
                 .build()
         assertThat(customerDetail).isNotNull
         assertThat(customerDetail.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(customerDetail.createdAt())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(customerDetail.customFields())
             .isEqualTo(
                 CustomerDetail.CustomFields.builder()
@@ -52,6 +56,8 @@ class CustomerDetailTest {
         assertThat(customerDetail.externalId()).isEqualTo("external_id")
         assertThat(customerDetail.ingestAliases()).containsExactly("string")
         assertThat(customerDetail.name()).isEqualTo("name")
+        assertThat(customerDetail.updatedAt())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(customerDetail.archivedAt())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(customerDetail.currentBillableStatus())

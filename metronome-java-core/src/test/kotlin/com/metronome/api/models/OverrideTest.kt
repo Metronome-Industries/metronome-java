@@ -29,6 +29,7 @@ class OverrideTest {
                 .multiplier(0.0)
                 .addOverrideSpecifier(
                     Override.OverrideSpecifier.builder()
+                        .billingFrequency(Override.OverrideSpecifier.BillingFrequency.MONTHLY)
                         .addCommitId("string")
                         .presentationGroupValues(
                             Override.OverrideSpecifier.PresentationGroupValues.builder()
@@ -46,10 +47,10 @@ class OverrideTest {
                         .addRecurringCreditId("string")
                         .build()
                 )
-                .addOverrideTier(Override.OverrideTier.builder().multiplier(0.0).size(0.0).build())
+                .addOverrideTier(OverrideTier.builder().multiplier(0.0).size(0.0).build())
                 .overwriteRate(
-                    Override.OverwriteRate.builder()
-                        .rateType(Override.OverwriteRate.RateType.FLAT)
+                    OverwriteRate.builder()
+                        .rateType(OverwriteRate.RateType.FLAT)
                         .creditType(
                             CreditTypeData.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -57,7 +58,7 @@ class OverrideTest {
                                 .build()
                         )
                         .customRate(
-                            Override.OverwriteRate.CustomRate.builder()
+                            OverwriteRate.CustomRate.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
@@ -107,6 +108,7 @@ class OverrideTest {
         assertThat(override.overrideSpecifiers().get())
             .containsExactly(
                 Override.OverrideSpecifier.builder()
+                    .billingFrequency(Override.OverrideSpecifier.BillingFrequency.MONTHLY)
                     .addCommitId("string")
                     .presentationGroupValues(
                         Override.OverrideSpecifier.PresentationGroupValues.builder()
@@ -125,11 +127,11 @@ class OverrideTest {
                     .build()
             )
         assertThat(override.overrideTiers().get())
-            .containsExactly(Override.OverrideTier.builder().multiplier(0.0).size(0.0).build())
+            .containsExactly(OverrideTier.builder().multiplier(0.0).size(0.0).build())
         assertThat(override.overwriteRate())
             .contains(
-                Override.OverwriteRate.builder()
-                    .rateType(Override.OverwriteRate.RateType.FLAT)
+                OverwriteRate.builder()
+                    .rateType(OverwriteRate.RateType.FLAT)
                     .creditType(
                         CreditTypeData.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -137,7 +139,7 @@ class OverrideTest {
                             .build()
                     )
                     .customRate(
-                        Override.OverwriteRate.CustomRate.builder()
+                        OverwriteRate.CustomRate.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )

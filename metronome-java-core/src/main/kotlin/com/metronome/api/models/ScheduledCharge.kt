@@ -14,6 +14,7 @@ import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.checkRequired
 import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
+import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
@@ -28,6 +29,9 @@ private constructor(
     @JsonProperty("schedule")
     @ExcludeMissing
     private val schedule: JsonField<SchedulePointInTime> = JsonMissing.of(),
+    @JsonProperty("archived_at")
+    @ExcludeMissing
+    private val archivedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonProperty("custom_fields")
     @ExcludeMissing
     private val customFields: JsonField<CustomFields> = JsonMissing.of(),
@@ -44,6 +48,10 @@ private constructor(
 
     fun schedule(): SchedulePointInTime = schedule.getRequired("schedule")
 
+    fun archivedAt(): Optional<OffsetDateTime> =
+        Optional.ofNullable(archivedAt.getNullable("archived_at"))
+
+    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
     fun customFields(): Optional<CustomFields> =
         Optional.ofNullable(customFields.getNullable("custom_fields"))
 
@@ -62,6 +70,11 @@ private constructor(
     @ExcludeMissing
     fun _schedule(): JsonField<SchedulePointInTime> = schedule
 
+    @JsonProperty("archived_at")
+    @ExcludeMissing
+    fun _archivedAt(): JsonField<OffsetDateTime> = archivedAt
+
+    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
     @JsonProperty("custom_fields")
     @ExcludeMissing
     fun _customFields(): JsonField<CustomFields> = customFields
@@ -88,6 +101,7 @@ private constructor(
         id()
         product().validate()
         schedule().validate()
+        archivedAt()
         customFields().ifPresent { it.validate() }
         name()
         netsuiteSalesOrderId()
@@ -107,6 +121,7 @@ private constructor(
         private var id: JsonField<String>? = null
         private var product: JsonField<Product>? = null
         private var schedule: JsonField<SchedulePointInTime>? = null
+        private var archivedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
         private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
@@ -117,6 +132,7 @@ private constructor(
             id = scheduledCharge.id
             product = scheduledCharge.product
             schedule = scheduledCharge.schedule
+            archivedAt = scheduledCharge.archivedAt
             customFields = scheduledCharge.customFields
             name = scheduledCharge.name
             netsuiteSalesOrderId = scheduledCharge.netsuiteSalesOrderId
@@ -135,8 +151,16 @@ private constructor(
 
         fun schedule(schedule: JsonField<SchedulePointInTime>) = apply { this.schedule = schedule }
 
+        fun archivedAt(archivedAt: OffsetDateTime) = archivedAt(JsonField.of(archivedAt))
+
+        fun archivedAt(archivedAt: JsonField<OffsetDateTime>) = apply {
+            this.archivedAt = archivedAt
+        }
+
+        /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
+        /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
         fun customFields(customFields: JsonField<CustomFields>) = apply {
             this.customFields = customFields
         }
@@ -180,6 +204,7 @@ private constructor(
                 checkRequired("id", id),
                 checkRequired("product", product),
                 checkRequired("schedule", schedule),
+                archivedAt,
                 customFields,
                 name,
                 netsuiteSalesOrderId,
@@ -297,6 +322,7 @@ private constructor(
             "Product{id=$id, name=$name, additionalProperties=$additionalProperties}"
     }
 
+    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
     @NoAutoDetect
     class CustomFields
     @JsonCreator
@@ -380,15 +406,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ScheduledCharge && id == other.id && product == other.product && schedule == other.schedule && customFields == other.customFields && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ScheduledCharge && id == other.id && product == other.product && schedule == other.schedule && archivedAt == other.archivedAt && customFields == other.customFields && name == other.name && netsuiteSalesOrderId == other.netsuiteSalesOrderId && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, product, schedule, customFields, name, netsuiteSalesOrderId, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, product, schedule, archivedAt, customFields, name, netsuiteSalesOrderId, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ScheduledCharge{id=$id, product=$product, schedule=$schedule, customFields=$customFields, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, additionalProperties=$additionalProperties}"
+        "ScheduledCharge{id=$id, product=$product, schedule=$schedule, archivedAt=$archivedAt, customFields=$customFields, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, additionalProperties=$additionalProperties}"
 }

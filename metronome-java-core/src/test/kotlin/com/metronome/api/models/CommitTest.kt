@@ -14,6 +14,7 @@ class CommitTest {
         val commit =
             Commit.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .product(
                     Commit.Product.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -43,6 +44,7 @@ class CommitTest {
                 .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .addApplicableProductTag("string")
+                .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .balance(0.0)
                 .contract(
                     Commit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
@@ -53,6 +55,21 @@ class CommitTest {
                         .build()
                 )
                 .description("description")
+                .hierarchyConfiguration(
+                    CommitHierarchyConfiguration.builder()
+                        .childAccess(
+                            CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll
+                                .builder()
+                                .type(
+                                    CommitHierarchyConfiguration.ChildAccess
+                                        .CommitHierarchyChildAccessAll
+                                        .Type
+                                        .ALL
+                                )
+                                .build()
+                        )
+                        .build()
+                )
                 .invoiceContract(
                     Commit.InvoiceContract.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -66,14 +83,15 @@ class CommitTest {
                                 .name("name")
                                 .build()
                         )
+                        .doNotInvoice(true)
                         .addScheduleItem(
                             SchedulePointInTime.ScheduleItem.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .amount(0.0)
-                                .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .quantity(0.0)
                                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .unitPrice(0.0)
+                                .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
                         .build()
@@ -93,6 +111,7 @@ class CommitTest {
                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                 .priority(0.0)
                 .rateType(Commit.RateType.COMMIT_RATE)
+                .recurringCommitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .rolledOverFrom(
                     Commit.RolledOverFrom.builder()
                         .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -101,10 +120,38 @@ class CommitTest {
                 )
                 .rolloverFraction(0.0)
                 .salesforceOpportunityId("salesforce_opportunity_id")
+                .addSpecifier(
+                    CommitSpecifier.builder()
+                        .presentationGroupValues(
+                            CommitSpecifier.PresentationGroupValues.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .pricingGroupValues(
+                            CommitSpecifier.PricingGroupValues.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addProductTag("string")
+                        .build()
+                )
+                .subscriptionConfig(
+                    Commit.SubscriptionConfig.builder()
+                        .allocation(Commit.SubscriptionConfig.Allocation.INDIVIDUAL)
+                        .applySeatIncreaseConfig(
+                            Commit.SubscriptionConfig.ApplySeatIncreaseConfig.builder()
+                                .isProrated(true)
+                                .build()
+                        )
+                        .subscriptionId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .build()
+                )
                 .uniquenessKey("x")
                 .build()
         assertThat(commit).isNotNull
         assertThat(commit.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(commit.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(commit.product())
             .isEqualTo(
                 Commit.Product.builder()
@@ -138,6 +185,7 @@ class CommitTest {
         assertThat(commit.applicableProductIds().get())
             .containsExactly("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(commit.applicableProductTags().get()).containsExactly("string")
+        assertThat(commit.archivedAt()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(commit.balance()).contains(0.0)
         assertThat(commit.contract())
             .contains(Commit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
@@ -148,6 +196,22 @@ class CommitTest {
                     .build()
             )
         assertThat(commit.description()).contains("description")
+        assertThat(commit.hierarchyConfiguration())
+            .contains(
+                CommitHierarchyConfiguration.builder()
+                    .childAccess(
+                        CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll
+                            .builder()
+                            .type(
+                                CommitHierarchyConfiguration.ChildAccess
+                                    .CommitHierarchyChildAccessAll
+                                    .Type
+                                    .ALL
+                            )
+                            .build()
+                    )
+                    .build()
+            )
         assertThat(commit.invoiceContract())
             .contains(
                 Commit.InvoiceContract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
@@ -161,14 +225,15 @@ class CommitTest {
                             .name("name")
                             .build()
                     )
+                    .doNotInvoice(true)
                     .addScheduleItem(
                         SchedulePointInTime.ScheduleItem.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .amount(0.0)
-                            .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .quantity(0.0)
                             .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .unitPrice(0.0)
+                            .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
                     .build()
@@ -191,6 +256,7 @@ class CommitTest {
         assertThat(commit.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
         assertThat(commit.priority()).contains(0.0)
         assertThat(commit.rateType()).contains(Commit.RateType.COMMIT_RATE)
+        assertThat(commit.recurringCommitId()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(commit.rolledOverFrom())
             .contains(
                 Commit.RolledOverFrom.builder()
@@ -200,6 +266,35 @@ class CommitTest {
             )
         assertThat(commit.rolloverFraction()).contains(0.0)
         assertThat(commit.salesforceOpportunityId()).contains("salesforce_opportunity_id")
+        assertThat(commit.specifiers().get())
+            .containsExactly(
+                CommitSpecifier.builder()
+                    .presentationGroupValues(
+                        CommitSpecifier.PresentationGroupValues.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .pricingGroupValues(
+                        CommitSpecifier.PricingGroupValues.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addProductTag("string")
+                    .build()
+            )
+        assertThat(commit.subscriptionConfig())
+            .contains(
+                Commit.SubscriptionConfig.builder()
+                    .allocation(Commit.SubscriptionConfig.Allocation.INDIVIDUAL)
+                    .applySeatIncreaseConfig(
+                        Commit.SubscriptionConfig.ApplySeatIncreaseConfig.builder()
+                            .isProrated(true)
+                            .build()
+                    )
+                    .subscriptionId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .build()
+            )
         assertThat(commit.uniquenessKey()).contains("x")
     }
 }

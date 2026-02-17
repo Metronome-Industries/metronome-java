@@ -52,6 +52,21 @@ class CreditTest {
                         .build()
                 )
                 .description("description")
+                .hierarchyConfiguration(
+                    CommitHierarchyConfiguration.builder()
+                        .childAccess(
+                            CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll
+                                .builder()
+                                .type(
+                                    CommitHierarchyConfiguration.ChildAccess
+                                        .CommitHierarchyChildAccessAll
+                                        .Type
+                                        .ALL
+                                )
+                                .build()
+                        )
+                        .build()
+                )
                 .addLedger(
                     Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
                         .amount(0.0)
@@ -64,7 +79,35 @@ class CreditTest {
                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                 .priority(0.0)
                 .rateType(Credit.RateType.COMMIT_RATE)
+                .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .salesforceOpportunityId("salesforce_opportunity_id")
+                .addSpecifier(
+                    CommitSpecifier.builder()
+                        .presentationGroupValues(
+                            CommitSpecifier.PresentationGroupValues.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .pricingGroupValues(
+                            CommitSpecifier.PricingGroupValues.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addProductTag("string")
+                        .build()
+                )
+                .subscriptionConfig(
+                    Credit.SubscriptionConfig.builder()
+                        .allocation(Credit.SubscriptionConfig.Allocation.INDIVIDUAL)
+                        .applySeatIncreaseConfig(
+                            Credit.SubscriptionConfig.ApplySeatIncreaseConfig.builder()
+                                .isProrated(true)
+                                .build()
+                        )
+                        .subscriptionId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .build()
+                )
                 .uniquenessKey("x")
                 .build()
         assertThat(credit).isNotNull
@@ -111,6 +154,22 @@ class CreditTest {
                     .build()
             )
         assertThat(credit.description()).contains("description")
+        assertThat(credit.hierarchyConfiguration())
+            .contains(
+                CommitHierarchyConfiguration.builder()
+                    .childAccess(
+                        CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll
+                            .builder()
+                            .type(
+                                CommitHierarchyConfiguration.ChildAccess
+                                    .CommitHierarchyChildAccessAll
+                                    .Type
+                                    .ALL
+                            )
+                            .build()
+                    )
+                    .build()
+            )
         assertThat(credit.ledger().get())
             .containsExactly(
                 Credit.Ledger.ofCreditSegmentStartLedgerEntry(
@@ -126,7 +185,37 @@ class CreditTest {
         assertThat(credit.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
         assertThat(credit.priority()).contains(0.0)
         assertThat(credit.rateType()).contains(Credit.RateType.COMMIT_RATE)
+        assertThat(credit.recurringCreditId()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(credit.salesforceOpportunityId()).contains("salesforce_opportunity_id")
+        assertThat(credit.specifiers().get())
+            .containsExactly(
+                CommitSpecifier.builder()
+                    .presentationGroupValues(
+                        CommitSpecifier.PresentationGroupValues.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .pricingGroupValues(
+                        CommitSpecifier.PricingGroupValues.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addProductTag("string")
+                    .build()
+            )
+        assertThat(credit.subscriptionConfig())
+            .contains(
+                Credit.SubscriptionConfig.builder()
+                    .allocation(Credit.SubscriptionConfig.Allocation.INDIVIDUAL)
+                    .applySeatIncreaseConfig(
+                        Credit.SubscriptionConfig.ApplySeatIncreaseConfig.builder()
+                            .isProrated(true)
+                            .build()
+                    )
+                    .subscriptionId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .build()
+            )
         assertThat(credit.uniquenessKey()).contains("x")
     }
 }
